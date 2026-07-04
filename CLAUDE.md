@@ -22,7 +22,7 @@
 
 1. **触发**:launchd(WatchPaths 盯 vault + 错过任务唤醒补跑)拉起 runner
 2. **Agent run**:`codex exec --json --output-schema` 扫 vault 增量找漂移;prompt 注入 `Taste Rules.md` + k 条相似历史决策
-3. **落盘**:卡片 JSON(schema 强制)+ markdown 镜像写进 vault;**指纹查重**(category+目标+diff hash)命中 rejected/parked 名单 → 直接丢弃
+3. **落盘(runner 代码执行,非 agent)**:agent 只返回 schema 强制的 JSON;卡片 JSON + markdown 镜像由 runner 写进 vault;**指纹查重**(category+目标+diff hash)命中 rejected/parked 名单 → 直接丢弃
 4. **呈现**:localhost console 渲染固定外观的原语卡;不推送,等用户来(工作流边界)
 5. **落子**:单键 a/p/r;diff 应用(git 可回滚);time-to-decision 静默计时;追加 `decisions.jsonl`
 6. **学习**:每 ~20 条决策,从 jsonl 提炼人可读规则追加 `Taste Rules.md`(用户可直接编辑)
@@ -36,11 +36,12 @@
 4. UI 零私有状态:所有卡片有 markdown 镜像;**vault 是唯一真相层**
 5. 卡片 schema 从 day 1 信封形(`origin/from/role/category`)——为 post-MVP agent relay 预留
 6. 重复率→0 靠确定性工程(指纹 + 硬过滤),不靠 LLM 自觉
+7. **Agent 只读、只返回 JSON**:一切写盘由 Forme 确定性代码执行(抹平底座沙箱差异;provenance 出自可审计代码)——2026-07-04 增,见 #8
 
 ## 技术基线
 
-- **执行底座**:Codex CLI headless 优先;Claude Code 经 SKILL.md 兼容(第二目标)
-- **政策事实**:Anthropic 禁止消费级 OAuth 用于第三方产品(**不得**设计任何依赖用户 Claude 订阅的路径);OpenAI 允许订阅 OAuth 用于第三方工具。两条均待对官方原文最终核验(见 issues)
+- **执行底座 = 三层矩阵(2026-07-04 定)**:Tier 1 默认 Codex CLI(`codex exec --json --output-schema`,`--sandbox workspace-write`);Tier 2 OpenCode(server/SDK 路径,适配器排 W7,见 #8);Tier 3 SKILL.md(Claude Code + OpenCode 均识别)。runner 接口按双调用形态设计(one-shot exec / 长驻 server-SDK);schema 校验用自有 AJV,不信 harness
+- **政策事实(已核验 2026-07-04,原文级,见 #2/#3 关闭记录)**:Anthropic 禁产品侧消费级 OAuth(**不得**设计依赖用户 Claude 订阅的产品路径;用户自己的 Claude Code + SKILL.md 显式合规);OpenAI **无**第三方订阅 OAuth 计划——登录委托用户自己的 Codex CLI(headless device-auth 官方支持);每轮 run 小增量 + 支持 API key 档(Plus 额度 15–80 条/5h)
 - **调度**:launchd(macOS 首发);**数据**:`decisions.jsonl`(event log,只追加)、`Taste Rules.md`、卡片 JSON + md 镜像
 - **License**:公开时 Apache-2.0;**Console 技术栈**:W1 Day 1 决定(倾向 TS/Node 轻量 localhost,勿引重框架)
 
