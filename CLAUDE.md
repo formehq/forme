@@ -1,0 +1,58 @@
+# CLAUDE.md — Forme
+
+## 这是什么项目
+
+**Forme**(中文名待定)= local-first agent,把用户知识库的漂移变成 one-decision 卡片(证据 + 最小 diff + accept/park/reject),并从每次决策学习用户的 taste。它是 CCS(Cognitive Continuity System)的产品化;所有核心回路已在 owner 的 vault 上经过 ~6 周自我实验验证。
+
+**当前阶段:W1(骨架 + 第一张真决策卡)。** 任务看 GitHub Issues/Milestones(W1→W6);本文件是每个 build 会话的起点——读完即有完整上下文,不需要翻旧会话。
+
+## Canonical 文档(战略层住在 vault;本 repo 不复制、不改写它们)
+
+| 要什么 | 读哪 |
+| --- | --- |
+| 产品定义(SSOT) | `/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/02_Wiki/Projects/Cognitive Continuity System.md` |
+| **MVP spec(建什么/不建什么/为什么)** | `/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/02_Wiki/Frameworks/CCS MVP Spec.md` |
+| Roadmap(硬锚日期) | `/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/03_Outputs/Reports/Forme Roadmap (Live).md` |
+| 实验证据(设计依据) | `/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/03_Outputs/Reports/CCS Validation v2 - 2026-07-02.md` |
+| 调研证据(底座政策/竞品/机制) | `/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/03_Outputs/Reports/CCS MVP 调研 - 2026-07-01.md` |
+
+日常以 spec 为准;冲突时以 SSOT 为准。
+
+## 架构:一张决策卡的 7 步生命周期
+
+1. **触发**:launchd(WatchPaths 盯 vault + 错过任务唤醒补跑)拉起 runner
+2. **Agent run**:`codex exec --json --output-schema` 扫 vault 增量找漂移;prompt 注入 `Taste Rules.md` + k 条相似历史决策
+3. **落盘**:卡片 JSON(schema 强制)+ markdown 镜像写进 vault;**指纹查重**(category+目标+diff hash)命中 rejected/parked 名单 → 直接丢弃
+4. **呈现**:localhost console 渲染固定外观的原语卡;不推送,等用户来(工作流边界)
+5. **落子**:单键 a/p/r;diff 应用(git 可回滚);time-to-decision 静默计时;追加 `decisions.jsonl`
+6. **学习**:每 ~20 条决策,从 jsonl 提炼人可读规则追加 `Taste Rules.md`(用户可直接编辑)
+7. **授权**:某类回放一致率 >95% → 影子模式(预决策但仍展示)→ 用户显式确认后该类自动化
+
+## 硬约束(违反即打回,全部来自已验证定律)
+
+1. 人侧动作 = 只读 + 单手势落子;correction 是唯一例外且可选
+2. 每轮呈现的提案数按近期接受率自适应节流;只在工作流边界成批出现
+3. 唤醒 → 首卡可见 ≤ 10 秒(增量指纹只处理 delta;可先渲染旧状态并标注)
+4. UI 零私有状态:所有卡片有 markdown 镜像;**vault 是唯一真相层**
+5. 卡片 schema 从 day 1 信封形(`origin/from/role/category`)——为 post-MVP agent relay 预留
+6. 重复率→0 靠确定性工程(指纹 + 硬过滤),不靠 LLM 自觉
+
+## 技术基线
+
+- **执行底座**:Codex CLI headless 优先;Claude Code 经 SKILL.md 兼容(第二目标)
+- **政策事实**:Anthropic 禁止消费级 OAuth 用于第三方产品(**不得**设计任何依赖用户 Claude 订阅的路径);OpenAI 允许订阅 OAuth 用于第三方工具。两条均待对官方原文最终核验(见 issues)
+- **调度**:launchd(macOS 首发);**数据**:`decisions.jsonl`(event log,只追加)、`Taste Rules.md`、卡片 JSON + md 镜像
+- **License**:公开时 Apache-2.0;**Console 技术栈**:W1 Day 1 决定(倾向 TS/Node 轻量 localhost,勿引重框架)
+
+## 会话协议(每个 build 会话遵守)
+
+- 本 repo 的会话**只做 build**;战略问题(定位、范围、优先级)不在这里决定——开 issue 加 label `needs-vault-decision`,周一 vault 周会处理
+- 每个 session 结束:更新相关 issue 状态 + 留一行进度 comment(供周会回流 vault)
+- 可以**读** vault 任何文档,**不改** vault 内容(回流由 vault 侧会话负责)
+- Commit 简短描述性;repo private 至 W6,发布另有清单
+
+## 公开前清单(W6,~08-18)
+
+- [ ] 本文件的本地绝对路径移除(公开版产品文档进 `docs/`)
+- [ ] README 重写为 landing;加 LICENSE(Apache-2.0)
+- [ ] 全库隐私扫描(不得含 owner vault 内容样本以外的个人信息)
