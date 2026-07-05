@@ -30,3 +30,9 @@ localhost console(W3)用 Node 内置 http + 原生 TS + 极简客户端脚本,�
 
 **2026-07-04 · License = Apache-2.0(公开时应用) · assumed**
 `package.json` 已标 `Apache-2.0`;LICENSE 文件在 W6 公开清单里补。(issue #6,承 vault 侧既有决定)
+
+**2026-07-04 · vault 写入边界 = 仅 `98_Forme/` · assumed**
+会话协议「不改 vault 内容」裁定为:不动知识层(既有各目录任何文件)。Forme 运行时产物(卡片 JSON + md 镜像、`decisions.jsonl`、日后 `Taste Rules.md`)只写 vault 顶层 `98_Forme/`,其外零写入。已转录进 CLAUDE.md 会话协议。#5 runner 落地后转 validated-in-use。(vault 侧裁定,承 #5)
+
+**2026-07-04 · decisions.jsonl 保持事件日志,种子对齐 schema(非反之) · validated-in-use**
+撤回「runner 对齐 #1 种子格式」——spec 承诺 event-log 形态(relay/同步友好),单条终态记录表达不了 park→再决策的生命周期(要么破坏 append-only,要么退化回事件语义)。#1 的三条种子是**去范式化的历史数据快照,不是 schema**。据此微调 event schema(非重构):①`decision` 加可选 `executed`(应用 diff 的 commit hash,种子里唯一值得吸的字段);②决策者字段命名 `actor`,枚举 `owner`/`agent_shadow`/`agent_authorized`——不撞卡 envelope 的 `role`(消息角色),且是影子模式必需字段,一步到位;③**事件反范式化**:去掉 denormalized `category`,事件只引 `cardId`+`fingerprint`,category/信封住卡里;④backfilled 记录可省 `latencyMs`(人肉阶段未计时)。三条种子已事件化导入 `schema/samples/decisions.sample.jsonl`(每卡 presented+decision 一对,`ts`/`executed`/`fingerprint` 均由真实 vault commit 反查,标 `backfilled`)。已验证:18 项测试绿。(issue #4;修订本文件上一条「三型」ADR)

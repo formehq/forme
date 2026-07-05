@@ -2,17 +2,17 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://forme.sh/schema/decision-event.schema.json",
   "title": "Forme decisions.jsonl event",
-  "description": "One append-only line in decisions.jsonl. The event log the taste learner reads from. Three types: presented (starts the silent timer), decision (accept/park/reject + measured latency), correction (the optional in-place edit before accepting).",
+  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Three types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit), correction (the optional in-place edit before accepting).",
   "type": "object",
   "additionalProperties": false,
-  "required": ["v", "ts", "type", "cardId", "fingerprint", "category"],
+  "required": ["v", "ts", "type", "cardId", "fingerprint"],
   "properties": {
     "v": {
       "description": "Event log format version.",
       "const": "0"
     },
     "ts": {
-      "description": "When the event occurred.",
+      "description": "When the event occurred (full ISO instant; latency is derived from presented→decision ts).",
       "type": "string",
       "format": "date-time"
     },
@@ -21,19 +21,14 @@
       "enum": ["presented", "decision", "correction"]
     },
     "cardId": {
-      "description": "id of the card this event is about.",
+      "description": "id of the card this event is about. Join key to the card (where category + envelope live).",
       "type": "string",
       "minLength": 1
     },
     "fingerprint": {
-      "description": "Card fingerprint. Lets the learner group events by drift identity across regenerations.",
+      "description": "Card fingerprint. The drift-identity key: lets the learner group decisions across regenerations (same drift → different cardId, same fingerprint).",
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
-    },
-    "category": {
-      "description": "Card category, denormalized onto every event so the learner never has to join back to the card.",
-      "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
     },
     "choice": {
       "description": "Present on decision events.",
@@ -41,9 +36,19 @@
       "enum": ["accept", "park", "reject"]
     },
     "latencyMs": {
-      "description": "Present on decision events: silently measured time from presented to decision. This is 'time-to-decision' / the latency signal.",
+      "description": "On live decision events: silently measured time from presented to decision (time-to-decision). Omitted on backfilled (human-era, untimed) records.",
       "type": "integer",
       "minimum": 0
+    },
+    "actor": {
+      "description": "Who made the decision. 'owner' = human. Reserved for the agency ladder: 'agent_shadow' (shadow mode pre-decides but still shows), 'agent_authorized' (authorized automation, still reversible). Distinct from the card's envelope `role` (a message role), by design.",
+      "type": "string",
+      "enum": ["owner", "agent_shadow", "agent_authorized"]
+    },
+    "executed": {
+      "description": "On accepted decisions: the git commit hash of the applied diff (execution receipt; enables rollback). Absent for park/reject.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$"
     },
     "correction": {
       "description": "Present on correction events: the user's edited hunks before accepting. The one sanctioned exception to read-only.",
@@ -70,15 +75,26 @@
           "type": "string"
         }
       }
+    },
+    "backfilled": {
+      "description": "true = a historical/imported record (e.g. the pre-product human-era decisions), not produced live by the runner. Backfilled decisions may omit latencyMs (untimed).",
+      "type": "boolean"
     }
   },
   "allOf": [
     {
-      "if": { "properties": { "type": { "const": "decision" } } },
-      "then": { "required": ["choice", "latencyMs"] }
+      "if": { "properties": { "type": { "const": "decision" } }, "required": ["type"] },
+      "then": { "required": ["choice", "actor"] }
     },
     {
-      "if": { "properties": { "type": { "const": "correction" } } },
+      "if": {
+        "properties": { "type": { "const": "decision" }, "backfilled": { "not": { "const": true } } },
+        "required": ["type"]
+      },
+      "then": { "required": ["latencyMs"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "correction" } }, "required": ["type"] },
       "then": { "required": ["correction"] }
     }
   ]

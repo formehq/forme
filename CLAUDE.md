@@ -64,7 +64,7 @@
 - 本 repo 的会话**只做 build**;战略问题(定位、范围、优先级)不在这里决定——开 issue 加 label `needs-vault-decision`,周一 vault 周会处理
 - 每个 session 结束:更新相关 issue 状态 + 留一行进度 comment(供周会回流 vault)
 - **动了架构 / schema / 交互的会话,结束前必须更新对应 `docs/` 文件**(ARCHITECTURE 的「能做/不能做」、DECISIONS 追加一条、SCHEMA 同步)——docs 是 Zayn 的系统理解面,过期即失职(#7 纪律)
-- 可以**读** vault 任何文档,**不改** vault 内容(回流由 vault 侧会话负责)
+- 可以**读** vault 任何文档;**不改 vault 内容 = 不动知识层**(既有各目录的任何文件,回流由 vault 侧会话负责)。**例外:Forme 运行时产物只写 vault 顶层 `98_Forme/`**(卡片 JSON + md 镜像、`decisions.jsonl`、日后 `Taste Rules.md`),其外零写入(2026-07-04 裁定,见 `docs/DECISIONS.md`)
 - Commit 简短描述性;repo private 至 W6,发布另有清单
 
 ## 公开前清单(W6,~08-18)

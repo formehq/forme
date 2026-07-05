@@ -79,15 +79,38 @@ test("a hunk that is empty on both sides is rejected", () => {
   assert.equal(checkCard(card).valid, false);
 });
 
-test("a decision event missing latencyMs is rejected", () => {
-  const bad = {
-    v: "0",
-    ts: "2026-07-04T09:00:00Z",
-    type: "decision",
-    cardId: "x",
-    fingerprint: "f".repeat(64),
-    category: "stale-claim",
-    choice: "accept",
-  };
-  assert.equal(checkEvent(bad).valid, false);
+const baseDecision = {
+  v: "0",
+  ts: "2026-07-04T09:00:00Z",
+  type: "decision",
+  cardId: "x",
+  fingerprint: "f".repeat(64),
+  choice: "accept",
+  actor: "owner",
+};
+
+test("a live decision event missing latencyMs is rejected", () => {
+  assert.equal(checkEvent(baseDecision).valid, false);
+});
+
+test("a live decision event with latencyMs + actor passes", () => {
+  assert.equal(checkEvent({ ...baseDecision, latencyMs: 1200 }).valid, true);
+});
+
+test("a decision event missing actor is rejected", () => {
+  const { actor, ...noActor } = baseDecision;
+  assert.equal(checkEvent({ ...noActor, latencyMs: 1200 }).valid, false);
+});
+
+test("a backfilled decision may omit latencyMs (human-era, untimed)", () => {
+  assert.equal(checkEvent({ ...baseDecision, backfilled: true }).valid, true);
+});
+
+test("events are thin: a card-side field like category is rejected", () => {
+  assert.equal(checkEvent({ ...baseDecision, latencyMs: 1200, category: "filing" }).valid, false);
+});
+
+test("actor enum reserves the agency-ladder values", () => {
+  assert.equal(checkEvent({ ...baseDecision, latencyMs: 0, actor: "agent_shadow" }).valid, true);
+  assert.equal(checkEvent({ ...baseDecision, latencyMs: 0, actor: "nope" }).valid, false);
 });

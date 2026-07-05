@@ -59,15 +59,18 @@ fingerprint = sha256( category \0 diff.file \0 diffHash )
 
 ## decisions.jsonl(decision-event.schema.json)——只追加事件日志
 
-taste 学习器的唯一读入。每行一个事件,三型:
+taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerprint`;category、信封(origin/from/role)等卡侧信息住卡里,不进事件(join key = cardId,分组 key = fingerprint)。每行一个事件,三型:
 
-| type | 何时 | 关键字段 |
+| type | 何时 | 追加字段 |
 | --- | --- | --- |
-| `presented` | 卡呈现(**启动静默计时**) | `ts, cardId, fingerprint, category` |
-| `decision` | 用户落子 | `+ choice(a/p/r), latencyMs`(presented→decision 的静默延迟 = time-to-decision) |
-| `correction` | accept 前就地改了 diff | `+ correction{ hunks[], note? }` |
+| `presented` | 卡呈现(**启动静默计时**) | —— |
+| `decision` | 用户落子 | `choice(a/p/r)` · `actor` · `latencyMs`(live 必填=presented→decision 静默延迟)· `executed?`(accept 时应用 diff 的 commit hash,执行凭证) |
+| `correction` | accept 前就地改了 diff | `correction{ hunks[], note? }` |
 
-公共信封:`{ v:"0", ts, type, cardId, fingerprint, category }`。`category`/`fingerprint` 冗余落在每个事件上,学习器无需回连卡即可分组。`latencyMs` 作为 decision 事件上的字段实现"latency"信号(presented 事件保留可重算)——见 `DECISIONS.md` 该条。
+公共信封:`{ v:"0", ts, type, cardId, fingerprint }`(`ts` 完整 ISO,latency 由 presented→decision 的 ts 差算)。
+
+- **`actor`** = 决策者:`owner`(人)· 预留 `agent_shadow`(影子预决策但仍展示)· `agent_authorized`(授权自动化,仍可撤回)。与卡 envelope 的 `role`(消息角色)**同名不同义、刻意分开**——`actor` 是影子模式日后必需的字段,一步到位。
+- **`backfilled: true`** = 历史/导入记录(如产品前的人肉决策),可省 `latencyMs`(人肉阶段无法诚实计时)。样例里的 6 条事件即三条种子(#1 comment)的事件化:每卡 presented+decision 一对,`ts` 取真实 commit 时刻,`executed` = 真实应用 commit,`fingerprint` 由该 commit 的真实 diff 反查而来。
 
 ---
 
