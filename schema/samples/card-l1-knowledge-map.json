@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "0",
+  "id": "card_l1_knowledge-map-link_20260704",
+  "origin": {
+    "agent": "codex",
+    "model": "gpt-5-codex",
+    "runId": "run_demo_0001",
+    "at": "2026-07-04T09:00:00Z"
+  },
+  "from": "forme://local/runner",
+  "role": "proposal",
+  "category": "broken-link",
+  "title": "[[Knowledge Map]] 掉了 .canvas,Home.md 里 2 处未解析",
+  "summary": "真身是 Knowledge Map.canvas;AI Operating Spec 已用带扩展名的正确写法可参照。",
+  "evidence": [
+    {
+      "path": "04_Index/Home.md",
+      "locator": "L7",
+      "quote": "[[Knowledge Map]]",
+      "note": "未解析链接(第一处)"
+    },
+    {
+      "path": "04_Index/Home.md",
+      "locator": "L53",
+      "quote": "[[Knowledge Map]]",
+      "note": "同一文件第二处"
+    },
+    {
+      "path": "02_Wiki/AI Operating Spec.md",
+      "locator": "L47",
+      "quote": "[[Knowledge Map.canvas|Knowledge Map]]",
+      "note": "库内已有正确写法可参照"
+    }
+  ],
+  "diff": {
+    "file": "04_Index/Home.md",
+    "hunks": [
+      {
+        "locator": "L7",
+        "before": "[[Knowledge Map]]",
+        "after": "[[Knowledge Map.canvas|Knowledge Map]]"
+      },
+      {
+        "locator": "L53",
+        "before": "[[Knowledge Map]]",
+        "after": "[[Knowledge Map.canvas|Knowledge Map]]"
+      }
+    ]
+  },
+  "options": [
+    {
+      "id": "accept",
+      "label": "接受",
+      "hotkey": "a"
+    },
+    {
+      "id": "park",
+      "label": "搁置",
+      "hotkey": "p"
+    },
+    {
+      "id": "reject",
+      "label": "拒绝",
+      "hotkey": "r"
+    }
+  ],
+  "fingerprint": "f6d89ad0ea5ce9c5213ac115d28a7f1fd8d5b945c9b7f3de42f0d973fe0d1b11",
+  "estSeconds": 15,
+  "createdAt": "2026-07-04T09:00:03Z"
+}

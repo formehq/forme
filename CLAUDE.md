@@ -43,12 +43,27 @@
 - **执行底座 = 三层矩阵(2026-07-04 定)**:Tier 1 默认 Codex CLI(`codex exec --json --output-schema`,`--sandbox workspace-write`);Tier 2 OpenCode(server/SDK 路径,适配器排 W7,见 #8);Tier 3 SKILL.md(Claude Code + OpenCode 均识别)。runner 接口按双调用形态设计(one-shot exec / 长驻 server-SDK);schema 校验用自有 AJV,不信 harness
 - **政策事实(已核验 2026-07-04,原文级,见 #2/#3 关闭记录)**:Anthropic 禁产品侧消费级 OAuth(**不得**设计依赖用户 Claude 订阅的产品路径;用户自己的 Claude Code + SKILL.md 显式合规);OpenAI **无**第三方订阅 OAuth 计划——登录委托用户自己的 Codex CLI(headless device-auth 官方支持);每轮 run 小增量 + 支持 API key 档(Plus 额度 15–80 条/5h)
 - **调度**:launchd(macOS 首发);**数据**:`decisions.jsonl`(event log,只追加)、`Taste Rules.md`、卡片 JSON + md 镜像
-- **License**:公开时 Apache-2.0;**Console 技术栈**:W1 Day 1 决定(倾向 TS/Node 轻量 localhost,勿引重框架)
+- **License**:公开时 Apache-2.0;**Console 技术栈**:已定=原生 TS + `node:http`,零重框架(2026-07-04,见 `docs/DECISIONS.md`)
+
+## 仓库现状(随进度更新)
+
+- **已建**:`schema/`(卡片 + 事件 JSON Schema、指纹、AJV 校验、3 张真样卡 —— #4 完成)· `docs/`(ARCHITECTURE / DECISIONS / SCHEMA)· `design/`(交互稿 —— #1)· 工具链(Node 原生 TS,无构建步骤)
+- **未建**:`runner/`(#5,占位)· `console/`(W3,占位)· launchd 调度
+- 一句话:**数据契约成立,管道未通**;下一块 = #5 runner 首跑。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
+
+## 常用命令
+
+- `npm install` —— 装依赖(ajv / ajv-formats;首次)
+- `npm test` —— schema 测试(`node --test`,13 项:样卡过校验 + 指纹自洽 + 边界拒绝)
+- `npm run validate` —— 用 Forme 自己的 AJV 门跑一遍所有样例(卡 + decisions.jsonl)
+- `npm run typecheck` —— `tsc --noEmit`(不产出,只查型)
+- `gh issue list --milestone "W1 — 骨架 + 第一张真决策卡"` —— 看 W1 任务;关键路径 #4(done)→ #6(done)→ #5
 
 ## 会话协议(每个 build 会话遵守)
 
 - 本 repo 的会话**只做 build**;战略问题(定位、范围、优先级)不在这里决定——开 issue 加 label `needs-vault-decision`,周一 vault 周会处理
 - 每个 session 结束:更新相关 issue 状态 + 留一行进度 comment(供周会回流 vault)
+- **动了架构 / schema / 交互的会话,结束前必须更新对应 `docs/` 文件**(ARCHITECTURE 的「能做/不能做」、DECISIONS 追加一条、SCHEMA 同步)——docs 是 Zayn 的系统理解面,过期即失职(#7 纪律)
 - 可以**读** vault 任何文档,**不改** vault 内容(回流由 vault 侧会话负责)
 - Commit 简短描述性;repo private 至 W6,发布另有清单
 

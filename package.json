@@ -1,0 +1,24 @@
+{
+  "name": "forme",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Local-first agent that turns knowledge-base drift into one-decision cards.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "validate": "node schema/validate-samples.ts",
+    "test": "node --test schema/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

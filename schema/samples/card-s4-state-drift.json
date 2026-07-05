@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "0",
+  "id": "card_s4_state-drift_20260704",
+  "origin": {
+    "agent": "codex",
+    "model": "gpt-5-codex",
+    "runId": "run_demo_0001",
+    "at": "2026-07-04T09:00:00Z"
+  },
+  "from": "forme://local/runner",
+  "role": "proposal",
+  "category": "stale-frontmatter",
+  "title": "「State Drift」——产品的核心原语——仍标着 draft",
+  "summary": "正文四节完整、被全库反链约 17 次、是 Forme drift detection 的名字来源,却还挂 draft。",
+  "evidence": [
+    {
+      "path": "02_Wiki/Concepts/State Drift.md",
+      "locator": "frontmatter",
+      "quote": "status: draft\nmaturity: draft\nupdated: 2026-05-26",
+      "note": "三个字段都停在初稿态,最后更新 05-26"
+    },
+    {
+      "path": "02_Wiki/Concepts/State Drift.md",
+      "locator": "body",
+      "note": "四节正文完整,被全库反链约 17 次,是 drift detection 的命名来源"
+    }
+  ],
+  "diff": {
+    "file": "02_Wiki/Concepts/State Drift.md",
+    "hunks": [
+      {
+        "locator": "frontmatter.status",
+        "before": "status: draft",
+        "after": "status: active"
+      },
+      {
+        "locator": "frontmatter.maturity",
+        "before": "maturity: draft",
+        "after": "maturity: stable"
+      },
+      {
+        "locator": "frontmatter.updated",
+        "before": "updated: 2026-05-26",
+        "after": "updated: 2026-07-04"
+      }
+    ]
+  },
+  "options": [
+    {
+      "id": "accept",
+      "label": "接受",
+      "hotkey": "a"
+    },
+    {
+      "id": "park",
+      "label": "搁置",
+      "hotkey": "p"
+    },
+    {
+      "id": "reject",
+      "label": "拒绝",
+      "hotkey": "r"
+    }
+  ],
+  "fingerprint": "f9119399c34ce2ba8b19408ec02dba35d724590e427cdd2e4d6759996c108f7b",
+  "estSeconds": 20,
+  "createdAt": "2026-07-04T09:00:03Z"
+}

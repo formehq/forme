@@ -1,0 +1,79 @@
+# SCHEMA — 决策卡 + decisions.jsonl(v0)
+
+数据契约的**单一事实源**。机器可读的权威定义是 `schema/*.json`(AJV 加载的就是它);本文件解释每个字段、指纹算法与事件语义,与 `.json` 同步维护(动了 schema 的会话结束前必须同步本文件)。
+
+- 机器 SSOT:`schema/card.schema.json`、`schema/decision-event.schema.json`(JSON Schema draft 2020-12)
+- 指纹算法:`schema/fingerprint.ts`
+- 校验器:`schema/validate.ts`(我们自己的 AJV;**不信任何 harness 的自觉**)
+- 手写样例:`schema/samples/`(3 张真卡 + 一段 decisions.jsonl)
+
+设计基线:**agent 只读、只返回符合 schema 的 JSON;一切写盘、指纹、校验由 Forme 代码执行**(硬约束 #7)。
+
+---
+
+## 决策卡(card.schema.json)
+
+一张卡 = 一个"等你 accept / park / reject"的提案。**信封形**(`origin/from/role`)为 post-MVP 的 agent relay 预留:一张卡未来可以在 Forme 节点之间转发(硬约束 #5)。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `schemaVersion` | `"0"` | 卡 schema 主版本,破坏性变更时 +1 |
+| `id` | string | 卡实例 id(跨重生**不稳定**;身份看 `fingerprint`) |
+| `origin` | object | **信封**:产出内容的底座 + 运行。`{ agent, model?, runId, at, host? }` |
+| `from` | string | **信封**:发出此卡的 Forme 节点身份。MVP 恒为本地节点 |
+| `role` | enum | **信封**:relay 协议里的消息角色。v0 恒 `"proposal"`;预留 `digest`(State Diff)/`decision`/`relay`/`ack` |
+| `category` | slug | 漂移类别(kebab-case),如 `stale-frontmatter`/`broken-link`/`stale-claim`/`orphan`。**进指纹** |
+| `title` | string | 卡的人读标题(默认中文)。用户第一眼读的东西 |
+| `summary` | string? | 标题下的可选单行上下文 |
+| `evidence[]` | array | 卡为何存在。标题里的每个断言都要在这里落地。渲染成"证据"块 |
+| `diff` | object | 提议的**单一最小改动**。由 Forme 代码确定性应用(git 提交以便回滚),渲染成 `-/+` |
+| `options[]` | array | 决策手势。MVP 恒为 accept / park / reject |
+| `fingerprint` | sha256 hex | 确定性去重键(见下)。由 Forme 代码算,不由 agent 算 |
+| `estSeconds` | int? | agent 估的 time-to-decision(秒)。仅参考;真实延迟静默计量 |
+| `createdAt` | date-time | Forme 写盘此卡的时刻 |
+
+### evidence[] 项
+`{ path(必填,vault 相对), locator?(如 "L283" / "frontmatter.status" / "#anchor"), quote?(逐字摘录), note?(一句话为何是证据) }`
+
+### diff
+`{ file(必填,vault 相对目标), hunks[] }`。**一张卡 = 一个目标文件**(让指纹 = category+file+diffhash 干净、让每处改动独立可 git 回滚)。同一漂移出现在多个文件 → 多张卡(靠指纹各自去重)。跨文件的"一键改全部"是 post-MVP 的批量卡(role 预留),不在 v0。
+
+### hunk(精确字符串替换)
+`{ locator?, before, after }`。在文件里匹配 `before`,替换成 `after`。`before=""` 为纯插入;`after=""` 为删除;两者不能同时为空。`locator` 用来消歧(同一 `before` 在文件里出现多次时指明是哪处——见 L1 样卡)。确定性可应用、可渲染成 `-/+`。
+
+### option
+`{ id: "accept"|"park"|"reject", label(默认中文), hotkey(单键) }`。**correction(就地修订)不是 option**,是 accept 前对 diff 的编辑,记在 jsonl 的 correction 事件里(read-only 的唯一例外)。
+
+---
+
+## 指纹(fingerprint.ts)——去重的全部基础
+
+```
+diffHash    = sha256( 规范排序后的 hunks )        # hunk 顺序无关
+fingerprint = sha256( category \0 diff.file \0 diffHash )
+```
+
+同一漂移无论 agent 以什么顺序吐 hunk,都得到**同一指纹**。runner 用它对照 rejected/parked 名单做**硬过滤**:命中即在呈现前丢弃。重复率→0 靠这段确定性工程,不靠 LLM 自觉(硬约束 #6)。
+
+---
+
+## decisions.jsonl(decision-event.schema.json)——只追加事件日志
+
+taste 学习器的唯一读入。每行一个事件,三型:
+
+| type | 何时 | 关键字段 |
+| --- | --- | --- |
+| `presented` | 卡呈现(**启动静默计时**) | `ts, cardId, fingerprint, category` |
+| `decision` | 用户落子 | `+ choice(a/p/r), latencyMs`(presented→decision 的静默延迟 = time-to-decision) |
+| `correction` | accept 前就地改了 diff | `+ correction{ hunks[], note? }` |
+
+公共信封:`{ v:"0", ts, type, cardId, fingerprint, category }`。`category`/`fingerprint` 冗余落在每个事件上,学习器无需回连卡即可分组。`latencyMs` 作为 decision 事件上的字段实现"latency"信号(presented 事件保留可重算)——见 `DECISIONS.md` 该条。
+
+---
+
+## 改这份契约时
+
+1. 先改 `schema/*.json`(权威),同步本文件的字段表。
+2. `npm test` 必须绿(13 项:3 样卡过校验 + 指纹自洽 + 边界拒绝)。
+3. `npm run validate` 对所有样例跑一遍 Forme 自己的门。
+4. 在 `DECISIONS.md` 追一条 ADR(含日期 + 验证状态)。

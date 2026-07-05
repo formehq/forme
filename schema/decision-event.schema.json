@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.sh/schema/decision-event.schema.json",
+  "title": "Forme decisions.jsonl event",
+  "description": "One append-only line in decisions.jsonl. The event log the taste learner reads from. Three types: presented (starts the silent timer), decision (accept/park/reject + measured latency), correction (the optional in-place edit before accepting).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "ts", "type", "cardId", "fingerprint", "category"],
+  "properties": {
+    "v": {
+      "description": "Event log format version.",
+      "const": "0"
+    },
+    "ts": {
+      "description": "When the event occurred.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["presented", "decision", "correction"]
+    },
+    "cardId": {
+      "description": "id of the card this event is about.",
+      "type": "string",
+      "minLength": 1
+    },
+    "fingerprint": {
+      "description": "Card fingerprint. Lets the learner group events by drift identity across regenerations.",
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "category": {
+      "description": "Card category, denormalized onto every event so the learner never has to join back to the card.",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "choice": {
+      "description": "Present on decision events.",
+      "type": "string",
+      "enum": ["accept", "park", "reject"]
+    },
+    "latencyMs": {
+      "description": "Present on decision events: silently measured time from presented to decision. This is 'time-to-decision' / the latency signal.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "correction": {
+      "description": "Present on correction events: the user's edited hunks before accepting. The one sanctioned exception to read-only.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hunks"],
+      "properties": {
+        "hunks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["before", "after"],
+            "properties": {
+              "locator": { "type": "string" },
+              "before": { "type": "string" },
+              "after": { "type": "string" }
+            }
+          }
+        },
+        "note": {
+          "description": "Optional free-text reason for the correction; raw material for taste rules.",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "type": { "const": "decision" } } },
+      "then": { "required": ["choice", "latencyMs"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "correction" } } },
+      "then": { "required": ["correction"] }
+    }
+  ]
+}
