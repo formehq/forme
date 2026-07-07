@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { writeFileSync, readFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
@@ -7,6 +7,8 @@ import { recentMarkdownFiles } from "./scan.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { assembleCard } from "./card.ts";
+import { loadSuppressionList } from "./suppress.ts";
+import { appendRunMetric } from "./metrics.ts";
 import type { AgentCard } from "./types.ts";
 
 /**
@@ -38,6 +40,24 @@ const outDir = arg("out") ?? join(vault, "98_Forme");
 const model = arg("model");
 const dryRun = hasFlag("dry-run");
 
+// 额度守卫(launchd 传 --min-hours 20;手动跑默认 0 = 不拦)。守卫住 runner
+// 本体而非 shell wrapper:带 provenance/quarantine xattr 的脚本会被 launchd
+// 拒执行(exec EPERM),plist 直接 exec node 就没有中间脚本这一层风险。
+// 时钟 = run-metrics.jsonl 的 mtime(只有真实完成的 run 会动它,
+// 手动/自动共享同一额度窗口,无独立状态文件)。
+const minHours = Number(arg("min-hours", "0"));
+if (minHours > 0) {
+  try {
+    const ageH = (Date.now() - statSync(join(outDir, "run-metrics.jsonl")).mtimeMs) / 3_600_000;
+    if (ageH < minHours) {
+      console.log(`skip: last run ${ageH.toFixed(1)}h ago (< ${minHours}h quota window)`);
+      process.exit(0);
+    }
+  } catch {
+    // 无数据点文件 = 从未真跑过,不拦
+  }
+}
+
 const at = new Date().toISOString();
 const runId = `run_${Date.now().toString(36)}_${randomBytes(3).toString("hex")}`;
 
@@ -48,6 +68,12 @@ if (files.length === 0) {
 }
 console.log(`forme runner ${runId}`);
 console.log(`scan: ${files.length} files from last ${commits} commits of ${vault}`);
+
+const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
+console.log(
+  `suppression list: ${suppression.fingerprints.size} decided fingerprint(s) from ${suppression.events} event(s)` +
+    (suppression.unreadable ? ` (${suppression.unreadable} unreadable line(s)!)` : ""),
+);
 
 const schemaPath = join(tmpdir(), `forme-agent-schema-${runId}.json`);
 writeFileSync(schemaPath, JSON.stringify(agentOutputSchema()));
@@ -101,12 +127,18 @@ mkdirSync(join(outDir, "cards"), { recursive: true });
 let written = 0;
 let dup = 0;
 let rejected = 0;
+let suppressed = 0;
 
 for (const ac of agentCards) {
   const { card, serializable, validation } = assembleCard(ac, { runId, at, model });
   if (!validation.valid) {
     rejected++;
     console.log(`  reject ${ac.category} — ${validation.errors.slice(0, 2).join("; ")}`);
+    continue;
+  }
+  if (suppression.fingerprints.has(card.fingerprint)) {
+    suppressed++;
+    console.log(`  suppress ${card.id} (${ac.category}) — 指纹已决,静默丢弃`);
     continue;
   }
 
@@ -127,6 +159,19 @@ for (const ac of agentCards) {
   console.log(`  write  ${card.id} (${ac.category}) — ${ac.title}`);
 }
 
+if (!dryRun) {
+  appendRunMetric(join(outDir, "run-metrics.jsonl"), {
+    v: "0",
+    date: at.slice(0, 10),
+    runId,
+    proposed: agentCards.length,
+    suppressed,
+    presented: written,
+    rejected,
+    dup,
+  });
+}
+
 console.log(
-  `done: ${written} ${dryRun ? "would-write" : "written"}, ${dup} dup, ${rejected} rejected → ${join(outDir, "cards")}`,
+  `done: ${written} ${dryRun ? "would-write" : "written"}, ${suppressed} suppressed, ${dup} dup, ${rejected} rejected → ${join(outDir, "cards")}`,
 );

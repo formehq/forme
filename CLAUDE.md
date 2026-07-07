@@ -4,7 +4,7 @@
 
 **Forme**(中文名待定)= local-first agent,把用户知识库的漂移变成 one-decision 卡片(证据 + 最小 diff + accept/park/reject),并从每次决策学习用户的 taste。它是 CCS(Cognitive Continuity System)的产品化;所有核心回路已在 owner 的 vault 上经过 ~6 周自我实验验证。
 
-**当前阶段:W1(骨架 + 第一张真决策卡)。** 任务看 GitHub Issues/Milestones(W1→W6);本文件是每个 build 会话的起点——读完即有完整上下文,不需要翻旧会话。
+**当前阶段:W2(重复抑制 + Taste Rules + State Diff 生成器)。** 任务看 GitHub Issues/Milestones(W1→W6);本文件是每个 build 会话的起点——读完即有完整上下文,不需要翻旧会话。
 
 ## Canonical 文档(战略层住在 vault;本 repo 不复制、不改写它们)
 
@@ -47,9 +47,9 @@
 
 ## 仓库现状(随进度更新)
 
-- **已建**:`schema/`(卡片 + 事件 JSON Schema、指纹、AJV 校验、3 张真样卡 —— #4 完成)· `docs/`(ARCHITECTURE / DECISIONS / SCHEMA)· `design/`(交互稿 —— #1)· 工具链(Node 原生 TS,无构建步骤)
-- **未建**:`runner/`(#5,占位)· `console/`(W3,占位)· launchd 调度
-- 一句话:**数据契约成立,管道未通**;下一块 = #5 runner 首跑。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
+- **已建**:`schema/`(卡片 + 事件 JSON Schema、指纹、AJV 校验、样卡 —— #4)· `runner/`(codex exec 真跑 → 自有 AJV 门 → 指纹抑制 → 卡落 `98_Forme/cards/` + run-metrics 数据点 —— #5、#9)· `launchd/`(日跑 + 额度守卫,已装机 —— #9)· `docs/` · `design/` · 工具链(Node 原生 TS,无构建步骤)
+- **未建**:`console/`(W3,占位)· Taste Rules 提炼/注入(#10)· State Diff 生成器(#11)
+- 一句话:**采集端闭环(调度 → 扫描 → 抑制 → 落卡 → 重复率曲线),决策端未通**;下一块 = #10/#11。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
 
 ## 常用命令
 

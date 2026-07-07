@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.forme.runner</string>
+
+  <!-- 直接 exec node,不经 shell wrapper:带 provenance/quarantine xattr 的
+       脚本会被 launchd 拒执行(exec EPERM),少一层中间脚本少一类故障。
+       额度守卫在 runner 本体(min-hours 标志)。 -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>{{NODE}}</string>
+    <string>{{REPO}}/runner/index.ts</string>
+    <string>--vault</string><string>{{VAULT}}</string>
+    <string>--min-hours</string><string>20</string>
+  </array>
+
+  <!-- launchd 的 PATH 极简;codex / git 所在目录在安装时固化 -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>{{PATH}}</string>
+  </dict>
+
+  <!-- 日跑锚点:每天固定时刻;睡眠错过的日程 macOS 会在唤醒时补发 -->
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>{{HOUR}}</integer><key>Minute</key><integer>0</integer></dict>
+
+  <!-- 工作流边界触发:vault 每次 commit 都动 reflog;真跑与否由守卫决定 -->
+  <key>WatchPaths</key>
+  <array><string>{{VAULT}}/.git/logs/HEAD</string></array>
+
+  <!-- 关机错过的补跑:登录/bootstrap 时拉一次,守卫保证不重复烧额度 -->
+  <key>RunAtLoad</key><true/>
+
+  <key>ThrottleInterval</key><integer>3600</integer>
+  <key>StandardOutPath</key><string>{{LOG}}/runner.log</string>
+  <key>StandardErrorPath</key><string>{{LOG}}/runner.log</string>
+</dict>
+</plist>

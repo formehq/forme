@@ -36,3 +36,15 @@ localhost console(W3)用 Node 内置 http + 原生 TS + 极简客户端脚本,�
 
 **2026-07-04 · decisions.jsonl 保持事件日志,种子对齐 schema(非反之) · validated-in-use**
 撤回「runner 对齐 #1 种子格式」——spec 承诺 event-log 形态(relay/同步友好),单条终态记录表达不了 park→再决策的生命周期(要么破坏 append-only,要么退化回事件语义)。#1 的三条种子是**去范式化的历史数据快照,不是 schema**。据此微调 event schema(非重构):①`decision` 加可选 `executed`(应用 diff 的 commit hash,种子里唯一值得吸的字段);②决策者字段命名 `actor`,枚举 `owner`/`agent_shadow`/`agent_authorized`——不撞卡 envelope 的 `role`(消息角色),且是影子模式必需字段,一步到位;③**事件反范式化**:去掉 denormalized `category`,事件只引 `cardId`+`fingerprint`,category/信封住卡里;④backfilled 记录可省 `latencyMs`(人肉阶段未计时)。三条种子已事件化导入 `schema/samples/decisions.sample.jsonl`(每卡 presented+decision 一对,`ts`/`executed`/`fingerprint` 均由真实 vault commit 反查,标 `backfilled`)。已验证:18 项测试绿。(issue #4;修订本文件上一条「三型」ADR)
+
+**2026-07-06 · 指纹抑制 = 任何已决指纹一律抑制;读取宽容解析 · assumed**
+runner 每轮从 `98_Forme/decisions.jsonl` 建抑制名单:出现过 `decision` 事件的指纹(accept/park/reject 不分)命中即静默丢弃、记 `suppressed`。accept 已执行的漂移理论上不会再被提出(before 串已变→指纹必变),仍抑制是双保险;parked 保持抑制直到日后 console 有显式 un-park(post-W2)。读取**故意宽容**(有 `type:"decision"`+`fingerprint` 即生效,不过完整 AJV):抑制是安全网,不能因校验挑剔放过重复卡——现实动机:vault 侧手写的 07-06 落子事件缺 `latencyMs` 又未标 `backfilled`,按 schema 不合法,但必须照样抑制。非 console 路径落的 decision 事件今后应标 `backfilled: true`(语义=非现场计时记录)。(issue #9)
+
+**2026-07-06 · 重复率曲线 = `98_Forme/run-metrics.jsonl`,每真实 run 一行 · assumed**
+`{v, date(UTC), runId, proposed, suppressed, presented, rejected, dup, backfilled?}`——前四类计数对得上账(proposed = suppressed+presented+rejected+dup)。dry-run 不落点;W3 之前 `presented` = 写入 cards/ 队列数(呈现=入列)。run-1(07-05)数据点由 session 记录反查补入,标 `backfilled`。该文件 mtime 兼任 launchd 守卫的"上次成功 run"时钟(见下条)。(issue #9)
+
+**2026-07-06 · launchd 日跑 = StartCalendarInterval + WatchPaths(.git/logs/HEAD)+ RunAtLoad;plist 直接 exec node,额度守卫在 runner 本体 · validated-in-use**
+plist 只管唤醒(每日定时;vault commit 动 reflog 即工作流边界触发;登录/bootstrap 补跑),跑不跑由 runner 的 `--min-hours`(launchd 传 20)决定:`run-metrics.jsonl` mtime 距今不足即跳过。效果=每日最多一轮真跑,触发点优先落在 vault commit(工作流边界,硬约束 #2 的雏形),手动跑与自动跑共享同一额度窗口、无独立状态文件。**不经 shell wrapper**:第一版走 `run-once.sh` 被 launchd 拒执行(exit 126 exec EPERM)——agent 工具落盘的脚本带 `com.apple.provenance` xattr;plist 直接 exec node 消掉这一类故障,node/codex 路径在 install 时固化进 plist(launchd PATH 极简)。已验证:bootstrap 后 RunAtLoad 拉起,守卫正确跳过(`skip: last run 0.1h ago`,exit 0)。(issue #9)
+
+**2026-07-06 · scan 排除 `98_Forme/` · validated-in-use**
+Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 runner 会对上一轮输出提卡,自激振荡。git-delta 取文件时按前缀排除,有测试覆盖。(issue #9)

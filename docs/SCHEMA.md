@@ -53,7 +53,7 @@ diffHash    = sha256( 规范排序后的 hunks )        # hunk 顺序无关
 fingerprint = sha256( category \0 diff.file \0 diffHash )
 ```
 
-同一漂移无论 agent 以什么顺序吐 hunk,都得到**同一指纹**。runner 用它对照 rejected/parked 名单做**硬过滤**:命中即在呈现前丢弃。重复率→0 靠这段确定性工程,不靠 LLM 自觉(硬约束 #6)。
+同一漂移无论 agent 以什么顺序吐 hunk,都得到**同一指纹**。runner 用它对照已决名单做**硬过滤**(`runner/suppress.ts`,#9):`decisions.jsonl` 里任何出现过 `decision` 事件的指纹(accept/park/reject 不分)命中即静默丢弃。名单读取是**宽容解析**——有 `type:"decision"` + `fingerprint` 即生效,不过完整 AJV:抑制是安全网,不能因校验挑剔放过重复卡。重复率→0 靠这段确定性工程,不靠 LLM 自觉(硬约束 #6)。
 
 ---
 
@@ -70,7 +70,19 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 公共信封:`{ v:"0", ts, type, cardId, fingerprint }`(`ts` 完整 ISO,latency 由 presented→decision 的 ts 差算)。
 
 - **`actor`** = 决策者:`owner`(人)· 预留 `agent_shadow`(影子预决策但仍展示)· `agent_authorized`(授权自动化,仍可撤回)。与卡 envelope 的 `role`(消息角色)**同名不同义、刻意分开**——`actor` 是影子模式日后必需的字段,一步到位。
-- **`backfilled: true`** = 历史/导入记录(如产品前的人肉决策),可省 `latencyMs`(人肉阶段无法诚实计时)。样例里的 6 条事件即三条种子(#1 comment)的事件化:每卡 presented+decision 一对,`ts` 取真实 commit 时刻,`executed` = 真实应用 commit,`fingerprint` 由该 commit 的真实 diff 反查而来。
+- **`backfilled: true`** = **非现场计时的记录**——历史导入(产品前的人肉决策)和一切绕过 console 的落子(如 vault 侧手动决策后补记事件)都算,可省 `latencyMs`(没有诚实的静默计时就别编)。样例里的 6 条事件即三条种子(#1 comment)的事件化:每卡 presented+decision 一对,`ts` 取真实 commit 时刻,`executed` = 真实应用 commit,`fingerprint` 由该 commit 的真实 diff 反查而来。已知偏差:vault 里 07-06 的两条手写 decision 事件缺 `latencyMs` 又未标 `backfilled`,按本 schema 不合法;日志只追加、不回改,抑制读取宽容所以功能无损——今后非 console 落子请带 `backfilled: true`。
+
+---
+
+## run-metrics.jsonl(非正式契约,#9)
+
+重复率曲线的原始数据,住 `98_Forme/run-metrics.jsonl`,每**真实完成**的 run 追加一行(dry-run 不落点);写入方 `runner/metrics.ts`,形状由其 `RunMetric` 接口定义(无独立 JSON Schema——运行时遥测,不是卡/事件契约):
+
+```
+{ v:"0", date(UTC YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, backfilled? }
+```
+
+`proposed = suppressed + presented + rejected + dup`(账要对得上)。W3 console 之前 `presented` = 写入 `cards/` 队列数(呈现=入列)。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟。
 
 ---
 
