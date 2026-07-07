@@ -29,8 +29,13 @@
 | `diff` | object | 提议的**单一最小改动**。由 Forme 代码确定性应用(git 提交以便回滚),渲染成 `-/+` |
 | `options[]` | array | 决策手势。MVP 恒为 accept / park / reject |
 | `fingerprint` | sha256 hex | 确定性去重键(见下)。由 Forme 代码算,不由 agent 算 |
+| `whyNow` | string? | **v0.1(#12)**:为什么现在出现(出身/时机,一句人话)——legibility 准则的界面化,渲染为「为什么现在」段 |
+| `recommendation` | object? | **v0.1(#12)**:`{ choice: accept/park/reject, reason }`——agent 亮明的建议 + 一行理由。**影子模式第一形态**:与实际 choice 的对照 = W5 一致率度量;只呈现,绝不自动执行。agent 侧拍平为两个 nullable 字段回传,由 Forme 代码重建 + 消毒(choice 非法即整体丢弃) |
+| `onAccept` | string? | **v0.1(#12)**:拍板后会发生什么的一句人话预览;渲染器永远补确定性事实行(目标文件、hunk 数、git 可回滚) |
 | `estSeconds` | int? | agent 估的 time-to-decision(秒)。仅参考;真实延迟静默计量 |
 | `createdAt` | date-time | Forme 写盘此卡的时刻 |
+
+> **卡面五段(镜像渲染次序,#12)**:①是什么(title+summary)②为什么现在(whyNow)③建议(recommendation)④拍板后会发生什么(onAccept+事实行)→ 落子手势 → ⑤证据与 diff 折叠为支撑层(Obsidian 可折叠 callout)。三个新字段全部可选、additive——`schemaVersion` 仍为 `"0"`,v0 卡照常渲染(缺段即省略)。
 
 ### evidence[] 项
 `{ path(必填,vault 相对), locator?(如 "L283" / "frontmatter.status" / "#anchor"), quote?(逐字摘录), note?(一句话为何是证据) }`

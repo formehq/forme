@@ -8,6 +8,7 @@ import { agentOutputSchema } from "./agent-schema.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { assembleCard } from "./card.ts";
 import { loadSuppressionList } from "./suppress.ts";
+import { loadTasteRuleLines } from "./taste.ts";
 import { appendRunMetric } from "./metrics.ts";
 import type { AgentCard } from "./types.ts";
 
@@ -75,6 +76,10 @@ console.log(
     (suppression.unreadable ? ` (${suppression.unreadable} unreadable line(s)!)` : ""),
 );
 
+// Taste Rules 注入(#10,生命周期第 2 步):已提炼的规则进 prompt,让提案先过用户口味
+const tasteRules = loadTasteRuleLines(join(outDir, "Taste Rules.md"));
+if (tasteRules.length) console.log(`taste rules: ${tasteRules.length} rule(s) injected into prompt`);
+
 const schemaPath = join(tmpdir(), `forme-agent-schema-${runId}.json`);
 writeFileSync(schemaPath, JSON.stringify(agentOutputSchema()));
 const lastMsgPath = join(tmpdir(), `forme-last-${runId}.json`);
@@ -84,14 +89,20 @@ const prompt = [
   "",
   "漂移类别(category,kebab-case):stale-frontmatter / broken-link / stale-claim / orphan / naming-drift / dangling-task 等。",
   "",
-  "每张卡:",
+  "每张卡(卡面是给决策者读的,五段结构,标题与 summary 不用术语):",
   "- category:类别 slug(kebab-case)",
   "- title:一句话中文标题(用户第一眼读的东西)",
-  "- summary:一行上下文,没有就 null",
+  "- summary:一行上下文(是什么),没有就 null",
+  "- whyNow:为什么现在出现这张卡(出身/时机,一句人话),可 null",
+  "- recommendationChoice + recommendationReason:你的明确建议(accept/park/reject 之一)+ 一行理由——你已经调查过了,亮明立场,别骑墙",
+  "- onAccept:拍板 accept 后会发生什么的一句人话预览(别复述文件路径和回滚说明,系统会补),可 null",
   "- evidence[]:{path(vault 相对), locator(行号/字段/锚点,可 null), quote(逐字摘录,可 null), note(为何是证据,可 null)};标题里每个断言都要有证据",
   "- diff:{file(vault 相对,一张卡只改一个文件), hunks[{locator(可 null), before, after}]};before 必须是文件里逐字存在的字符串,after 是替换;before 为空串表示纯插入;保持最小改动",
   "- estSeconds:估计落子秒数,可 null",
   "",
+  ...(tasteRules.length
+    ? ["用户已确立的 taste 规则(提案须符合,拿不准就别提):", ...tasteRules.map((r) => `- ${r}`), ""]
+    : []),
   "硬规则:你是只读,绝不修改任何文件;before 必须与文件实际内容逐字匹配(会被机器校验,不匹配即丢弃);卡面文案用中文;宁缺毋滥,只报有把握的;没有可靠漂移就返回空数组。",
   "",
   "只返回符合 output schema 的结构化 JSON。最近变更的文件:",

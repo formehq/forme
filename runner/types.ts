@@ -33,6 +33,11 @@ export interface Origin {
   host?: string;
 }
 
+export interface Recommendation {
+  choice: "accept" | "park" | "reject";
+  reason: string;
+}
+
 export interface Card {
   schemaVersion: "0";
   id: string;
@@ -42,6 +47,9 @@ export interface Card {
   category: string;
   title: string;
   summary?: string;
+  whyNow?: string;
+  recommendation?: Recommendation;
+  onAccept?: string;
   evidence: Evidence[];
   diff: Diff;
   options: Option[];
@@ -51,11 +59,16 @@ export interface Card {
 }
 
 // What codex returns under runner/agent-schema.ts (strict structured outputs:
-// every field present, optionals as null). Forme code owns everything else.
+// every field present, optionals as null; recommendation 拍平成两个 nullable
+// string,组装时由 Forme 代码重建并消毒)。Forme code owns everything else.
 export interface AgentCard {
   category: string;
   title: string;
   summary: string | null;
+  whyNow: string | null;
+  recommendationChoice: string | null;
+  recommendationReason: string | null;
+  onAccept: string | null;
   evidence: Array<{
     path: string;
     locator: string | null;

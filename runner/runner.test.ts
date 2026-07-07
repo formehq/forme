@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { assembleCard } from "./card.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
+import { checkCard } from "../schema/validate.ts";
 import type { AgentCard } from "./types.ts";
 
 const ctx = { runId: "run_test", at: "2026-07-04T20:00:00Z", now: "2026-07-04T20:00:01Z" };
@@ -11,12 +12,24 @@ const base = (): AgentCard => ({
   category: "broken-link",
   title: "断链",
   summary: null,
+  whyNow: null,
+  recommendationChoice: null,
+  recommendationReason: null,
+  onAccept: null,
   evidence: [{ path: "04_Index/Home.md", locator: "L7", quote: "[[Knowledge Map]]", note: "未解析" }],
   diff: {
     file: "04_Index/Home.md",
     hunks: [{ locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" }],
   },
   estSeconds: null,
+});
+
+const v01 = (): AgentCard => ({
+  ...base(),
+  whyNow: "上周你把 canvas 改了名,这条链接当时没跟上。",
+  recommendationChoice: "accept",
+  recommendationReason: "纯链接修复,不动内容。",
+  onAccept: "Home 的 Key Maps 链接恢复可点。",
 });
 
 test("assembleCard produces a valid, fingerprinted card", () => {
@@ -47,13 +60,44 @@ test("an agent card our AJV rejects (empty evidence) is caught", () => {
   assert.equal(assembleCard(bad, ctx).validation.valid, false);
 });
 
-test("markdown mirror renders envelope + evidence + diff + gestures", () => {
+test("markdown mirror renders envelope + folded evidence/diff + gestures", () => {
   const md = cardToMarkdown(assembleCard(base(), ctx).card);
   assert.match(md, /forme: card/);
-  assert.match(md, /## 证据/);
-  assert.match(md, /```diff/);
-  assert.match(md, /\+ \[\[Knowledge Map\.canvas\|Knowledge Map\]\]/);
+  assert.match(md, /> \[!quote\]- 证据（展开核查）/);
+  assert.match(md, /> \[!example\]- 最小 diff/);
+  assert.match(md, /> \+ \[\[Knowledge Map\.canvas\|Knowledge Map\]\]/);
   assert.match(md, /\[a\] 接受/);
+});
+
+test("v0.1 五段:决策段在前,支撑层折叠在后(#12)", () => {
+  const md = cardToMarkdown(assembleCard(v01(), ctx).card);
+  assert.match(md, /## 为什么现在\n\n上周你把 canvas 改了名/);
+  assert.match(md, /## 建议\n\n\*\*接受\*\* —— 纯链接修复,不动内容。/);
+  assert.match(md, /## 拍板后会发生什么\n\nHome 的 Key Maps 链接恢复可点。\n改 `04_Index\/Home\.md`（1 处最小改动）;git 提交,可回滚。/);
+  // 决策者优先:落子手势出现在折叠证据之前
+  assert.ok(md.indexOf("## 落子") < md.indexOf("[!quote]-"));
+});
+
+test("v0 卡(无新字段)仍渲染:②③ 整段省略,④ 用确定性事实行", () => {
+  const md = cardToMarkdown(assembleCard(base(), ctx).card);
+  assert.equal(md.includes("## 为什么现在"), false);
+  assert.equal(md.includes("## 建议"), false);
+  assert.match(md, /## 拍板后会发生什么\n\n改 `04_Index\/Home\.md`/);
+});
+
+test("recommendation 消毒:choice 不在枚举 → 整体丢弃,卡仍有效", () => {
+  const r = assembleCard({ ...v01(), recommendationChoice: "apply" }, ctx);
+  assert.ok(r.validation.valid);
+  assert.equal(r.card.recommendation, undefined);
+  assert.equal("recommendation" in r.serializable, false);
+});
+
+test("v0.1 字段过自有 AJV 门;坏 recommendation 直接过门会被拒", () => {
+  const good = assembleCard(v01(), ctx);
+  assert.ok(good.validation.valid);
+  assert.deepEqual(good.card.recommendation, { choice: "accept", reason: "纯链接修复,不动内容。" });
+  const tampered = { ...good.serializable, recommendation: { choice: "apply", reason: "x" } };
+  assert.equal(checkCard(tampered).valid, false);
 });
 
 test("same drift → same fingerprint regardless of hunk order", () => {

@@ -1,6 +1,6 @@
 # runner/ — 漂移扫描 + 确定性落盘
 
-W1 Codex 路径已跑通(#5),W2 指纹抑制闭环已生效(#9)。runner 把一次 agent run 变成真盘上的卡:
+W1 Codex 路径已跑通(#5),W2 全链就位:指纹抑制(#9)、taste 提炼(#10)、State Diff(#11)、卡面 v0.1(#12)。runner 把一次 agent run 变成真盘上的卡:
 
 ```
 node runner/index.ts --vault <vault 路径> [--commits 4] [--max-files 12] [--max-cards 3] [--dry-run] [--model <m>] [--out <dir>]
@@ -14,15 +14,25 @@ node runner/index.ts --vault <vault 路径> [--commits 4] [--max-files 12] [--ma
 3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。
 4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹,再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
 5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。
-6. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4)。
+6. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 → 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层。
 7. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**。
 8. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料;dry-run 不落点)。
 
 **一切写盘、校验、指纹由本目录代码执行,agent 只读、只返回 JSON**(硬约束 #7)。写入只落 `98_Forme/`,不碰知识层(2026-07-04 边界裁定)。
 
-## 调度(launchd,#9)
+## 姊妹管道(同一套「确定性采集 → agent 只读 JSON → 代码落盘」骨架)
 
-`../launchd/install.sh <vault> [hour]` 装 `com.forme.runner`:每日定时(StartCalendarInterval)+ vault commit 触发(WatchPaths 盯 `.git/logs/HEAD`,工作流边界)+ 登录补跑(RunAtLoad)。plist **直接 exec node**(不经 shell wrapper——带 provenance xattr 的脚本会被 launchd 拒执行),真跑与否由 runner 自己的 `--min-hours 20` 守卫决定:`run-metrics.jsonl` 的 mtime 距今不足即跳过——每日最多一轮,手动/自动共享同一额度窗口。日志在 `~/Library/Logs/forme/runner.log`;卸载命令见 `install.sh` 头注释。
+- **`taste.ts`**(#10)—— `node runner/taste.ts --vault <v>`:决策日志(+卡体上下文)→ codex 提炼 → 追加 `98_Forme/Taste Rules.md`。护栏全在代码:sourceCardIds 溯源过滤(清零即弃)、零负样本时 confidence 钉死 low、追加制不动人编辑的文本;已生效规则由 `loadTasteRuleLines()` 回注 runner prompt。
+- **`state-diff.ts`**(#11)—— `node runner/state-diff.ts --vault <v> [--min-days 6] [--dry-run]`:周数据包(git 周窗口 / 待决卡 / Inbox / Reports:Posts / run 汇总)→ codex 四段叙事 → `98_Forme/state-diff-YYYY-MM-DD.md`;四段骨架由渲染器钉死。
+
+## 调度(launchd,#9 + #11)
+
+`../launchd/install.sh <vault> [日跑小时] [周日小时]` 装两个 job,plist 均**直接 exec node**(不经 shell wrapper——带 provenance xattr 的脚本会被 launchd 拒执行):
+
+- `com.forme.runner`:每日定时 + vault commit 触发(WatchPaths 盯 `.git/logs/HEAD`,工作流边界)+ 登录补跑(RunAtLoad);守卫 `--min-hours 20`(`run-metrics.jsonl` mtime 时钟,手动/自动共享额度窗口)。
+- `com.forme.statediff`:每周日 18:00;守卫 `--min-days 6`(最新产物文件名日期);**无 RunAtLoad**(第一张必须产在周日;睡眠错过唤醒补发,整机关机顺延下周日)。
+
+日志在 `~/Library/Logs/forme/{runner,statediff}.log`;卸载命令见 `install.sh` 头注释。
 
 ## 当前边界
 

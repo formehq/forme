@@ -1,7 +1,7 @@
 import { hostname } from "node:os";
 import { checkCard, type ValidationResult } from "../schema/validate.ts";
 import { fingerprint } from "../schema/fingerprint.ts";
-import type { AgentCard, Card, Evidence, Hunk, Option, Origin } from "./types.ts";
+import type { AgentCard, Card, Evidence, Hunk, Option, Origin, Recommendation } from "./types.ts";
 
 /**
  * Deterministic assembly: turn the agent's loose read-only JSON into a full,
@@ -52,6 +52,13 @@ export function assembleCard(ac: AgentCard, ctx: AssembleCtx): Assembled {
     host: hostname(),
   });
 
+  // recommendation 消毒:choice 不在枚举或缺理由 → 整体丢弃(可选装饰,不拖垮整卡)
+  const recommendation: Recommendation | undefined =
+    ac.recommendationChoice && ac.recommendationReason &&
+    (["accept", "park", "reject"] as const).includes(ac.recommendationChoice as Recommendation["choice"])
+      ? { choice: ac.recommendationChoice as Recommendation["choice"], reason: ac.recommendationReason }
+      : undefined;
+
   const card: Card = {
     schemaVersion: "0",
     id: `card_${fp.slice(0, 16)}`,
@@ -61,6 +68,9 @@ export function assembleCard(ac: AgentCard, ctx: AssembleCtx): Assembled {
     category: ac.category,
     title: ac.title,
     summary: ac.summary ?? undefined,
+    whyNow: ac.whyNow ?? undefined,
+    recommendation,
+    onAccept: ac.onAccept ?? undefined,
     evidence,
     diff,
     options: OPTIONS.map((o) => ({ ...o })),

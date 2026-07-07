@@ -48,3 +48,12 @@ plist 只管唤醒(每日定时;vault commit 动 reflog 即工作流边界触发
 
 **2026-07-06 · scan 排除 `98_Forme/` · validated-in-use**
 Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 runner 会对上一轮输出提卡,自激振荡。git-delta 取文件时按前缀排除,有测试覆盖。(issue #9)
+
+**2026-07-07 · 卡面 v0.1 = 决策者优先五段;schema 只加可选字段 · assumed**
+源自 Zayn 07-06 第一条真实设计反馈(v0 真卡「不容易懂 then 决策」,结构机器优先)。五段 = 是什么 → 为什么现在(`whyNow`)→ 建议+一行理由(`recommendation{choice,reason}`,**影子模式第一形态**,与实际 choice 对照留 W5 一致率)→ 拍板后会发生什么(`onAccept` + 渲染器补确定性事实行)→ 证据与 diff 折叠为支撑层(Obsidian 可折叠 callout);落子手势紧跟第 ④ 段,决策不需要滚过证据。三字段全可选、additive,`schemaVersion` 不动;v0 卡照常渲染。agent 侧 recommendation 拍平为两个 nullable string(strict 结构化输出的兼容取舍),Forme 代码重建+消毒(choice 非法即丢 recommendation,不拖垮整卡)。交互稿屏 2 已同步,措辞留 Zayn 过目;下一张真卡以 v0.1 产出后转 validated-in-use。(issue #12)
+
+**2026-07-07 · Taste Rules = 候选规则追加制 md;置信与溯源由代码钉死 · assumed**
+`runner/taste.ts`:decisions.jsonl(+卡体上下文)→ codex 只读提炼(schema 强制 JSON)→ Forme 代码消毒渲染追加 `98_Forme/Taste Rules.md`。确定性护栏(不信 LLM 自觉):①溯源——`sourceCardIds` 过滤到真实 cardId,清零即整条丢弃(收割护栏);②诚实置信——样本统计由代码算,**零负样本(无 reject/park/correction)时 confidence 一律钉死 low**,数据基础(如「8 决策 = 8 accept · 0 reject…零负样本——只能刻画『会接受什么』」)写进每条规则。文件人可编辑:再提炼只追加 `## Rn` 块、编号接续、既有文本零改动;条目带 status:candidate(收录/改写/丢弃确认卡 = W3 屏 4)与 reverify:+20 决策(aging 预留)。已生效规则回注 runner prompt(生命周期第 2 步)。(issue #10)
+
+**2026-07-07 · State Diff = 确定性数据包 + agent 四段叙事;骨架代码钉死;周日 launchd 产出 · assumed**
+`runner/state-diff.ts`:确定性采集(vault git 周窗口、待决卡=cards/ 无 decision 事件者、00_Inbox 计数、Reports:Posts canary、run-metrics 周汇总)→ codex 只读叙事(schema 强制 into/changed/waiting/alerts 四串)→ 代码渲染 `98_Forme/state-diff-YYYY-MM-DD.md`。四段固定结构由渲染器钉死(agent 加不了段、删不了段,空段占位)——交互稿屏 3「骨架永远不变,内容生成式」的代码化;语气按屏 3(平静、零催促、只读)。调度:`com.forme.statediff` 周日 18:00;**不设 RunAtLoad**——「从未生成过」时守卫(--min-days 6,按最新产物文件名日期)拦不住装机即跑,第一张必须产在周日(睡眠错过唤醒补发,整机关机顺延下周日)。(issue #11)

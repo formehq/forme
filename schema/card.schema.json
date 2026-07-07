@@ -105,6 +105,34 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
     },
+    "whyNow": {
+      "description": "Card face v0.1 (#12): why this card exists now (出身/时机) — the legibility answer, one plain-language line, rendered as 为什么现在.",
+      "type": "string",
+      "minLength": 1
+    },
+    "recommendation": {
+      "description": "Card face v0.1 (#12): the agent's declared recommendation — first form of shadow mode. Compared against the actual choice for the W5 consistency metric; never auto-applied.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["choice", "reason"],
+      "properties": {
+        "choice": {
+          "description": "The gesture the agent recommends.",
+          "type": "string",
+          "enum": ["accept", "park", "reject"]
+        },
+        "reason": {
+          "description": "One-line reason for the recommendation.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "onAccept": {
+      "description": "Card face v0.1 (#12): one plain-language line previewing what happens after accept. The deterministic facts (target file, rollback) are appended by the renderer.",
+      "type": "string",
+      "minLength": 1
+    },
     "estSeconds": {
       "description": "Agent's estimate of time-to-decision in seconds. Informational; real latency is measured silently.",
       "type": "integer",

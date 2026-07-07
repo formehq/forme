@@ -19,11 +19,19 @@ export function agentOutputSchema(): unknown {
         items: {
           type: "object",
           additionalProperties: false,
-          required: ["category", "title", "summary", "evidence", "diff", "estSeconds"],
+          required: [
+            "category", "title", "summary",
+            "whyNow", "recommendationChoice", "recommendationReason", "onAccept",
+            "evidence", "diff", "estSeconds",
+          ],
           properties: {
             category: { type: "string" },
             title: { type: "string" },
             summary: nullableString,
+            whyNow: nullableString,
+            recommendationChoice: nullableString,
+            recommendationReason: nullableString,
+            onAccept: nullableString,
             evidence: {
               type: "array",
               items: {

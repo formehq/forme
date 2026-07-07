@@ -47,9 +47,9 @@
 
 ## 仓库现状(随进度更新)
 
-- **已建**:`schema/`(卡片 + 事件 JSON Schema、指纹、AJV 校验、样卡 —— #4)· `runner/`(codex exec 真跑 → 自有 AJV 门 → 指纹抑制 → 卡落 `98_Forme/cards/` + run-metrics 数据点 —— #5、#9)· `launchd/`(日跑 + 额度守卫,已装机 —— #9)· `docs/` · `design/` · 工具链(Node 原生 TS,无构建步骤)
-- **未建**:`console/`(W3,占位)· Taste Rules 提炼/注入(#10)· State Diff 生成器(#11)
-- 一句话:**采集端闭环(调度 → 扫描 → 抑制 → 落卡 → 重复率曲线),决策端未通**;下一块 = #10/#11。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
+- **已建**:`schema/`(卡契约 v0 + v0.1 五段字段 —— #4、#12)· `runner/`(漂移卡管道:codex 真跑 → AJV 门 → 指纹抑制 → 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12;taste 提炼器 `taste.ts` —— #10;State Diff 生成器 `state-diff.ts` —— #11)· `launchd/`(日跑 + 周日 State Diff 双 job,已装机 —— #9、#11)· `docs/` · `design/` · 工具链(Node 原生 TS,无构建步骤)
+- **未建**:`console/`(W3,占位)· 规则确认交互(屏 4,W3)· 相似历史注入(post-W2)
+- 一句话:**采集端 + 学习半环 + 周叙事已通,决策端(console)未通**;待验:下一张真卡 v0.1 卡面 + 周日 07-12 第一张自动 State Diff。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
 
 ## 常用命令
 
