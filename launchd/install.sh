@@ -38,5 +38,5 @@ install_one() { # $1 = label
 install_one com.forme.runner
 install_one com.forme.statediff
 echo "runner: daily ${HOUR}:00 + vault-commit wake + login catch-up(guard --min-hours 20)"
-echo "statediff: Sunday ${SD_HOUR}:00(睡眠错过唤醒补发;guard --min-days 6)"
+echo "statediff: Sunday ${SD_HOUR}:00(睡眠错过唤醒补发;guard --min-days 4)"
 echo "日志:$LOGDIR/{runner,statediff}.log"

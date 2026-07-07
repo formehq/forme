@@ -6,7 +6,7 @@ Forme = local-first agent,把知识库的漂移变成 one-decision 卡片(证据
 
 ```
 launchd (StartCalendarInterval 日跑 + WatchPaths 盯 vault   [launchd/ 已建 · #9]
-   │      .git/logs/HEAD + RunAtLoad 补跑;额度守卫在 run-once.sh)
+   │      .git/logs/HEAD + RunAtLoad 补跑;额度守卫在 runner --min-hours)
    │  唤醒 → 首卡可见 ≤ 10s(增量指纹只处理 git delta)
    ▼
 runner  ──►  codex exec --json --output-schema             [runner/ 已建 · #5]
@@ -59,7 +59,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - 每轮真 run 落一行 `{date, proposed, suppressed, presented, …}` 到 `98_Forme/run-metrics.jsonl`——重复率曲线有原始数据了(#9)。
 - **taste 学习半环**:决策日志 → codex 提炼 → `Taste Rules.md`(零负样本置信钉死 low + cardId 溯源)→ 规则回注 runner prompt(#10)。
 - **State Diff 周更**:确定性周数据包 → 四段叙事 → `state-diff-YYYY-MM-DD.md`,周日 launchd 自动产出(#11)。
-- launchd 调度:日跑(每日定时 + vault commit 触发 + 登录补跑,≥20h 守卫)+ 周日 State Diff(≥6d 守卫)(#9、#11)。
+- launchd 调度:日跑(每日定时 + vault commit 触发 + 登录补跑,≥20h 守卫)+ 周日 State Diff(≥4d 守卫)(#9、#11)。
 
 **还不能:**
 - 渲染卡片 / 接受落子 / 记 presented 与 decision 事件(无 console,W3)。
