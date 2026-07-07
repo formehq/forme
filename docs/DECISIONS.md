@@ -57,3 +57,6 @@ Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 run
 
 **2026-07-07 · State Diff = 确定性数据包 + agent 四段叙事;骨架代码钉死;周日 launchd 产出 · assumed**
 `runner/state-diff.ts`:确定性采集(vault git 周窗口、待决卡=cards/ 无 decision 事件者、00_Inbox 计数、Reports:Posts canary、run-metrics 周汇总)→ codex 只读叙事(schema 强制 into/changed/waiting/alerts 四串)→ 代码渲染 `98_Forme/state-diff-YYYY-MM-DD.md`。四段固定结构由渲染器钉死(agent 加不了段、删不了段,空段占位)——交互稿屏 3「骨架永远不变,内容生成式」的代码化;语气按屏 3(平静、零催促、只读)。调度:`com.forme.statediff` 周日 18:00;**不设 RunAtLoad**——「从未生成过」时守卫(--min-days 6,按最新产物文件名日期)拦不住装机即跑,第一张必须产在周日(睡眠错过唤醒补发,整机关机顺延下周日)。(issue #11)
+
+**2026-07-07 · 人面表面一般原则 = 结论用人话一行,账本降层可查(Taste Rules 先落地) · assumed**
+源自 Zayn 07-06 第二条真实反馈(Taste Rules v1「代码术语太重」,与卡面 v0 同病:机器语域上了人类表面)。落地(#13):①**规则行语体**——一行中文祈使句,像用户亲手写进 CLAUDE.md 的指令;提炼 prompt 注入用户手写规则作风格 few-shot(`STYLE_FEWSHOTS`,出自 owner CLAUDE.md/agent memory,经交互稿屏 4 核验非虚构);②**禁词硬闸**——`BANNED_IN_RULE`(provenance/frontmatter/cardId/指纹/schema/jsonl/Hub/Source Index…)由代码检查,命中即整条丢弃,不靠 prompt 恳求;③**账本代码渲染**——「依据 n 卡 · 统计 → 置信 · 提炼日期 · 重验点」合并为规则行下的斜体小字,LLM 不碰账本;④**同文件双层**——md 人读层 = 渲染,`<!-- forme-rule: {...} -->` 注释块 = 结构化存储(id/溯源/置信/时效/rationale;`loadTasteRuleRecords()` 供 W3 重验与确认卡),渲染完全分离留 W3+ console。现有 4 条已就地迁移(id/溯源/置信/added 不变,rationale 叙事降入存储层,规则行重写为用户语体)。**原则适用一切人面表面**(卡/规则/State Diff/console)。Zayn 读后「像我自己会写的规则」即转 validated-in-use。(issue #13;修订 #10 的渲染格式)

@@ -22,7 +22,7 @@ node runner/index.ts --vault <vault 路径> [--commits 4] [--max-files 12] [--ma
 
 ## 姊妹管道(同一套「确定性采集 → agent 只读 JSON → 代码落盘」骨架)
 
-- **`taste.ts`**(#10)—— `node runner/taste.ts --vault <v>`:决策日志(+卡体上下文)→ codex 提炼 → 追加 `98_Forme/Taste Rules.md`。护栏全在代码:sourceCardIds 溯源过滤(清零即弃)、零负样本时 confidence 钉死 low、追加制不动人编辑的文本;已生效规则由 `loadTasteRuleLines()` 回注 runner prompt。
+- **`taste.ts`**(#10、#13)—— `node runner/taste.ts --vault <v>`:决策日志(+卡体上下文)→ codex 提炼 → 追加 `98_Forme/Taste Rules.md`。护栏全在代码:sourceCardIds 溯源过滤(清零即弃)、零负样本时 confidence 钉死 low、**规则行禁词硬闸**(系统词上人读层即整条丢弃)、追加制不动人编辑的文本。**表达层双层**(#13,「结论用人话一行,账本降层可查」):规则行 = 用户语体祈使句(prompt 注入 `STYLE_FEWSHOTS` = owner 手写规则作风格样例);账本(依据/统计/置信/时效)由代码渲染成斜体小字;`<!-- forme-rule: {...} -->` 注释块 = 结构化存储(`loadTasteRuleRecords()` 供 W3 重验/确认卡)。已生效规则由 `loadTasteRuleLines()` 回注 runner prompt。
 - **`state-diff.ts`**(#11)—— `node runner/state-diff.ts --vault <v> [--min-days 6] [--dry-run]`:周数据包(git 周窗口 / 待决卡 / Inbox / Reports:Posts / run 汇总)→ codex 四段叙事 → `98_Forme/state-diff-YYYY-MM-DD.md`;四段骨架由渲染器钉死。
 
 ## 调度(launchd,#9 + #11)

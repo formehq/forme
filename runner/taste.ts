@@ -16,6 +16,13 @@ import { fileURLToPath } from "node:url";
  *   confidence 一律钉死 low,并把数据基础写进每条规则——8 条全 accept 只能
  *   刻画「会接受什么」,刻画不了「会拒绝什么」。
  * - 规则是候选:收录/改写/丢弃确认卡是 W3 console 的事(交互稿屏 4)。
+ *
+ * 表达层(#13,Zayn 07-06 反馈,一般原则「结论用人话一行,账本降层可查」):
+ * - 规则行 = 一行祈使句,像用户亲手写进 CLAUDE.md 的指令;系统词硬禁
+ *   (BANNED_IN_RULE,含即丢——机器检查,不靠 prompt 恳求);
+ * - 账本(依据/统计/置信/时效)由代码渲染成规则行下的降层小字,LLM 不碰;
+ * - 同文件双层:md 人读层 = 渲染,`<!-- forme-rule: {...} -->` 注释块 = 存储
+ *   (供注入与重验;渲染完全分离留 W3+ console)。
  */
 
 export interface DecisionRow {
@@ -49,12 +56,63 @@ export interface VettedRule {
   confidenceNote: string;
 }
 
+/**
+ * 用户手写规则(风格 few-shot,#13):出自 owner 的 CLAUDE.md 与 agent memory,
+ * 经交互稿屏 4 核验为非虚构(2026-07-04)。机器写的规则要读起来像这些。
+ */
+export const STYLE_FEWSHOTS: string[] = [
+  "报告与总结用中文;路径、属性名、英文概念题名不动",
+  "删除 / 合并 / 归档 / 发布必须人批(保守默认)",
+  "私密与关系类材料不做转化,停在 Inbox 等本人",
+  "自我呈现文案默认 honest-humble,主动砍浮夸",
+  "写回 = 填真 gap,不复读已有内容;单一事实源",
+  "先核验事实,再写回;只 stage 任务相关文件",
+  "开发期不新增 vault 文档;产物优先代码 / demo",
+];
+
+/** 规则行禁词表(#13):系统语域不许上人读层。小写比对;命中即整条丢弃。 */
+const BANNED_IN_RULE = [
+  "provenance", "frontmatter", "cardid", "card_", "card-0",
+  "fingerprint", "指纹", "jsonl", "schema", "hub", "source index", "sourcecardid",
+];
+
+/** 返回规则行里第一个命中的禁词,干净则 null。 */
+export function bannedWordIn(rule: string): string | null {
+  const lower = rule.toLowerCase();
+  return BANNED_IN_RULE.find((w) => lower.includes(w)) ?? null;
+}
+
 /** 从 Taste Rules.md 提取规则行(`## Rn · 规则`)——runner prompt 注入用。 */
 export function loadTasteRuleLines(path: string): string[] {
   if (!existsSync(path)) return [];
   const rules: string[] = [];
   for (const m of readFileSync(path, "utf8").matchAll(/^## R\d+ · (.+)$/gm)) rules.push(m[1]!.trim());
   return rules;
+}
+
+export interface RuleRecord {
+  id: string;
+  sources: string[];
+  confidence: string;
+  status: string;
+  added: string;
+  reverifyAfterDecisions: number;
+  rationale?: string;
+  stats?: string;
+}
+
+/** 读注释块存储层(`<!-- forme-rule: {...} -->`)——W3 重验/确认卡的读入。宽容解析。 */
+export function loadTasteRuleRecords(path: string): RuleRecord[] {
+  if (!existsSync(path)) return [];
+  const records: RuleRecord[] = [];
+  for (const m of readFileSync(path, "utf8").matchAll(/<!-- forme-rule: (\{.*?\}) -->/g)) {
+    try {
+      records.push(JSON.parse(m[1]!) as RuleRecord);
+    } catch {
+      /* 人编辑弄坏一条存档不致命 */
+    }
+  }
+  return records;
 }
 
 /** 宽容读事件日志:decision 行 + correction 计数(同 suppress 的姿态)。 */
@@ -100,13 +158,14 @@ export function statsLine(s: SampleStats): string {
   return `${s.decisions} 决策 = ${s.accept} accept · ${s.reject} reject · ${s.park} park · ${s.corrections} correction`;
 }
 
-/** 确定性消毒:溯源过滤 + 置信钉死。 */
+/** 确定性消毒:溯源过滤 + 置信钉死 + 规则行禁词(#13)。 */
 export function vetRules(agentRules: AgentRule[], knownCardIds: Set<string>, stats: SampleStats): VettedRule[] {
   const negatives = hasNegativeSamples(stats);
   const vetted: VettedRule[] = [];
   for (const r of agentRules) {
     const rule = r.rule?.trim();
     if (!rule) continue;
+    if (bannedWordIn(rule)) continue; // 系统词上了人读层 = 表达层不合格,整条丢弃(#13)
     const sources = [...new Set(r.sourceCardIds ?? [])].filter((id) => knownCardIds.has(id));
     if (sources.length === 0) continue; // 无真实出处 = 不可溯源,丢弃(收割护栏)
     const claimed = (["low", "medium", "high"] as const).find((c) => c === r.confidence) ?? "low";
@@ -128,31 +187,52 @@ const HEADER = [
   "",
   "# Taste Rules(人可编辑)",
   "",
-  "> Forme 每 ~20 条决策提炼一批候选规则**追加**到这里;整份文件你可以直接改写、删除、重排——",
-  "> 你的编辑就是最终裁决。规则的「收录/改写/丢弃」确认卡是 W3 console 的交互(交互稿屏 4),",
-  "> 在那之前所有条目 status 都是 candidate。规则会过期:reverify 到点后须用新决策重验(aging)。",
+  "> 每条规则 = 一行你的话;规则下的小字账本(依据/置信/时效)由代码生成,注释块是机器存档。",
+  "> 整份文件你可以直接改写、删除、重排——你的编辑就是最终裁决;「收录/改写/丢弃」确认交互",
+  "> 是 W3 console 的事,在那之前所有条目都是候选。规则会过期:到重验点后用新决策重验。",
   "",
   "",
 ].join("\n");
 
-export function renderRuleBlocks(rules: VettedRule[], startIndex: number, date: string): string {
+const CONFIDENCE_CN: Record<string, string> = { low: "低", medium: "中", high: "高" };
+
+/** 账本压缩统计:降层小字里的一段,全由代码措辞。 */
+export function compactStats(stats: SampleStats): string {
+  if (!hasNegativeSamples(stats)) return `${stats.decisions} 决策全 accept 零负样本`;
+  return `${stats.decisions} 决策(${stats.accept} accept · ${stats.reject} reject · ${stats.park} park · ${stats.corrections} 修正)`;
+}
+
+/**
+ * 渲染(#13 双层):规则行(人话)→ 账本小字(斜体一行,代码措辞)→
+ * 注释块(结构化存储:溯源/置信/时效/rationale,机器读)。
+ */
+export function renderRuleBlocks(rules: VettedRule[], startIndex: number, date: string, stats: SampleStats): string {
   const L: string[] = [];
   rules.forEach((r, i) => {
-    L.push(`## R${startIndex + i} · ${r.rule}`);
+    const id = `R${startIndex + i}`;
+    const record: RuleRecord = {
+      id,
+      sources: r.sources,
+      confidence: r.confidence,
+      status: "candidate",
+      added: date,
+      reverifyAfterDecisions: 20,
+      rationale: r.rationale,
+      stats: statsLine(stats),
+    };
+    L.push(`## ${id} · ${r.rule}`);
     L.push("");
-    L.push(`- 依据:${r.rationale}`);
-    L.push(`- 出处:${r.sources.join(" · ")}`);
-    L.push(`- confidence:${r.confidence} —— ${r.confidenceNote}`);
-    L.push(`- status:candidate · added ${date} · reverify:+20 决策后`);
+    L.push(`*依据 ${r.sources.length} 卡 · ${compactStats(stats)} → 置信${CONFIDENCE_CN[r.confidence]} · ${date.slice(5)} 提炼 · +20 决策重验*`);
+    L.push(`<!-- forme-rule: ${JSON.stringify(record)} -->`);
     L.push("");
   });
   return L.join("\n");
 }
 
 /** 写盘:不存在则建全文档;存在则只追加规则块(人编辑的部分一个字不动)。 */
-export function writeTasteRules(path: string, rules: VettedRule[], date: string): { startIndex: number } {
+export function writeTasteRules(path: string, rules: VettedRule[], date: string, stats: SampleStats): { startIndex: number } {
   const existing = loadTasteRuleLines(path).length;
-  const blocks = renderRuleBlocks(rules, existing + 1, date);
+  const blocks = renderRuleBlocks(rules, existing + 1, date, stats);
   if (existsSync(path)) appendFileSync(path, "\n" + blocks);
   else writeFileSync(path, HEADER + blocks);
   return { startIndex: existing + 1 };
@@ -230,7 +310,13 @@ function main(): void {
   });
 
   const prompt = [
-    `你是 Forme 的 taste 提炼器,从用户(vault 主人)的真实决策记录里提炼最多 ${maxRules} 条人可读的 taste 规则(中文一句话,可执行的偏好/边界,不是对单卡的复述)。`,
+    `你是 Forme 的 taste 提炼器,从用户(vault 主人)的真实决策记录里提炼最多 ${maxRules} 条 taste 规则(可执行的偏好/边界,不是对单卡的复述)。`,
+    "",
+    "规则行的语体(硬要求,#13):一行中文祈使句,读起来像用户亲手写进自己 CLAUDE.md 的指令——不认识 Forme 的人也能照做。",
+    "规则行内禁用系统词:provenance、frontmatter、cardId、指纹、schema、jsonl、Hub、Source Index 之类(会被机器检查,含即整条丢弃);用用户自己的说法,如「属性」「索引」「地图」「归位」。",
+    "",
+    "用户手写规则样例(照这个腔写,别照抄内容):",
+    ...STYLE_FEWSHOTS.map((r) => `- ${r}`),
     "",
     `样本统计(如实面对):${statsLine(stats)}。`,
     ...(hasNegativeSamples(stats)
@@ -245,7 +331,8 @@ function main(): void {
     ...(existingRules.length
       ? ["已有规则(别重复、别换皮复述;只提真正新的):", ...existingRules.map((r) => `- ${r}`), ""]
       : []),
-    "每条规则:rule(一句话)· rationale(从哪些决策的什么共性得出)· sourceCardIds(上面列表里真实的 cardId,≥1)· confidence(low/medium/high)· confidenceNote(可 null)。",
+    "每条规则:rule(人话一行,如上语体)· rationale(写给机器存档的依据:哪些决策的什么共性;不上人读层,术语随意)· sourceCardIds(上面列表里真实的 cardId,≥1)· confidence(low/medium/high)· confidenceNote(可 null)。",
+    "统计、置信、时效这些账本信息不要写进 rule——账本由代码渲染成规则行下的降层小字。",
     "宁缺毋滥:共性不足 2 条决策支撑的规则别提;没有可靠规则就返回空数组。只返回符合 output schema 的 JSON。",
   ].join("\n");
 
@@ -283,7 +370,7 @@ function main(): void {
     console.log("[dry] would append to " + join(outDir, "Taste Rules.md"));
     return;
   }
-  const { startIndex } = writeTasteRules(join(outDir, "Taste Rules.md"), vetted, date);
+  const { startIndex } = writeTasteRules(join(outDir, "Taste Rules.md"), vetted, date, stats);
   console.log(`wrote R${startIndex}…R${startIndex + vetted.length - 1} → ${join(outDir, "Taste Rules.md")}`);
 }
 
