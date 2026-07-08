@@ -3,13 +3,13 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync } from "no
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
-import { recentMarkdownFiles } from "./scan.ts";
+import { recentMarkdownFiles, markdownFilesSince, vaultHead, isUsableAnchor } from "./scan.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { assembleCard } from "./card.ts";
 import { loadSuppressionList } from "./suppress.ts";
 import { loadTasteRuleLines } from "./taste.ts";
-import { appendRunMetric } from "./metrics.ts";
+import { appendRunMetric, lastRunHead } from "./metrics.ts";
 import type { AgentCard } from "./types.ts";
 
 /**
@@ -34,6 +34,7 @@ if (!vault) {
   console.error("forme runner: need --vault <path> or FORME_VAULT env");
   process.exit(2);
 }
+const commitsExplicit = hasFlag("commits"); // #14:显式传参 = 手动覆盖增量锚点
 const commits = Number(arg("commits", "4"));
 const maxFiles = Number(arg("max-files", "12"));
 const maxCards = Number(arg("max-cards", "3"));
@@ -46,10 +47,11 @@ const dryRun = hasFlag("dry-run");
 // 拒执行(exec EPERM),plist 直接 exec node 就没有中间脚本这一层风险。
 // 时钟 = run-metrics.jsonl 的 mtime(只有真实完成的 run 会动它,
 // 手动/自动共享同一额度窗口,无独立状态文件)。
+const metricsPath = join(outDir, "run-metrics.jsonl");
 const minHours = Number(arg("min-hours", "0"));
 if (minHours > 0) {
   try {
-    const ageH = (Date.now() - statSync(join(outDir, "run-metrics.jsonl")).mtimeMs) / 3_600_000;
+    const ageH = (Date.now() - statSync(metricsPath).mtimeMs) / 3_600_000;
     if (ageH < minHours) {
       console.log(`skip: last run ${ageH.toFixed(1)}h ago (< ${minHours}h quota window)`);
       process.exit(0);
@@ -62,13 +64,29 @@ if (minHours > 0) {
 const at = new Date().toISOString();
 const runId = `run_${Date.now().toString(36)}_${randomBytes(3).toString("hex")}`;
 
-const files = recentMarkdownFiles(vault, commits, maxFiles);
+// #14:增量窗口默认「上次成功 run 以来」(锚点 = run-metrics 最后记录的 HEAD),
+// 窗口自动等于 run 节律,vault 一天多次 commit 也不漏文件(硬约束 #3 的本意)。
+// --commits 显式传参 = 手动覆盖;锚点缺失(首跑/旧数据)或失效(rebase)→ 回退。
+const head = vaultHead(vault);
+const anchor = commitsExplicit ? null : lastRunHead(metricsPath);
+let files: string[];
+let windowDesc: string;
+if (anchor && isUsableAnchor(vault, anchor)) {
+  files = markdownFilesSince(vault, anchor, maxFiles);
+  windowDesc = `since last run (${anchor}..${head})`;
+} else {
+  files = recentMarkdownFiles(vault, commits, maxFiles);
+  windowDesc = commitsExplicit
+    ? `last ${commits} commits (manual override)`
+    : `last ${commits} commits (no usable anchor)`;
+}
 if (files.length === 0) {
-  console.error("forme runner: no recent .md files in git delta — nothing to scan");
-  process.exit(1);
+  // 日常静默结果(如窗口里只有 98_Forme/ 自己的产物),不是错误
+  console.log(`forme runner: no knowledge-layer .md in window ${windowDesc} — nothing to scan`);
+  process.exit(0);
 }
 console.log(`forme runner ${runId}`);
-console.log(`scan: ${files.length} files from last ${commits} commits of ${vault}`);
+console.log(`scan: ${files.length} files, window = ${windowDesc}, vault = ${vault}`);
 
 const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
 console.log(
@@ -171,7 +189,7 @@ for (const ac of agentCards) {
 }
 
 if (!dryRun) {
-  appendRunMetric(join(outDir, "run-metrics.jsonl"), {
+  appendRunMetric(metricsPath, {
     v: "0",
     date: at.slice(0, 10),
     runId,
@@ -180,6 +198,7 @@ if (!dryRun) {
     presented: written,
     rejected,
     dup,
+    head, // #14:下轮增量窗口的锚点(本轮扫描时的 vault HEAD)
   });
 }
 

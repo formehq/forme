@@ -4,7 +4,7 @@
 
 **Forme**(中文名待定)= local-first agent,把用户知识库的漂移变成 one-decision 卡片(证据 + 最小 diff + accept/park/reject),并从每次决策学习用户的 taste。它是 CCS(Cognitive Continuity System)的产品化;所有核心回路已在 owner 的 vault 上经过 ~6 周自我实验验证。
 
-**当前阶段:W2(重复抑制 + Taste Rules + State Diff 生成器)。** 任务看 GitHub Issues/Milestones(W1→W6);本文件是每个 build 会话的起点——读完即有完整上下文,不需要翻旧会话。
+**当前阶段:W3(Console 三卡 + 落子手势 + wake-catchup)。** 任务看 GitHub Issues/Milestones(W1→W6);本文件是每个 build 会话的起点——读完即有完整上下文,不需要翻旧会话。
 
 ## Canonical 文档(战略层住在 vault;本 repo 不复制、不改写它们)
 
@@ -47,17 +47,18 @@
 
 ## 仓库现状(随进度更新)
 
-- **已建**:`schema/`(卡契约 v0 + v0.1 五段字段 —— #4、#12)· `runner/`(漂移卡管道:codex 真跑 → AJV 门 → 指纹抑制 → 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12;taste 提炼器 `taste.ts` —— #10;State Diff 生成器 `state-diff.ts` —— #11)· `launchd/`(日跑 + 周日 State Diff 双 job,已装机 —— #9、#11)· `docs/` · `design/` · 工具链(Node 原生 TS,无构建步骤)
-- **未建**:`console/`(W3,占位)· 规则确认交互(屏 4,W3)· 相似历史注入(post-W2)
-- 一句话:**采集端 + 学习半环 + 周叙事已通,决策端(console)未通**;待验:下一张真卡 v0.1 卡面 + 周日 07-12 第一张自动 State Diff。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
+- **已建**:`schema/`(卡契约 v0 + v0.1 五段字段 —— #4、#12)· `runner/`(漂移卡管道:codex 真跑 → AJV 门 → 指纹抑制 → 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12;增量窗口 = 上次 run 的 HEAD 锚点 —— #14;taste 提炼器 `taste.ts` —— #10;State Diff 生成器 `state-diff.ts` —— #11)· `console/`(localhost 单页决策台:三原语渲染 + a/p/r + correction + diff 应用回执 + 事件过 AJV 门落 jsonl —— #15)· `launchd/`(日跑 + 周日 State Diff 双 job,已装机 —— #9、#11)· `docs/` · `design/` · 工具链(Node 原生 TS,无构建步骤)
+- **未建**:规则确认交互(屏 4)· 呈现的接受率自适应节流(硬约束 #2 完整形)· un-park · 相似历史注入(post-W2)
+- 一句话:**七步生命周期首尾闭合,console 骨架在等 Zayn 第一次真实落子(#15 验收)**;待验:周日 07-12 第一张自动 State Diff。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
 
 ## 常用命令
 
 - `npm install` —— 装依赖(ajv / ajv-formats;首次)
-- `npm test` —— schema 测试(`node --test`,13 项:样卡过校验 + 指纹自洽 + 边界拒绝)
+- `npm test` —— 全部测试(`node --test`:schema 契约 + runner 管道 + console 端到端)
 - `npm run validate` —— 用 Forme 自己的 AJV 门跑一遍所有样例(卡 + decisions.jsonl)
 - `npm run typecheck` —— `tsc --noEmit`(不产出,只查型)
-- `gh issue list --milestone "W1 — 骨架 + 第一张真决策卡"` —— 看 W1 任务;关键路径 #4(done)→ #6(done)→ #5
+- `npm run run:console -- --vault <v>` —— 起决策台(http://127.0.0.1:6180;或用 FORME_VAULT 环境变量)
+- `gh issue list --milestone "W3 — Console 三卡 + 落子手势 + wake-catchup"` —— 看当前任务
 
 ## 会话协议(每个 build 会话遵守)
 

@@ -63,3 +63,9 @@ Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 run
 
 **2026-07-07 · State Diff 守卫 --min-days 6 → 4 · validated-in-use**
 首次手动真跑(07-07,周二)暴露:6 天守卫会让周中的手动生成扼杀下个周日的自动产出(07-07 → 07-12 仅 5 天)。守卫的真实职责只是防同周双发(唤醒补发间隔 0~1 天),4 天足够,且周日间隔恒为 7 不受影响。模板与装机 plist 已同步。(issue #11 修订)
+
+**2026-07-07 · scan 增量窗口 = 上次成功 run 的 HEAD 锚点(anchor..HEAD);--commits 降为手动覆盖 · validated-in-use**
+#12 验收暴露:vault 一天多次 commit 时固定 `--commits 4` 窗口 < run 节律(守卫 ~20h),跨文档漂移所需的文件会漏出扫描面。改为:每轮真实 run 在 run-metrics 行里记 `head`(扫描时的 vault HEAD 短 hash),下轮增量 = `git log <head>..HEAD`——窗口自动等于 run 节律,这才是硬约束 #3「增量只处理 delta」的本意。回退链:`--commits` 显式传参 = 手动覆盖 > 锚点缺失(首跑/旧数据)或失效(rebase 后非祖先,`merge-base --is-ancestor` 判)= 回退最近 N commit 窗口。**空窗口从 exit 1 改 exit 0**:锚点模式下「自上次 run 无知识层变更」是日常静默结果(launchd 日志里不该像故障)。已验证:测试覆盖 + 真 vault 只读冒烟(HEAD~8 窗口正确拾回 Console/Spec/Roadmap 三文件,即上次漏扫场景)。(issue #14)
+
+**2026-07-07 · Console 骨架 = node:http 单页,服务器零状态;presented 语义就此定案 · assumed**
+`console/`(#15,W3 主菜):`store.ts`(vault 投影:待决队列 = cards/ 无 decision 事件者,cardId+指纹双保险;catch-up 数据包全部从 git/jsonl 推导)+ `apply.ts`(accept 执行路径)+ `server.ts` + `page.ts`(单 HTML,内联 CSS/JS,交互稿屏 1/2/3 三原语)。关键裁定:①**presented = 卡在浏览器实际上屏那一刻**(客户端上报,#9 遗留语义定案),落子 session 一次一卡——latencyMs = 最近一次 presented → decision 的真实间隔才诚实;绕过 console 的落子(curl 等)自动记 `backfilled`,不编造延迟。②**console 写 jsonl 的路径过完整 AJV 门**(appendEvent 不合法即抛)——宽容解析只用于读历史行,自己写的行零豁免。③**accept 执行 = Forme 代码唯一写知识层处**:hunk 精确替换全有或全无(before 消失=卡过期、多匹配用行号 locator 消歧、纯插入 v0 拒绝),git 提交只含目标文件(pathspec commit),hash 进 `executed`;**目标文件不干净即拒绝落子**——回执 commit 不能裹挟用户未提交的编辑(provenance 会撒谎,回滚会误伤)。④correction = accept 前就地改 hunks 的 after + 可选 note,correction 事件先于 decision 落盘。⑤只绑 127.0.0.1 + Host 校验 + POST 强制 application/json(本机写路径的 CSRF/DNS-rebinding 挡板)。⑥零推送零通知零 badge(沉默纪律);「今天不看」永远在且零愧疚。手势形态 = 键盘 a/p/r 与按钮并存(issue 定)。Zayn 用它完成一次真实落子即转 validated-in-use。(issue #15)

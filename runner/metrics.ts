@@ -1,4 +1,4 @@
-import { appendFileSync, mkdirSync } from "node:fs";
+import { appendFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 /**
@@ -17,10 +17,30 @@ export interface RunMetric {
   presented: number; // 写入 cards/ 队列数(W3 console 之前,呈现 = 入列)
   rejected: number; // 没过自有 AJV 门
   dup: number; // 同指纹卡已在盘上(幂等跳过)
+  head?: string; // 本轮扫描时的 vault HEAD(#14:下轮增量窗口的锚点)
   backfilled?: boolean;
 }
 
 export function appendRunMetric(path: string, m: RunMetric): void {
   mkdirSync(dirname(path), { recursive: true });
   appendFileSync(path, JSON.stringify(m) + "\n");
+}
+
+/**
+ * 上次成功 run 记录的 vault HEAD(#14)。取**最后一条带 head 的行**——
+ * 早期数据点没有该字段,跳过即可;解析宽容(遥测文件,读不动的行不致命)。
+ */
+export function lastRunHead(path: string): string | null {
+  if (!existsSync(path)) return null;
+  let head: string | null = null;
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const m = JSON.parse(line) as { head?: unknown };
+      if (typeof m.head === "string" && m.head) head = m.head;
+    } catch {
+      /* 宽容 */
+    }
+  }
+  return head;
 }

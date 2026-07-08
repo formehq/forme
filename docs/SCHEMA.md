@@ -68,14 +68,15 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 
 | type | 何时 | 追加字段 |
 | --- | --- | --- |
-| `presented` | 卡呈现(**启动静默计时**) | —— |
-| `decision` | 用户落子 | `choice(a/p/r)` · `actor` · `latencyMs`(live 必填=presented→decision 静默延迟)· `executed?`(accept 时应用 diff 的 commit hash,执行凭证) |
-| `correction` | accept 前就地改了 diff | `correction{ hunks[], note? }` |
+| `presented` | **卡在 console 实际上屏那一刻**(#15 定案:客户端上报,启动静默计时;不是「写入队列」也不是「打开页面」) | —— |
+| `decision` | 用户落子 | `choice(a/p/r)` · `actor` · `latencyMs`(live 必填=**最近一次** presented→decision 静默延迟)· `executed?`(accept 时应用 diff 的 commit hash,执行凭证) |
+| `correction` | accept 前就地改了 diff(事件先于 decision 落盘) | `correction{ hunks[], note? }` |
 
 公共信封:`{ v:"0", ts, type, cardId, fingerprint }`(`ts` 完整 ISO,latency 由 presented→decision 的 ts 差算)。
 
 - **`actor`** = 决策者:`owner`(人)· 预留 `agent_shadow`(影子预决策但仍展示)· `agent_authorized`(授权自动化,仍可撤回)。与卡 envelope 的 `role`(消息角色)**同名不同义、刻意分开**——`actor` 是影子模式日后必需的字段,一步到位。
 - **`backfilled: true`** = **非现场计时的记录**——历史导入(产品前的人肉决策)和一切绕过 console 的落子(如 vault 侧手动决策后补记事件)都算,可省 `latencyMs`(没有诚实的静默计时就别编)。样例里的 6 条事件即三条种子(#1 comment)的事件化:每卡 presented+decision 一对,`ts` 取真实 commit 时刻,`executed` = 真实应用 commit,`fingerprint` 由该 commit 的真实 diff 反查而来。已知偏差:vault 里 07-06 的两条手写 decision 事件缺 `latencyMs` 又未标 `backfilled`,按本 schema 不合法;日志只追加、不回改,抑制读取宽容所以功能无损——今后非 console 落子请带 `backfilled: true`。
+- **写入方(#15 起)**:console 是事件的正规产地,`console/store.ts` 的 `appendEvent` **先过完整 AJV 门再落盘**(不合法即抛)——宽容解析只用于读历史行,自己写的行零豁免。console 收到没有 presented 记录的落子(如 curl 直打)自动按 `backfilled` 记,不编造延迟。
 
 ---
 
@@ -84,10 +85,10 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 重复率曲线的原始数据,住 `98_Forme/run-metrics.jsonl`,每**真实完成**的 run 追加一行(dry-run 不落点);写入方 `runner/metrics.ts`,形状由其 `RunMetric` 接口定义(无独立 JSON Schema——运行时遥测,不是卡/事件契约):
 
 ```
-{ v:"0", date(UTC YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, backfilled? }
+{ v:"0", date(UTC YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, backfilled? }
 ```
 
-`proposed = suppressed + presented + rejected + dup`(账要对得上)。W3 console 之前 `presented` = 写入 `cards/` 队列数(呈现=入列)。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟。
+`proposed = suppressed + presented + rejected + dup`(账要对得上)。此处 `presented` = 写入 `cards/` 队列数(入列;**呈现的正规语义已定案在 decisions.jsonl 的 presented 事件**,见上)。`head`(#14)= 本轮扫描时的 vault HEAD 短 hash,下轮增量窗口的锚点(`git log <head>..HEAD`);旧行无此字段 → 回退 `--commits` 窗口。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟。
 
 ---
 

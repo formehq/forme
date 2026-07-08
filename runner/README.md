@@ -3,20 +3,20 @@
 W1 Codex 路径已跑通(#5),W2 全链就位:指纹抑制(#9)、taste 提炼(#10)、State Diff(#11)、卡面 v0.1(#12)。runner 把一次 agent run 变成真盘上的卡:
 
 ```
-node runner/index.ts --vault <vault 路径> [--commits 4] [--max-files 12] [--max-cards 3] [--dry-run] [--model <m>] [--out <dir>]
+node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--max-cards 3] [--dry-run] [--model <m>] [--out <dir>]
 # 或:FORME_VAULT=<vault> npm run run:once -- --max-cards 3
 ```
 
 ## 管道
 
-1. **`scan.ts`** — 取 vault 最近 N 个 commit 的 markdown git-delta(增量,服务「唤醒 ≤10s」的雏形);**排除 `98_Forme/`**——Forme 自己的运行时产物不是漂移面,否则会对上一轮输出提卡自激。
+1. **`scan.ts`** — 取 markdown git-delta(增量,服务「唤醒 ≤10s」的雏形)。**窗口 = 上次成功 run 以来**(#14):锚点 = run-metrics 最后记录的 vault HEAD,增量 = `anchor..HEAD`,窗口自动等于 run 节律;`--commits N` 显式传参 = 手动覆盖,锚点缺失(首跑)或失效(rebase)时回退最近 N commit。空窗口 = 日常静默结果(exit 0)。**排除 `98_Forme/`**——Forme 自己的运行时产物不是漂移面,否则会对上一轮输出提卡自激。
 2. **`agent-schema.ts`** — 生成给 codex 的 `--output-schema`。**故意宽松**:codex 用 OpenAI strict 结构化输出(拒 `pattern`/`minItems`/`format`,且要求每个属性都 required、可选项走 nullable)。它只定形状。
 3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。
 4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹,再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
 5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。
 6. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 → 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层。
 7. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**。
-8. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料;dry-run 不落点)。
+8. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup, head}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料 + 下轮增量锚点;dry-run 不落点)。
 
 **一切写盘、校验、指纹由本目录代码执行,agent 只读、只返回 JSON**(硬约束 #7)。写入只落 `98_Forme/`,不碰知识层(2026-07-04 边界裁定)。
 
@@ -37,8 +37,8 @@ node runner/index.ts --vault <vault 路径> [--commits 4] [--max-files 12] [--ma
 ## 当前边界
 
 - 只做 Codex 一次性调用;OpenCode server/SDK(#8)日后插在同一 `scan → assemble → write` 核心之后(双调用形态)。
-- **不写 `decisions.jsonl`**:还没有 console,卡是「生成入列」不是「呈现落子」,写 presented 事件会不诚实——事件从 console(W3)呈现/落子时才产生。
-- parked 与 rejected 同样被永久抑制;un-park 机制随 console(W3+)。
+- **runner 仍不写 `decisions.jsonl`**:卡是「生成入列」;presented/decision/correction 事件由 `console/`(#15)在实际呈现与落子时产生。
+- parked 与 rejected 同样被永久抑制;un-park 机制随 console 后续(W3+)。
 - k 条相似历史决策注入 prompt 留 post-W2(Taste Rules 注入已通,#10)。
 
 数据契约见 `docs/SCHEMA.md`;设计取舍见 `docs/DECISIONS.md`。
