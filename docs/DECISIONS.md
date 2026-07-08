@@ -69,3 +69,6 @@ Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 run
 
 **2026-07-07 · Console 骨架 = node:http 单页,服务器零状态;presented 语义就此定案 · assumed**
 `console/`(#15,W3 主菜):`store.ts`(vault 投影:待决队列 = cards/ 无 decision 事件者,cardId+指纹双保险;catch-up 数据包全部从 git/jsonl 推导)+ `apply.ts`(accept 执行路径)+ `server.ts` + `page.ts`(单 HTML,内联 CSS/JS,交互稿屏 1/2/3 三原语)。关键裁定:①**presented = 卡在浏览器实际上屏那一刻**(客户端上报,#9 遗留语义定案),落子 session 一次一卡——latencyMs = 最近一次 presented → decision 的真实间隔才诚实;绕过 console 的落子(curl 等)自动记 `backfilled`,不编造延迟。②**console 写 jsonl 的路径过完整 AJV 门**(appendEvent 不合法即抛)——宽容解析只用于读历史行,自己写的行零豁免。③**accept 执行 = Forme 代码唯一写知识层处**:hunk 精确替换全有或全无(before 消失=卡过期、多匹配用行号 locator 消歧、纯插入 v0 拒绝),git 提交只含目标文件(pathspec commit),hash 进 `executed`;**目标文件不干净即拒绝落子**——回执 commit 不能裹挟用户未提交的编辑(provenance 会撒谎,回滚会误伤)。④correction = accept 前就地改 hunks 的 after + 可选 note,correction 事件先于 decision 落盘。⑤只绑 127.0.0.1 + Host 校验 + POST 强制 application/json(本机写路径的 CSRF/DNS-rebinding 挡板)。⑥零推送零通知零 badge(沉默纪律);「今天不看」永远在且零愧疚。手势形态 = 键盘 a/p/r 与按钮并存(issue 定)。Zayn 用它完成一次真实落子即转 validated-in-use。(issue #15)
+
+**2026-07-07 · AGENTS.md = CLAUDE.md 的 symlink,不做第二份拷贝 · assumed**
+AGENTS.md 是 Codex/OpenCode 等底座认的通用入口文件名(Tier 1/2 底座读它),CLAUDE.md 是 Claude Code 入口——同一份 build 上下文,两个门牌。拷贝形态当天就漂了(CLAUDE.md 升 W3 时 AGENTS.md 还停在 W2,被 console 冒烟当场抓到,颇具讽刺);single source of truth 用 symlink 落实,git 原生支持。公开前清单(W6)处理路径时两个名字一起过。
