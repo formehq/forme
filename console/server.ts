@@ -1,5 +1,8 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "node:http";
-import { join } from "node:path";
+import { spawn } from "node:child_process";
+import { mkdirSync, openSync, statSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderPage } from "./page.ts";
 import { applyCardDiff, ApplyError } from "./apply.ts";
@@ -25,12 +28,31 @@ import type { Card, Hunk } from "../runner/types.ts";
  * latencyMs = 最近一次 presented → decision 的真实间隔。没有 presented
  * 记录的落子(如 curl 直打)按 backfilled 记,不编造延迟。
  *
+ * wake-catchup(#16,硬约束 #3):开盖 → 首卡可见 ≤10s 的策略 = **先渲染
+ * 盘上旧状态并标注「队列截至 X」,后台增量刷新**。console 打开 = 用户来了
+ * = 合法拉取时刻,客户端上报 POST /api/refresh,服务器后台 spawn 一轮
+ * 增量 runner(#14 锚点窗口:无新 commit 即零成本退出;--min-hours 下限
+ * 防反复开页烧 codex 额度)。页面永远不等扫描——新卡出现在投影更新之后。
+ *
  * 只绑 127.0.0.1;不推送、不通知、无 badge(沉默纪律)——等用户来。
  */
 
 export interface ConsoleOpts {
   vault: string;
   outDir?: string;
+  /** 后台刷新命令(测试注入);默认 = node runner/index.ts --vault … */
+  refreshCmd?: string[];
+  /** 传给后台 runner 的 --min-hours(console 拉取的额度下限,默认 2) */
+  refreshMinHours?: number;
+  /** 后台 run 的日志(默认 ~/Library/Logs/forme/console-refresh.log) */
+  refreshLog?: string;
+}
+
+interface RefreshState {
+  startedAt: string;
+  endedAt?: string;
+  exitCode?: number | null;
+  running: boolean;
 }
 
 interface DecideBody {
@@ -82,6 +104,54 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
   const vault = opts.vault;
   const outDir = opts.outDir ?? join(vault, "98_Forme");
   const jsonlPath = join(outDir, "decisions.jsonl");
+  const metricsPath = join(outDir, "run-metrics.jsonl");
+
+  // 后台刷新是唯一的进程内状态——运维态(一个在飞的子进程),不是数据
+  // (数据永远住 vault;asOf 从 run-metrics mtime 现读,server 重启零丢失)。
+  let refresh: RefreshState | null = null;
+
+  const freshness = () => {
+    let asOf: string | null = null;
+    try {
+      asOf = new Date(statSync(metricsPath).mtimeMs).toISOString();
+    } catch {
+      /* 从未真跑过 */
+    }
+    return { asOf, refreshing: refresh?.running === true, lastRefresh: refresh };
+  };
+
+  const startRefresh = (): { started?: boolean; already?: boolean } => {
+    if (refresh?.running) return { already: true };
+    const cmd = opts.refreshCmd ?? [
+      process.execPath,
+      fileURLToPath(new URL("../runner/index.ts", import.meta.url)),
+      "--vault", vault,
+      "--out", outDir,
+      "--min-hours", String(opts.refreshMinHours ?? 2),
+    ];
+    let out: number | "ignore" = "ignore";
+    try {
+      const logPath = opts.refreshLog ?? join(homedir(), "Library", "Logs", "forme", "console-refresh.log");
+      mkdirSync(dirname(logPath), { recursive: true });
+      out = openSync(logPath, "a");
+    } catch {
+      /* 日志开不了不拦刷新 */
+    }
+    const rec: RefreshState = { startedAt: new Date().toISOString(), running: true };
+    refresh = rec;
+    const child = spawn(cmd[0]!, cmd.slice(1), { stdio: ["ignore", out, out] });
+    child.on("exit", (code) => {
+      rec.running = false;
+      rec.endedAt = new Date().toISOString();
+      rec.exitCode = code;
+    });
+    child.on("error", () => {
+      rec.running = false;
+      rec.endedAt = new Date().toISOString();
+      rec.exitCode = -1;
+    });
+    return { started: true };
+  };
 
   return createServer(async (req, res) => {
     try {
@@ -102,6 +172,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         const events = readEvents(jsonlPath);
         return json(res, 200, {
           now: now.toISOString(),
+          freshness: freshness(),
           catchUp: catchUpData(vault, outDir, now),
           pending: pendingCards(outDir, events),
           stateDiff: latestStateDiff(outDir),
@@ -119,6 +190,12 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         } catch {
           return json(res, 400, { error: "body 不是 JSON" });
         }
+
+        // wake-catchup(#16):console 打开 = 合法拉取,后台补一轮增量扫描
+        if (url.pathname === "/api/refresh") {
+          return json(res, 200, { ok: true, ...startRefresh() });
+        }
+
         const cardId = typeof body.cardId === "string" ? body.cardId : null;
         if (!cardId) return json(res, 400, { error: "缺 cardId" });
 
@@ -216,7 +293,11 @@ function main(): void {
     process.exit(2);
   }
   const port = Number(arg("port", "6180"));
-  const server = createConsoleServer({ vault, outDir: arg("out") });
+  const server = createConsoleServer({
+    vault,
+    outDir: arg("out"),
+    refreshMinHours: Number(arg("refresh-min-hours", "2")),
+  });
   server.listen(port, "127.0.0.1", () => {
     console.log(`forme console → http://127.0.0.1:${port}  (vault: ${vault})`);
     console.log("不推送、不通知;开着就行,等你来。Ctrl-C 退出。");

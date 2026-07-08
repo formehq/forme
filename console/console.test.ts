@@ -92,8 +92,8 @@ function seedCard(repo: string, category: string, file: string, before: string, 
   return card;
 }
 
-async function startServer(vault: string) {
-  const server = createConsoleServer({ vault });
+async function startServer(vault: string, extra: Partial<Parameters<typeof createConsoleServer>[0]> = {}) {
+  const server = createConsoleServer({ vault, ...extra });
   await new Promise<void>((r) => server.listen(0, "127.0.0.1", r));
   const port = (server.address() as AddressInfo).port;
   const base = `http://127.0.0.1:${port}`;
@@ -197,6 +197,48 @@ test("console 拒绝不干净的目标文件:回执 commit 不裹挟用户未提
     assert.equal(events.filter((e) => e.type === "decision").length, 0);
     const state = (await t.get("/api/state")) as { pending: Card[] };
     assert.equal(state.pending.length, 1);
+  } finally {
+    await t.close();
+  }
+});
+
+test("wake-catchup(#16):旧状态先渲染(freshness.asOf),refresh 后台跑、去抖、完成后投影更新", async () => {
+  const vault = mkVault();
+  const metricsPath = join(vault, "98_Forme", "run-metrics.jsonl");
+  const logPath = join(vault, "refresh-test.log");
+  // 假「后台 runner」:睡 300ms 后追加一行 run-metrics(模拟真实 run 完成动 asOf 时钟)
+  const fakeCmd = [
+    process.execPath,
+    "-e",
+    'setTimeout(() => { require("node:fs").appendFileSync(process.argv[1], JSON.stringify({v:"0",date:"2026-07-07",runId:"r_bg",proposed:0,suppressed:0,presented:0,rejected:0,dup:0,head:"abc"}) + "\\n"); }, 300)',
+    metricsPath,
+  ];
+  const t = await startServer(vault, { refreshCmd: fakeCmd, refreshLog: logPath });
+  try {
+    // 从未真跑过:asOf null,页面照样能渲染(旧状态优先,不等扫描)
+    let s = (await t.get("/api/state")) as { freshness: { asOf: string | null; refreshing: boolean } };
+    assert.equal(s.freshness.asOf, null);
+    assert.equal(s.freshness.refreshing, false);
+
+    // 触发刷新:started;去抖:第二次 already;期间 refreshing = true
+    const r1 = await t.post("/api/refresh", {});
+    assert.equal(r1.status, 200);
+    assert.equal(r1.data.started, true);
+    const r2 = await t.post("/api/refresh", {});
+    assert.equal(r2.data.already, true);
+    s = (await t.get("/api/state")) as typeof s;
+    assert.equal(s.freshness.refreshing, true);
+
+    // 完成后:refreshing 归零、exitCode 0、asOf 从 null 变为真时刻(投影自然更新)
+    await new Promise((r) => setTimeout(r, 700));
+    const s2 = (await t.get("/api/state")) as {
+      freshness: { asOf: string | null; refreshing: boolean; lastRefresh: { exitCode: number | null } };
+    };
+    assert.equal(s2.freshness.refreshing, false);
+    assert.equal(s2.freshness.lastRefresh.exitCode, 0);
+    assert.ok(s2.freshness.asOf);
+    // 完成后可再次触发(新一轮 started,不是 already)
+    assert.equal((await t.post("/api/refresh", {})).data.started, true);
   } finally {
     await t.close();
   }

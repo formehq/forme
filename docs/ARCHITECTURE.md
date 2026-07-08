@@ -22,9 +22,12 @@ Forme 代码(非 agent)确定性执行:                          [schema/ 已建
    ├─ 落盘:卡片 JSON + markdown 镜像 → vault/98_Forme/
    └─ 记数据点:run-metrics.jsonl(重复率曲线原料)         [#9]
    ▼
-console (localhost 单页,node:http,服务器零状态)          [console/ 已建骨架 · #15]
+console (localhost 单页,node:http,服务器零状态;           [console/ 已建 · #15/#16]
+   │    launchd 常驻 com.forme.console,KeepAlive)
    │   三原语:catch-up 卡(屏 1)/ Decision 卡五段(屏 2)/ State Diff(屏 3)
    │   presented 事件 = 卡实际上屏时上报(静默计时起点;语义定案 #15)
+   │   wake-catchup(#16,硬约束 #3):旧状态秒渲 +「队列截至 X」标注,
+   │   开页触发后台增量 run(--min-hours 2 + 锚点空窗零成本 + 去抖)
    ▼
 落子  a / p / r 单键 + 按钮(+ correction 就地修正 after)   [已建 · #15]
    ├─ accept → hunk 精确替换(全有或全无)→ git 提交回执 executed
@@ -48,7 +51,7 @@ console (localhost 单页,node:http,服务器零状态)          [console/ 已�
 | `schema/` | 卡片 + 事件的 JSON Schema、指纹、AJV 校验、样例 | **已建(#4、#12)** |
 | `runner/` | 漂移卡管道(#5/#9/#12)+ taste 提炼器(#10)+ State Diff 生成器(#11) | **已建** |
 | `launchd/` | 日跑 + 周日 State Diff 双 plist 模板 + 安装脚本 | **已建(#9、#11)** |
-| `console/` | localhost 三卡 + 落子手势 + wake-catchup(单页,零框架) | **已建骨架(#15)** |
+| `console/` | localhost 三卡 + 落子手势 + wake-catchup(单页,零框架) | **已建(#15、#16;真实落子已发生)** |
 | `docs/` | 系统理解面:ARCHITECTURE / DECISIONS / SCHEMA | 进行中(#7) |
 | `design/` | 交互稿 + 语气笔记(活文档) | 已有(#1) |
 
@@ -65,7 +68,8 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **taste 学习半环**:决策日志 → codex 提炼 → `Taste Rules.md`(零负样本置信钉死 low + cardId 溯源)→ 规则回注 runner prompt(#10)。
 - **State Diff 周更**:确定性周数据包 → 四段叙事 → `state-diff-YYYY-MM-DD.md`,周日 launchd 自动产出(#11)。
 - launchd 调度:日跑(每日定时 + vault commit 触发 + 登录补跑,≥20h 守卫)+ 周日 State Diff(≥4d 守卫)(#9、#11)。
-- **console 落子全链**(#15):`npm run run:console -- --vault <v>` → localhost 单页(127.0.0.1:6180)渲染三原语(catch-up / 五段卡 / State Diff)→ a/p/r 单键或按钮 + correction 就地修正 → accept 应用最小 diff(全有或全无;目标文件不干净即拒)+ git 提交回执 → presented/correction/decision 事件过 AJV 门追加 jsonl,latencyMs 有真值。服务器零状态,每请求现读 vault(硬约束 #4)。
+- **console 落子全链**(#15):localhost 单页(127.0.0.1:6180,launchd 常驻)渲染三原语(catch-up / 五段卡 / State Diff)→ a/p/r 单键或按钮 + correction 就地修正 → accept 应用最小 diff(全有或全无;目标文件不干净即拒)+ git 提交回执 → presented/correction/decision 事件过 AJV 门追加 jsonl,latencyMs 有真值(首批:123s/15s/18s,07-08 Zayn 真实 session)。服务器零状态,每请求现读 vault(硬约束 #4)。
+- **wake-catchup**(#16,硬约束 #3):开页旧状态秒渲 +「队列截至 X」标注 → 后台增量 run(额度三重护栏)→ 投影自更新;常开 tab 回可见自动重投影;真链已验证(refresh → 锚点 run → 3 卡入列)。
 
 **还不能:**
 - 规则的「收录/改写/丢弃」确认交互(W3 屏 4)/ k 条相似历史决策注入(post-W2)。
@@ -74,4 +78,4 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(console 侧解,W3+)。
 - correction 只能改 hunk 的 after(v0);纯插入(before 为空)的 diff 拒绝自动应用。
 
-> 一句话:**七步生命周期首尾闭合了——采集、呈现、落子、学习、周叙事全通,console 骨架在等 Zayn 的第一次真实落子。** 下一块 = #15 验收(Zayn 用 console 而非 vault 会话落一次子)+ 屏 4 规则确认交互。
+> 一句话:**七步生命周期在真实使用中闭合了——07-08 Zayn 用 console 完成首个真实 session(3 卡 3 accept,latency 真值起转)。** W3 剩:开盖 ≤10s 秒表 3 天实测(#16 验收)。下一块 = W4 Metrics 上屏(#19)+ 屏 4 Taste 面板(#20,W5)。

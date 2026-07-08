@@ -31,6 +31,7 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 
 - `com.forme.runner`:每日定时 + vault commit 触发(WatchPaths 盯 `.git/logs/HEAD`,工作流边界)+ 登录补跑(RunAtLoad);守卫 `--min-hours 20`(`run-metrics.jsonl` mtime 时钟,手动/自动共享额度窗口)。
 - `com.forme.statediff`:每周日 18:00;守卫 `--min-days 4`(最新产物文件名日期);**无 RunAtLoad**(第一张必须产在周日;睡眠错过唤醒补发,整机关机顺延下周日)。
+- `com.forme.console`:常驻 127.0.0.1:6180(RunAtLoad + KeepAlive,#16);打开页面即触发后台增量 run(`--min-hours 2`,同一 mtime 时钟)。
 
 日志在 `~/Library/Logs/forme/{runner,statediff}.log`;卸载命令见 `install.sh` 头注释。
 

@@ -1,8 +1,8 @@
 #!/bin/sh
-# 安装/更新 Forme 的 launchd 调度(issue #9 日跑 + #11 周日 State Diff)。
+# 安装/更新 Forme 的 launchd 调度(#9 日跑 + #11 周日 State Diff + #16 console 常驻)。
 # 重复执行 = 更新(先 bootout 再 bootstrap)。
 # 用法:launchd/install.sh <vault 路径> [日跑小时,默认 9] [State Diff 周日小时,默认 18]
-# 卸载:for l in com.forme.runner com.forme.statediff; do
+# 卸载:for l in com.forme.runner com.forme.statediff com.forme.console; do
 #         launchctl bootout gui/$(id -u)/$l; rm ~/Library/LaunchAgents/$l.plist; done
 set -eu
 
@@ -37,6 +37,8 @@ install_one() { # $1 = label
 
 install_one com.forme.runner
 install_one com.forme.statediff
+install_one com.forme.console
 echo "runner: daily ${HOUR}:00 + vault-commit wake + login catch-up(guard --min-hours 20)"
 echo "statediff: Sunday ${SD_HOUR}:00(睡眠错过唤醒补发;guard --min-days 4)"
-echo "日志:$LOGDIR/{runner,statediff}.log"
+echo "console: 常驻 http://127.0.0.1:6180(KeepAlive;打开页面即触发后台补扫,guard --min-hours 2)"
+echo "日志:$LOGDIR/{runner,statediff,console}.log"

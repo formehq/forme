@@ -25,6 +25,10 @@ node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
 
 `presented` 事件 = 卡在浏览器**实际上屏**那一刻(客户端上报,每页加载每卡一次);`latencyMs` = 最近一次 presented → decision 的真实间隔。绕过 console 的落子(curl 直打)没有诚实计时,自动记 `backfilled`,不编造延迟。
 
+## wake-catchup(#16,硬约束 #3:开盖 → 首卡可见 ≤10s)
+
+页面**永远不等扫描**:开页即渲染盘上现状,catch-up 卡带「队列截至 HH:MM」标注(asOf = run-metrics mtime);同时客户端上报 `POST /api/refresh`,server 后台 spawn 一轮增量 runner,完成后投影自更新。防烧额度三重:runner `--min-hours 2`(与日跑 20h 共享 mtime 时钟)· #14 锚点空窗零成本退出 · server 去抖(在飞即 already)。常开 tab 回到可见且距上次投影 >1min → 自动重投影 + 补扫(落子/阅读中不打断)。console 以 launchd 常驻(`com.forme.console`,KeepAlive,`../launchd/install.sh` 一并安装);后台 run 日志在 `~/Library/Logs/forme/console-refresh.log`。
+
 ## 当前边界
 
 - 呈现数量无接受率自适应节流(硬约束 #2 完整形,后续);现在 = 全部待决卡一次 session。

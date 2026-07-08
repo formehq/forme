@@ -72,3 +72,6 @@ Forme 自己的运行时产物(卡片 md 镜像)不是漂移面;不排除则 run
 
 **2026-07-07 · AGENTS.md = CLAUDE.md 的 symlink,不做第二份拷贝 · assumed**
 AGENTS.md 是 Codex/OpenCode 等底座认的通用入口文件名(Tier 1/2 底座读它),CLAUDE.md 是 Claude Code 入口——同一份 build 上下文,两个门牌。拷贝形态当天就漂了(CLAUDE.md 升 W3 时 AGENTS.md 还停在 W2,被 console 冒烟当场抓到,颇具讽刺);single source of truth 用 symlink 落实,git 原生支持。公开前清单(W6)处理路径时两个名字一起过。
+
+**2026-07-07 · wake-catchup = 旧状态秒渲 +「截至 X」标注 + console 打开触发后台增量 run · validated-in-use**
+硬约束 #3(开盖 → 首卡可见 ≤10s)的实现策略(#16):页面**永远不等扫描**——开页即渲染盘上现状,catch-up 卡带「队列截至 HH:MM」标注(asOf = run-metrics mtime 现读,server 重启零丢失);同时客户端上报 `POST /api/refresh`,server 后台 spawn 一轮增量 runner(console 打开 = 用户来了 = 合法拉取时刻,工作流边界之一)。防烧额度三重:①runner 传 `--min-hours 2`(开页拉取的下限,与日跑 20h 共享同一 mtime 时钟);②#14 锚点窗口下无新 commit 的 run 在 codex 之前零成本退出;③server 内去抖(已在飞的刷新直接 already)。刷新态是 server 唯一进程内状态——运维态(一个在飞的子进程),不是数据,不违硬约束 #4。常开 tab 的开盖路径:visibilitychange 回可见且距上次投影 >1min → 重投影 + 补扫(session/State Diff 阅读中不打断)。console 自身以 launchd 常驻(`com.forme.console`,RunAtLoad + KeepAlive,直接 exec node)——「开盖 ≤10s」的前提是 server 一直活着。已验证:装机后真链全通(refresh → 锚点窗口 run(eab7e5f9..00189d60)→ 3 张新卡入列 → asOf 更新);秒表 3 天连续达标留 Zayn 实测。(issue #16)

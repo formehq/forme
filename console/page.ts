@@ -97,6 +97,9 @@ var decided = 0;
 var sessionStart = 0;
 var presentedOnce = {};  // cardId → true(本页加载内只上报一次)
 var view = document.getElementById("view");
+var currentView = "";    // catchup / session / statediff / done / skip
+var lastBoot = 0;
+var polling = false;
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -120,7 +123,18 @@ function awayLabel(cu) {
   if (h < 48) return "你不在的 " + Math.round(h) + " 小时";
   return "你不在的 " + Math.round(h / 24) + " 天";
 }
+function freshLabel() {
+  var fr = st.freshness || {};
+  if (!fr.asOf) return fr.refreshing ? "还没跑过扫描 · 正在补第一轮…" : "还没跑过扫描";
+  var d = new Date(fr.asOf);
+  var pad = function (n) { return (n < 10 ? "0" : "") + n; };
+  var sameDay = new Date().toDateString() === d.toDateString();
+  var label = "队列截至 " + (sameDay ? "" : pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " ") +
+    pad(d.getHours()) + ":" + pad(d.getMinutes());
+  return fr.refreshing ? label + " · 后台补扫中…" : label;
+}
 function renderCatchup() {
+  currentView = "catchup";
   var cu = st.catchUp;
   var into = cu.commits === 0 ? "vault 没有新 commit" :
     cu.commits + " 个 commit,动了 " + cu.mdTouched + " 个文档";
@@ -133,6 +147,7 @@ function renderCatchup() {
     '<table class="facts"><tr><td>进来</td><td>' + into + "</td></tr>" +
     "<tr><td>我做的</td><td>" + did + "</td></tr>" +
     "<tr><td>等你</td><td>" + wait + "</td></tr></table>" +
+    '<p class="muted" style="font-size:13px;margin:14px 0 0">' + esc(freshLabel()) + "</p>" +
     '<div class="actions">';
   if (cu.pending.count > 0) html += '<button class="primary" id="go">进入落子</button>';
   if (st.stateDiff) html += '<button id="sd">先看 State Diff</button>';
@@ -145,6 +160,7 @@ function renderCatchup() {
   document.getElementById("skip").onclick = renderSkip;
 }
 function renderSkip() {
+  currentView = "skip";
   view.innerHTML = '<div class="card"><p>好,今天不看。卡都在,不催。</p>' +
     '<div class="actions"><button class="ghost" id="back">回到开头</button></div></div>';
   document.getElementById("back").onclick = boot;
@@ -158,6 +174,7 @@ function startSession() {
 }
 function showCard() {
   if (idx >= queue.length) return renderDone();
+  currentView = "session";
   var c = queue[idx];
   if (!presentedOnce[c.id]) {
     presentedOnce[c.id] = true;
@@ -255,6 +272,7 @@ function decide(choice, correction) {
   });
 }
 function renderDone() {
+  currentView = "done";
   var secs = Math.round((Date.now() - sessionStart) / 1000);
   var mm = Math.floor(secs / 60), ss = secs % 60;
   var html = '<div class="card"><h1>落完了</h1><p>' + decided + " 张 · 用时 " +
@@ -269,6 +287,7 @@ function renderDone() {
 
 /* ---------- 屏 3 · State Diff(只读) ---------- */
 function renderStateDiff(backTo) {
+  currentView = "statediff";
   var md = st.stateDiff.markdown;
   var body = md.replace(/^---[\\s\\S]*?---\\n/, "");
   var out = "";
@@ -294,12 +313,41 @@ document.addEventListener("keydown", function (ev) {
   if (map[ev.key]) { ev.preventDefault(); decide(map[ev.key], null); }
 });
 
+/* ---------- wake-catchup(#16):先渲染旧状态,后台增量刷新 ---------- */
+function triggerRefresh() {
+  post("/api/refresh", {}).then(function (r) {
+    if (r.ok) pollFreshness();
+  });
+}
+function pollFreshness() {
+  if (polling) return;
+  polling = true;
+  var tick = function () {
+    fetch("/api/state").then(function (r) { return r.json(); }).then(function (s) {
+      st = s;
+      if (currentView === "catchup") renderCatchup(); // 落子中不打扰,session 快照不动
+      if (s.freshness && s.freshness.refreshing) setTimeout(tick, 4000);
+      else polling = false;
+    });
+  };
+  setTimeout(tick, 4000);
+}
+
 function boot() {
+  lastBoot = Date.now();
   fetch("/api/state").then(function (r) { return r.json(); }).then(function (s) {
     st = s;
     renderCatchup();
+    triggerRefresh(); // console 打开 = 用户来了 = 合法拉取时刻
   });
 }
+// 常开 tab 的开盖路径:回到可见且离上次投影超过 1 分钟 → 重新投影 + 补扫
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState !== "visible") return;
+  if (Date.now() - lastBoot < 60000) return;
+  if (currentView === "session" || currentView === "statediff") return; // 不打断阅读与落子
+  boot();
+});
 boot();
 </script>
 </body>
