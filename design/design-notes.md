@@ -8,5 +8,6 @@
 
 - (示例)07-05 · 屏 2 卡 3 · "你称它静态残骸"这句让我被自己的话将军,有点不适——考虑证据引用降一档语气
 - **07-06 · 卡面整体 · Zayn 第一条真实反馈(权重高)**:直接看 v0 真卡(87/f4)「非常不容易懂 then 决策」;对照他易决策的形态 = **是什么(context)→ 为什么现在 → 选项化建议(agent 亮推荐)→ 拍板后会发生什么**;证据与 diff 应降为支撑层(可展开)。→ **卡面 v0.1 方向:决策者优先结构;「建议」字段 = 影子模式的第一形态**。结构定稿后进 renderer(候选 W2 issue)+ 交互稿修订。
-- **07-07 晚 · 卡 44fc(@formehq 拆待办)· Zayn 第三次卡面反馈(比语体更深一层)**:"花了很长时间才理解它在说什么;信息量小到只倾向 accept;没有接口补 context"。诊断:①卡在**账本层**说话(文档手术),世界层事实(@formehq 账号未确认、8.15 要用)零出现——**规则:卡面说事,diff 说账**;②瘦卡面把本该的 park/question 偷换成 accept——accept 偏置与负样本饥荒同病;③context 补充通道 = correction 输入框语义扩展(**correction 改 diff,question 改 context**),异步再出卡,不做 chat 面。→ v0.2 方向 + context 随 stakes 缩放。→ issue #21。
+- **07-08 补:上条卡号勘误(44fc→66bcc,44fc 是 Roadmap 速览);且 66bcc 的 latencyMs = 949024(15.8 分钟)vs 同批世界层清晰卡 12.1s/12.6s——legibility 失败首次被产品自己的计时器定量捕获,证据挂 #21。**
+- **07-07 晚 · 卡 66bcc(@formehq 拆待办)· Zayn 第三次卡面反馈(比语体更深一层)**:"花了很长时间才理解它在说什么;信息量小到只倾向 accept;没有接口补 context"。诊断:①卡在**账本层**说话(文档手术),世界层事实(@formehq 账号未确认、8.15 要用)零出现——**规则:卡面说事,diff 说账**;②瘦卡面把本该的 park/question 偷换成 accept——accept 偏置与负样本饥荒同病;③context 补充通道 = correction 输入框语义扩展(**correction 改 diff,question 改 context**),异步再出卡,不做 chat 面。→ v0.2 方向 + context 随 stakes 缩放。→ issue #21。
 - **07-06 · Taste Rules v1 · Zayn 反馈(与卡面 v0 同病)**:"代码术语太重,不是任何决策者都能快速读懂"。→ 一般原则成形:**结论用人话一行,账本降层可查**——规则行要读起来像用户亲手写进 CLAUDE.md 的指令(用户手写规则 = 机器写规则的风格语料/few-shot);统计、溯源、时效由代码渲染成降层小字;规则行禁用 provenance/frontmatter/cardId 类词汇。适用于一切人面表面(卡/规则/State Diff/console)。→ issue #13。
