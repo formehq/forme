@@ -81,3 +81,15 @@ AGENTS.md 是 Codex/OpenCode 等底座认的通用入口文件名(Tier 1/2 底�
 
 **2026-07-08 · Metrics 上屏 = 纯投影,中位数只取现场计时 · assumed**
 #19(demo 拍 4 缺口 G1):①落子 toast 加本次用时(「已接受 · commit xxx · 12 秒 · 可回滚」),值 = decide 响应里的 latencyMs 真值,backfilled 落子无值即不显示——不编造延迟的纪律延伸到显示层。②Metrics 视图(console 第四屏):time-to-decision 中位数 + 最近 20 次分布条(按 choice 着色)、重复率逐轮条(入列 vs 抑制+重复)+ 累计抑制率、世界层闸命中/问答往返计数。全部现读 decisions.jsonl + run-metrics.jsonl(`store.metricsData`),进视图时现取现算(落完子看,数字含刚落的这批);服务器仍零状态。中位数**只取现场计时的落子**(backfilled 不进分布)。949s 离群值不截断——线性坐标下它本身就是 legibility 故事(拍 6 素材)。(issue #19)
+
+**2026-07-08 · note 通道对所有 choice 开放 + 撤销窗口 = 补偿事件,日志仍只追加 · assumed**
+出身 = #24 实录(07-08 首例真实 park 的理由在 console 丢失,Zayn 手工补录 jsonl;vault 侧当日裁定)。①**note 通道**:decision 事件加可选 `note`——落子理由随任意手势提交,有字就带上;console 卡面常驻一行输入框,placeholder 点明「park/reject 的理由是最珍贵的 taste 数据」;correction 保持原义(带 hunks 的修改后接受,自有 note),两义不混。②**撤销窗口**(#23 并入):toast 停 4 秒可撤(`u` 键),服务端上限 15s 兜底;**undo 是补偿事件,不是删除**——`{type:"undo", cardId, fingerprint, executed?}` 追加进 jsonl,读取方按文件序重放(append-only 日志文件序 = 时间序):store 队列/metrics、runner 指纹抑制、taste 学习器、question 已决名单四处同步「undo 撤销同卡最近一次 decision」;decision → undo → decision 是合法序列,第二条生效。被撤销的 decision 不进 taste、不进时延分布(4 秒内反悔的数据是噪声)、指纹回到未决。③**accept 的撤销走 `git revert`**(不 reset)——vault 历史与事件日志同一姿态,只追加;revert 冲突(窗口内文件又被改)即整个撤销失败,revert commit hash 记进 undo 事件 `executed`(凭证闭环)。④撤销期间手势封禁,防二次按键;undo 后卡重新上屏、presented 重报(计时重新起点,延迟诚实)。(issue #24;#23 并入)
+
+**2026-07-08 · claim-drift 思想卡 = 快慢层对照 + 每轮 ≤1 张机器节流 · assumed**
+SSOT 最锋利命题是 notice when your thinking has changed,而 12 张真卡全是库的整洁类(方向审计 07-07)——**思想漂移住在慢层**(02_Wiki 概念笔记几周不动,永远进不了 delta 窗口),增量扫描机械性偏向 hygiene。落地(#18):①新类别 `claim-drift`(立场/判断漂移),stakes 恒派生 `thought`(#21 预留的出生通道);②**快慢层对照**:`--slow-layer N` 把 02_Wiki 里最久没被 commit 动过的 N 篇概念笔记注入 prompt 作立场参照(慢的那端),与 delta 窗口(快的那端)对照找张力;**取窗按日轮转**(窗口起点 = 日序×N mod 总数,无状态确定性;否则每天都是同 N 篇,其余慢层永远进不了对照面),~len/N 天覆盖全慢层一遍;daily launchd job 传 4——对照面常驻,而非另设周扫 job(第 4 个 job 的复杂度不值;若节奏不够再升级);③**每轮 ≤1 张思想卡由代码节流**(认知负载高;prompt 恳求之外的机器闸),入列数记 run-metrics `thought`;④prompt 明示:低 accept 率是预期且受欢迎(reject/park 正是负样本饥荒的解药)、建议允许 park(立场卡不硬推)、diff 允许修正注记但须替换式插入(纯插入 apply v0 拒绝);⑤**认知含量比上仪表**:Metrics 视图加思想/行动/账本构成行(数据 = 盘上卡的 stakes 分桶,零新增存储)——07-07 方向审计从一次性担忧变成常驻仪表。验收留真实使用:W4 内 ≥1 张 claim-drift 真实呈现 + 8.15 前一张值得上台的思想卡。(issue #18)
+
+**2026-07-08 · runner 跨 job 串行化 = 文件锁(mkdir 原子),不是更多 launchd 配置 · validated-in-use**
+#22 现象:相邻数分钟两轮完整 run 双倍烧额度。诊断:daily job(WatchPaths)与 console 触发的 refresh 是**两个进程、两个 label**——launchd 的单实例保护与 ThrottleInterval 跨不过 label,而额度守卫的时钟(metrics mtime)在两发并发时是 TOCTOU(都在对方写表前查表)。修法:runner 本体加文件锁(`98_Forme/.runner.lock`,mkdir 原子抢占)——先抢锁再查守卫,拿不到 = 已有 run 在飞,exit 0 静默退出;陈锁(>30min,崩溃残留)回收一次再抢;exit/SIGTERM 清锁。已验证:锁在飞拒绝 + 陈锁回收 + 退出清理三行为真机通过。(issue #22)
+
+**2026-07-08 · 日期语义 = 时间戳存 UTC ISO 不动;date-only 按本地日切;用户面渲染一律本地 · assumed**
+#25 现象:18:00 PT 的 run 在 Metrics 里标成"明天"(UTC 日期)。裁定:①存储层时间戳(事件 ts、卡 createdAt/revisedAt、信封 at)保持完整 ISO(UTC),不动;②**date-only 字段的语义是「用户的哪一天」**——run-metrics `date`、State Diff 文件名/周窗口按本地日切(`localDate()`,一个助手全库共用);周日 18:00 的 State Diff 文件名必须是周日,不是 UTC 的周一;③用户面渲染(Metrics 行日期、队列截至标注)一律本地时区。旧行(UTC 日期)不回改——日志只追加,读取宽容。讽刺点自查通过:产品刚出过一张纠 vault 日期语义漂移的卡,自己不能犯同类错。(issue #25)

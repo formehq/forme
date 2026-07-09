@@ -5,10 +5,11 @@ import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderPage } from "./page.ts";
-import { applyCardDiff, ApplyError } from "./apply.ts";
+import { applyCardDiff, ApplyError, revertCommit } from "./apply.ts";
 import {
   appendEvent,
   catchUpData,
+  effectiveDecisions,
   lastPresentedTs,
   latestStateDiff,
   metricsData,
@@ -61,9 +62,12 @@ interface DecideBody {
   choice?: unknown;
   correction?: { hunks?: unknown; note?: unknown };
   question?: unknown;
+  note?: unknown;
 }
 
 const CHOICES = new Set(["accept", "park", "reject"]);
+/** 撤销窗口的服务端上限(#24):客户端 toast 4s,服务端放宽到 15s 兜底。 */
+const UNDO_WINDOW_MS = 15_000;
 
 function json(res: ServerResponse, status: number, body: unknown): void {
   const buf = JSON.stringify(body);
@@ -206,6 +210,35 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         const pending = pendingCards(outDir, events);
         const card = pending.find((c) => c.id === cardId);
 
+        // #24 撤销窗口:补偿事件,不删日志——undo 撤销该卡最近一次生效 decision;
+        // accept 已应用的 diff 用 git revert 回滚(历史同样只追加)。
+        if (url.pathname === "/api/undo") {
+          const dec = effectiveDecisions(events).find((e) => e.cardId === cardId);
+          if (!dec) return json(res, 409, { error: "没有可撤销的落子" });
+          const age = Date.now() - Date.parse(dec.ts);
+          if (!(age >= 0 && age <= UNDO_WINDOW_MS)) {
+            return json(res, 409, { error: "撤销窗口已过(落子后 15 秒内有效)" });
+          }
+          let reverted: string | undefined;
+          if (dec.executed) {
+            try {
+              reverted = revertCommit(vault, dec.executed);
+            } catch (e) {
+              const msg = e instanceof ApplyError ? e.message : `撤销失败:${String(e)}`;
+              return json(res, 422, { error: msg });
+            }
+          }
+          appendEvent(jsonlPath, {
+            v: "0",
+            ts: new Date().toISOString(),
+            type: "undo",
+            cardId: dec.cardId,
+            fingerprint: dec.fingerprint,
+            ...(reverted ? { executed: reverted } : {}),
+          });
+          return json(res, 200, { ok: true, reverted });
+        }
+
         if (url.pathname === "/api/presented") {
           if (!card) return json(res, 409, { error: "卡不存在或已落子" });
           appendEvent(jsonlPath, {
@@ -280,6 +313,11 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
           const latencyMs = presentedTs
             ? Math.max(0, now.getTime() - Date.parse(presentedTs))
             : null;
+          // #24 note 通道:落子理由随任意手势,有字就带上(park/reject 的理由
+          // 是最珍贵的 taste 数据;与 correction 的 note 两义不混)
+          const note = typeof body.note === "string" && body.note.trim()
+            ? body.note.trim().slice(0, 2000)
+            : undefined;
           const decision: DecisionEvent = {
             v: "0",
             ts: now.toISOString(),
@@ -290,6 +328,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
             actor: "owner",
             ...(latencyMs !== null ? { latencyMs } : { backfilled: true }),
             ...(executed ? { executed } : {}),
+            ...(note ? { note } : {}),
           };
           if (correctionEvent) appendEvent(jsonlPath, correctionEvent);
           appendEvent(jsonlPath, decision);

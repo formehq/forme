@@ -76,6 +76,12 @@ export function renderPage(): string {
     background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 4px 0 10px;
   }
   .correction .before { white-space: pre-wrap; background: var(--code); border-radius: 6px; padding: 8px 10px; color: var(--muted); font: 13px/1.6 ui-monospace, monospace; margin: 4px 0 6px; }
+  .notebox {
+    width: 100%; font: 14px/1.6 inherit; color: var(--ink); background: var(--code);
+    border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; margin-top: 14px;
+  }
+  .notebox::placeholder { color: var(--muted); }
+  .toast button { font-size: 13px; padding: 2px 10px; margin-left: 10px; }
   .sd h1 { margin-bottom: 18px; }
   .sd p strong { display: block; color: var(--muted); font-size: 13px; letter-spacing: .05em; margin-bottom: 2px; }
   .sd p { margin: 14px 0; }
@@ -128,6 +134,11 @@ function fmtSecs(ms) { // #19:本次用时的人读形
   var s = Math.round(ms / 1000);
   if (s < 60) return s + " 秒";
   return Math.floor(s / 60) + " 分 " + (s % 60) + " 秒";
+}
+function mmdd(ts) { // #25:时间戳的用户面渲染一律本地时区
+  var d = new Date(ts);
+  var p = function (n) { return (n < 10 ? "0" : "") + n; };
+  return p(d.getMonth() + 1) + "-" + p(d.getDate());
 }
 var STAKES_LABEL = { "reversible-ledger": "账本", "real-world-action": "行动", "thought": "思想" };
 
@@ -228,6 +239,7 @@ function showCard() {
     '<button data-choice="reject"><kbd>r</kbd>拒绝</button>' +
     '<button class="ghost" id="fix">输入修正…</button>' +
     '<button class="ghost" id="ask"><kbd>q</kbd>问一句…</button></div>' +
+    '<input id="note" class="notebox" placeholder="为什么?(可选——park/reject 的理由是最珍贵的 taste 数据)">' +
     '<div id="msg"></div><div id="corr"></div>';
   html += '<details><summary>证据（展开核查）</summary>';
   for (var i = 0; i < c.evidence.length; i++) {
@@ -307,9 +319,12 @@ function renderCorrection(c) {
     decide("accept", { hunks: hunks, note: note || undefined });
   };
 }
+var advanceTimer = null; // #24 撤销窗口:toast 停 4s,期间可撤,之后自动进下一张
 function decide(choice, correction) {
   var c = queue[idx];
   var body = { cardId: c.id, choice: choice };
+  var noteEl = document.getElementById("note");
+  if (noteEl && noteEl.value.trim()) body.note = noteEl.value.trim(); // #24:理由随任意手势
   if (correction) body.correction = correction;
   post("/api/decide", body).then(function (r) {
     var msg = document.getElementById("msg");
@@ -318,12 +333,28 @@ function decide(choice, correction) {
       return;
     }
     decided++;
+    // 落子已生效:封住手势,防止撤销窗口期的二次按键
+    var btns = view.querySelectorAll("button[data-choice], #fix, #ask");
+    for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
     var took = r.data.latencyMs != null ? " · " + fmtSecs(r.data.latencyMs) : ""; // #19:本次用时上屏
     var text = choice === "accept"
       ? "已接受 · commit " + esc(r.data.executed || "?") + took + " · 可回滚"
       : (choice === "park" ? "已搁置" : "已拒绝") + took;
-    msg.innerHTML = '<div class="toast">' + text + "</div>";
-    setTimeout(function () { idx++; showCard(); }, 650);
+    msg.innerHTML = '<div class="toast">' + text + '<button id="undo"><kbd>u</kbd>撤销</button></div>';
+    advanceTimer = setTimeout(function () { advanceTimer = null; idx++; showCard(); }, 4000);
+    document.getElementById("undo").onclick = function () {
+      if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = null; }
+      post("/api/undo", { cardId: c.id }).then(function (u) {
+        if (!u.ok) {
+          msg.innerHTML = '<div class="banner">' + esc(u.data.error || "撤销失败") + "</div>";
+          setTimeout(function () { idx++; showCard(); }, 1200);
+          return;
+        }
+        decided--;
+        presentedOnce[c.id] = false; // 重新上屏 = presented 重报,计时重新起点(诚实延迟)
+        showCard();
+      });
+    };
   });
 }
 function renderDone() {
@@ -370,6 +401,14 @@ function renderMetrics(backTo) {
     var html = '<div class="card"><h1>Metrics</h1>';
     html += "<p>" + m.decided.total + " 次落子:接受 " + m.decided.accept + " · 搁置 " + m.decided.park +
       " · 拒绝 " + m.decided.reject + (m.questions ? " · 发问 " + m.questions : "") + "</p>";
+    if (m.cognition) { // #18:认知含量——方向审计的常驻仪表
+      var cg = m.cognition;
+      var cgTotal = cg.thought + cg.action + cg.ledger;
+      if (cgTotal > 0) {
+        html += '<p class="muted" style="font-size:13px">认知含量:思想 ' + cg.thought + " · 行动 " + cg.action +
+          " · 账本 " + cg.ledger + "(思想卡占比 " + Math.round((cg.thought / cgTotal) * 100) + "%)</p>";
+      }
+    }
 
     html += "<h2>time-to-decision</h2>";
     if (m.latency.count === 0) {
@@ -383,7 +422,7 @@ function renderMetrics(backTo) {
       for (var j = 0; j < recent.length; j++) {
         var d = recent[j];
         var pct = Math.max(2, Math.round((d.latencyMs / maxMs) * 100));
-        html += '<div class="mrow"><span class="mdate">' + esc(String(d.ts).slice(5, 10)) + "</span>" +
+        html += '<div class="mrow"><span class="mdate">' + esc(mmdd(d.ts)) + "</span>" + // #25:本地时区
           '<span class="mtrack"><span class="mbar mbar-' + esc(d.choice) + '" style="width:' + pct + '%"></span></span>' +
           '<span class="mval">' + fmtSecs(d.latencyMs) + "</span></div>";
       }
@@ -429,7 +468,13 @@ document.addEventListener("keydown", function (ev) {
   if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
   var t = ev.target;
   if (t && (t.tagName === "TEXTAREA" || t.tagName === "INPUT")) return;
-  if (!view.querySelector("button[data-choice]")) return;
+  if (ev.key === "u") { // #24:撤销窗口期内单键撤
+    var undo = document.getElementById("undo");
+    if (undo) { ev.preventDefault(); undo.click(); }
+    return;
+  }
+  var gesture = view.querySelector("button[data-choice]");
+  if (!gesture || gesture.disabled) return;
   var map = { a: "accept", p: "park", r: "reject" };
   if (map[ev.key]) { ev.preventDefault(); decide(map[ev.key], null); }
   if (ev.key === "q") { // #21:问一句

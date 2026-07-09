@@ -89,3 +89,28 @@ export function applyCardDiff(vault: string, card: Card, hunks: Hunk[]): ApplyRe
   }).trim();
   return { file: rel, hunks: hunks.length, executed };
 }
+
+/**
+ * 撤销一次已执行的 accept(#24 撤销窗口):`git revert` 回执 commit——
+ * 历史只追加(与事件日志同一姿态),不用 reset 抹历史。revert 冲突
+ * (窗口这几秒里文件又被人改了)则 abort 还原,整个撤销失败。
+ * 返回 revert commit 的短 hash(记进 undo 事件的 executed,凭证闭环)。
+ */
+export function revertCommit(vault: string, hash: string): string {
+  try {
+    execFileSync("git", ["-C", vault, "revert", "--no-edit", hash], {
+      stdio: ["ignore", "ignore", "pipe"],
+    });
+  } catch (e) {
+    try {
+      execFileSync("git", ["-C", vault, "revert", "--abort"], { stdio: "ignore" });
+    } catch {
+      /* 没有进行中的 revert 就算了 */
+    }
+    const msg = e instanceof Error && "stderr" in e ? String((e as { stderr?: unknown }).stderr) : "";
+    throw new ApplyError(`撤销失败(revert 冲突,文件可能又被改过)${msg ? `:${msg.trim().slice(0, 200)}` : ""}`);
+  }
+  return execFileSync("git", ["-C", vault, "rev-parse", "--short=12", "HEAD"], {
+    encoding: "utf8",
+  }).trim();
+}

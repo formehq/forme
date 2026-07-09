@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://forme.sh/schema/decision-event.schema.json",
   "title": "Forme decisions.jsonl event",
-  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Four types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit), correction (the optional in-place edit before accepting), question (#21: the user asked for context instead of deciding — the card awaits a re-face; also the legibility metric).",
+  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Five types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit + optional note), correction (the optional in-place edit before accepting), question (#21: the user asked for context instead of deciding — the card awaits a re-face; also the legibility metric), undo (#24: cancels the most recent decision on this card within the undo window; the log stays append-only — undone decisions are compensated, never erased).",
   "type": "object",
   "additionalProperties": false,
   "required": ["v", "ts", "type", "cardId", "fingerprint"],
@@ -18,7 +18,7 @@
     },
     "type": {
       "type": "string",
-      "enum": ["presented", "decision", "correction", "question"]
+      "enum": ["presented", "decision", "correction", "question", "undo"]
     },
     "cardId": {
       "description": "id of the card this event is about. Join key to the card (where category + envelope live).",
@@ -46,9 +46,14 @@
       "enum": ["owner", "agent_shadow", "agent_authorized"]
     },
     "executed": {
-      "description": "On accepted decisions: the git commit hash of the applied diff (execution receipt; enables rollback). Absent for park/reject.",
+      "description": "On accepted decisions: the git commit hash of the applied diff (execution receipt; enables rollback). Absent for park/reject. On undo events (#24): the git revert commit hash, when the undone decision had applied a diff.",
       "type": "string",
       "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "note": {
+      "description": "Optional on decision events (#24): the user's one-line reason, captured with any gesture — park/reject rationales are the scarcest taste data. Distinct from correction (which keeps its own note alongside edited hunks).",
+      "type": "string",
+      "minLength": 1
     },
     "correction": {
       "description": "Present on correction events: the user's edited hunks before accepting. The one sanctioned exception to read-only.",

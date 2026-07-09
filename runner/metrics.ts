@@ -8,9 +8,18 @@ import { dirname } from "node:path";
  * runId/rejected/dup 是诚实的补充维度(数字才对得上账)。
  * dry-run 不落点——曲线只记真实完成的 run。
  */
+/**
+ * 本地日切的 YYYY-MM-DD(#25):date-only 字段一律按用户的这一天算——
+ * 晚间 run 不该被记成"明天"(UTC 日期)。时间戳存储仍是完整 ISO(UTC)。
+ */
+export function localDate(d: Date): string {
+  const p = (n: number) => (n < 10 ? "0" : "") + n;
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 export interface RunMetric {
   v: "0";
-  date: string; // UTC YYYY-MM-DD
+  date: string; // 本地日切 YYYY-MM-DD(#25;2026-07-09 之前的旧行是 UTC 日期)
   runId: string;
   proposed: number; // agent 返回的候选数
   suppressed: number; // 指纹命中已决名单被静默丢弃数
@@ -20,6 +29,7 @@ export interface RunMetric {
   head?: string; // 本轮扫描时的 vault HEAD(#14:下轮增量窗口的锚点)
   illegible?: number; // 世界层闸命中数(#21:legibility 曲线原料;含被重写救回的)
   refaced?: number; // question 通道重写数(#21:问→再出卡的往返完成数)
+  thought?: number; // 思想卡入列数(#18:每轮 ≤1;认知含量曲线原料)
   backfilled?: boolean;
 }
 

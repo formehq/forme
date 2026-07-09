@@ -40,13 +40,15 @@ test("世界层闸:纯账本卡(stale-frontmatter)豁免——它们的事就是
   assert.equal(r.ok, true);
 });
 
-test("effectiveStakes:申报合法即用;非法/缺失按 category 派生;thought 只认显式申报", () => {
+test("effectiveStakes:申报合法即用;非法/缺失按 category 派生;claim-drift 恒为 thought(#18)", () => {
   assert.equal(effectiveStakes({ category: "dangling-task", stakes: "thought" }), "thought");
   assert.equal(effectiveStakes({ category: "dangling-task", stakes: "yolo" }), "real-world-action");
   assert.equal(effectiveStakes({ category: "dangling-task", stakes: null }), "real-world-action");
   assert.equal(effectiveStakes({ category: "broken-link", stakes: null }), "reversible-ledger");
   assert.equal(effectiveStakes({ category: "naming-drift" }), "reversible-ledger");
   assert.equal(effectiveStakes({ category: "stale-claim" }), "real-world-action");
+  assert.equal(effectiveStakes({ category: "claim-drift", stakes: null }), "thought"); // #18:思想卡出生通道
+  assert.equal(effectiveStakes({ category: "claim-drift", stakes: "垃圾值" }), "thought");
 });
 
 test("ledgerSpeechIn:手术词命中;世界层名词(人名/日期/@handle)不误伤", () => {

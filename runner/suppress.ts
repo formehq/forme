@@ -6,6 +6,9 @@ import { readFileSync, existsSync } from "node:fs";
  * 都进名单:该漂移已被裁决,再次提出即重复。parked 同样抑制,直到日后
  * console 侧有显式 un-park 机制(post-W2)。
  *
+ * undo(#24):撤销该卡最近一次 decision——按文件序重放(append-only 日志,
+ * 文件序 = 时间序),undo 把该指纹移出名单;其后再落子则重新进名单。
+ *
  * 解析故意宽容:抑制是安全网。一行事件哪怕过不了完整 schema 校验
  * (如缺 latencyMs),只要能读出 type + fingerprint 就必须生效——
  * 不能因为校验挑剔而放过一张重复卡。读不动的行只计数,绝不致命。
@@ -28,6 +31,8 @@ export function loadSuppressionList(jsonlPath: string): SuppressionList {
       events++;
       if (e.type === "decision" && typeof e.fingerprint === "string") {
         fingerprints.add(e.fingerprint);
+      } else if (e.type === "undo" && typeof e.fingerprint === "string") {
+        fingerprints.delete(e.fingerprint); // #24:撤销后该漂移回到未决,不抑制
       }
     } catch {
       unreadable++;

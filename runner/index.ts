@@ -1,15 +1,15 @@
 import { execFileSync } from "node:child_process";
-import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync } from "node:fs";
+import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
-import { recentMarkdownFiles, markdownFilesSince, vaultHead, isUsableAnchor } from "./scan.ts";
+import { recentMarkdownFiles, markdownFilesSince, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { assembleCard } from "./card.ts";
 import { loadSuppressionList } from "./suppress.ts";
 import { loadTasteRuleLines } from "./taste.ts";
-import { appendRunMetric, lastRunHead } from "./metrics.ts";
+import { appendRunMetric, lastRunHead, localDate } from "./metrics.ts";
 import { checkLegibility } from "./legibility.ts";
 import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type RefaceCause } from "./reface.ts";
 import { checkCard } from "../schema/validate.ts";
@@ -41,9 +41,46 @@ const commitsExplicit = hasFlag("commits"); // #14:显式传参 = 手动覆盖�
 const commits = Number(arg("commits", "4"));
 const maxFiles = Number(arg("max-files", "12"));
 const maxCards = Number(arg("max-cards", "3"));
+const slowLayer = Number(arg("slow-layer", "0")); // #18:注入 n 篇慢层概念笔记作立场参照
 const outDir = arg("out") ?? join(vault, "98_Forme");
 const model = arg("model");
 const dryRun = hasFlag("dry-run");
+
+// #22:跨 job 串行锁。daily job 与 console 触发的 refresh 是两个进程,launchd
+// 的单实例保护跨不过 label——两发并发时守卫时钟(metrics mtime)是 TOCTOU,
+// 会双倍烧额度。mkdir 原子抢锁;陈锁(>30min,崩溃残留;一轮 codex 只要几分钟)
+// 回收一次再抢;拿不到 = 已有 run 在飞,静默退出(exit 0,不是故障)。
+mkdirSync(outDir, { recursive: true });
+const lockDir = join(outDir, ".runner.lock");
+function acquireLock(): boolean {
+  try {
+    mkdirSync(lockDir);
+    return true;
+  } catch {
+    try {
+      if (Date.now() - statSync(lockDir).mtimeMs > 30 * 60_000) {
+        rmSync(lockDir, { recursive: true, force: true });
+        mkdirSync(lockDir);
+        return true;
+      }
+    } catch {
+      /* 竞争中被别的进程抢走/回收 */
+    }
+    return false;
+  }
+}
+if (!acquireLock()) {
+  console.log("skip: another forme run is in flight (lock held) — 串行化(#22)");
+  process.exit(0);
+}
+process.on("exit", () => {
+  try {
+    rmSync(lockDir, { recursive: true, force: true });
+  } catch {
+    /* 已清 */
+  }
+});
+for (const sig of ["SIGINT", "SIGTERM"] as const) process.on(sig, () => process.exit(130));
 
 // 额度守卫(launchd 传 --min-hours 20;手动跑默认 0 = 不拦)。守卫住 runner
 // 本体而非 shell wrapper:带 provenance/quarantine xattr 的脚本会被 launchd
@@ -144,7 +181,7 @@ if (files.length === 0) {
   // 但 reface 花了真 codex → 落一行数据点,让额度 mtime 时钟诚实走表。
   if (refaced > 0) {
     appendRunMetric(metricsPath, {
-      v: "0", date: at.slice(0, 10), runId,
+      v: "0", date: localDate(new Date()), runId,
       proposed: 0, suppressed: 0, presented: 0, rejected: 0, dup: 0,
       head, refaced,
     });
@@ -153,8 +190,21 @@ if (files.length === 0) {
     (refaced ? ` (refaced ${refaced})` : ""));
   process.exit(0);
 }
+// #18:慢层立场参照——思想漂移住在慢层(概念笔记几周不动,永远进不了
+// delta 窗口),claim-drift 需要「最近变更 vs 既有立场」的快慢对照。
+// 取窗按日轮转:~len/n 天覆盖全部慢层一遍,不永远盯着最陈旧的同几篇。
+const slowFiles = slowLayer > 0
+  ? slowLayerFiles(vault, slowLayer, "02_Wiki/", Math.floor(Date.now() / 86_400_000)).filter(
+      (f) => !files.includes(f),
+    )
+  : [];
+
 console.log(`forme runner ${runId}`);
-console.log(`scan: ${files.length} files, window = ${windowDesc}, vault = ${vault}`);
+console.log(
+  `scan: ${files.length} files, window = ${windowDesc}` +
+    (slowFiles.length ? `, slow-layer = ${slowFiles.length}` : "") +
+    `, vault = ${vault}`,
+);
 
 const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
 console.log(
@@ -173,7 +223,13 @@ const lastMsgPath = join(tmpdir(), `forme-last-${runId}.json`);
 const prompt = [
   `你是 Forme 的漂移侦测器,只读扫描下面这批 vault 最近变更的 markdown 文件,找出最多 ${maxCards} 个真实、具体、可用最小 diff 修复的漂移。`,
   "",
-  "漂移类别(category,kebab-case):stale-frontmatter / broken-link / stale-claim / orphan / naming-drift / dangling-task 等。",
+  "漂移类别(category,kebab-case):stale-frontmatter / broken-link / stale-claim / orphan / naming-drift / dangling-task / claim-drift 等。",
+  "",
+  "思想卡(category = claim-drift,stakes = thought;每轮最多 1 张,机器闸强制;#18):",
+  "- 找的是**立场/判断的漂移**,不是文档整洁:慢层概念笔记里写下的立场 A,与最近变更、决策轨迹暗示的 B 之间的张力——「你在 X 写的立场是 A,近期 Y 暗示 B——立场变了吗?」",
+  "- diff 允许温和形态(如在原立场处加一行修正注记),但 before 仍须逐字存在(替换式插入,不做纯插入)",
+  "- 建议允许不确定:recommendation 可以是 park(先搁置想想)——立场卡不硬推单一答案",
+  "- 低 accept 率是预期且受欢迎:reject / park 正是 taste 学习最缺的负样本;只报确有张力的,没有就不报",
   "",
   "每张卡(卡面是给决策者读的,五段结构,标题与 summary 不用术语):",
   "- category:类别 slug(kebab-case)",
@@ -200,6 +256,13 @@ const prompt = [
   "",
   "只返回符合 output schema 的结构化 JSON。最近变更的文件:",
   ...files.map((f) => `- ${f}`),
+  ...(slowFiles.length
+    ? [
+        "",
+        "慢层立场参照(02_Wiki 里最久没动过的概念笔记;拿它们与上面最近变更做快慢对照找 claim-drift,不要对它们提普通整洁卡):",
+        ...slowFiles.map((f) => `- ${f}`),
+      ]
+    : []),
 ].join("\n");
 
 const codexArgs = [
@@ -233,6 +296,7 @@ let dup = 0;
 let rejected = 0;
 let suppressed = 0;
 let illegible = 0;
+let thoughtWritten = 0; // #18:思想卡每轮 ≤1(认知负载高,不刷屏)
 
 for (const ac of agentCards) {
   const { card, serializable, validation } = assembleCard(ac, { runId, at, model });
@@ -254,6 +318,13 @@ for (const ac of agentCards) {
     continue;
   }
 
+  // #18 思想卡节流:每轮最多 1 张(prompt 恳求之外的机器闸)
+  if (card.stakes === "thought" && thoughtWritten >= 1) {
+    rejected++;
+    console.log(`  throttle ${card.id} (${ac.category}) — 每轮最多 1 张思想卡,弃`);
+    continue;
+  }
+
   // #21 世界层闸:账本语域上了世界层段(账本卡豁免)→ 同轮一次重写机会,
   // 仍不过即弃——漂移还在,下轮在世界层 prompt 下重提,不硬塞难读的卡。
   const gate = checkLegibility(card);
@@ -264,6 +335,7 @@ for (const ac of agentCards) {
       try {
         if (refaceAndWrite(card, { kind: "gate", hit: gate.hit! })) {
           written++;
+          if (card.stakes === "thought") thoughtWritten++;
           console.log(`  rewrite ${card.id} — 世界层重写通过,已入列`);
           continue;
         }
@@ -278,19 +350,21 @@ for (const ac of agentCards) {
 
   if (dryRun) {
     written++;
+    if (card.stakes === "thought") thoughtWritten++;
     console.log(`  [dry]  ${card.id} (${ac.category}) — ${ac.title}`);
     continue;
   }
   writeFileSync(jsonPath, JSON.stringify(serializable, null, 2) + "\n");
   writeFileSync(join(outDir, "cards", `${card.id}.md`), cardToMarkdown(card));
   written++;
+  if (card.stakes === "thought") thoughtWritten++;
   console.log(`  write  ${card.id} (${ac.category}) — ${ac.title}`);
 }
 
 if (!dryRun) {
   appendRunMetric(metricsPath, {
     v: "0",
-    date: at.slice(0, 10),
+    date: localDate(new Date()), // #25:本地日切
     runId,
     proposed: agentCards.length,
     suppressed,
@@ -300,6 +374,7 @@ if (!dryRun) {
     head, // #14:下轮增量窗口的锚点(本轮扫描时的 vault HEAD)
     ...(illegible ? { illegible } : {}), // #21:世界层闸命中数(legibility 曲线原料)
     ...(refaced ? { refaced } : {}), // #21:question 通道重写数
+    ...(thoughtWritten ? { thought: thoughtWritten } : {}), // #18:思想卡入列数(认知含量原料)
   });
 }
 

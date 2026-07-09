@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import type { AddressInfo } from "node:net";
 import { applyHunksToContent, ApplyError } from "./apply.ts";
-import { appendEvent, readEvents, pendingCards, queueState, catchUpData, metricsData } from "./store.ts";
+import { appendEvent, readEvents, pendingCards, queueState, catchUpData, metricsData, effectiveDecisions } from "./store.ts";
 import { createConsoleServer } from "./server.ts";
 import { assembleCard } from "../runner/card.ts";
 import type { AgentCard, Card } from "../runner/types.ts";
@@ -306,6 +306,8 @@ test("metricsData(#19):时延中位数取现场真值,backfilled 不计;重复�
   const outDir = join(vault, "98_Forme");
   const jsonl = join(outDir, "decisions.jsonl");
   const fp = (c: string) => c.repeat(64);
+  seedCard(vault, "stale-frontmatter", "note-a.md", "updated: 2026-07-04", "updated: 2026-07-08"); // → 账本
+  seedCard(vault, "dangling-task", "note-b.md", "- [ ] 待办一", "- [x] 待办一"); // → 行动
   for (const e of [
     { v: "0", ts: "2026-07-08T01:00:00Z", type: "presented", cardId: "c1", fingerprint: fp("a") },
     { v: "0", ts: "2026-07-08T01:00:10Z", type: "decision", cardId: "c1", fingerprint: fp("a"), choice: "accept", actor: "owner", latencyMs: 10_000, executed: "abcdef1" },
@@ -330,6 +332,72 @@ test("metricsData(#19):时延中位数取现场真值,backfilled 不计;重复�
   assert.deepEqual(m.totals, { proposed: 7, suppressedPlusDup: 3 });
   assert.equal(m.runs[1]!.illegible, 1);
   assert.equal(m.runs[1]!.refaced, 1);
+  assert.deepEqual(m.cognition, { thought: 0, action: 1, ledger: 1 }); // #18:认知含量按 stakes 分桶
+});
+
+test("note 通道 + 撤销窗口(#24):理由随任意手势;undo 补偿事件;accept 撤销走 git revert", async () => {
+  const vault = mkVault();
+  const outDir = join(vault, "98_Forme");
+  const jsonl = join(outDir, "decisions.jsonl");
+  const cardA = seedCard(vault, "dangling-task", "note-b.md", "- [ ] 待办一", "- [x] 待办一");
+  const cardB = seedCard(vault, "stale-claim", "note-c.md", "旧口径的一句话。", "新话。");
+  const t = await startServer(vault);
+  try {
+    // ① park + note:理由进 decision 事件(不是 correction)
+    await t.post("/api/presented", { cardId: cardA.id });
+    const parked = await t.post("/api/decide", { cardId: cardA.id, choice: "park", note: "  两个 follow-up 还没有承接,先不动。 " });
+    assert.equal(parked.status, 200, JSON.stringify(parked.data));
+    let events = readEvents(jsonl);
+    const dec1 = events.find((e) => e.type === "decision" && e.cardId === cardA.id)!;
+    assert.equal(dec1.note, "两个 follow-up 还没有承接,先不动。"); // trim 后入账
+    assert.equal(dec1.choice, "park");
+
+    // ② undo park:补偿事件,卡回队列;taste/抑制视角它未被决过
+    const undo1 = await t.post("/api/undo", { cardId: cardA.id });
+    assert.equal(undo1.status, 200, JSON.stringify(undo1.data));
+    events = readEvents(jsonl);
+    assert.equal(events.at(-1)!.type, "undo");
+    assert.equal(effectiveDecisions(events).length, 0);
+    assert.equal(queueState(outDir, events).pending.length, 2); // 卡回来了
+    // 没有可撤销的落子 → 409(连按两次 u)
+    assert.equal((await t.post("/api/undo", { cardId: cardA.id })).status, 409);
+
+    // ③ 撤销后再落子是合法序列(decision → undo → decision,第二条生效)
+    await t.post("/api/presented", { cardId: cardA.id });
+    assert.equal((await t.post("/api/decide", { cardId: cardA.id, choice: "reject", note: "看过了,不需要。" })).status, 200);
+    events = readEvents(jsonl);
+    assert.equal(effectiveDecisions(events).length, 1);
+    assert.equal(effectiveDecisions(events)[0]!.choice, "reject");
+
+    // ④ accept → undo:git revert 回滚,文件复原,undo 事件带 revert 凭证
+    const before = readFileSync(join(vault, "note-c.md"), "utf8");
+    await t.post("/api/presented", { cardId: cardB.id });
+    const acc = await t.post("/api/decide", { cardId: cardB.id, choice: "accept" });
+    assert.equal(acc.status, 200);
+    assert.match(readFileSync(join(vault, "note-c.md"), "utf8"), /新话。/);
+    const undo2 = await t.post("/api/undo", { cardId: cardB.id });
+    assert.equal(undo2.status, 200, JSON.stringify(undo2.data));
+    assert.match(String(undo2.data.reverted), /^[0-9a-f]{7,40}$/);
+    assert.equal(readFileSync(join(vault, "note-c.md"), "utf8"), before); // 内容复原
+    const subject = execFileSync("git", ["-C", vault, "log", "-1", "--format=%s"], { encoding: "utf8" });
+    assert.match(subject, /Revert/);
+    events = readEvents(jsonl);
+    const undoEv = events.at(-1)!;
+    assert.equal(undoEv.type, "undo");
+    assert.equal(undoEv.executed, String(undo2.data.reverted));
+    assert.equal(queueState(outDir, events).pending.some((c) => c.id === cardB.id), true);
+
+    // ⑤ 窗口已过 → 409(手工补一条 20 秒前的 decision)
+    appendEvent(jsonl, {
+      v: "0", ts: new Date(Date.now() - 20_000).toISOString(), type: "decision",
+      cardId: cardB.id, fingerprint: cardB.fingerprint, choice: "park", actor: "owner", backfilled: true,
+    });
+    const late = await t.post("/api/undo", { cardId: cardB.id });
+    assert.equal(late.status, 409);
+    assert.match(String(late.data.error), /窗口/);
+  } finally {
+    await t.close();
+  }
 });
 
 test("console 写路径的门:非 JSON content-type 415;未知卡 409;非法 choice 400", async () => {

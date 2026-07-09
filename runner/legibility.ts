@@ -20,13 +20,17 @@ export const STAKES_VALUES: readonly Stakes[] = ["reversible-ledger", "real-worl
 /** 账本类 category:动作只发生在账面上,卡面豁免世界层闸、保持 10 秒瘦。 */
 const LEDGER_CATEGORIES = new Set(["stale-frontmatter", "broken-link", "naming-drift"]);
 
+/** 思想类 category(#18):立场/判断漂移,stakes 恒为 thought,卡面最厚。 */
+const THOUGHT_CATEGORIES = new Set(["claim-drift"]);
+
 /**
  * 卡的有效 stakes:agent 申报合法就用申报,否则按 category 派生
- * (账本类 → reversible-ledger,其余 → real-world-action;thought 只
- * 认显式申报——#18 思想卡有自己的出生通道)。
+ * (思想类 → thought —— #18;账本类 → reversible-ledger;其余 →
+ * real-world-action)。
  */
 export function effectiveStakes(card: Pick<Card, "category"> & { stakes?: string | null }): Stakes {
   if (card.stakes && (STAKES_VALUES as readonly string[]).includes(card.stakes)) return card.stakes as Stakes;
+  if (THOUGHT_CATEGORIES.has(card.category)) return "thought";
   return LEDGER_CATEGORIES.has(card.category) ? "reversible-ledger" : "real-world-action";
 }
 

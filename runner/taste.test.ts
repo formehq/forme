@@ -145,3 +145,19 @@ test("readDecisionLog 宽容:坏行跳过,correction 计数,decision 提取 choi
   assert.equal(decisions[0]!.executed, "abc1234");
   assert.equal(corrections, 1);
 });
+
+test("readDecisionLog:undo(#24)撤销同卡最近一次 decision——反悔的落子不是 taste", () => {
+  const p = join(mkdtempSync(join(tmpdir(), "forme-taste-undo-")), "d.jsonl");
+  writeFileSync(
+    p,
+    [
+      JSON.stringify({ v: "0", ts: "t1", type: "decision", cardId: "c1", choice: "park" }),
+      JSON.stringify({ v: "0", ts: "t2", type: "undo", cardId: "c1" }),
+      JSON.stringify({ v: "0", ts: "t3", type: "decision", cardId: "c1", choice: "reject" }),
+      JSON.stringify({ v: "0", ts: "t4", type: "decision", cardId: "c2", choice: "accept" }),
+      JSON.stringify({ v: "0", ts: "t5", type: "undo", cardId: "c2" }),
+    ].join("\n") + "\n",
+  );
+  const { decisions } = readDecisionLog(p);
+  assert.deepEqual(decisions.map((d) => [d.cardId, d.choice]), [["c1", "reject"]]);
+});

@@ -4,8 +4,8 @@ import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
-import { markdownFilesSince, recentMarkdownFiles, vaultHead, isUsableAnchor } from "./scan.ts";
-import { lastRunHead, appendRunMetric } from "./metrics.ts";
+import { markdownFilesSince, recentMarkdownFiles, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
+import { lastRunHead, appendRunMetric, localDate } from "./metrics.ts";
 
 /** 临时 git vault:两批 commit,中间取锚点(= #14 的「上次 run」时刻)。 */
 function fixture(): { repo: string; anchor: string } {
@@ -62,4 +62,36 @@ test("回退窗口 recentMarkdownFiles 行为不变(含 98_Forme 排除)", () =>
   const { repo } = fixture();
   assert.deepEqual(recentMarkdownFiles(repo, 3, 10).sort(), ["new-a.md", "new-b.md", "old.md"]);
   assert.deepEqual(recentMarkdownFiles(repo, 3, 1), ["new-b.md"]); // maxFiles 截断,最近优先
+});
+
+test("slowLayerFiles(#18):取 02_Wiki 里最久没被 commit 动过的概念笔记,最陈旧优先", () => {
+  const repo = mkdtempSync(join(tmpdir(), "forme-slow-"));
+  const git = (...a: string[]) => execFileSync("git", ["-C", repo, ...a], { encoding: "utf8" });
+  git("init", "-q");
+  git("config", "user.email", "t@t");
+  git("config", "user.name", "t");
+  mkdirSync(join(repo, "02_Wiki", "Concepts"), { recursive: true });
+  writeFileSync(join(repo, "02_Wiki", "Concepts", "stale-idea.md"), "# 立场 A\n");
+  writeFileSync(join(repo, "02_Wiki", "mid.md"), "# mid\n");
+  writeFileSync(join(repo, "02_Wiki", "note.txt"), "非 md\n");
+  git("add", "-A");
+  git("commit", "-qm", "c1: 概念层初始");
+  writeFileSync(join(repo, "02_Wiki", "fresh.md"), "# fresh\n");
+  git("add", "-A");
+  git("commit", "-qm", "c2: fresh 进来");
+  writeFileSync(join(repo, "02_Wiki", "mid.md"), "# mid v2\n");
+  git("add", "-A");
+  git("commit", "-qm", "c3: mid 被动过");
+  // 最陈旧 = stale-idea(c1 后再没动过);其次 fresh(c2);mid 最新(c3)
+  assert.deepEqual(slowLayerFiles(repo, 2), ["02_Wiki/Concepts/stale-idea.md", "02_Wiki/fresh.md"]);
+  assert.deepEqual(slowLayerFiles(repo, 0), []); // 不开就是不开
+  // 日轮转:第 1 天窗口起点后移(mod 总数),wrap 回最陈旧——不永远盯同几篇
+  assert.deepEqual(slowLayerFiles(repo, 2, "02_Wiki/", 1), ["02_Wiki/mid.md", "02_Wiki/Concepts/stale-idea.md"]);
+  assert.deepEqual(slowLayerFiles(repo, 2, "02_Wiki/", 3), slowLayerFiles(repo, 2, "02_Wiki/", 0)); // 周期回归
+});
+
+test("localDate(#25):按本地日切,不是 UTC 日期", () => {
+  // 本地构造的午夜/深夜时刻,无论测试机时区如何,本地日期都应是构造时的那天
+  assert.equal(localDate(new Date(2026, 6, 8, 23, 30)), "2026-07-08");
+  assert.equal(localDate(new Date(2026, 0, 1, 0, 5)), "2026-01-01");
 });

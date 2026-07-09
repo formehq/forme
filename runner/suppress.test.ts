@@ -71,3 +71,17 @@ test("scan 排除 98_Forme/:Forme 自己的运行时产物不是漂移面", () =
   git("commit", "-qm", "seed");
   assert.deepEqual(recentMarkdownFiles(repo, 3, 10), ["note.md"]);
 });
+
+test("undo(#24)把指纹移出名单;其后再落子重新进名单", () => {
+  const s = loadSuppressionList(
+    writeLog([
+      { v: "0", ts: "2026-07-09T00:00:00Z", type: "decision", cardId: "c1", fingerprint: FP("a"), choice: "park", actor: "owner", latencyMs: 1 },
+      { v: "0", ts: "2026-07-09T00:00:03Z", type: "undo", cardId: "c1", fingerprint: FP("a") },
+      { v: "0", ts: "2026-07-09T00:00:10Z", type: "decision", cardId: "c2", fingerprint: FP("b"), choice: "accept", actor: "owner", latencyMs: 1 },
+      { v: "0", ts: "2026-07-09T00:00:12Z", type: "undo", cardId: "c2", fingerprint: FP("b") },
+      { v: "0", ts: "2026-07-09T00:01:00Z", type: "decision", cardId: "c2", fingerprint: FP("b"), choice: "reject", actor: "owner", latencyMs: 1 },
+    ]),
+  );
+  assert.equal(s.fingerprints.has(FP("a")), false); // 撤销后回到未决,不抑制
+  assert.equal(s.fingerprints.has(FP("b")), true); // 撤销后又落了子 → 抑制
+});

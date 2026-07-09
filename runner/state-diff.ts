@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { localDate } from "./metrics.ts";
 
 /**
  * State Diff 生成器(issue #11,交互稿屏 3 的代码化)。
@@ -42,9 +43,10 @@ const mdCount = (dir: string): number =>
 
 /** 确定性采集一周窗口的数据包(全部可核查,agent 只负责叙述它)。 */
 export function collectWeek(vault: string, outDir: string, days: number, now: Date): WeekData {
-  const to = now.toISOString().slice(0, 10);
+  // #25:窗口两端按本地日切——周日 18:00 跑的 State Diff 文件名必须是周日,不是 UTC 的周一
+  const to = localDate(now);
   const fromDate = new Date(now.getTime() - days * 86_400_000);
-  const from = fromDate.toISOString().slice(0, 10);
+  const from = localDate(fromDate);
 
   const log = execFileSync(
     "git",
@@ -83,7 +85,7 @@ export function collectWeek(vault: string, outDir: string, days: number, now: Da
         const e = JSON.parse(line) as { type?: string; cardId?: string; ts?: string };
         if (e.type !== "decision" || !e.cardId) continue;
         decided.add(e.cardId);
-        if (e.ts && e.ts.slice(0, 10) >= from) decisionsThisWeek++;
+        if (e.ts && localDate(new Date(e.ts)) >= from) decisionsThisWeek++; // #25:本地日切
       } catch {
         /* 宽容 */
       }

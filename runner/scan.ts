@@ -60,6 +60,40 @@ export function markdownFilesSince(
   return filterMarkdownList(vault, out, maxFiles, excludePrefix);
 }
 
+/**
+ * 慢层立场参照(#18):`02_Wiki/` 里**最久没被 commit 动过**的概念笔记。
+ * 思想漂移住在慢层——概念笔记几周不动,永远进不了 delta 窗口;claim-drift
+ * 需要「最近的行为/表述 vs 既有立场」的快慢对照,这里取慢的那一端。
+ * 一遍 git log(新→旧)记每个文件最近一次被动的次序,按最陈旧排序后取 n 篇;
+ * `day` 让取窗按日轮转(窗口起点 = day*n mod 总数)——否则每天都是同 n 篇,
+ * 其余慢层永远进不了对照面;轮转无状态、确定性,~len/n 天覆盖全慢层一遍。
+ */
+export function slowLayerFiles(vault: string, n: number, prefix = "02_Wiki/", day = 0): string[] {
+  if (n <= 0) return [];
+  const lastTouch = new Map<string, number>(); // 文件 → 首见次序(小 = 最近被动过)
+  let order = 0;
+  const log = execFileSync("git", ["-C", vault, "log", "--name-only", "--format=", "--", prefix], {
+    encoding: "utf8",
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  for (const raw of log.split("\n")) {
+    const f = raw.trim();
+    if (!f || !f.endsWith(".md")) continue;
+    if (!lastTouch.has(f)) lastTouch.set(f, order++);
+  }
+  const existing = execFileSync("git", ["-C", vault, "ls-files", "--", prefix], { encoding: "utf8" })
+    .split("\n")
+    .map((s) => s.trim())
+    .filter((f) => f.endsWith(".md"));
+  const touchOf = (f: string) => lastTouch.get(f) ?? Number.MAX_SAFE_INTEGER;
+  const sorted = existing.sort((a, b) => touchOf(b) - touchOf(a));
+  if (sorted.length <= n) return sorted;
+  const start = (day * n) % sorted.length;
+  const out: string[] = [];
+  for (let i = 0; i < n; i++) out.push(sorted[(start + i) % sorted.length]!);
+  return out;
+}
+
 /** 当前 vault HEAD(短 hash)——本轮 run 的窗口上界,记进 run-metrics 作下轮锚点。 */
 export function vaultHead(vault: string): string {
   return execFileSync("git", ["-C", vault, "rev-parse", "--short=12", "HEAD"], {

@@ -115,7 +115,8 @@ export function loadTasteRuleRecords(path: string): RuleRecord[] {
   return records;
 }
 
-/** 宽容读事件日志:decision 行 + correction 计数(同 suppress 的姿态)。 */
+/** 宽容读事件日志:decision 行 + correction 计数(同 suppress 的姿态)。
+ *  undo(#24)按文件序撤销同卡最近一次 decision——4 秒内反悔的落子不是 taste。 */
 export function readDecisionLog(jsonlPath: string): { decisions: DecisionRow[]; corrections: number } {
   const decisions: DecisionRow[] = [];
   let corrections = 0;
@@ -132,6 +133,14 @@ export function readDecisionLog(jsonlPath: string): { decisions: DecisionRow[]; 
           executed: typeof e.executed === "string" ? e.executed : undefined,
           backfilled: e.backfilled === true,
         });
+      }
+      if (e.type === "undo" && typeof e.cardId === "string") {
+        for (let i = decisions.length - 1; i >= 0; i--) {
+          if (decisions[i]!.cardId === e.cardId) {
+            decisions.splice(i, 1);
+            break;
+          }
+        }
       }
     } catch {
       /* 非 JSON 行不致命 */

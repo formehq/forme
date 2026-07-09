@@ -4,6 +4,7 @@ import { join, dirname } from "node:path";
 import { checkEvent } from "../schema/validate.ts";
 import { latestStateDiffDate } from "../runner/state-diff.ts";
 import { effectiveStakes } from "../runner/legibility.ts";
+import { localDate } from "../runner/metrics.ts";
 import type { Card, Hunk } from "../runner/types.ts";
 
 /**
@@ -16,16 +17,31 @@ import type { Card, Hunk } from "../runner/types.ts";
 export interface DecisionEvent {
   v: "0";
   ts: string;
-  type: "presented" | "decision" | "correction" | "question";
+  type: "presented" | "decision" | "correction" | "question" | "undo";
   cardId: string;
   fingerprint: string;
   choice?: "accept" | "park" | "reject";
   latencyMs?: number;
   actor?: "owner" | "agent_shadow" | "agent_authorized";
-  executed?: string;
+  executed?: string; // accept 的应用 commit;undo 时 = revert commit(#24)
   correction?: { hunks: Hunk[]; note?: string };
   question?: string; // #21:用户对卡发的问题(卡进入待补 context 态)
+  note?: string; // #24:落子理由,随任意手势(park/reject 的理由 = 最珍贵的 taste 数据)
   backfilled?: boolean;
+}
+
+/**
+ * 生效的 decision 事件(#24):undo 事件撤销**同卡最近一次** decision——
+ * 日志只追加(被撤销的行不删,补偿事件表达状态),读取时按文件序重放。
+ * 撤销后再落子是合法序列:decision → undo → decision(第二条生效)。
+ */
+export function effectiveDecisions(events: DecisionEvent[]): DecisionEvent[] {
+  const effective = new Map<string, DecisionEvent>(); // cardId → 当前生效的 decision
+  for (const e of events) {
+    if (e.type === "decision" && e.cardId) effective.set(e.cardId, e);
+    else if (e.type === "undo" && e.cardId) effective.delete(e.cardId);
+  }
+  return [...effective.values()];
 }
 
 /** 读事件日志(宽容:读不动的行跳过——历史里有 vault 侧手写的非标行)。 */
@@ -71,16 +87,14 @@ export function loadCards(outDir: string): Card[] {
   return cards.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
 }
 
-/** 每指纹最新未终结的 question ts(有 decision 的指纹不算——已决不回场)。 */
+/** 每指纹最新未终结的 question ts(有生效 decision 的指纹不算——已决不回场)。 */
 function openQuestionTs(events: DecisionEvent[]): Map<string, string> {
   const latest = new Map<string, string>();
-  const decided = new Set<string>();
   for (const e of events) {
     if (!e.fingerprint) continue;
-    if (e.type === "decision") decided.add(e.fingerprint);
     if (e.type === "question") latest.set(e.fingerprint, e.ts);
   }
-  for (const fp of decided) latest.delete(fp);
+  for (const d of effectiveDecisions(events)) latest.delete(d.fingerprint);
   return latest;
 }
 
@@ -99,12 +113,11 @@ export interface QueueState {
   awaiting: Card[];
 }
 
-/** 队列投影(cardId 与 fingerprint 双保险)。 */
+/** 队列投影(cardId 与 fingerprint 双保险;undo 过的 decision 不算数 —— #24)。 */
 export function queueState(outDir: string, events: DecisionEvent[]): QueueState {
   const decidedIds = new Set<string>();
   const decidedFps = new Set<string>();
-  for (const e of events) {
-    if (e.type !== "decision") continue;
+  for (const e of effectiveDecisions(events)) {
     if (e.cardId) decidedIds.add(e.cardId);
     if (e.fingerprint) decidedFps.add(e.fingerprint);
   }
@@ -145,12 +158,11 @@ export interface CatchUp {
 export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
   const events = readEvents(join(outDir, "decisions.jsonl"));
   let sinceMs = 0;
-  let decidedTotal = 0;
   for (const e of events) {
     const t = Date.parse(e.ts);
     if (Number.isFinite(t) && t > sinceMs) sinceMs = t;
-    if (e.type === "decision") decidedTotal++;
   }
+  const decidedTotal = effectiveDecisions(events).length;
   const sinceTs = sinceMs ? new Date(sinceMs).toISOString() : null;
 
   let commits = 0;
@@ -171,7 +183,7 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
 
   const runs = { runs: 0, proposed: 0, suppressed: 0 };
   const metricsPath = join(outDir, "run-metrics.jsonl");
-  const sinceDate = sinceTs ? sinceTs.slice(0, 10) : "";
+  const sinceDate = sinceTs ? localDate(new Date(sinceTs)) : ""; // #25:metric date 是本地日切
   if (existsSync(metricsPath)) {
     for (const line of readFileSync(metricsPath, "utf8").split("\n")) {
       if (!line.trim()) continue;
@@ -222,18 +234,25 @@ export interface MetricsData {
     dup: number;
     illegible?: number;
     refaced?: number;
+    thought?: number;
   }>;
   totals: { proposed: number; suppressedPlusDup: number };
+  /** 认知含量(#18):入列卡按 stakes 的构成——方向审计的常驻仪表。 */
+  cognition: { thought: number; action: number; ledger: number };
 }
 
 /** Metrics 投影:时延来自 decisions.jsonl 真值,重复率曲线来自 run-metrics.jsonl。 */
 export function metricsData(outDir: string): MetricsData {
   const decided = { total: 0, accept: 0, park: 0, reject: 0 };
   let questions = 0;
+  const events = readEvents(join(outDir, "decisions.jsonl"));
   const timed: Array<{ ts: string; latencyMs: number; choice: string }> = [];
-  for (const e of readEvents(join(outDir, "decisions.jsonl"))) {
+  for (const e of events) {
     if (e.type === "question") questions++;
-    if (e.type !== "decision") continue;
+  }
+  // 只统计生效的落子(#24:被撤销的 decision 不进计数,也不进时延分布——4 秒内反悔的数据是噪声)
+  const decisions = effectiveDecisions(events).sort((a, b) => (a.ts < b.ts ? -1 : 1));
+  for (const e of decisions) {
     decided.total++;
     if (e.choice === "accept") decided.accept++;
     else if (e.choice === "park") decided.park++;
@@ -267,6 +286,7 @@ export function metricsData(outDir: string): MetricsData {
           dup: m.dup ?? 0,
           ...(m.illegible ? { illegible: m.illegible } : {}),
           ...(m.refaced ? { refaced: m.refaced } : {}),
+          ...(m.thought ? { thought: m.thought } : {}),
         };
         runs.push(row);
         totals.proposed += row.proposed;
@@ -276,12 +296,20 @@ export function metricsData(outDir: string): MetricsData {
       }
     }
   }
+  // 认知含量(#18):所有入列过的卡按 stakes 分桶(卡永久在盘,零新增存储)
+  const cognition = { thought: 0, action: 0, ledger: 0 };
+  for (const c of loadCards(outDir)) {
+    if (c.stakes === "thought") cognition.thought++;
+    else if (c.stakes === "reversible-ledger") cognition.ledger++;
+    else cognition.action++;
+  }
   return {
     decided,
     questions,
     latency: { count: timed.length, medianMs, recent: timed.slice(-20) },
     runs,
     totals,
+    cognition,
   };
 }
 

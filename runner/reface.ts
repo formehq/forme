@@ -131,6 +131,7 @@ export function unansweredQuestions(jsonlPath: string): PendingQuestion[] {
       };
       if (!e.fingerprint) continue;
       if (e.type === "decision") decided.add(e.fingerprint);
+      if (e.type === "undo") decided.delete(e.fingerprint); // #24:撤销后回到未决
       if (e.type === "question" && e.question && e.cardId && e.ts) {
         latest.set(e.fingerprint, {
           cardId: e.cardId,

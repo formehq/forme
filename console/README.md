@@ -11,15 +11,15 @@ node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
 ## 四个视图(交互稿屏 1/2/3 + Metrics)
 
 1. **catch-up 卡**(开盖/回归):「你不在的 N 小时」+ 进来/我做的/等你 三行,全部从 git 与 jsonl 推导;`[今天不看]` 永远在且零愧疚;待补 context 的卡单独计数显示。
-2. **落子 session**:一次一卡,五段 v0.1 卡面(是什么 → 为什么现在 → 建议 → 拍板后会发生什么 → 落子)+ stakes 徽标 + 「你问过」问答段(#21),证据与 diff 折叠;键盘 `a/p/r` 与按钮并存;`输入修正…` 就地编辑 hunk 的 after + 一句 note(taste 原料);`问一句…`(`q` 键)发问不落子(#21,见下)。落子 toast 带本次用时(#19)。
+2. **落子 session**:一次一卡,五段 v0.1 卡面(是什么 → 为什么现在 → 建议 → 拍板后会发生什么 → 落子)+ stakes 徽标 + 「你问过」问答段(#21),证据与 diff 折叠;键盘 `a/p/r` 与按钮并存;`输入修正…` 就地编辑 hunk 的 after + 一句 note(taste 原料);`问一句…`(`q` 键)发问不落子(#21,见下);**note 输入框常驻**(#24)——落子理由随任意手势提交,有字就带上(park/reject 的理由是最珍贵的 taste 数据)。落子 toast 带本次用时(#19)+ **4 秒撤销窗口**(#24,`u` 键;accept 撤销走 git revert,undo 补偿事件进 jsonl,卡重新上屏重新计时)。
 3. **State Diff**:最新 `state-diff-*.md` 的只读投影,四段骨架原样。
-4. **Metrics**(#19):time-to-decision 中位数 + 最近 20 次分布条(按 choice 着色)、重复率逐轮条(入列 vs 抑制+重复)+ 累计抑制率、世界层闸/问答往返计数。进视图时现取现算;中位数只取现场计时的落子(backfilled 不编)。
+4. **Metrics**(#19):time-to-decision 中位数 + 最近 20 次分布条(按 choice 着色)、重复率逐轮条(入列 vs 抑制+重复)+ 累计抑制率、世界层闸/问答往返计数、认知含量构成(思想/行动/账本 —— #18)。进视图时现取现算;中位数只取现场计时的落子(backfilled 不编;被撤销的 decision 不进分布)。
 
 ## 文件
 
 - **`store.ts`** — vault 投影(`queueState`:可决队列 = cards/ 无 decision 事件且不在待补 context 态者,cardId+指纹双保险;catch-up 数据包;`metricsData` —— #19)+ `appendEvent`(**每条事件先过 Forme 自己的 AJV 门**,不合法即抛——宽容解析只用于读历史行,自己写的行零豁免)。
 - **`apply.ts`** — accept 执行路径,**Forme 代码唯一写知识层处**且只发生在人落子 accept 之后:hunk 精确替换全有或全无(before 消失 = 卡过期;多匹配用行号 locator 消歧;纯插入 v0 拒绝),git pathspec 提交只含目标文件,hash 进事件 `executed`(可回滚)。**目标文件有未提交改动即拒绝**——回执 commit 不裹挟用户的编辑。
-- **`server.ts`** — 路由:`GET /`(页面)、`GET /api/state`(投影,含 metrics)、`POST /api/presented`(卡实际上屏,静默计时起点)、`POST /api/question`(#21,发问)、`POST /api/decide`(落子;correction 事件先于 decision)。只绑 127.0.0.1 + Host 校验 + POST 强制 `application/json`(本机写路径的 CSRF 挡板)。
+- **`server.ts`** — 路由:`GET /`(页面)、`GET /api/state`(投影,含 metrics)、`POST /api/presented`(卡实际上屏,静默计时起点)、`POST /api/question`(#21,发问)、`POST /api/decide`(落子,可带 note;correction 事件先于 decision)、`POST /api/undo`(#24,撤销窗口 15s 上限;accept 撤销走 git revert)。只绑 127.0.0.1 + Host 校验 + POST 强制 `application/json`(本机写路径的 CSRF 挡板)。
 - **`page.ts`** — 单 HTML,内联 CSS/JS;页面自身不存任何东西。
 
 ## question 通道(#21,correction 的双胞胎)
@@ -37,7 +37,7 @@ node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
 ## 当前边界
 
 - 呈现数量无接受率自适应节流(硬约束 #2 完整形,后续);现在 = 全部待决卡一次 session。
-- correction 只能改 after,不能增删 hunk;park 无 un-park(与 rejected 同样被指纹永久抑制;question 是「先别落子」的出口,但 park 仍是终态)。
+- correction 只能改 after,不能增删 hunk;park 无 un-park(与 rejected 同样被指纹永久抑制;question 是落子前的出口、undo 是落子后 15s 内的出口,但 park 仍是终态)。
 - question 一卡一问待答(再问覆盖前问);判定全靠显式手势,不做自然语言猜测。
 - 屏 4(taste 规则确认)与屏 5(影子授权)未建——Metrics 视图(#19)先补了曲线一半。
 

@@ -10,9 +10,12 @@ launchd (StartCalendarInterval 日跑 + WatchPaths 盯 vault   [launchd/ 已建 
    │  唤醒 → 首卡可见 ≤ 10s(增量指纹只处理 git delta)
    ▼
 runner  ──►  codex exec --json --output-schema             [runner/ 已建 · #5]
-   │         (先答上一轮的 question:reface 只换脸,同指纹回场 —— #21;
+   │         (文件锁串行化跨 job 竞态 —— #22;
+   │          先答上一轮的 question:reface 只换脸,同指纹回场 —— #21;
    │          agent 只读扫 vault git-delta 找漂移;窗口 = 上次 run 的
    │          HEAD 锚点..HEAD —— #14;排除 98_Forme/;
+   │          + 慢层立场参照:02_Wiki 最久未动 N 篇,快慢对照找
+   │            claim-drift 思想卡,每轮 ≤1 张机器节流 —— #18;
    │          prompt 注入 Taste Rules —— #10 + 世界层指令/正反例 —— #21;
    │          k 条相似历史留 post-W2)
    │         agent 只返回 schema 强制的 JSON(五段 v0.1 —— #12;stakes v0.2 —— #21)
@@ -34,12 +37,15 @@ console (localhost 单页,node:http,服务器零状态;           [console/ 已�
    │   wake-catchup(#16,硬约束 #3):旧状态秒渲 +「队列截至 X」标注,
    │   开页触发后台增量 run(--min-hours 2 + 锚点空窗零成本 + 去抖)
    ▼
-落子  a / p / r 单键 + 按钮(+ correction 就地修正 after      [已建 · #15/#21]
+落子  a / p / r 单键 + 按钮(+ correction 就地修正 after      [已建 · #15/#21/#24]
    │   + question 问一句:不落子,卡转待补 context 态,
-   │     下一轮 reface 带解释回场 —— correction 的双胞胎)
+   │     下一轮 reface 带解释回场 —— correction 的双胞胎
+   │   + note 随任意手势:落子理由一行,park/reject 的理由
+   │     是最珍贵的 taste 数据 —— #24)
    ├─ accept → hunk 精确替换(全有或全无)→ git 提交回执 executed
    │   toast 带本次用时(latencyMs 真值上屏 —— #19)
-   └─ 追加 decisions.jsonl(presented / correction / decision / question;
+   │   + 撤销窗口 4s(#24):undo 补偿事件,accept 走 git revert
+   └─ 追加 decisions.jsonl(presented / correction / decision / question / undo;
       每条过自家 AJV 门;latencyMs = 最近 presented → decision 真值)
    ▼
 学习  taste.ts:决策日志 → codex 提炼 → Taste Rules.md       [已建 · #10]
@@ -80,13 +86,17 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **wake-catchup**(#16,硬约束 #3):开页旧状态秒渲 +「队列截至 X」标注 → 后台增量 run(额度三重护栏)→ 投影自更新;常开 tab 回可见自动重投影;真链已验证(refresh → 锚点 run → 3 卡入列)。
 - **卡面 v0.2:世界层优先**(#21):世界层闸(账本语域上 title/summary/whyNow 即打回,账本卡豁免)+ 同轮一次 reface 重写机会;stakes 三级(申报+消毒派生)驱动卡面丰俭;prompt 带 66bcc 真实正反例。
 - **question 通道**(#21):console 问一句(q 键)→ question 事件(非 decision,指纹不进已决名单)→ 卡转待补 context 态退出队列 → 下一轮 run 先答问题(reface 只换脸,id/指纹/diff 不变)→ 带着「你问过」问答同指纹回场。
-- **Metrics 上屏**(#19):落子 toast 带本次用时;Metrics 视图 = 时延中位数 + 最近 20 次分布(按 choice 着色)+ 重复率逐轮条 + 累计抑制率——全部现读 jsonl,中位数只取现场计时。
+- **Metrics 上屏**(#19):落子 toast 带本次用时;Metrics 视图 = 时延中位数 + 最近 20 次分布(按 choice 着色)+ 重复率逐轮条 + 累计抑制率 + 认知含量构成(#18)——全部现读 jsonl,中位数只取现场计时。
+- **note 通道 + 撤销窗口**(#24):落子理由随任意手势入 decision 事件;toast 4s 内 `u` 撤销——undo 补偿事件(日志仍只追加),accept 撤销走 git revert,四处读取方(队列/抑制/taste/question)同步生效判定。
+- **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
+- **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
+- **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
 
 **还不能:**
 - 规则的「收录/改写/丢弃」确认交互(屏 4 Taste 面板,#20,W5)/ k 条相似历史决策注入(post-W2)。
 - 呈现数量的接受率自适应节流(硬约束 #2 的完整形)——现在 = 全部待决卡一次 session。
 - 影子授权(W5)——但 recommendation 与实际 choice 的对照数据已开始积累。
-- parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(question 是「先别落子」的出口,但 park 本身仍是终态)。
+- parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(question 是落子前的出口、undo 是落子后 15s 内的出口,但 park 本身仍是终态)。
 - correction 只能改 hunk 的 after(v0);纯插入(before 为空)的 diff 拒绝自动应用。
 
-> 一句话:**七步生命周期在真实使用中闭合,且第一条 legibility 定量证据(66bcc 949s)已长成机制——世界层闸 + question 通道 + Metrics 上屏(#21/#19)。** 待验:下一批行动类卡回到 ~15s 量级(#21 验收基线)+ question 真实往返一次;W3 剩开盖 ≤10s 秒表 3 天(#16)。下一块 = 屏 4 Taste 面板(#20,W5)+ #18 思想卡(stakes=thought 地基已就位)。
+> 一句话:**决策台长出了耳朵和悔棋——note 随任意手势、4 秒撤销窗口(#24);思想卡管道就位,快慢层对照猎 claim-drift(#18);额度竞态与日期语义修毕(#22/#25)。** 待验:第一张 claim-drift 真实呈现 + Zayn 落子(W4 验收);note 通道接住第一条真实 park 理由;#21 的 ~15s 基线与 question 往返;#16 秒表 3 天。下一块 = 屏 4 Taste 面板(#20,W5)。
