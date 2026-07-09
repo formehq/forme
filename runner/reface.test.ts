@@ -121,3 +121,13 @@ test("buildRefacePrompt:question 带原话,gate 带命中片段,原卡 JSON 在�
   assert.match(pg, /「拆成」/);
   assert.match(pg, /answer 返回 null/);
 });
+
+test("buildRefacePrompt(#28):英文卡重写时保持英文,不退回 owner 中文默认", () => {
+  const card = mkCard();
+  card.title = "The launch promise is stale";
+  card.summary = "The public date no longer matches the current plan.";
+  card.whyNow = "A partner will quote it this week.";
+  const prompt = buildRefacePrompt(card, { kind: "gate", hit: "list surgery" });
+  assert.match(prompt, /in English/);
+  assert.doesNotMatch(prompt, /卡面文案用中文/);
+});

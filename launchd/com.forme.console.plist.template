@@ -12,7 +12,7 @@
     <string>{{NODE}}</string>
     <string>{{REPO}}/console/server.ts</string>
     <string>--vault</string><string>{{VAULT}}</string>
-    <string>--port</string><string>6180</string>
+    <string>--port</string><string>{{PORT}}</string>
   </array>
 
   <!-- 后台刷新会 spawn runner 子进程,codex/git 路径要在 -->

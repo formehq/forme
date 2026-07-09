@@ -90,6 +90,21 @@ test("slowLayerFiles(#18):取 02_Wiki 里最久没被 commit 动过的概念笔�
   assert.deepEqual(slowLayerFiles(repo, 2, "02_Wiki/", 3), slowLayerFiles(repo, 2, "02_Wiki/", 0)); // 周期回归
 });
 
+test("slowLayerFiles(#28):未知 vault 可从根目录取慢层,且永远排除 98_Forme", () => {
+  const repo = mkdtempSync(join(tmpdir(), "forme-slow-root-"));
+  const git = (...a: string[]) => execFileSync("git", ["-C", repo, ...a], { encoding: "utf8" });
+  git("init", "-q");
+  git("config", "user.email", "t@t");
+  git("config", "user.name", "t");
+  mkdirSync(join(repo, "Ideas"), { recursive: true });
+  mkdirSync(join(repo, "98_Forme", "cards"), { recursive: true });
+  writeFileSync(join(repo, "Ideas", "principle.md"), "# Principle\n");
+  writeFileSync(join(repo, "98_Forme", "cards", "mirror.md"), "# Runtime\n");
+  git("add", "-A");
+  git("commit", "-qm", "seed");
+  assert.deepEqual(slowLayerFiles(repo, 10, "."), ["Ideas/principle.md"]);
+});
+
 test("localDate(#25):按本地日切,不是 UTC 日期", () => {
   // 本地构造的午夜/深夜时刻,无论测试机时区如何,本地日期都应是构造时的那天
   assert.equal(localDate(new Date(2026, 6, 8, 23, 30)), "2026-07-08");

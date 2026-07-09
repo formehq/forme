@@ -3,6 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { clean } from "./card.ts";
+import { cardLanguageInstruction, detectTextLanguage } from "./language.ts";
 import type { Card } from "./types.ts";
 
 /**
@@ -49,13 +50,14 @@ export function refaceOutputSchema(): unknown {
 }
 
 export function buildRefacePrompt(card: Card, cause: RefaceCause): string {
+  const language = detectTextLanguage([card.title, card.summary, card.whyNow, card.onAccept].filter(Boolean).join("\n"));
   const L: string[] = [
     "你是 Forme 的卡面重写器。下面这张决策卡的 diff 与证据是对的,但卡面(给决策者读的文字)不合格。只读涉及的文件核实背景,然后**只重写卡面**,返回 JSON。",
     "",
     "规则(v0.2,世界层优先——卡面说事,diff 说账):",
     "- title / summary / whyNow 必须说**用户世界里的事**:什么事没落地、卡着谁、什么时间点要用;不许出现列表手术语言(「已完成项」「拆成待办」之类,会被机器闸再次检查)。",
     "- onAccept 一句人话说拍板后世界里/文档里会发生什么(别复述路径与回滚说明)。",
-    "- 不改 diff、不改证据、不换目标——你只换说法。卡面文案用中文。",
+    `- 不改 diff、不改证据、不换目标——你只换说法。${cardLanguageInstruction(language)}`,
     "",
   ];
   if (cause.kind === "question") {

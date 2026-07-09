@@ -47,9 +47,9 @@
 
 ## 仓库现状(随进度更新)
 
-- **已建**:`schema/`(卡契约 v0 + v0.1 五段 + v0.2 stakes/问答;事件五型 presented/decision(可带 note)/correction/question/undo —— #4/#12/#21/#24)· `runner/`(漂移卡管道:文件锁串行化(#22)→ codex 真跑 → AJV 门 → 指纹抑制 → 世界层闸(卡面说事,diff 说账;打回给一次 reface)→ 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12/#21;增量窗口 = 上次 run 的 HEAD 锚点 —— #14;question 阶段先于扫描 —— #21;claim-drift 思想卡:慢层对照 `--slow-layer` + 每轮 ≤1 节流 —— #18;date-only 本地日切 —— #25;taste 提炼器 —— #10;State Diff 生成器 —— #11)· `console/`(localhost 单页决策台:四视图(catch-up / 五段卡 / State Diff / Metrics 含认知含量)+ a/p/r + correction 人话面板 + 问一句 + note 随任意手势 + 草稿防丢 + 4s 撤销窗口 —— #15/#19/#21/#24/#26-A/#27;wake-catchup —— #16)· `launchd/`(三 job 已装机,daily 带 --slow-layer 4)· `docs/` · `design/`(交互稿 + demo 剧本 v0 —— #17)· 工具链(Node 原生 TS,无构建步骤)
+- **已建**:`schema/`(卡契约 v0 + v0.1 五段 + v0.2 stakes/问答;事件五型 presented/decision(可带 note)/correction/question/undo —— #4/#12/#21/#24)· `runner/`(漂移卡管道:文件锁串行化(#22)→ codex 真跑 → AJV 门 → 指纹抑制 → 世界层闸(卡面说事,diff 说账;打回给一次 reface)→ 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12/#21;增量窗口 = 上次 run 的 HEAD 锚点 —— #14;question 阶段先于扫描 —— #21;claim-drift 思想卡:路径无关慢层对照 + 每轮 ≤1 节流 —— #18/#28;空白首轮 ≤2 卡 + 卡面语言随 vault —— #28;date-only 本地日切 —— #25;taste 提炼器 —— #10;State Diff 生成器 —— #11)· `console/`(localhost 单页决策台:四视图(catch-up / 五段卡 / State Diff / Metrics 含认知含量)+ a/p/r + correction 人话面板 + 问一句 + note 随任意手势 + 草稿防丢 + 4s 撤销窗口 —— #15/#19/#21/#24/#26-A/#27;wake-catchup —— #16)· `launchd/`(三 job + 白手套预检/安装/卸载,API key 不落盘 —— #28)· `docs/`(含 30 分钟 runbook + 隐私一页纸)· `design/`(交互稿 + demo 剧本 v0 —— #17)· 工具链(Node 原生 TS,无构建步骤)
 - **未建**:Taste 面板/屏 4(#20,W5)· 呈现的接受率自适应节流(硬约束 #2 完整形)· un-park · 相似历史注入
-- 一句话:**修正面板已说人话,收起与手势不再静默丢字(#26-A/#27);决策台的耳朵与悔棋照常工作(#24);思想卡等慢层自然轮转(#18)**;待验:第一张 claim-drift 真实呈现 + 修正面板一次真实无解释使用 + 开盖 ≤10s 秒表(#16)+ 周日 State Diff。详见 `docs/ARCHITECTURE.md`。
+- 一句话:**白手套安装包已把第二台 Mac 的隐含前提变成预检、smoke、保守首跑与健康检查(#28);未知目录和英文 vault 不再套 Zayn 默认**;待验:今晚/明天干净账户计时预演 + 一次真实 API-key 凭据跑;#18 思想卡继续等慢层自然轮转。详见 `docs/ARCHITECTURE.md`。
 
 ## 常用命令
 

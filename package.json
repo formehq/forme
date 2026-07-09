@@ -10,7 +10,7 @@
   },
   "scripts": {
     "validate": "node schema/validate-samples.ts",
-    "test": "node --test schema/*.test.ts runner/*.test.ts console/*.test.ts",
+    "test": "node --test schema/*.test.ts runner/*.test.ts console/*.test.ts launchd/*.test.ts",
     "typecheck": "tsc --noEmit",
     "run:once": "node runner/index.ts",
     "run:console": "node console/server.ts",

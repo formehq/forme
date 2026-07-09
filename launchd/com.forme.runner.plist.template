@@ -7,9 +7,9 @@
   <!-- 直接 exec node,不经 shell wrapper:带 provenance/quarantine xattr 的
        脚本会被 launchd 拒执行(exec EPERM),少一层中间脚本少一类故障。
        额度守卫在 runner 本体(min-hours 标志;跨 job 竞态由 runner 文件锁
-       串行化 —— #22)。slow-layer(#18):每轮注入 4 篇最久未动的 02_Wiki
-       概念笔记作立场参照(claim-drift 思想卡的快慢对照面;每轮 ≤1 张由
-       runner 节流)。 -->
+       串行化 —— #22)。slow-layer(#18/#28):根目录安装时按 vault 自动探测,
+       每轮注入 4 篇最久未动的笔记作立场参照(claim-drift 思想卡的快慢
+       对照面;每轮 ≤1 张由 runner 节流)。 -->
   <key>ProgramArguments</key>
   <array>
     <string>{{NODE}}</string>
@@ -17,6 +17,7 @@
     <string>--vault</string><string>{{VAULT}}</string>
     <string>--min-hours</string><string>20</string>
     <string>--slow-layer</string><string>4</string>
+    <string>--slow-root</string><string>{{SLOW_ROOT}}</string>
   </array>
 
   <!-- launchd 的 PATH 极简;codex / git 所在目录在安装时固化 -->

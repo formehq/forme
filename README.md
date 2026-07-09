@@ -9,3 +9,5 @@ A local-first agent that turns your knowledge base's drift into **one-decision c
 - **It learns.** Repeated suggestions go to zero by construction; your decision history distills into taste rules you can read and edit.
 
 _Full docs, demo, and the six-week self-experiment behind this design land here at public launch._
+
+Private white-glove installs use [the 30-minute operator runbook](docs/WHITE_GLOVE_INSTALL.md) and [privacy/rollback one-pager](docs/PRIVACY.md).

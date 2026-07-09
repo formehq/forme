@@ -64,7 +64,7 @@ console (localhost 单页,node:http,服务器零状态;           [console/ 已�
 | --- | --- | --- |
 | `schema/` | 卡片 + 事件的 JSON Schema、指纹、AJV 校验、样例 | **已建(#4、#12)** |
 | `runner/` | 漂移卡管道(#5/#9/#12)+ taste 提炼器(#10)+ State Diff 生成器(#11) | **已建** |
-| `launchd/` | 日跑 + 周日 State Diff 双 plist 模板 + 安装脚本 | **已建(#9、#11)** |
+| `launchd/` | 日跑 + 周日 State Diff + 常驻 console 三 plist;白手套安装/卸载/预检 | **已建(#9、#11、#16、#28)** |
 | `console/` | localhost 四视图 + 落子手势 + wake-catchup + 问一句 + Metrics(单页,零框架) | **已建(#15、#16、#19、#21、#26-A、#27;真实落子已发生)** |
 | `docs/` | 系统理解面:ARCHITECTURE / DECISIONS / SCHEMA | 进行中(#7) |
 | `design/` | 交互稿 + 语气笔记(活文档) | 已有(#1) |
@@ -92,6 +92,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
 - **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
 - **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
+- **白手套冷启动包**(#28):任意 git vault 路径 → Node/Codex/auth 预检(API key 只走 stdin)→ 初始化 `98_Forme/`→ 真实只读 smoke → 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;单命令卸载保留审计数据。runner 不再要求 `02_Wiki/` 或中文 vault:慢层根自动探测,卡面语言按证据判定。
 
 **还不能:**
 - 规则的「收录/改写/丢弃」确认交互(屏 4 Taste 面板,#20,W5)/ k 条相似历史决策注入(post-W2)。
@@ -100,4 +101,4 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(question 是落子前的出口、undo 是落子后 15s 内的出口,但 park 本身仍是终态)。
 - correction 只能改 hunk 的 after(v0);纯插入(before 为空)的 diff 拒绝自动应用。
 
-> 一句话:**决策台的修正入口已经说人话,未提交文字也有护栏(#26-A/#27);耳朵与悔棋(note + undo)照常工作(#24);思想卡管道等慢层自然轮转(#18)。** 待验:第一张 claim-drift 真实呈现 + Zayn 落子(W4 验收);修正面板一次真实无解释使用;#16 秒表 3 天;周日 State Diff。下一块 = 屏 4 Taste 面板(#20,W5)。
+> 一句话:**第二台 Mac 的 30 分钟白手套路径已工程化(#28):先问认证,再预检/smoke/保守首跑/健康检查,未知目录与英文 vault 不再走 owner 默认。** 待验:Zayn 干净账户真预演 + API-key 凭据真跑;第一张 claim-drift 继续等慢层轮转;周日 State Diff。下一块 = 07-21 首用户装机。

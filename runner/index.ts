@@ -13,6 +13,8 @@ import { appendRunMetric, lastRunHead, localDate } from "./metrics.ts";
 import { checkLegibility } from "./legibility.ts";
 import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type RefaceCause } from "./reface.ts";
 import { checkCard } from "../schema/validate.ts";
+import { isColdStart, coldStartPolicy } from "./cold-start.ts";
+import { cardLanguageInstruction, detectVaultLanguage } from "./language.ts";
 import type { AgentCard, Card } from "./types.ts";
 
 /**
@@ -40,11 +42,14 @@ if (!vault) {
 const commitsExplicit = hasFlag("commits"); // #14:显式传参 = 手动覆盖增量锚点
 const commits = Number(arg("commits", "4"));
 const maxFiles = Number(arg("max-files", "12"));
-const maxCards = Number(arg("max-cards", "3"));
-const slowLayer = Number(arg("slow-layer", "0")); // #18:注入 n 篇慢层概念笔记作立场参照
+const requestedMaxCards = Number(arg("max-cards", "3"));
+const requestedSlowLayer = Number(arg("slow-layer", "0")); // #18:注入 n 篇慢层概念笔记作立场参照
+const slowRoot = arg("slow-root", "02_Wiki/")!; // #28:旧安装兼容;新安装按 vault 自动探测
 const outDir = arg("out") ?? join(vault, "98_Forme");
 const model = arg("model");
 const dryRun = hasFlag("dry-run");
+const coldStart = isColdStart(outDir);
+const { maxCards, slowLayer } = coldStartPolicy(requestedMaxCards, requestedSlowLayer, coldStart);
 
 // #22:跨 job 串行锁。daily job 与 console 触发的 refresh 是两个进程,launchd
 // 的单实例保护跨不过 label——两发并发时守卫时钟(metrics mtime)是 TOCTOU,
@@ -72,6 +77,9 @@ function acquireLock(): boolean {
 if (!acquireLock()) {
   console.log("skip: another forme run is in flight (lock held) — 串行化(#22)");
   process.exit(0);
+}
+if (coldStart) {
+  console.log(`cold start: no cards/decisions/taste yet; first batch capped at ${maxCards}, slow layer deferred`);
 }
 process.on("exit", () => {
   try {
@@ -194,16 +202,17 @@ if (files.length === 0) {
 // delta 窗口),claim-drift 需要「最近变更 vs 既有立场」的快慢对照。
 // 取窗按日轮转:~len/n 天覆盖全部慢层一遍,不永远盯着最陈旧的同几篇。
 const slowFiles = slowLayer > 0
-  ? slowLayerFiles(vault, slowLayer, "02_Wiki/", Math.floor(Date.now() / 86_400_000)).filter(
+  ? slowLayerFiles(vault, slowLayer, slowRoot, Math.floor(Date.now() / 86_400_000)).filter(
       (f) => !files.includes(f),
     )
   : [];
+const cardLanguage = detectVaultLanguage(vault, [...files, ...slowFiles]);
 
 console.log(`forme runner ${runId}`);
 console.log(
   `scan: ${files.length} files, window = ${windowDesc}` +
     (slowFiles.length ? `, slow-layer = ${slowFiles.length}` : "") +
-    `, vault = ${vault}`,
+    `, language = ${cardLanguage}, vault = ${vault}`,
 );
 
 const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
@@ -233,7 +242,7 @@ const prompt = [
   "",
   "每张卡(卡面是给决策者读的,五段结构,标题与 summary 不用术语):",
   "- category:类别 slug(kebab-case)",
-  "- title:一句话中文标题(用户第一眼读的东西)",
+  "- title:一句话标题(用户第一眼读的东西,语言规则见下)",
   "- summary:一行上下文(是什么),没有就 null",
   "- whyNow:为什么现在出现这张卡(出身/时机,一句人话),可 null",
   "- stakes:这张卡动的是什么——reversible-ledger(纯账面修正:frontmatter、断链、命名)/ real-world-action(接受后影响 vault 之外的事:对外承诺、要做的事、时间点)/ thought(观点或立场层面的冲突,拿不准就别用)",
@@ -244,6 +253,7 @@ const prompt = [
   "- estSeconds:估计落子秒数,可 null",
   "",
   "卡面语言(v0.2,世界层优先——**卡面说事,diff 说账**):",
+  `- ${cardLanguageInstruction(cardLanguage)}`,
   "- title / summary / whyNow 必须说**用户世界里的事**:什么事没落地、卡着谁、什么时间点要用;哪一行怎么改、在哪个列表里,这些账本细节一律降到 onAccept 与 diff,不许出现在世界层段(会被机器闸检查,命中账本手术词即打回)。",
   "- 反例(真实打回样本):「社媒号确认被塞在已完成的 handle 任务里」——只说了列表手术,没说这件事是什么。",
   "- 正例:「@formehq 社媒号还没确认,8.15 发布要用」——先说世界里什么事悬着,手术细节留给 diff。",
@@ -252,14 +262,14 @@ const prompt = [
   ...(tasteRules.length
     ? ["用户已确立的 taste 规则(提案须符合,拿不准就别提):", ...tasteRules.map((r) => `- ${r}`), ""]
     : []),
-  "硬规则:你是只读,绝不修改任何文件;before 必须与文件实际内容逐字匹配(会被机器校验,不匹配即丢弃);卡面文案用中文;宁缺毋滥,只报有把握的;没有可靠漂移就返回空数组。",
+  "硬规则:你是只读,绝不修改任何文件;before 必须与文件实际内容逐字匹配(会被机器校验,不匹配即丢弃);严格遵守上面的卡面语言规则;宁缺毋滥,只报有把握的;没有可靠漂移就返回空数组。",
   "",
   "只返回符合 output schema 的结构化 JSON。最近变更的文件:",
   ...files.map((f) => `- ${f}`),
   ...(slowFiles.length
     ? [
         "",
-        "慢层立场参照(02_Wiki 里最久没动过的概念笔记;拿它们与上面最近变更做快慢对照找 claim-drift,不要对它们提普通整洁卡):",
+        `慢层立场参照(${slowRoot} 中最久没动过的笔记;拿它们与上面最近变更做快慢对照找 claim-drift,不要对它们提普通整洁卡):`,
         ...slowFiles.map((f) => `- ${f}`),
       ]
     : []),
