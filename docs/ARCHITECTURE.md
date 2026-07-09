@@ -65,7 +65,7 @@ console (localhost 单页,node:http,服务器零状态;           [console/ 已�
 | `schema/` | 卡片 + 事件的 JSON Schema、指纹、AJV 校验、样例 | **已建(#4、#12)** |
 | `runner/` | 漂移卡管道(#5/#9/#12)+ taste 提炼器(#10)+ State Diff 生成器(#11) | **已建** |
 | `launchd/` | 日跑 + 周日 State Diff 双 plist 模板 + 安装脚本 | **已建(#9、#11)** |
-| `console/` | localhost 四视图 + 落子手势 + wake-catchup + 问一句 + Metrics(单页,零框架) | **已建(#15、#16、#19、#21;真实落子已发生)** |
+| `console/` | localhost 四视图 + 落子手势 + wake-catchup + 问一句 + Metrics(单页,零框架) | **已建(#15、#16、#19、#21、#26-A、#27;真实落子已发生)** |
 | `docs/` | 系统理解面:ARCHITECTURE / DECISIONS / SCHEMA | 进行中(#7) |
 | `design/` | 交互稿 + 语气笔记(活文档) | 已有(#1) |
 
@@ -88,6 +88,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **question 通道**(#21):console 问一句(q 键)→ question 事件(非 decision,指纹不进已决名单)→ 卡转待补 context 态退出队列 → 下一轮 run 先答问题(reface 只换脸,id/指纹/diff 不变)→ 带着「你问过」问答同指纹回场。
 - **Metrics 上屏**(#19):落子 toast 带本次用时;Metrics 视图 = 时延中位数 + 最近 20 次分布(按 choice 着色)+ 重复率逐轮条 + 累计抑制率 + 认知含量构成(#18)——全部现读 jsonl,中位数只取现场计时。
 - **note 通道 + 撤销窗口**(#24):落子理由随任意手势入 decision 事件;toast 4s 内 `u` 撤销——undo 补偿事件(日志仍只追加),accept 撤销走 git revert,四处读取方(队列/抑制/taste/question)同步生效判定。
+- **修正面板人话化 + 输入防丢**(#26-A/#27):category 中文化;修正只露「改后的样子」,原样折叠;修改后接受与原样接受留备注分流;首次聚焦提示不持久化。收起/面板切换有草稿先确认,a/p/r 按钮与键盘手势会携带面板未提交文字,不再有静默清空路径;park 理由同时作为 vault agent 周会复查的转交信号。
 - **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
 - **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
 - **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
@@ -99,4 +100,4 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(question 是落子前的出口、undo 是落子后 15s 内的出口,但 park 本身仍是终态)。
 - correction 只能改 hunk 的 after(v0);纯插入(before 为空)的 diff 拒绝自动应用。
 
-> 一句话:**决策台长出了耳朵和悔棋——note 随任意手势、4 秒撤销窗口(#24);思想卡管道就位,快慢层对照猎 claim-drift(#18);额度竞态与日期语义修毕(#22/#25)。** 待验:第一张 claim-drift 真实呈现 + Zayn 落子(W4 验收);note 通道接住第一条真实 park 理由;#21 的 ~15s 基线与 question 往返;#16 秒表 3 天。下一块 = 屏 4 Taste 面板(#20,W5)。
+> 一句话:**决策台的修正入口已经说人话,未提交文字也有护栏(#26-A/#27);耳朵与悔棋(note + undo)照常工作(#24);思想卡管道等慢层自然轮转(#18)。** 待验:第一张 claim-drift 真实呈现 + Zayn 落子(W4 验收);修正面板一次真实无解释使用;#16 秒表 3 天;周日 State Diff。下一块 = 屏 4 Taste 面板(#20,W5)。

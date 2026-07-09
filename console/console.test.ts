@@ -120,7 +120,17 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
     // 页面与投影
     const page = await fetch(t.base + "/");
     assert.equal(page.status, 200);
-    assert.match(await page.text(), /进入落子|forme/);
+    const pageHtml = await page.text();
+    assert.match(pageHtml, /进入落子|forme/);
+    // #26-A/#27:人话表面 + 未提交草稿的两条预防性护栏常驻页面脚本
+    assert.match(pageHtml, /悬空待办/);
+    assert.match(pageHtml, /哪里不对？/);
+    assert.match(pageHtml, /改后的样子/);
+    assert.match(pageHtml, /原样（展开对照）/);
+    assert.match(pageHtml, /原样接受，字留作备注/);
+    assert.match(pageHtml, /确定丢掉并收起/);
+    assert.match(pageHtml, /未采用的修正草稿/);
+    assert.doesNotMatch(pageHtml, /before 必须原样匹配/);
     let state = (await t.get("/api/state")) as { pending: Card[]; catchUp: { pending: { count: number }; sinceTs: string | null } };
     assert.equal(state.pending.length, 4);
     assert.equal(state.catchUp.pending.count, 4);
@@ -150,6 +160,7 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
     const corr = await t.post("/api/decide", {
       cardId: cardC.id,
       choice: "accept",
+      note: "按我的版本接受",
       correction: { hunks: [{ before: "旧口径的一句话。", after: "我自己的口径。" }], note: "用我的 voice" },
     });
     assert.equal(corr.status, 200, JSON.stringify(corr.data));
@@ -168,6 +179,7 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
     assert.equal(decC[1]!.type, "correction");
     assert.equal(decC[1]!.correction!.note, "用我的 voice");
     assert.equal(decC[2]!.choice, "accept");
+    assert.equal(decC[2]!.note, "按我的版本接受");
     assert.ok(decC[2]!.latencyMs! >= 0);
     const decD = events.find((e) => e.cardId === cardD.id && e.type === "decision")!;
     assert.equal(decD.backfilled, true);

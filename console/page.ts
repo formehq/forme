@@ -71,13 +71,18 @@ export function renderPage(): string {
   .banner { border: 1px solid var(--reject); color: var(--reject); border-radius: 8px; padding: 8px 14px; margin-top: 14px; font-size: 14px; }
   .toast { color: var(--accent); margin-top: 14px; font-size: 14px; }
   .correction { border-top: 1px dashed var(--line); margin-top: 20px; padding-top: 14px; }
+  .correction h2 { color: var(--ink); font-size: 16px; margin: 0 0 4px; }
+  .correction .field-label { color: var(--muted); font-size: 13px; margin-top: 12px; }
   .correction textarea, .correction input {
-    width: 100%; font: 13px/1.6 ui-monospace, monospace; color: var(--ink);
-    background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 4px 0 10px;
+    width: 100%; font: inherit; font-size: 14px; line-height: 1.6; color: var(--ink);
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; margin: 4px 0 10px;
   }
-  .correction .before { white-space: pre-wrap; background: var(--code); border-radius: 6px; padding: 8px 10px; color: var(--muted); font: 13px/1.6 ui-monospace, monospace; margin: 4px 0 6px; }
+  .correction textarea { resize: vertical; }
+  .correction details { margin: 6px 0 12px; }
+  .correction .before { white-space: pre-wrap; color: var(--muted); font-size: 13px; line-height: 1.6; font-family: inherit; padding: 2px 0; }
+  .focus-hint { color: var(--muted); font-size: 12.5px; margin: 7px 0 0; }
   .notebox {
-    width: 100%; font: 14px/1.6 inherit; color: var(--ink); background: var(--code);
+    width: 100%; font-size: 14px; line-height: 1.6; font-family: inherit; color: var(--ink); background: var(--code);
     border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; margin-top: 14px;
   }
   .notebox::placeholder { color: var(--muted); }
@@ -116,6 +121,7 @@ var view = document.getElementById("view");
 var currentView = "";    // catchup / session / statediff / done / skip
 var lastBoot = 0;
 var polling = false;
+var focusHintShown = false; // #26-A:只在本页会话第一次聚焦时出现,不落私有状态
 
 function esc(s) {
   return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -141,6 +147,15 @@ function mmdd(ts) { // #25:时间戳的用户面渲染一律本地时区
   return p(d.getMonth() + 1) + "-" + p(d.getDate());
 }
 var STAKES_LABEL = { "reversible-ledger": "账本", "real-world-action": "行动", "thought": "思想" };
+var CATEGORY_LABEL = {
+  "dangling-task": "悬空待办",
+  "stale-claim": "过期断言",
+  "stale-frontmatter": "页头失新",
+  "broken-link": "断开的链接",
+  "naming-drift": "命名漂移",
+  "claim-drift": "观点漂移"
+};
+function categoryLabel(category) { return CATEGORY_LABEL[category] || "知识漂移"; }
 
 /* ---------- 屏 1 · catch-up ---------- */
 function awayLabel(cu) {
@@ -212,7 +227,7 @@ function showCard() {
     post("/api/presented", { cardId: c.id }); // 卡实际上屏 → 静默计时起点
   }
   var html = '<div class="card">' +
-    '<div class="meta"><span class="chip">' + esc(c.category) + "</span>" +
+    '<div class="meta"><span class="chip" title="' + esc(c.category) + '">' + esc(categoryLabel(c.category)) + "</span>" +
     (c.stakes && STAKES_LABEL[c.stakes] ? '<span class="chip">' + STAKES_LABEL[c.stakes] + "</span>" : "") +
     (c.estSeconds ? "<span>约 " + c.estSeconds + " 秒</span>" : "") +
     '<span style="margin-left:auto">第 ' + (idx + 1) + " / " + queue.length + " 张</span></div>" +
@@ -239,7 +254,8 @@ function showCard() {
     '<button data-choice="reject"><kbd>r</kbd>拒绝</button>' +
     '<button class="ghost" id="fix">输入修正…</button>' +
     '<button class="ghost" id="ask"><kbd>q</kbd>问一句…</button></div>' +
-    '<input id="note" class="notebox" placeholder="为什么?(可选——park/reject 的理由是最珍贵的 taste 数据)">' +
+    '<input id="note" class="notebox" placeholder="为什么？（可选；搁置时写下缘由 = 转交给你的 agent 复查）">' +
+    '<p id="focus-hint" class="focus-hint" hidden>改内容 · q 问一句 · 搁置或拒绝时说理由 · u 撤销</p>' +
     '<div id="msg"></div><div id="corr"></div>';
   html += '<details><summary>证据（展开核查）</summary>';
   for (var i = 0; i < c.evidence.length; i++) {
@@ -261,22 +277,65 @@ function showCard() {
   view.innerHTML = html;
   var btns = view.querySelectorAll("button[data-choice]");
   for (var k = 0; k < btns.length; k++) {
-    btns[k].onclick = (function (ch) { return function () { decide(ch, null); }; })(btns[k].getAttribute("data-choice"));
+    btns[k].onclick = (function (ch) { return function () { decideFromGesture(ch); }; })(btns[k].getAttribute("data-choice"));
   }
   document.getElementById("fix").onclick = function () { renderCorrection(c); };
   document.getElementById("ask").onclick = function () { renderAsk(c); };
 }
+
+function panelDraft(box) {
+  var panel = box && box.querySelector("[data-panel]");
+  if (!panel) return { kind: "", dirty: false, note: "", hunks: [] };
+  if (panel.getAttribute("data-panel") === "ask") {
+    var q = document.getElementById("ask-q");
+    var question = q ? q.value.trim() : "";
+    return { kind: "ask", dirty: !!question, note: question ? "原本想问：" + question : "", hunks: [] };
+  }
+  var hunks = [];
+  var changed = false;
+  var tas = box.querySelectorAll("textarea[data-hunk]");
+  for (var i = 0; i < tas.length; i++) {
+    var pos = Number(tas[i].getAttribute("data-hunk"));
+    var orig = queue[idx].diff.hunks[pos];
+    var edited = { before: orig.before, after: tas[i].value };
+    if (orig.locator) edited.locator = orig.locator;
+    if (edited.after !== orig.after) changed = true;
+    hunks.push(edited);
+  }
+  var noteEl = document.getElementById("corr-note");
+  var note = noteEl ? noteEl.value.trim() : "";
+  var draftNote = note;
+  if (changed) {
+    var changedText = [];
+    for (var j = 0; j < hunks.length; j++) {
+      if (hunks[j].after !== queue[idx].diff.hunks[j].after) changedText.push(hunks[j].after);
+    }
+    draftNote = (note ? note + "\\n" : "") + "未采用的修正草稿：" + changedText.join("\\n---\\n");
+  }
+  return { kind: "correction", dirty: changed || !!note, note: draftNote, correctionNote: note, hunks: hunks, changed: changed };
+}
+
+function mayReplacePanel(box) {
+  var draft = panelDraft(box);
+  return !draft.dirty || window.confirm("这段还没送出，确定丢掉并收起？");
+}
+
+function closePanel(box) {
+  if (mayReplacePanel(box)) box.innerHTML = "";
+}
+
 /* #21 question 通道:correction 的双胞胎——correction 改 diff,question 改 context。
    发问不落子:卡退回待补态,下一轮 run 带着世界层解释重新出现(同指纹,不算重复)。 */
 function renderAsk(c) {
   var box = document.getElementById("corr");
-  box.innerHTML = '<div class="correction">' +
+  if (!mayReplacePanel(box)) return;
+  box.innerHTML = '<div class="correction" data-panel="ask">' +
     '<p class="muted">哪里没说清?问一句。这张卡先退回去,下一轮扫描会带着解释重新出现——不落子,不催你。</p>' +
     '<textarea id="ask-q" rows="2" placeholder="例:这件事在我的世界里对应什么?"></textarea>' +
     '<div class="actions"><button class="primary" id="ask-send">发问,先不落子</button>' +
     '<button class="ghost" id="ask-cancel">收起</button></div></div>';
   document.getElementById("ask-q").focus();
-  document.getElementById("ask-cancel").onclick = function () { box.innerHTML = ""; };
+  document.getElementById("ask-cancel").onclick = function () { closePanel(box); };
   document.getElementById("ask-send").onclick = function () {
     var q = document.getElementById("ask-q").value.trim();
     if (!q) return;
@@ -294,37 +353,51 @@ function renderAsk(c) {
 }
 function renderCorrection(c) {
   var box = document.getElementById("corr");
-  var html = '<div class="correction"><p class="muted">修正 diff(编辑替换后的内容;before 必须原样匹配文件):</p>';
+  if (!mayReplacePanel(box)) return;
+  var html = '<div class="correction" data-panel="correction"><h2>哪里不对？</h2>' +
+    '<p class="muted">直接改成你想要的样子。</p>';
   for (var i = 0; i < c.diff.hunks.length; i++) {
     var h = c.diff.hunks[i];
-    html += (h.locator ? '<p class="muted">@@ ' + esc(h.locator) + " @@</p>" : "") +
-      '<div class="before">- ' + esc(h.before) + "</div>" +
-      '<textarea data-hunk="' + i + '" rows="2">' + esc(h.after) + "</textarea>";
+    html += '<p class="field-label">改后的样子' + (c.diff.hunks.length > 1 ? " · 第 " + (i + 1) + " 处" : "") + "</p>" +
+      '<textarea data-hunk="' + i + '" rows="2">' + esc(h.after) + "</textarea>" +
+      '<details><summary>原样（展开对照）</summary><div class="before">' + esc(h.before) + "</div></details>";
   }
-  html += '<input id="corr-note" placeholder="一句话说明为什么改(可空;这是 taste 的原料)">' +
-    '<div class="actions"><button class="primary" id="corr-accept">以修正后内容接受</button>' +
+  html += '<input id="corr-note" placeholder="想补一句原因？（可选）">' +
+    '<div class="actions"><button class="primary" id="corr-accept">按这个改后接受</button>' +
+    '<button id="corr-original" hidden>原样接受，字留作备注</button>' +
     '<button class="ghost" id="corr-cancel">收起</button></div></div>';
   box.innerHTML = html;
-  document.getElementById("corr-cancel").onclick = function () { box.innerHTML = ""; };
-  document.getElementById("corr-accept").onclick = function () {
-    var hunks = [];
-    var tas = box.querySelectorAll("textarea[data-hunk]");
-    for (var j = 0; j < tas.length; j++) {
-      var orig = c.diff.hunks[Number(tas[j].getAttribute("data-hunk"))];
-      var edited = { before: orig.before, after: tas[j].value };
-      if (orig.locator) edited.locator = orig.locator;
-      hunks.push(edited);
-    }
-    var note = document.getElementById("corr-note").value.trim();
-    decide("accept", { hunks: hunks, note: note || undefined });
+  document.getElementById("corr-cancel").onclick = function () { closePanel(box); };
+  document.getElementById("corr-note").oninput = function () {
+    document.getElementById("corr-original").hidden = !this.value.trim();
   };
+  document.getElementById("corr-accept").onclick = function () { submitCorrection(); };
+  document.getElementById("corr-original").onclick = function () {
+    var draft = panelDraft(box);
+    decide("accept", null, draft.note);
+  };
+  box.querySelector("textarea[data-hunk]").focus();
+}
+
+function submitCorrection() {
+  var draft = panelDraft(document.getElementById("corr"));
+  decide("accept", { hunks: draft.hunks, note: draft.correctionNote || undefined });
+}
+
+function decideFromGesture(choice) {
+  var draft = panelDraft(document.getElementById("corr"));
+  if (draft.kind === "correction" && choice === "accept" && draft.changed) return submitCorrection();
+  decide(choice, null, draft.dirty ? draft.note : "");
 }
 var advanceTimer = null; // #24 撤销窗口:toast 停 4s,期间可撤,之后自动进下一张
-function decide(choice, correction) {
+function decide(choice, correction, panelNote) {
   var c = queue[idx];
   var body = { cardId: c.id, choice: choice };
+  var notes = [];
   var noteEl = document.getElementById("note");
-  if (noteEl && noteEl.value.trim()) body.note = noteEl.value.trim(); // #24:理由随任意手势
+  if (noteEl && noteEl.value.trim()) notes.push(noteEl.value.trim()); // #24:理由随任意手势
+  if (panelNote) notes.push(panelNote);
+  if (notes.length) body.note = notes.join("\\n");
   if (correction) body.correction = correction;
   post("/api/decide", body).then(function (r) {
     var msg = document.getElementById("msg");
@@ -334,7 +407,7 @@ function decide(choice, correction) {
     }
     decided++;
     // 落子已生效:封住手势,防止撤销窗口期的二次按键
-    var btns = view.querySelectorAll("button[data-choice], #fix, #ask");
+    var btns = view.querySelectorAll("button[data-choice], #fix, #ask, #corr button, #corr textarea, #corr input");
     for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
     var took = r.data.latencyMs != null ? " · " + fmtSecs(r.data.latencyMs) : ""; // #19:本次用时上屏
     var text = choice === "accept"
@@ -476,11 +549,22 @@ document.addEventListener("keydown", function (ev) {
   var gesture = view.querySelector("button[data-choice]");
   if (!gesture || gesture.disabled) return;
   var map = { a: "accept", p: "park", r: "reject" };
-  if (map[ev.key]) { ev.preventDefault(); decide(map[ev.key], null); }
+  if (map[ev.key]) { ev.preventDefault(); decideFromGesture(map[ev.key]); }
   if (ev.key === "q") { // #21:问一句
     var ask = document.getElementById("ask");
     if (ask) { ev.preventDefault(); ask.click(); }
   }
+});
+
+view.addEventListener("focusin", function (ev) {
+  if (focusHintShown) return;
+  var t = ev.target;
+  if (!t || (t.tagName !== "TEXTAREA" && t.tagName !== "INPUT")) return;
+  focusHintShown = true;
+  var hint = document.getElementById("focus-hint");
+  if (!hint) return;
+  hint.hidden = false;
+  setTimeout(function () { if (hint.isConnected) hint.hidden = true; }, 6000);
 });
 
 /* ---------- wake-catchup(#16):先渲染旧状态,后台增量刷新 ---------- */

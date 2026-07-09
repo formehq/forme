@@ -93,3 +93,6 @@ SSOT 最锋利命题是 notice when your thinking has changed,而 12 张真卡�
 
 **2026-07-08 · 日期语义 = 时间戳存 UTC ISO 不动;date-only 按本地日切;用户面渲染一律本地 · assumed**
 #25 现象:18:00 PT 的 run 在 Metrics 里标成"明天"(UTC 日期)。裁定:①存储层时间戳(事件 ts、卡 createdAt/revisedAt、信封 at)保持完整 ISO(UTC),不动;②**date-only 字段的语义是「用户的哪一天」**——run-metrics `date`、State Diff 文件名/周窗口按本地日切(`localDate()`,一个助手全库共用);周日 18:00 的 State Diff 文件名必须是周日,不是 UTC 的周一;③用户面渲染(Metrics 行日期、队列截至标注)一律本地时区。旧行(UTC 日期)不回改——日志只追加,读取宽容。讽刺点自查通过:产品刚出过一张纠 vault 日期语义漂移的卡,自己不能犯同类错。(issue #25)
+
+**2026-07-09 · correction 修承诺不修补丁;未提交文字不得静默消失 · assumed**
+源自第四次卡面反馈与五卡复盘(#26-A/#27)。人面裁定:①category slug 全部中文化,未知类别回落「知识漂移」;②修正面板标题 =「哪里不对?」,主路只让用户改「改后的样子」纯文本,`before`/locator/hunk 匹配均降到折叠对照或系统内部;③有说明文字时拆成两个明确意图——「按这个改后接受」产生 correction,「原样接受,字留作备注」只写 decision.note;④首次聚焦提示只活在当前页面会话,不使用 localStorage,不制造 UI 私有真值;⑤收起/面板切换遇到草稿先确认,a/p/r 按钮和键盘手势都先读取面板草稿:accept 应用已编辑内容,park/reject 或问句草稿转写为 decision.note,任何路径都不静默丢字;⑥MVP 不加第四手势,park + note 仍是转交信号,由 vault agent 周会复查。事件 schema 不变;#26-B 的自然语言 `revise` 事件仍留待与富卡同班车。(issue #26-A/#27)
