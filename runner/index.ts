@@ -10,7 +10,10 @@ import { assembleCard } from "./card.ts";
 import { loadSuppressionList } from "./suppress.ts";
 import { loadTasteRuleLines } from "./taste.ts";
 import { appendRunMetric, lastRunHead } from "./metrics.ts";
-import type { AgentCard } from "./types.ts";
+import { checkLegibility } from "./legibility.ts";
+import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type RefaceCause } from "./reface.ts";
+import { checkCard } from "../schema/validate.ts";
+import type { AgentCard, Card } from "./types.ts";
 
 /**
  * Forme runner (W1, Codex path). Reads the vault git-delta, asks a READ-ONLY
@@ -64,6 +67,62 @@ if (minHours > 0) {
 const at = new Date().toISOString();
 const runId = `run_${Date.now().toString(36)}_${randomBytes(3).toString("hex")}`;
 
+/** 重写一张卡的脸并落盘(#21;question 与闸打回共用)。true = 已入列。 */
+function refaceAndWrite(card: Card, cause: RefaceCause): boolean {
+  const face = runRefaceCodex(vault!, card, cause, { runId, model });
+  const grafted = graftFace(card, face, cause, new Date().toISOString());
+  if (!grafted) {
+    console.log(`  reface 弃 ${card.id} — 重写结果不可用(标题或答案为空)`);
+    return false;
+  }
+  const v = checkCard(grafted);
+  if (!v.valid) {
+    console.log(`  reface 弃 ${card.id} — ${v.errors.slice(0, 2).join("; ")}`);
+    return false;
+  }
+  const gate = checkLegibility(grafted as unknown as Card);
+  if (!gate.ok) {
+    console.log(`  reface 弃 ${card.id} — 重写后仍命中账本语域「${gate.hit}」`);
+    return false;
+  }
+  writeFileSync(join(outDir, "cards", `${card.id}.json`), JSON.stringify(grafted, null, 2) + "\n");
+  writeFileSync(join(outDir, "cards", `${card.id}.md`), cardToMarkdown(grafted as unknown as Card));
+  return true;
+}
+
+// #21 question 通道:先答上一轮的问题,再找新漂移。用户发问 = 主动拉取,
+// 优先级最高;这个阶段与扫描窗口无关(窗口为空也要答)。已决指纹不回场。
+let refaced = 0;
+const pendingQuestions = unansweredQuestions(join(outDir, "decisions.jsonl"));
+if (pendingQuestions.length) {
+  if (dryRun) {
+    console.log(`questions: ${pendingQuestions.length} 张卡在等世界层解释(dry-run 跳过重写)`);
+  } else {
+    console.log(`questions: ${pendingQuestions.length} 张卡在等世界层解释(#21)`);
+    for (const q of pendingQuestions.slice(0, maxCards)) {
+      const cardPath = join(outDir, "cards", `${q.cardId}.json`);
+      if (!existsSync(cardPath)) continue;
+      let card: Card;
+      try {
+        card = JSON.parse(readFileSync(cardPath, "utf8")) as Card;
+      } catch {
+        continue;
+      }
+      if (!needsReface(card, q)) continue;
+      try {
+        if (refaceAndWrite(card, { kind: "question", question: q.question })) {
+          refaced++;
+          console.log(`  reface ${q.cardId} — 已带解释回队列(问:「${q.question.slice(0, 40)}」)`);
+        } else {
+          console.log(`  卡 ${q.cardId} 继续待补,下轮重试`);
+        }
+      } catch (e) {
+        console.log(`  reface 出错 ${q.cardId} — ${String(e instanceof Error ? e.message : e)}`);
+      }
+    }
+  }
+}
+
 // #14:增量窗口默认「上次成功 run 以来」(锚点 = run-metrics 最后记录的 HEAD),
 // 窗口自动等于 run 节律,vault 一天多次 commit 也不漏文件(硬约束 #3 的本意)。
 // --commits 显式传参 = 手动覆盖;锚点缺失(首跑/旧数据)或失效(rebase)→ 回退。
@@ -81,8 +140,17 @@ if (anchor && isUsableAnchor(vault, anchor)) {
     : `last ${commits} commits (no usable anchor)`;
 }
 if (files.length === 0) {
-  // 日常静默结果(如窗口里只有 98_Forme/ 自己的产物),不是错误
-  console.log(`forme runner: no knowledge-layer .md in window ${windowDesc} — nothing to scan`);
+  // 日常静默结果(如窗口里只有 98_Forme/ 自己的产物),不是错误。
+  // 但 reface 花了真 codex → 落一行数据点,让额度 mtime 时钟诚实走表。
+  if (refaced > 0) {
+    appendRunMetric(metricsPath, {
+      v: "0", date: at.slice(0, 10), runId,
+      proposed: 0, suppressed: 0, presented: 0, rejected: 0, dup: 0,
+      head, refaced,
+    });
+  }
+  console.log(`forme runner: no knowledge-layer .md in window ${windowDesc} — nothing to scan` +
+    (refaced ? ` (refaced ${refaced})` : ""));
   process.exit(0);
 }
 console.log(`forme runner ${runId}`);
@@ -112,11 +180,18 @@ const prompt = [
   "- title:一句话中文标题(用户第一眼读的东西)",
   "- summary:一行上下文(是什么),没有就 null",
   "- whyNow:为什么现在出现这张卡(出身/时机,一句人话),可 null",
+  "- stakes:这张卡动的是什么——reversible-ledger(纯账面修正:frontmatter、断链、命名)/ real-world-action(接受后影响 vault 之外的事:对外承诺、要做的事、时间点)/ thought(观点或立场层面的冲突,拿不准就别用)",
   "- recommendationChoice + recommendationReason:你的明确建议(accept/park/reject 之一)+ 一行理由——你已经调查过了,亮明立场,别骑墙",
   "- onAccept:拍板 accept 后会发生什么的一句人话预览(别复述文件路径和回滚说明,系统会补),可 null",
   "- evidence[]:{path(vault 相对), locator(行号/字段/锚点,可 null), quote(逐字摘录,可 null), note(为何是证据,可 null)};标题里每个断言都要有证据",
   "- diff:{file(vault 相对,一张卡只改一个文件), hunks[{locator(可 null), before, after}]};before 必须是文件里逐字存在的字符串,after 是替换;before 为空串表示纯插入;保持最小改动",
   "- estSeconds:估计落子秒数,可 null",
+  "",
+  "卡面语言(v0.2,世界层优先——**卡面说事,diff 说账**):",
+  "- title / summary / whyNow 必须说**用户世界里的事**:什么事没落地、卡着谁、什么时间点要用;哪一行怎么改、在哪个列表里,这些账本细节一律降到 onAccept 与 diff,不许出现在世界层段(会被机器闸检查,命中账本手术词即打回)。",
+  "- 反例(真实打回样本):「社媒号确认被塞在已完成的 handle 任务里」——只说了列表手术,没说这件事是什么。",
+  "- 正例:「@formehq 社媒号还没确认,8.15 发布要用」——先说世界里什么事悬着,手术细节留给 diff。",
+  "- 丰俭随 stakes:reversible-ledger 卡面保持瘦(10 秒可决,一句话账面事实即可);real-world-action 必须给足世界层背景;不要全面加厚——大多数卡应该 10 秒可决。",
   "",
   ...(tasteRules.length
     ? ["用户已确立的 taste 规则(提案须符合,拿不准就别提):", ...tasteRules.map((r) => `- ${r}`), ""]
@@ -157,6 +232,7 @@ let written = 0;
 let dup = 0;
 let rejected = 0;
 let suppressed = 0;
+let illegible = 0;
 
 for (const ac of agentCards) {
   const { card, serializable, validation } = assembleCard(ac, { runId, at, model });
@@ -177,6 +253,29 @@ for (const ac of agentCards) {
     console.log(`  dup    ${card.id} (${ac.category})`);
     continue;
   }
+
+  // #21 世界层闸:账本语域上了世界层段(账本卡豁免)→ 同轮一次重写机会,
+  // 仍不过即弃——漂移还在,下轮在世界层 prompt 下重提,不硬塞难读的卡。
+  const gate = checkLegibility(card);
+  if (!gate.ok) {
+    illegible++;
+    console.log(`  illegible ${card.id} (${ac.category}) — 账本语域「${gate.hit}」上了世界层段`);
+    if (!dryRun) {
+      try {
+        if (refaceAndWrite(card, { kind: "gate", hit: gate.hit! })) {
+          written++;
+          console.log(`  rewrite ${card.id} — 世界层重写通过,已入列`);
+          continue;
+        }
+      } catch (e) {
+        console.log(`  rewrite 出错 ${card.id} — ${String(e instanceof Error ? e.message : e)}`);
+      }
+    }
+    rejected++;
+    console.log(`  reject ${card.id} — 卡面不合格${dryRun ? "(dry-run 不重写)" : ",重写未通过"};弃,下轮重提`);
+    continue;
+  }
+
   if (dryRun) {
     written++;
     console.log(`  [dry]  ${card.id} (${ac.category}) — ${ac.title}`);
@@ -199,9 +298,14 @@ if (!dryRun) {
     rejected,
     dup,
     head, // #14:下轮增量窗口的锚点(本轮扫描时的 vault HEAD)
+    ...(illegible ? { illegible } : {}), // #21:世界层闸命中数(legibility 曲线原料)
+    ...(refaced ? { refaced } : {}), // #21:question 通道重写数
   });
 }
 
 console.log(
-  `done: ${written} ${dryRun ? "would-write" : "written"}, ${suppressed} suppressed, ${dup} dup, ${rejected} rejected → ${join(outDir, "cards")}`,
+  `done: ${written} ${dryRun ? "would-write" : "written"}, ${suppressed} suppressed, ${dup} dup, ${rejected} rejected` +
+    (illegible ? `, ${illegible} illegible` : "") +
+    (refaced ? `, ${refaced} refaced` : "") +
+    ` → ${join(outDir, "cards")}`,
 );

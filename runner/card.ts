@@ -1,6 +1,7 @@
 import { hostname } from "node:os";
 import { checkCard, type ValidationResult } from "../schema/validate.ts";
 import { fingerprint } from "../schema/fingerprint.ts";
+import { effectiveStakes } from "./legibility.ts";
 import type { AgentCard, Card, Evidence, Hunk, Option, Origin, Recommendation } from "./types.ts";
 
 /**
@@ -77,6 +78,8 @@ export function assembleCard(ac: AgentCard, ctx: AssembleCtx): Assembled {
     fingerprint: fp,
     estSeconds: ac.estSeconds ?? undefined,
     createdAt: ctx.now ?? new Date().toISOString(),
+    // stakes 消毒(#21):申报合法即用,否则按 category 派生——新卡永远带值
+    stakes: effectiveStakes({ category: ac.category, stakes: ac.stakes }),
   };
   const serializable = clean(card as unknown as Record<string, unknown>);
   return { card, serializable, validation: checkCard(serializable) };

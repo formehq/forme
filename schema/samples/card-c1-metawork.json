@@ -54,6 +54,12 @@
     }
   ],
   "fingerprint": "ccd80563bf5d1b46a6c20aa703aa4a0d5be80c3b9439822fd3bafc16d604ce59",
+  "stakes": "real-world-action",
   "estSeconds": 15,
-  "createdAt": "2026-07-04T09:00:03Z"
+  "createdAt": "2026-07-04T09:00:03Z",
+  "revisedAt": "2026-07-04T18:20:00Z",
+  "context": {
+    "question": "这个数字过期了会影响什么?",
+    "answer": "对外讲 CCS 验证故事时引用的就是这一行——数字停在最旧快照,下一次引用就是失实。"
+  }
 }

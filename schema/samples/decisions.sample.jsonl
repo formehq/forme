@@ -4,3 +4,7 @@
 {"v":"0","ts":"2026-07-04T17:34:43-07:00","type":"decision","cardId":"card-002","fingerprint":"70a390799efbd8c634b3212bd59c6f65febc8bd2e43fa9e7ce9e29914b075c91","choice":"accept","actor":"owner","executed":"130004d","backfilled":true}
 {"v":"0","ts":"2026-07-04T17:35:00-07:00","type":"presented","cardId":"card-003","fingerprint":"8527060869c15046c953d3db137b366921301cf9bf7f4a37e1cd4d273631ee09","backfilled":true}
 {"v":"0","ts":"2026-07-04T17:35:00-07:00","type":"decision","cardId":"card-003","fingerprint":"8527060869c15046c953d3db137b366921301cf9bf7f4a37e1cd4d273631ee09","choice":"accept","actor":"owner","executed":"3e55675","backfilled":true}
+{"v":"0","ts":"2026-07-04T18:00:00-07:00","type":"presented","cardId":"card-004","fingerprint":"9b3c1a7e5d2f4860a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718","backfilled":true}
+{"v":"0","ts":"2026-07-04T18:01:10-07:00","type":"question","cardId":"card-004","fingerprint":"9b3c1a7e5d2f4860a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718","question":"这张卡说的事在我的世界里对应什么?","backfilled":true}
+{"v":"0","ts":"2026-07-05T09:00:00-07:00","type":"presented","cardId":"card-004","fingerprint":"9b3c1a7e5d2f4860a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718","backfilled":true}
+{"v":"0","ts":"2026-07-05T09:00:20-07:00","type":"decision","cardId":"card-004","fingerprint":"9b3c1a7e5d2f4860a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718","choice":"accept","actor":"owner","executed":"a1b2c3d","backfilled":true}

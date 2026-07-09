@@ -138,6 +138,34 @@
       "type": "integer",
       "minimum": 0
     },
+    "stakes": {
+      "description": "Card face v0.2 (#21): what accepting this card touches, driving how rich the face must be. 'reversible-ledger' = pure bookkeeping fix, face stays thin; 'real-world-action' = affects things outside the vault, face must open in world-layer terms; 'thought' = a stance/claim conflict, thickest face (#18). Declared by the agent, sanitized by Forme code (invalid/missing → derived from category).",
+      "type": "string",
+      "enum": ["reversible-ledger", "real-world-action", "thought"]
+    },
+    "revisedAt": {
+      "description": "Card face v0.2 (#21): when Forme last rewrote the face of this card (legibility-gate rewrite or question answer). id/fingerprint/diff never change on a reface. A card with an unanswered question (question event newer than revisedAt) is awaiting context and leaves the decidable queue until refaced.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "context": {
+      "description": "Card face v0.2 (#21): the question-channel round trip. Set when the card was re-faced in answer to the user's question; rendered as the 你问过 block so the vault mirror stays self-contained.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "answer"],
+      "properties": {
+        "question": {
+          "description": "The user's question, verbatim (also recorded as a question event in decisions.jsonl).",
+          "type": "string",
+          "minLength": 1
+        },
+        "answer": {
+          "description": "The agent's direct one-line answer, in world-layer terms.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "createdAt": {
       "description": "When Forme wrote this card to disk.",
       "type": "string",

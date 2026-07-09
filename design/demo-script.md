@@ -47,8 +47,8 @@
 ### 拍 4 · 单键落子,time-to-decision 计数(25s)
 
 - **说**:"One key. Applied, committed, reversible. It silently timed that decision — my median is seconds, not mornings."(一个键:已应用、已提交、可回滚。它悄悄计了时——我的中位决策是秒级,不是一上午。)
-- **屏**:按 `a` → toast「已接受 · commit xxx · 可回滚」→ 自动进下一张。
-- **现状**:✅ 手势 + 回执 + latencyMs 静默入账(首批真值 07-08:123s / 15s / 18s);**缺口 G1:计时不上屏**(落子回执只显示 commit,不显示本次用时;也没有中位数/曲线可指)→ W4 Metrics。
+- **屏**:按 `a` → toast「已接受 · commit xxx · 12 秒 · 可回滚」→ 自动进下一张;讲中位数时切 Metrics 视图(时延分布条 + 重复率曲线)。
+- **现状**:✅ 全通(#19 已建,07-08):toast 带本次用时;Metrics 视图有中位数 + 最近 20 次分布 + 重复率逐轮曲线可指。949s 离群条本身就是拍 6 的 legibility 故事素材(它逼出了 #21)。
 
 ### 拍 5 · State Diff 一屏叙事(25s)
 
@@ -59,8 +59,8 @@
 ### 拍 6 · Taste 面板(30s,demo 高潮)
 
 - **说**:"And this rule? It learned it from my decision history — with the receipts. Duplicate proposals trend to zero by construction; shadow agreement is how it earns autonomy, one category at a time."(这条规则是它从我的决策史里自己学到的,带凭证;重复率靠工程归零,影子一致率是它挣得自动化的方式。)
-- **屏**:**理想**=Taste 面板(当前规则 + 待确认规则卡 + 重复率曲线↓ + 影子一致率↑);**当前 fallback**=Obsidian 打开 `Taste Rules.md`(4 条人话规则 + 降层账本,真实存在)。
-- **现状**:⚠️ 规则与曲线的**数据**都真实在盘(Taste Rules.md、run-metrics 6 个点、latencyMs 起转);**缺口 G2:console 无 Taste 面板视图**(屏 4 确认交互 + 曲线上屏)→ W5。
+- **屏**:**理想**=Taste 面板(当前规则 + 待确认规则卡 + 重复率曲线↓ + 影子一致率↑);**当前 fallback**=Metrics 视图(重复率曲线已上屏,#19)+ Obsidian 打开 `Taste Rules.md`(4 条人话规则 + 降层账本,真实存在)。
+- **现状**:⚠️ 曲线半上屏(重复率在 Metrics 视图可指,#19);**缺口 G2:console 无 Taste 面板视图**(屏 4 规则确认交互 + 影子一致率)→ W5。
 
 ### 收尾(10s)
 
@@ -71,10 +71,10 @@
 
 | # | 缺口 | 影响拍 | 归属 |
 | --- | --- | --- | --- |
-| G1 | time-to-decision 上屏:落子回执显示本次用时;Metrics 卡(时延中位数 + 重复率曲线可视化) | 拍 4(半缺)拍 6(曲线) | **W4**(issue 另开,见 #17 comment) |
-| G2 | Taste 面板 console 视图:当前规则 + 屏 4 规则确认卡 + 影子一致率/重复率曲线 | 拍 6(fallback 走 md 文件) | **W5**(issue 另开,见 #17 comment) |
+| ~~G1~~ | ~~time-to-decision 上屏 + Metrics 卡~~ **已收(#19,07-08)**:toast 带用时,Metrics 视图有中位数/分布/重复率曲线 | 拍 4 ✅ 拍 6(曲线部分)✅ | ~~W4~~ 完成 |
+| G2 | Taste 面板 console 视图:当前规则 + 屏 4 规则确认卡 + 影子一致率 | 拍 6(fallback = Metrics 曲线 + md 文件) | **W5**(#20) |
 
-**当前可走通:开场 + 拍 1/2/3/5 完整,拍 4 除计时上屏、拍 6 走 md fallback——≥4 拍达标(#17 验收)。**
+**当前可走通:开场 + 拍 1/2/3/4/5 完整,拍 6 走 Metrics 曲线 + md fallback——5 拍达标(#17 验收线之上)。**
 
 ## 排练检查单(每次真机排练前)
 

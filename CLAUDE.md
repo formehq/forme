@@ -47,9 +47,9 @@
 
 ## 仓库现状(随进度更新)
 
-- **已建**:`schema/`(卡契约 v0 + v0.1 五段字段 —— #4、#12)· `runner/`(漂移卡管道:codex 真跑 → AJV 门 → 指纹抑制 → 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12;增量窗口 = 上次 run 的 HEAD 锚点 —— #14;taste 提炼器 `taste.ts` —— #10;State Diff 生成器 `state-diff.ts` —— #11)· `console/`(localhost 单页决策台:三原语渲染 + a/p/r + correction + diff 应用回执 + 事件过 AJV 门落 jsonl —— #15;wake-catchup:旧状态秒渲 +「截至 X」+ 开页触发后台增量 run —— #16)· `launchd/`(日跑 + 周日 State Diff + console 常驻三 job,已装机 —— #9、#11、#16)· `docs/` · `design/`(交互稿 + demo 剧本 v0 —— #17)· 工具链(Node 原生 TS,无构建步骤)
-- **未建**:Metrics 上屏(#19,W4)· Taste 面板/屏 4(#20,W5)· 呈现的接受率自适应节流(硬约束 #2 完整形)· un-park · 相似历史注入
-- 一句话:**七步生命周期已在真实使用中闭合(07-08 Zayn console 首个真 session:3 卡 3 accept,latency 真值起转)**;待验:开盖 ≤10s 秒表 3 天(#16)+ 周日 07-12 第一张自动 State Diff。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
+- **已建**:`schema/`(卡契约 v0 + v0.1 五段 + v0.2 stakes/问答 —— #4、#12、#21)· `runner/`(漂移卡管道:codex 真跑 → AJV 门 → 指纹抑制 → 世界层闸(卡面说事,diff 说账;打回给一次 reface)→ 五段镜像落 `98_Forme/cards/` + run-metrics —— #5/#9/#12/#21;增量窗口 = 上次 run 的 HEAD 锚点 —— #14;question 阶段先于扫描答上一轮的问 —— #21;taste 提炼器 `taste.ts` —— #10;State Diff 生成器 `state-diff.ts` —— #11)· `console/`(localhost 单页决策台:四视图(catch-up / 五段卡 / State Diff / Metrics)+ a/p/r + correction + 问一句(question 事件,卡转待补 context 态)+ diff 应用回执 + toast 带用时 + 事件过 AJV 门落 jsonl —— #15/#19/#21;wake-catchup:旧状态秒渲 +「截至 X」+ 开页触发后台增量 run —— #16)· `launchd/`(日跑 + 周日 State Diff + console 常驻三 job,已装机 —— #9、#11、#16)· `docs/` · `design/`(交互稿 + demo 剧本 v0 —— #17)· 工具链(Node 原生 TS,无构建步骤)
+- **未建**:Taste 面板/屏 4(#20,W5)· 思想卡(#18,stakes=thought 地基已就位)· 呈现的接受率自适应节流(硬约束 #2 完整形)· un-park · 相似历史注入
+- 一句话:**七步生命周期已在真实使用中闭合;66bcc 949s 的 legibility 定量证据已长成机制(世界层闸 + question 通道 + Metrics 上屏 —— #21/#19)**;待验:下一批行动类卡回到 ~15s(#21 基线)+ question 真实往返 + 开盖 ≤10s 秒表 3 天(#16)+ 周日 07-12 第一张自动 State Diff。详见 `docs/ARCHITECTURE.md` 的"能做/不能做"。
 
 ## 常用命令
 

@@ -33,9 +33,14 @@
 | `recommendation` | object? | **v0.1(#12)**:`{ choice: accept/park/reject, reason }`——agent 亮明的建议 + 一行理由。**影子模式第一形态**:与实际 choice 的对照 = W5 一致率度量;只呈现,绝不自动执行。agent 侧拍平为两个 nullable 字段回传,由 Forme 代码重建 + 消毒(choice 非法即整体丢弃) |
 | `onAccept` | string? | **v0.1(#12)**:拍板后会发生什么的一句人话预览;渲染器永远补确定性事实行(目标文件、hunk 数、git 可回滚) |
 | `estSeconds` | int? | agent 估的 time-to-decision(秒)。仅参考;真实延迟静默计量 |
+| `stakes` | enum? | **v0.2(#21)**:这张卡动的是什么,驱动卡面丰俭与世界层闸豁免。`reversible-ledger`(纯账面修正,卡面保持 10 秒瘦、豁免闸)/ `real-world-action`(影响 vault 之外的事,卡面必须世界层开口)/ `thought`(观点冲突,最厚,#18)。agent 申报 + 代码消毒(非法/缺失按 category 派生;thought 只认显式申报) |
+| `revisedAt` | date-time? | **v0.2(#21)**:卡面最近一次被 reface 重写的时刻(闸打回重写或回答问题)。**id/指纹/diff 在 reface 中永不变**。有未答问题且 revisedAt 早于提问 = 卡在「待补 context」态,退出可决队列 |
+| `context` | object? | **v0.2(#21)**:question 通道的往返 `{question, answer}`——用户的原话 + agent 的一句直接回答,渲染为「你问过」段(镜像自含,硬约束 #4) |
 | `createdAt` | date-time | Forme 写盘此卡的时刻 |
 
 > **卡面五段(镜像渲染次序,#12)**:①是什么(title+summary)②为什么现在(whyNow)③建议(recommendation)④拍板后会发生什么(onAccept+事实行)→ 落子手势 → ⑤证据与 diff 折叠为支撑层(Obsidian 可折叠 callout)。三个新字段全部可选、additive——`schemaVersion` 仍为 `"0"`,v0 卡照常渲染(缺段即省略)。
+>
+> **v0.2 语言纪律(#21):卡面说事,diff 说账**——title/summary/whyNow 必须说用户世界里的事;账本手术语言(「已完成项」「拆成待办」…)命中即被世界层闸(`runner/legibility.ts`)打回,同轮一次 reface 重写机会,仍不过即弃。纯账本卡(stakes=reversible-ledger)豁免。v0.2 三字段同样可选、additive。
 
 ### evidence[] 项
 `{ path(必填,vault 相对), locator?(如 "L283" / "frontmatter.status" / "#anchor"), quote?(逐字摘录), note?(一句话为何是证据) }`
@@ -64,13 +69,14 @@ fingerprint = sha256( category \0 diff.file \0 diffHash )
 
 ## decisions.jsonl(decision-event.schema.json)——只追加事件日志
 
-taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerprint`;category、信封(origin/from/role)等卡侧信息住卡里,不进事件(join key = cardId,分组 key = fingerprint)。每行一个事件,三型:
+taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerprint`;category、信封(origin/from/role)等卡侧信息住卡里,不进事件(join key = cardId,分组 key = fingerprint)。每行一个事件,四型:
 
 | type | 何时 | 追加字段 |
 | --- | --- | --- |
 | `presented` | **卡在 console 实际上屏那一刻**(#15 定案:客户端上报,启动静默计时;不是「写入队列」也不是「打开页面」) | —— |
 | `decision` | 用户落子 | `choice(a/p/r)` · `actor` · `latencyMs`(live 必填=**最近一次** presented→decision 静默延迟)· `executed?`(accept 时应用 diff 的 commit hash,执行凭证) |
 | `correction` | accept 前就地改了 diff(事件先于 decision 落盘) | `correction{ hunks[], note? }` |
+| `question` | **v0.2(#21)**:用户发问而非落子(correction 的双胞胎——correction 改 diff,question 改 context)。**不是 decision**:指纹不进已决名单;卡转入待补 context 态,下一轮 run reface 后同指纹回场(不算重复)。事件本身 = 「卡面哪里不 legible」的度量 | `question`(原话) |
 
 公共信封:`{ v:"0", ts, type, cardId, fingerprint }`(`ts` 完整 ISO,latency 由 presented→decision 的 ts 差算)。
 
@@ -85,10 +91,10 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 重复率曲线的原始数据,住 `98_Forme/run-metrics.jsonl`,每**真实完成**的 run 追加一行(dry-run 不落点);写入方 `runner/metrics.ts`,形状由其 `RunMetric` 接口定义(无独立 JSON Schema——运行时遥测,不是卡/事件契约):
 
 ```
-{ v:"0", date(UTC YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, backfilled? }
+{ v:"0", date(UTC YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, illegible?, refaced?, backfilled? }
 ```
 
-`proposed = suppressed + presented + rejected + dup`(账要对得上)。此处 `presented` = 写入 `cards/` 队列数(入列;**呈现的正规语义已定案在 decisions.jsonl 的 presented 事件**,见上)。`head`(#14)= 本轮扫描时的 vault HEAD 短 hash,下轮增量窗口的锚点(`git log <head>..HEAD`);旧行无此字段 → 回退 `--commits` 窗口。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟。
+`proposed = suppressed + presented + rejected + dup`(账要对得上)。此处 `presented` = 写入 `cards/` 队列数(入列;**呈现的正规语义已定案在 decisions.jsonl 的 presented 事件**,见上)。`head`(#14)= 本轮扫描时的 vault HEAD 短 hash,下轮增量窗口的锚点(`git log <head>..HEAD`);旧行无此字段 → 回退 `--commits` 窗口。`illegible`(#21)= 世界层闸命中数(含被 reface 救回的;legibility 曲线原料);`refaced`(#21)= question 通道重写数——**只 reface 没扫描的 run 也落一行**(耗了真 codex,额度 mtime 时钟必须走表)。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟。
 
 ---
 

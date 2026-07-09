@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://forme.sh/schema/decision-event.schema.json",
   "title": "Forme decisions.jsonl event",
-  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Three types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit), correction (the optional in-place edit before accepting).",
+  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Four types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit), correction (the optional in-place edit before accepting), question (#21: the user asked for context instead of deciding — the card awaits a re-face; also the legibility metric).",
   "type": "object",
   "additionalProperties": false,
   "required": ["v", "ts", "type", "cardId", "fingerprint"],
@@ -18,7 +18,7 @@
     },
     "type": {
       "type": "string",
-      "enum": ["presented", "decision", "correction"]
+      "enum": ["presented", "decision", "correction", "question"]
     },
     "cardId": {
       "description": "id of the card this event is about. Join key to the card (where category + envelope live).",
@@ -76,6 +76,11 @@
         }
       }
     },
+    "question": {
+      "description": "Present on question events (#21): the user's verbatim question about this card. Not a decision — the fingerprint stays un-suppressed so the runner can re-face the card with world-layer context (same fingerprint, not a duplicate). Doubles as the 'where was this card illegible' metric.",
+      "type": "string",
+      "minLength": 1
+    },
     "backfilled": {
       "description": "true = a historical/imported record (e.g. the pre-product human-era decisions), not produced live by the runner. Backfilled decisions may omit latencyMs (untimed).",
       "type": "boolean"
@@ -96,6 +101,10 @@
     {
       "if": { "properties": { "type": { "const": "correction" } }, "required": ["type"] },
       "then": { "required": ["correction"] }
+    },
+    {
+      "if": { "properties": { "type": { "const": "question" } }, "required": ["type"] },
+      "then": { "required": ["question"] }
     }
   ]
 }

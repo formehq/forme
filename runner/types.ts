@@ -38,6 +38,9 @@ export interface Recommendation {
   reason: string;
 }
 
+// v0.2(#21):stakes 驱动卡面丰俭与世界层闸的豁免面。
+export type Stakes = "reversible-ledger" | "real-world-action" | "thought";
+
 export interface Card {
   schemaVersion: "0";
   id: string;
@@ -56,6 +59,9 @@ export interface Card {
   fingerprint: string;
   estSeconds?: number;
   createdAt: string;
+  stakes?: Stakes; // v0.2(#21):agent 申报 + 代码消毒(非法/缺失 → 按 category 派生)
+  revisedAt?: string; // v0.2(#21):卡面最近一次被重写的时刻(id/指纹/diff 不变)
+  context?: { question: string; answer: string }; // v0.2(#21):question 通道往返
 }
 
 // What codex returns under runner/agent-schema.ts (strict structured outputs:
@@ -80,4 +86,5 @@ export interface AgentCard {
     hunks: Array<{ locator: string | null; before: string; after: string }>;
   };
   estSeconds: number | null;
+  stakes: string | null; // v0.2(#21):agent 申报的 stakes 分级,代码消毒
 }

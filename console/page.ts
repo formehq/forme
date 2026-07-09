@@ -79,6 +79,16 @@ export function renderPage(): string {
   .sd h1 { margin-bottom: 18px; }
   .sd p strong { display: block; color: var(--muted); font-size: 13px; letter-spacing: .05em; margin-bottom: 2px; }
   .sd p { margin: 14px 0; }
+  .mrow { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 12.5px; color: var(--muted); }
+  .mdate { width: 42px; white-space: nowrap; }
+  .mtrack { flex: 1; display: flex; gap: 2px; align-items: center; }
+  .mbar, .seg { height: 9px; border-radius: 4px; display: block; min-width: 2px; }
+  .mbar-accept, .segp { background: var(--accent); }
+  .mbar-park { background: var(--park); }
+  .mbar-reject { background: var(--reject); }
+  .segs { background: var(--line); }
+  .mval { min-width: 64px; text-align: right; white-space: nowrap; }
+  .big { font-size: 24px; font-weight: 600; color: var(--ink); }
   code { background: var(--code); border-radius: 4px; padding: 1px 5px; font-size: .88em; font-family: ui-monospace, monospace; }
   a { color: inherit; }
 </style>
@@ -114,6 +124,12 @@ function post(path, body) {
   return fetch(path, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
     .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, data: j }; }); });
 }
+function fmtSecs(ms) { // #19:本次用时的人读形
+  var s = Math.round(ms / 1000);
+  if (s < 60) return s + " 秒";
+  return Math.floor(s / 60) + " 分 " + (s % 60) + " 秒";
+}
+var STAKES_LABEL = { "reversible-ledger": "账本", "real-world-action": "行动", "thought": "思想" };
 
 /* ---------- 屏 1 · catch-up ---------- */
 function awayLabel(cu) {
@@ -142,6 +158,7 @@ function renderCatchup() {
     cu.runs.runs + " 轮扫描,提出 " + cu.runs.proposed + " 张、抑制 " + cu.runs.suppressed + " 张;没动任何内容文件";
   var wait = cu.pending.count === 0 ? "没有卡在等你" :
     "<strong>" + cu.pending.count + " 张卡,约 " + Math.max(1, Math.round(cu.pending.estSeconds / 60)) + " 分钟</strong>";
+  if (cu.awaitingContext > 0) wait += '<span class="muted">(另 ' + cu.awaitingContext + " 张在补 context)</span>";
   var html = '<div class="card">' +
     "<h1>" + esc(awayLabel(cu)) + "</h1>" +
     '<table class="facts"><tr><td>进来</td><td>' + into + "</td></tr>" +
@@ -151,12 +168,15 @@ function renderCatchup() {
     '<div class="actions">';
   if (cu.pending.count > 0) html += '<button class="primary" id="go">进入落子</button>';
   if (st.stateDiff) html += '<button id="sd">先看 State Diff</button>';
+  if (st.metrics && (st.metrics.decided.total > 0 || st.metrics.runs.length > 0)) html += '<button id="mx">Metrics</button>';
   html += '<button class="ghost" id="skip">今天不看</button></div></div>';
   view.innerHTML = html;
   var go = document.getElementById("go");
   if (go) go.onclick = startSession;
   var sd = document.getElementById("sd");
   if (sd) sd.onclick = function () { renderStateDiff("catchup"); };
+  var mx = document.getElementById("mx");
+  if (mx) mx.onclick = function () { renderMetrics("catchup"); };
   document.getElementById("skip").onclick = renderSkip;
 }
 function renderSkip() {
@@ -182,11 +202,17 @@ function showCard() {
   }
   var html = '<div class="card">' +
     '<div class="meta"><span class="chip">' + esc(c.category) + "</span>" +
+    (c.stakes && STAKES_LABEL[c.stakes] ? '<span class="chip">' + STAKES_LABEL[c.stakes] + "</span>" : "") +
     (c.estSeconds ? "<span>约 " + c.estSeconds + " 秒</span>" : "") +
     '<span style="margin-left:auto">第 ' + (idx + 1) + " / " + queue.length + " 张</span></div>" +
     "<h1>" + esc(c.title) + "</h1>" +
     (c.summary ? "<p>" + esc(c.summary) + "</p>" : "");
   if (c.whyNow) html += "<h2>为什么现在</h2><p>" + esc(c.whyNow) + "</p>";
+  if (c.context) { // #21 question 通道的往返:你问过 → 它带着解释回来了
+    html += "<h2>你问过</h2>" +
+      '<div class="quote">' + esc(c.context.question) + "</div>" +
+      "<p>" + esc(c.context.answer) + "</p>";
+  }
   if (c.recommendation) {
     var lbl = { accept: "接受", park: "搁置", reject: "拒绝" }[c.recommendation.choice];
     html += '<h2>建议</h2><p><span class="rec-' + c.recommendation.choice + '">' + lbl +
@@ -200,7 +226,8 @@ function showCard() {
     '<button class="primary" data-choice="accept"><kbd>a</kbd>接受</button>' +
     '<button data-choice="park"><kbd>p</kbd>搁置</button>' +
     '<button data-choice="reject"><kbd>r</kbd>拒绝</button>' +
-    '<button class="ghost" id="fix">输入修正…</button></div>' +
+    '<button class="ghost" id="fix">输入修正…</button>' +
+    '<button class="ghost" id="ask"><kbd>q</kbd>问一句…</button></div>' +
     '<div id="msg"></div><div id="corr"></div>';
   html += '<details><summary>证据（展开核查）</summary>';
   for (var i = 0; i < c.evidence.length; i++) {
@@ -225,6 +252,33 @@ function showCard() {
     btns[k].onclick = (function (ch) { return function () { decide(ch, null); }; })(btns[k].getAttribute("data-choice"));
   }
   document.getElementById("fix").onclick = function () { renderCorrection(c); };
+  document.getElementById("ask").onclick = function () { renderAsk(c); };
+}
+/* #21 question 通道:correction 的双胞胎——correction 改 diff,question 改 context。
+   发问不落子:卡退回待补态,下一轮 run 带着世界层解释重新出现(同指纹,不算重复)。 */
+function renderAsk(c) {
+  var box = document.getElementById("corr");
+  box.innerHTML = '<div class="correction">' +
+    '<p class="muted">哪里没说清?问一句。这张卡先退回去,下一轮扫描会带着解释重新出现——不落子,不催你。</p>' +
+    '<textarea id="ask-q" rows="2" placeholder="例:这件事在我的世界里对应什么?"></textarea>' +
+    '<div class="actions"><button class="primary" id="ask-send">发问,先不落子</button>' +
+    '<button class="ghost" id="ask-cancel">收起</button></div></div>';
+  document.getElementById("ask-q").focus();
+  document.getElementById("ask-cancel").onclick = function () { box.innerHTML = ""; };
+  document.getElementById("ask-send").onclick = function () {
+    var q = document.getElementById("ask-q").value.trim();
+    if (!q) return;
+    post("/api/question", { cardId: c.id, question: q }).then(function (r) {
+      var msg = document.getElementById("msg");
+      if (!r.ok) {
+        msg.innerHTML = '<div class="banner">' + esc(r.data.error || "发问失败") + "</div>";
+        return;
+      }
+      box.innerHTML = "";
+      msg.innerHTML = '<div class="toast">记下了。这张卡退回队列,下一轮会带着解释回来。</div>';
+      setTimeout(function () { idx++; showCard(); }, 900);
+    });
+  };
 }
 function renderCorrection(c) {
   var box = document.getElementById("corr");
@@ -264,9 +318,10 @@ function decide(choice, correction) {
       return;
     }
     decided++;
+    var took = r.data.latencyMs != null ? " · " + fmtSecs(r.data.latencyMs) : ""; // #19:本次用时上屏
     var text = choice === "accept"
-      ? "已接受 · commit " + esc(r.data.executed || "?") + " · 可回滚"
-      : choice === "park" ? "已搁置" : "已拒绝";
+      ? "已接受 · commit " + esc(r.data.executed || "?") + took + " · 可回滚"
+      : (choice === "park" ? "已搁置" : "已拒绝") + took;
     msg.innerHTML = '<div class="toast">' + text + "</div>";
     setTimeout(function () { idx++; showCard(); }, 650);
   });
@@ -278,10 +333,12 @@ function renderDone() {
   var html = '<div class="card"><h1>落完了</h1><p>' + decided + " 张 · 用时 " +
     (mm ? mm + " 分 " : "") + ss + ' 秒。今天到此为止。</p><div class="actions">';
   if (st.stateDiff) html += '<button id="sd">看 State Diff</button>';
+  html += '<button id="mx">看 Metrics</button>';
   html += '<button class="ghost" id="back">回到开头</button></div></div>';
   view.innerHTML = html;
   var sd = document.getElementById("sd");
   if (sd) sd.onclick = function () { renderStateDiff("done"); };
+  document.getElementById("mx").onclick = function () { renderMetrics("done"); };
   document.getElementById("back").onclick = boot;
 }
 
@@ -303,6 +360,70 @@ function renderStateDiff(backTo) {
   document.getElementById("back").onclick = backTo === "done" ? renderDone : renderCatchup;
 }
 
+/* ---------- 屏 Metrics(#19):时延中位数 + 分布、重复率曲线——数据早已在盘 ---------- */
+function renderMetrics(backTo) {
+  // 现取现算(落完子来看,数字必须含刚落的这批)
+  fetch("/api/state").then(function (r) { return r.json(); }).then(function (s) {
+    st = s;
+    currentView = "metrics";
+    var m = st.metrics;
+    var html = '<div class="card"><h1>Metrics</h1>';
+    html += "<p>" + m.decided.total + " 次落子:接受 " + m.decided.accept + " · 搁置 " + m.decided.park +
+      " · 拒绝 " + m.decided.reject + (m.questions ? " · 发问 " + m.questions : "") + "</p>";
+
+    html += "<h2>time-to-decision</h2>";
+    if (m.latency.count === 0) {
+      html += '<p class="muted">还没有现场计时的落子。</p>';
+    } else {
+      html += '<p><span class="big">中位 ' + fmtSecs(m.latency.medianMs) + "</span>" +
+        '<span class="muted"> · ' + m.latency.count + " 次现场计时</span></p>";
+      var recent = m.latency.recent;
+      var maxMs = 1;
+      for (var i = 0; i < recent.length; i++) if (recent[i].latencyMs > maxMs) maxMs = recent[i].latencyMs;
+      for (var j = 0; j < recent.length; j++) {
+        var d = recent[j];
+        var pct = Math.max(2, Math.round((d.latencyMs / maxMs) * 100));
+        html += '<div class="mrow"><span class="mdate">' + esc(String(d.ts).slice(5, 10)) + "</span>" +
+          '<span class="mtrack"><span class="mbar mbar-' + esc(d.choice) + '" style="width:' + pct + '%"></span></span>' +
+          '<span class="mval">' + fmtSecs(d.latencyMs) + "</span></div>";
+      }
+    }
+
+    html += "<h2>重复率</h2>";
+    if (m.runs.length === 0) {
+      html += '<p class="muted">还没跑过扫描。</p>';
+    } else {
+      var t = m.totals;
+      var ratePct = t.proposed ? Math.round((t.suppressedPlusDup / t.proposed) * 100) : 0;
+      html += "<p>累计 " + m.runs.length + " 轮:提出 " + t.proposed + ",抑制+重复 " + t.suppressedPlusDup +
+        (t.proposed ? "(" + ratePct + "%)" : "") + "</p>";
+      var runs = m.runs.slice(-15);
+      var maxP = 1;
+      for (var a = 0; a < runs.length; a++) if (runs[a].proposed > maxP) maxP = runs[a].proposed;
+      for (var b = 0; b < runs.length; b++) {
+        var run = runs[b];
+        var sup = run.suppressed + run.dup;
+        var wp = Math.round((run.presented / maxP) * 100);
+        var ws = Math.round((sup / maxP) * 100);
+        html += '<div class="mrow"><span class="mdate">' + esc(String(run.date).slice(5)) + "</span>" +
+          '<span class="mtrack">' +
+          (run.presented ? '<span class="seg segp" style="width:' + wp + '%"></span>' : "") +
+          (sup ? '<span class="seg segs" style="width:' + ws + '%"></span>' : "") +
+          "</span>" +
+          '<span class="mval">' + run.presented + " 入列 · " + sup + " 抑</span></div>";
+      }
+      html += '<p class="muted" style="font-size:12px">绿 = 入列呈现;灰 = 指纹抑制 + 重复丢弃;每行一轮。</p>';
+      var ill = 0, ref = 0;
+      for (var e2 = 0; e2 < m.runs.length; e2++) { ill += m.runs[e2].illegible || 0; ref += m.runs[e2].refaced || 0; }
+      if (ill || ref) html += '<p class="muted" style="font-size:12px">世界层闸命中 ' + ill + " · 问答往返 " + ref + "。</p>";
+    }
+
+    html += '<div class="actions"><button class="ghost" id="back">回去</button></div></div>';
+    view.innerHTML = html;
+    document.getElementById("back").onclick = backTo === "done" ? renderDone : renderCatchup;
+  });
+}
+
 /* ---------- 键盘:a / p / r(输入框里不劫持) ---------- */
 document.addEventListener("keydown", function (ev) {
   if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
@@ -311,6 +432,10 @@ document.addEventListener("keydown", function (ev) {
   if (!view.querySelector("button[data-choice]")) return;
   var map = { a: "accept", p: "park", r: "reject" };
   if (map[ev.key]) { ev.preventDefault(); decide(map[ev.key], null); }
+  if (ev.key === "q") { // #21:问一句
+    var ask = document.getElementById("ask");
+    if (ask) { ev.preventDefault(); ask.click(); }
+  }
 });
 
 /* ---------- wake-catchup(#16):先渲染旧状态,后台增量刷新 ---------- */

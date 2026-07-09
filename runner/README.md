@@ -11,12 +11,14 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 
 1. **`scan.ts`** — 取 markdown git-delta(增量,服务「唤醒 ≤10s」的雏形)。**窗口 = 上次成功 run 以来**(#14):锚点 = run-metrics 最后记录的 vault HEAD,增量 = `anchor..HEAD`,窗口自动等于 run 节律;`--commits N` 显式传参 = 手动覆盖,锚点缺失(首跑)或失效(rebase)时回退最近 N commit。空窗口 = 日常静默结果(exit 0)。**排除 `98_Forme/`**——Forme 自己的运行时产物不是漂移面,否则会对上一轮输出提卡自激。
 2. **`agent-schema.ts`** — 生成给 codex 的 `--output-schema`。**故意宽松**:codex 用 OpenAI strict 结构化输出(拒 `pattern`/`minItems`/`format`,且要求每个属性都 required、可选项走 nullable)。它只定形状。
-3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。
-4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹,再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
-5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。
-6. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 → 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层。
-7. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**。
-8. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup, head}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料 + 下轮增量锚点;dry-run 不落点)。
+3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。
+4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹 / stakes 消毒(#21:申报非法按 category 派生),再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
+5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。**question 事件不是 decision**——发过问的指纹不进名单,reface 后同指纹回场不算重复。
+6. **`legibility.ts`** — **世界层闸**(#21,与 #13 禁词闸同族):「卡面说事,diff 说账」——账本手术语域(已完成项/拆成待办/速览…)上了世界层段(title/summary/whyNow)即打回;同轮给一次 reface 重写机会,仍不过即弃(下轮重提)。纯账本卡(stakes=reversible-ledger,按 category 派生豁免面)不检查:它们的「事」就是账。
+7. **`reface.ts`** — 卡面重写(#21,闸打回与 question 共用):codex **只换脸**(title/summary/whyNow/onAccept + 问答 context),id/指纹/diff/evidence 永不变;question 路径要求 answer 非空,否则卡继续待补下轮重试。
+8. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 →(你问过,#21)→ 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层;stakes/revisedAt 进 frontmatter。
+9. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**(reface 是对同 id 卡的显式覆写,唯一例外)。
+10. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup, head, illegible?, refaced?}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料 + 下轮增量锚点 + legibility 曲线原料;dry-run 不落点)。
 
 **一切写盘、校验、指纹由本目录代码执行,agent 只读、只返回 JSON**(硬约束 #7)。写入只落 `98_Forme/`,不碰知识层(2026-07-04 边界裁定)。
 
@@ -38,8 +40,9 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 ## 当前边界
 
 - 只做 Codex 一次性调用;OpenCode server/SDK(#8)日后插在同一 `scan → assemble → write` 核心之后(双调用形态)。
-- **runner 仍不写 `decisions.jsonl`**:卡是「生成入列」;presented/decision/correction 事件由 `console/`(#15)在实际呈现与落子时产生。
-- parked 与 rejected 同样被永久抑制;un-park 机制随 console 后续(W3+)。
+- **runner 仍不写 `decisions.jsonl`**:卡是「生成入列」;presented/decision/correction/question 事件由 `console/`(#15/#21)在实际呈现与落子时产生。
+- parked 与 rejected 同样被永久抑制;question 是「先别落子」的出口,但 park 本身仍是终态(un-park 后续)。
 - k 条相似历史决策注入 prompt 留 post-W2(Taste Rules 注入已通,#10)。
+- 世界层闸是词表启发式(账本手术语域的对偶),不做语义判断;词表随真实误伤/漏放修订。
 
 数据契约见 `docs/SCHEMA.md`;设计取舍见 `docs/DECISIONS.md`。

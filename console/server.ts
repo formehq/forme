@@ -11,6 +11,7 @@ import {
   catchUpData,
   lastPresentedTs,
   latestStateDiff,
+  metricsData,
   pendingCards,
   readEvents,
   type DecisionEvent,
@@ -59,6 +60,7 @@ interface DecideBody {
   cardId?: unknown;
   choice?: unknown;
   correction?: { hunks?: unknown; note?: unknown };
+  question?: unknown;
 }
 
 const CHOICES = new Set(["accept", "park", "reject"]);
@@ -176,6 +178,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
           catchUp: catchUpData(vault, outDir, now),
           pending: pendingCards(outDir, events),
           stateDiff: latestStateDiff(outDir),
+          metrics: metricsData(outDir), // #19:数据早已在盘,这里只是投影
         });
       }
 
@@ -211,6 +214,25 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
             type: "presented",
             cardId: card.id,
             fingerprint: card.fingerprint,
+          });
+          return json(res, 200, { ok: true });
+        }
+
+        // #21 question 通道(correction 的双胞胎:correction 改 diff,question 改 context)
+        // 不是 decision:指纹不进已决名单,卡转入待补 context 态,下一轮 run
+        // 带着世界层解释重新出卡(同指纹,不算重复)。有界、异步,不做 chat。
+        if (url.pathname === "/api/question") {
+          if (!card) return json(res, 409, { error: "卡不存在或已落子" });
+          const question = typeof body.question === "string" ? body.question.trim() : "";
+          if (!question) return json(res, 400, { error: "缺 question 文本" });
+          if (question.length > 2000) return json(res, 400, { error: "question 太长(≤2000 字)" });
+          appendEvent(jsonlPath, {
+            v: "0",
+            ts: new Date().toISOString(),
+            type: "question",
+            cardId: card.id,
+            fingerprint: card.fingerprint,
+            question,
           });
           return json(res, 200, { ok: true });
         }

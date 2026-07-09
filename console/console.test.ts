@@ -6,7 +6,7 @@ import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import type { AddressInfo } from "node:net";
 import { applyHunksToContent, ApplyError } from "./apply.ts";
-import { appendEvent, readEvents, pendingCards, catchUpData } from "./store.ts";
+import { appendEvent, readEvents, pendingCards, queueState, catchUpData, metricsData } from "./store.ts";
 import { createConsoleServer } from "./server.ts";
 import { assembleCard } from "../runner/card.ts";
 import type { AgentCard, Card } from "../runner/types.ts";
@@ -85,6 +85,7 @@ function seedCard(repo: string, category: string, file: string, before: string, 
     evidence: [{ path: file, locator: null, quote: null, note: null }],
     diff: { file, hunks: [{ locator: null, before, after }] },
     estSeconds: 10,
+    stakes: null,
   };
   const { card, serializable, validation } = assembleCard(ac, { runId: "run_test", at: "2026-07-07T00:00:00.000Z" });
   assert.equal(validation.valid, true, validation.errors.join("; "));
@@ -242,6 +243,93 @@ test("wake-catchup(#16):旧状态先渲染(freshness.asOf),refresh 后台跑、�
   } finally {
     await t.close();
   }
+});
+
+test("question 通道(#21):问 → 待补 context 退出队列 → reface 回场 → 落子,全往返", async () => {
+  const vault = mkVault();
+  const outDir = join(vault, "98_Forme");
+  const jsonl = join(outDir, "decisions.jsonl");
+  const card = seedCard(vault, "stale-claim", "note-c.md", "旧口径的一句话。", "新话。");
+  const t = await startServer(vault);
+  try {
+    // 上屏后发问:不是 decision——指纹不进已决名单
+    await t.post("/api/presented", { cardId: card.id });
+    const q = await t.post("/api/question", { cardId: card.id, question: "这句话现在还有人引用吗?" });
+    assert.equal(q.status, 200, JSON.stringify(q.data));
+    let events = readEvents(jsonl);
+    const qe = events.find((e) => e.type === "question")!;
+    assert.equal(qe.question, "这句话现在还有人引用吗?");
+    assert.equal(qe.cardId, card.id);
+
+    // 卡进入待补 context 态:退出可决队列,但没被永久抑制
+    let queue = queueState(outDir, events);
+    assert.equal(queue.pending.length, 0);
+    assert.equal(queue.awaiting.length, 1);
+    assert.equal(queue.awaiting[0]!.id, card.id);
+    const cu = catchUpData(vault, outDir, new Date());
+    assert.equal(cu.pending.count, 0);
+    assert.equal(cu.awaitingContext, 1);
+    // 待补态的卡不可落子(它不在可决队列里)
+    assert.equal((await t.post("/api/decide", { cardId: card.id, choice: "accept" })).status, 409);
+
+    // 模拟下一轮 runner reface:同 id 同指纹,卡面带上问答,revisedAt 晚于提问
+    const cardPath = join(outDir, "cards", `${card.id}.json`);
+    const onDisk = JSON.parse(readFileSync(cardPath, "utf8")) as Card;
+    onDisk.title = "这句旧口径还挂在对外文档里";
+    onDisk.revisedAt = new Date(Date.now() + 60_000).toISOString();
+    onDisk.context = { question: "这句话现在还有人引用吗?", answer: "对外 README 还在引用这一段,口径不改就继续扩散。" };
+    writeFileSync(cardPath, JSON.stringify(onDisk, null, 2) + "\n");
+
+    // 卡回到可决队列(同指纹,不算重复),带着问答;正常落子收尾
+    queue = queueState(outDir, readEvents(jsonl));
+    assert.equal(queue.pending.length, 1);
+    assert.equal(queue.pending[0]!.context!.answer.includes("README"), true);
+    await t.post("/api/presented", { cardId: card.id });
+    const dec = await t.post("/api/decide", { cardId: card.id, choice: "accept" });
+    assert.equal(dec.status, 200, JSON.stringify(dec.data));
+    assert.ok(Number(dec.data.latencyMs) >= 0);
+    events = readEvents(jsonl);
+    assert.deepEqual(events.map((e) => e.type), ["presented", "question", "presented", "decision"]);
+
+    // question 事件门:空问题 400;已决卡再问 409
+    assert.equal((await t.post("/api/question", { cardId: card.id, question: "  " })).status, 409); // 已落子
+    const card2 = seedCard(vault, "stale-claim", "note-d.md", "再一句旧话。", "新话。");
+    assert.equal((await t.post("/api/question", { cardId: card2.id, question: "" })).status, 400);
+    assert.equal((await t.post("/api/question", { cardId: "card_nope", question: "?" })).status, 409);
+  } finally {
+    await t.close();
+  }
+});
+
+test("metricsData(#19):时延中位数取现场真值,backfilled 不计;重复率按轮累计", () => {
+  const vault = mkVault();
+  const outDir = join(vault, "98_Forme");
+  const jsonl = join(outDir, "decisions.jsonl");
+  const fp = (c: string) => c.repeat(64);
+  for (const e of [
+    { v: "0", ts: "2026-07-08T01:00:00Z", type: "presented", cardId: "c1", fingerprint: fp("a") },
+    { v: "0", ts: "2026-07-08T01:00:10Z", type: "decision", cardId: "c1", fingerprint: fp("a"), choice: "accept", actor: "owner", latencyMs: 10_000, executed: "abcdef1" },
+    { v: "0", ts: "2026-07-08T01:01:00Z", type: "question", cardId: "c2", fingerprint: fp("b"), question: "?" },
+    { v: "0", ts: "2026-07-08T02:00:00Z", type: "decision", cardId: "c3", fingerprint: fp("c"), choice: "park", actor: "owner", latencyMs: 30_000 },
+    { v: "0", ts: "2026-07-08T03:00:00Z", type: "decision", cardId: "c4", fingerprint: fp("d"), choice: "reject", actor: "owner", backfilled: true },
+  ]) {
+    appendEvent(jsonl, e as Parameters<typeof appendEvent>[1]);
+  }
+  writeFileSync(join(outDir, "run-metrics.jsonl"), [
+    JSON.stringify({ v: "0", date: "2026-07-07", runId: "r1", proposed: 3, suppressed: 0, presented: 3, rejected: 0, dup: 0 }),
+    JSON.stringify({ v: "0", date: "2026-07-08", runId: "r2", proposed: 4, suppressed: 2, presented: 1, rejected: 0, dup: 1, illegible: 1, refaced: 1 }),
+  ].join("\n") + "\n");
+
+  const m = metricsData(outDir);
+  assert.deepEqual(m.decided, { total: 3, accept: 1, park: 1, reject: 1 });
+  assert.equal(m.questions, 1);
+  assert.equal(m.latency.count, 2); // backfilled 那次没有诚实计时,不进分布
+  assert.equal(m.latency.medianMs, 20_000);
+  assert.equal(m.latency.recent.length, 2);
+  assert.equal(m.runs.length, 2);
+  assert.deepEqual(m.totals, { proposed: 7, suppressedPlusDup: 3 });
+  assert.equal(m.runs[1]!.illegible, 1);
+  assert.equal(m.runs[1]!.refaced, 1);
 });
 
 test("console 写路径的门:非 JSON content-type 415;未知卡 409;非法 choice 400", async () => {

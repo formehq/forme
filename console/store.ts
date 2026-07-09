@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { join, dirname } from "node:path";
 import { checkEvent } from "../schema/validate.ts";
 import { latestStateDiffDate } from "../runner/state-diff.ts";
+import { effectiveStakes } from "../runner/legibility.ts";
 import type { Card, Hunk } from "../runner/types.ts";
 
 /**
@@ -15,7 +16,7 @@ import type { Card, Hunk } from "../runner/types.ts";
 export interface DecisionEvent {
   v: "0";
   ts: string;
-  type: "presented" | "decision" | "correction";
+  type: "presented" | "decision" | "correction" | "question";
   cardId: string;
   fingerprint: string;
   choice?: "accept" | "park" | "reject";
@@ -23,6 +24,7 @@ export interface DecisionEvent {
   actor?: "owner" | "agent_shadow" | "agent_authorized";
   executed?: string;
   correction?: { hunks: Hunk[]; note?: string };
+  question?: string; // #21:用户对卡发的问题(卡进入待补 context 态)
   backfilled?: boolean;
 }
 
@@ -58,7 +60,10 @@ export function loadCards(outDir: string): Card[] {
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".json"))) {
     try {
       const c = JSON.parse(readFileSync(join(dir, f), "utf8")) as Card;
-      if (c && c.id && c.fingerprint && c.diff) cards.push(c);
+      if (c && c.id && c.fingerprint && c.diff) {
+        if (!c.stakes) c.stakes = effectiveStakes(c); // 旧卡按 category 派生(#21)
+        cards.push(c);
+      }
     } catch {
       /* 宽容 */
     }
@@ -66,8 +71,36 @@ export function loadCards(outDir: string): Card[] {
   return cards.sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
 }
 
-/** 待决队列 = 没有 decision 事件的卡(cardId 与 fingerprint 双保险)。 */
-export function pendingCards(outDir: string, events: DecisionEvent[]): Card[] {
+/** 每指纹最新未终结的 question ts(有 decision 的指纹不算——已决不回场)。 */
+function openQuestionTs(events: DecisionEvent[]): Map<string, string> {
+  const latest = new Map<string, string>();
+  const decided = new Set<string>();
+  for (const e of events) {
+    if (!e.fingerprint) continue;
+    if (e.type === "decision") decided.add(e.fingerprint);
+    if (e.type === "question") latest.set(e.fingerprint, e.ts);
+  }
+  for (const fp of decided) latest.delete(fp);
+  return latest;
+}
+
+/** 卡是否在「待补 context」态(#21):有未答问题,且卡面尚未因之重写。 */
+function isAwaitingContext(card: Card, openQ: Map<string, string>): boolean {
+  const qts = openQ.get(card.fingerprint);
+  if (!qts) return false;
+  const revised = card.revisedAt ? Date.parse(card.revisedAt) : NaN;
+  return !(Number.isFinite(revised) && revised >= Date.parse(qts));
+}
+
+export interface QueueState {
+  /** 可决队列:没有 decision 事件、也不在待补 context 态的卡。 */
+  pending: Card[];
+  /** 待补 context(#21):发过问、等下一轮 run 带解释回来的卡。 */
+  awaiting: Card[];
+}
+
+/** 队列投影(cardId 与 fingerprint 双保险)。 */
+export function queueState(outDir: string, events: DecisionEvent[]): QueueState {
   const decidedIds = new Set<string>();
   const decidedFps = new Set<string>();
   for (const e of events) {
@@ -75,7 +108,19 @@ export function pendingCards(outDir: string, events: DecisionEvent[]): Card[] {
     if (e.cardId) decidedIds.add(e.cardId);
     if (e.fingerprint) decidedFps.add(e.fingerprint);
   }
-  return loadCards(outDir).filter((c) => !decidedIds.has(c.id) && !decidedFps.has(c.fingerprint));
+  const openQ = openQuestionTs(events);
+  const undecided = loadCards(outDir).filter(
+    (c) => !decidedIds.has(c.id) && !decidedFps.has(c.fingerprint),
+  );
+  return {
+    pending: undecided.filter((c) => !isAwaitingContext(c, openQ)),
+    awaiting: undecided.filter((c) => isAwaitingContext(c, openQ)),
+  };
+}
+
+/** 待决队列(兼容旧签名;新代码用 queueState)。 */
+export function pendingCards(outDir: string, events: DecisionEvent[]): Card[] {
+  return queueState(outDir, events).pending;
 }
 
 /** 该卡最近一次 presented 的时刻——静默计时的起点(没有就是 null)。 */
@@ -92,6 +137,7 @@ export interface CatchUp {
   mdTouched: number; // 其中动过的知识层 md 数(排除 98_Forme/)
   runs: { runs: number; proposed: number; suppressed: number };
   pending: { count: number; estSeconds: number };
+  awaitingContext: number; // #21:发过问、等下一轮带解释回来的卡数
   decidedTotal: number;
 }
 
@@ -141,7 +187,7 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
     }
   }
 
-  const queue = pendingCards(outDir, events);
+  const queue = queueState(outDir, events);
   return {
     sinceTs,
     awayHours: sinceMs ? (now.getTime() - sinceMs) / 3_600_000 : null,
@@ -149,10 +195,93 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
     mdTouched: mdSet.size,
     runs,
     pending: {
-      count: queue.length,
-      estSeconds: queue.reduce((s, c) => s + (c.estSeconds ?? 30), 0),
+      count: queue.pending.length,
+      estSeconds: queue.pending.reduce((s, c) => s + (c.estSeconds ?? 30), 0),
     },
+    awaitingContext: queue.awaiting.length,
     decidedTotal,
+  };
+}
+
+/* ---------- Metrics(#19):数据早已在盘,这里只是投影 ---------- */
+
+export interface MetricsData {
+  decided: { total: number; accept: number; park: number; reject: number };
+  questions: number; // question 事件总数(#21:legibility 度量)
+  latency: {
+    count: number; // 有现场计时真值的落子数(backfilled 不算)
+    medianMs: number | null;
+    recent: Array<{ ts: string; latencyMs: number; choice: string }>; // 最近 20 次
+  };
+  runs: Array<{
+    date: string;
+    proposed: number;
+    presented: number;
+    suppressed: number;
+    rejected: number;
+    dup: number;
+    illegible?: number;
+    refaced?: number;
+  }>;
+  totals: { proposed: number; suppressedPlusDup: number };
+}
+
+/** Metrics 投影:时延来自 decisions.jsonl 真值,重复率曲线来自 run-metrics.jsonl。 */
+export function metricsData(outDir: string): MetricsData {
+  const decided = { total: 0, accept: 0, park: 0, reject: 0 };
+  let questions = 0;
+  const timed: Array<{ ts: string; latencyMs: number; choice: string }> = [];
+  for (const e of readEvents(join(outDir, "decisions.jsonl"))) {
+    if (e.type === "question") questions++;
+    if (e.type !== "decision") continue;
+    decided.total++;
+    if (e.choice === "accept") decided.accept++;
+    else if (e.choice === "park") decided.park++;
+    else if (e.choice === "reject") decided.reject++;
+    if (typeof e.latencyMs === "number" && !e.backfilled) {
+      timed.push({ ts: e.ts, latencyMs: e.latencyMs, choice: e.choice ?? "" });
+    }
+  }
+  const sorted = timed.map((t) => t.latencyMs).sort((a, b) => a - b);
+  const medianMs = sorted.length
+    ? sorted.length % 2
+      ? sorted[(sorted.length - 1) / 2]!
+      : Math.round((sorted[sorted.length / 2 - 1]! + sorted[sorted.length / 2]!) / 2)
+    : null;
+
+  const runs: MetricsData["runs"] = [];
+  const totals = { proposed: 0, suppressedPlusDup: 0 };
+  const metricsPath = join(outDir, "run-metrics.jsonl");
+  if (existsSync(metricsPath)) {
+    for (const line of readFileSync(metricsPath, "utf8").split("\n")) {
+      if (!line.trim()) continue;
+      try {
+        const m = JSON.parse(line) as MetricsData["runs"][number] & { backfilled?: boolean };
+        if (!m.date) continue;
+        const row = {
+          date: m.date,
+          proposed: m.proposed ?? 0,
+          presented: m.presented ?? 0,
+          suppressed: m.suppressed ?? 0,
+          rejected: m.rejected ?? 0,
+          dup: m.dup ?? 0,
+          ...(m.illegible ? { illegible: m.illegible } : {}),
+          ...(m.refaced ? { refaced: m.refaced } : {}),
+        };
+        runs.push(row);
+        totals.proposed += row.proposed;
+        totals.suppressedPlusDup += row.suppressed + row.dup;
+      } catch {
+        /* 宽容 */
+      }
+    }
+  }
+  return {
+    decided,
+    questions,
+    latency: { count: timed.length, medianMs, recent: timed.slice(-20) },
+    runs,
+    totals,
   };
 }
 

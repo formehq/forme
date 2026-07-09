@@ -18,6 +18,8 @@ export interface RunMetric {
   rejected: number; // 没过自有 AJV 门
   dup: number; // 同指纹卡已在盘上(幂等跳过)
   head?: string; // 本轮扫描时的 vault HEAD(#14:下轮增量窗口的锚点)
+  illegible?: number; // 世界层闸命中数(#21:legibility 曲线原料;含被重写救回的)
+  refaced?: number; // question 通道重写数(#21:问→再出卡的往返完成数)
   backfilled?: boolean;
 }
 

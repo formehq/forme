@@ -27,7 +27,9 @@ export function cardToMarkdown(card: Card): string {
     `origin: { agent: "${card.origin.agent}", runId: "${card.origin.runId}", at: "${card.origin.at}" }`,
   );
   if (card.estSeconds !== undefined) L.push(`estSeconds: ${card.estSeconds}`);
+  if (card.stakes) L.push(`stakes: "${card.stakes}"`);
   L.push(`createdAt: "${card.createdAt}"`);
+  if (card.revisedAt) L.push(`revisedAt: "${card.revisedAt}"`);
   L.push("---");
   L.push("");
 
@@ -44,6 +46,16 @@ export function cardToMarkdown(card: Card): string {
     L.push("## 为什么现在");
     L.push("");
     L.push(card.whyNow);
+    L.push("");
+  }
+
+  // ②′ 你问过(#21 question 通道往返:问题与回答都留在镜像里,卡自含)
+  if (card.context) {
+    L.push("## 你问过");
+    L.push("");
+    L.push(`> ${card.context.question}`);
+    L.push("");
+    L.push(card.context.answer);
     L.push("");
   }
 

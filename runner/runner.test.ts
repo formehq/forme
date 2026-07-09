@@ -22,6 +22,7 @@ const base = (): AgentCard => ({
     hunks: [{ locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" }],
   },
   estSeconds: null,
+  stakes: null,
 });
 
 const v01 = (): AgentCard => ({

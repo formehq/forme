@@ -22,7 +22,7 @@ export function agentOutputSchema(): unknown {
           required: [
             "category", "title", "summary",
             "whyNow", "recommendationChoice", "recommendationReason", "onAccept",
-            "evidence", "diff", "estSeconds",
+            "evidence", "diff", "estSeconds", "stakes",
           ],
           properties: {
             category: { type: "string" },
@@ -68,6 +68,7 @@ export function agentOutputSchema(): unknown {
               },
             },
             estSeconds: { type: ["integer", "null"] },
+            stakes: nullableString,
           },
         },
       },
