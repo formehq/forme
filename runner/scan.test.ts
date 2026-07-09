@@ -105,6 +105,21 @@ test("slowLayerFiles(#28):未知 vault 可从根目录取慢层,且永远排除 
   assert.deepEqual(slowLayerFiles(repo, 10, "."), ["Ideas/principle.md"]);
 });
 
+test("multilingual vault paths stay readable instead of Git quotePath escapes (#28/#29)", () => {
+  const repo = mkdtempSync(join(tmpdir(), "forme-unicode-path-"));
+  const git = (...a: string[]) => execFileSync("git", ["-C", repo, ...a], { encoding: "utf8" });
+  git("init", "-q");
+  git("config", "user.email", "t@t");
+  git("config", "user.name", "t");
+  mkdirSync(join(repo, "概念"), { recursive: true });
+  writeFileSync(join(repo, "路线图.md"), "# 路线图\n");
+  writeFileSync(join(repo, "概念", "原则.md"), "# 原则\n");
+  git("add", "-A");
+  git("commit", "-qm", "seed multilingual paths");
+  assert.deepEqual(recentMarkdownFiles(repo, 1, 10).sort(), ["概念/原则.md", "路线图.md"]);
+  assert.deepEqual(slowLayerFiles(repo, 10, ".").sort(), ["概念/原则.md", "路线图.md"]);
+});
+
 test("localDate(#25):按本地日切,不是 UTC 日期", () => {
   // 本地构造的午夜/深夜时刻,无论测试机时区如何,本地日期都应是构造时的那天
   assert.equal(localDate(new Date(2026, 6, 8, 23, 30)), "2026-07-08");

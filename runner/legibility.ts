@@ -44,8 +44,21 @@ const LEDGER_SPEECH: RegExp[] = [
   /列表项/,
   /清单里/,
   /条目里/,
-  /frontmatter/i,
   /字段(值|里)/,
+  /\bcompleted (task|item|list item)s?\b/i,
+  /\b(to[- ]?do|task|list) (item|entry)s?\b/i,
+  /\bcheck(box|ed item)s?\b/i,
+  /\bfrontmatter\b/i,
+  /\bwiki[- ]?links?\b/i,
+  /\bdiff hunks?\b/i,
+  /\bcard[- ]?ids?\b/i,
+  /\bprovenance\b/i,
+  /\bfingerprints?\b/i,
+  /\bjsonl\b/i,
+  /\bschema\b/i,
+  /\bsource index\b/i,
+  /\blocators?\b/i,
+  /\bmetadata fields?\b/i,
 ];
 
 /** 返回文本里第一个命中的账本语域片段,干净则 null。 */

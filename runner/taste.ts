@@ -74,12 +74,18 @@ export const STYLE_FEWSHOTS: string[] = [
 const BANNED_IN_RULE = [
   "provenance", "frontmatter", "cardid", "card_", "card-0",
   "fingerprint", "指纹", "jsonl", "schema", "hub", "source index", "sourcecardid",
+  "wikilink", "diff hunk", "locator", "metadata field", "commit hash",
 ];
 
 /** 返回规则行里第一个命中的禁词,干净则 null。 */
 export function bannedWordIn(rule: string): string | null {
   const lower = rule.toLowerCase();
   return BANNED_IN_RULE.find((w) => lower.includes(w)) ?? null;
+}
+
+/** Existing historical rules may be Chinese; newly extracted rules must be English. */
+export function isEnglishRule(rule: string): boolean {
+  return /[A-Za-z]/.test(rule) && !/[\u3400-\u9fff]/u.test(rule);
 }
 
 /** 从 Taste Rules.md 提取规则行(`## Rn · 规则`)——runner prompt 注入用。 */
@@ -164,7 +170,7 @@ export const hasNegativeSamples = (s: SampleStats): boolean =>
   s.reject + s.park + s.corrections > 0;
 
 export function statsLine(s: SampleStats): string {
-  return `${s.decisions} 决策 = ${s.accept} accept · ${s.reject} reject · ${s.park} park · ${s.corrections} correction`;
+  return `${s.decisions} decision${s.decisions === 1 ? "" : "s"} = ${s.accept} accept · ${s.reject} reject · ${s.park} park · ${s.corrections} correction`;
 }
 
 /** 确定性消毒:溯源过滤 + 置信钉死 + 规则行禁词(#13)。 */
@@ -174,17 +180,18 @@ export function vetRules(agentRules: AgentRule[], knownCardIds: Set<string>, sta
   for (const r of agentRules) {
     const rule = r.rule?.trim();
     if (!rule) continue;
+    if (!isEnglishRule(rule)) continue;
     if (bannedWordIn(rule)) continue; // 系统词上了人读层 = 表达层不合格,整条丢弃(#13)
     const sources = [...new Set(r.sourceCardIds ?? [])].filter((id) => knownCardIds.has(id));
     if (sources.length === 0) continue; // 无真实出处 = 不可溯源,丢弃(收割护栏)
     const claimed = (["low", "medium", "high"] as const).find((c) => c === r.confidence) ?? "low";
     const confidence = negatives ? claimed : "low";
     const noteParts = [
-      `数据基础 ${statsLine(stats)}`,
-      ...(negatives ? [] : ["零负样本——只能刻画「会接受什么」,刻画不了「会拒绝什么」"]),
+      `Data basis: ${statsLine(stats)}`,
+      ...(negatives ? [] : ["No negative samples: this can describe what the user accepts, not what they reject"]),
       ...(r.confidenceNote ? [r.confidenceNote.trim()] : []),
     ];
-    vetted.push({ rule, rationale: r.rationale?.trim() || "(agent 未给依据)", sources, confidence, confidenceNote: noteParts.join(";") });
+    vetted.push({ rule, rationale: r.rationale?.trim() || "(No rationale supplied)", sources, confidence, confidenceNote: noteParts.join("; ") });
   }
   return vetted;
 }
@@ -194,21 +201,19 @@ const HEADER = [
   "forme: taste-rules",
   "---",
   "",
-  "# Taste Rules(人可编辑)",
+  "# Taste Rules (editable)",
   "",
-  "> 每条规则 = 一行你的话;规则下的小字账本(依据/置信/时效)由代码生成,注释块是机器存档。",
-  "> 整份文件你可以直接改写、删除、重排——你的编辑就是最终裁决;「收录/改写/丢弃」确认交互",
-  "> 是 W3 console 的事,在那之前所有条目都是候选。规则会过期:到重验点后用新决策重验。",
+  "> Each rule is one plain-language instruction. Forme renders its evidence, confidence, and aging ledger below it; the comment block is machine-readable storage.",
+  "> You may rewrite, delete, or reorder this file directly. Your edit is final. Until the confirm/rewrite/discard interaction ships, every generated entry remains a candidate.",
+  "> Rules can expire. Reverify them against new decisions at the stated checkpoint.",
   "",
   "",
 ].join("\n");
 
-const CONFIDENCE_CN: Record<string, string> = { low: "低", medium: "中", high: "高" };
-
 /** 账本压缩统计:降层小字里的一段,全由代码措辞。 */
 export function compactStats(stats: SampleStats): string {
-  if (!hasNegativeSamples(stats)) return `${stats.decisions} 决策全 accept 零负样本`;
-  return `${stats.decisions} 决策(${stats.accept} accept · ${stats.reject} reject · ${stats.park} park · ${stats.corrections} 修正)`;
+  if (!hasNegativeSamples(stats)) return `${stats.decisions} all-accept decision${stats.decisions === 1 ? "" : "s"}, no negative samples`;
+  return `${stats.decisions} decision${stats.decisions === 1 ? "" : "s"} (${stats.accept} accept · ${stats.reject} reject · ${stats.park} park · ${stats.corrections} correction${stats.corrections === 1 ? "" : "s"})`;
 }
 
 /**
@@ -231,7 +236,7 @@ export function renderRuleBlocks(rules: VettedRule[], startIndex: number, date: 
     };
     L.push(`## ${id} · ${r.rule}`);
     L.push("");
-    L.push(`*依据 ${r.sources.length} 卡 · ${compactStats(stats)} → 置信${CONFIDENCE_CN[r.confidence]} · ${date.slice(5)} 提炼 · +20 决策重验*`);
+    L.push(`*Based on ${r.sources.length} card${r.sources.length === 1 ? "" : "s"} · ${compactStats(stats)} → ${r.confidence} confidence · distilled ${date.slice(5)} · reverify after 20 decisions*`);
     L.push(`<!-- forme-rule: ${JSON.stringify(record)} -->`);
     L.push("");
   });
@@ -275,6 +280,41 @@ function agentRulesSchema(): unknown {
   };
 }
 
+export function buildTastePrompt(input: {
+  maxRules: number;
+  stats: SampleStats;
+  digest: string[];
+  existingRules: string[];
+}): string {
+  const { maxRules, stats, digest, existingRules } = input;
+  return [
+    `You are Forme's taste distiller. Derive at most ${maxRules} actionable preferences or boundaries from the vault owner's real decision history. Do not merely restate individual cards.`,
+    "",
+    "Every new rule must be a single English imperative sentence that reads like something the user would put in their own agent instructions. A person who has never seen Forme must be able to follow it.",
+    "Do not put system or storage terms such as provenance, frontmatter, cardId, fingerprint, schema, JSONL, wikilink, diff hunk, locator, Hub, or Source Index in the rule line. The deterministic gate will discard such rules. Use the user's world-level language instead.",
+    "",
+    "Historical user-written style examples follow. They may be Chinese or mixed-language; imitate their directness and specificity, not their language:",
+    ...STYLE_FEWSHOTS.map((rule) => `- ${rule}`),
+    "",
+    `Sample statistics: ${statsLine(stats)}.`,
+    ...(hasNegativeSamples(stats)
+      ? []
+      : ["There are no negative samples: all decisions are accept. Derive only what the user tends to accept, do not invent rejection boundaries, and set every confidence to low."]),
+    "",
+    "Decision records (cardId · card context · choice · execution commit):",
+    ...digest,
+    "",
+    "For seed decisions whose card body is unavailable, you may inspect the accepted change with git show <commit> in the read-only sandbox.",
+    "",
+    ...(existingRules.length
+      ? ["Existing rules may be in any language. Do not duplicate or paraphrase them; propose only genuinely new rules:", ...existingRules.map((rule) => `- ${rule}`), ""]
+      : []),
+    "For each rule return: rule (one plain-English imperative); rationale (English machine-facing evidence describing the shared pattern); sourceCardIds (real cardIds from the records, at least one); confidence (low, medium, or high); confidenceNote (nullable English text).",
+    "Do not put statistics, confidence, or aging information in rule. Forme renders that ledger below the rule deterministically.",
+    "Prefer no rule over a weak rule. Require support from at least two decisions; return an empty rules array when no reliable pattern exists. Return only JSON matching the output schema.",
+  ].join("\n");
+}
+
 function main(): void {
   const arg = (name: string, def?: string): string | undefined => {
     const i = process.argv.indexOf(`--${name}`);
@@ -306,44 +346,19 @@ function main(): void {
   // 每条决策一行摘要;卡体存盘的补上下文,种子决策给 executed commit 让 agent 自己 git show
   const digest = decisions.map((d) => {
     const cardPath = join(outDir, "cards", `${d.cardId}.json`);
-    let ctx = "(卡体未存盘的种子决策)";
+    let ctx = "(seed decision; card body unavailable)";
     if (existsSync(cardPath)) {
       try {
         const c = JSON.parse(readFileSync(cardPath, "utf8")) as { category?: string; title?: string; diff?: { file?: string } };
-        ctx = `${c.category} · 「${c.title}」 · 目标 ${c.diff?.file}`;
+        ctx = `${c.category} · '${c.title}' · target ${c.diff?.file}`;
       } catch {
         /* 卡体读不动就退回占位 */
       }
     }
-    return `- ${d.cardId} · ${ctx} · choice=${d.choice}${d.executed ? ` · 执行 commit ${d.executed}` : ""}`;
+    return `- ${d.cardId} · ${ctx} · choice=${d.choice}${d.executed ? ` · execution commit ${d.executed}` : ""}`;
   });
 
-  const prompt = [
-    `你是 Forme 的 taste 提炼器,从用户(vault 主人)的真实决策记录里提炼最多 ${maxRules} 条 taste 规则(可执行的偏好/边界,不是对单卡的复述)。`,
-    "",
-    "规则行的语体(硬要求,#13):一行中文祈使句,读起来像用户亲手写进自己 CLAUDE.md 的指令——不认识 Forme 的人也能照做。",
-    "规则行内禁用系统词:provenance、frontmatter、cardId、指纹、schema、jsonl、Hub、Source Index 之类(会被机器检查,含即整条丢弃);用用户自己的说法,如「属性」「索引」「地图」「归位」。",
-    "",
-    "用户手写规则样例(照这个腔写,别照抄内容):",
-    ...STYLE_FEWSHOTS.map((r) => `- ${r}`),
-    "",
-    `样本统计(如实面对):${statsLine(stats)}。`,
-    ...(hasNegativeSamples(stats)
-      ? []
-      : ["注意:零负样本——所有决策都是 accept。你只能提炼「用户会接受什么」;不要编造「用户会拒绝什么」类规则;confidence 一律填 low。"]),
-    "",
-    "决策记录(cardId · 卡上下文 · 落子 · 执行 commit):",
-    ...digest,
-    "",
-    "卡体未存盘的种子决策,可在 vault 里 `git show <commit>` 查看被接受的真实改动(你是只读沙箱,git 读操作可用)。",
-    "",
-    ...(existingRules.length
-      ? ["已有规则(别重复、别换皮复述;只提真正新的):", ...existingRules.map((r) => `- ${r}`), ""]
-      : []),
-    "每条规则:rule(人话一行,如上语体)· rationale(写给机器存档的依据:哪些决策的什么共性;不上人读层,术语随意)· sourceCardIds(上面列表里真实的 cardId,≥1)· confidence(low/medium/high)· confidenceNote(可 null)。",
-    "统计、置信、时效这些账本信息不要写进 rule——账本由代码渲染成规则行下的降层小字。",
-    "宁缺毋滥:共性不足 2 条决策支撑的规则别提;没有可靠规则就返回空数组。只返回符合 output schema 的 JSON。",
-  ].join("\n");
+  const prompt = buildTastePrompt({ maxRules, stats, digest, existingRules });
 
   const schemaPath = join(tmpdir(), `forme-taste-schema-${runId}.json`);
   writeFileSync(schemaPath, JSON.stringify(agentRulesSchema()));

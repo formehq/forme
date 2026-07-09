@@ -71,7 +71,7 @@ No reliable drift can legitimately produce zero cards. Do not manufacture a card
 ## 0:25–0:30 — verify with the user
 
 - Console opens at `http://127.0.0.1:6180` and shows either the first card or an honest empty state.
-- The card's human-facing text follows the selected evidence language (Chinese, English, or per-card language in a mixed vault).
+- Every newly generated card face and console control is English-first. Evidence quotes and diff source text remain verbatim in the vault's language.
 - The card cites a real vault path and exact evidence. Expand the diff together.
 - The user can explain accept/park/reject without operator translation.
 - `~/Library/Logs/forme/` contains no crash loop; `launchctl print gui/$(id -u)/com.forme.console` succeeds.

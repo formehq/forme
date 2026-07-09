@@ -7,7 +7,7 @@
  */
 export function renderPage(): string {
   return `<!doctype html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,7 +29,7 @@ export function renderPage(): string {
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
-    font: 16px/1.7 -apple-system, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
   main { max-width: 660px; margin: 0 auto; padding: 40px 20px 80px; }
   .brand { color: var(--muted); font-size: 13px; letter-spacing: .08em; margin-bottom: 28px; }
@@ -138,64 +138,65 @@ function post(path, body) {
 }
 function fmtSecs(ms) { // #19:本次用时的人读形
   var s = Math.round(ms / 1000);
-  if (s < 60) return s + " 秒";
-  return Math.floor(s / 60) + " 分 " + (s % 60) + " 秒";
+  if (s < 60) return s + " sec";
+  return Math.floor(s / 60) + " min " + (s % 60) + " sec";
 }
 function mmdd(ts) { // #25:时间戳的用户面渲染一律本地时区
   var d = new Date(ts);
   var p = function (n) { return (n < 10 ? "0" : "") + n; };
   return p(d.getMonth() + 1) + "-" + p(d.getDate());
 }
-var STAKES_LABEL = { "reversible-ledger": "账本", "real-world-action": "行动", "thought": "思想" };
+var STAKES_LABEL = { "reversible-ledger": "Ledger", "real-world-action": "Action", "thought": "Thought" };
 var CATEGORY_LABEL = {
-  "dangling-task": "悬空待办",
-  "stale-claim": "过期断言",
-  "stale-frontmatter": "页头失新",
-  "broken-link": "断开的链接",
-  "naming-drift": "命名漂移",
-  "claim-drift": "观点漂移"
+  "dangling-task": "Open task",
+  "stale-claim": "Stale claim",
+  "stale-frontmatter": "Stale metadata",
+  "broken-link": "Broken link",
+  "naming-drift": "Naming drift",
+  "claim-drift": "Claim drift"
 };
-function categoryLabel(category) { return CATEGORY_LABEL[category] || "知识漂移"; }
+function categoryLabel(category) { return CATEGORY_LABEL[category] || "Knowledge drift"; }
 
 /* ---------- 屏 1 · catch-up ---------- */
 function awayLabel(cu) {
-  if (!cu.sinceTs) return "第一次开盖";
+  if (!cu.sinceTs) return "First opening";
   var h = cu.awayHours;
-  if (h < 1) return "你刚还在";
-  if (h < 48) return "你不在的 " + Math.round(h) + " 小时";
-  return "你不在的 " + Math.round(h / 24) + " 天";
+  if (h < 1) return "You were just here";
+  if (h < 48) return "While you were away for " + Math.round(h) + " hours";
+  return "While you were away for " + Math.round(h / 24) + " days";
 }
 function freshLabel() {
   var fr = st.freshness || {};
-  if (!fr.asOf) return fr.refreshing ? "还没跑过扫描 · 正在补第一轮…" : "还没跑过扫描";
+  if (!fr.asOf) return fr.refreshing ? "No scan yet · running the first scan…" : "No scan yet";
   var d = new Date(fr.asOf);
   var pad = function (n) { return (n < 10 ? "0" : "") + n; };
   var sameDay = new Date().toDateString() === d.toDateString();
-  var label = "队列截至 " + (sameDay ? "" : pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " ") +
+  var label = "Queue current as of " + (sameDay ? "" : pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + " ") +
     pad(d.getHours()) + ":" + pad(d.getMinutes());
-  return fr.refreshing ? label + " · 后台补扫中…" : label;
+  return fr.refreshing ? label + " · refreshing in the background…" : label;
 }
 function renderCatchup() {
   currentView = "catchup";
   var cu = st.catchUp;
-  var into = cu.commits === 0 ? "vault 没有新 commit" :
-    cu.commits + " 个 commit,动了 " + cu.mdTouched + " 个文档";
-  var did = cu.runs.runs === 0 ? "没跑扫描;没动任何内容文件" :
-    cu.runs.runs + " 轮扫描,提出 " + cu.runs.proposed + " 张、抑制 " + cu.runs.suppressed + " 张;没动任何内容文件";
-  var wait = cu.pending.count === 0 ? "没有卡在等你" :
-    "<strong>" + cu.pending.count + " 张卡,约 " + Math.max(1, Math.round(cu.pending.estSeconds / 60)) + " 分钟</strong>";
-  if (cu.awaitingContext > 0) wait += '<span class="muted">(另 ' + cu.awaitingContext + " 张在补 context)</span>";
+  var into = cu.commits === 0 ? "No new vault commits" :
+    cu.commits + " commit" + (cu.commits === 1 ? "" : "s") + " touched " + cu.mdTouched + " document" + (cu.mdTouched === 1 ? "" : "s");
+  var did = cu.runs.runs === 0 ? "No scans yet; no knowledge files changed" :
+    cu.runs.runs + " scan" + (cu.runs.runs === 1 ? "" : "s") + " proposed " + cu.runs.proposed +
+    " card" + (cu.runs.proposed === 1 ? "" : "s") + " and suppressed " + cu.runs.suppressed + "; no knowledge files changed";
+  var wait = cu.pending.count === 0 ? "No cards are waiting" :
+    "<strong>" + cu.pending.count + " card" + (cu.pending.count === 1 ? "" : "s") + " · about " + Math.max(1, Math.round(cu.pending.estSeconds / 60)) + " min</strong>";
+  if (cu.awaitingContext > 0) wait += '<span class="muted">(' + cu.awaitingContext + " more " + (cu.awaitingContext === 1 ? "is" : "are") + " gathering context)</span>";
   var html = '<div class="card">' +
     "<h1>" + esc(awayLabel(cu)) + "</h1>" +
-    '<table class="facts"><tr><td>进来</td><td>' + into + "</td></tr>" +
-    "<tr><td>我做的</td><td>" + did + "</td></tr>" +
-    "<tr><td>等你</td><td>" + wait + "</td></tr></table>" +
+    '<table class="facts"><tr><td>Arrived</td><td>' + into + "</td></tr>" +
+    "<tr><td>I did</td><td>" + did + "</td></tr>" +
+    "<tr><td>Waiting</td><td>" + wait + "</td></tr></table>" +
     '<p class="muted" style="font-size:13px;margin:14px 0 0">' + esc(freshLabel()) + "</p>" +
     '<div class="actions">';
-  if (cu.pending.count > 0) html += '<button class="primary" id="go">进入落子</button>';
-  if (st.stateDiff) html += '<button id="sd">先看 State Diff</button>';
+  if (cu.pending.count > 0) html += '<button class="primary" id="go">Review cards</button>';
+  if (st.stateDiff) html += '<button id="sd">View State Diff</button>';
   if (st.metrics && (st.metrics.decided.total > 0 || st.metrics.runs.length > 0)) html += '<button id="mx">Metrics</button>';
-  html += '<button class="ghost" id="skip">今天不看</button></div></div>';
+  html += '<button class="ghost" id="skip">Not today</button></div></div>';
   view.innerHTML = html;
   var go = document.getElementById("go");
   if (go) go.onclick = startSession;
@@ -207,8 +208,8 @@ function renderCatchup() {
 }
 function renderSkip() {
   currentView = "skip";
-  view.innerHTML = '<div class="card"><p>好,今天不看。卡都在,不催。</p>' +
-    '<div class="actions"><button class="ghost" id="back">回到开头</button></div></div>';
+  view.innerHTML = '<div class="card"><p>Okay, not today. The cards will be here when you return.</p>' +
+    '<div class="actions"><button class="ghost" id="back">Back to start</button></div></div>';
   document.getElementById("back").onclick = boot;
 }
 
@@ -229,35 +230,35 @@ function showCard() {
   var html = '<div class="card">' +
     '<div class="meta"><span class="chip" title="' + esc(c.category) + '">' + esc(categoryLabel(c.category)) + "</span>" +
     (c.stakes && STAKES_LABEL[c.stakes] ? '<span class="chip">' + STAKES_LABEL[c.stakes] + "</span>" : "") +
-    (c.estSeconds ? "<span>约 " + c.estSeconds + " 秒</span>" : "") +
-    '<span style="margin-left:auto">第 ' + (idx + 1) + " / " + queue.length + " 张</span></div>" +
+    (c.estSeconds ? "<span>About " + c.estSeconds + " sec</span>" : "") +
+    '<span style="margin-left:auto">Card ' + (idx + 1) + " of " + queue.length + "</span></div>" +
     "<h1>" + esc(c.title) + "</h1>" +
     (c.summary ? "<p>" + esc(c.summary) + "</p>" : "");
-  if (c.whyNow) html += "<h2>为什么现在</h2><p>" + esc(c.whyNow) + "</p>";
+  if (c.whyNow) html += "<h2>Why now</h2><p>" + esc(c.whyNow) + "</p>";
   if (c.context) { // #21 question 通道的往返:你问过 → 它带着解释回来了
-    html += "<h2>你问过</h2>" +
+    html += "<h2>You asked</h2>" +
       '<div class="quote">' + esc(c.context.question) + "</div>" +
       "<p>" + esc(c.context.answer) + "</p>";
   }
   if (c.recommendation) {
-    var lbl = { accept: "接受", park: "搁置", reject: "拒绝" }[c.recommendation.choice];
-    html += '<h2>建议</h2><p><span class="rec-' + c.recommendation.choice + '">' + lbl +
-      "</span> —— " + esc(c.recommendation.reason) + "</p>";
+    var lbl = { accept: "Accept", park: "Park", reject: "Reject" }[c.recommendation.choice];
+    html += '<h2>Recommendation</h2><p><span class="rec-' + c.recommendation.choice + '">' + lbl +
+      "</span> · " + esc(c.recommendation.reason) + "</p>";
   }
-  html += "<h2>拍板后会发生什么</h2>";
+  html += "<h2>After you decide</h2>";
   if (c.onAccept) html += "<p>" + esc(c.onAccept) + "</p>";
-  html += '<p class="muted">改 <code>' + esc(c.diff.file) + "</code>（" + c.diff.hunks.length +
-    " 处最小改动）;git 提交,可回滚。</p>";
+  html += '<p class="muted">Updates <code>' + esc(c.diff.file) + "</code> (" + c.diff.hunks.length +
+    " minimal edit" + (c.diff.hunks.length === 1 ? "" : "s") + "); committed to git and reversible.</p>";
   html += '<div class="actions">' +
-    '<button class="primary" data-choice="accept"><kbd>a</kbd>接受</button>' +
-    '<button data-choice="park"><kbd>p</kbd>搁置</button>' +
-    '<button data-choice="reject"><kbd>r</kbd>拒绝</button>' +
-    '<button class="ghost" id="fix">输入修正…</button>' +
-    '<button class="ghost" id="ask"><kbd>q</kbd>问一句…</button></div>' +
-    '<input id="note" class="notebox" placeholder="为什么？（可选；搁置时写下缘由 = 转交给你的 agent 复查）">' +
-    '<p id="focus-hint" class="focus-hint" hidden>改内容 · q 问一句 · 搁置或拒绝时说理由 · u 撤销</p>' +
+    '<button class="primary" data-choice="accept"><kbd>a</kbd>Accept</button>' +
+    '<button data-choice="park"><kbd>p</kbd>Park</button>' +
+    '<button data-choice="reject"><kbd>r</kbd>Reject</button>' +
+    '<button class="ghost" id="fix">Revise…</button>' +
+    '<button class="ghost" id="ask"><kbd>q</kbd>Ask…</button></div>' +
+    '<input id="note" class="notebox" placeholder="Why? Optional. A note on Park hands this back to your agent for review.">' +
+    '<p id="focus-hint" class="focus-hint" hidden>Revise · q ask · explain a park or reject · u undo</p>' +
     '<div id="msg"></div><div id="corr"></div>';
-  html += '<details><summary>证据（展开核查）</summary>';
+  html += '<details><summary>Evidence (expand to verify)</summary>';
   for (var i = 0; i < c.evidence.length; i++) {
     var e = c.evidence[i];
     html += '<div class="ev"><span class="path">' + esc(e.path) + (e.locator ? " · " + esc(e.locator) : "") +
@@ -266,7 +267,7 @@ function showCard() {
     html += "</div>";
   }
   html += "</details>";
-  html += '<details><summary>最小 diff · <code>' + esc(c.diff.file) + "</code></summary><pre class=\\"diff\\">";
+  html += '<details><summary>Minimal diff · <code>' + esc(c.diff.file) + "</code></summary><pre class=\\"diff\\">";
   for (var j = 0; j < c.diff.hunks.length; j++) {
     var h = c.diff.hunks[j];
     if (h.locator) html += '<span class="loc">@@ ' + esc(h.locator) + " @@</span>\\n";
@@ -289,7 +290,7 @@ function panelDraft(box) {
   if (panel.getAttribute("data-panel") === "ask") {
     var q = document.getElementById("ask-q");
     var question = q ? q.value.trim() : "";
-    return { kind: "ask", dirty: !!question, note: question ? "原本想问：" + question : "", hunks: [] };
+    return { kind: "ask", dirty: !!question, note: question ? "Question draft: " + question : "", hunks: [] };
   }
   var hunks = [];
   var changed = false;
@@ -310,14 +311,14 @@ function panelDraft(box) {
     for (var j = 0; j < hunks.length; j++) {
       if (hunks[j].after !== queue[idx].diff.hunks[j].after) changedText.push(hunks[j].after);
     }
-    draftNote = (note ? note + "\\n" : "") + "未采用的修正草稿：" + changedText.join("\\n---\\n");
+    draftNote = (note ? note + "\\n" : "") + "Unused revision draft: " + changedText.join("\\n---\\n");
   }
   return { kind: "correction", dirty: changed || !!note, note: draftNote, correctionNote: note, hunks: hunks, changed: changed };
 }
 
 function mayReplacePanel(box) {
   var draft = panelDraft(box);
-  return !draft.dirty || window.confirm("这段还没送出，确定丢掉并收起？");
+  return !draft.dirty || window.confirm("This draft has not been sent. Discard it and close?");
 }
 
 function closePanel(box) {
@@ -330,10 +331,10 @@ function renderAsk(c) {
   var box = document.getElementById("corr");
   if (!mayReplacePanel(box)) return;
   box.innerHTML = '<div class="correction" data-panel="ask">' +
-    '<p class="muted">哪里没说清?问一句。这张卡先退回去,下一轮扫描会带着解释重新出现——不落子,不催你。</p>' +
-    '<textarea id="ask-q" rows="2" placeholder="例:这件事在我的世界里对应什么?"></textarea>' +
-    '<div class="actions"><button class="primary" id="ask-send">发问,先不落子</button>' +
-    '<button class="ghost" id="ask-cancel">收起</button></div></div>';
+    '<p class="muted">What is missing? Ask one question. This card will return after the next scan with the context, without forcing a decision.</p>' +
+    '<textarea id="ask-q" rows="2" placeholder="Example: What does this affect outside the vault?"></textarea>' +
+    '<div class="actions"><button class="primary" id="ask-send">Ask without deciding</button>' +
+    '<button class="ghost" id="ask-cancel">Close</button></div></div>';
   document.getElementById("ask-q").focus();
   document.getElementById("ask-cancel").onclick = function () { closePanel(box); };
   document.getElementById("ask-send").onclick = function () {
@@ -342,11 +343,11 @@ function renderAsk(c) {
     post("/api/question", { cardId: c.id, question: q }).then(function (r) {
       var msg = document.getElementById("msg");
       if (!r.ok) {
-        msg.innerHTML = '<div class="banner">' + esc(r.data.error || "发问失败") + "</div>";
+        msg.innerHTML = '<div class="banner">' + esc(r.data.error || "Could not send the question") + "</div>";
         return;
       }
       box.innerHTML = "";
-      msg.innerHTML = '<div class="toast">记下了。这张卡退回队列,下一轮会带着解释回来。</div>';
+      msg.innerHTML = '<div class="toast">Question saved. This card will return with context after the next scan.</div>';
       setTimeout(function () { idx++; showCard(); }, 900);
     });
   };
@@ -354,18 +355,18 @@ function renderAsk(c) {
 function renderCorrection(c) {
   var box = document.getElementById("corr");
   if (!mayReplacePanel(box)) return;
-  var html = '<div class="correction" data-panel="correction"><h2>哪里不对？</h2>' +
-    '<p class="muted">直接改成你想要的样子。</p>';
+  var html = '<div class="correction" data-panel="correction"><h2>What is off?</h2>' +
+    '<p class="muted">Edit the proposed result directly.</p>';
   for (var i = 0; i < c.diff.hunks.length; i++) {
     var h = c.diff.hunks[i];
-    html += '<p class="field-label">改后的样子' + (c.diff.hunks.length > 1 ? " · 第 " + (i + 1) + " 处" : "") + "</p>" +
+    html += '<p class="field-label">Proposed result' + (c.diff.hunks.length > 1 ? " · Edit " + (i + 1) : "") + "</p>" +
       '<textarea data-hunk="' + i + '" rows="2">' + esc(h.after) + "</textarea>" +
-      '<details><summary>原样（展开对照）</summary><div class="before">' + esc(h.before) + "</div></details>";
+      '<details><summary>Original (expand to compare)</summary><div class="before">' + esc(h.before) + "</div></details>";
   }
-  html += '<input id="corr-note" placeholder="想补一句原因？（可选）">' +
-    '<div class="actions"><button class="primary" id="corr-accept">按这个改后接受</button>' +
-    '<button id="corr-original" hidden>原样接受，字留作备注</button>' +
-    '<button class="ghost" id="corr-cancel">收起</button></div></div>';
+  html += '<input id="corr-note" placeholder="Add a reason? Optional.">' +
+    '<div class="actions"><button class="primary" id="corr-accept">Accept with this change</button>' +
+    '<button id="corr-original" hidden>Accept original, keep text as note</button>' +
+    '<button class="ghost" id="corr-cancel">Close</button></div></div>';
   box.innerHTML = html;
   document.getElementById("corr-cancel").onclick = function () { closePanel(box); };
   document.getElementById("corr-note").oninput = function () {
@@ -402,7 +403,7 @@ function decide(choice, correction, panelNote) {
   post("/api/decide", body).then(function (r) {
     var msg = document.getElementById("msg");
     if (!r.ok) {
-      msg.innerHTML = '<div class="banner">' + esc(r.data.error || "落子失败") + "</div>";
+      msg.innerHTML = '<div class="banner">' + esc(r.data.error || "Could not record the decision") + "</div>";
       return;
     }
     decided++;
@@ -411,15 +412,15 @@ function decide(choice, correction, panelNote) {
     for (var i = 0; i < btns.length; i++) btns[i].disabled = true;
     var took = r.data.latencyMs != null ? " · " + fmtSecs(r.data.latencyMs) : ""; // #19:本次用时上屏
     var text = choice === "accept"
-      ? "已接受 · commit " + esc(r.data.executed || "?") + took + " · 可回滚"
-      : (choice === "park" ? "已搁置" : "已拒绝") + took;
-    msg.innerHTML = '<div class="toast">' + text + '<button id="undo"><kbd>u</kbd>撤销</button></div>';
+      ? "Accepted · commit " + esc(r.data.executed || "?") + took + " · reversible"
+      : (choice === "park" ? "Parked" : "Rejected") + took;
+    msg.innerHTML = '<div class="toast">' + text + '<button id="undo"><kbd>u</kbd>Undo</button></div>';
     advanceTimer = setTimeout(function () { advanceTimer = null; idx++; showCard(); }, 4000);
     document.getElementById("undo").onclick = function () {
       if (advanceTimer) { clearTimeout(advanceTimer); advanceTimer = null; }
       post("/api/undo", { cardId: c.id }).then(function (u) {
         if (!u.ok) {
-          msg.innerHTML = '<div class="banner">' + esc(u.data.error || "撤销失败") + "</div>";
+          msg.innerHTML = '<div class="banner">' + esc(u.data.error || "Could not undo") + "</div>";
           setTimeout(function () { idx++; showCard(); }, 1200);
           return;
         }
@@ -434,11 +435,11 @@ function renderDone() {
   currentView = "done";
   var secs = Math.round((Date.now() - sessionStart) / 1000);
   var mm = Math.floor(secs / 60), ss = secs % 60;
-  var html = '<div class="card"><h1>落完了</h1><p>' + decided + " 张 · 用时 " +
-    (mm ? mm + " 分 " : "") + ss + ' 秒。今天到此为止。</p><div class="actions">';
-  if (st.stateDiff) html += '<button id="sd">看 State Diff</button>';
-  html += '<button id="mx">看 Metrics</button>';
-  html += '<button class="ghost" id="back">回到开头</button></div></div>';
+  var html = '<div class="card"><h1>All done</h1><p>' + decided + " card" + (decided === 1 ? "" : "s") + " · " +
+    (mm ? mm + " min " : "") + ss + ' sec. That is enough for today.</p><div class="actions">';
+  if (st.stateDiff) html += '<button id="sd">View State Diff</button>';
+  html += '<button id="mx">View Metrics</button>';
+  html += '<button class="ghost" id="back">Back to start</button></div></div>';
   view.innerHTML = html;
   var sd = document.getElementById("sd");
   if (sd) sd.onclick = function () { renderStateDiff("done"); };
@@ -460,7 +461,7 @@ function renderStateDiff(backTo) {
     else out += "<p>" + inline(p).replace(/^<strong>([^<]+)<\\/strong>[::]/, "<strong>$1</strong>") + "</p>";
   }
   view.innerHTML = '<div class="card sd">' + out +
-    '<div class="actions"><button class="ghost" id="back">回去</button></div></div>';
+    '<div class="actions"><button class="ghost" id="back">Back</button></div></div>';
   document.getElementById("back").onclick = backTo === "done" ? renderDone : renderCatchup;
 }
 
@@ -472,23 +473,23 @@ function renderMetrics(backTo) {
     currentView = "metrics";
     var m = st.metrics;
     var html = '<div class="card"><h1>Metrics</h1>';
-    html += "<p>" + m.decided.total + " 次落子:接受 " + m.decided.accept + " · 搁置 " + m.decided.park +
-      " · 拒绝 " + m.decided.reject + (m.questions ? " · 发问 " + m.questions : "") + "</p>";
+    html += "<p>" + m.decided.total + " decision" + (m.decided.total === 1 ? "" : "s") + ": " + m.decided.accept + " accept · " + m.decided.park +
+      " park · " + m.decided.reject + " reject" + (m.questions ? " · " + m.questions + " question" + (m.questions === 1 ? "" : "s") : "") + "</p>";
     if (m.cognition) { // #18:认知含量——方向审计的常驻仪表
       var cg = m.cognition;
       var cgTotal = cg.thought + cg.action + cg.ledger;
       if (cgTotal > 0) {
-        html += '<p class="muted" style="font-size:13px">认知含量:思想 ' + cg.thought + " · 行动 " + cg.action +
-          " · 账本 " + cg.ledger + "(思想卡占比 " + Math.round((cg.thought / cgTotal) * 100) + "%)</p>";
+        html += '<p class="muted" style="font-size:13px">Cognitive mix: ' + cg.thought + " thought · " + cg.action + " action · " +
+          cg.ledger + " ledger (" + Math.round((cg.thought / cgTotal) * 100) + "% thought)</p>";
       }
     }
 
     html += "<h2>time-to-decision</h2>";
     if (m.latency.count === 0) {
-      html += '<p class="muted">还没有现场计时的落子。</p>';
+      html += '<p class="muted">No live decision timings yet.</p>';
     } else {
-      html += '<p><span class="big">中位 ' + fmtSecs(m.latency.medianMs) + "</span>" +
-        '<span class="muted"> · ' + m.latency.count + " 次现场计时</span></p>";
+      html += '<p><span class="big">Median ' + fmtSecs(m.latency.medianMs) + "</span>" +
+        '<span class="muted"> · ' + m.latency.count + " live timing" + (m.latency.count === 1 ? "" : "s") + "</span></p>";
       var recent = m.latency.recent;
       var maxMs = 1;
       for (var i = 0; i < recent.length; i++) if (recent[i].latencyMs > maxMs) maxMs = recent[i].latencyMs;
@@ -501,13 +502,13 @@ function renderMetrics(backTo) {
       }
     }
 
-    html += "<h2>重复率</h2>";
+    html += "<h2>Repetition</h2>";
     if (m.runs.length === 0) {
-      html += '<p class="muted">还没跑过扫描。</p>';
+      html += '<p class="muted">No scans yet.</p>';
     } else {
       var t = m.totals;
       var ratePct = t.proposed ? Math.round((t.suppressedPlusDup / t.proposed) * 100) : 0;
-      html += "<p>累计 " + m.runs.length + " 轮:提出 " + t.proposed + ",抑制+重复 " + t.suppressedPlusDup +
+      html += "<p>" + m.runs.length + " run" + (m.runs.length === 1 ? "" : "s") + ": " + t.proposed + " proposed, " + t.suppressedPlusDup + " suppressed or duplicate " +
         (t.proposed ? "(" + ratePct + "%)" : "") + "</p>";
       var runs = m.runs.slice(-15);
       var maxP = 1;
@@ -522,15 +523,15 @@ function renderMetrics(backTo) {
           (run.presented ? '<span class="seg segp" style="width:' + wp + '%"></span>' : "") +
           (sup ? '<span class="seg segs" style="width:' + ws + '%"></span>' : "") +
           "</span>" +
-          '<span class="mval">' + run.presented + " 入列 · " + sup + " 抑</span></div>";
+          '<span class="mval">' + run.presented + " shown · " + sup + " suppressed</span></div>";
       }
-      html += '<p class="muted" style="font-size:12px">绿 = 入列呈现;灰 = 指纹抑制 + 重复丢弃;每行一轮。</p>';
+      html += '<p class="muted" style="font-size:12px">Green = shown; gray = fingerprint suppression or duplicate; one row per run.</p>';
       var ill = 0, ref = 0;
       for (var e2 = 0; e2 < m.runs.length; e2++) { ill += m.runs[e2].illegible || 0; ref += m.runs[e2].refaced || 0; }
-      if (ill || ref) html += '<p class="muted" style="font-size:12px">世界层闸命中 ' + ill + " · 问答往返 " + ref + "。</p>";
+      if (ill || ref) html += '<p class="muted" style="font-size:12px">World-level gate hits ' + ill + " · question round-trips " + ref + ".</p>";
     }
 
-    html += '<div class="actions"><button class="ghost" id="back">回去</button></div></div>';
+    html += '<div class="actions"><button class="ghost" id="back">Back</button></div></div>';
     view.innerHTML = html;
     document.getElementById("back").onclick = backTo === "done" ? renderDone : renderCatchup;
   });

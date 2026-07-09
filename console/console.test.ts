@@ -121,15 +121,19 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
     const page = await fetch(t.base + "/");
     assert.equal(page.status, 200);
     const pageHtml = await page.text();
-    assert.match(pageHtml, /进入落子|forme/);
+    assert.match(pageHtml, /Review cards|forme/);
     // #26-A/#27:人话表面 + 未提交草稿的两条预防性护栏常驻页面脚本
-    assert.match(pageHtml, /悬空待办/);
-    assert.match(pageHtml, /哪里不对？/);
-    assert.match(pageHtml, /改后的样子/);
-    assert.match(pageHtml, /原样（展开对照）/);
-    assert.match(pageHtml, /原样接受，字留作备注/);
-    assert.match(pageHtml, /确定丢掉并收起/);
-    assert.match(pageHtml, /未采用的修正草稿/);
+    assert.match(pageHtml, /Open task/);
+    assert.match(pageHtml, /What is off\?/);
+    assert.match(pageHtml, /Proposed result/);
+    assert.match(pageHtml, /Original \(expand to compare\)/);
+    assert.match(pageHtml, /Accept original, keep text as note/);
+    assert.match(pageHtml, /Discard it and close/);
+    assert.match(pageHtml, /Unused revision draft/);
+    assert.match(pageHtml, /A note on Park hands this back to your agent for review/);
+    assert.match(pageHtml, /Ask without deciding/);
+    assert.match(pageHtml, /<kbd>u<\/kbd>Undo/);
+    assert.match(pageHtml, /Cognitive mix/);
     assert.doesNotMatch(pageHtml, /before 必须原样匹配/);
     let state = (await t.get("/api/state")) as { pending: Card[]; catchUp: { pending: { count: number }; sinceTs: string | null } };
     assert.equal(state.pending.length, 4);
@@ -203,7 +207,7 @@ test("console 拒绝不干净的目标文件:回执 commit 不裹挟用户未提
   try {
     const r = await t.post("/api/decide", { cardId: card.id, choice: "accept" });
     assert.equal(r.status, 422);
-    assert.match(String(r.data.error), /未提交/);
+    assert.match(String(r.data.error), /uncommitted changes/);
     // 文件除用户手改外原样;没有 decision 事件,卡还在队列里
     assert.match(readFileSync(join(vault, "note-e.md"), "utf8"), /第五句。/);
     const events = readEvents(join(vault, "98_Forme", "decisions.jsonl"));
@@ -406,7 +410,7 @@ test("note 通道 + 撤销窗口(#24):理由随任意手势;undo 补偿事件;ac
     });
     const late = await t.post("/api/undo", { cardId: cardB.id });
     assert.equal(late.status, 409);
-    assert.match(String(late.data.error), /窗口/);
+    assert.match(String(late.data.error), /undo window/);
   } finally {
     await t.close();
   }

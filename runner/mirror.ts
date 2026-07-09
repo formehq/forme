@@ -1,6 +1,6 @@
 import type { Card } from "./types.ts";
 
-const CHOICE_LABEL: Record<string, string> = { accept: "接受", park: "搁置", reject: "拒绝" };
+const CHOICE_LABEL: Record<string, string> = { accept: "Accept", park: "Park", reject: "Reject" };
 
 /**
  * Render a card to its markdown mirror. Hard constraint #4: every card has a
@@ -43,7 +43,7 @@ export function cardToMarkdown(card: Card): string {
 
   // ② 为什么现在(出身/时机)
   if (card.whyNow) {
-    L.push("## 为什么现在");
+    L.push("## Why now");
     L.push("");
     L.push(card.whyNow);
     L.push("");
@@ -51,7 +51,7 @@ export function cardToMarkdown(card: Card): string {
 
   // ②′ 你问过(#21 question 通道往返:问题与回答都留在镜像里,卡自含)
   if (card.context) {
-    L.push("## 你问过");
+    L.push("## You asked");
     L.push("");
     L.push(`> ${card.context.question}`);
     L.push("");
@@ -61,26 +61,26 @@ export function cardToMarkdown(card: Card): string {
 
   // ③ 建议 + 一行理由
   if (card.recommendation) {
-    L.push("## 建议");
+    L.push("## Recommendation");
     L.push("");
-    L.push(`**${CHOICE_LABEL[card.recommendation.choice]}** —— ${card.recommendation.reason}`);
+    L.push(`**${CHOICE_LABEL[card.recommendation.choice]}** · ${card.recommendation.reason}`);
     L.push("");
   }
 
   // ④ 拍板后会发生什么(agent 一句人话 + 确定性事实行)
-  L.push("## 拍板后会发生什么");
+  L.push("## After you decide");
   L.push("");
   if (card.onAccept) L.push(card.onAccept);
-  L.push(`改 \`${card.diff.file}\`（${card.diff.hunks.length} 处最小改动）;git 提交,可回滚。`);
+  L.push(`Updates \`${card.diff.file}\` (${card.diff.hunks.length} minimal edit${card.diff.hunks.length === 1 ? "" : "s"}); committed to git and reversible.`);
   L.push("");
 
-  L.push("## 落子");
+  L.push("## Decide");
   L.push("");
   L.push(card.options.map((o) => `\`[${o.hotkey}] ${o.label}\``).join("   "));
   L.push("");
 
   // ⑤ 支撑层(折叠,展开可核查)
-  L.push("> [!quote]- 证据（展开核查）");
+  L.push("> [!quote]- Evidence (expand to verify)");
   for (const e of card.evidence) {
     const loc = e.locator ? ` \`${e.locator}\`` : "";
     const note = e.note ? ` — ${e.note}` : "";
@@ -88,7 +88,7 @@ export function cardToMarkdown(card: Card): string {
     if (e.quote) for (const q of e.quote.split("\n")) L.push(`>   > ${q}`);
   }
   L.push("");
-  L.push(`> [!example]- 最小 diff · \`${card.diff.file}\``);
+  L.push(`> [!example]- Minimal diff · \`${card.diff.file}\``);
   L.push("> ```diff");
   for (const h of card.diff.hunks) {
     if (h.locator) L.push(`> @@ ${h.locator} @@`);

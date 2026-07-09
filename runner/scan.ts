@@ -39,7 +39,7 @@ export function recentMarkdownFiles(
 ): string[] {
   const out = execFileSync(
     "git",
-    ["-C", vault, "log", `-n${commits}`, "--name-only", "--format=", "--", "*.md"],
+    ["-c", "core.quotePath=false", "-C", vault, "log", `-n${commits}`, "--name-only", "--format=", "--", "*.md"],
     { encoding: "utf8" },
   );
   return filterMarkdownList(vault, out, maxFiles, excludePrefix);
@@ -54,7 +54,7 @@ export function markdownFilesSince(
 ): string[] {
   const out = execFileSync(
     "git",
-    ["-C", vault, "log", `${anchor}..HEAD`, "--name-only", "--format=", "--", "*.md"],
+    ["-c", "core.quotePath=false", "-C", vault, "log", `${anchor}..HEAD`, "--name-only", "--format=", "--", "*.md"],
     { encoding: "utf8" },
   );
   return filterMarkdownList(vault, out, maxFiles, excludePrefix);
@@ -73,7 +73,7 @@ export function slowLayerFiles(vault: string, n: number, prefix = "02_Wiki/", da
   const pathspec = prefix || ".";
   const lastTouch = new Map<string, number>(); // 文件 → 首见次序(小 = 最近被动过)
   let order = 0;
-  const log = execFileSync("git", ["-C", vault, "log", "--name-only", "--format=", "--", pathspec], {
+  const log = execFileSync("git", ["-c", "core.quotePath=false", "-C", vault, "log", "--name-only", "--format=", "--", pathspec], {
     encoding: "utf8",
     maxBuffer: 64 * 1024 * 1024,
   });
@@ -82,7 +82,7 @@ export function slowLayerFiles(vault: string, n: number, prefix = "02_Wiki/", da
     if (!f || !f.endsWith(".md") || f.startsWith("98_Forme/")) continue;
     if (!lastTouch.has(f)) lastTouch.set(f, order++);
   }
-  const existing = execFileSync("git", ["-C", vault, "ls-files", "--", pathspec], { encoding: "utf8" })
+  const existing = execFileSync("git", ["-c", "core.quotePath=false", "-C", vault, "ls-files", "--", pathspec], { encoding: "utf8" })
     .split("\n")
     .map((s) => s.trim())
     .filter((f) => f.endsWith(".md") && !f.startsWith("98_Forme/"));

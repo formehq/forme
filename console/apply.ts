@@ -20,7 +20,7 @@ export function applyHunksToContent(content: string, hunks: Hunk[]): string {
   for (const [i, h] of hunks.entries()) {
     const tag = `hunk ${i + 1}${h.locator ? `（${h.locator}）` : ""}`;
     if (h.before === "") {
-      throw new ApplyError(`${tag}:纯插入(before 为空)v0 不支持自动应用,请在 vault 侧手动处理`);
+      throw new ApplyError(`${tag}: pure insertions (empty before) are not auto-applied in v0; edit the vault manually`);
     }
     const hits: number[] = [];
     let from = 0;
@@ -31,13 +31,13 @@ export function applyHunksToContent(content: string, hunks: Hunk[]): string {
       from = at + 1;
     }
     if (hits.length === 0) {
-      throw new ApplyError(`${tag}:before 在文件里已不存在——内容又漂了,这张卡过期了`);
+      throw new ApplyError(`${tag}: before no longer exists in the file; the content moved again and this card is stale`);
     }
     let at = hits[0]!;
     if (hits.length > 1) {
       const line = h.locator?.match(/L(\d+)/)?.[1];
       if (!line) {
-        throw new ApplyError(`${tag}:before 出现 ${hits.length} 次且 locator 无行号,无法消歧`);
+        throw new ApplyError(`${tag}: before appears ${hits.length} times and the locator has no line number`);
       }
       const target = Number(line);
       const lineOf = (p: number) => out.slice(0, p).split("\n").length;
@@ -59,7 +59,7 @@ export interface ApplyReceipt {
 export function applyCardDiff(vault: string, card: Card, hunks: Hunk[]): ApplyReceipt {
   const rel = card.diff.file;
   const abs = resolve(vault, rel);
-  if (!abs.startsWith(resolve(vault) + sep)) throw new ApplyError(`diff.file 越出 vault 边界:${rel}`);
+  if (!abs.startsWith(resolve(vault) + sep)) throw new ApplyError(`diff.file escapes the vault boundary: ${rel}`);
 
   // 目标文件必须干净:回执 commit 只能包含这张卡的改动,
   // 不能把用户未提交的编辑一起裹进去(provenance 会撒谎,回滚会误伤)
@@ -67,7 +67,7 @@ export function applyCardDiff(vault: string, card: Card, hunks: Hunk[]): ApplyRe
     encoding: "utf8",
   }).trim();
   if (dirty) {
-    throw new ApplyError(`目标文件有未提交的改动,先在 vault 侧提交或还原它再落子:${rel}`);
+    throw new ApplyError(`The target file has uncommitted changes. Commit or restore it before deciding: ${rel}`);
   }
 
   const original = readFileSync(abs, "utf8");
@@ -82,7 +82,7 @@ export function applyCardDiff(vault: string, card: Card, hunks: Hunk[]): ApplyRe
   } catch (e) {
     writeFileSync(abs, original); // 不留半执行状态
     const msg = e instanceof Error && "stderr" in e ? String((e as { stderr?: unknown }).stderr) : "";
-    throw new ApplyError(`git 提交失败,文件已还原${msg ? `:${msg.trim().slice(0, 200)}` : ""}`);
+    throw new ApplyError(`git commit failed; the file was restored${msg ? `: ${msg.trim().slice(0, 200)}` : ""}`);
   }
   const executed = execFileSync("git", ["-C", vault, "rev-parse", "--short=12", "HEAD"], {
     encoding: "utf8",
@@ -108,7 +108,7 @@ export function revertCommit(vault: string, hash: string): string {
       /* 没有进行中的 revert 就算了 */
     }
     const msg = e instanceof Error && "stderr" in e ? String((e as { stderr?: unknown }).stderr) : "";
-    throw new ApplyError(`撤销失败(revert 冲突,文件可能又被改过)${msg ? `:${msg.trim().slice(0, 200)}` : ""}`);
+    throw new ApplyError(`Undo failed because git revert conflicted; the file may have changed again${msg ? `: ${msg.trim().slice(0, 200)}` : ""}`);
   }
   return execFileSync("git", ["-C", vault, "rev-parse", "--short=12", "HEAD"], {
     encoding: "utf8",

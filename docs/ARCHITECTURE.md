@@ -92,7 +92,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
 - **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
 - **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
-- **白手套冷启动包**(#28):任意 git vault 路径 → Node/Codex/auth 预检(API key 只走 stdin)→ 初始化 `98_Forme/`→ 真实只读 smoke → 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;单命令卸载保留审计数据。runner 不再要求 `02_Wiki/` 或中文 vault:慢层根自动探测,卡面语言按证据判定。
+- **白手套冷启动包**(#28 + #29):任意 git vault 路径 → Node/Codex/auth 预检(API key 只走 stdin)→ 初始化 `98_Forme/`→ 真实只读 smoke → 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;单命令卸载保留审计数据。runner 不要求 `02_Wiki/` 或 owner 目录结构,并以 `core.quotePath=false` 正确读取多语言文件名。新卡、reface、State Diff、console 与新 Taste Rules 固定 English-first;证据引用/diff 源文/历史记录不翻译。
 
 **还不能:**
 - 规则的「收录/改写/丢弃」确认交互(屏 4 Taste 面板,#20,W5)/ k 条相似历史决策注入(post-W2)。
@@ -101,4 +101,4 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - parked 卡没有 un-park 机制——目前与 rejected 同样被永久抑制(question 是落子前的出口、undo 是落子后 15s 内的出口,但 park 本身仍是终态)。
 - correction 只能改 hunk 的 after(v0);纯插入(before 为空)的 diff 拒绝自动应用。
 
-> 一句话:**第二台 Mac 的 30 分钟白手套路径已工程化(#28):先问认证,再预检/smoke/保守首跑/健康检查,未知目录与英文 vault 不再走 owner 默认。** 待验:Zayn 干净账户真预演 + API-key 凭据真跑;第一张 claim-drift 继续等慢层轮转;周日 State Diff。下一块 = 07-21 首用户装机。
+> 一句话:**第二台 Mac 的白手套路径已把 English-first 一并固化(#28/#29):首用户从第一张卡开始就看到真实产品,不存在装机后语言迁移。** 待验:Zayn 干净账户真预演 + API-key 凭据真跑;第一张 claim-drift 继续等慢层轮转;周日 State Diff。下一块 = 07-21 首用户装机。

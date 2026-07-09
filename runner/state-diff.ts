@@ -50,7 +50,7 @@ export function collectWeek(vault: string, outDir: string, days: number, now: Da
 
   const log = execFileSync(
     "git",
-    ["-C", vault, "log", `--since=${fromDate.toISOString()}`, "--name-status", "--format=@%h\t%ad\t%s", "--date=short"],
+    ["-c", "core.quotePath=false", "-C", vault, "log", `--since=${fromDate.toISOString()}`, "--name-status", "--format=@%h\t%ad\t%s", "--date=short"],
     { encoding: "utf8" },
   );
   const commits: WeekData["commits"] = [];
@@ -97,7 +97,7 @@ export function collectWeek(vault: string, outDir: string, days: number, now: Da
     for (const f of readdirSync(cardsDir).filter((f) => f.endsWith(".json"))) {
       try {
         const c = JSON.parse(readFileSync(join(cardsDir, f), "utf8")) as { id?: string; title?: string };
-        if (c.id && !decided.has(c.id)) pendingCards.push({ id: c.id, title: c.title ?? "(无标题)" });
+        if (c.id && !decided.has(c.id)) pendingCards.push({ id: c.id, title: c.title ?? "(Untitled)" });
       } catch {
         /* 宽容 */
       }
@@ -151,7 +151,7 @@ export function latestStateDiffDate(outDir: string): string | null {
 
 /** 渲染:四段骨架永远不变,agent 只填内容;空段落用占位,不许缺段。 */
 export function renderStateDiff(s: Sections, meta: { from: string; to: string; runId: string; at: string }): string {
-  const seg = (v: string) => (v.trim() ? v.trim() : "——（本周无）");
+  const seg = (v: string) => (v.trim() ? v.trim() : "None this week.");
   const mmdd = (d: string) => d.slice(5);
   return [
     "---",
@@ -160,16 +160,37 @@ export function renderStateDiff(s: Sections, meta: { from: string; to: string; r
     `origin: { agent: "codex", runId: "${meta.runId}", at: "${meta.at}" }`,
     "---",
     "",
-    `# 本周（${mmdd(meta.from)} → ${mmdd(meta.to)}）`,
+    `# This week (${mmdd(meta.from)} → ${mmdd(meta.to)})`,
     "",
-    `**进来了什么**:${seg(s.into)}`,
+    `**What came in**: ${seg(s.into)}`,
     "",
-    `**变了什么**:${seg(s.changed)}`,
+    `**What changed**: ${seg(s.changed)}`,
     "",
-    `**什么在等你决定**:${seg(s.waiting)}`,
+    `**What is waiting for you**: ${seg(s.waiting)}`,
     "",
-    `**警报**:${seg(s.alerts)}`,
+    `**Alerts**: ${seg(s.alerts)}`,
     "",
+  ].join("\n");
+}
+
+export function buildStateDiffPrompt(data: WeekData): string {
+  return [
+    "You are Forme's State Diff narrator. Turn the deterministic weekly vault data below into a four-part, single-screen narrative in English.",
+    "",
+    "Use a calm colleague's voice, first person where natural, no pressure, and no calls to action. Keep the full reading under 90 seconds (at most 350 words). Use only numbers present in the data packet.",
+    "",
+    "Return these four sections:",
+    "- into: the substance of new files or inputs, not a filename list. Mention inbox accumulation when the data supports it.",
+    "- changed: the week's real arc, inferred from commit subjects and changed material.",
+    "- waiting: pending card titles plus any clearly open decision you can verify in the vault. Remain read-only.",
+    "- alerts: unusual signals such as meta-work imbalance or a long-stale commitment; return an empty string when there is no alert.",
+    "",
+    "The vault data and quoted titles may be in any language. Keep proper nouns and quotes intact, but write all narration in English.",
+    "",
+    "Data packet:",
+    JSON.stringify(data, null, 2),
+    "",
+    "You may inspect vault files in the read-only sandbox to verify context. Return only JSON matching the output schema with into, changed, waiting, and alerts strings.",
   ].join("\n");
 }
 
@@ -224,22 +245,7 @@ function main(): void {
       `${data.pendingCards.length} pending card(s), ${data.decisionsThisWeek} decision(s)`,
   );
 
-  const prompt = [
-    "你是 Forme 的 State Diff 叙事器。下面是 vault 主人这一周的确定性数据包(全部可核查),把它写成四段一屏叙事。",
-    "",
-    "语气(交互稿屏 3):平静同事腔、第一人称我/你、零催促、只读——没有任何要求动作的字眼;总量读完 ≤90 秒(四段合计 ≤350 字);具体数字直接用数据包里的,不要编造。",
-    "",
-    "四段各自要什么:",
-    "- into(进来了什么):新增文件/输入的实质,不是文件名罗列;Inbox 有积压就点到",
-    "- changed(变了什么):这周真实发生的演化叙事(从 commit subjects 提炼主线,可用 → 串联)",
-    "- waiting(什么在等你决定):待决卡(标题列出)+ 数据包之外你在 vault 里看到的明确 open decision(如 Console 的「等 Zayn 决定」小节;只读)",
-    "- alerts(警报):异常信号,如 meta-work canary(Reports:Posts 比值)、长期未动的承诺;没有就返回空串",
-    "",
-    "数据包:",
-    JSON.stringify(data, null, 2),
-    "",
-    "你在 vault 只读沙箱里,可翻任何文件核对。只返回符合 output schema 的 JSON(into/changed/waiting/alerts 四个字符串,markdown 行内语法可用)。",
-  ].join("\n");
+  const prompt = buildStateDiffPrompt(data);
 
   const schemaPath = join(tmpdir(), `forme-sd-schema-${runId}.json`);
   writeFileSync(schemaPath, JSON.stringify(sectionsSchema()));
@@ -265,8 +271,8 @@ function main(): void {
     process.exit(1);
   }
   const md = renderStateDiff(sections, { from: data.from, to: data.to, runId, at: now.toISOString() });
-  const body = md.slice(md.indexOf("# 本周"));
-  if (body.length > 1600) console.warn(`warn: body ${body.length} chars — 可能超 90 秒预算`);
+  const body = md.slice(md.indexOf("# This week"));
+  if (body.length > 2200) console.warn(`warn: body ${body.length} chars may exceed the 90-second budget`);
 
   const outPath = join(outDir, `state-diff-${data.to}.md`);
   if (dryRun) {

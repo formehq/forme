@@ -2,8 +2,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { clean } from "./card.ts";
-import { cardLanguageInstruction, detectTextLanguage } from "./language.ts";
+import { clean, DEFAULT_OPTIONS } from "./card.ts";
 import type { Card } from "./types.ts";
 
 /**
@@ -16,15 +15,17 @@ import type { Card } from "./types.ts";
  *    世界层解释重写卡面并直接回答问题 → 卡回到队列(同指纹,不算重复)。
  *
  * 不做 chat:有界、异步——一问一答一次往返,答案落在卡面上(vault 镜像
- * 自含,硬约束 #4)。重写只动脸(title/summary/whyNow/onAccept/context);
- * **id、指纹、diff、evidence 永不变**——身份与手术属于确定性代码。
+ * 自含,硬约束 #4)。重写只动人读解释与 evidence notes;
+ * **id、指纹、diff、evidence quote/path 永不变**——身份与手术属于确定性代码。
  */
 
 export interface RefaceFace {
   title: string;
   summary: string | null;
   whyNow: string | null;
+  recommendationReason: string | null;
   onAccept: string | null;
+  evidenceNotes: Array<string | null>;
   answer: string | null; // question 通道:对用户问题的一句直接回答
 }
 
@@ -38,41 +39,43 @@ export function refaceOutputSchema(): unknown {
   return {
     type: "object",
     additionalProperties: false,
-    required: ["title", "summary", "whyNow", "onAccept", "answer"],
+    required: ["title", "summary", "whyNow", "recommendationReason", "onAccept", "evidenceNotes", "answer"],
     properties: {
       title: { type: "string" },
       summary: nullableString,
       whyNow: nullableString,
+      recommendationReason: nullableString,
       onAccept: nullableString,
+      evidenceNotes: { type: "array", items: nullableString },
       answer: nullableString,
     },
   };
 }
 
 export function buildRefacePrompt(card: Card, cause: RefaceCause): string {
-  const language = detectTextLanguage([card.title, card.summary, card.whyNow, card.onAccept].filter(Boolean).join("\n"));
   const L: string[] = [
-    "你是 Forme 的卡面重写器。下面这张决策卡的 diff 与证据是对的,但卡面(给决策者读的文字)不合格。只读涉及的文件核实背景,然后**只重写卡面**,返回 JSON。",
+    "You are Forme's card-face rewriter. The card's identity, evidence quotes, and diff are correct, but its product-facing explanation is not. Read the referenced files only to verify context, then return a rewritten face as JSON.",
     "",
-    "规则(v0.2,世界层优先——卡面说事,diff 说账):",
-    "- title / summary / whyNow 必须说**用户世界里的事**:什么事没落地、卡着谁、什么时间点要用;不许出现列表手术语言(「已完成项」「拆成待办」之类,会被机器闸再次检查)。",
-    "- onAccept 一句人话说拍板后世界里/文档里会发生什么(别复述路径与回滚说明)。",
-    `- 不改 diff、不改证据、不换目标——你只换说法。${cardLanguageInstruction(language)}`,
+    "Rules (world on the face, ledger below):",
+    "- Write every returned product-facing field in English, even when the original card or vault evidence is Chinese or mixed-language.",
+    "- title, summary, and whyNow must describe the user's world: what is unresolved, what it blocks, and which commitment or date makes it matter. Do not use list-surgery or implementation language.",
+    "- recommendationReason must state a clear English position without repeating the Accept/Park/Reject label. onAccept must say in plain English what accepting changes without repeating file paths or rollback mechanics.",
+    "- evidenceNotes must contain one English note per evidence item, in the same order. Do not alter paths, locators, quotes, diff hunks, target, id, or fingerprint.",
     "",
   ];
   if (cause.kind === "question") {
     L.push(
-      "这张卡上一轮呈现时,用户没有落子,而是问了一个问题。重写卡面让它自答这个问题,并在 answer 字段用一两句话直接回答:",
-      `用户的问题:「${cause.question}」`,
+      "The user asked a question instead of deciding. Rewrite the face so it carries the missing context, and answer the question directly in one or two English sentences in answer:",
+      `User question: ${cause.question}`,
       "",
     );
   } else {
     L.push(
-      `这张卡没过世界层闸,命中账本语域:「${cause.hit}」。把世界层的事写回卡面;answer 返回 null。`,
+      `The card failed the world-level gate on ledger phrase '${cause.hit}'. Restore the real-world meaning to the face and return null for answer.`,
       "",
     );
   }
-  L.push("原卡(JSON):", JSON.stringify(card, null, 2), "", "只返回符合 output schema 的 JSON。");
+  L.push("Original card JSON:", JSON.stringify(card, null, 2), "", "Return only JSON that satisfies the output schema.");
   return L.join("\n");
 }
 
@@ -90,12 +93,24 @@ export function graftFace(
   if (!face.title || !face.title.trim()) return null;
   const answer = face.answer?.trim() || null;
   if (cause.kind === "question" && !answer) return null;
+  const evidence = card.evidence.map((item, index) => {
+    const note = face.evidenceNotes[index]?.trim();
+    const next = { ...item };
+    if (note) next.note = note;
+    else delete next.note;
+    return next;
+  });
   const next: Card = {
     ...card,
     title: face.title.trim(),
     summary: face.summary?.trim() || undefined,
     whyNow: face.whyNow?.trim() || undefined,
+    recommendation: card.recommendation
+      ? { ...card.recommendation, reason: face.recommendationReason?.trim() || card.recommendation.reason }
+      : undefined,
     onAccept: face.onAccept?.trim() || undefined,
+    evidence,
+    options: DEFAULT_OPTIONS.map((option) => ({ ...option })),
     revisedAt: now,
     context:
       cause.kind === "question"

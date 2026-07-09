@@ -10,13 +10,13 @@ const ctx = { runId: "run_test", at: "2026-07-04T20:00:00Z", now: "2026-07-04T20
 
 const base = (): AgentCard => ({
   category: "broken-link",
-  title: "断链",
+  title: "The Knowledge Map link no longer resolves",
   summary: null,
   whyNow: null,
   recommendationChoice: null,
   recommendationReason: null,
   onAccept: null,
-  evidence: [{ path: "04_Index/Home.md", locator: "L7", quote: "[[Knowledge Map]]", note: "未解析" }],
+  evidence: [{ path: "04_Index/Home.md", locator: "L7", quote: "[[Knowledge Map]]", note: "The target no longer resolves." }],
   diff: {
     file: "04_Index/Home.md",
     hunks: [{ locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" }],
@@ -27,10 +27,10 @@ const base = (): AgentCard => ({
 
 const v01 = (): AgentCard => ({
   ...base(),
-  whyNow: "上周你把 canvas 改了名,这条链接当时没跟上。",
+  whyNow: "The canvas was renamed last week, but this link did not move with it.",
   recommendationChoice: "accept",
-  recommendationReason: "纯链接修复,不动内容。",
-  onAccept: "Home 的 Key Maps 链接恢复可点。",
+  recommendationReason: "This restores the link without changing the underlying content.",
+  onAccept: "The Knowledge Map entry in Home becomes clickable again.",
 });
 
 test("assembleCard produces a valid, fingerprinted card", () => {
@@ -40,6 +40,7 @@ test("assembleCard produces a valid, fingerprinted card", () => {
   assert.equal(r.card.id, `card_${r.card.fingerprint.slice(0, 16)}`);
   assert.equal(r.card.role, "proposal");
   assert.equal(r.card.options.length, 3);
+  assert.deepEqual(r.card.options.map((option) => option.label), ["Accept", "Park", "Reject"]);
 });
 
 test("null optionals are stripped from the serialized card", () => {
@@ -64,26 +65,26 @@ test("an agent card our AJV rejects (empty evidence) is caught", () => {
 test("markdown mirror renders envelope + folded evidence/diff + gestures", () => {
   const md = cardToMarkdown(assembleCard(base(), ctx).card);
   assert.match(md, /forme: card/);
-  assert.match(md, /> \[!quote\]- 证据（展开核查）/);
-  assert.match(md, /> \[!example\]- 最小 diff/);
+  assert.match(md, /> \[!quote\]- Evidence \(expand to verify\)/);
+  assert.match(md, /> \[!example\]- Minimal diff/);
   assert.match(md, /> \+ \[\[Knowledge Map\.canvas\|Knowledge Map\]\]/);
-  assert.match(md, /\[a\] 接受/);
+  assert.match(md, /\[a\] Accept/);
 });
 
 test("v0.1 五段:决策段在前,支撑层折叠在后(#12)", () => {
   const md = cardToMarkdown(assembleCard(v01(), ctx).card);
-  assert.match(md, /## 为什么现在\n\n上周你把 canvas 改了名/);
-  assert.match(md, /## 建议\n\n\*\*接受\*\* —— 纯链接修复,不动内容。/);
-  assert.match(md, /## 拍板后会发生什么\n\nHome 的 Key Maps 链接恢复可点。\n改 `04_Index\/Home\.md`（1 处最小改动）;git 提交,可回滚。/);
+  assert.match(md, /## Why now\n\nThe canvas was renamed last week/);
+  assert.match(md, /## Recommendation\n\n\*\*Accept\*\* · This restores the link/);
+  assert.match(md, /## After you decide\n\nThe Knowledge Map entry in Home becomes clickable again\.\nUpdates `04_Index\/Home\.md` \(1 minimal edit\); committed to git and reversible\./);
   // 决策者优先:落子手势出现在折叠证据之前
-  assert.ok(md.indexOf("## 落子") < md.indexOf("[!quote]-"));
+  assert.ok(md.indexOf("## Decide") < md.indexOf("[!quote]-"));
 });
 
 test("v0 卡(无新字段)仍渲染:②③ 整段省略,④ 用确定性事实行", () => {
   const md = cardToMarkdown(assembleCard(base(), ctx).card);
-  assert.equal(md.includes("## 为什么现在"), false);
-  assert.equal(md.includes("## 建议"), false);
-  assert.match(md, /## 拍板后会发生什么\n\n改 `04_Index\/Home\.md`/);
+  assert.equal(md.includes("## Why now"), false);
+  assert.equal(md.includes("## Recommendation"), false);
+  assert.match(md, /## After you decide\n\nUpdates `04_Index\/Home\.md`/);
 });
 
 test("recommendation 消毒:choice 不在枚举 → 整体丢弃,卡仍有效", () => {
@@ -96,7 +97,7 @@ test("recommendation 消毒:choice 不在枚举 → 整体丢弃,卡仍有效", 
 test("v0.1 字段过自有 AJV 门;坏 recommendation 直接过门会被拒", () => {
   const good = assembleCard(v01(), ctx);
   assert.ok(good.validation.valid);
-  assert.deepEqual(good.card.recommendation, { choice: "accept", reason: "纯链接修复,不动内容。" });
+  assert.deepEqual(good.card.recommendation, { choice: "accept", reason: "This restores the link without changing the underlying content." });
   const tampered = { ...good.serializable, recommendation: { choice: "apply", reason: "x" } };
   assert.equal(checkCard(tampered).valid, false);
 });

@@ -58,3 +58,16 @@ test("ledgerSpeechIn:手术词命中;世界层名词(人名/日期/@handle)不�
   assert.equal(ledgerSpeechIn("@formehq 社媒号还没确认,8.15 发布要用"), null);
   assert.equal(ledgerSpeechIn("CCS 验证故事引用的数字停在最旧快照"), null);
 });
+
+test("English-first world gate rejects ledger jargon on action faces (#29)", () => {
+  for (const phrase of ["frontmatter", "wikilink", "diff hunk", "cardId", "provenance", "metadata field"]) {
+    const result = checkLegibility({
+      category: "dangling-task",
+      title: `Move this ${phrase} into the completed list`,
+      stakes: "real-world-action",
+    });
+    assert.equal(result.ok, false, phrase);
+    assert.ok(result.hit, phrase);
+  }
+  assert.equal(ledgerSpeechIn("@formehq is still unconfirmed for the August 15 launch"), null);
+});

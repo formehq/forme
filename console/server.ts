@@ -164,7 +164,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
       // localhost CSRF/DNS-rebinding 挡板:console 会写 vault,来路必须是本机
       const host = (req.headers.host ?? "").split(":")[0];
       if (host !== "127.0.0.1" && host !== "localhost") {
-        return json(res, 403, { error: "console 只服务本机" });
+        return json(res, 403, { error: "The console is available only on this machine" });
       }
       const url = new URL(req.url ?? "/", "http://127.0.0.1");
 
@@ -189,13 +189,13 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
       if (req.method === "POST") {
         // 跨站简单请求发不出 application/json——这是本机写路径的最后一道闸
         if (!(req.headers["content-type"] ?? "").includes("application/json")) {
-          return json(res, 415, { error: "需要 application/json" });
+          return json(res, 415, { error: "application/json is required" });
         }
         let body: DecideBody;
         try {
           body = JSON.parse(await readBody(req)) as DecideBody;
         } catch {
-          return json(res, 400, { error: "body 不是 JSON" });
+          return json(res, 400, { error: "Request body is not valid JSON" });
         }
 
         // wake-catchup(#16):console 打开 = 合法拉取,后台补一轮增量扫描
@@ -204,7 +204,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         }
 
         const cardId = typeof body.cardId === "string" ? body.cardId : null;
-        if (!cardId) return json(res, 400, { error: "缺 cardId" });
+        if (!cardId) return json(res, 400, { error: "cardId is required" });
 
         const events = readEvents(jsonlPath);
         const pending = pendingCards(outDir, events);
@@ -214,17 +214,17 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         // accept 已应用的 diff 用 git revert 回滚(历史同样只追加)。
         if (url.pathname === "/api/undo") {
           const dec = effectiveDecisions(events).find((e) => e.cardId === cardId);
-          if (!dec) return json(res, 409, { error: "没有可撤销的落子" });
+          if (!dec) return json(res, 409, { error: "There is no decision to undo" });
           const age = Date.now() - Date.parse(dec.ts);
           if (!(age >= 0 && age <= UNDO_WINDOW_MS)) {
-            return json(res, 409, { error: "撤销窗口已过(落子后 15 秒内有效)" });
+            return json(res, 409, { error: "The undo window has passed (15 seconds)" });
           }
           let reverted: string | undefined;
           if (dec.executed) {
             try {
               reverted = revertCommit(vault, dec.executed);
             } catch (e) {
-              const msg = e instanceof ApplyError ? e.message : `撤销失败:${String(e)}`;
+              const msg = e instanceof ApplyError ? e.message : `Undo failed: ${String(e)}`;
               return json(res, 422, { error: msg });
             }
           }
@@ -240,7 +240,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         }
 
         if (url.pathname === "/api/presented") {
-          if (!card) return json(res, 409, { error: "卡不存在或已落子" });
+          if (!card) return json(res, 409, { error: "The card does not exist or is already decided" });
           appendEvent(jsonlPath, {
             v: "0",
             ts: new Date().toISOString(),
@@ -255,10 +255,10 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         // 不是 decision:指纹不进已决名单,卡转入待补 context 态,下一轮 run
         // 带着世界层解释重新出卡(同指纹,不算重复)。有界、异步,不做 chat。
         if (url.pathname === "/api/question") {
-          if (!card) return json(res, 409, { error: "卡不存在或已落子" });
+          if (!card) return json(res, 409, { error: "The card does not exist or is already decided" });
           const question = typeof body.question === "string" ? body.question.trim() : "";
-          if (!question) return json(res, 400, { error: "缺 question 文本" });
-          if (question.length > 2000) return json(res, 400, { error: "question 太长(≤2000 字)" });
+          if (!question) return json(res, 400, { error: "Question text is required" });
+          if (question.length > 2000) return json(res, 400, { error: "Question is too long (maximum 2,000 characters)" });
           appendEvent(jsonlPath, {
             v: "0",
             ts: new Date().toISOString(),
@@ -271,17 +271,17 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
         }
 
         if (url.pathname === "/api/decide") {
-          if (!card) return json(res, 409, { error: "卡不存在或已落子" });
+          if (!card) return json(res, 409, { error: "The card does not exist or is already decided" });
           const choice = typeof body.choice === "string" ? body.choice : "";
-          if (!CHOICES.has(choice)) return json(res, 400, { error: "choice 须为 accept/park/reject" });
+          if (!CHOICES.has(choice)) return json(res, 400, { error: "choice must be accept, park, or reject" });
 
           // correction = accept 前对 diff 的就地修订(read-only 的唯一例外)
           let hunks = card.diff.hunks;
           let correctionEvent: DecisionEvent | null = null;
           if (body.correction) {
-            if (choice !== "accept") return json(res, 400, { error: "correction 只随 accept" });
+            if (choice !== "accept") return json(res, 400, { error: "A correction can only accompany accept" });
             const edited = sanitizeCorrectionHunks(body.correction.hunks);
-            if (!edited) return json(res, 400, { error: "correction.hunks 结构不合法" });
+            if (!edited) return json(res, 400, { error: "correction.hunks has an invalid shape" });
             const note = typeof body.correction.note === "string" && body.correction.note.trim()
               ? body.correction.note.trim()
               : undefined;
@@ -361,7 +361,7 @@ function main(): void {
   });
   server.listen(port, "127.0.0.1", () => {
     console.log(`forme console → http://127.0.0.1:${port}  (vault: ${vault})`);
-    console.log("不推送、不通知;开着就行,等你来。Ctrl-C 退出。");
+    console.log("No pushes or notifications. Leave it open and come back when ready. Press Ctrl-C to stop.");
   });
 }
 

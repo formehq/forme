@@ -13,7 +13,7 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 
 1. **`scan.ts`** — 取 markdown git-delta(增量,服务「唤醒 ≤10s」的雏形)。**窗口 = 上次成功 run 以来**(#14):锚点 = run-metrics 最后记录的 vault HEAD,增量 = `anchor..HEAD`,窗口自动等于 run 节律;`--commits N` 显式传参 = 手动覆盖,锚点缺失(首跑)或失效(rebase)时回退最近 N commit。空窗口 = 日常静默结果(exit 0)。**排除 `98_Forme/`**——Forme 自己的运行时产物不是漂移面,否则会对上一轮输出提卡自激。**慢层立场参照**(#18/#28):`--slow-layer N --slow-root <dir>` 追加指定根目录里最久没被 commit 动过的 N 篇笔记进 prompt(取窗按日轮转,~len/N 天覆盖一遍);安装器见到 `02_Wiki/` 就沿用,否则取 vault 根目录,不预设用户结构。
 2. **`agent-schema.ts`** — 生成给 codex 的 `--output-schema`。**故意宽松**:codex 用 OpenAI strict 结构化输出(拒 `pattern`/`minItems`/`format`,且要求每个属性都 required、可选项走 nullable)。它只定形状。
-3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。**空白冷启动**(#28)由盘上事实判定(零卡/零 decisions/零 Taste Rules;只有运维 metrics 不算变暖):首批硬限 ≤2 卡、慢层延后、空 Taste 不注入;卡面人读字段按本轮证据检测为中文/英文/混合,reface 保持原卡语言。
+3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。**空白冷启动**(#28)由盘上事实判定(零卡/零 decisions/零 Taste Rules;只有运维 metrics 不算变暖):首批硬限 ≤2 卡、慢层延后、空 Taste 不注入。**English-first**(#29):所有新卡与 reface 的人读说明固定英文;证据 quote、路径、专名与 diff 源文逐字保留,历史卡不回写。
 4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹 / stakes 消毒(#21:申报非法按 category 派生),再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
 5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。**question 事件不是 decision**——发过问的指纹不进名单,reface 后同指纹回场不算重复。**undo 把指纹移出名单**(#24:撤销后回到未决;按文件序重放)。
 6. **`legibility.ts`** — **世界层闸**(#21,与 #13 禁词闸同族):「卡面说事,diff 说账」——账本手术语域(已完成项/拆成待办/速览…)上了世界层段(title/summary/whyNow)即打回;同轮给一次 reface 重写机会,仍不过即弃(下轮重提)。纯账本卡(stakes=reversible-ledger,按 category 派生豁免面)不检查:它们的「事」就是账。
@@ -26,7 +26,7 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 
 ## 姊妹管道(同一套「确定性采集 → agent 只读 JSON → 代码落盘」骨架)
 
-- **`taste.ts`**(#10、#13)—— `node runner/taste.ts --vault <v>`:决策日志(+卡体上下文)→ codex 提炼 → 追加 `98_Forme/Taste Rules.md`。护栏全在代码:sourceCardIds 溯源过滤(清零即弃)、零负样本时 confidence 钉死 low、**规则行禁词硬闸**(系统词上人读层即整条丢弃)、追加制不动人编辑的文本。**表达层双层**(#13,「结论用人话一行,账本降层可查」):规则行 = 用户语体祈使句(prompt 注入 `STYLE_FEWSHOTS` = owner 手写规则作风格样例);账本(依据/统计/置信/时效)由代码渲染成斜体小字;`<!-- forme-rule: {...} -->` 注释块 = 结构化存储(`loadTasteRuleRecords()` 供 W3 重验/确认卡)。已生效规则由 `loadTasteRuleLines()` 回注 runner prompt。
+- **`taste.ts`**(#10、#13、#29)—— `node runner/taste.ts --vault <v>`:决策日志(+卡体上下文)→ codex 提炼 → 追加 `98_Forme/Taste Rules.md`。护栏全在代码:sourceCardIds 溯源过滤(清零即弃)、零负样本时 confidence 钉死 low、**规则行禁词硬闸**(中英系统词上人读层即整条丢弃)、**新规则英文硬闸**、追加制不动既有文本。旧中文规则是历史证据,不翻译;新提炼规则与账本小字固定英文。`<!-- forme-rule: {...} -->` 注释块继续是结构化存储。
 - **`state-diff.ts`**(#11)—— `node runner/state-diff.ts --vault <v> [--min-days 4] [--dry-run]`:周数据包(git 周窗口 / 待决卡 / Inbox / Reports:Posts / run 汇总)→ codex 四段叙事 → `98_Forme/state-diff-YYYY-MM-DD.md`;四段骨架由渲染器钉死。
 
 ## 调度(launchd,#9 + #11)

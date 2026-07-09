@@ -11,10 +11,10 @@ import type { AgentCard, Card, Evidence, Hunk, Option, Origin, Recommendation } 
  * final AJV gate. This is the heart of hard constraint #7.
  */
 
-const OPTIONS: Option[] = [
-  { id: "accept", label: "接受", hotkey: "a" },
-  { id: "park", label: "搁置", hotkey: "p" },
-  { id: "reject", label: "拒绝", hotkey: "r" },
+export const DEFAULT_OPTIONS: Option[] = [
+  { id: "accept", label: "Accept", hotkey: "a" },
+  { id: "park", label: "Park", hotkey: "p" },
+  { id: "reject", label: "Reject", hotkey: "r" },
 ];
 
 export function clean<T extends Record<string, unknown>>(o: T): T {
@@ -74,7 +74,7 @@ export function assembleCard(ac: AgentCard, ctx: AssembleCtx): Assembled {
     onAccept: ac.onAccept ?? undefined,
     evidence,
     diff,
-    options: OPTIONS.map((o) => ({ ...o })),
+    options: DEFAULT_OPTIONS.map((o) => ({ ...o })),
     fingerprint: fp,
     estSeconds: ac.estSeconds ?? undefined,
     createdAt: ctx.now ?? new Date().toISOString(),

@@ -63,7 +63,7 @@ export function readEvents(jsonlPath: string): DecisionEvent[] {
 /** 追加一条事件——先过自家 AJV,不合法即抛,绝不落盘。 */
 export function appendEvent(jsonlPath: string, event: DecisionEvent): void {
   const r = checkEvent(event as unknown as Record<string, unknown>);
-  if (!r.valid) throw new Error(`事件没过 schema 门:${r.errors.join("; ")}`);
+  if (!r.valid) throw new Error(`Event failed schema validation: ${r.errors.join("; ")}`);
   mkdirSync(dirname(jsonlPath), { recursive: true });
   appendFileSync(jsonlPath, JSON.stringify(event) + "\n");
 }
@@ -170,7 +170,7 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
   if (sinceTs) {
     const log = execFileSync(
       "git",
-      ["-C", vault, "log", `--since=${sinceTs}`, "--name-only", "--format=@%h"],
+      ["-c", "core.quotePath=false", "-C", vault, "log", `--since=${sinceTs}`, "--name-only", "--format=@%h"],
       { encoding: "utf8" },
     );
     for (const raw of log.split("\n")) {

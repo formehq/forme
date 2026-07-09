@@ -4,7 +4,7 @@ import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
-import { collectWeek, renderStateDiff, latestStateDiffDate } from "./state-diff.ts";
+import { buildStateDiffPrompt, collectWeek, renderStateDiff, latestStateDiffDate } from "./state-diff.ts";
 
 function fixtureVault(): { vault: string; outDir: string } {
   const vault = mkdtempSync(join(tmpdir(), "forme-sd-"));
@@ -21,6 +21,7 @@ function fixtureVault(): { vault: string; outDir: string } {
   writeFileSync(join(vault, "03_Outputs", "Reports", "r1.md"), "# r\n");
   writeFileSync(join(vault, "03_Outputs", "Reports", "r2.md"), "# r\n");
   writeFileSync(join(vault, "03_Outputs", "Posts", "p1.md"), "# p\n");
+  writeFileSync(join(vault, "项目路线.md"), "# 项目路线\n");
   writeFileSync(join(outDir, "cards", "card_dec.json"), JSON.stringify({ id: "card_dec", title: "已决的卡" }));
   writeFileSync(join(outDir, "cards", "card_open.json"), JSON.stringify({ id: "card_open", title: "待决的卡" }));
   writeFileSync(
@@ -45,6 +46,7 @@ test("collectWeek:git 周窗口 + 待决卡 + Inbox/指标计数全确定性", (
   assert.equal(d.commits.length, 1);
   assert.equal(d.commits[0]!.subject, "week seed");
   assert.ok(d.addedFiles.includes("00_Inbox/clip.md"));
+  assert.ok(d.addedFiles.includes("项目路线.md"));
   assert.equal(d.inboxCount, 1);
   assert.deepEqual(d.inboxNewThisWeek, ["00_Inbox/clip.md"]);
   assert.deepEqual(d.pendingCards, [{ id: "card_open", title: "待决的卡" }]);
@@ -55,15 +57,25 @@ test("collectWeek:git 周窗口 + 待决卡 + Inbox/指标计数全确定性", (
   assert.deepEqual(d.runsThisWeek, { runs: 1, proposed: 2, suppressed: 0, presented: 2 });
 });
 
-test("renderStateDiff:四段骨架永远齐;空段用占位;窗口进 frontmatter", () => {
+test("renderStateDiff uses the fixed English-first skeleton and preserves the window", () => {
   const md = renderStateDiff(
-    { into: "7 条 Flomo", changed: "W2 开", waiting: "2 张卡", alerts: "" },
+    { into: "Seven notes", changed: "W2 opened", waiting: "Two cards", alerts: "" },
     { from: "2026-07-05", to: "2026-07-12", runId: "sd_test", at: "2026-07-12T18:00:00Z" },
   );
   assert.match(md, /window: "2026-07-05 → 2026-07-12"/);
-  assert.match(md, /# 本周（07-05 → 07-12）/);
-  for (const label of ["进来了什么", "变了什么", "什么在等你决定", "警报"]) assert.match(md, new RegExp(`\\*\\*${label}\\*\\*:`));
-  assert.match(md, /\*\*警报\*\*:——（本周无）/);
+  assert.match(md, /# This week \(07-05 → 07-12\)/);
+  for (const label of ["What came in", "What changed", "What is waiting for you", "Alerts"]) {
+    assert.ok(md.includes("**" + label + "**:"));
+  }
+  assert.match(md, /\*\*Alerts\*\*: None this week\./);
+});
+
+test("State Diff narration prompt is English-first even when packet titles are multilingual (#29)", () => {
+  const { vault, outDir } = fixtureVault();
+  const data = collectWeek(vault, outDir, 7, new Date("2026-07-12T18:00:00Z"));
+  const prompt = buildStateDiffPrompt(data);
+  assert.match(prompt, /write all narration in English/);
+  assert.match(prompt, /待决的卡/);
 });
 
 test("latestStateDiffDate:取最新文件名日期,周更守卫的时钟", () => {
