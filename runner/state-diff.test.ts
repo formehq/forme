@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
@@ -76,6 +76,44 @@ test("State Diff narration prompt is English-first even when packet titles are m
   const prompt = buildStateDiffPrompt(data);
   assert.match(prompt, /write all narration in English/);
   assert.match(prompt, /待决的卡/);
+});
+
+test("authorized freshness fixes are deterministically visible in the next State Diff", () => {
+  const { vault, outDir } = fixtureVault();
+  writeFileSync(join(outDir, "cards", "card_clock.json"), JSON.stringify({
+    id: "card_clock",
+    title: "Forme corrected a stale date marker",
+    diff: { file: "status.md" },
+  }));
+  const event = JSON.stringify({
+    v: "0", ts: "2026-07-12T17:00:00Z", type: "decision", cardId: "card_clock",
+    fingerprint: "a".repeat(64), choice: "accept", actor: "agent_authorized", executionId: "exec_clock_test",
+  });
+  writeFileSync(join(outDir, "decisions.jsonl"), readFileSync(join(outDir, "decisions.jsonl"), "utf8") + event + "\n");
+  const data = collectWeek(vault, outDir, 7, new Date("2026-07-12T18:00:00Z"));
+  assert.deepEqual(data.authorizedFixesThisWeek, [{
+    cardId: "card_clock",
+    title: "Forme corrected a stale date marker",
+    file: "status.md",
+    ts: "2026-07-12T17:00:00Z",
+    undone: false,
+  }]);
+  const md = renderStateDiff(
+    { into: "", changed: "The project moved forward.", waiting: "", alerts: "" },
+    {
+      from: data.from, to: data.to, runId: "sd_clock", at: "2026-07-12T18:00:00Z",
+      authorizedFixes: data.authorizedFixesThisWeek,
+    },
+  );
+  assert.match(md, /Self-executed: Forme corrected a stale date marker in `status\.md`\./);
+
+  writeFileSync(join(outDir, "decisions.jsonl"), readFileSync(join(outDir, "decisions.jsonl"), "utf8") + [
+    JSON.stringify({ v: "0", ts: "2026-07-12T17:10:00Z", type: "undo", cardId: "card_clock", fingerprint: "a".repeat(64) }),
+    JSON.stringify({ v: "0", ts: "2026-07-12T17:20:00Z", type: "decision", cardId: "card_clock", fingerprint: "a".repeat(64), choice: "accept", actor: "owner", backfilled: true }),
+  ].join("\n") + "\n");
+  const replayed = collectWeek(vault, outDir, 7, new Date("2026-07-12T18:00:00Z"));
+  assert.equal(replayed.authorizedFixesThisWeek[0]!.undone, true);
+  assert.equal(replayed.pendingCards.some((card) => card.id === "card_clock"), false);
 });
 
 test("latestStateDiffDate:取最新文件名日期,周更守卫的时钟", () => {

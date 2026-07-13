@@ -173,3 +173,13 @@ test("readDecisionLog:undo(#24)撤销同卡最近一次 decision——反悔的�
   const { decisions } = readDecisionLog(p);
   assert.deepEqual(decisions.map((d) => [d.cardId, d.choice]), [["c1", "reject"]]);
 });
+
+test("agent_authorized execution is audit history, not owner taste", () => {
+  const p = join(dir(), "decisions.jsonl");
+  writeFileSync(p, [
+    JSON.stringify({ type: "decision", cardId: "clock", choice: "accept", actor: "agent_authorized" }),
+    JSON.stringify({ type: "decision", cardId: "owner", choice: "reject", actor: "owner" }),
+  ].join("\n") + "\n");
+  const { decisions } = readDecisionLog(p);
+  assert.deepEqual(decisions.map((d) => [d.cardId, d.choice]), [["owner", "reject"]]);
+});

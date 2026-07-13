@@ -3,13 +3,20 @@ import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync, rmSync } 
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
-import { recentMarkdownFiles, markdownFilesSince, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
+import { commitWindowBase, recentMarkdownFiles, markdownFilesSince, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
 import { cardToMarkdown } from "./mirror.ts";
 import { assembleCard } from "./card.ts";
 import { loadSuppressionList } from "./suppress.ts";
 import { loadTasteRuleLines } from "./taste.ts";
-import { appendRunMetric, lastRunHead, localDate } from "./metrics.ts";
+import { appendRunMetric, lastRunAnchor, localDate } from "./metrics.ts";
+import {
+  buildFreshnessCard,
+  detectTimestampFreshness,
+  executeTimestampFreshness,
+  isFreshnessOnlyDelta,
+} from "./freshness.ts";
+import { resolveExecutionCommit } from "./execution.ts";
 import { checkLegibility } from "./legibility.ts";
 import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type RefaceCause } from "./reface.ts";
 import { checkCard } from "../schema/validate.ts";
@@ -171,19 +178,63 @@ if (pendingQuestions.length) {
 // #14:增量窗口默认「上次成功 run 以来」(锚点 = run-metrics 最后记录的 HEAD),
 // 窗口自动等于 run 节律,vault 一天多次 commit 也不漏文件(硬约束 #3 的本意)。
 // --commits 显式传参 = 手动覆盖;锚点缺失(首跑/旧数据)或失效(rebase)→ 回退。
-const head = vaultHead(vault);
-const anchor = commitsExplicit ? null : lastRunHead(metricsPath);
+let head = vaultHead(vault);
+const anchorRef = commitsExplicit ? null : lastRunAnchor(metricsPath);
+const anchor = anchorRef?.head ?? (
+  anchorRef?.executionId ? resolveExecutionCommit(vault, anchorRef.executionId) : null
+);
 let files: string[];
 let windowDesc: string;
+let windowBase: string | null;
 if (anchor && isUsableAnchor(vault, anchor)) {
   files = markdownFilesSince(vault, anchor, maxFiles);
   windowDesc = `since last run (${anchor}..${head})`;
+  windowBase = anchor;
 } else {
   files = recentMarkdownFiles(vault, commits, maxFiles);
   windowDesc = commitsExplicit
     ? `last ${commits} commits (manual override)`
     : `last ${commits} commits (no usable anchor)`;
+  windowBase = commitWindowBase(vault, commits);
 }
+const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
+let authorized = 0;
+if (files.length > 0) {
+  const machineNow = new Date();
+  const llmFiles: string[] = [];
+  for (const file of files) {
+    const source = readFileSync(join(vault, file), "utf8");
+    const fix = detectTimestampFreshness(source, machineNow);
+    if (!fix) {
+      llmFiles.push(file);
+      continue;
+    }
+    const freshnessOnly = isFreshnessOnlyDelta(vault, windowBase, file, source);
+    const freshnessRunId = `${runId}_clock_${authorized + 1}`;
+    const candidate = buildFreshnessCard({ vault, outDir, file, fix, now: machineNow, runId: freshnessRunId });
+    if (suppression.fingerprints.has(candidate.fingerprint)) {
+      console.log(`freshness: suppress ${candidate.id} — fingerprint already decided`);
+      if (!freshnessOnly) llmFiles.push(file);
+      continue;
+    }
+    if (dryRun) {
+      console.log(`freshness: [dry] would self-execute ${fix.hunks.length} machine-time correction(s) in ${file} (zero LLM)`);
+      if (!freshnessOnly) llmFiles.push(file);
+      continue;
+    }
+    const result = executeTimestampFreshness({ vault, outDir, file, fix, now: machineNow, runId: freshnessRunId });
+    authorized++;
+    suppression.fingerprints.add(result.card.fingerprint);
+    console.log(
+      `freshness: self-executed ${fix.hunks.length} correction(s) in ${file} ` +
+      `(actor=agent_authorized, execution=${result.executionId}, zero LLM)`,
+    );
+    if (!freshnessOnly) llmFiles.push(file);
+  }
+  files = llmFiles;
+  if (authorized > 0) head = vaultHead(vault);
+}
+
 if (files.length === 0) {
   // 日常静默结果(如窗口里只有 98_Forme/ 自己的产物),不是错误。
   // 但 reface 花了真 codex → 落一行数据点,让额度 mtime 时钟诚实走表。
@@ -194,7 +245,8 @@ if (files.length === 0) {
       head, refaced,
     });
   }
-  console.log(`forme runner: no knowledge-layer .md in window ${windowDesc} — nothing to scan` +
+  console.log(`forme runner: no remaining knowledge-layer .md in window ${windowDesc} — nothing to scan` +
+    (authorized ? ` (self-executed ${authorized} freshness fix${authorized === 1 ? "" : "es"}; freshness path zero LLM)` : "") +
     (refaced ? ` (refaced ${refaced})` : ""));
   process.exit(0);
 }
@@ -213,7 +265,6 @@ console.log(
     `, vault = ${vault}`,
 );
 
-const suppression = loadSuppressionList(join(outDir, "decisions.jsonl"));
 console.log(
   `suppression list: ${suppression.fingerprints.size} decided fingerprint(s) from ${suppression.events} event(s)` +
     (suppression.unreadable ? ` (${suppression.unreadable} unreadable line(s)!)` : ""),

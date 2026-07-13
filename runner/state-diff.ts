@@ -26,6 +26,7 @@ export interface WeekData {
   inboxNewThisWeek: string[];
   pendingCards: Array<{ id: string; title: string }>;
   decisionsThisWeek: number;
+  authorizedFixesThisWeek: Array<{ cardId: string; title: string; file: string; ts: string; undone: boolean }>;
   reportsCount: number;
   postsCount: number;
   runsThisWeek: { runs: number; proposed: number; suppressed: number; presented: number };
@@ -74,35 +75,65 @@ export function collectWeek(vault: string, outDir: string, days: number, now: Da
   const inboxCount = existsSync(inboxDir) ? readdirSync(inboxDir).filter((f) => !f.startsWith(".")).length : 0;
   const inboxNewThisWeek = [...added].filter((f) => f.startsWith("00_Inbox/"));
 
-  // 待决卡 = cards/ 里没有 decision 事件的卡
-  const decided = new Set<string>();
+  // 事件按序重放:undo 撤销同卡最近一次 decision。授权自执行另列,
+  // 由渲染器确定性写入 State Diff,不依赖 narrator 记得提。
+  type AuthorizedRecord = { cardId: string; ts: string; undone: boolean };
+  const effective = new Map<string, { actor?: string; authorized?: AuthorizedRecord }>();
+  const authorizedEvents: AuthorizedRecord[] = [];
   let decisionsThisWeek = 0;
   const jsonlPath = join(outDir, "decisions.jsonl");
   if (existsSync(jsonlPath)) {
     for (const line of readFileSync(jsonlPath, "utf8").split("\n")) {
       if (!line.trim()) continue;
       try {
-        const e = JSON.parse(line) as { type?: string; cardId?: string; ts?: string };
-        if (e.type !== "decision" || !e.cardId) continue;
-        decided.add(e.cardId);
-        if (e.ts && localDate(new Date(e.ts)) >= from) decisionsThisWeek++; // #25:本地日切
+        const e = JSON.parse(line) as { type?: string; cardId?: string; ts?: string; actor?: string };
+        if (!e.cardId) continue;
+        if (e.type === "decision") {
+          let authorized: AuthorizedRecord | undefined;
+          if (e.ts && localDate(new Date(e.ts)) >= from) {
+            decisionsThisWeek++; // #25:本地日切
+            if (e.actor === "agent_authorized") {
+              authorized = { cardId: e.cardId, ts: e.ts, undone: false };
+              authorizedEvents.push(authorized);
+            }
+          }
+          effective.set(e.cardId, { actor: e.actor, ...(authorized ? { authorized } : {}) });
+        } else if (e.type === "undo") {
+          const previous = effective.get(e.cardId);
+          if (previous?.authorized) previous.authorized.undone = true;
+          effective.delete(e.cardId);
+        }
       } catch {
         /* 宽容 */
       }
     }
   }
   const pendingCards: WeekData["pendingCards"] = [];
+  const cardDetails = new Map<string, { title: string; file: string }>();
   const cardsDir = join(outDir, "cards");
   if (existsSync(cardsDir)) {
     for (const f of readdirSync(cardsDir).filter((f) => f.endsWith(".json"))) {
       try {
-        const c = JSON.parse(readFileSync(join(cardsDir, f), "utf8")) as { id?: string; title?: string };
-        if (c.id && !decided.has(c.id)) pendingCards.push({ id: c.id, title: c.title ?? "(Untitled)" });
+        const c = JSON.parse(readFileSync(join(cardsDir, f), "utf8")) as { id?: string; title?: string; diff?: { file?: string } };
+        if (!c.id) continue;
+        const title = c.title ?? "(Untitled)";
+        cardDetails.set(c.id, { title, file: c.diff?.file ?? "(unknown file)" });
+        if (!effective.has(c.id)) pendingCards.push({ id: c.id, title });
       } catch {
         /* 宽容 */
       }
     }
   }
+  const authorizedFixesThisWeek = authorizedEvents.map((event) => {
+    const card = cardDetails.get(event.cardId);
+    return {
+      cardId: event.cardId,
+      title: card?.title ?? "Authorized freshness correction",
+      file: card?.file ?? "(unknown file)",
+      ts: event.ts,
+      undone: event.undone,
+    };
+  });
 
   // 硬指标:meta-work canary + 本周 run 计数(能算多少算多少)
   const runsThisWeek = { runs: 0, proposed: 0, suppressed: 0, presented: 0 };
@@ -133,6 +164,7 @@ export function collectWeek(vault: string, outDir: string, days: number, now: Da
     inboxNewThisWeek,
     pendingCards,
     decisionsThisWeek,
+    authorizedFixesThisWeek,
     reportsCount: mdCount(join(vault, "03_Outputs", "Reports")),
     postsCount: mdCount(join(vault, "03_Outputs", "Posts")),
     runsThisWeek,
@@ -150,9 +182,22 @@ export function latestStateDiffDate(outDir: string): string | null {
 }
 
 /** 渲染:四段骨架永远不变,agent 只填内容;空段落用占位,不许缺段。 */
-export function renderStateDiff(s: Sections, meta: { from: string; to: string; runId: string; at: string }): string {
+export function renderStateDiff(
+  s: Sections,
+  meta: {
+    from: string;
+    to: string;
+    runId: string;
+    at: string;
+    authorizedFixes?: WeekData["authorizedFixesThisWeek"];
+  },
+): string {
   const seg = (v: string) => (v.trim() ? v.trim() : "None this week.");
   const mmdd = (d: string) => d.slice(5);
+  const authorized = (meta.authorizedFixes ?? []).map(
+    (fix) => `Self-executed: ${fix.title} in \`${fix.file}\`${fix.undone ? " (later undone)" : ""}.`,
+  ).join(" ");
+  const changed = [seg(s.changed), authorized].filter(Boolean).join(" ");
   return [
     "---",
     "forme: state-diff",
@@ -164,7 +209,7 @@ export function renderStateDiff(s: Sections, meta: { from: string; to: string; r
     "",
     `**What came in**: ${seg(s.into)}`,
     "",
-    `**What changed**: ${seg(s.changed)}`,
+    `**What changed**: ${changed}`,
     "",
     `**What is waiting for you**: ${seg(s.waiting)}`,
     "",
@@ -181,7 +226,7 @@ export function buildStateDiffPrompt(data: WeekData): string {
     "",
     "Return these four sections:",
     "- into: the substance of new files or inputs, not a filename list. Mention inbox accumulation when the data supports it.",
-    "- changed: the week's real arc, inferred from commit subjects and changed material.",
+    "- changed: the week's real arc, inferred from commit subjects and changed material. Authorized fixes are injected by code after narration; do not turn them into requests.",
     "- waiting: pending card titles plus any clearly open decision you can verify in the vault. Remain read-only.",
     "- alerts: unusual signals such as meta-work imbalance or a long-stale commitment; return an empty string when there is no alert.",
     "",
@@ -270,7 +315,13 @@ function main(): void {
     console.error("codex output was not JSON");
     process.exit(1);
   }
-  const md = renderStateDiff(sections, { from: data.from, to: data.to, runId, at: now.toISOString() });
+  const md = renderStateDiff(sections, {
+    from: data.from,
+    to: data.to,
+    runId,
+    at: now.toISOString(),
+    authorizedFixes: data.authorizedFixesThisWeek,
+  });
   const body = md.slice(md.indexOf("# This week"));
   if (body.length > 2200) console.warn(`warn: body ${body.length} chars may exceed the 90-second budget`);
 

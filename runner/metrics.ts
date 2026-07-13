@@ -1,5 +1,6 @@
 import { appendFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { withWriteLock } from "./execution.ts";
 
 /**
  * 每轮 run 追加一行数据点 → 重复率曲线的原始数据(issue #9)。
@@ -30,12 +31,17 @@ export interface RunMetric {
   illegible?: number; // 世界层闸命中数(#21:legibility 曲线原料;含被重写救回的)
   refaced?: number; // question 通道重写数(#21:问→再出卡的往返完成数)
   thought?: number; // 思想卡入列数(#18:每轮 ≤1;认知含量曲线原料)
+  authorized?: number; // 机器时间护栏自执行数(#31;不计入 owner acceptance)
+  executionId?: string; // 原子自执行提交的可解析锚点(#31;替代自引用 head)
   backfilled?: boolean;
 }
 
 export function appendRunMetric(path: string, m: RunMetric): void {
-  mkdirSync(dirname(path), { recursive: true });
-  appendFileSync(path, JSON.stringify(m) + "\n");
+  const root = dirname(path);
+  withWriteLock(root, () => {
+    mkdirSync(root, { recursive: true });
+    appendFileSync(path, JSON.stringify(m) + "\n");
+  });
 }
 
 /**
@@ -55,4 +61,26 @@ export function lastRunHead(path: string): string | null {
     }
   }
   return head;
+}
+
+export interface RunAnchor {
+  head?: string;
+  executionId?: string;
+}
+
+/** Last successful run reference, including atomic executions that cannot self-record their commit hash. */
+export function lastRunAnchor(path: string): RunAnchor | null {
+  if (!existsSync(path)) return null;
+  let anchor: RunAnchor | null = null;
+  for (const line of readFileSync(path, "utf8").split("\n")) {
+    if (!line.trim()) continue;
+    try {
+      const m = JSON.parse(line) as { head?: unknown; executionId?: unknown };
+      if (typeof m.head === "string" && m.head) anchor = { head: m.head };
+      else if (typeof m.executionId === "string" && m.executionId) anchor = { executionId: m.executionId };
+    } catch {
+      /* tolerant telemetry reader */
+    }
+  }
+  return anchor;
 }

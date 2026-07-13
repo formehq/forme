@@ -7,11 +7,19 @@ import { fileURLToPath } from "node:url";
 import { renderPage } from "./page.ts";
 import { applyCardDiff, ApplyError, revertCommit } from "./apply.ts";
 import {
+  createExecutionId,
+  resolveExecutionCommit,
+  runtimeArtifactPaths,
+  vaultRelativePath,
+} from "../runner/execution.ts";
+import {
   appendEvent,
   catchUpData,
+  contentWithEvents,
   effectiveDecisions,
   lastPresentedTs,
   latestStateDiff,
+  loadCards,
   metricsData,
   pendingCards,
   readEvents,
@@ -216,13 +224,19 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
           const dec = effectiveDecisions(events).find((e) => e.cardId === cardId);
           if (!dec) return json(res, 409, { error: "There is no decision to undo" });
           const age = Date.now() - Date.parse(dec.ts);
-          if (!(age >= 0 && age <= UNDO_WINDOW_MS)) {
+          if (dec.actor !== "agent_authorized" && !(age >= 0 && age <= UNDO_WINDOW_MS)) {
             return json(res, 409, { error: "The undo window has passed (15 seconds)" });
           }
           let reverted: string | undefined;
-          if (dec.executed) {
+          const appliedCommit = dec.executed ?? (dec.executionId ? resolveExecutionCommit(vault, dec.executionId) ?? undefined : undefined);
+          if (dec.choice === "accept" && !appliedCommit) {
+            return json(res, 422, { error: "Undo failed because the execution receipt could not be resolved" });
+          }
+          if (appliedCommit) {
             try {
-              reverted = revertCommit(vault, dec.executed);
+              const decidedCard = loadCards(outDir).find((candidate) => candidate.id === dec.cardId);
+              if (!decidedCard) return json(res, 422, { error: "Undo failed because the card receipt is missing" });
+              reverted = revertCommit(vault, appliedCommit, decidedCard.diff.file);
             } catch (e) {
               const msg = e instanceof ApplyError ? e.message : `Undo failed: ${String(e)}`;
               return json(res, 422, { error: msg });
@@ -298,16 +312,6 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
             }
           }
 
-          let executed: string | undefined;
-          if (choice === "accept") {
-            try {
-              executed = applyCardDiff(vault, card, hunks).executed;
-            } catch (e) {
-              const msg = e instanceof ApplyError ? e.message : `应用失败:${String(e)}`;
-              return json(res, 422, { error: msg });
-            }
-          }
-
           const now = new Date();
           const presentedTs = lastPresentedTs(events, card.id);
           const latencyMs = presentedTs
@@ -318,6 +322,7 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
           const note = typeof body.note === "string" && body.note.trim()
             ? body.note.trim().slice(0, 2000)
             : undefined;
+          const executionId = choice === "accept" ? createExecutionId() : undefined;
           const decision: DecisionEvent = {
             v: "0",
             ts: now.toISOString(),
@@ -327,11 +332,31 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
             choice: choice as DecisionEvent["choice"],
             actor: "owner",
             ...(latencyMs !== null ? { latencyMs } : { backfilled: true }),
-            ...(executed ? { executed } : {}),
+            ...(executionId ? { executionId } : {}),
             ...(note ? { note } : {}),
           };
-          if (correctionEvent) appendEvent(jsonlPath, correctionEvent);
-          appendEvent(jsonlPath, decision);
+          let executed: string | undefined;
+          if (choice === "accept") {
+            try {
+              executed = applyCardDiff(vault, card, hunks, {
+                executionId,
+                artifactUpdates: [{
+                  path: vaultRelativePath(vault, jsonlPath),
+                  content: () => contentWithEvents(jsonlPath, [
+                    ...(correctionEvent ? [correctionEvent] : []),
+                    decision,
+                  ]),
+                }],
+                includePaths: runtimeArtifactPaths(vault, outDir),
+                lockRoot: outDir,
+              }).executed;
+            } catch (e) {
+              const msg = e instanceof ApplyError ? e.message : `Apply failed: ${String(e)}`;
+              return json(res, 422, { error: msg });
+            }
+          } else {
+            appendEvent(jsonlPath, decision);
+          }
           return json(res, 200, { ok: true, choice, executed, latencyMs });
         }
       }

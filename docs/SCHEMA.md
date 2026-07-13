@@ -23,7 +23,7 @@
 | `from` | string | **信封**:发出此卡的 Forme 节点身份。MVP 恒为本地节点 |
 | `role` | enum | **信封**:relay 协议里的消息角色。v0 恒 `"proposal"`;预留 `digest`(State Diff)/`decision`/`relay`/`ack` |
 | `category` | slug | 漂移类别(kebab-case),如 `stale-frontmatter`/`broken-link`/`stale-claim`/`orphan`/`claim-drift`(**#18 思想卡**:立场/判断漂移,stakes 恒派生 thought,每轮 ≤1 张机器节流)。**进指纹** |
-| `title` | string | 卡的人读标题(默认中文)。用户第一眼读的东西 |
+| `title` | string | 卡的人读标题。#29 后新卡面 English-first;证据与目标正文不翻译 |
 | `summary` | string? | 标题下的可选单行上下文 |
 | `evidence[]` | array | 卡为何存在。标题里的每个断言都要在这里落地。渲染成"证据"块 |
 | `diff` | object | 提议的**单一最小改动**。由 Forme 代码确定性应用(git 提交以便回滚),渲染成 `-/+` |
@@ -52,7 +52,7 @@
 `{ locator?, before, after }`。在文件里匹配 `before`,替换成 `after`。`before=""` 为纯插入;`after=""` 为删除;两者不能同时为空。`locator` 用来消歧(同一 `before` 在文件里出现多次时指明是哪处——见 L1 样卡)。确定性可应用、可渲染成 `-/+`。
 
 ### option
-`{ id: "accept"|"park"|"reject", label(默认中文), hotkey(单键) }`。**correction(就地修订)不是 option**,是 accept 前对 diff 的编辑,记在 jsonl 的 correction 事件里(read-only 的唯一例外)。
+`{ id: "accept"|"park"|"reject", label(新卡默认 English), hotkey(单键) }`。**correction(就地修订)不是 option**,是 accept 前对 diff 的编辑,记在 jsonl 的 correction 事件里(read-only 的唯一例外)。
 
 ---
 
@@ -74,14 +74,15 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 | type | 何时 | 追加字段 |
 | --- | --- | --- |
 | `presented` | **卡在 console 实际上屏那一刻**(#15 定案:客户端上报,启动静默计时;不是「写入队列」也不是「打开页面」) | —— |
-| `decision` | 用户落子 | `choice(a/p/r)` · `actor` · `latencyMs`(live 必填=**最近一次** presented→decision 静默延迟)· `executed?`(accept 时应用 diff 的 commit hash,执行凭证)· `note?`(**#24**:落子理由,随任意手势——park/reject 的理由是最珍贵的 taste 数据) |
+| `decision` | owner 落子或授权代码自执行 | `choice(a/p/r)` · `actor` · `latencyMs`(owner live 必填=**最近一次** presented→decision 静默延迟;`agent_authorized` 不伪造人类 latency)· `executionId?`(新原子执行凭证)· `executed?`(旧格式 commit hash)· `note?` |
 | `correction` | accept 前就地改了 diff(事件先于 decision 落盘) | `correction{ hunks[], note? }`(与 decision.note 两义不混:correction 的 note 说「为什么改」,decision 的 note 说「为什么这样落」) |
 | `question` | **v0.2(#21)**:用户发问而非落子(correction 的双胞胎——correction 改 diff,question 改 context)。**不是 decision**:指纹不进已决名单;卡转入待补 context 态,下一轮 run reface 后同指纹回场(不算重复)。事件本身 = 「卡面哪里不 legible」的度量 | `question`(原话) |
-| `undo` | **#24 撤销窗口**(toast 4s,服务端上限 15s):撤销**同卡最近一次** decision。**补偿事件,不是删除**——日志仍只追加,读取方按文件序重放(decision → undo → decision 合法,第二条生效)。被撤销的 decision 不进 taste、不进时延分布,指纹回到未决名单之外 | `executed?`(被撤销的 accept 之 git revert commit hash) |
+| `undo` | **#24/#31 撤销**:owner toast 4s/服务端 15s;`agent_authorized` 在下一张 State Diff 可见后仍可撤。撤销同卡最近一次 decision,补偿事件不删除历史。原子 receipt 只反向目标文件 patch,不倒回卡/日志/metrics | `executed?`(inverse-patch commit hash) |
 
 公共信封:`{ v:"0", ts, type, cardId, fingerprint }`(`ts` 完整 ISO,latency 由 presented→decision 的 ts 差算)。
 
 - **`actor`** = 决策者:`owner`(人)· 预留 `agent_shadow`(影子预决策但仍展示)· `agent_authorized`(授权自动化,仍可撤回)。与卡 envelope 的 `role`(消息角色)**同名不同义、刻意分开**——`actor` 是影子模式日后必需的字段,一步到位。
+- **`executionId`**(#31)= `exec_...` 稳定回执 id,同时写入 decision event 与 git commit trailer `Forme-Execution: ...`。新 accept 不在事件里写自己的 commit hash:commit 若包含自己的 hash 会形成不可能求解的自引用。撤销和 run anchor 由 executionId 解析真实 commit;历史 `executed` 仍兼容。
 - **`backfilled: true`** = **非现场计时的记录**——历史导入(产品前的人肉决策)和一切绕过 console 的落子(如 vault 侧手动决策后补记事件)都算,可省 `latencyMs`(没有诚实的静默计时就别编)。样例里的 6 条事件即三条种子(#1 comment)的事件化:每卡 presented+decision 一对,`ts` 取真实 commit 时刻,`executed` = 真实应用 commit,`fingerprint` 由该 commit 的真实 diff 反查而来。已知偏差:vault 里 07-06 的两条手写 decision 事件缺 `latencyMs` 又未标 `backfilled`,按本 schema 不合法;日志只追加、不回改,抑制读取宽容所以功能无损——今后非 console 落子请带 `backfilled: true`。
 - **写入方(#15 起)**:console 是事件的正规产地,`console/store.ts` 的 `appendEvent` **先过完整 AJV 门再落盘**(不合法即抛)——宽容解析只用于读历史行,自己写的行零豁免。console 收到没有 presented 记录的落子(如 curl 直打)自动按 `backfilled` 记,不编造延迟。
 
@@ -92,10 +93,10 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 重复率曲线的原始数据,住 `98_Forme/run-metrics.jsonl`,每**真实完成**的 run 追加一行(dry-run 不落点);写入方 `runner/metrics.ts`,形状由其 `RunMetric` 接口定义(无独立 JSON Schema——运行时遥测,不是卡/事件契约):
 
 ```
-{ v:"0", date(本地日切 YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, illegible?, refaced?, thought?, backfilled? }
+{ v:"0", date(本地日切 YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, executionId?, authorized?, illegible?, refaced?, thought?, backfilled? }
 ```
 
-`proposed = suppressed + presented + rejected + dup`(账要对得上)。此处 `presented` = 写入 `cards/` 队列数(入列;**呈现的正规语义已定案在 decisions.jsonl 的 presented 事件**,见上)。`head`(#14)= 本轮扫描时的 vault HEAD 短 hash,下轮增量窗口的锚点(`git log <head>..HEAD`);旧行无此字段 → 回退 `--commits` 窗口。`illegible`(#21)= 世界层闸命中数(含被 reface 救回的;legibility 曲线原料);`refaced`(#21)= question 通道重写数——**只 reface 没扫描的 run 也落一行**(耗了真 codex,额度 mtime 时钟必须走表);`thought`(#18)= 本轮思想卡入列数(机器节流 ≤1;认知含量曲线原料)。**`date` 按本地日切**(#25:18:00 跑的 run 不该记成 UTC 的明天;2026-07-09 前的旧行是 UTC 日期,不回改)。该文件的 mtime 兼任额度守卫(runner `--min-hours`,launchd 传 20)的"上次成功 run"时钟;跨 job 并发由 runner 文件锁串行化(#22,`98_Forme/.runner.lock`)。
+`proposed = suppressed + presented + rejected + dup`(普通 agent run 的账要对上;纯 authorized run 四项为 0)。`head`(#14)= 普通 run 的 vault HEAD 锚点。原子授权提交不能在自身内容中记录自身 hash,故用 `executionId` 解析该提交作为下一轮锚点;`authorized`=#31 本轮自执行数,不计 owner acceptance/taste。其余 `illegible`/`refaced`/`thought` 语义不变。`date` 按本地日切(#25);文件 mtime 仍兼任额度守卫时钟,跨 job 并发由 runner 文件锁串行化(#22)。
 
 ---
 

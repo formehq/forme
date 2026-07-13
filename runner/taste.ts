@@ -133,6 +133,8 @@ export function readDecisionLog(jsonlPath: string): { decisions: DecisionRow[]; 
       const e = JSON.parse(line) as Record<string, unknown>;
       if (e.type === "correction") corrections++;
       if (e.type === "decision" && typeof e.cardId === "string" && typeof e.choice === "string") {
+        // Authorized/shadow executions are system behavior, not owner taste.
+        if (e.actor === "agent_authorized" || e.actor === "agent_shadow") continue;
         decisions.push({
           cardId: e.cardId,
           choice: e.choice,

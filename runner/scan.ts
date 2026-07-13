@@ -113,3 +113,13 @@ export function isUsableAnchor(vault: string, anchor: string): boolean {
     return false;
   }
 }
+
+/** Commit immediately before a fixed-size fallback window; null means the window reaches the root. */
+export function commitWindowBase(vault: string, commits: number): string | null {
+  const out = execFileSync(
+    "git",
+    ["-C", vault, "rev-list", "--max-count=1", `--skip=${Math.max(0, commits)}`, "HEAD"],
+    { encoding: "utf8" },
+  ).trim();
+  return out || null;
+}

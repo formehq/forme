@@ -9,6 +9,7 @@ import { applyHunksToContent, ApplyError } from "./apply.ts";
 import { appendEvent, readEvents, pendingCards, queueState, catchUpData, metricsData, effectiveDecisions } from "./store.ts";
 import { createConsoleServer } from "./server.ts";
 import { assembleCard } from "../runner/card.ts";
+import { detectTimestampFreshness, executeTimestampFreshness } from "../runner/freshness.ts";
 import type { AgentCard, Card } from "../runner/types.ts";
 
 /* ---------- 纯函数:hunk 应用 ---------- */
@@ -142,6 +143,10 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
 
     // ① accept:presented → decide → diff 应用 + git 回执 + latency 真值
     assert.equal((await t.post("/api/presented", { cardId: cardA.id })).status, 200);
+    writeFileSync(join(vault, "98_Forme", "run-metrics.jsonl"), JSON.stringify({
+      v: "0", date: "2026-07-07", runId: "r_accept", proposed: 4,
+      suppressed: 0, presented: 4, rejected: 0, dup: 0,
+    }) + "\n");
     const acc = await t.post("/api/decide", { cardId: cardA.id, choice: "accept" });
     assert.equal(acc.status, 200, JSON.stringify(acc.data));
     assert.match(String(acc.data.executed), /^[0-9a-f]{7,40}$/);
@@ -149,6 +154,16 @@ test("console 端到端:presented → accept/park/correction/backfilled 四种�
     assert.match(readFileSync(join(vault, "note-a.md"), "utf8"), /updated: 2026-07-07/);
     const subject = execFileSync("git", ["-C", vault, "log", "-1", "--format=%s"], { encoding: "utf8" });
     assert.match(subject, new RegExp(`forme: accept ${cardA.id}`));
+    const committed = execFileSync("git", ["-C", vault, "show", "--format=", "--name-only", "HEAD"], { encoding: "utf8" });
+    for (const path of [
+      "note-a.md",
+      `98_Forme/cards/${cardA.id}.json`,
+      "98_Forme/decisions.jsonl",
+      "98_Forme/run-metrics.jsonl",
+    ]) assert.ok(committed.split("\n").includes(path), `${path} was not in the atomic accept commit`);
+    const acceptedEvent = readEvents(jsonl).find((e) => e.type === "decision" && e.cardId === cardA.id)!;
+    assert.match(acceptedEvent.executionId ?? "", /^exec_/);
+    assert.equal(acceptedEvent.executed, undefined);
     // 已落子的卡再打 → 409(队列投影也随之更新)
     assert.equal((await t.post("/api/decide", { cardId: cardA.id, choice: "accept" })).status, 409);
     state = (await t.get("/api/state")) as typeof state;
@@ -411,6 +426,40 @@ test("note 通道 + 撤销窗口(#24):理由随任意手势;undo 补偿事件;ac
     const late = await t.post("/api/undo", { cardId: cardB.id });
     assert.equal(late.status, 409);
     assert.match(String(late.data.error), /undo window/);
+  } finally {
+    await t.close();
+  }
+});
+
+test("agent_authorized freshness execution remains undoable after the owner undo window", async () => {
+  const vault = mkVault();
+  const outDir = join(vault, "98_Forme");
+  const clockPath = join(vault, "clock.md");
+  writeFileSync(clockPath, "---\nupdated: 2026-07-04\n---\n# Clock\n");
+  execFileSync("git", ["-C", vault, "add", "clock.md"]);
+  execFileSync("git", ["-C", vault, "commit", "-qm", "add clock fixture"]);
+  const before = readFileSync(clockPath, "utf8");
+  const now = new Date(Date.now() - 60_000);
+  const fix = detectTimestampFreshness(before, now);
+  assert.ok(fix);
+  const executed = executeTimestampFreshness({
+    vault,
+    outDir,
+    file: "clock.md",
+    fix,
+    now,
+    runId: "run_old_clock",
+  });
+  assert.notEqual(readFileSync(clockPath, "utf8"), before);
+
+  const t = await startServer(vault);
+  try {
+    const undo = await t.post("/api/undo", { cardId: executed.card.id });
+    assert.equal(undo.status, 200, JSON.stringify(undo.data));
+    assert.equal(readFileSync(clockPath, "utf8"), before);
+    const events = readEvents(join(outDir, "decisions.jsonl"));
+    assert.equal(events.at(-1)!.type, "undo");
+    assert.equal(effectiveDecisions(events).length, 0);
   } finally {
     await t.close();
   }

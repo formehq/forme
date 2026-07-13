@@ -4,8 +4,8 @@ import { mkdtempSync, writeFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
-import { markdownFilesSince, recentMarkdownFiles, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
-import { lastRunHead, appendRunMetric, localDate } from "./metrics.ts";
+import { commitWindowBase, markdownFilesSince, recentMarkdownFiles, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
+import { lastRunAnchor, lastRunHead, appendRunMetric, localDate } from "./metrics.ts";
 
 /** 临时 git vault:两批 commit,中间取锚点(= #14 的「上次 run」时刻)。 */
 function fixture(): { repo: string; anchor: string } {
@@ -58,10 +58,19 @@ test("lastRunHead:取最后一条带 head 的行;旧格式行(无 head)与坏行
   assert.equal(lastRunHead(p), "abc123abc123");
 });
 
+test("atomic authorized metrics use executionId as the latest run anchor", () => {
+  const p = join(mkdtempSync(join(tmpdir(), "forme-anchor-exec-")), "run-metrics.jsonl");
+  appendRunMetric(p, { v: "0", date: "2026-07-11", runId: "r1", proposed: 1, suppressed: 0, presented: 1, rejected: 0, dup: 0, head: "abc123abc123" });
+  appendRunMetric(p, { v: "0", date: "2026-07-12", runId: "r2", proposed: 0, suppressed: 0, presented: 0, rejected: 0, dup: 0, authorized: 1, executionId: "exec_clock_test" });
+  assert.deepEqual(lastRunAnchor(p), { executionId: "exec_clock_test" });
+});
+
 test("回退窗口 recentMarkdownFiles 行为不变(含 98_Forme 排除)", () => {
   const { repo } = fixture();
   assert.deepEqual(recentMarkdownFiles(repo, 3, 10).sort(), ["new-a.md", "new-b.md", "old.md"]);
   assert.deepEqual(recentMarkdownFiles(repo, 3, 1), ["new-b.md"]); // maxFiles 截断,最近优先
+  assert.equal(commitWindowBase(repo, 1), execFileSync("git", ["-C", repo, "rev-parse", "HEAD~1"], { encoding: "utf8" }).trim());
+  assert.equal(commitWindowBase(repo, 99), null);
 });
 
 test("slowLayerFiles(#18):取 02_Wiki 里最久没被 commit 动过的概念笔记,最陈旧优先", () => {

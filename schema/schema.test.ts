@@ -114,3 +114,15 @@ test("actor enum reserves the agency-ladder values", () => {
   assert.equal(checkEvent({ ...baseDecision, latencyMs: 0, actor: "agent_shadow" }).valid, true);
   assert.equal(checkEvent({ ...baseDecision, latencyMs: 0, actor: "nope" }).valid, false);
 });
+
+test("agent_authorized decisions use an executionId and need no human latency", () => {
+  const event = {
+    ...baseDecision,
+    actor: "agent_authorized",
+    executionId: "exec_clock_0123456789abcdef",
+  };
+  assert.equal(checkEvent(event).valid, true);
+  const { executionId, ...missingReceipt } = event;
+  assert.equal(checkEvent(missingReceipt).valid, false);
+  assert.equal(checkEvent({ ...event, executionId: "bad receipt" }).valid, false);
+});

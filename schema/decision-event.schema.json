@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://forme.sh/schema/decision-event.schema.json",
   "title": "Forme decisions.jsonl event",
-  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Five types: presented (starts the silent timer), decision (accept/park/reject + measured latency + actor + optional executed commit + optional note), correction (the optional in-place edit before accepting), question (#21: the user asked for context instead of deciding — the card awaits a re-face; also the legibility metric), undo (#24: cancels the most recent decision on this card within the undo window; the log stays append-only — undone decisions are compensated, never erased).",
+  "description": "One append-only line in decisions.jsonl — the event log the taste learner reads from. Events are THIN: they reference a card by cardId + fingerprint only; category, envelope (origin/from/role) and all other card-side fields live in the card, not here. Five types: presented (starts the silent timer), decision (accept/park/reject + actor + owner latency or an authorized execution receipt), correction (the optional in-place edit before accepting), question (#21: the user asked for context instead of deciding — the card awaits a re-face; also the legibility metric), undo (#24: cancels the most recent decision on this card; the log stays append-only — undone decisions are compensated, never erased).",
   "type": "object",
   "additionalProperties": false,
   "required": ["v", "ts", "type", "cardId", "fingerprint"],
@@ -36,7 +36,7 @@
       "enum": ["accept", "park", "reject"]
     },
     "latencyMs": {
-      "description": "On live decision events: silently measured time from presented to decision (time-to-decision). Omitted on backfilled (human-era, untimed) records.",
+      "description": "On live owner/shadow decision events: silently measured time from presented to decision. Omitted on backfilled records and agent_authorized executions, which have no human decision latency.",
       "type": "integer",
       "minimum": 0
     },
@@ -46,9 +46,14 @@
       "enum": ["owner", "agent_shadow", "agent_authorized"]
     },
     "executed": {
-      "description": "On accepted decisions: the git commit hash of the applied diff (execution receipt; enables rollback). Absent for park/reject. On undo events (#24): the git revert commit hash, when the undone decision had applied a diff.",
+      "description": "Legacy accepted-decision receipt: the git commit hash of the applied diff. New atomic executions use executionId because a commit cannot contain its own hash. On undo events (#24/#31), this is the inverse-patch commit hash.",
       "type": "string",
       "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "executionId": {
+      "description": "Stable receipt id written into both the event and the git commit trailer. Resolves to the commit without embedding a commit hash inside that same commit.",
+      "type": "string",
+      "pattern": "^exec_[a-z0-9_]+$"
     },
     "note": {
       "description": "Optional on decision events (#24): the user's one-line reason, captured with any gesture — park/reject rationales are the scarcest taste data. Distinct from correction (which keeps its own note alongside edited hunks).",
@@ -98,10 +103,21 @@
     },
     {
       "if": {
-        "properties": { "type": { "const": "decision" }, "backfilled": { "not": { "const": true } } },
-        "required": ["type"]
+        "properties": {
+          "type": { "const": "decision" },
+          "actor": { "not": { "const": "agent_authorized" } },
+          "backfilled": { "not": { "const": true } }
+        },
+        "required": ["type", "actor"]
       },
       "then": { "required": ["latencyMs"] }
+    },
+    {
+      "if": {
+        "properties": { "type": { "const": "decision" }, "actor": { "const": "agent_authorized" } },
+        "required": ["type", "actor"]
+      },
+      "then": { "required": ["executionId"] }
     },
     {
       "if": { "properties": { "type": { "const": "correction" } }, "required": ["type"] },

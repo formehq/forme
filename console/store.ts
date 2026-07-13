@@ -5,6 +5,7 @@ import { checkEvent } from "../schema/validate.ts";
 import { latestStateDiffDate } from "../runner/state-diff.ts";
 import { effectiveStakes } from "../runner/legibility.ts";
 import { localDate } from "../runner/metrics.ts";
+import { withWriteLock } from "../runner/execution.ts";
 import type { Card, Hunk } from "../runner/types.ts";
 
 /**
@@ -24,6 +25,7 @@ export interface DecisionEvent {
   latencyMs?: number;
   actor?: "owner" | "agent_shadow" | "agent_authorized";
   executed?: string; // accept 的应用 commit;undo 时 = revert commit(#24)
+  executionId?: string; // 新原子执行回执;git trailer → commit(#31)
   correction?: { hunks: Hunk[]; note?: string };
   question?: string; // #21:用户对卡发的问题(卡进入待补 context 态)
   note?: string; // #24:落子理由,随任意手势(park/reject 的理由 = 最珍贵的 taste 数据)
@@ -61,11 +63,24 @@ export function readEvents(jsonlPath: string): DecisionEvent[] {
 }
 
 /** 追加一条事件——先过自家 AJV,不合法即抛,绝不落盘。 */
-export function appendEvent(jsonlPath: string, event: DecisionEvent): void {
+export function validateEvent(event: DecisionEvent): void {
   const r = checkEvent(event as unknown as Record<string, unknown>);
   if (!r.valid) throw new Error(`Event failed schema validation: ${r.errors.join("; ")}`);
-  mkdirSync(dirname(jsonlPath), { recursive: true });
-  appendFileSync(jsonlPath, JSON.stringify(event) + "\n");
+}
+
+export function contentWithEvents(jsonlPath: string, events: DecisionEvent[]): string {
+  for (const event of events) validateEvent(event);
+  const existing = existsSync(jsonlPath) ? readFileSync(jsonlPath, "utf8") : "";
+  return existing + events.map((event) => JSON.stringify(event) + "\n").join("");
+}
+
+export function appendEvent(jsonlPath: string, event: DecisionEvent): void {
+  validateEvent(event);
+  const root = dirname(jsonlPath);
+  withWriteLock(root, () => {
+    mkdirSync(root, { recursive: true });
+    appendFileSync(jsonlPath, JSON.stringify(event) + "\n");
+  });
 }
 
 /** cards/ 里的全部卡(宽容读;按 createdAt 升序 = 先来先决)。 */
@@ -219,6 +234,7 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
 
 export interface MetricsData {
   decided: { total: number; accept: number; park: number; reject: number };
+  autonomy: { authorized: number };
   questions: number; // question 事件总数(#21:legibility 度量)
   latency: {
     count: number; // 有现场计时真值的落子数(backfilled 不算)
@@ -235,6 +251,7 @@ export interface MetricsData {
     illegible?: number;
     refaced?: number;
     thought?: number;
+    authorized?: number;
   }>;
   totals: { proposed: number; suppressedPlusDup: number };
   /** 认知含量(#18):入列卡按 stakes 的构成——方向审计的常驻仪表。 */
@@ -244,6 +261,7 @@ export interface MetricsData {
 /** Metrics 投影:时延来自 decisions.jsonl 真值,重复率曲线来自 run-metrics.jsonl。 */
 export function metricsData(outDir: string): MetricsData {
   const decided = { total: 0, accept: 0, park: 0, reject: 0 };
+  const autonomy = { authorized: 0 };
   let questions = 0;
   const events = readEvents(join(outDir, "decisions.jsonl"));
   const timed: Array<{ ts: string; latencyMs: number; choice: string }> = [];
@@ -253,6 +271,11 @@ export function metricsData(outDir: string): MetricsData {
   // 只统计生效的落子(#24:被撤销的 decision 不进计数,也不进时延分布——4 秒内反悔的数据是噪声)
   const decisions = effectiveDecisions(events).sort((a, b) => (a.ts < b.ts ? -1 : 1));
   for (const e of decisions) {
+    if (e.actor === "agent_authorized") {
+      autonomy.authorized++;
+      continue;
+    }
+    if (e.actor === "agent_shadow") continue;
     decided.total++;
     if (e.choice === "accept") decided.accept++;
     else if (e.choice === "park") decided.park++;
@@ -287,6 +310,7 @@ export function metricsData(outDir: string): MetricsData {
           ...(m.illegible ? { illegible: m.illegible } : {}),
           ...(m.refaced ? { refaced: m.refaced } : {}),
           ...(m.thought ? { thought: m.thought } : {}),
+          ...(m.authorized ? { authorized: m.authorized } : {}),
         };
         runs.push(row);
         totals.proposed += row.proposed;
@@ -305,6 +329,7 @@ export function metricsData(outDir: string): MetricsData {
   }
   return {
     decided,
+    autonomy,
     questions,
     latency: { count: timed.length, medianMs, recent: timed.slice(-20) },
     runs,

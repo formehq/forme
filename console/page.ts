@@ -474,7 +474,8 @@ function renderMetrics(backTo) {
     var m = st.metrics;
     var html = '<div class="card"><h1>Metrics</h1>';
     html += "<p>" + m.decided.total + " decision" + (m.decided.total === 1 ? "" : "s") + ": " + m.decided.accept + " accept · " + m.decided.park +
-      " park · " + m.decided.reject + " reject" + (m.questions ? " · " + m.questions + " question" + (m.questions === 1 ? "" : "s") : "") + "</p>";
+      " park · " + m.decided.reject + " reject" + (m.questions ? " · " + m.questions + " question" + (m.questions === 1 ? "" : "s") : "") +
+      (m.autonomy && m.autonomy.authorized ? " · " + m.autonomy.authorized + " authorized fix" + (m.autonomy.authorized === 1 ? "" : "es") : "") + "</p>";
     if (m.cognition) { // #18:认知含量——方向审计的常驻仪表
       var cg = m.cognition;
       var cgTotal = cg.thought + cg.action + cg.ledger;
