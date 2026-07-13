@@ -13,6 +13,15 @@ Forme is local-first, not offline. During a scan, the user's own Codex CLI sends
 
 The agent runs with a read-only sandbox and returns schema-constrained JSON. It cannot write the vault. Forme's deterministic code validates the response and is the only layer that writes runtime artifacts.
 
+## Source-mirror limits
+
+An external-note exporter may be unable to represent every attachment. Forme
+must not describe such a mirror as lossless. When source preparation reports a
+nonzero unsupported-attachment count, the installer repeats that exact count
+and blocks until the operator confirms that the user understood and accepted
+the omission. Consent to a count does not authorize Forme to inspect, upload, or
+silently discard any additional item.
+
 ## What accept changes
 
 - Before a decision, Forme writes only inside `98_Forme/`.

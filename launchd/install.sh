@@ -10,12 +10,16 @@ Usage:
 
 Options:
   --vault PATH               Vault path (or FORME_VAULT)
-  --auth auto|chatgpt|api-key|skip
-                             Authentication path (default: auto)
+  --auth chatgpt|api-key|auto|skip
+                             Authentication path (default: chatgpt; API key is fallback)
   --runner-hour HOUR         Daily runner hour, 0-23 (default: 9)
   --statediff-hour HOUR      Sunday State Diff hour, 0-23 (default: 18)
   --port PORT                Local console port (default: 6180)
   --slow-root PATH           Relative slow-layer root; auto-detected by default
+  --unsupported-attachments N
+                             Upstream-reported attachments absent from the mirror
+  --accept-unsupported-attachments
+                             Confirm informed consent for that exact nonzero count
   --preflight                Check prerequisites/auth only; write nothing
   --dry-run                  Alias for --preflight
   --no-launch                Render plists but do not load launchd jobs
@@ -33,11 +37,13 @@ EOF
 
 REPO="$(cd "$(dirname "$0")/.." && pwd -P)"
 VAULT="${FORME_VAULT:-}"
-AUTH="${FORME_AUTH:-auto}"
+AUTH="${FORME_AUTH:-chatgpt}"
 HOUR="${FORME_RUNNER_HOUR:-9}"
 SD_HOUR="${FORME_STATEDIFF_HOUR:-18}"
 PORT="${FORME_PORT:-6180}"
 SLOW_ROOT="${FORME_SLOW_ROOT:-}"
+UNSUPPORTED_ATTACHMENTS="${FORME_UNSUPPORTED_ATTACHMENTS:-0}"
+ACCEPT_UNSUPPORTED_ATTACHMENTS="${FORME_ACCEPT_UNSUPPORTED_ATTACHMENTS:-0}"
 PRECHECK=0
 NO_LAUNCH="${FORME_NO_LAUNCH:-0}"
 SKIP_SMOKE="${FORME_SKIP_CODEX_SMOKE:-0}"
@@ -54,6 +60,8 @@ while [ "$#" -gt 0 ]; do
     --statediff-hour) [ "$#" -ge 2 ] || { usage >&2; exit 2; }; SD_HOUR="$2"; shift 2 ;;
     --port) [ "$#" -ge 2 ] || { usage >&2; exit 2; }; PORT="$2"; shift 2 ;;
     --slow-root) [ "$#" -ge 2 ] || { usage >&2; exit 2; }; SLOW_ROOT="$2"; shift 2 ;;
+    --unsupported-attachments) [ "$#" -ge 2 ] || { usage >&2; exit 2; }; UNSUPPORTED_ATTACHMENTS="$2"; shift 2 ;;
+    --accept-unsupported-attachments) ACCEPT_UNSUPPORTED_ATTACHMENTS=1; shift ;;
     --preflight|--dry-run) PRECHECK=1; NO_LAUNCH=1; SKIP_SMOKE=1; SKIP_FIRST_RUN=1; SKIP_NPM=1; NO_OPEN=1; shift ;;
     --no-launch) NO_LAUNCH=1; NO_OPEN=1; shift ;;
     --skip-smoke) SKIP_SMOKE=1; shift ;;
@@ -85,6 +93,34 @@ valid_port() {
   case "$1" in *[!0-9]*|'') return 1 ;; esac
   [ "$1" -ge 1 ] && [ "$1" -le 65535 ]
 }
+valid_count() {
+  case "$1" in *[!0-9]*|'') return 1 ;; esac
+  [ "$1" -ge 0 ]
+}
+codex_failure_kind() {
+  LOG_FILE="$1"
+  if grep -Eiq 'usage limit|rate.?limit|quota|too many requests|limit[^[:alnum:]]+(reached|reset)' "$LOG_FILE"; then
+    echo "usage-limit"
+  elif grep -Eiq 'requires a newer version of Codex|upgrade to the latest (app or )?CLI' "$LOG_FILE"; then
+    echo "stale-codex"
+  else
+    echo "other"
+  fi
+}
+fail_codex_run() {
+  STAGE="$1"
+  LOG_FILE="$2"
+  tail -n 20 "$LOG_FILE" >&2
+  case "$(codex_failure_kind "$LOG_FILE")" in
+    usage-limit)
+      fail "ChatGPT-plan usage limit reached during $STAGE; no jobs were loaded. Wait for the plan reset, or explicitly choose the API-key fallback and rerun."
+      ;;
+    stale-codex)
+      fail "Codex became incompatible during $STAGE; rerun launchd/prepare-codex.sh before restarting the stopwatch."
+      ;;
+    *) fail "$STAGE failed; no jobs were loaded" ;;
+  esac
+}
 
 [ "$(uname -s)" = "Darwin" ] || fail "macOS is required for the launchd installer"
 [ -n "$VAULT" ] || { usage >&2; exit 2; }
@@ -95,7 +131,9 @@ git -C "$VAULT" rev-parse --verify HEAD >/dev/null 2>&1 || fail "vault needs at 
 valid_hour "$HOUR" || fail "runner hour must be 0-23"
 valid_hour "$SD_HOUR" || fail "State Diff hour must be 0-23"
 valid_port "$PORT" || fail "console port must be 1-65535"
+valid_count "$UNSUPPORTED_ATTACHMENTS" || fail "unsupported attachment count must be a non-negative integer"
 case "$AUTH" in auto|chatgpt|api-key|skip) ;; *) fail "auth must be auto, chatgpt, api-key, or skip" ;; esac
+case "$ACCEPT_UNSUPPORTED_ATTACHMENTS" in 0|1) ;; *) fail "unsupported attachment consent flag must be 0 or 1" ;; esac
 
 NODE_BIN="$(command -v node 2>/dev/null || true)"
 [ -n "$NODE_BIN" ] || fail "Node.js is missing (need >=22.18)"
@@ -106,6 +144,26 @@ NODE_REAL="$("$NODE_BIN" -e 'console.log(require("node:fs").realpathSync(process
 CODEX_BIN="$(command -v codex 2>/dev/null || true)"
 [ -n "$CODEX_BIN" ] || fail "Codex CLI is missing (install it before Forme)"
 NPM_BIN="$(command -v npm 2>/dev/null || true)"
+
+if [ "${FORME_SKIP_CODEX_VERSION_CHECK:-0}" != "1" ]; then
+  DOCTOR_JSON="$(mktemp "${TMPDIR:-/tmp}/forme-codex-doctor.XXXXXX")"
+  DOCTOR_LOG="$(mktemp "${TMPDIR:-/tmp}/forme-codex-doctor-log.XXXXXX")"
+  trap 'rm -f "$DOCTOR_JSON" "$DOCTOR_LOG"' EXIT HUP INT TERM
+  OPENAI_API_KEY= "$CODEX_BIN" doctor --json >"$DOCTOR_JSON" 2>"$DOCTOR_LOG" || true
+  if ! "$NODE_REAL" "$REPO/launchd/codex-preflight.ts" <"$DOCTOR_JSON"; then
+    tail -n 20 "$DOCTOR_LOG" >&2
+    fail "Codex version gate failed; run launchd/prepare-codex.sh before the user's stopwatch"
+  fi
+  rm -f "$DOCTOR_JSON" "$DOCTOR_LOG"
+  trap - EXIT HUP INT TERM
+fi
+
+if [ "$UNSUPPORTED_ATTACHMENTS" -gt 0 ]; then
+  say "source mirror omits $UNSUPPORTED_ATTACHMENTS unsupported attachment(s); this migration is not lossless"
+  [ "$ACCEPT_UNSUPPORTED_ATTACHMENTS" = "1" ] ||
+    fail "$UNSUPPORTED_ATTACHMENTS unsupported attachment(s) require informed consent; explain the loss, then rerun with --accept-unsupported-attachments"
+  say "operator confirmed informed consent for exactly $UNSUPPORTED_ATTACHMENTS unsupported attachment(s)"
+fi
 
 MARKDOWN_COUNT="$(git -C "$VAULT" ls-files '*.md' | awk 'NF { n++ } END { print n+0 }')"
 [ "$MARKDOWN_COUNT" -gt 0 ] || say "warning: vault has no tracked Markdown yet; install can continue, but no card can be proposed"
@@ -159,17 +217,43 @@ if [ "$SKIP_NPM" -eq 0 ] && [ ! -d "$REPO/node_modules/ajv" ]; then
   (cd "$REPO" && "$NPM_BIN" ci --ignore-scripts)
 fi
 
+if [ "$SKIP_SMOKE" -eq 0 ] && [ "$AUTH" != "skip" ]; then
+  SMOKE_OUT="$(mktemp "${TMPDIR:-/tmp}/forme-smoke.XXXXXX")"
+  SMOKE_LOG="$(mktemp "${TMPDIR:-/tmp}/forme-smoke-log.XXXXXX")"
+  trap 'rm -f "${SMOKE_OUT:-}" "${SMOKE_LOG:-}"' EXIT HUP INT TERM
+  say "Codex smoke: one tiny real read-only call"
+  if ! "$CODEX_BIN" exec --ephemeral --ignore-rules --sandbox read-only -C "$VAULT" --skip-git-repo-check \
+    -o "$SMOKE_OUT" "Reply exactly FORME_READY. Do not use tools." >"$SMOKE_LOG" 2>&1; then
+    fail_codex_run "Codex smoke" "$SMOKE_LOG"
+  fi
+  grep -qx "FORME_READY" "$SMOKE_OUT" || fail "Codex smoke returned an unexpected response"
+  rm -f "$SMOKE_OUT" "$SMOKE_LOG"
+  trap - EXIT HUP INT TERM
+fi
+
 OUTDIR="$VAULT/98_Forme"
 mkdir -p "$OUTDIR/cards"
-LOGDIR="${FORME_LOG_DIR:-$HOME/Library/Logs/forme}"
-INSTALL_DIR="${FORME_INSTALL_DIR:-$HOME/Library/LaunchAgents}"
-mkdir -p "$LOGDIR" "$INSTALL_DIR"
 
 if [ -z "$SLOW_ROOT" ]; then
   if [ -d "$VAULT/02_Wiki" ]; then SLOW_ROOT="02_Wiki/"; else SLOW_ROOT="."; fi
 fi
 case "$SLOW_ROOT" in /*|*../*|../*|..) fail "slow-root must stay inside the vault" ;; esac
 
+if [ "$SKIP_FIRST_RUN" -eq 0 ]; then
+  say "first scan: recent 12 commits, at most 2 cards (cold-start throttle)"
+  FIRST_RUN_LOG="$(mktemp "${TMPDIR:-/tmp}/forme-first-run.XXXXXX")"
+  trap 'rm -f "${FIRST_RUN_LOG:-}"' EXIT HUP INT TERM
+  if ! "$NODE_REAL" "$REPO/runner/index.ts" --vault "$VAULT" --commits 12 --max-files 24 --max-cards 2 --slow-layer 0 >"$FIRST_RUN_LOG" 2>&1; then
+    fail_codex_run "first scan" "$FIRST_RUN_LOG"
+  fi
+  cat "$FIRST_RUN_LOG"
+  rm -f "$FIRST_RUN_LOG"
+  trap - EXIT HUP INT TERM
+fi
+
+LOGDIR="${FORME_LOG_DIR:-$HOME/Library/Logs/forme}"
+INSTALL_DIR="${FORME_INSTALL_DIR:-$HOME/Library/LaunchAgents}"
+mkdir -p "$LOGDIR" "$INSTALL_DIR"
 PATH_LINE="$(dirname "$NODE_REAL"):$(dirname "$CODEX_BIN"):/usr/bin:/bin"
 export FORME_RENDER_NODE="$NODE_REAL"
 export FORME_RENDER_PATH="$PATH_LINE"
@@ -194,26 +278,6 @@ render_one() {
 render_one com.forme.runner
 render_one com.forme.statediff
 render_one com.forme.console
-
-if [ "$SKIP_SMOKE" -eq 0 ] && [ "$AUTH" != "skip" ]; then
-  SMOKE_OUT="$(mktemp "${TMPDIR:-/tmp}/forme-smoke.XXXXXX")"
-  SMOKE_LOG="$(mktemp "${TMPDIR:-/tmp}/forme-smoke-log.XXXXXX")"
-  trap 'rm -f "${SMOKE_OUT:-}" "${SMOKE_LOG:-}"' EXIT HUP INT TERM
-  say "Codex smoke: one tiny real read-only call"
-  if ! "$CODEX_BIN" exec --ephemeral --ignore-rules --sandbox read-only -C "$VAULT" --skip-git-repo-check \
-    -o "$SMOKE_OUT" "Reply exactly FORME_READY. Do not use tools." >"$SMOKE_LOG" 2>&1; then
-    tail -n 20 "$SMOKE_LOG" >&2
-    fail "Codex smoke failed"
-  fi
-  grep -qx "FORME_READY" "$SMOKE_OUT" || fail "Codex smoke returned an unexpected response"
-  rm -f "$SMOKE_OUT" "$SMOKE_LOG"
-  trap - EXIT HUP INT TERM
-fi
-
-if [ "$SKIP_FIRST_RUN" -eq 0 ]; then
-  say "first scan: recent 12 commits, at most 2 cards (cold-start throttle)"
-  "$NODE_REAL" "$REPO/runner/index.ts" --vault "$VAULT" --commits 12 --max-files 24 --max-cards 2 --slow-layer 0
-fi
 
 if [ "$NO_LAUNCH" -eq 0 ]; then
   UID_NOW="$(id -u)"
@@ -241,4 +305,5 @@ CARD_COUNT="$(find "$OUTDIR/cards" -type f -name '*.json' 2>/dev/null | awk 'END
 say "ready: $CARD_COUNT card(s) on disk; runtime data stays in $OUTDIR"
 say "schedule: runner ${HOUR}:00 daily; State Diff Sunday ${SD_HOUR}:00; slow layer '$SLOW_ROOT'"
 say "logs: $LOGDIR"
+[ "$UNSUPPORTED_ATTACHMENTS" -eq 0 ] || say "source consent: $UNSUPPORTED_ATTACHMENTS unsupported attachment(s) acknowledged"
 say "uninstall: $REPO/launchd/uninstall.sh"

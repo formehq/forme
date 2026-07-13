@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { tmpdir } from "node:os";
@@ -9,6 +9,7 @@ import { renderPlist, xmlEscape } from "./render-plist.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const installScript = join(here, "install.sh");
+const prepareScript = join(here, "prepare-codex.sh");
 const uninstallScript = join(here, "uninstall.sh");
 
 function vaultFixture(name: string): string {
@@ -35,6 +36,7 @@ function baseEnv(home: string): NodeJS.ProcessEnv {
     FORME_SKIP_FIRST_RUN: "1",
     FORME_SKIP_CODEX_SMOKE: "1",
     FORME_NO_OPEN: "1",
+    FORME_SKIP_CODEX_VERSION_CHECK: "1",
   };
 }
 
@@ -117,4 +119,111 @@ test("API key reaches login through stdin, is absent from smoke, and never enter
   for (const file of ["com.forme.runner.plist", "com.forme.statediff.plist", "com.forme.console.plist"]) {
     assert.doesNotMatch(readFileSync(join(home, "LaunchAgents", file), "utf8"), new RegExp(secret));
   }
+});
+
+test("pre-clock Codex preparation upgrades a stale CLI and verifies the result", () => {
+  const home = mkdtempSync(join(tmpdir(), "forme-prepare-home-"));
+  const fakeBin = join(home, "bin");
+  const marker = join(home, "updated");
+  mkdirSync(fakeBin, { recursive: true });
+  const fakeCodex = join(fakeBin, "codex");
+  writeFileSync(fakeCodex, [
+    "#!/bin/sh",
+    'if [ "$1" = "update" ] && [ "$2" = "--help" ]; then exit 0; fi',
+    'if [ "$1" = "update" ]; then : > "$FAKE_UPDATE_MARKER"; exit 0; fi',
+    'if [ "$1" = "--version" ]; then if [ -f "$FAKE_UPDATE_MARKER" ]; then echo "codex-cli 0.144.3"; else echo "codex-cli 0.142.5"; fi; exit 0; fi',
+    'if [ "$1" = "doctor" ] && [ "$2" = "--json" ]; then',
+    '  if [ -f "$FAKE_UPDATE_MARKER" ]; then CURRENT="0.144.3"; else CURRENT="0.142.5"; fi',
+    '  printf \'{"codexVersion":"%s","checks":{"updates.status":{"details":{"latest version":"0.144.3"}}}}\\n\' "$CURRENT"',
+    "  exit 0",
+    "fi",
+    'if [ "$1" = "login" ] && [ "$2" = "status" ]; then echo "Not logged in"; exit 1; fi',
+    "exit 2",
+    "",
+  ].join("\n"));
+  chmodSync(fakeCodex, 0o755);
+  const env = {
+    ...process.env,
+    HOME: home,
+    FORME_CODEX_BIN: fakeCodex,
+    FORME_NODE_BIN: process.execPath,
+    FAKE_UPDATE_MARKER: marker,
+  };
+
+  const stale = spawnSync("sh", [prepareScript, "--verify-only"], { encoding: "utf8", env });
+  assert.equal(stale.status, 1);
+  assert.match(stale.stderr, /Codex 0\.142\.5 is stale/);
+  assert.equal(existsSync(marker), false);
+
+  const updated = spawnSync("sh", [prepareScript], { encoding: "utf8", env });
+  assert.equal(updated.status, 0, updated.stderr);
+  assert.equal(existsSync(marker), true);
+  assert.match(updated.stdout, /Codex 0\.144\.3 is current/);
+  assert.match(updated.stdout, /Codex preparation passed/);
+});
+
+test("unsupported attachment count blocks install until the exact consent gate is explicit", () => {
+  const home = mkdtempSync(join(tmpdir(), "forme-consent-home-"));
+  const vault = vaultFixture("consent-vault");
+  const env = baseEnv(home);
+  const blocked = spawnSync("sh", [
+    installScript,
+    "--vault", vault,
+    "--auth", "skip",
+    "--preflight",
+    "--unsupported-attachments", "4",
+  ], { encoding: "utf8", env });
+  assert.equal(blocked.status, 1);
+  assert.match(blocked.stdout, /omits 4 unsupported attachment/);
+  assert.match(blocked.stderr, /require informed consent/);
+
+  const accepted = spawnSync("sh", [
+    installScript,
+    "--vault", vault,
+    "--auth", "skip",
+    "--preflight",
+    "--unsupported-attachments", "4",
+    "--accept-unsupported-attachments",
+  ], { encoding: "utf8", env });
+  assert.equal(accepted.status, 0, accepted.stderr);
+  assert.match(accepted.stdout, /confirmed informed consent for exactly 4/);
+  assert.equal(existsSync(join(vault, "98_Forme")), false);
+});
+
+test("ChatGPT-plan usage limit fails clearly before runtime files or launch jobs", () => {
+  const home = mkdtempSync(join(tmpdir(), "forme-limit-home-"));
+  const vault = vaultFixture("limit-vault");
+  const fakeBin = join(home, "bin");
+  mkdirSync(fakeBin, { recursive: true });
+  const fakeCodex = join(fakeBin, "codex");
+  writeFileSync(fakeCodex, [
+    "#!/bin/sh",
+    'if [ "$1" = "doctor" ] && [ "$2" = "--json" ]; then printf \'{"codexVersion":"0.144.3","checks":{"updates.status":{"details":{"latest version":"0.144.3"}}}}\\n\'; exit 0; fi',
+    'if [ "$1" = "login" ] && [ "$2" = "status" ]; then echo "Logged in using ChatGPT"; exit 0; fi',
+    'if [ "$1" = "--version" ]; then echo "codex-cli 0.144.3"; exit 0; fi',
+    'if [ "$1" = "exec" ]; then echo "You have reached your ChatGPT usage limit; reset at 09:00" >&2; exit 1; fi',
+    "exit 2",
+    "",
+  ].join("\n"));
+  chmodSync(fakeCodex, 0o755);
+  const env = {
+    ...baseEnv(home),
+    PATH: `${fakeBin}:${dirname(process.execPath)}:/usr/bin:/bin`,
+    FORME_SKIP_CODEX_VERSION_CHECK: "0",
+    FORME_SKIP_CODEX_SMOKE: "0",
+  };
+  const result = spawnSync("sh", [
+    installScript,
+    "--vault", vault,
+    "--auth", "chatgpt",
+    "--no-launch",
+    "--skip-first-run",
+    "--skip-npm",
+    "--no-open",
+  ], { encoding: "utf8", env });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /ChatGPT-plan usage limit reached during Codex smoke/);
+  assert.match(result.stderr, /Wait for the plan reset/);
+  assert.equal(existsSync(join(vault, "98_Forme")), false);
+  assert.equal(existsSync(join(home, "LaunchAgents")), false);
 });

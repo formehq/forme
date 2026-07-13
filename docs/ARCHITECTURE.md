@@ -92,7 +92,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
 - **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
 - **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
-- **白手套冷启动包**(#28 + #29):任意 git vault 路径 → Node/Codex/auth 预检(API key 只走 stdin)→ 初始化 `98_Forme/`→ 真实只读 smoke → 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;单命令卸载保留审计数据。runner 不要求 `02_Wiki/` 或 owner 目录结构,并以 `core.quotePath=false` 正确读取多语言文件名。新卡、reface、State Diff、console 与新 Taste Rules 固定 English-first;证据引用/diff 源文/历史记录不翻译。
+- **白手套冷启动包**(#28 + #29):秒表前 `codex update` + `doctor --json` 当前版硬门(install 时重复校验)→ 任意 git vault 路径 → Node/ChatGPT-plan auth 预检(API key 只作显式 fallback 且只走 stdin)→ unsupported attachment 精确计数同意门 → 真实只读 smoke → 初始化 `98_Forme/`→ 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;Plus usage limit 在 smoke/首扫中命中时明示 reset/fallback 并在 load job 前退出。单命令卸载保留审计数据。runner 不要求 `02_Wiki/` 或 owner 目录结构,并以 `core.quotePath=false` 正确读取多语言文件名。新卡、reface、State Diff、console 与新 Taste Rules 固定 English-first;证据引用/diff 源文/历史记录不翻译。
 
 **还不能:**
 - 规则的「收录/改写/丢弃」确认交互(屏 4 Taste 面板,#20,W5)/ k 条相似历史决策注入(post-W2)。
