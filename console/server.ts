@@ -182,16 +182,21 @@ export function createConsoleServer(opts: ConsoleOpts): Server {
       }
 
       if (req.method === "GET" && url.pathname === "/api/state") {
+        const projectionStarted = performance.now();
         const now = new Date();
         const events = readEvents(jsonlPath);
-        return json(res, 200, {
+        const cards = loadCards(outDir);
+        const body = {
+          product: "forme",
           now: now.toISOString(),
           freshness: freshness(),
-          catchUp: catchUpData(vault, outDir, now),
-          pending: pendingCards(outDir, events),
+          catchUp: catchUpData(vault, outDir, now, events, cards),
+          pending: pendingCards(outDir, events, cards),
           stateDiff: latestStateDiff(outDir),
-          metrics: metricsData(outDir), // #19:数据早已在盘,这里只是投影
-        });
+          metrics: metricsData(outDir, events, cards), // #19:数据早已在盘,这里只是投影
+        };
+        res.setHeader("server-timing", `forme-state;dur=${(performance.now() - projectionStarted).toFixed(1)}`);
+        return json(res, 200, body);
       }
 
       if (req.method === "POST") {

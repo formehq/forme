@@ -129,7 +129,7 @@ export interface QueueState {
 }
 
 /** 队列投影(cardId 与 fingerprint 双保险;undo 过的 decision 不算数 —— #24)。 */
-export function queueState(outDir: string, events: DecisionEvent[]): QueueState {
+export function queueState(outDir: string, events: DecisionEvent[], cards: Card[] = loadCards(outDir)): QueueState {
   const decidedIds = new Set<string>();
   const decidedFps = new Set<string>();
   for (const e of effectiveDecisions(events)) {
@@ -137,7 +137,7 @@ export function queueState(outDir: string, events: DecisionEvent[]): QueueState 
     if (e.fingerprint) decidedFps.add(e.fingerprint);
   }
   const openQ = openQuestionTs(events);
-  const undecided = loadCards(outDir).filter(
+  const undecided = cards.filter(
     (c) => !decidedIds.has(c.id) && !decidedFps.has(c.fingerprint),
   );
   return {
@@ -147,8 +147,8 @@ export function queueState(outDir: string, events: DecisionEvent[]): QueueState 
 }
 
 /** 待决队列(兼容旧签名;新代码用 queueState)。 */
-export function pendingCards(outDir: string, events: DecisionEvent[]): Card[] {
-  return queueState(outDir, events).pending;
+export function pendingCards(outDir: string, events: DecisionEvent[], cards: Card[] = loadCards(outDir)): Card[] {
+  return queueState(outDir, events, cards).pending;
 }
 
 /** 该卡最近一次 presented 的时刻——静默计时的起点(没有就是 null)。 */
@@ -170,8 +170,13 @@ export interface CatchUp {
 }
 
 /** catch-up 卡(交互稿屏 1)的数据包——全部从 vault 推导,可核查。 */
-export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
-  const events = readEvents(join(outDir, "decisions.jsonl"));
+export function catchUpData(
+  vault: string,
+  outDir: string,
+  now: Date,
+  events: DecisionEvent[] = readEvents(join(outDir, "decisions.jsonl")),
+  cards: Card[] = loadCards(outDir),
+): CatchUp {
   let sinceMs = 0;
   for (const e of events) {
     const t = Date.parse(e.ts);
@@ -214,7 +219,7 @@ export function catchUpData(vault: string, outDir: string, now: Date): CatchUp {
     }
   }
 
-  const queue = queueState(outDir, events);
+  const queue = queueState(outDir, events, cards);
   return {
     sinceTs,
     awayHours: sinceMs ? (now.getTime() - sinceMs) / 3_600_000 : null,
@@ -259,11 +264,14 @@ export interface MetricsData {
 }
 
 /** Metrics 投影:时延来自 decisions.jsonl 真值,重复率曲线来自 run-metrics.jsonl。 */
-export function metricsData(outDir: string): MetricsData {
+export function metricsData(
+  outDir: string,
+  events: DecisionEvent[] = readEvents(join(outDir, "decisions.jsonl")),
+  cards: Card[] = loadCards(outDir),
+): MetricsData {
   const decided = { total: 0, accept: 0, park: 0, reject: 0 };
   const autonomy = { authorized: 0 };
   let questions = 0;
-  const events = readEvents(join(outDir, "decisions.jsonl"));
   const timed: Array<{ ts: string; latencyMs: number; choice: string }> = [];
   for (const e of events) {
     if (e.type === "question") questions++;
@@ -322,7 +330,7 @@ export function metricsData(outDir: string): MetricsData {
   }
   // 认知含量(#18):所有入列过的卡按 stakes 分桶(卡永久在盘,零新增存储)
   const cognition = { thought: 0, action: 0, ledger: 0 };
-  for (const c of loadCards(outDir)) {
+  for (const c of cards) {
     if (c.stakes === "thought") cognition.thought++;
     else if (c.stakes === "reversible-ledger") cognition.ledger++;
     else cognition.action++;

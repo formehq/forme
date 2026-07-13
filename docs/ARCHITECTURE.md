@@ -90,7 +90,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **State Diff 周更**:确定性周数据包 → 四段叙事 → `state-diff-YYYY-MM-DD.md`,周日 launchd 自动产出(#11)。
 - launchd 调度:日跑(每日定时 + vault commit 触发 + 登录补跑,≥20h 守卫)+ 周日 State Diff(≥4d 守卫)(#9、#11)。
 - **console 落子全链**(#15):localhost 单页(127.0.0.1:6180,launchd 常驻)渲染三原语(catch-up / 五段卡 / State Diff)→ a/p/r 单键或按钮 + correction 就地修正 → accept 应用最小 diff(全有或全无;目标文件不干净即拒)+ 目标/卡镜像/decision/metrics 原子提交 → latencyMs 有真值。服务器零状态,每请求现读 vault(硬约束 #4)。
-- **wake-catchup**(#16,硬约束 #3):开页旧状态秒渲 +「队列截至 X」标注 → 后台增量 run(额度三重护栏)→ 投影自更新;常开 tab 回可见自动重投影;真链已验证(refresh → 锚点 run → 3 卡入列)。
+- **wake-catchup**(#16,硬约束 #3):开页旧状态秒渲 +「队列截至 X」标注 → 后台增量 run(额度三重护栏)→ 投影自更新。首个 `/api/state` 单次读取 cards/events 后复用于三块投影,响应带 `Server-Timing`;安装健康门的 curl 有自身 timeout、真实 10s deadline 与 Forme 身份校验。常开 tab 回可见自动重投影;最终仍等 owner 连续三天开盖秒表。
 - **卡面 v0.2:世界层优先**(#21):世界层闸(账本语域上 title/summary/whyNow 即打回,账本卡豁免)+ 同轮一次 reface 重写机会;stakes 三级(申报+消毒派生)驱动卡面丰俭;prompt 带 66bcc 真实正反例。
 - **question 通道**(#21):console 问一句(q 键)→ question 事件(非 decision,指纹不进已决名单)→ 卡转待补 context 态退出队列 → 下一轮 run 先答问题(reface 只换脸,id/指纹/diff 不变)→ 带着「你问过」问答同指纹回场。
 - **Metrics 上屏**(#19):落子 toast 带本次用时;Metrics 视图 = 时延中位数 + 最近 20 次分布(按 choice 着色)+ 重复率逐轮条 + 累计抑制率 + 认知含量构成(#18)——全部现读 jsonl,中位数只取现场计时。

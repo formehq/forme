@@ -44,6 +44,9 @@ test("plist renderer XML-escapes paths and rejects missing tokens", () => {
   assert.equal(xmlEscape('/tmp/A & B/"vault"'), "/tmp/A &amp; B/&quot;vault&quot;");
   assert.equal(renderPlist("<string>{{VAULT}}</string>", { VAULT: "/tmp/A & B" }), "<string>/tmp/A &amp; B</string>");
   assert.throws(() => renderPlist("{{VAULT}} {{PORT}}", { VAULT: "/tmp" }), /missing plist value/);
+  const installer = readFileSync(installScript, "utf8");
+  assert.match(installer, /--connect-timeout 1 --max-time 2/);
+  assert.match(installer, /\*'"product":"forme"'\*/);
 });
 
 test("white-glove install renders valid generic plists and initializes only 98_Forme", () => {

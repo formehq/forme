@@ -24,10 +24,10 @@ silently discard any additional item.
 
 ## What accept changes
 
-- Before a decision, Forme writes only inside `98_Forme/`.
-- `accept` applies the displayed minimal replacement to one target file and creates a git commit containing only that file.
+- Outside an explicitly authorized deterministic class, Forme writes the knowledge layer only after an owner `accept`. Timestamp freshness (#31) is the sole current authorized class and remains auditable/reversible.
+- `accept` applies one displayed minimal replacement and commits the target together with its Forme-owned card/event/metric audit artifacts; unrelated user changes are excluded.
 - A dirty target file, missing `before` text, ambiguous match, invalid schema, or path outside the vault stops the write.
-- The four-second console undo uses `git revert`; history remains append-only. After that window, the normal git commit/revert workflow remains available.
+- The four-second owner undo writes an inverse target-file commit; history and audit artifacts remain append-only. Explicitly authorized freshness fixes remain undoable after that owner window because they first surface in the next State Diff.
 - `park` and `reject` do not change knowledge-layer files.
 
 ## Uninstall and deletion

@@ -1,6 +1,6 @@
 # console/ — localhost 决策台(#15,W3)
 
-单页,原生 TS + `node:http`,零框架零构建零外部资源(2026-07-04 技术栈裁定)。**服务器零状态**(硬约束 #4):每个请求现读 `98_Forme/` + vault git,UI 只是 vault 的确定性投影;唯一写入 = 往 `decisions.jsonl` 追加事件 + 应用被 accept 的 diff。
+单页,原生 TS + `node:http`,零框架零构建零外部资源(2026-07-04 技术栈裁定)。**服务器零状态**(硬约束 #4):每个请求现读 `98_Forme/` + vault git,UI 只是 vault 的确定性投影;所有事件与知识层写入都走确定性执行通道。
 
 ```
 node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
@@ -17,9 +17,9 @@ node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
 
 ## 文件
 
-- **`store.ts`** — vault 投影(`queueState`:可决队列 = cards/ 无 decision 事件且不在待补 context 态者,cardId+指纹双保险;catch-up 数据包;`metricsData` —— #19)+ `appendEvent`(**每条事件先过 Forme 自己的 AJV 门**,不合法即抛——宽容解析只用于读历史行,自己写的行零豁免)。
-- **`apply.ts`** — accept 执行路径,**Forme 代码唯一写知识层处**且只发生在人落子 accept 之后:hunk 精确替换全有或全无(before 消失 = 卡过期;多匹配用行号 locator 消歧;纯插入 v0 拒绝),git pathspec 提交只含目标文件,hash 进事件 `executed`(可回滚)。**目标文件有未提交改动即拒绝**——回执 commit 不裹挟用户的编辑。
-- **`server.ts`** — 路由:`GET /`(页面)、`GET /api/state`(投影,含 metrics)、`POST /api/presented`(卡实际上屏,静默计时起点)、`POST /api/question`(#21,发问)、`POST /api/decide`(落子,可带 note;correction 事件先于 decision)、`POST /api/undo`(#24,撤销窗口 15s 上限;accept 撤销走 git revert)。只绑 127.0.0.1 + Host 校验 + POST 强制 `application/json`(本机写路径的 CSRF 挡板)。
+- **`store.ts`** — vault 投影(`queueState`:可决队列 = cards/ 无 decision 事件且不在待补 context 态者,cardId+指纹双保险;catch-up 数据包;`metricsData` —— #19)+ `appendEvent`(**每条事件先过 Forme 自己的 AJV 门**,不合法即抛)。`/api/state` 一次读取 cards/events 后在各投影间复用(#16),不重复扫盘。
+- **`apply.ts`** — accept 执行路径:hunk 精确替换全有或全无;目标 + 当前卡镜像 + decisions/metrics 以显式 pathspec 同一提交,`executionId` 同时进事件与 commit trailer。目标文件不干净即拒绝;undo 只反向目标 patch,不倒回审计产物(#31)。
+- **`server.ts`** — 路由:`GET /`、`GET /api/state`(含 `product:forme` 身份与 `Server-Timing` 投影耗时)、`POST /api/presented`、`POST /api/question`、`POST /api/decide`、`POST /api/undo`。owner 撤销窗服务端 15s;authorized fix 长期可撤。只绑 127.0.0.1 + Host 校验 + POST 强制 `application/json`。
 - **`page.ts`** — 单 HTML,内联 CSS/JS;页面不持久化任何私有状态(队列、一次性提示等只活在本页会话,真值仍全来自 vault 投影)。
 
 ## question 通道(#21,correction 的双胞胎)
@@ -32,7 +32,7 @@ node console/server.ts --vault <vault 路径> [--port 6180] [--out <dir>]
 
 ## wake-catchup(#16,硬约束 #3:开盖 → 首卡可见 ≤10s)
 
-页面**永远不等扫描**:开页即渲染盘上现状,catch-up 卡带「队列截至 HH:MM」标注(asOf = run-metrics mtime);同时客户端上报 `POST /api/refresh`,server 后台 spawn 一轮增量 runner,完成后投影自更新。防烧额度三重:runner `--min-hours 2`(与日跑 20h 共享 mtime 时钟)· #14 锚点空窗零成本退出 · server 去抖(在飞即 already)。常开 tab 回到可见且距上次投影 >1min → 自动重投影 + 补扫(落子/阅读中不打断)。console 以 launchd 常驻(`com.forme.console`,KeepAlive,`../launchd/install.sh` 一并安装);后台 run 日志在 `~/Library/Logs/forme/console-refresh.log`。
+页面**永远不等扫描**:开页即渲染盘上现状,catch-up 卡带「队列截至 HH:MM」标注;同时客户端上报 `POST /api/refresh`,server 后台 spawn 增量 runner,完成后投影自更新。首投影只读取一次 cards/events 并复用于 catch-up、队列和 metrics;响应带 `Server-Timing` 供代码侧秒表。安装健康门给 curl 自身 1s connect/2s request timeout,按真实 10s deadline 失败,并校验响应 `product=forme`。常开 tab 回可见 >1min 自动重投影;console 由 launchd KeepAlive 常驻。owner 的连续三天开盖秒表仍是最终验收。
 
 ## 当前边界
 

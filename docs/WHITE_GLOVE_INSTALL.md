@@ -93,7 +93,7 @@ One command does the following:
 3. Makes one tiny, ephemeral, read-only Codex call and requires `FORME_READY`.
 4. Runs a conservative first scan over the latest 12 commits and at most 24 Markdown files. Cold start is machine-capped at **two cards** and does not inject Taste Rules or slow-layer context.
 5. Auto-detects the slow layer: `02_Wiki/` when present, otherwise the vault root. Future scans exclude `98_Forme/`.
-6. Renders and validates three plists, loads the runner/State Diff/console jobs, waits up to 10 seconds for console health, then opens it.
+6. Renders and validates three plists, loads the runner/State Diff/console jobs, and waits up to 10 seconds for a full `/api/state` projection that identifies itself as Forme. The probe has its own connection/request timeouts, so the deadline cannot hang indefinitely. It then opens the console.
 
 The smoke and first scan finish before any launchd job is loaded. If the user's
 ChatGPT plan reaches its usage limit during either call, install exits with a

@@ -248,7 +248,14 @@ test("wake-catchup(#16):旧状态先渲染(freshness.asOf),refresh 后台跑、�
   const t = await startServer(vault, { refreshCmd: fakeCmd, refreshLog: logPath });
   try {
     // 从未真跑过:asOf null,页面照样能渲染(旧状态优先,不等扫描)
-    let s = (await t.get("/api/state")) as { freshness: { asOf: string | null; refreshing: boolean } };
+    const projectionStarted = performance.now();
+    const initialResponse = await fetch(t.base + "/api/state");
+    const initialElapsed = performance.now() - projectionStarted;
+    assert.equal(initialResponse.status, 200);
+    assert.ok(initialElapsed < 10_000, `initial state projection took ${initialElapsed.toFixed(1)}ms`);
+    assert.match(initialResponse.headers.get("server-timing") ?? "", /^forme-state;dur=\d+(?:\.\d+)?$/);
+    let s = (await initialResponse.json()) as { product: string; freshness: { asOf: string | null; refreshing: boolean } };
+    assert.equal(s.product, "forme");
     assert.equal(s.freshness.asOf, null);
     assert.equal(s.freshness.refreshing, false);
 

@@ -288,12 +288,16 @@ if [ "$NO_LAUNCH" -eq 0 ]; then
   done
 
   if command -v curl >/dev/null 2>&1; then
-    ATTEMPT=0
-    until curl -fsS "http://127.0.0.1:$PORT/api/state" >/dev/null 2>&1; do
-      ATTEMPT=$((ATTEMPT + 1))
-      [ "$ATTEMPT" -lt 20 ] || fail "console did not become healthy within 10 seconds; check $LOGDIR/console.log"
+    HEALTH_DEADLINE=$(( $(date +%s) + 10 ))
+    CONSOLE_STATE=""
+    until CONSOLE_STATE="$(curl -fsS --connect-timeout 1 --max-time 2 "http://127.0.0.1:$PORT/api/state" 2>/dev/null)"; do
+      [ "$(date +%s)" -lt "$HEALTH_DEADLINE" ] || fail "console did not become healthy within 10 seconds; check $LOGDIR/console.log"
       sleep 0.5
     done
+    case "$CONSOLE_STATE" in
+      *'"product":"forme"'*) ;;
+      *) fail "port $PORT answered, but it was not the Forme console" ;;
+    esac
     say "console healthy: http://127.0.0.1:$PORT"
   fi
   if [ "$NO_OPEN" -eq 0 ] && command -v open >/dev/null 2>&1; then open "http://127.0.0.1:$PORT"; fi
