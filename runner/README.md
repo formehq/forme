@@ -16,11 +16,12 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。**空白冷启动**(#28)由盘上事实判定(零卡/零 decisions/零 Taste Rules;只有运维 metrics 不算变暖):首批硬限 ≤2 卡、慢层延后、空 Taste 不注入。**English-first**(#29):所有新卡与 reface 的人读说明固定英文;证据 quote、路径、专名与 diff 源文逐字保留,历史卡不回写。
 4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹 / stakes 消毒(#21:申报非法按 category 派生),再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
 5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。**question 事件不是 decision**——发过问的指纹不进名单,reface 后同指纹回场不算重复。**undo 把指纹移出名单**(#24:撤销后回到未决;按文件序重放)。
-6. **`legibility.ts`** — **世界层闸**(#21,与 #13 禁词闸同族):「卡面说事,diff 说账」——账本手术语域(已完成项/拆成待办/速览…)上了世界层段(title/summary/whyNow)即打回;同轮给一次 reface 重写机会,仍不过即弃(下轮重提)。纯账本卡(stakes=reversible-ledger,按 category 派生豁免面)不检查:它们的「事」就是账。
-7. **`reface.ts`** — 卡面重写(#21,闸打回与 question 共用):codex **只换脸**(title/summary/whyNow/onAccept + 问答 context),id/指纹/diff/evidence 永不变;question 路径要求 answer 非空,否则卡继续待补下轮重试。
-8. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 →(你问过,#21)→ 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层;stakes/revisedAt 进 frontmatter。
-9. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**(reface 是对同 id 卡的显式覆写,唯一例外)。
-10. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup, head, illegible?, refaced?, thought?}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料 + 下轮增量锚点 + legibility/认知含量原料;dry-run 不落点)。**date 按本地日切**(#25;`localDate()` 是全库共用的日切助手)。
+6. **`hunks.ts`** — **可执行性干跑**(#36):hunk 匹配语义(唯一匹配 / `all: true` 全部替换 / `L<行号>` 消歧)的纯函数层,console accept 与入列前干跑共用;写卡前对目标文件当前内容干跑一遍,accept 时会失败的卡(歧义/内容已漂/纯插入)当场打回、计 `unappliable`——不可执行的提案不走到人面前。
+7. **`legibility.ts`** — **世界层闸**(#21,与 #13 禁词闸同族):「卡面说事,diff 说账」——账本手术语域(已完成项/拆成待办/速览…)上了世界层段(title/summary/whyNow)即打回;同轮给一次 reface 重写机会,仍不过即弃(下轮重提)。纯账本卡(stakes=reversible-ledger,按 category 派生豁免面)不检查:它们的「事」就是账。
+8. **`reface.ts`** — 卡面重写(#21,闸打回与 question 共用):codex **只换脸**(title/summary/whyNow/onAccept + 问答 context),id/指纹/diff/evidence 永不变;question 路径要求 answer 非空,否则卡继续待补下轮重试。
+9. **`mirror.ts`** — 渲染 markdown 镜像(硬约束 #4);**卡面 v0.1 决策者优先五段**(#12):是什么 → 为什么现在 →(你问过,#21)→ 建议 → 拍板后会发生什么 → 落子;证据+diff 折叠为支撑层;stakes/revisedAt 进 frontmatter。
+10. 落盘:`<vault>/98_Forme/cards/<id>.json` + `<id>.md`;`id` 由指纹派生,重复运行同一漂移**幂等不重写**(reface 是对同 id 卡的显式覆写,唯一例外)。
+11. **`metrics.ts`** — 真实 run 末尾追加 `{date, proposed, suppressed, presented, rejected, dup, head, illegible?, unappliable?, refaced?, thought?}` 到 `<vault>/98_Forme/run-metrics.jsonl`(重复率曲线原料 + 下轮增量锚点 + legibility/认知含量原料;dry-run 不落点)。**date 按本地日切**(#25;`localDate()` 是全库共用的日切助手)。
 
 **一切写盘、校验、指纹由本目录代码执行,agent 只读、只返回 JSON**(硬约束 #7)。写入只落 `98_Forme/`,不碰知识层(2026-07-04 边界裁定)。
 

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { execFileSync } from "node:child_process";
 import type { AddressInfo } from "node:net";
 import { applyHunksToContent, ApplyError } from "./apply.ts";
+import { checkAppliable } from "../runner/hunks.ts";
 import { appendEvent, readEvents, pendingCards, queueState, catchUpData, metricsData, effectiveDecisions } from "./store.ts";
 import { createConsoleServer } from "./server.ts";
 import { assembleCard } from "../runner/card.ts";
@@ -35,6 +36,30 @@ test("applyHunksToContent:多处匹配 + 行号 locator 消歧;无 locator 则�
 
 test("applyHunksToContent:纯插入(before 为空)v0 拒绝自动应用", () => {
   assert.throws(() => applyHunksToContent("x\n", [{ before: "", after: "插入" }]), ApplyError);
+});
+
+test("applyHunksToContent(#36):all=true 替换每一处;0 处仍算 stale 整卡失败", () => {
+  const content = "[[a](u)] x [[a](u)]\n[[a](u)]\n";
+  const out = applyHunksToContent(content, [{ before: "[[a](u)]", after: "[a](u)", all: true }]);
+  assert.equal(out, "[a](u) x [a](u)\n[a](u)\n");
+  assert.throws(() => applyHunksToContent("x\n", [{ before: "不在了", after: "y", all: true }]), ApplyError);
+  // all 只对自己那个 hunk 生效,后续 hunk 语义不变(多处无消歧仍拒绝)
+  assert.throws(
+    () => applyHunksToContent("k k\n", [{ before: "k", after: "K" }]),
+    ApplyError,
+  );
+});
+
+test("checkAppliable(#36):入列前干跑——可执行放行,歧义/文件不存在打回", () => {
+  const vault = mkdtempSync(join(tmpdir(), "forme-appl-"));
+  writeFileSync(join(vault, "note.md"), "same\nsame\n");
+  const cardFor = (hunks: object[], file = "note.md") =>
+    ({ diff: { file, hunks } }) as unknown as Card;
+  assert.equal(checkAppliable(vault, cardFor([{ before: "same", after: "改", all: true }])).ok, true);
+  const ambiguous = checkAppliable(vault, cardFor([{ before: "same", after: "改" }]));
+  assert.equal(ambiguous.ok, false);
+  assert.match((ambiguous as { error: string }).error, /appears 2 times/);
+  assert.equal(checkAppliable(vault, cardFor([{ before: "x", after: "y" }], "gone.md")).ok, false);
 });
 
 /* ---------- 事件门:console 自己的写路径不宽容 ---------- */
@@ -84,7 +109,7 @@ function seedCard(repo: string, category: string, file: string, before: string, 
     recommendationReason: "测试推荐",
     onAccept: null,
     evidence: [{ path: file, locator: null, quote: null, note: null }],
-    diff: { file, hunks: [{ locator: null, before, after }] },
+    diff: { file, hunks: [{ locator: null, before, after, all: null }] },
     estSeconds: 10,
     stakes: null,
   };

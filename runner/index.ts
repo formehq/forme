@@ -18,6 +18,7 @@ import {
 } from "./freshness.ts";
 import { resolveExecutionCommit } from "./execution.ts";
 import { checkLegibility } from "./legibility.ts";
+import { checkAppliable } from "./hunks.ts";
 import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type RefaceCause } from "./reface.ts";
 import { checkCard } from "../schema/validate.ts";
 import { isColdStart, coldStartPolicy } from "./cold-start.ts";
@@ -311,6 +312,7 @@ let dup = 0;
 let rejected = 0;
 let suppressed = 0;
 let illegible = 0;
+let unappliable = 0; // #36:accept 干跑失败数(不可执行的卡不入列)
 let thoughtWritten = 0; // #18:思想卡每轮 ≤1(认知负载高,不刷屏)
 
 for (const ac of agentCards) {
@@ -330,6 +332,16 @@ for (const ac of agentCards) {
   if (existsSync(jsonPath)) {
     dup++;
     console.log(`  dup    ${card.id} (${ac.category})`);
+    continue;
+  }
+
+  // #36 可执行性干跑:accept 时会失败的卡(匹配歧义/内容已漂/纯插入)不入列——
+  // 不可执行的提案不该走到人面前才 422;漂移还在,下轮在新 prompt 下重提。
+  const appliability = checkAppliable(vault, card);
+  if (!appliability.ok) {
+    unappliable++;
+    rejected++;
+    console.log(`  unappliable ${card.id} (${ac.category}) — ${appliability.error}`);
     continue;
   }
 
@@ -388,6 +400,7 @@ if (!dryRun) {
     dup,
     head, // #14:下轮增量窗口的锚点(本轮扫描时的 vault HEAD)
     ...(illegible ? { illegible } : {}), // #21:世界层闸命中数(legibility 曲线原料)
+    ...(unappliable ? { unappliable } : {}), // #36:可执行性闸命中数
     ...(refaced ? { refaced } : {}), // #21:question 通道重写数
     ...(thoughtWritten ? { thought: thoughtWritten } : {}), // #18:思想卡入列数(认知含量原料)
   });
@@ -396,6 +409,7 @@ if (!dryRun) {
 console.log(
   `done: ${written} ${dryRun ? "would-write" : "written"}, ${suppressed} suppressed, ${dup} dup, ${rejected} rejected` +
     (illegible ? `, ${illegible} illegible` : "") +
+    (unappliable ? `, ${unappliable} unappliable` : "") +
     (refaced ? `, ${refaced} refaced` : "") +
     ` → ${join(outDir, "cards")}`,
 );

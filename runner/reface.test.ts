@@ -21,7 +21,7 @@ function mkCard(): Card {
     recommendationReason: "最小两行替换。",
     onAccept: null,
     evidence: [{ path: "Roadmap.md", locator: "L59", quote: "剩 @formehq 顺手确认", note: null }],
-    diff: { file: "Roadmap.md", hunks: [{ locator: null, before: "旧行", after: "新行" }] },
+    diff: { file: "Roadmap.md", hunks: [{ locator: null, before: "旧行", after: "新行", all: null }] },
     estSeconds: 10,
     stakes: "real-world-action",
   };

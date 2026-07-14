@@ -8,6 +8,7 @@ import {
   vaultRelativePath,
   type FileUpdate,
 } from "../runner/execution.ts";
+import { applyHunksToContent, ApplyError } from "../runner/hunks.ts";
 import type { Card, Hunk } from "../runner/types.ts";
 
 /**
@@ -17,45 +18,12 @@ import type { Card, Hunk } from "../runner/types.ts";
  *
  * 全有或全无:任何 hunk 应用不了(内容又漂了 / 匹配歧义 / 纯插入)就整卡
  * 失败,文件一个字不动;git 提交失败则把原内容原样放回。
+ *
+ * hunk 匹配语义住 runner/hunks.ts(#36)——runner 入列前用同一份语义干跑,
+ * 不可执行的卡不会走到这里。
  */
 
-export class ApplyError extends Error {}
-
-/** 纯函数:按 hunk 精确字符串替换。匹配歧义时用 locator 的行号消歧。 */
-export function applyHunksToContent(content: string, hunks: Hunk[]): string {
-  let out = content;
-  for (const [i, h] of hunks.entries()) {
-    const tag = `hunk ${i + 1}${h.locator ? `（${h.locator}）` : ""}`;
-    if (h.before === "") {
-      throw new ApplyError(`${tag}: pure insertions (empty before) are not auto-applied in v0; edit the vault manually`);
-    }
-    const hits: number[] = [];
-    let from = 0;
-    for (;;) {
-      const at = out.indexOf(h.before, from);
-      if (at < 0) break;
-      hits.push(at);
-      from = at + 1;
-    }
-    if (hits.length === 0) {
-      throw new ApplyError(`${tag}: before no longer exists in the file; the content moved again and this card is stale`);
-    }
-    let at = hits[0]!;
-    if (hits.length > 1) {
-      const line = h.locator?.match(/L(\d+)/)?.[1];
-      if (!line) {
-        throw new ApplyError(`${tag}: before appears ${hits.length} times and the locator has no line number`);
-      }
-      const target = Number(line);
-      const lineOf = (p: number) => out.slice(0, p).split("\n").length;
-      at = hits.reduce((best, cur) =>
-        Math.abs(lineOf(cur) - target) < Math.abs(lineOf(best) - target) ? cur : best,
-      );
-    }
-    out = out.slice(0, at) + h.after + out.slice(at + h.before.length);
-  }
-  return out;
-}
+export { applyHunksToContent, ApplyError };
 
 export interface ApplyReceipt {
   file: string;

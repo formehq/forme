@@ -270,7 +270,8 @@ function showCard() {
   html += '<details><summary>Minimal diff · <code>' + esc(c.diff.file) + "</code></summary><pre class=\\"diff\\">";
   for (var j = 0; j < c.diff.hunks.length; j++) {
     var h = c.diff.hunks[j];
-    if (h.locator) html += '<span class="loc">@@ ' + esc(h.locator) + " @@</span>\\n";
+    var loc = (h.locator || "") + (h.all ? (h.locator ? " · " : "") + "all occurrences" : "");
+    if (loc) html += '<span class="loc">@@ ' + esc(loc) + " @@</span>\\n";
     if (h.before) html += '<span class="del">- ' + esc(h.before).replace(/\\n/g, "\\n- ") + "</span>\\n";
     if (h.after) html += '<span class="add">+ ' + esc(h.after).replace(/\\n/g, "\\n+ ") + "</span>\\n";
   }
@@ -300,6 +301,7 @@ function panelDraft(box) {
     var orig = queue[idx].diff.hunks[pos];
     var edited = { before: orig.before, after: tas[i].value };
     if (orig.locator) edited.locator = orig.locator;
+    if (orig.all) edited.all = true;
     if (edited.after !== orig.after) changed = true;
     hunks.push(edited);
   }

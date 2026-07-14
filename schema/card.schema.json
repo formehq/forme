@@ -215,7 +215,7 @@
       }
     },
     "hunk": {
-      "description": "An exact-string replacement: match `before` in the file, replace with `after`. before='' is a pure insertion; after='' is a deletion. Deterministic to apply and to render as -/+.",
+      "description": "An exact-string replacement: match `before` in the file, replace with `after`. before='' is a pure insertion; after='' is a deletion. `all: true` replaces every occurrence of `before` (#36, repeated-pattern drift). Deterministic to apply and to render as -/+.",
       "type": "object",
       "additionalProperties": false,
       "required": ["before", "after"],
@@ -231,6 +231,10 @@
         "after": {
           "description": "Replacement text. '' means delete.",
           "type": "string"
+        },
+        "all": {
+          "description": "When true, replace every occurrence of `before` (zero occurrences is still a stale-card failure). Absent/false = exactly one occurrence, disambiguated by uniqueness or an L<line> locator.",
+          "type": "boolean"
         }
       },
       "anyOf": [

@@ -29,6 +29,7 @@ export interface RunMetric {
   dup: number; // 同指纹卡已在盘上(幂等跳过)
   head?: string; // 本轮扫描时的 vault HEAD(#14:下轮增量窗口的锚点)
   illegible?: number; // 世界层闸命中数(#21:legibility 曲线原料;含被重写救回的)
+  unappliable?: number; // 可执行性闸命中数(#36:accept 干跑失败,不入列)
   refaced?: number; // question 通道重写数(#21:问→再出卡的往返完成数)
   thought?: number; // 思想卡入列数(#18:每轮 ≤1;认知含量曲线原料)
   authorized?: number; // 机器时间护栏自执行数(#31;不计入 owner acceptance)

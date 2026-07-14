@@ -27,6 +27,8 @@ Forme 代码(非 agent)确定性执行:                          [schema/ 已建
    ├─ AJV 校验(validate.ts;不信 harness 自觉)
    ├─ 算指纹(fingerprint.ts)
    ├─ 指纹抑制:命中已决名单(decisions.jsonl)→ 静默丢弃  [#9]
+   ├─ 可执行性干跑(hunks.ts):accept 会失败的卡 → 打回    [#36]
+   │  (歧义/已漂/纯插入;hunk 支持 all=true 全部替换)
    ├─ 世界层闸(legibility.ts):账本语域上世界层段 → 打回  [#21]
    │  (同轮一次 reface 重写机会;账本卡豁免;卡面说事,diff 说账)
    ├─ 落盘:卡片 JSON + markdown 镜像 → vault/98_Forme/
@@ -98,6 +100,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - **修正面板人话化 + 输入防丢**(#26-A/#27):category 中文化;修正只露「改后的样子」,原样折叠;修改后接受与原样接受留备注分流;首次聚焦提示不持久化。收起/面板切换有草稿先确认,a/p/r 按钮与键盘手势会携带面板未提交文字,不再有静默清空路径;park 理由同时作为 vault agent 周会复查的转交信号。
 - **claim-drift 思想卡**(#18):快慢层对照(delta 窗口 vs 02_Wiki 最久未动概念笔记),每轮 ≤1 张机器节流,stakes 恒 thought;低 accept 率是预期(负样本饥荒的解药);daily job 常驻 `--slow-layer 4`。
 - **runner 跨 job 串行化**(#22):文件锁(mkdir 原子 + 陈锁回收)——daily job 与 console refresh 不再能并发双烧额度。
+- **replace-all hunk + 可执行性闸**(#36):hunk 契约加显式 `all: true`(替换 before 每一处;卡面/镜像渲染 all occurrences 标记;correction 保留);runner 写卡前对目标文件干跑 apply,不可执行的卡(歧义/已漂/纯插入)打回计 `unappliable`,不走到人面前。
 - **日期语义**(#25):时间戳存 UTC ISO;date-only(run-metrics date、State Diff 文件名/窗口)按本地日切;用户面渲染一律本地时区。
 - **白手套冷启动包**(#28 + #29):秒表前 `codex update` + `doctor --json` 当前版硬门(install 时重复校验)→ 任意 git vault 路径 → Node/ChatGPT-plan auth 预检(API key 只作显式 fallback 且只走 stdin)→ unsupported attachment 精确计数同意门 → 真实只读 smoke → 初始化 `98_Forme/`→ 首轮 ≤2 卡保守扫描 → 三 plist 绝对路径固化/校验 → console ≤10s 健康检查;Plus usage limit 在 smoke/首扫中命中时明示 reset/fallback 并在 load job 前退出。单命令卸载保留审计数据。runner 不要求 `02_Wiki/` 或 owner 目录结构,并以 `core.quotePath=false` 正确读取多语言文件名。新卡、reface、State Diff、console 与新 Taste Rules 固定 English-first;证据引用/diff 源文/历史记录不翻译。
 

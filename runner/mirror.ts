@@ -91,7 +91,8 @@ export function cardToMarkdown(card: Card): string {
   L.push(`> [!example]- Minimal diff · \`${card.diff.file}\``);
   L.push("> ```diff");
   for (const h of card.diff.hunks) {
-    if (h.locator) L.push(`> @@ ${h.locator} @@`);
+    const loc = [h.locator, h.all ? "all occurrences" : ""].filter(Boolean).join(" · ");
+    if (loc) L.push(`> @@ ${loc} @@`);
     if (h.before !== "") for (const l of h.before.split("\n")) L.push(`> - ${l}`);
     if (h.after !== "") for (const l of h.after.split("\n")) L.push(`> + ${l}`);
   }

@@ -5,6 +5,7 @@ export interface Hunk {
   locator?: string;
   before: string;
   after: string;
+  all?: boolean; // #36:true = 替换 before 的每一处出现(重复引用类漂移)
 }
 
 export interface Diff {
@@ -83,7 +84,7 @@ export interface AgentCard {
   }>;
   diff: {
     file: string;
-    hunks: Array<{ locator: string | null; before: string; after: string }>;
+    hunks: Array<{ locator: string | null; before: string; after: string; all: boolean | null }>;
   };
   estSeconds: number | null;
   stakes: string | null; // v0.2(#21):agent 申报的 stakes 分级,代码消毒

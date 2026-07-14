@@ -57,11 +57,14 @@ export function agentOutputSchema(): unknown {
                   items: {
                     type: "object",
                     additionalProperties: false,
-                    required: ["locator", "before", "after"],
+                    required: ["locator", "before", "after", "all"],
                     properties: {
                       locator: nullableString,
                       before: { type: "string" },
                       after: { type: "string" },
+                      // #36:true = 替换 before 的每一处出现(重复引用类漂移);
+                      // 指某一处时用 null 并在 locator 里带 L<行号>。
+                      all: { type: ["boolean", "null"] },
                     },
                   },
                 },

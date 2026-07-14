@@ -103,11 +103,17 @@ function sanitizeCorrectionHunks(raw: unknown): Hunk[] | null {
   const hunks: Hunk[] = [];
   for (const h of raw) {
     if (!h || typeof h !== "object") return null;
-    const { locator, before, after } = h as Record<string, unknown>;
+    const { locator, before, after, all } = h as Record<string, unknown>;
     if (typeof before !== "string" || typeof after !== "string") return null;
     if (before === "" && after === "") return null;
     if (locator !== undefined && typeof locator !== "string") return null;
-    hunks.push(locator !== undefined ? { locator, before, after } : { before, after });
+    if (all !== undefined && typeof all !== "boolean") return null;
+    hunks.push({
+      before,
+      after,
+      ...(locator !== undefined ? { locator } : {}),
+      ...(all === true ? { all } : {}), // #36:correction 保留 replace-all 语义
+    });
   }
   return hunks;
 }

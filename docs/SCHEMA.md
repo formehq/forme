@@ -49,7 +49,7 @@
 `{ file(必填,vault 相对目标), hunks[] }`。**一张卡 = 一个目标文件**(让指纹 = category+file+diffhash 干净、让每处改动独立可 git 回滚)。同一漂移出现在多个文件 → 多张卡(靠指纹各自去重)。跨文件的"一键改全部"是 post-MVP 的批量卡(role 预留),不在 v0。
 
 ### hunk(精确字符串替换)
-`{ locator?, before, after }`。在文件里匹配 `before`,替换成 `after`。`before=""` 为纯插入;`after=""` 为删除;两者不能同时为空。`locator` 用来消歧(同一 `before` 在文件里出现多次时指明是哪处——见 L1 样卡)。确定性可应用、可渲染成 `-/+`。
+`{ locator?, before, after, all? }`。在文件里匹配 `before`,替换成 `after`。`before=""` 为纯插入;`after=""` 为删除;两者不能同时为空。消歧三途(#36):匹配唯一直接换;`all: true` = 替换**每一处**出现(重复引用类漂移的表达,0 处仍算 stale 整卡失败);多处且 `locator` 带 `L<行号>` = 换离该行最近的一处。三者全无 → accept 拒绝执行——而这样的卡自 #36 起在 runner 入列前就被可执行性干跑打回,不会走到人面前。确定性可应用、可渲染成 `-/+`(`all` 在 diff 块渲染为 `@@ … · all occurrences @@`)。
 
 ### option
 `{ id: "accept"|"park"|"reject", label(新卡默认 English), hotkey(单键) }`。**correction(就地修订)不是 option**,是 accept 前对 diff 的编辑,记在 jsonl 的 correction 事件里(read-only 的唯一例外)。
@@ -93,7 +93,7 @@ taste 学习器的唯一读入。**事件是薄的**:只引 `cardId` + `fingerpr
 重复率曲线的原始数据,住 `98_Forme/run-metrics.jsonl`,每**真实完成**的 run 追加一行(dry-run 不落点);写入方 `runner/metrics.ts`,形状由其 `RunMetric` 接口定义(无独立 JSON Schema——运行时遥测,不是卡/事件契约):
 
 ```
-{ v:"0", date(本地日切 YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, executionId?, authorized?, illegible?, refaced?, thought?, backfilled? }
+{ v:"0", date(本地日切 YYYY-MM-DD), runId, proposed, suppressed, presented, rejected, dup, head?, executionId?, authorized?, illegible?, unappliable?, refaced?, thought?, backfilled? }
 ```
 
 `proposed = suppressed + presented + rejected + dup`(普通 agent run 的账要对上;纯 authorized run 四项为 0)。`head`(#14)= 普通 run 的 vault HEAD 锚点。原子授权提交不能在自身内容中记录自身 hash,故用 `executionId` 解析该提交作为下一轮锚点;`authorized`=#31 本轮自执行数,不计 owner acceptance/taste。其余 `illegible`/`refaced`/`thought` 语义不变。`date` 按本地日切(#25);文件 mtime 仍兼任额度守卫时钟,跨 job 并发由 runner 文件锁串行化(#22)。

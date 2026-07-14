@@ -41,7 +41,7 @@ export function assembleCard(ac: AgentCard, ctx: AssembleCtx): Assembled {
     clean({ path: e.path, locator: e.locator ?? undefined, quote: e.quote ?? undefined, note: e.note ?? undefined }),
   );
   const hunks: Hunk[] = ac.diff.hunks.map((h) =>
-    clean({ locator: h.locator ?? undefined, before: h.before, after: h.after }),
+    clean({ locator: h.locator ?? undefined, before: h.before, after: h.after, all: h.all === true ? true : undefined }),
   );
   const diff = { file: ac.diff.file, hunks };
   const fp = fingerprint({ category: ac.category, diff });

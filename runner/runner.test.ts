@@ -19,7 +19,7 @@ const base = (): AgentCard => ({
   evidence: [{ path: "04_Index/Home.md", locator: "L7", quote: "[[Knowledge Map]]", note: "The target no longer resolves." }],
   diff: {
     file: "04_Index/Home.md",
-    hunks: [{ locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" }],
+    hunks: [{ locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]", all: null }],
   },
   estSeconds: null,
   stakes: null,
@@ -108,8 +108,8 @@ test("same drift → same fingerprint regardless of hunk order", () => {
     diff: {
       file: "04_Index/Home.md",
       hunks: [
-        { locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" },
-        { locator: "L53", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" },
+        { locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]", all: null },
+        { locator: "L53", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]", all: null },
       ],
     },
   };
@@ -118,8 +118,8 @@ test("same drift → same fingerprint regardless of hunk order", () => {
     diff: {
       file: "04_Index/Home.md",
       hunks: [
-        { locator: "L53", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" },
-        { locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]" },
+        { locator: "L53", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]", all: null },
+        { locator: "L7", before: "[[Knowledge Map]]", after: "[[Knowledge Map.canvas|Knowledge Map]]", all: null },
       ],
     },
   };

@@ -30,6 +30,7 @@ export function buildScanPrompt(input: ScanPromptInput): string {
     "- onAccept: one English sentence previewing what accepting changes; do not repeat file paths or rollback mechanics; null when unnecessary.",
     "- evidence: vault-relative path, locator, verbatim quote, and an English note explaining relevance. Quotes stay verbatim in their original language.",
     "- diff: one vault-relative file and minimal replacement hunks. before must match the file verbatim; after must fit the target document's language and style. A pure insertion uses an empty before string.",
+    "- If the same before text occurs more than once and you mean every occurrence (a repeated broken pattern), set the hunk's all to true. If you mean exactly one occurrence among several, set all to null and include L<line> in the locator. A hunk whose before matches several places with neither signal cannot be executed and wastes the card.",
     "- estSeconds: estimated decision time; null when unknown.",
     "",
     "English-first product language and world-level legibility:",
