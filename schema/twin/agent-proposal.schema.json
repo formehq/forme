@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/agent-proposal-v0.json",
+  "title": "Forme Agent Proposal v0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "proposalId",
+    "workspaceId",
+    "twinId",
+    "baseRevision",
+    "createdAt",
+    "kind",
+    "origin",
+    "summary",
+    "evidenceRefs",
+    "confidence",
+    "uncertainties",
+    "preconditions",
+    "body"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0"
+    },
+    "proposalId": {
+      "type": "string",
+      "pattern": "^prp_[A-Za-z0-9_-]+$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^wsp_[A-Za-z0-9_-]+$"
+    },
+    "twinId": {
+      "type": "string",
+      "pattern": "^twn_[A-Za-z0-9_-]+$"
+    },
+    "baseRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "kind": {
+      "enum": [
+        "state-observation",
+        "reflection",
+        "action-request",
+        "projection-draft",
+        "message-reply-draft"
+      ]
+    },
+    "origin": {
+      "type": "object",
+      "required": ["runtime", "runId"],
+      "properties": {
+        "runtime": {
+          "enum": ["codex", "opencode"]
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^run_[A-Za-z0-9_-]+$"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^evd_[A-Za-z0-9_-]+$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "uniqueItems": true
+    },
+    "preconditions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      },
+      "uniqueItems": true
+    },
+    "body": {
+      "type": "object"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "state-observation"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "required": ["claims"],
+            "properties": {
+              "claims": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["statement", "evidenceRefs"],
+                  "properties": {
+                    "statement": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "evidenceRefs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^evd_[A-Za-z0-9_-]+$"
+                      },
+                      "minItems": 1,
+                      "uniqueItems": true
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "reflection"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "required": ["interpretation", "trajectory", "alternatives"],
+            "properties": {
+              "interpretation": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              },
+              "trajectory": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "alternatives": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "action-request"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "required": [
+              "effector",
+              "input",
+              "expectedEffects",
+              "reversibility",
+              "blastRadius"
+            ],
+            "properties": {
+              "effector": {
+                "type": "string",
+                "pattern": "^forme[.][a-z0-9.-]+$"
+              },
+              "input": {
+                "type": "object"
+              },
+              "expectedEffects": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 500
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "reversibility": {
+                "enum": ["automatic", "manual", "none"]
+              },
+              "blastRadius": {
+                "enum": ["forme-owned", "workspace", "external"]
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "projection-draft"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "required": ["projectionId", "claimIds", "renderIntent"],
+            "properties": {
+              "projectionId": {
+                "type": "string",
+                "pattern": "^prj_[A-Za-z0-9_-]+$"
+              },
+              "claimIds": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^clm_[A-Za-z0-9_-]+$"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "renderIntent": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "message-reply-draft"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "body": {
+            "type": "object",
+            "required": ["messageId", "projectionId", "projectionVersion", "reply"],
+            "properties": {
+              "messageId": {
+                "type": "string",
+                "pattern": "^msg_[A-Za-z0-9_-]+$"
+              },
+              "projectionId": {
+                "type": "string",
+                "pattern": "^prj_[A-Za-z0-9_-]+$"
+              },
+              "projectionVersion": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "reply": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10000
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

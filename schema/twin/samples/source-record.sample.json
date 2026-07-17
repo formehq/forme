@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "0",
+  "connectorId": "con_apple_notes_export",
+  "workspaceId": "wsp_forme",
+  "evidenceId": "evd_owner_pivot",
+  "sourceKind": "notes-export",
+  "provenanceClass": "normalized",
+  "locator": {
+    "sourceId": "apple-note-stable-id",
+    "relativePath": "mirror/Forme/Project direction.md",
+    "fragment": "heading:Current direction"
+  },
+  "observedAt": "2026-07-15T19:00:00Z",
+  "modifiedAt": "2026-07-15T18:55:00Z",
+  "contentHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "sizeBytes": 2048,
+  "language": "zh-Hans",
+  "sensitivity": "private",
+  "projectionEligibility": "denied",
+  "fidelity": {
+    "status": "partial",
+    "issues": [
+      "One attachment type could not be represented in the normalized mirror."
+    ]
+  },
+  "change": {
+    "kind": "modified",
+    "cursor": "export:2026-07-15T19:00:00Z"
+  }
+}

@@ -26,9 +26,24 @@ function vaultFixture(name: string): string {
 }
 
 function baseEnv(home: string): NodeJS.ProcessEnv {
+  const fakeBin = join(home, "bin");
+  const fakeCodex = join(fakeBin, "codex");
+  mkdirSync(fakeBin, { recursive: true });
+  if (!existsSync(fakeCodex)) {
+    writeFileSync(fakeCodex, [
+      "#!/bin/sh",
+      'if [ "$1" = "--version" ]; then echo "codex-cli test"; exit 0; fi',
+      'if [ "$1" = "doctor" ] && [ "$2" = "--json" ]; then printf \'{"codexVersion":"0.144.3","checks":{"updates.status":{"details":{"latest version":"0.144.3"}}}}\\n\'; exit 0; fi',
+      'if [ "$1" = "login" ] && [ "$2" = "status" ]; then echo "Logged in using ChatGPT"; exit 0; fi',
+      "exit 0",
+      "",
+    ].join("\n"));
+    chmodSync(fakeCodex, 0o755);
+  }
   return {
     ...process.env,
     HOME: home,
+    PATH: `${fakeBin}:${dirname(process.execPath)}:/usr/bin:/bin`,
     FORME_INSTALL_DIR: join(home, "LaunchAgents"),
     FORME_LOG_DIR: join(home, "Logs"),
     FORME_NO_LAUNCH: "1",

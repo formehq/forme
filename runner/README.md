@@ -3,7 +3,7 @@
 W1 Codex 路径已跑通(#5),W2 全链就位:指纹抑制(#9)、taste 提炼(#10)、State Diff(#11)、卡面 v0.1(#12)。runner 把一次 agent run 变成真盘上的卡:
 
 ```
-node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--max-cards 3] [--slow-layer N] [--slow-root <vault-relative-dir>] [--dry-run] [--model <m>] [--out <dir>]
+node runner/index.ts --vault <vault 路径> [--runtime codex-exec|codex-app-server|opencode] [--commits N] [--max-files 12] [--max-cards 3] [--slow-layer N] [--slow-root <vault-relative-dir>] [--dry-run] [--model <m>] [--out <dir>]
 # 或:FORME_VAULT=<vault> npm run run:once -- --max-cards 3
 ```
 
@@ -12,8 +12,8 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 ## 管道
 
 1. **`scan.ts`** — 取 markdown git-delta(增量,服务「唤醒 ≤10s」的雏形)。**窗口 = 上次成功 run 以来**(#14):锚点 = run-metrics 最后记录的 vault HEAD,增量 = `anchor..HEAD`,窗口自动等于 run 节律;`--commits N` 显式传参 = 手动覆盖,锚点缺失(首跑)或失效(rebase)时回退最近 N commit。空窗口 = 日常静默结果(exit 0)。**排除 `98_Forme/`**——Forme 自己的运行时产物不是漂移面,否则会对上一轮输出提卡自激。**慢层立场参照**(#18/#28):`--slow-layer N --slow-root <dir>` 追加指定根目录里最久没被 commit 动过的 N 篇笔记进 prompt(取窗按日轮转,~len/N 天覆盖一遍);安装器见到 `02_Wiki/` 就沿用,否则取 vault 根目录,不预设用户结构。
-2. **`agent-schema.ts`** — 生成给 codex 的 `--output-schema`。**故意宽松**:codex 用 OpenAI strict 结构化输出(拒 `pattern`/`minItems`/`format`,且要求每个属性都 required、可选项走 nullable)。它只定形状。
-3. **`index.ts`** — `codex exec --sandbox read-only -C <vault> --output-schema … -o …`,拿回**只读 JSON**。agent 全程只读,绝不写盘。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。**空白冷启动**(#28)由盘上事实判定(零卡/零 decisions/零 Taste Rules;只有运维 metrics 不算变暖):首批硬限 ≤2 卡、慢层延后、空 Taste 不注入。**English-first**(#29):所有新卡与 reface 的人读说明固定英文;证据 quote、路径、专名与 diff 源文逐字保留,历史卡不回写。
+2. **`agent-schema.ts`** — 生成给 harness 的 structured-output schema。**故意宽松**:OpenAI strict 输出拒 `pattern`/`minItems`/`format`,且要求每个属性都 required、可选项走 nullable;OpenCode 也可原生接收同一 JSON Schema。它只定形状。
+3. **`index.ts` + `runtime/`** — `--runtime` 选择稳定默认 `codex-exec`、Codex App Server 或 OpenCode Server,三路都拿回**只读 structured JSON**。Codex 用 read-only OS sandbox;OpenCode 用 deny-all 后只放 read/list/search 的应用权限,且其 loopback server 每进程随机认证。扫描之前先跑 **question 阶段**(#21):上一轮用户在 console 发问的卡(待补 context)逐张 reface——空窗口也要答;耗了真 codex 就落 metric 行走额度表。prompt v0.2 带世界层指令 + 66bcc 正反例 + stakes 分级。**空白冷启动**(#28)由盘上事实判定(零卡/零 decisions/零 Taste Rules;只有运维 metrics 不算变暖):首批硬限 ≤2 卡、慢层延后、空 Taste 不注入。**English-first**(#29):所有新卡与 reface 的人读说明固定英文;证据 quote、路径、专名与 diff 源文逐字保留,历史卡不回写。
 4. **`card.ts` → `assembleCard()`** — 确定性组装:补 id / 信封(origin/from/role)/ 默认 a/p/r / 指纹 / stakes 消毒(#21:申报非法按 category 派生),再过 **Forme 自己的 AJV**(`schema/validate.ts`,真契约在这里把关,不信 codex 的宽松 schema)。校验不过即丢弃。
 5. **`suppress.ts`** — 指纹抑制(#9,硬约束 #6):从 `<vault>/98_Forme/decisions.jsonl` 读已决名单(任何 `decision` 事件的指纹,accept/park/reject 不分),命中即静默丢弃、计 `suppressed`。解析宽容(抑制是安全网,不因 schema 挑剔放行重复卡)。**question 事件不是 decision**——发过问的指纹不进名单,reface 后同指纹回场不算重复。**undo 把指纹移出名单**(#24:撤销后回到未决;按文件序重放)。
 6. **`hunks.ts`** — **可执行性干跑**(#36):hunk 匹配语义(唯一匹配 / `all: true` 全部替换 / `L<行号>` 消歧)的纯函数层,console accept 与入列前干跑共用;写卡前对目标文件当前内容干跑一遍,accept 时会失败的卡(歧义/内容已漂/纯插入)当场打回、计 `unappliable`——不可执行的提案不走到人面前。
@@ -42,7 +42,7 @@ node runner/index.ts --vault <vault 路径> [--commits N] [--max-files 12] [--ma
 
 ## 当前边界
 
-- 只做 Codex 一次性调用;OpenCode server/SDK(#8)日后插在同一 `scan → assemble → write` 核心之后(双调用形态)。
+- 主漂移扫描已可选 Codex one-shot / Codex App Server / OpenCode Server;默认仍为经长期使用验证的 `codex-exec`。reface、taste、State Diff 与安装认证仍直连 Codex,下一里程碑逐项迁入 `runtime/`。
 - **runner 仍不写 `decisions.jsonl`**:卡是「生成入列」;presented/decision/correction/question 事件由 `console/`(#15/#21)在实际呈现与落子时产生。
 - parked 与 rejected 同样被永久抑制;question 是「先别落子」的出口,但 park 本身仍是终态(un-park 后续)。
 - k 条相似历史决策注入 prompt 留 post-W2(Taste Rules 注入已通,#10)。

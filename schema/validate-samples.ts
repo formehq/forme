@@ -1,7 +1,13 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { checkCard, checkEvent, type ValidationResult } from "./validate.ts";
+import {
+  checkCard,
+  checkEvent,
+  checkTwinContract,
+  twinContractNames,
+  type ValidationResult,
+} from "./validate.ts";
 import { fingerprint } from "./fingerprint.ts";
 
 /**
@@ -53,8 +59,16 @@ jsonl.forEach((line, i) => {
   report(`line ${i + 1} (${ev.type})`, checkEvent(ev));
 });
 
+console.log("Living Project Twin contracts:");
+const twinSamplesDir = join(here, "twin", "samples");
+for (const name of twinContractNames) {
+  const filename = `${name}.sample.json`;
+  const sample = JSON.parse(readFileSync(join(twinSamplesDir, filename), "utf8"));
+  report(filename, checkTwinContract(name, sample));
+}
+
 if (failures > 0) {
   console.error(`\n${failures} sample(s) failed validation.`);
   process.exit(1);
 }
-console.log(`\nAll ${cardFiles.length} cards + ${jsonl.length} events valid.`);
+console.log(`\nAll ${cardFiles.length} cards + ${jsonl.length} events + ${twinContractNames.length} Twin contracts valid.`);

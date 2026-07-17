@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0",
+  "eventId": "rte_0003",
+  "runId": "run_demo_001",
+  "seq": 3,
+  "at": "2026-07-15T20:05:03Z",
+  "runtime": {
+    "kind": "codex",
+    "version": "0.0-pinned",
+    "sessionId": "runtime-session-42"
+  },
+  "type": "proposal.created",
+  "payload": {
+    "proposalId": "prp_reflection_001",
+    "schemaId": "https://forme.dev/schemas/agent-proposal-v0.json"
+  }
+}

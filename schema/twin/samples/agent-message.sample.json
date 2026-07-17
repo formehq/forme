@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "0",
+  "messageId": "msg_demo_001",
+  "threadId": "thr_demo_001",
+  "sentAt": "2026-07-15T20:30:00Z",
+  "from": {
+    "identityId": "idn_sender",
+    "agentId": "agt_sender"
+  },
+  "to": {
+    "identityId": "idn_owner",
+    "agentId": "agt_forme_owner"
+  },
+  "projectionRef": {
+    "projectionId": "prj_forme_collaboration",
+    "version": 1
+  },
+  "intent": "collaboration-request",
+  "body": "Would the owner like to compare runtime adapter findings next week?",
+  "attribution": {
+    "mode": "owner-approved",
+    "approvedBy": "idn_sender"
+  },
+  "trust": "untrusted-external",
+  "limits": {
+    "expiresAt": "2026-07-22T20:30:00Z",
+    "maxReplyTurns": 1
+  }
+}

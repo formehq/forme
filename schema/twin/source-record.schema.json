@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/source-record-v0.json",
+  "title": "Forme Source Record v0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "connectorId",
+    "workspaceId",
+    "evidenceId",
+    "sourceKind",
+    "provenanceClass",
+    "locator",
+    "observedAt",
+    "contentHash",
+    "sizeBytes",
+    "sensitivity",
+    "projectionEligibility",
+    "fidelity",
+    "change"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0"
+    },
+    "connectorId": {
+      "type": "string",
+      "pattern": "^con_[A-Za-z0-9_-]+$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^wsp_[A-Za-z0-9_-]+$"
+    },
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^evd_[A-Za-z0-9_-]+$"
+    },
+    "sourceKind": {
+      "enum": ["project-file", "notes-export", "forme-owned"]
+    },
+    "provenanceClass": {
+      "enum": ["original", "normalized", "derived", "forme-owned"]
+    },
+    "locator": {
+      "type": "object",
+      "required": ["sourceId", "relativePath"],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relativePath": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "anyOf": [
+              {
+                "pattern": "^(?:/|[A-Za-z]:)"
+              },
+              {
+                "pattern": "(?:^|/)[.][.](?:/|$)"
+              }
+            ]
+          }
+        },
+        "fragment": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "modifiedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "sizeBytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "language": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 35
+    },
+    "sensitivity": {
+      "enum": ["private", "restricted", "shareable"]
+    },
+    "projectionEligibility": {
+      "enum": ["denied", "pending", "approved"]
+    },
+    "fidelity": {
+      "type": "object",
+      "required": ["status", "issues"],
+      "properties": {
+        "status": {
+          "enum": ["exact", "partial", "unsupported", "unreadable"]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "change": {
+      "type": "object",
+      "required": ["kind", "cursor"],
+      "properties": {
+        "kind": {
+          "enum": ["added", "modified", "deleted", "unchanged"]
+        },
+        "cursor": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

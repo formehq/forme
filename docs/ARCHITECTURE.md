@@ -1,5 +1,7 @@
 # ARCHITECTURE — 一页系统图
 
+> 本文描述已经实现的 decision-card/runtime 系统。Living Project Twin 的目标架构、迁移阶段与验证闸门以 [`architecture/HARNESS.md`](./architecture/HARNESS.md) 为准。
+
 Forme = local-first agent,把知识库的漂移变成 one-decision 卡片(证据 + 最小 diff + a/p/r),并从每次决策学 taste。**vault 是唯一真相层**;repo 里只有代码,卡片/日志都写进 vault。
 
 ## 一张卡的生命周期(7 步)
@@ -9,7 +11,8 @@ launchd (StartCalendarInterval 日跑 + WatchPaths 盯 vault   [launchd/ 已建 
    │      .git/logs/HEAD + RunAtLoad 补跑;额度守卫在 runner --min-hours)
    │  唤醒 → 首卡可见 ≤ 10s(增量指纹只处理 git delta)
    ▼
-runner  ──►  codex exec --json --output-schema             [runner/ 已建 · #5]
+runner  ──►  runtime boundary                               [runtime/ 已建 · #8/#37]
+   │         codex exec | Codex App Server | OpenCode Server
    │         (文件锁串行化跨 job 竞态 —— #22;
    │          先以注入的机器时间检查 timestamp freshness —— #31;
    │          纯 `updated:`/独立 as-of/星期日期错配由代码自执行,
@@ -72,12 +75,15 @@ console (localhost 单页,node:http,服务器零状态;           [console/ 已�
 | --- | --- | --- |
 | `schema/` | 卡片 + 事件的 JSON Schema、指纹、AJV 校验、样例 | **已建(#4、#12)** |
 | `runner/` | 漂移卡管道(#5/#9/#12)+ timestamp 自执行(#31)+ taste 提炼器(#10)+ State Diff(#11) | **已建** |
+| `runtime/` | Codex one-shot/App Server + OpenCode authenticated server; structured-output 与 capability boundary | **M0 已建(#8/#37)** |
 | `launchd/` | 日跑 + 周日 State Diff + 常驻 console 三 plist;白手套安装/卸载/预检 | **已建(#9、#11、#16、#28)** |
 | `console/` | localhost 四视图 + 落子手势 + wake-catchup + 问一句 + Metrics(单页,零框架) | **已建(#15、#16、#19、#21、#26-A、#27;真实落子已发生)** |
 | `docs/` | 系统理解面:ARCHITECTURE / DECISIONS / SCHEMA | 进行中(#7) |
 | `design/` | 交互稿 + 语气笔记(活文档) | 已有(#1) |
+| `schema/twin/` | M0 source/Twin/proposal/runtime/receipt/projection/message contracts | **已纳入** |
+| `twin/` | Workspace registry、evidence manifest、Twin state/revisions/snapshots、Continuity view | **M1 进行中** |
 
-runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与长驻 server/SDK(OpenCode,Tier 2,#8)。
+runner 的主扫描现在按 capability boundary 选 `codex-exec`(稳定默认)、`codex-app-server` 或 `opencode`。换 harness 不换 Forme 的 AJV、指纹、写入与授权核心;OpenCode 应用权限不冒充 Codex OS sandbox。reface/taste/State Diff 仍待逐项迁移。
 
 ## 现在能做什么 / 还不能做什么(代码库自己的 State Diff)
 
@@ -85,6 +91,7 @@ runner 边界按**双调用形态**设计:one-shot exec(Codex,Tier 1 默认)与�
 - 定义并校验一张决策卡 + 一段 decisions.jsonl(`npm run validate` / `npm test`)。
 - 从 category + diff 确定性算去重指纹,顺序无关。
 - **真跑一轮**:git-delta(窗口 = 上次 run 的 HEAD 锚点..HEAD,--commits 为手动覆盖 —— #14;排除 `98_Forme/`)→ codex 只读扫描 → 自有 AJV 门 → 指纹抑制(已决名单命中即丢)→ 卡片 JSON + md 镜像落 `98_Forme/cards/`,幂等(#5、#9)。
+- **双 harness 主扫描**(#8/#37):同一 agent schema 可走 Codex one-shot、Codex App Server `turn/start.outputSchema` 或 OpenCode `format:json_schema`;Codex App Server 已过真 structured turn,OpenCode 已过隔离 server/health/OpenAPI 与模拟 structured session。`npm run runtime:preflight` 不耗模型验证两套本机协议入口。
 - **授权 #1:timestamp freshness 自执行**(#31):仅 frontmatter `updated:`、整行 `as of <date>`、星期/date 错配;机器时间注入,检测+修复零 LLM。机械-only delta 整轮跳过 Codex;混合 delta 先修日期再扫描正文。事件 `actor=agent_authorized`,不进入 owner taste/acceptance;完整回执在下一张 State Diff 确定性出现,且不受 15s 人类撤销窗限制。
 - 卡面 v0.1 决策者优先五段:whyNow / recommendation / onAccept 进 schema 与镜像;证据+diff 折叠为支撑层(#12)。
 - 每轮真 run 落一行 `{date, proposed, suppressed, presented, …}` 到 `98_Forme/run-metrics.jsonl`——重复率曲线有原始数据了(#9)。
