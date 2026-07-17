@@ -1,0 +1,17 @@
+# dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+
+# local Forme state and credentials
+/98_Forme/
+*.local
+.env
+.env.*
+
+# operating system and editors
+.DS_Store
+.vscode/
+.idea/

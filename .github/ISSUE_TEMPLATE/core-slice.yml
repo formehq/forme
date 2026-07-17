@@ -1,0 +1,54 @@
+name: Core MVP slice
+description: Propose one P0 end-to-end outcome.
+title: "[P0] "
+labels:
+  - scope:core
+body:
+  - type: markdown
+    attributes:
+      value: One issue should prove one user-visible outcome and end with owner acceptance.
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User outcome
+      description: What can the user perceive or do after this slice?
+    validations:
+      required: true
+  - type: textarea
+    id: flow
+    attributes:
+      label: Input → state → output
+      description: Describe the smallest end-to-end data flow.
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Context, authority, and persistence
+      description: What may the agent observe or request, and what becomes durable?
+    validations:
+      required: true
+  - type: textarea
+    id: failure
+    attributes:
+      label: Failure and recovery
+      description: What happens after invalid output, interruption, stale state, or retry?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Technical and owner acceptance
+      description: Name the automated evidence and the exact owner demo.
+    validations:
+      required: true
+  - type: checkboxes
+    id: stop-gates
+    attributes:
+      label: Owner stop gates
+      options:
+        - label: Durable state or schema changes
+        - label: Agent context or authority changes
+        - label: Privacy or projection changes
+        - label: Foundational dependency or deployment changes
+        - label: None

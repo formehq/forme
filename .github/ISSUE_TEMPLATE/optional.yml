@@ -1,0 +1,27 @@
+name: Optional feature
+description: Propose P1 work only after preceding P0 gates are green.
+title: "[P1] "
+labels:
+  - scope:optional
+body:
+  - type: textarea
+    id: value
+    attributes:
+      label: Additional user value
+      description: Which already-working P0 experience becomes stronger?
+    validations:
+      required: true
+  - type: textarea
+    id: admission
+    attributes:
+      label: Admission evidence
+      description: Which P0 gates are green, and why will this not threaten the critical path?
+    validations:
+      required: true
+  - type: textarea
+    id: cut
+    attributes:
+      label: Cut condition
+      description: When should this leave the Demo Day scope?
+    validations:
+      required: true
