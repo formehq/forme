@@ -37,3 +37,9 @@ Keep this file short. Record only decisions that change product scope, constitut
 **Decision:** Codex is the first live MVP path. OpenCode remains a first-class architectural target but does not require feature parity by Demo Day.
 
 **Reason:** one real runtime is sufficient to prove the product; forced parity would consume the core schedule.
+
+## 2026-07-17 — GitHub planning is gate-based
+
+**Decision:** milestone #11 contains one parent epic, R0–R5 P0 gates, and separately labeled P1 options. Previous open issues are closed as `archive:v0`; they remain historical evidence.
+
+**Reason:** one active P0 issue and explicit owner gates make progress legible and prevent optional work from silently entering the critical path.

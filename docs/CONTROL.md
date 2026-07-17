@@ -2,7 +2,7 @@
 
 - Updated: 2026-07-17
 - Active gate: R0 — repository reboot and shared understanding
-- Active build issue: none until new GitHub planning is created
+- Active issue: [#48 — Approve the walking-skeleton Control Packet](https://github.com/formehq/forme/issues/48)
 - P0 status: not started on the new main
 - Next owner decision: approve the first walking-skeleton input, output, durable state, and demo
 

@@ -4,6 +4,7 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
+- GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
 
