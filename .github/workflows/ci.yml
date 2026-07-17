@@ -10,7 +10,9 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # The first release is macOS-only and the full suite exercises the real
+    # launchd installer boundary. Linux correctly rejects those paths.
+    runs-on: macos-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
