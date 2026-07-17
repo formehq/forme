@@ -1,7 +1,5 @@
-import { execFileSync } from "node:child_process";
 import { writeFileSync, readFileSync, mkdirSync, existsSync, statSync, rmSync } from "node:fs";
 import { join } from "node:path";
-import { tmpdir } from "node:os";
 import { randomBytes } from "node:crypto";
 import { commitWindowBase, recentMarkdownFiles, markdownFilesSince, slowLayerFiles, vaultHead, isUsableAnchor } from "./scan.ts";
 import { agentOutputSchema } from "./agent-schema.ts";
@@ -23,16 +21,17 @@ import { graftFace, needsReface, runRefaceCodex, unansweredQuestions, type Refac
 import { checkCard } from "../schema/validate.ts";
 import { isColdStart, coldStartPolicy } from "./cold-start.ts";
 import { buildScanPrompt } from "./scan-prompt.ts";
+import { parseProposalRuntime, runStructuredAgent } from "../runtime/index.ts";
 import type { AgentCard, Card } from "./types.ts";
 
 /**
- * Forme runner (W1, Codex path). Reads the vault git-delta, asks a READ-ONLY
- * codex agent to find drift and return JSON only, then deterministically
+ * Forme runner. Reads the vault git-delta, asks a READ-ONLY harness runtime
+ * to find drift and return structured JSON, then deterministically
  * assembles + validates + fingerprints + writes cards into 98_Forme/. The agent
  * never writes; all provenance and disk writes are Forme code (hard constraint #7).
  *
- * Dual call form: this is the one-shot `codex exec` path; the long-running
- * server/SDK (OpenCode, #8) plugs in behind the same scan → assemble → write core.
+ * Runtime selection only changes the model/harness boundary. The same
+ * scan → assemble → validate → write core applies to Codex and OpenCode.
  */
 
 function arg(name: string, def?: string): string | undefined {
@@ -55,6 +54,7 @@ const requestedSlowLayer = Number(arg("slow-layer", "0")); // #18:注入 n 篇�
 const slowRoot = arg("slow-root", "02_Wiki/")!; // #28:旧安装兼容;新安装按 vault 自动探测
 const outDir = arg("out") ?? join(vault, "98_Forme");
 const model = arg("model");
+const proposalRuntime = parseProposalRuntime(arg("runtime", process.env.FORME_RUNTIME ?? "codex-exec"));
 const dryRun = hasFlag("dry-run");
 const coldStart = isColdStart(outDir);
 const { maxCards, slowLayer } = coldStartPolicy(requestedMaxCards, requestedSlowLayer, coldStart);
@@ -275,27 +275,15 @@ console.log(
 const tasteRules = loadTasteRuleLines(join(outDir, "Taste Rules.md"));
 if (tasteRules.length) console.log(`taste rules: ${tasteRules.length} rule(s) injected into prompt`);
 
-const schemaPath = join(tmpdir(), `forme-agent-schema-${runId}.json`);
-writeFileSync(schemaPath, JSON.stringify(agentOutputSchema()));
-const lastMsgPath = join(tmpdir(), `forme-last-${runId}.json`);
-
 const prompt = buildScanPrompt({ maxCards, files, slowFiles, slowRoot, tasteRules });
-
-const codexArgs = [
-  "exec",
-  "--sandbox", "read-only",
-  "-C", vault,
-  "--skip-git-repo-check",
-  "--output-schema", schemaPath,
-  "-o", lastMsgPath,
-];
-if (model) codexArgs.push("-m", model);
-codexArgs.push(prompt);
-
-console.log("codex: running read-only scan (this can take a minute)…");
-execFileSync("codex", codexArgs, { stdio: ["ignore", "inherit", "inherit"] });
-
-const raw = readFileSync(lastMsgPath, "utf8");
+console.log(`${proposalRuntime}: running read-only structured scan (this can take a minute)…`);
+const runtimeResult = await runStructuredAgent(proposalRuntime, {
+  cwd: vault,
+  prompt,
+  outputSchema: agentOutputSchema(),
+  ...(model ? { model } : {}),
+});
+const raw = runtimeResult.raw;
 let agentCards: AgentCard[];
 try {
   const parsed = JSON.parse(raw) as { cards?: AgentCard[] };

@@ -16,5 +16,5 @@
     "noEmit": true,
     "skipLibCheck": true
   },
-  "include": ["schema/**/*.ts", "runner/**/*.ts", "console/**/*.ts"]
+  "include": ["schema/**/*.ts", "runner/**/*.ts", "runtime/**/*.ts", "console/**/*.ts"]
 }

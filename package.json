@@ -10,12 +10,13 @@
   },
   "scripts": {
     "validate": "node schema/validate-samples.ts",
-    "test": "node --test schema/*.test.ts runner/*.test.ts console/*.test.ts launchd/*.test.ts",
+    "test": "node --test schema/*.test.ts runner/*.test.ts runtime/*.test.ts console/*.test.ts launchd/*.test.ts",
     "typecheck": "tsc --noEmit",
     "run:once": "node runner/index.ts",
     "run:console": "node console/server.ts",
     "run:taste": "node runner/taste.ts",
-    "run:statediff": "node runner/state-diff.ts"
+    "run:statediff": "node runner/state-diff.ts",
+    "runtime:preflight": "node runtime/preflight.ts"
   },
   "dependencies": {
     "ajv": "^8.17.1",

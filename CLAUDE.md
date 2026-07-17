@@ -23,7 +23,7 @@ Use the MVP spec for daily work. When documents conflict, the SSOT wins.
 ## Architecture: Seven Steps in a Decision Card's Life
 
 1. **Trigger:** launchd watches the vault and runs missed work after wake.
-2. **Agent run:** `codex exec --json --output-schema` scans the vault delta. The prompt injects `Taste Rules.md` and, later, k similar historical decisions.
+2. **Agent run:** the runtime boundary asks Codex or OpenCode for schema-constrained JSON while the harness remains read-only. The prompt injects `Taste Rules.md` and, later, k similar historical decisions.
 3. **Deterministic write:** the agent returns schema-constrained JSON only. The runner writes card JSON and Markdown mirrors. A fingerprint (category + target + diff hash) that matches a rejected or parked decision is discarded.
 4. **Presentation:** the localhost console renders fixed card primitives. There are no notifications; cards wait at the workflow boundary.
 5. **Decision:** one gesture (a/p/r) applies the diff when accepted, keeps git rollback available, silently measures time-to-decision, and appends to `decisions.jsonl`.
@@ -44,7 +44,7 @@ Violating any of these is a rejection. They come from validated behavior, not pr
 
 ## Technical Baseline
 
-- **Execution is a three-tier matrix (decided 2026-07-04):** Tier 1 defaults to Codex CLI (`codex exec --json --output-schema`, read-only sandbox); Tier 2 is an OpenCode server/SDK adapter planned for W7 (#8); Tier 3 is SKILL.md, recognized by Claude Code and OpenCode. Runner interfaces support one-shot exec and future long-lived server/SDK calls. Forme validates schemas with its own AJV instance.
+- **Execution is a capability matrix (revised 2026-07-16):** the stable default is `codex-exec`; `codex-app-server` and `opencode` are working opt-in proposal runtimes behind `runtime/`. Codex provides an OS-enforced read-only sandbox; OpenCode provides application permission rules and therefore must not be represented as equivalent isolation. Both provide native structured output, while Forme still validates with its own AJV and performs every write. SKILL.md remains a portable instruction surface, not a runtime security boundary.
 - **Provider policy facts (verified 2026-07-04):** Anthropic forbids product-side consumer OAuth, so no product path may depend on a user's Claude subscription. User-operated Claude Code plus SKILL.md is compliant. OpenAI has no third-party subscription OAuth plan; users authenticate their own Codex CLI, including official headless device auth. Runs stay incremental and API-key mode remains available.
 - **Scheduling:** launchd for the first macOS release.
 - **Data:** append-only `decisions.jsonl`, `Taste Rules.md`, and card JSON/Markdown mirrors.
@@ -54,7 +54,7 @@ Violating any of these is a rejection. They come from validated behavior, not pr
 
 ## Repository Status
 
-- **Built:** `schema/` (card v0/v0.1/v0.2 and five event types); `runner/` (file-lock serialization, deterministic timestamp-freshness self-execution, Codex scan, AJV gate, fingerprint suppression, appliability dry-run gate with replace-all hunks, world-level legibility gate and one reface attempt, question-before-scan, rotating slow-layer claim-drift, local date boundaries, taste distillation, and State Diff); `console/` (catch-up, five-part card, State Diff, Metrics, a/p/r, human correction panel, ask-one-question, decision notes, draft-loss guards, atomic execution receipts, four-second owner undo plus authorized-fix undo, wake-catchup); `launchd/` (three jobs plus white-glove preflight/install/uninstall); `docs/`; `design/`; native TypeScript tooling.
+- **Built:** `schema/` (card v0/v0.1/v0.2 and five event types); `runtime/` (Codex one-shot + App Server and OpenCode authenticated server adapters, capability matrix, deterministic protocol tests, live preflight); `runner/` (file-lock serialization, deterministic timestamp-freshness self-execution, runtime-selectable main scan, AJV gate, fingerprint suppression, appliability dry-run gate with replace-all hunks, world-level legibility gate and one reface attempt, question-before-scan, rotating slow-layer claim-drift, local date boundaries, taste distillation, and State Diff); `console/` (catch-up, five-part card, State Diff, Metrics, a/p/r, human correction panel, ask-one-question, decision notes, draft-loss guards, atomic execution receipts, four-second owner undo plus authorized-fix undo, wake-catchup); `launchd/` (three jobs plus white-glove preflight/install/uninstall); `docs/`; `design/`; native TypeScript tooling.
 - **White-glove path (#28):** arbitrary git vault path, Unicode-safe filename scans, pre-clock current-Codex update/doctor gate, ChatGPT-plan primary auth with explicit API-key fallback, Plus-limit fail-safe before jobs load, unsupported-attachment consent count, real read-only smoke, cold-start cap of two cards, structure-neutral slow-layer fallback, validated plists, console health check, one-command uninstall, and operator/privacy runbooks.
 - **English-first switch (#29):** new product surfaces are English; evidence quotes and vault edits preserve source language; English ledger-jargon gates cover card faces and future Taste Rules; pre-switch metrics remain in place as a different experimental condition.
 - **Not built:** Taste confirmation panel/screen 4 (#20, W5), the complete acceptance-rate adaptive presentation throttle, un-park, and similar-history injection.
@@ -66,6 +66,7 @@ Violating any of these is a rejection. They come from validated behavior, not pr
 - `npm test` — run all schema, runner, console, and launchd tests.
 - `npm run validate` — validate every sample card and event with Forme's AJV gate.
 - `npm run typecheck` — run `tsc --noEmit`.
+- `npm run runtime:preflight` — initialize Codex App Server and verify an isolated authenticated OpenCode server without making a model call.
 - `npm run run:console -- --vault <v>` — start the decision console at `http://127.0.0.1:6180` (or use `FORME_VAULT`).
 - `gh issue list --milestone "W4 — Metrics + 回放 eval + 第一个非自己用户 + demo 视频"` — list current milestone work.
 
