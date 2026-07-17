@@ -2,7 +2,7 @@
 
 - Date: 2026-07-16
 - Workspace kind: local project
-- Result: deterministic acceptance passed; owner experience review pending
+- Result: deterministic and real-project code acceptance passed; owner experience review pending
 
 ## Real-workspace result
 

@@ -3,7 +3,7 @@
 - Updated: 2026-07-16
 - Scope freeze: 2026-08-08
 - MVP demo and public launch: 2026-08-15
-- Current phase: D2/D3 review and M1 Continuity implementation
+- Current phase: M1 experience validation and M2 Cognition preparation
 
 ## Executive state
 
@@ -24,7 +24,6 @@ The existing decision-card prototype is a reusable capability layer, not the new
 
 ## In progress
 
-- D2/D3 review closure against the implemented M0/M1 boundaries.
 - Owner review of the real Forme Project Twin continuity view and one real exported-notes mirror run.
 - M2 ContextPacket and evidence-scoped Reflection pass design against real snapshots.
 

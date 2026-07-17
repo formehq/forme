@@ -4,7 +4,7 @@
 
 **Forme** is a local-first Living Project Twin: durable semantic project state that survives any one document, chat, runtime session, or model. It separates evidence, confirmed meaning, revisable inference, bounded action, and controlled external projection. The existing decision-card system is a validated control primitive inside the Twin, not the product boundary.
 
-**Current stage: D2/D3 review plus M1 real-workspace acceptance and M2 preparation.** The harness-first pivot in GitHub issue #37 replaces the former W4–W6 plan. Scope freezes on 2026-08-08; the MVP demo and public-launch target is 2026-08-15. This file and `docs/` must provide enough context without private notes or old chat history.
+**Current stage: M1 owner/notes-mirror experience validation plus M2 Cognition preparation.** D1 requirements, D2 functional decomposition, D3 architecture/scope lock, M0, and M1 code acceptance are complete. Scope freezes on 2026-08-08; the MVP demo and public-launch target is 2026-08-15. This file and `docs/` must provide enough context without private notes or old chat history.
 
 ## Canonical Documents
 
