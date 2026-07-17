@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/workspace-v0.json",
+  "title": "Forme Workspace Registry v0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "twinId",
+    "name",
+    "createdAt",
+    "stateRoot",
+    "source"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0" },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^wsp_[A-Za-z0-9_-]+$"
+    },
+    "twinId": {
+      "type": "string",
+      "pattern": "^twn_[A-Za-z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stateRoot": { "const": "98_Forme" },
+    "initialIntent": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "connectorId",
+        "kind",
+        "root",
+        "includeExtensions",
+        "excludeDirectories",
+        "maxFileBytes"
+      ],
+      "properties": {
+        "connectorId": {
+          "type": "string",
+          "pattern": "^con_[A-Za-z0-9_-]+$"
+        },
+        "kind": {
+          "enum": ["project", "notes-export"]
+        },
+        "root": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "anyOf": [
+              { "pattern": "^(?:/|[A-Za-z]:)" },
+              { "pattern": "(?:^|[/\\\\])[.][.](?:[/\\\\]|$)" }
+            ]
+          }
+        },
+        "includeExtensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[.][A-Za-z0-9]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "excludeDirectories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "not": {
+              "anyOf": [
+                { "pattern": "[/\\\\]" },
+                { "const": "." },
+                { "const": ".." }
+              ]
+            }
+          },
+          "uniqueItems": true
+        },
+        "maxFileBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10485760
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -3,7 +3,7 @@
 - Updated: 2026-07-16
 - Scope freeze: 2026-08-08
 - MVP demo and public launch: 2026-08-15
-- Current phase: D1–D3 consolidation and M0 runtime foundation
+- Current phase: D2/D3 review and M1 Continuity implementation
 
 ## Executive state
 
@@ -19,17 +19,18 @@ The existing decision-card prototype is a reusable capability layer, not the new
 - White-glove macOS installation path and Apple Notes export feasibility spike.
 - M0 dual-runtime foundation: Codex one-shot, Codex App Server, and OpenCode server adapters behind a capability boundary.
 - Codex App Server real structured turn; OpenCode isolated server/health/OpenAPI and simulated structured session.
+- Canonical repository product/status/roadmap/requirements/architecture/handoff documentation and macOS CI.
+- M1 local project and notes-mirror connection, relative-path evidence manifest, revisioned Twin state, immutable snapshots, continuity events, and restart/crash reconstruction.
 
 ## In progress
 
-- Canonical repository documentation and handoff surface.
-- M0 contracts and automated contract validation.
-- Dual-runtime foundation review and merge: [PR #39](https://github.com/formehq/forme/pull/39).
-- M1 Continuity vertical slice: workspace registry, source manifest, Twin state, snapshots, restart reconstruction, and Now/What Changed/Next Move.
+- D2/D3 review closure against the implemented M0/M1 boundaries.
+- Owner review of the real Forme Project Twin continuity view and one real exported-notes mirror run.
+- M2 ContextPacket and evidence-scoped Reflection pass design against real snapshots.
 
 ## Not yet complete
 
-- A complete Living Project Twin acceptance scene under the new requirements.
+- M1 owner-experience acceptance and launchd wake integration; deterministic code and real Forme-project acceptance are complete.
 - Cross-time Reflection packet and quality gate.
 - Twin-aware corrections and dependent-output invalidation.
 - Typed Twin effector transaction and crash-equivalence gate.

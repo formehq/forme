@@ -8,6 +8,7 @@ These JSON Schemas are Forme-owned M0 contracts. They define the stable boundari
 |---|---|
 | `source-record.schema.json` | Project/notes connector → evidence store |
 | `twin-state.schema.json` | Twin event reducer → durable semantic state |
+| `workspace.schema.json` | Workspace onboarding → connector and state-root registry |
 | `runtime-event.schema.json` | Codex/OpenCode adapter → Forme orchestrator |
 | `agent-proposal.schema.json` | Read-only agent lane → Forme proposal gate |
 | `action-receipt.schema.json` | Deterministic effector → receipt ledger/Twin transition |

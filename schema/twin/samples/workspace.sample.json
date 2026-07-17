@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "0",
+  "workspaceId": "wsp_forme",
+  "twinId": "twn_forme_project",
+  "name": "Forme",
+  "createdAt": "2026-07-16T20:00:00Z",
+  "stateRoot": "98_Forme",
+  "initialIntent": "Build a restart-safe Continuity vertical slice.",
+  "source": {
+    "connectorId": "con_local_project",
+    "kind": "project",
+    "root": ".",
+    "includeExtensions": [".md", ".ts", ".json"],
+    "excludeDirectories": [".git", "98_Forme", "node_modules"],
+    "maxFileBytes": 1048576
+  }
+}

@@ -24,6 +24,10 @@ This directory is the canonical entry point for product, architecture, status, a
 - [`PRIVACY.md`](./PRIVACY.md) — local data and release privacy boundary.
 - [`WHITE_GLOVE_INSTALL.md`](./WHITE_GLOVE_INSTALL.md) — operator installation path for the existing prototype.
 
+## Acceptance evidence
+
+- [`evidence/M1_CONTINUITY_ACCEPTANCE.md`](./evidence/M1_CONTINUITY_ACCEPTANCE.md) — deterministic and real Forme-project M1 results.
+
 ## Source-of-truth rule
 
 Repository documents are the build source of truth. Private research notes may provide evidence, but no implementation decision may depend on an inaccessible local path. When code and docs disagree, treat the mismatch as a build failure and reconcile it in the same change.

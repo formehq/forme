@@ -70,6 +70,20 @@ test("a source record cannot contain an absolute or parent-relative path", () =>
     ...sample,
     locator: { ...sample.locator, relativePath: "../private/notes.md" },
   }).valid, false);
+  assert.equal(checkTwinContract("source-record", {
+    ...sample,
+    locator: { ...sample.locator, relativePath: "..\\private\\notes.md" },
+  }).valid, false);
+});
+
+test("a workspace source root cannot escape with POSIX or Windows traversal", () => {
+  const sample = JSON.parse(readFileSync(join(twinSamplesDir, "workspace.sample.json"), "utf8"));
+  for (const root of ["/private", "../private", "..\\private", "C:\\private"]) {
+    assert.equal(checkTwinContract("workspace", {
+      ...sample,
+      source: { ...sample.source, root },
+    }).valid, false, `workspace accepted unsafe root ${root}`);
+  }
 });
 
 test("fingerprint is stable and order-independent across hunks", () => {

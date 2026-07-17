@@ -1,6 +1,6 @@
 # SCHEMA — 决策卡 + decisions.jsonl(v0)
 
-> 下文保留 decision-card 和 decision-event 契约。Living Project Twin 的 M0 contracts 位于 [`schema/twin/`](../schema/twin/README.md),并通过同一个 Forme-owned AJV gate 校验。
+> 下文保留 decision-card 和 decision-event 契约。Living Project Twin 的 contracts 位于 [`schema/twin/`](../schema/twin/README.md),当前包含 workspace/source/Twin/proposal/runtime/receipt/projection/message 八份 schema,并通过同一个 Forme-owned AJV gate 校验。
 
 数据契约的**单一事实源**。机器可读的权威定义是 `schema/*.json`(AJV 加载的就是它);本文件解释每个字段、指纹算法与事件语义,与 `.json` 同步维护(动了 schema 的会话结束前必须同步本文件)。
 
