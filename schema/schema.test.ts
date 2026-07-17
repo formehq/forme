@@ -3,11 +3,12 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { checkCard, checkEvent } from "./validate.ts";
+import { checkCard, checkEvent, checkTwinContract, twinContractNames } from "./validate.ts";
 import { fingerprint, diffHash } from "./fingerprint.ts";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const samplesDir = join(here, "samples");
+const twinSamplesDir = join(here, "twin", "samples");
 
 const cardFiles = readdirSync(samplesDir)
   .filter((f) => f.startsWith("card-") && f.endsWith(".json"))
@@ -41,6 +42,34 @@ test("every decisions.jsonl sample event passes schema", () => {
     const r = checkEvent(JSON.parse(line));
     assert.ok(r.valid, `line ${i + 1} errors:\n${r.errors.join("\n")}`);
   });
+});
+
+for (const name of twinContractNames) {
+  test(`Twin contract ${name} accepts its positive fixture`, () => {
+    const sample = JSON.parse(readFileSync(join(twinSamplesDir, `${name}.sample.json`), "utf8"));
+    const result = checkTwinContract(name, sample);
+    assert.ok(result.valid, `errors:\n${result.errors.join("\n")}`);
+  });
+}
+
+test("Twin contracts fail closed on unknown fields", () => {
+  for (const name of twinContractNames) {
+    const sample = JSON.parse(readFileSync(join(twinSamplesDir, `${name}.sample.json`), "utf8"));
+    const result = checkTwinContract(name, { ...sample, privateAmbientContext: "must not pass" });
+    assert.equal(result.valid, false, `${name} accepted an unknown top-level field`);
+  }
+});
+
+test("a source record cannot contain an absolute or parent-relative path", () => {
+  const sample = JSON.parse(readFileSync(join(twinSamplesDir, "source-record.sample.json"), "utf8"));
+  assert.equal(checkTwinContract("source-record", {
+    ...sample,
+    locator: { ...sample.locator, relativePath: "/private/notes.md" },
+  }).valid, false);
+  assert.equal(checkTwinContract("source-record", {
+    ...sample,
+    locator: { ...sample.locator, relativePath: "../private/notes.md" },
+  }).valid, false);
 });
 
 test("fingerprint is stable and order-independent across hunks", () => {

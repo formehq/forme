@@ -1,0 +1,46 @@
+name: Build slice
+description: Track one bounded implementation outcome against the active roadmap.
+title: "[M?] "
+labels: []
+body:
+  - type: dropdown
+    id: slice
+    attributes:
+      label: Slice
+      options:
+        - M0 — contracts and runtime gate
+        - M1 — continuity
+        - M2 — cognition
+        - M3 — bounded agency
+        - M4 — controlled presence
+        - Release and hardening
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: Describe the user- or system-level result, not a list of files.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: Name the observable test, fixture, or real workflow that closes this issue.
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Boundaries and failure cases
+      description: Include privacy, authorization, crash, or runtime constraints that apply.
+  - type: checkboxes
+    id: handoff
+    attributes:
+      label: Handoff requirements
+      options:
+        - label: Relevant docs and status will be updated with the implementation.
+          required: true
+        - label: No private source material or absolute local paths will enter public artifacts.
+          required: true

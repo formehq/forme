@@ -1,5 +1,7 @@
 # ARCHITECTURE — 一页系统图
 
+> 本文描述已经实现的 decision-card/runtime 系统。Living Project Twin 的目标架构、迁移阶段与验证闸门以 [`architecture/HARNESS.md`](./architecture/HARNESS.md) 为准。
+
 Forme = local-first agent,把知识库的漂移变成 one-decision 卡片(证据 + 最小 diff + a/p/r),并从每次决策学 taste。**vault 是唯一真相层**;repo 里只有代码,卡片/日志都写进 vault。
 
 ## 一张卡的生命周期(7 步)
@@ -78,6 +80,8 @@ console (localhost 单页,node:http,服务器零状态;           [console/ 已�
 | `console/` | localhost 四视图 + 落子手势 + wake-catchup + 问一句 + Metrics(单页,零框架) | **已建(#15、#16、#19、#21、#26-A、#27;真实落子已发生)** |
 | `docs/` | 系统理解面:ARCHITECTURE / DECISIONS / SCHEMA | 进行中(#7) |
 | `design/` | 交互稿 + 语气笔记(活文档) | 已有(#1) |
+| `schema/twin/` | M0 source/Twin/proposal/runtime/receipt/projection/message contracts | **已纳入** |
+| `twin/` | Workspace registry、evidence manifest、Twin state/revisions/snapshots、Continuity view | **M1 进行中** |
 
 runner 的主扫描现在按 capability boundary 选 `codex-exec`(稳定默认)、`codex-app-server` 或 `opencode`。换 harness 不换 Forme 的 AJV、指纹、写入与授权核心;OpenCode 应用权限不冒充 Codex OS sandbox。reface/taste/State Diff 仍待逐项迁移。
 

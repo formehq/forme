@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "0",
+  "projectionId": "prj_forme_collaboration",
+  "version": 1,
+  "twinId": "twn_forme_project",
+  "sourceRevision": 13,
+  "createdAt": "2026-07-15T20:20:00Z",
+  "expiresAt": "2026-08-15T20:20:00Z",
+  "status": "published",
+  "audience": {
+    "type": "invite",
+    "identityIds": [
+      "idn_collaborator"
+    ]
+  },
+  "claims": [
+    {
+      "claimId": "clm_current_direction",
+      "classification": "confirmed",
+      "text": "Forme is building a Living Project Twin with bounded agent agency.",
+      "approvedForProjectionAt": "2026-07-15T20:19:00Z",
+      "freshness": {
+        "asOf": "2026-07-15T20:18:00Z",
+        "status": "fresh"
+      },
+      "provenanceClass": "owner-confirmed",
+      "canAnswer": true
+    }
+  ],
+  "allowedIntents": [
+    "question",
+    "collaboration-request"
+  ],
+  "ownerOnlyBoundaries": [
+    "Commitments, pricing, and publication require the owner."
+  ],
+  "delegationPolicy": {
+    "mode": "owner-approved",
+    "allowedIntents": [
+      "question",
+      "collaboration-request"
+    ],
+    "maxAgentTurns": 1
+  }
+}

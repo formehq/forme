@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/published-projection-v0.json",
+  "title": "Forme Published Projection v0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "projectionId",
+    "version",
+    "twinId",
+    "sourceRevision",
+    "createdAt",
+    "status",
+    "audience",
+    "claims",
+    "allowedIntents",
+    "ownerOnlyBoundaries",
+    "delegationPolicy"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0"
+    },
+    "projectionId": {
+      "type": "string",
+      "pattern": "^prj_[A-Za-z0-9_-]+$"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "twinId": {
+      "type": "string",
+      "pattern": "^twn_[A-Za-z0-9_-]+$"
+    },
+    "sourceRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": ["draft", "published", "superseded", "revoked"]
+    },
+    "audience": {
+      "type": "object",
+      "required": ["type", "identityIds"],
+      "properties": {
+        "type": {
+          "enum": ["private", "invite", "link", "public"]
+        },
+        "identityIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^idn_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claimId",
+          "classification",
+          "text",
+          "approvedForProjectionAt",
+          "freshness",
+          "provenanceClass",
+          "canAnswer"
+        ],
+        "properties": {
+          "claimId": {
+            "type": "string",
+            "pattern": "^clm_[A-Za-z0-9_-]+$"
+          },
+          "classification": {
+            "enum": ["confirmed", "inferred", "unresolved"]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "approvedForProjectionAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "freshness": {
+            "type": "object",
+            "required": ["asOf", "status"],
+            "properties": {
+              "asOf": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "enum": ["fresh", "stale", "unknown"]
+              }
+            },
+            "additionalProperties": false
+          },
+          "provenanceClass": {
+            "enum": ["owner-confirmed", "agent-inference", "mixed"]
+          },
+          "canAnswer": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    },
+    "allowedIntents": {
+      "type": "array",
+      "items": {
+        "enum": ["introduction", "question", "collaboration-request", "proposal"]
+      },
+      "uniqueItems": true
+    },
+    "ownerOnlyBoundaries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      },
+      "uniqueItems": true
+    },
+    "delegationPolicy": {
+      "type": "object",
+      "required": ["mode", "allowedIntents", "maxAgentTurns"],
+      "properties": {
+        "mode": {
+          "enum": ["no-reply", "draft-only", "owner-approved", "auto-delegated"]
+        },
+        "allowedIntents": {
+          "type": "array",
+          "items": {
+            "enum": ["introduction", "question", "collaboration-request", "proposal"]
+          },
+          "uniqueItems": true
+        },
+        "maxAgentTurns": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

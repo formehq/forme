@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0",
+  "receiptId": "rcp_demo_001",
+  "effectId": "efx_update_plan_001",
+  "idempotencyKey": "sha256:11111111111111111111111111111111",
+  "proposalId": "prp_action_001",
+  "twinId": "twn_forme_project",
+  "baseRevision": 12,
+  "resultRevision": 13,
+  "runtimeRunId": "run_demo_002",
+  "authority": {
+    "type": "owner",
+    "actorId": "idn_owner"
+  },
+  "effector": "forme.plan.update",
+  "scope": {
+    "reads": [
+      "98_Forme/twin/state.json"
+    ],
+    "writes": [
+      "98_Forme/plan.md"
+    ]
+  },
+  "status": "succeeded",
+  "startedAt": "2026-07-15T20:10:00Z",
+  "completedAt": "2026-07-15T20:10:01Z",
+  "beforeRefs": [
+    "git:tree-before"
+  ],
+  "afterRefs": [
+    "git:tree-after"
+  ],
+  "rollback": {
+    "supported": true,
+    "status": "not-requested"
+  }
+}

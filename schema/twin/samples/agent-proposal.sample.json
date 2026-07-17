@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "0",
+  "proposalId": "prp_reflection_001",
+  "workspaceId": "wsp_forme",
+  "twinId": "twn_forme_project",
+  "baseRevision": 12,
+  "createdAt": "2026-07-15T20:05:02Z",
+  "kind": "reflection",
+  "origin": {
+    "runtime": "codex",
+    "runId": "run_demo_001",
+    "model": "openai-model"
+  },
+  "summary": "The project appears to be shifting from a drift-card product toward a general Living Project Twin harness.",
+  "evidenceRefs": [
+    "evd_owner_pivot",
+    "evd_runtime_history"
+  ],
+  "confidence": 0.78,
+  "uncertainties": [
+    "The one-month projection scope is still open."
+  ],
+  "preconditions": [
+    "Both evidence records still resolve at Twin revision 12."
+  ],
+  "body": {
+    "interpretation": "The recent decisions change the product's center of gravity from a card surface to a continuous entity state and harness.",
+    "trajectory": "Future work should treat existing cards as one control primitive inside the Twin rather than the product boundary.",
+    "alternatives": [
+      "This may be a temporary demo framing change rather than a durable product shift."
+    ]
+  }
+}
