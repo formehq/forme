@@ -36,7 +36,7 @@ npm run typecheck
 npm run runtime:preflight
 ```
 
-M1 adds explicit Twin init/status commands; see `twin/README.md` when present.
+The M1 commands are `npm run twin:init`, `npm run twin:refresh`, and `npm run twin:status`; see [`../twin/README.md`](../twin/README.md).
 
 ## Non-negotiable implementation rules
 

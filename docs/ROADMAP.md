@@ -20,10 +20,10 @@
 
 | Phase | Deliverable | Current state |
 |---|---|---|
-| D1 | Traceable requirements and golden acceptance story | Draft complete; canonicalization in progress |
-| D2 | Stable functional boundaries and migration map | Draft complete; acceptance pending |
-| D3 | Technical architecture, runtime strategy, contracts, and verification gates | Draft complete; implementation review in progress |
-| D4 | M0–M4 implementation and demo hardening | M0 started early |
+| D1 | Traceable requirements and golden acceptance story | Complete and canonical |
+| D2 | Stable functional boundaries and migration map | Canonical baseline; review issue #40 open |
+| D3 | Technical architecture, runtime strategy, contracts, and verification gates | Canonical baseline; scope-lock issue #41 open |
+| D4 | M0–M4 implementation and demo hardening | M0 merged; M1 code acceptance complete, real-workspace acceptance next |
 
 ## Build slices
 

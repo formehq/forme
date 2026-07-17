@@ -1,7 +1,8 @@
 # deps
 node_modules/
 
-# runtime output (cards + logs live in the vault, never in the repo)
+# runtime output (local project-Twin state is durable but never source code)
+/98_Forme/
 *.local
 .env
 .env.*

@@ -14,6 +14,7 @@ import publishedProjectionSchema from "./twin/published-projection.schema.json" 
 import runtimeEventSchema from "./twin/runtime-event.schema.json" with { type: "json" };
 import sourceRecordSchema from "./twin/source-record.schema.json" with { type: "json" };
 import twinStateSchema from "./twin/twin-state.schema.json" with { type: "json" };
+import workspaceSchema from "./twin/workspace.schema.json" with { type: "json" };
 
 /**
  * Forme's own validation gate. The design baseline is: the agent is read-only
@@ -42,6 +43,7 @@ export const twinContractNames = [
   "runtime-event",
   "source-record",
   "twin-state",
+  "workspace",
 ] as const;
 
 export type TwinContractName = typeof twinContractNames[number];
@@ -54,6 +56,7 @@ const twinValidators: Record<TwinContractName, ValidateFunction> = {
   "runtime-event": ajv.compile(runtimeEventSchema),
   "source-record": ajv.compile(sourceRecordSchema),
   "twin-state": ajv.compile(twinStateSchema),
+  "workspace": ajv.compile(workspaceSchema),
 };
 
 export interface ValidationResult {

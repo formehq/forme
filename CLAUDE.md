@@ -4,7 +4,7 @@
 
 **Forme** is a local-first Living Project Twin: durable semantic project state that survives any one document, chat, runtime session, or model. It separates evidence, confirmed meaning, revisable inference, bounded action, and controlled external projection. The existing decision-card system is a validated control primitive inside the Twin, not the product boundary.
 
-**Current stage: D1–D3 consolidation plus M0/M1 implementation.** The harness-first pivot in GitHub issue #37 replaces the former W4–W6 plan. Scope freezes on 2026-08-08; the MVP demo and public-launch target is 2026-08-15. This file and `docs/` must provide enough context without private notes or old chat history.
+**Current stage: D2/D3 review plus M1 real-workspace acceptance and M2 preparation.** The harness-first pivot in GitHub issue #37 replaces the former W4–W6 plan. Scope freezes on 2026-08-08; the MVP demo and public-launch target is 2026-08-15. This file and `docs/` must provide enough context without private notes or old chat history.
 
 ## Canonical Documents
 
@@ -56,11 +56,11 @@ Violating any of these is a rejection. They come from validated behavior, not pr
 
 ## Repository Status
 
-- **Built:** `schema/` (card v0/v0.1/v0.2 and five event types); `runtime/` (Codex one-shot + App Server and OpenCode authenticated server adapters, capability matrix, deterministic protocol tests, live preflight); `runner/` (file-lock serialization, deterministic timestamp-freshness self-execution, runtime-selectable main scan, AJV gate, fingerprint suppression, appliability dry-run gate with replace-all hunks, world-level legibility gate and one reface attempt, question-before-scan, rotating slow-layer claim-drift, local date boundaries, taste distillation, and State Diff); `console/` (catch-up, five-part card, State Diff, Metrics, a/p/r, human correction panel, ask-one-question, decision notes, draft-loss guards, atomic execution receipts, four-second owner undo plus authorized-fix undo, wake-catchup); `launchd/` (three jobs plus white-glove preflight/install/uninstall); `docs/`; `design/`; native TypeScript tooling.
+- **Built:** `schema/` (card/event contracts plus eight Living Project Twin contracts); `runtime/` (Codex one-shot + App Server and OpenCode authenticated server adapters, capability matrix, deterministic protocol tests, live preflight); `twin/` (workspace registry, project/notes-mirror connectors, evidence manifest, revisioned state, immutable snapshots, crash-safe transition recovery, and reconstructable Continuity view); `runner/` (file-lock serialization, deterministic timestamp-freshness self-execution, runtime-selectable main scan, AJV gate, fingerprint suppression, appliability dry-run gate with replace-all hunks, world-level legibility gate and one reface attempt, question-before-scan, rotating slow-layer claim-drift, local date boundaries, taste distillation, and State Diff); `console/` (catch-up, five-part card, State Diff, Metrics, a/p/r, human correction panel, ask-one-question, decision notes, draft-loss guards, atomic execution receipts, four-second owner undo plus authorized-fix undo, wake-catchup); `launchd/` (three jobs plus white-glove preflight/install/uninstall); canonical `docs/`; macOS CI; native TypeScript tooling.
 - **White-glove path (#28):** arbitrary git vault path, Unicode-safe filename scans, pre-clock current-Codex update/doctor gate, ChatGPT-plan primary auth with explicit API-key fallback, Plus-limit fail-safe before jobs load, unsupported-attachment consent count, real read-only smoke, cold-start cap of two cards, structure-neutral slow-layer fallback, validated plists, console health check, one-command uninstall, and operator/privacy runbooks.
 - **English-first switch (#29):** new product surfaces are English; evidence quotes and vault edits preserve source language; English ledger-jargon gates cover card faces and future Taste Rules; pre-switch metrics remain in place as a different experimental condition.
-- **Not built:** complete M1 continuity flow, cross-time Reflection gate, Twin-aware correction invalidation, typed Twin effector transaction, projection compiler, and optional mailbox. Legacy gaps such as Taste confirmation remain deferred unless they serve the new slices.
-- **Current acceptance work:** canonical M0 contracts, dual-runtime foundation, and a restart-safe M1 Twin state/view for one local project or notes mirror.
+- **Not built:** cross-time Reflection gate, Twin-aware correction invalidation, typed Twin effector transaction, projection compiler, and optional mailbox. Legacy gaps such as Taste confirmation remain deferred unless they serve the new slices.
+- **Current acceptance work:** run M1 on the real Forme repository and one exported-notes mirror, close D2/D3 review, then build the M2 ContextPacket and Reflection quality gate.
 
 ## Common Commands
 
@@ -69,6 +69,9 @@ Violating any of these is a rejection. They come from validated behavior, not pr
 - `npm run validate` — validate every sample card and event with Forme's AJV gate.
 - `npm run typecheck` — run `tsc --noEmit`.
 - `npm run runtime:preflight` — initialize Codex App Server and verify an isolated authenticated OpenCode server without making a model call.
+- `npm run twin:init -- --workspace <path> --name <name> --intent <text>` — connect one local project or notes mirror and create revision 1.
+- `npm run twin:refresh -- --workspace <path>` — record meaningful source changes as a new Twin revision.
+- `npm run twin:status -- --workspace <path>` — reconstruct the durable Now / What Changed / Next Move view without a runtime session.
 - `npm run run:console -- --vault <v>` — start the decision console at `http://127.0.0.1:6180` (or use `FORME_VAULT`).
 - `gh issue view 37` — read the active harness-first epic and implementation phase.
 

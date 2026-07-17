@@ -71,6 +71,7 @@ The exact vault root remains configurable. The proposed Forme-owned layout is:
   evidence/
     manifest.jsonl
   twin/
+    pending-transition.json  # exists only while a revision is being committed/recovered
     state.json
     state.md
     events.jsonl
@@ -152,6 +153,17 @@ Each claim includes:
 - sensitivity and projection eligibility.
 
 Only deterministic state-transition code advances `revision`.
+
+### M1 revision commit protocol
+
+The current local implementation writes a complete `pending-transition.json` before touching append-only ledgers. It then idempotently applies:
+
+1. new evidence observations;
+2. the immutable revision snapshot;
+3. the continuity event;
+4. current `state.json` and reconstructable `state.md`.
+
+The pending file is removed only after all projections are durable. A restart at any intermediate boundary replays the same evidence and event IDs, rejects conflicting content, restores current state, and removes the pending file. This gives M1 process-crash equivalence without treating a runtime session as state.
 
 ## 6. Context packet
 
