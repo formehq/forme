@@ -43,3 +43,9 @@ Keep this file short. Record only decisions that change product scope, constitut
 **Decision:** milestone #11 contains one parent epic, R0–R5 P0 gates, and separately labeled P1 options. Previous open issues are closed as `archive:v0`; they remain historical evidence.
 
 **Reason:** one active P0 issue and explicit owner gates make progress legible and prevent optional work from silently entering the critical path.
+
+## 2026-07-17 — R1 Continuity foundation
+
+**Decision:** the Forme repo is the first real workspace. R1 observation and restart are fully deterministic, with the first live Codex path deferred to R2. R1 durable state is project-local and Git-ignored, and its first owner surface is generated Markdown that never owns canonical state.
+
+**Reason:** Continuity must survive independently of model availability and runtime sessions; the Twin must remain independent of both its storage adapter and its presentation surface. The local, inspectable choices minimize privacy, infrastructure, and UI risk while the product semantics are still being proven.

@@ -56,12 +56,15 @@ Runtime transcripts are disposable computation. They are never the Project Twin.
 8. Projection rendering has no private-source handle and consumes only an explicit allowlist.
 9. Product behavior does not depend on a resident runtime session.
 10. Codex is the first live demo path; OpenCode remains an architectural integration target without forced MVP parity.
+11. R1 Continuity is deterministic and invokes no model runtime; the first live Codex path begins in R2 through a scoped Context Packet.
+12. R1 durable state is project-local and Git-ignored. It must be excluded from source observation and remain replaceable by a future storage adapter.
+13. The R1 owner surface is generated Markdown. It renders the Twin but never becomes canonical state.
 
 ## Decisions intentionally deferred
 
 - programming language and package topology;
-- exact state storage format;
-- CLI, local web, or native primary surface;
+- exact R1 state schema and storage format;
+- long-term CLI, local web, or native primary surface beyond the approved R1 Markdown view;
 - runtime adapter protocol details;
 - background scheduling;
 - server deployment.
