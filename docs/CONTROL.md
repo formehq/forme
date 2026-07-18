@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R1 — implementation contract owner-approved; ready to build**
-- Active issue: [#49 — Continuity: one project to a durable restart view](https://github.com/formehq/forme/issues/49)
-- P0 implementation: **not started on the new main**
+- Active gate: **R2 — Cognition Control Packet; implementation not yet approved**
+- Active issue: [#50 — Cognition: evidence-backed Reflection and correction](https://github.com/formehq/forme/issues/50)
+- P0 implementation: **R1 owner-accepted; R2–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: build the first deterministic Forme repo → durable Twin → Markdown view slice
+- Next action: review and approve or challenge the R2 Cognition boundary
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -22,9 +22,9 @@ The four required effects are **Continuity, Cognition, Bounded Agency, and Contr
 ```text
 R0 Shared understanding   ✓ COMPLETE
   ↓
-R1 Continuity             ← YOU ARE HERE · CONTRACT APPROVED · BUILD NEXT
+R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R2 Cognition              Codex Reflection → correction → invalidation
+R2 Cognition              ← YOU ARE HERE · CONTROL PACKET NEXT
   ↓
 R3 Bounded Agency         approved effect → receipt → rollback
   ↓
@@ -35,12 +35,14 @@ R5 Demo hardening         clean run → privacy → recovery → rehearsal
 
 Current truth:
 
-- the new `main` intentionally has no product implementation;
+- the new `main` contains the owner-accepted R1 Continuity substrate;
 - the previous implementation is preserved in the archive as evidence and a parts library;
 - archived code is not the default architecture and is not reused without an explicit contract;
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
-- #49 contains the owner-approved R1 implementation contract;
-- no product implementation exists yet on the new `main`; the first R1 build is the next change.
+- #49 contains the completed R1 contract, technical evidence, and owner acceptance;
+- #50 is the next gate and must define Codex visibility, evidence, durable semantic state, correction, and invalidation before implementation;
+- the deterministic walking skeleton exists without Codex, OpenCode, source-write, network, or server authority;
+- R1 is Done; R2 has no implementation authority until its Control Packet is owner-approved.
 
 ## System map
 
@@ -106,9 +108,9 @@ The owner has decision-grade technical understanding of a slice when these five 
 
 If these cannot be answered in roughly five minutes, implementation pauses and this cockpit or the active Control Packet must be repaired.
 
-## Active Control Packet — R1 walking skeleton
+## Completed Control Packet — R1 walking skeleton
 
-- Status: **product and implementation contract owner-approved on 2026-07-18**
+- Status: **implemented, technically verified, and owner-accepted on 2026-07-18**
 
 ### User outcome
 
@@ -145,6 +147,7 @@ Forme repo
 - project-local, Git-ignored `.forme/` state;
 - validated workspace contract, immutable full revisions, atomic `HEAD`, and idempotent pending-transition recovery;
 - generated Markdown owner view that is reconstructible and non-canonical;
+- owner-controlled `observe` inputs for Active Intent, Next Move, and Unresolved items, with strict CLI option validation;
 - explicit Forme repo source allowlist only, with no ambient extension-based discovery;
 - selective port of named archive safety algorithms and tests, never the old schema, state layout, or broader modules.
 
@@ -157,6 +160,14 @@ Forme repo
 5. Confirm revision 2 explains the observed change; run a no-op refresh and confirm it creates no revision.
 6. Stop the process, discard runtime/session context, restart, and reconstruct the same current view from durable state.
 7. Confirm the project source was never modified by the observation path.
+
+### Technical evidence
+
+- `npm run check` type-checks the package and passes all 16 deterministic tests.
+- Boundary tests reject parent traversal, skip symlinks, and keep out-of-allowlist canaries absent from state.
+- Continuity and CLI tests prove initial, changed, deleted, owner-frame, strict input, no-op, and byte-for-byte Markdown reconstruction behavior.
+- Recovery tests interrupt the pending, revision, `HEAD`, and view boundaries and resume each transition exactly once.
+- The real Forme repo reached revision 8: revision 7 captured the CLI-control patch, revision 8 changed only the Owner Frame, an identical owner command was a no-op, and deleting the Restart View reconstructed identical bytes.
 
 ### Owner decisions
 
@@ -171,7 +182,23 @@ Confirmed:
 - **Source scope:** observe only the explicit Forme repo allowlist recorded in #49; do not scan the rest of the repo by extension or discovery.
 - **Archive reuse:** port only the named safety algorithms and tests; do not copy the old schema, `98_Forme/` layout, or broader modules.
 
-These choices make R1 ready to build. Exact command spelling, internal function names, and non-foundational implementation details remain within the agent's approved implementation authority. Any expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
+These choices produced the accepted R1 substrate. Any R2 expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
+
+## Next Control Packet — R2 Cognition
+
+- Status: **framing only; not owner-approved and not authorized to build**
+- User outcome: one Reflection depends on evidence from at least two time points, exposes uncertainty, and can be corrected by the owner so stale dependent output is invalidated.
+- Required map delta: durable Twin → scoped Context Packet → Codex proposal → evidence and quality validation → admitted Reflection → correction and invalidation.
+
+Before implementation, the owner and agent must settle:
+
+1. how the Forme repo supplies durable, resolvable content from two time points without granting ambient workspace access;
+2. the minimum Context Packet Codex may see and whether runtime tools are disabled for this slice;
+3. the Reflection proposal schema, evidence rules, uncertainty fields, and summary-only rejection gate;
+4. which semantic records become canonical only after validation or owner judgment;
+5. how correction creates a new revision and identifies every dependent output that becomes stale.
+
+Current recommendation: use one Codex path behind a Forme-owned adapter; constrain it to a deterministic Context Packet and schema-only proposal; grant no source-write, shell, network, or autonomous tool authority; admit only resolvable evidence into the Twin; and treat runtime sessions and transcripts as disposable computation. The unresolved architectural choice is the narrowest trustworthy source of cross-time content evidence for the first real Forme workspace.
 
 ## Owner–agent working agreement
 

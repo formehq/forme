@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/twin-revision-v1.json",
+  "title": "Forme R1 Twin Revision v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "revision",
+    "previousRevision",
+    "observedAt",
+    "workspaceContractHash",
+    "evidence",
+    "changes",
+    "ownerFrame",
+    "warnings"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^wsp_[a-f0-9]{32}$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "previousRevision": {
+      "anyOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "null" }
+      ]
+    },
+    "observedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "workspaceContractHash": { "$ref": "#/$defs/sha256" },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "changes": {
+      "type": "object",
+      "required": ["added", "modified", "deleted"],
+      "properties": {
+        "added": { "$ref": "#/$defs/pathList" },
+        "modified": { "$ref": "#/$defs/pathList" },
+        "deleted": { "$ref": "#/$defs/pathList" }
+      },
+      "additionalProperties": false
+    },
+    "ownerFrame": { "$ref": "#/$defs/ownerFrame" },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "not": {
+        "anyOf": [
+          { "pattern": "^(?:/|[A-Za-z]:)" },
+          { "pattern": "(?:^|[/\\\\])[.][.](?:[/\\\\]|$)" }
+        ]
+      }
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "relativePath",
+        "contentHash",
+        "sizeBytes",
+        "modifiedAt"
+      ],
+      "properties": {
+        "relativePath": { "$ref": "#/$defs/relativePath" },
+        "contentHash": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1048576
+        },
+        "modifiedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ownerFrame": {
+      "type": "object",
+      "required": ["activeIntent", "nextMove", "unresolved"],
+      "properties": {
+        "activeIntent": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "nextMove": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "unresolved": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
