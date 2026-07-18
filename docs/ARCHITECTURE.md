@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: R1 owner-accepted; R2 runtime and cognition boundary implemented in Technical Review
+- Status: R1 and R2 owner-accepted; R3 Bounded Agency is the next architecture gate
 - Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -91,7 +91,7 @@ The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapt
 - package or service topology beyond the single R1 package;
 - storage backends, backup, sync, and cross-device durability beyond the R1 local file store;
 - long-term CLI, local web, or native primary surface beyond the approved R1 Markdown view;
-- runtime adapter protocol details;
+- runtime adapter protocol beyond the accepted internal Codex boundary;
 - background scheduling;
 - server deployment.
 

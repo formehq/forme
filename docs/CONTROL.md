@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R2 — Cognition; Technical Review**
-- Active issue: [#50 — Cognition: evidence-backed Reflection and correction](https://github.com/formehq/forme/issues/50)
-- P0 implementation: **R1 owner-accepted; R2 technically verified and awaiting Owner Acceptance; R3–R5 not started**
+- Active gate: **R3 — Bounded Agency; Needs Decision**
+- Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
+- P0 implementation: **R1 and R2 owner-accepted; R3 awaiting its Control Packet; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: run and challenge the first real Reflection and correction demo
+- Next action: prepare and review the R3 action, approval, effect, receipt, verification, and rollback contract
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -24,9 +24,9 @@ R0 Shared understanding   ✓ COMPLETE
   ↓
 R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R2 Cognition              ← YOU ARE HERE · TECHNICAL REVIEW
+R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         approved effect → receipt → rollback
+R3 Bounded Agency         ← YOU ARE HERE · NEEDS DECISION
   ↓
 R4 Controlled Presence    allowlist → static collaborator projection
   ↓
@@ -40,9 +40,9 @@ Current truth:
 - archived code is not the default architecture and is not reused without an explicit contract;
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
-- #50 is the active build gate; its Codex visibility, evidence, durable semantic state, correction, and invalidation contract is owner-approved;
-- the deterministic walking skeleton exists without Codex, OpenCode, source-write, network, or server authority;
-- R1 is Done; R2 implementation authority is limited to the five recommendations approved by the owner on 2026-07-18.
+- #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
+- #51 is now the active gate; no R3 write authority or action contract has been approved;
+- R1 and R2 are Done; project sources still have no agent action, background, server, or projection write path.
 
 ## System map
 
@@ -184,9 +184,9 @@ Confirmed:
 
 These choices produced the accepted R1 substrate. Any R2 expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
 
-## Active Control Packet — R2 Cognition
+## Completed Control Packet — R2 Cognition
 
-- Status: **all five recommendations owner-approved; implementation and first real Codex Reflection technically verified on 2026-07-18; Owner Acceptance pending**
+- Status: **implemented, technically verified, corrected through the real owner surface, and owner-accepted on 2026-07-18**
 - User outcome: one Reflection depends on evidence from at least two time points, exposes uncertainty, and can be corrected by the owner so stale dependent output is invalidated.
 - Required map delta: durable Twin → scoped Context Packet → Codex proposal → evidence and quality validation → admitted Reflection → correction and invalidation.
 
@@ -326,12 +326,18 @@ R2 excludes source writes, action approval, rollback effectors, background sched
 
 - the real Forme workspace built a 9,014-byte packet from the approved commits and admitted Reflection `ref_403269dc2ce5d90e7284f3db835d0a7d` into Twin revision 16;
 - runtime receipt `run_c2161146e800cdf8685acc2a41fb7372` records `codex-cli 0.144.3`, authenticated-catalog model `gpt-5.6-sol`, the packet/proposal hashes, a completed turn, and zero tool events;
-- the Reflection cites both exact Git blobs and line ranges, labels uncertainty `medium`, includes an alternative explanation and implication, and remains visibly `inferred`;
+- the Reflection cites both exact Git blobs and line ranges, labels uncertainty `medium`, and includes an alternative explanation and implication; it entered the Twin visibly `inferred` before owner correction;
 - persisted-state sweeps found no historical document bodies, absolute workspace path, session, transcript, or untracked draft reference; the generated view reconstructed byte-for-byte;
 - `npm run check` passes 30 tests covering deterministic packets, evidence resolution, schema and staleness rejection, model catalog selection, runtime audit, persistence privacy, correction, invalidation, V2 continuity, and every recovery boundary;
 - the real run exposed and then closed two adapter gaps before admission: generic model names can differ from the authenticated catalog, and the API structured-output schema is narrower than Ajv. Both now fail closed and have regression tests.
 
-Technical Review does not complete R2. The owner must still judge whether this Reflection is more valuable than a summary and enter the real correction text. Forme will then create the next revision, invalidate the old derived output, and prove that a rebuilt packet contains the correction.
+### Owner acceptance evidence
+
+- the owner narrowed the Reflection through the real `correct` command: one R1 case justifies retaining Owner Acceptance as a control path but does not establish a general law;
+- Twin revision 19 preserved the original Codex Reflection as `superseded` and created owner-authored corrected Reflection `ref_705992a7ae63e403b601af34d16c5a54`;
+- correction `cor_7912bf1eb8f1133b766c64bcd1e0b7cd` invalidated one dependent output rather than rewriting history;
+- the rebuilt packet is based on Twin revision 19, has hash `sha256:2b8bc2c8d47939733d06a7cb94c0a8397f111068481e5b405ae1631fb9e57c56`, and contains the active owner correction;
+- repeated restart reconstruction produced identical bytes, all 30 checks passed, project sources remained unchanged, and the owner explicitly approved R2 on 2026-07-18.
 
 ### Owner stop gate — approved 2026-07-18
 
@@ -344,6 +350,14 @@ The owner explicitly confirmed all five recommendations before implementation:
 - owner correction by new revision with dependent-output invalidation.
 
 Implementation must remain inside these five decisions. Any broader source visibility, tool authority, automatic history discovery, runtime parity, or semantic durability returns to a new Owner stop gate.
+
+## Next Control Packet — R3 Bounded Agency
+
+- Status: **Needs Decision; no implementation or source-write authority is approved**
+- User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
+- Required map delta: corrected Twin revision → structured action proposal → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
+
+The next proposal must recommend the smallest real Forme-owned artifact to change, define the exact readable and writable paths, bind approval and execution to one Twin revision, make retries safe, and prove both the intended effect and rollback. Choosing that action or granting any write capability remains an owner stop gate.
 
 ## Owner–agent working agreement
 
