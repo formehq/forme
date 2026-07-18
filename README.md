@@ -10,7 +10,7 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R2 — Cognition Control Packet; implementation not yet approved**
+- Current gate: **R2 — Cognition Control Packet prepared; owner decision pending**
 - Product implementation: **R1 accepted** — deterministic Forme repo → durable Twin revision → Markdown Restart View
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 issue [#49](https://github.com/formehq/forme/issues/49), and next R2 issue [#50](https://github.com/formehq/forme/issues/50).

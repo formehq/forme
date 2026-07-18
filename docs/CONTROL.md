@@ -186,19 +186,153 @@ These choices produced the accepted R1 substrate. Any R2 expansion of state, sou
 
 ## Next Control Packet — R2 Cognition
 
-- Status: **framing only; not owner-approved and not authorized to build**
+- Status: **proposal prepared on 2026-07-18; not owner-approved and not authorized to build**
 - User outcome: one Reflection depends on evidence from at least two time points, exposes uncertainty, and can be corrected by the owner so stale dependent output is invalidated.
 - Required map delta: durable Twin → scoped Context Packet → Codex proposal → evidence and quality validation → admitted Reflection → correction and invalidation.
 
-Before implementation, the owner and agent must settle:
+### Proposed walking slice
 
-1. how the Forme repo supplies durable, resolvable content from two time points without granting ambient workspace access;
-2. the minimum Context Packet Codex may see and whether runtime tools are disabled for this slice;
-3. the Reflection proposal schema, evidence rules, uncertainty fields, and summary-only rejection gate;
-4. which semantic records become canonical only after validation or owner judgment;
-5. how correction creates a new revision and identifies every dependent output that becomes stale.
+```text
+owner-selected Git checkpoints and paths
+  → deterministic Context Packet at base Twin revision N
+  → isolated, ephemeral Codex execution
+  → schema-constrained Reflection proposal
+  → evidence, staleness, privacy, and shape validation
+  → inferred Reflection in Twin revision N+1
+  → owner correction
+  → corrected meaning and invalidation in Twin revision N+2
+  → next Context Packet contains the correction
+```
 
-Current recommendation: use one Codex path behind a Forme-owned adapter; constrain it to a deterministic Context Packet and schema-only proposal; grant no source-write, shell, network, or autonomous tool authority; admit only resolvable evidence into the Twin; and treat runtime sessions and transcripts as disposable computation. The unresolved architectural choice is the narrowest trustworthy source of cross-time content evidence for the first real Forme workspace.
+This is one cognition loop, not a general memory system or autonomous research agent.
+
+### Recommended decisions
+
+| Decision | Recommended answer | Global effect |
+|---|---|---|
+| Cross-time evidence | For the MVP, use two explicit, reachable Git commits and explicit small text paths. Resolve content with read-only Git operations and bind every document to its commit, blob hash, byte count, and line map. | R2 can inspect durable historical content without copying source bodies into R1 state. Uncommitted history and non-Git notes remain out of scope. |
+| Codex visibility | Build a deterministic Context Packet first. Run Codex outside the Forme repo with a custom permission profile that can read only runtime-minimal paths and the isolated packet root. Disable project instructions, user config, tools, MCP, plugins, web search, and command network. | Selected packet content is transmitted to OpenAI through the owner's existing Codex authentication; the rest of the repo and machine are not authorized input. |
+| Runtime role | Use `codex exec` as the first real adapter, with ephemeral execution, JSONL audit events, and `--output-schema`. Codex returns a proposal only. | Codex supplies mature model invocation and structured output while Forme retains state, validation, admission, and recovery. The adapter contract stays compatible with a later OpenCode implementation. |
+| Semantic durability | Introduce `TwinRevisionV2` only when the first validated Reflection is admitted. Preserve every R1 revision unchanged. Store the Reflection as `inferred`, with evidence, uncertainty, provenance, and runtime receipt—not as owner-confirmed truth. | R2 adds canonical semantic state and a schema version, so owner approval is required before implementation. |
+| Correction and invalidation | Correction creates a new Twin revision, records owner authority and the superseded Reflection, marks dependent outputs stale, and changes later Context Packets. Never overwrite history. | Owner authorship becomes executable and testable; stale model interpretation cannot silently remain active. |
+| Quality gate | Apply deterministic structural gates, then require owner judgment. Structure requires two distinct time points, resolvable evidence, a cross-time relation, uncertainty, an alternative explanation, and an implication. | Forme can reject invalid or summary-shaped proposals, but it does not pretend to automate whether a Reflection is genuinely valuable. |
+
+### First real evidence pair
+
+The proposed demo uses one owner-controlled document at two immutable commits:
+
+| Time point | Commit | Blob | Evidence |
+|---|---|---|---|
+| R0 control established | `81a002744156128c1e370bf6b8a3526e72bddbf9` | `1b5fb24e8e2afb511d28cb3f7cd8570c81b985d6` | `docs/DECISIONS.md`, lines 29–33: tests lead only to Technical Review; owner experience is required because technical completion had outrun shared understanding. |
+| R1 owner accepted | `3cc2ac567d22b5b1c5bb1bfd7ed790d3ebd59052` | `5e06da60be0aaaa4d9655a7c9aee7157e93d1f5f` | `docs/DECISIONS.md`, lines 59–63: the real Owner Demo caught a silently ignored CLI control input after technical checks passed, and acceptance waited for the corrected rerun. |
+
+Each historical file is under 5 KiB. The first packet therefore needs only the two versions of `docs/DECISIONS.md`, not source code or the rest of the repository.
+
+Candidate Reflection to challenge, not hard-code:
+
+> Owner Acceptance changed from a governance rule created after loss of shared understanding into a working diagnostic that caught a control-path defect after tests passed. This suggests R2 correction must be exercised through the real owner surface, not proven only at the schema or unit-test layer.
+
+Required uncertainty: this inference is supported by one completed slice and may not generalize; an alternative explanation is that the CLI gap was ordinary missing test coverage and the Owner Demo only happened to expose it.
+
+### Proposed contracts
+
+`ContextPacketV1` is deterministic and disposable. Its content hash is persisted, but source bodies are not copied into the Twin:
+
+- packet ID, schema version, creation time, and `baseTwinRevision`;
+- current owner frame and the explicit Reflection task;
+- two time points, each with commit ID, commit time, selected path, blob hash, byte count, and file body;
+- active owner corrections from the base revision;
+- allowed evidence IDs and explicit constraints;
+- canonical packet content hash.
+
+`GitLineEvidenceV1` makes every cited statement resolvable:
+
+- commit ID, path, blob hash, line start, line end, and excerpt hash;
+- the validator re-reads the Git object and rejects a mismatch, missing commit, invalid range, or evidence outside the packet.
+
+`ReflectionProposalV1` is the only accepted model output shape:
+
+- proposal ID and `baseTwinRevision`;
+- one cross-time claim and relation type (`pattern`, `tension`, `trajectory`, or `unfinished`);
+- at least two evidence references from distinct packet time points;
+- uncertainty level and rationale;
+- at least one plausible alternative explanation;
+- one implication and one owner-facing correction question;
+- no commands, patches, free-form tool calls, or source content outside the packet.
+
+`TwinRevisionV2` retains all R1 fields and adds a cognition state:
+
+- admitted Reflection records with `inferred`, `corrected`, `superseded`, or `invalidated` status;
+- owner Correction records with target Reflection, correction text, authority, and timestamp;
+- Invalidation records naming every dependent output and reason;
+- minimal Runtime Receipts: adapter, CLI version, model, packet hash, proposal hash, base revision, validation result, and audit-event summary;
+- no chain-of-thought, full runtime transcript, Codex session state, or copied historical source body.
+
+### Codex runtime envelope
+
+Local research used installed `codex-cli 0.144.3` and current OpenAI Codex documentation and source. The proposal relies on:
+
+- non-interactive `codex exec`, `--ephemeral`, JSONL events, and `--output-schema`;
+- an isolated `CODEX_HOME` so global `AGENTS.md`, user configuration, plugins, MCP servers, and saved sessions do not enter model context; authentication is referenced for the run but never copied into the packet;
+- `project_doc_max_bytes=0`, web search disabled, optional tool features disabled, and a clean packet-only working root;
+- a named permission profile granting `read` only to `:minimal` runtime paths and the packet workspace, with network disabled for model-generated commands;
+- event admission that fails if command execution, file change, MCP, web-search, or other unapproved tool activity appears;
+- no `--sandbox read-only` fallback: the legacy read-only policy prevents writes but permits full-disk reads and therefore violates Forme's visibility contract;
+- a capability probe before any source is sent. If exact readable-root enforcement or structured output is unavailable, the run fails closed.
+
+Bundled Codex system and safety instructions remain part of the runtime itself; Forme does not redefine or persist them. The isolation contract removes owner-global and project instructions and records the effective Codex version and environment summary so this runtime-owned influence remains visible.
+
+Proposal research used Codex prompt-debug rather than a model call: no Forme project content was transmitted. The verified effective profile contained only `:minimal`, the isolated context root, and Codex runtime bootstrap paths; it did not expose the Forme repo. Actual model execution remains blocked on owner approval.
+
+The Codex service request itself necessarily uses the owner's authenticated network path. The "network disabled" boundary applies to model-generated commands and tools, not the model invocation. Relevant official references are [Non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode), [Permissions](https://learn.chatgpt.com/docs/permissions), and [Agent approvals and security](https://learn.chatgpt.com/docs/agent-approvals-security). The permission-profile feature is beta, so the runtime version and effective environment summary must be receipted.
+
+### Admission and correction sequence
+
+1. Forme verifies that the requested commits are reachable, paths are explicitly allowed for cognition, Git objects match their hashes, and the packet stays under its byte ceiling.
+2. The owner can inspect the packet manifest—paths, commits, byte counts, and hashes—before the first external call.
+3. Codex returns a `ReflectionProposalV1`; it has no authority to write `.forme/` or project sources.
+4. Forme validates schema, base revision, evidence resolution, two-time-point coverage, packet membership, output size, and runtime audit events.
+5. A valid proposal creates `TwinRevisionV2` with an `inferred` Reflection and minimal receipt. Invalid output creates no Twin revision.
+6. The generated Reflection view shows claim, evidence, uncertainty, alternative, implication, provenance, and a correction command.
+7. Owner correction creates the next Twin revision, supersedes the original active interpretation, and invalidates derived output tied to it.
+8. A later Context Packet includes the correction and rejects any proposal still based on the pre-correction revision.
+
+### Five-minute owner demo
+
+1. Begin at the current owner-approved base Twin revision and display the exact packet manifest for the two commits above.
+2. Show that a private canary outside the packet root is unreadable and absent from prompt-debug output.
+3. Run one ephemeral Codex Reflection and display its structured proposal plus runtime receipt.
+4. Open the generated Reflection view and resolve each evidence reference against its historical Git blob.
+5. Ask the owner whether the relationship is more valuable than a two-commit summary.
+6. Enter one correction through the real owner surface.
+7. Show the new revision, invalidated old output, and a rebuilt Context Packet containing the correction.
+8. Restart Forme and reconstruct the same active Reflection/correction state; confirm project sources never changed.
+
+### Acceptance and failure conditions
+
+R2 passes only if:
+
+- the owner judges one real Reflection more valuable than a summary;
+- all cited evidence resolves to the approved commits, blobs, paths, and lines;
+- prompt-debug and runtime receipts show no ambient project files, owner-global or project instructions, MCP, web, file-change, or command activity;
+- the proposed Context Packet is deterministic and bounded;
+- correction changes later context and invalidates stale dependent output;
+- runtime/process loss does not lose the admitted or corrected state;
+- invalid, stale, oversized, unsupported, or unauthorized runtime output fails closed.
+
+R2 excludes source writes, action approval, rollback effectors, background scheduling, server deployment, notes, OpenCode live parity, automatic historical discovery, dirty-working-tree time points, and generalized semantic memory.
+
+### Owner stop gate
+
+Approval must explicitly confirm all five recommendations before implementation:
+
+- Git-only committed evidence from the explicit commit/path pair;
+- isolated packet-only Codex visibility and no model-generated tool use;
+- schema-only proposal and two-layer quality gate;
+- `TwinRevisionV2` with clearly labeled inferred state and minimal receipts;
+- owner correction by new revision with dependent-output invalidation.
+
+Until that approval, no project content is sent to Codex and no R2 schema or durable state is implemented.
 
 ## Owner–agent working agreement
 
