@@ -1,61 +1,234 @@
-# Owner control panel
+# Owner technical cockpit
 
-- Updated: 2026-07-17
-- Active gate: R0 — repository reboot and shared understanding
-- Active issue: [#48 — Approve the walking-skeleton Control Packet](https://github.com/formehq/forme/issues/48)
-- P0 status: not started on the new main
-- Next owner decision: approve the first walking-skeleton input, output, durable state, and demo
+- Updated: 2026-07-18
+- Active gate: **R1 — implementation contract owner-approved; ready to build**
+- Active issue: [#49 — Continuity: one project to a durable restart view](https://github.com/formehq/forme/issues/49)
+- P0 implementation: **not started on the new main**
+- First real workspace: **Forme repo — owner confirmed**
+- Next action: build the first deterministic Forme repo → durable Twin → Markdown view slice
 
-## Current truth
+This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
-The new main intentionally contains no product implementation. The previous prototype, runtime adapters, and Continuity code are preserved in the archive. They may be studied and selectively reused only after their role is understood and approved in the active slice.
+## Product claim
 
-## Control model
+The August MVP is one Living Project Twin for one real project:
 
-| Layer | Examples | Authority |
+> It remembers where the project is, notices what it is becoming, acts once within explicit and reversible trust, and produces one controlled collaborator projection.
+
+The four required effects are **Continuity, Cognition, Bounded Agency, and Controlled Presence**. They are one causal story built on one Twin, not four disconnected features.
+
+## You are here
+
+```text
+R0 Shared understanding   ✓ COMPLETE
+  ↓
+R1 Continuity             ← YOU ARE HERE · CONTRACT APPROVED · BUILD NEXT
+  ↓
+R2 Cognition              Codex Reflection → correction → invalidation
+  ↓
+R3 Bounded Agency         approved effect → receipt → rollback
+  ↓
+R4 Controlled Presence    allowlist → static collaborator projection
+  ↓
+R5 Demo hardening         clean run → privacy → recovery → rehearsal
+```
+
+Current truth:
+
+- the new `main` intentionally has no product implementation;
+- the previous implementation is preserved in the archive as evidence and a parts library;
+- archived code is not the default architecture and is not reused without an explicit contract;
+- #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
+- #49 contains the owner-approved R1 implementation contract;
+- no product implementation exists yet on the new `main`; the first R1 build is the next change.
+
+## System map
+
+```mermaid
+flowchart LR
+    Owner["Owner<br/>intent · correction · approval"]
+    Source["Bounded project sources<br/>Forme repo first"]
+
+    subgraph Forme["Forme owns continuity and control"]
+        Observe["R1 Deterministic observation"]
+        Twin["Living Project Twin<br/>durable state · revisions · evidence<br/>confirmed / inferred / unresolved"]
+        Context["R2 Scoped Context Packet"]
+        Gate["Validation · policy · owner judgment"]
+        Effect["R3 Deterministic effect<br/>verify · receipt · rollback"]
+        Scope["R4 Projection allowlist"]
+    end
+
+    subgraph Runtime["Replaceable harness runtime"]
+        Codex["Codex — P0 live path"]
+        OpenCode["OpenCode — compatible boundary<br/>P1 live path"]
+    end
+
+    subgraph Surfaces["Experiences derived from the same Twin"]
+        Restart["R1 Restart View"]
+        Reflection["R2 Reflection"]
+        Review["R3 Action Review"]
+        Projection["R4 Collaborator Projection"]
+    end
+
+    Source --> Observe --> Twin
+    Owner -->|"intent / correction"| Twin
+    Twin --> Restart --> Owner
+    Twin --> Context --> Codex
+    Context -.-> OpenCode
+    Codex -->|"typed proposal only"| Gate
+    OpenCode -.->|"typed proposal only"| Gate
+    Gate -->|"admitted interpretation"| Twin
+    Twin --> Reflection --> Owner
+    Owner -->|"explicit approval"| Gate
+    Gate --> Review
+    Gate --> Effect -->|"bounded change"| Source
+    Effect -->|"receipt"| Twin
+    Twin --> Scope --> Projection
+```
+
+### How to read the map
+
+- **Sources** say what happened in files; they remain authoritative for their own content.
+- **The Twin** is Forme's durable, versioned understanding of the project. It is not a chat transcript, runtime session, file copy, or summary page.
+- **Codex and OpenCode** are replaceable cognition runtimes. They receive scoped context and return proposals; they do not own the Twin or write canonical state directly.
+- **The gate and executor** keep interpretation probabilistic but effects deterministic, authorized, inspectable, and reversible where feasible.
+- **Surfaces** are views of one Twin. They must not create private parallel truths.
+
+## Owner architecture checksum
+
+The owner has decision-grade technical understanding of a slice when these five questions have clear answers:
+
+1. **Input:** What enters Forme?
+2. **Durability:** What becomes durable, and where does it live?
+3. **Visibility:** What can Codex or OpenCode see?
+4. **Authority:** What may an agent change, and who approves it?
+5. **Recovery:** After interruption, failure, or a wrong interpretation, what survives and how is it corrected or reversed?
+
+If these cannot be answered in roughly five minutes, implementation pauses and this cockpit or the active Control Packet must be repaired.
+
+## Active Control Packet — R1 walking skeleton
+
+- Status: **product and implementation contract owner-approved on 2026-07-18**
+
+### User outcome
+
+After connecting the Forme repo, the owner can leave, restart the process, and recover a human-readable view of the project's current intent and observed change without reconstructing context from a chat session.
+
+### Proposed first flow
+
+```text
+Forme repo
+  → explicit source root and exclusions
+  → deterministic bounded observation
+  → durable Project Twin revision
+  → Markdown Restart View
+  → one source change
+  → next meaningful revision
+  → process stop and restart
+  → reconstruct the same current view
+```
+
+### Five-question contract
+
+| Question | R1 proposal |
+|---|---|
+| What enters? | One explicitly selected workspace: the Forme repo. Observation follows an explicit root and exclusions; no vault-wide discovery and no symlink escape. |
+| What becomes durable? | A validated workspace contract, immutable Twin revisions, an atomic `HEAD` pointer, evidence metadata/provenance, and the minimum owner frame needed to reconstruct the view. Source bodies are not copied into the Twin. |
+| What can the runtime see? | R1 uses no Codex or OpenCode reasoning. The first live Codex context begins in R2 through a scoped Context Packet. |
+| What may the agent change? | R1 observation is read-only toward project sources. Deterministic Forme code may create or update only the approved, project-local state and generated view. |
+| How does recovery work? | Canonical state survives process and runtime loss. A no-op observation does not create a new revision. Interrupted writes must not replace the last valid state; restart reconstructs from the last valid revision. |
+
+### Accepted implementation boundary
+
+- one root TypeScript / Node 24 npm package;
+- JSON Schema validation through Ajv, with no other R1 runtime dependency;
+- project-local, Git-ignored `.forme/` state;
+- validated workspace contract, immutable full revisions, atomic `HEAD`, and idempotent pending-transition recovery;
+- generated Markdown owner view that is reconstructible and non-canonical;
+- explicit Forme repo source allowlist only, with no ambient extension-based discovery;
+- selective port of named archive safety algorithms and tests, never the old schema, state layout, or broader modules.
+
+### Five-minute owner demo
+
+1. Start from a clean Forme repo checkout and connect it with explicit boundaries.
+2. Enter or confirm the project's Active Intent.
+3. Run observation and open revision 1 of the Restart View.
+4. Make one meaningful allowed source change and run observation again.
+5. Confirm revision 2 explains the observed change; run a no-op refresh and confirm it creates no revision.
+6. Stop the process, discard runtime/session context, restart, and reconstruct the same current view from durable state.
+7. Confirm the project source was never modified by the observation path.
+
+### Owner decisions
+
+Confirmed:
+
+- **First real workspace:** use the Forme repo.
+- **Runtime boundary:** keep R1 fully deterministic and introduce the first real Codex path only in R2.
+- **Persistence boundary:** use project-local, Git-ignored durable state. R1 durability covers process and runtime loss, not project-directory or machine loss.
+- **First surface:** use a generated Markdown Restart View. It is a rendering of the Twin, never canonical state.
+- **Toolchain:** use one TypeScript / Node 24 npm package, with Ajv for persisted JSON Schema validation and no other R1 runtime dependency.
+- **State contract:** use `.forme/` with an owner workspace contract, immutable full revisions, atomic `HEAD`, reconstructible Markdown, and pending-transition recovery.
+- **Source scope:** observe only the explicit Forme repo allowlist recorded in #49; do not scan the rest of the repo by extension or discovery.
+- **Archive reuse:** port only the named safety algorithms and tests; do not copy the old schema, `98_Forme/` layout, or broader modules.
+
+These choices make R1 ready to build. Exact command spelling, internal function names, and non-foundational implementation details remain within the agent's approved implementation authority. Any expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
+
+## Owner–agent working agreement
+
+| Responsibility | Owner | Agent |
 |---|---|---|
-| Product constitution | vision, authorship, privacy, MVP scope | owner confirmation required |
-| Architecture and contracts | durable state, context, permissions, schemas, projection boundary | one-page proposal and owner confirmation before implementation |
-| Implementation | files, functions, tests, error handling inside an approved contract | agent may proceed autonomously |
-| Maintenance | refactors, CI, dependency hygiene, documentation synchronization | agent may proceed with evidence |
+| Product meaning, trust, privacy, scope, public behavior | decides | explains options and recommends |
+| Durable state, schemas, permissions, runtime visibility | confirms before implementation | proposes a bounded contract and stops at the gate |
+| Implementation inside an approved contract | need not review every function | may proceed autonomously with tests and evidence |
+| User experience acceptance | experiences, challenges, accepts | supplies a runnable demo and explains the map delta |
+| Architecture drift | decides whether the contract changes | must expose drift; never rewrites intent to match code silently |
 
-## Slice cadence
+The operating loop is:
 
-Every core slice follows the same loop:
+```text
+owner defines meaning and boundaries
+  → agent proposes a Control Packet with a recommendation
+  → owner confirms architecture-changing choices
+  → agent builds one demonstrable outcome
+  → checks and demo provide technical evidence
+  → owner experiences and accepts
+  → cockpit records what changed in the shared system model
+```
 
-1. **Kickoff:** one-page Control Packet explains user outcome, data flow, agent visibility, authority, persistence, failure recovery, and owner decisions.
-2. **Owner gate:** the owner confirms product and contract choices.
-3. **Build:** one small end-to-end increment per pull request.
-4. **Technical Review:** checks pass and a runnable demo is available.
-5. **Owner Acceptance:** the owner experiences the behavior and can explain the important boundaries.
-6. **Done:** issue closes only after both forms of evidence exist.
+Passing checks moves a slice to **Technical Review**. A P0 slice becomes **Done** only after the owner can experience the behavior and retain the important technical model.
 
-## Stop-the-line triggers
+## Stop-the-line boundaries
 
-Implementation pauses before crossing any of these boundaries:
+Implementation returns to the owner before it:
 
-- new or changed persistent state;
-- a schema or identifier change;
-- broader agent context or authority;
-- file, shell, network, messaging, or publish access;
-- privacy or projection-scope changes;
-- a foundational dependency or deployment topology;
-- P0/P1/P2 movement or date changes.
+- creates or changes persistent state or a schema;
+- broadens file, shell, network, messaging, or publish authority;
+- changes what Codex or OpenCode may observe or execute;
+- changes privacy, projection audience, or a trust boundary;
+- adds a foundational dependency or deployment topology;
+- changes P0/P1/P2 scope, dates, or public behavior;
+- makes code, a runtime transcript, or a surface into a new source of truth.
 
-## Definition of done
+## Re-entry and reporting protocol
 
-A P0 slice is Done only when:
+Every core implementation update reports the same eight items:
 
-- the user-visible outcome works on real data;
-- deterministic and adversarial checks pass;
-- restart/failure behavior is demonstrated where relevant;
-- privacy and permission effects are explicit;
-- the owner has completed the demo and accepted the experience;
-- `CONTROL.md`, `ROADMAP.md`, and the GitHub issue agree.
+1. user-visible outcome;
+2. current roadmap gate;
+3. map delta — which system box or connection changed;
+4. durable-state delta;
+5. visibility and authority delta;
+6. validation and five-minute demo path;
+7. what the owner should challenge or decide;
+8. whether the shared architecture model changed.
 
-## Work-in-progress limit
+If a change is only an internal refactor, the report says explicitly: **no owner-visible architecture change**.
 
-- one active P0 build issue at a time;
-- one pull request proves one outcome;
-- P1 work starts only when every earlier P0 gate is green;
-- no feature begins because it is technically attractive alone.
+## Detailed references
+
+- [`PRODUCT.md`](./PRODUCT.md) — product vision, constitutional floor, and Demo Day acceptance story
+- [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
+- [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
+- [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
+- [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map
