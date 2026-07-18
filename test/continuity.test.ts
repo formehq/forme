@@ -70,14 +70,18 @@ test("R1 Continuity: an owner-frame change creates a revision without inventing 
   seedProject(workspace);
   initWorkspace(baseInit(workspace));
 
-  const contractPath = join(workspace, ".forme", "workspace.json");
-  const contract = JSON.parse(readFileSync(contractPath, "utf8")) as {
-    ownerFrame: { nextMove: string };
-  };
-  contract.ownerFrame.nextMove = "Demonstrate the reconstructed Markdown view.";
-  writeFileSync(contractPath, `${JSON.stringify(contract, null, 2)}\n`);
-  const result = observeWorkspace(workspace, { now: at("2026-07-18T11:00:00.000Z") });
+  const result = observeWorkspace(workspace, {
+    now: at("2026-07-18T11:00:00.000Z"),
+    ownerFrame: { nextMove: "Demonstrate the reconstructed Markdown view." },
+  });
   assert.equal(result.revision.revision, 2);
   assert.deepEqual(result.revision.changes, { added: [], modified: [], deleted: [] });
   assert.match(result.view, /Demonstrate the reconstructed Markdown view/);
+
+  const noOp = observeWorkspace(workspace, {
+    now: at("2026-07-18T12:00:00.000Z"),
+    ownerFrame: { nextMove: "Demonstrate the reconstructed Markdown view." },
+  });
+  assert.equal(noOp.changed, false);
+  assert.equal(noOp.revision.revision, 2);
 });

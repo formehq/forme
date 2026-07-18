@@ -45,6 +45,7 @@ interface ClockOptions {
 
 interface StoreOptions extends ClockOptions {
   failurePoint?: FailurePoint;
+  ownerFrame?: Partial<OwnerFrame>;
 }
 
 export interface InitWorkspaceOptions extends ClockOptions {
@@ -253,6 +254,16 @@ function ownerFrameMeaning(ownerFrame: OwnerFrame): string {
   return canonicalJson(ownerFrame);
 }
 
+function mergeOwnerFrame(current: OwnerFrame, update: Partial<OwnerFrame>): OwnerFrame {
+  return {
+    activeIntent: update.activeIntent === undefined ? current.activeIntent : update.activeIntent.trim(),
+    nextMove: update.nextMove === undefined ? current.nextMove : update.nextMove.trim(),
+    unresolved: update.unresolved === undefined
+      ? current.unresolved
+      : update.unresolved.map((item) => item.trim()).filter(Boolean),
+  };
+}
+
 function changes(previous: EvidenceRecord[], current: EvidenceRecord[]): SourceChanges {
   const before = new Map(previous.map((item) => [item.relativePath, item]));
   const after = new Map(current.map((item) => [item.relativePath, item]));
@@ -318,8 +329,18 @@ export function observeWorkspace(workspaceRoot: string, options: StoreOptions = 
   assertGitIgnored(root);
   return withLock(root, () => {
     recoverPending(root);
-    const contract = loadWorkspaceContract(root);
+    let contract = loadWorkspaceContract(root);
     const previous = readCurrentRevision(root);
+    let ownerFrameChanged = false;
+    if (options.ownerFrame) {
+      const updatedContract: WorkspaceContract = {
+        ...contract,
+        ownerFrame: mergeOwnerFrame(contract.ownerFrame, options.ownerFrame),
+      };
+      assertWorkspaceContract(updatedContract);
+      ownerFrameChanged = ownerFrameMeaning(updatedContract.ownerFrame) !== ownerFrameMeaning(contract.ownerFrame);
+      contract = updatedContract;
+    }
     const scan = scanWorkspace(root, contract);
     const contractHash = sha256(canonicalJson(contract));
     const unchanged = previous
@@ -347,6 +368,7 @@ export function observeWorkspace(workspaceRoot: string, options: StoreOptions = 
     };
     assertTwinRevision(revision);
     const view = renderRestartView(revision);
+    if (ownerFrameChanged) atomicWrite(paths(root).workspace, prettyJson(contract));
     persistTransition(root, revision, view, options.failurePoint);
     return { changed: true, revision, view };
   });

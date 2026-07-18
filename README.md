@@ -58,4 +58,15 @@ npm run forme -- observe --workspace .
 npm run forme -- status --workspace .
 ```
 
+The owner can update the project frame through the same observation command:
+
+```sh
+npm run forme -- observe --workspace . \
+  --intent "Keep the current project intent owner-controlled." \
+  --next "Review the reconstructed Restart View." \
+  --unresolved "Should R2 add Codex?,Should R2 add OpenCode?"
+```
+
+Owner Frame options replace the supplied field; omitted fields keep their current values. Unknown or misplaced CLI options fail instead of being silently ignored.
+
 The owner view is `.forme/restart.md`. Deleting that derived file and running `status` reconstructs it from the latest validated revision selected by `.forme/HEAD`.

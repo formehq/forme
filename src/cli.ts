@@ -3,25 +3,46 @@
 import { resolve } from "node:path";
 import { initWorkspace, observeWorkspace, statusWorkspace } from "./store.ts";
 
-function values(args: string[], name: string): string[] {
-  const result: string[] = [];
-  for (let index = 0; index < args.length; index += 1) {
-    if (args[index] === name) {
-      const value = args[index + 1];
-      if (!value || value.startsWith("--")) throw new Error(`${name} requires a value`);
-      result.push(...value.split(",").map((item) => item.trim()).filter(Boolean));
-      index += 1;
-    }
+type ParsedOptions = Map<string, string[]>;
+
+const ALLOWED_OPTIONS: Record<string, Set<string>> = {
+  init: new Set(["--workspace", "--name", "--intent", "--next", "--unresolved", "--include", "--source-root"]),
+  observe: new Set(["--workspace", "--intent", "--next", "--unresolved"]),
+  status: new Set(["--workspace"]),
+};
+const LIST_OPTIONS = new Set(["--include", "--unresolved"]);
+
+function parseOptions(command: string, args: string[]): ParsedOptions {
+  const allowed = ALLOWED_OPTIONS[command];
+  if (!allowed) throw new Error(`unknown command: ${command}`);
+  const parsed: ParsedOptions = new Map();
+  for (let index = 0; index < args.length; index += 2) {
+    const name = args[index];
+    if (!name?.startsWith("--")) throw new Error(`unexpected argument for ${command}: ${name ?? ""}`);
+    if (!allowed.has(name)) throw new Error(`unknown option for ${command}: ${name}`);
+    const value = args[index + 1];
+    if (!value || value.startsWith("--")) throw new Error(`${name} requires a value`);
+    const items = (LIST_OPTIONS.has(name) ? value.split(",") : [value])
+      .map((item) => item.trim())
+      .filter(Boolean);
+    if (items.length === 0) throw new Error(`${name} requires a non-empty value`);
+    parsed.set(name, [...(parsed.get(name) ?? []), ...items]);
   }
-  return result;
+  return parsed;
 }
 
-function option(args: string[], name: string): string | undefined {
-  return values(args, name)[0];
+function values(options: ParsedOptions, name: string): string[] {
+  return options.get(name) ?? [];
 }
 
-function required(args: string[], name: string): string {
-  const value = option(args, name);
+function option(options: ParsedOptions, name: string): string | undefined {
+  const found = values(options, name);
+  if (found.length > 1) throw new Error(`${name} may only be provided once`);
+  return found[0];
+}
+
+function required(options: ParsedOptions, name: string): string {
+  const value = option(options, name);
   if (!value) throw new Error(`${name} is required`);
   return value;
 }
@@ -44,6 +65,12 @@ function help(): string {
     "  --include <path>         repeatable or comma-separated explicit allowlist",
     "  --source-root <path>     defaults to .",
     "",
+    "Observe options:",
+    "  --workspace <path>       defaults to the current directory",
+    "  --intent <text>          replace the owner-confirmed Active Intent",
+    "  --next <text>            replace the owner-confirmed Next Move",
+    "  --unresolved <text>      repeatable or comma-separated replacement list",
+    "",
     "R1 invokes no model and never writes project sources.",
   ].join("\n");
 }
@@ -53,24 +80,29 @@ try {
   if (!command || command === "help" || command === "--help") {
     console.log(help());
   } else {
-    const workspaceRoot = resolve(option(args, "--workspace") ?? process.cwd());
+    const options = parseOptions(command, args);
+    const workspaceRoot = resolve(option(options, "--workspace") ?? process.cwd());
     if (command === "init") {
       const result = initWorkspace({
         workspaceRoot,
-        name: required(args, "--name"),
-        activeIntent: required(args, "--intent"),
-        nextMove: required(args, "--next"),
-        unresolved: values(args, "--unresolved"),
-        sourceRoot: option(args, "--source-root"),
-        includePaths: values(args, "--include"),
+        name: required(options, "--name"),
+        activeIntent: required(options, "--intent"),
+        nextMove: required(options, "--next"),
+        unresolved: values(options, "--unresolved"),
+        sourceRoot: option(options, "--source-root"),
+        includePaths: values(options, "--include"),
       });
       console.log(result.view);
     } else if (command === "observe") {
-      console.log(observeWorkspace(workspaceRoot).view);
+      const activeIntent = option(options, "--intent");
+      const nextMove = option(options, "--next");
+      const unresolved = options.has("--unresolved") ? values(options, "--unresolved") : undefined;
+      const ownerFrame = activeIntent === undefined && nextMove === undefined && unresolved === undefined
+        ? undefined
+        : { activeIntent, nextMove, unresolved };
+      console.log(observeWorkspace(workspaceRoot, { ownerFrame }).view);
     } else if (command === "status") {
       console.log(statusWorkspace(workspaceRoot).view);
-    } else {
-      throw new Error(`unknown command: ${command}`);
     }
   }
 } catch (error) {

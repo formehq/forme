@@ -5,7 +5,7 @@
 - Active issue: [#49 — Continuity: one project to a durable restart view](https://github.com/formehq/forme/issues/49)
 - P0 implementation: **R1 walking skeleton implemented; R2–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner runs the restart demo and accepts or challenges the R1 experience
+- Next action: owner reviews the successful restart demo and accepts or challenges the R1 experience
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -22,7 +22,7 @@ The four required effects are **Continuity, Cognition, Bounded Agency, and Contr
 ```text
 R0 Shared understanding   ✓ COMPLETE
   ↓
-R1 Continuity             ← YOU ARE HERE · TECHNICAL REVIEW · OWNER DEMO NEXT
+R1 Continuity             ← YOU ARE HERE · TECHNICAL REVIEW · OWNER DECISION NEXT
   ↓
 R2 Cognition              Codex Reflection → correction → invalidation
   ↓
@@ -146,6 +146,7 @@ Forme repo
 - project-local, Git-ignored `.forme/` state;
 - validated workspace contract, immutable full revisions, atomic `HEAD`, and idempotent pending-transition recovery;
 - generated Markdown owner view that is reconstructible and non-canonical;
+- owner-controlled `observe` inputs for Active Intent, Next Move, and Unresolved items, with strict CLI option validation;
 - explicit Forme repo source allowlist only, with no ambient extension-based discovery;
 - selective port of named archive safety algorithms and tests, never the old schema, state layout, or broader modules.
 
@@ -161,11 +162,11 @@ Forme repo
 
 ### Technical evidence
 
-- `npm run check` type-checks the package and runs deterministic tests.
+- `npm run check` type-checks the package and passes all 16 deterministic tests.
 - Boundary tests reject parent traversal, skip symlinks, and keep out-of-allowlist canaries absent from state.
-- Continuity tests prove initial, changed, deleted, owner-frame, no-op, and byte-for-byte Markdown reconstruction behavior.
+- Continuity and CLI tests prove initial, changed, deleted, owner-frame, strict input, no-op, and byte-for-byte Markdown reconstruction behavior.
 - Recovery tests interrupt the pending, revision, `HEAD`, and view boundaries and resume each transition exactly once.
-- The real Forme repo has completed revision 1 → revision 2 → no-op → deleted-view reconstruction using the approved allowlist.
+- The real Forme repo reached revision 8: revision 7 captured the CLI-control patch, revision 8 changed only the Owner Frame, an identical owner command was a no-op, and deleting the Restart View reconstructed identical bytes.
 
 ### Owner decisions
 
