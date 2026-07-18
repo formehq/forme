@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R1 — implementation contract owner-approved; ready to build**
+- Active gate: **R1 — Technical Review; owner experience acceptance pending**
 - Active issue: [#49 — Continuity: one project to a durable restart view](https://github.com/formehq/forme/issues/49)
-- P0 implementation: **not started on the new main**
+- P0 implementation: **R1 walking skeleton implemented; R2–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: build the first deterministic Forme repo → durable Twin → Markdown view slice
+- Next action: owner runs the restart demo and accepts or challenges the R1 experience
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -22,7 +22,7 @@ The four required effects are **Continuity, Cognition, Bounded Agency, and Contr
 ```text
 R0 Shared understanding   ✓ COMPLETE
   ↓
-R1 Continuity             ← YOU ARE HERE · CONTRACT APPROVED · BUILD NEXT
+R1 Continuity             ← YOU ARE HERE · TECHNICAL REVIEW · OWNER DEMO NEXT
   ↓
 R2 Cognition              Codex Reflection → correction → invalidation
   ↓
@@ -39,8 +39,9 @@ Current truth:
 - the previous implementation is preserved in the archive as evidence and a parts library;
 - archived code is not the default architecture and is not reused without an explicit contract;
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
-- #49 contains the owner-approved R1 implementation contract;
-- no product implementation exists yet on the new `main`; the first R1 build is the next change.
+- #49 contains the owner-approved R1 contract and implementation evidence;
+- the deterministic walking skeleton exists without Codex, OpenCode, source-write, network, or server authority;
+- R1 is not Done until the owner experiences the real restart flow and accepts the boundary.
 
 ## System map
 
@@ -108,7 +109,7 @@ If these cannot be answered in roughly five minutes, implementation pauses and t
 
 ## Active Control Packet — R1 walking skeleton
 
-- Status: **product and implementation contract owner-approved on 2026-07-18**
+- Status: **implemented and technically verified on 2026-07-18; owner acceptance pending**
 
 ### User outcome
 
@@ -157,6 +158,14 @@ Forme repo
 5. Confirm revision 2 explains the observed change; run a no-op refresh and confirm it creates no revision.
 6. Stop the process, discard runtime/session context, restart, and reconstruct the same current view from durable state.
 7. Confirm the project source was never modified by the observation path.
+
+### Technical evidence
+
+- `npm run check` type-checks the package and runs deterministic tests.
+- Boundary tests reject parent traversal, skip symlinks, and keep out-of-allowlist canaries absent from state.
+- Continuity tests prove initial, changed, deleted, owner-frame, no-op, and byte-for-byte Markdown reconstruction behavior.
+- Recovery tests interrupt the pending, revision, `HEAD`, and view boundaries and resume each transition exactly once.
+- The real Forme repo has completed revision 1 → revision 2 → no-op → deleted-view reconstruction using the approved allowlist.
 
 ### Owner decisions
 
