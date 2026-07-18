@@ -3,9 +3,9 @@
 - Updated: 2026-07-18
 - Active gate: **R3 — Bounded Agency; Needs Decision**
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 awaiting its Control Packet; R4–R5 not started**
+- P0 implementation: **R1 and R2 owner-accepted; R3 Control Packet prepared for owner decision; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: prepare and review the R3 action, approval, effect, receipt, verification, and rollback contract
+- Next action: owner-review the recommended fixed-block action, runtime visibility, approval, durable-state, and recovery boundaries
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -351,13 +351,170 @@ The owner explicitly confirmed all five recommendations before implementation:
 
 Implementation must remain inside these five decisions. Any broader source visibility, tool authority, automatic history discovery, runtime parity, or semantic durability returns to a new Owner stop gate.
 
-## Next Control Packet — R3 Bounded Agency
+## Active Control Packet — R3 Bounded Agency
 
-- Status: **Needs Decision; no implementation or source-write authority is approved**
+- Status: **proposal prepared; Needs Decision; no implementation or source-write authority is approved**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
-- Required map delta: corrected Twin revision → structured action proposal → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
+- Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
-The next proposal must recommend the smallest real Forme-owned artifact to change, define the exact readable and writable paths, bind approval and execution to one Twin revision, make retries safe, and prove both the intended effect and rollback. Choosing that action or granting any write capability remains an owner stop gate.
+R3 proves one narrow control loop. It is not a general tool system, arbitrary file editor, shell agent, Git bot, or reusable authorization framework.
+
+### Recommended first effect
+
+Use one fixed Forme-managed block in `README.md` as the only writable project-source surface. Codex proposes a structured **Next Move Brief** from the active corrected Reflection and an owner-supplied action goal. Forme—not Codex—renders that proposal into exact Markdown, previews the complete block diff, and writes it only after the owner approves its content hash and effect-plan hash.
+
+The implementation adds inert markers and a known placeholder:
+
+```text
+<!-- forme:r3-action:start -->
+_No approved Forme action is currently applied._
+<!-- forme:r3-action:end -->
+```
+
+The action kind is fixed to `render_next_move_brief.v1`. The model may propose only bounded fields such as title, why now, next move, success check, and owner challenge. It cannot choose a path, operation, command, patch, tool, or renderer. Forme adds provenance—the Twin revision, corrected Reflection ID, proposal ID, and effect hash—during deterministic rendering.
+
+Before the first real R3 proposal, the owner must replace the now-stale R2 Owner Frame through the already accepted R1 `observe` surface. Forme must not infer or silently advance the owner's Active Intent or Next Move. The Action Context is built only after that owner-authored revision exists.
+
+Why this target:
+
+| Candidate | Benefit | Problem | Recommendation |
+|---|---|---|---|
+| Update only the Twin Owner Frame | smallest authority and reuses R1 state transitions | demonstrates the system changing itself, not acting on a project artifact | retain as the schedule fallback, not the first choice |
+| Replace one fixed `README.md` managed block | visible real-project effect, exact narrow write scope, easy diff and rollback, no new path discovery | grants Forme its first project-source write and therefore needs this stop gate | **recommended** |
+| Mutate a GitHub Issue or Project | externally meaningful and collaborative | adds credentials, network, API idempotency, remote rollback, and messaging authority | defer beyond R3 |
+
+### Proposed walking slice
+
+```text
+active corrected Reflection at Twin revision N
+  → owner-supplied action goal
+  → disposable Action Context Packet
+  → isolated Codex structured intent proposal
+  → Forme validation and fixed-effect compilation
+  → exact managed-block preview and effect-plan hash
+  → owner approval recorded at revision N+2
+  → Forme-only deterministic README block rewrite
+  → verification and terminal receipt at revision N+3
+  → explicit rollback against the after-hash
+  → placeholder restored and rollback receipt at revision N+4
+```
+
+The revision numbers illustrate the required order. Any unrelated Twin revision between proposal, approval, execution, or the first rollback makes that step stale and forces a new proposal or owner decision.
+
+### Five-question contract
+
+| Question | R3 recommendation |
+|---|---|
+| What enters? | The current Twin revision, the one active owner-corrected Reflection, its evidence coordinates and correction ID, the owner frame, an explicit owner-supplied action goal, and the fixed `render_next_move_brief.v1` capability description. No historical source body or ambient workspace content enters. |
+| What becomes durable? | Additive `TwinRevisionV3` agency state: admitted action proposals, compiled effect-plan hashes, owner approvals, terminal execution/rollback receipts, invalidations, and minimal action-runtime receipts. V1/V2 history remains unchanged; README bodies and runtime transcripts are not copied into the Twin. |
+| What can Codex or OpenCode see? | For P0, the existing isolated Codex adapter receives only the disposable Action Context Packet. It sees the relative target name and managed-block contract, but not the README body, repository, `.forme/`, untracked draft, credentials, tools, web, or shell. OpenCode remains contract-compatible but has no live R3 path. |
+| What may an agent change? | Codex changes nothing. After exact owner approval, deterministic Forme code may read `README.md` and replace only the bytes between the two named markers. It cannot add paths, modify text outside the block, stage, commit, push, call the network, or execute a model-generated command. |
+| How does recovery work? | A write-ahead effect journal plus before/after hashes distinguishes not-started, completed-but-unreceipted, and unexpected states. Retry returns the existing receipt instead of duplicating the effect. Rollback is an explicit owner command and succeeds only while the target still matches the recorded after-hash. |
+
+### Recommended decisions
+
+| Decision | Recommended answer | Global effect |
+|---|---|---|
+| First writable surface | One fixed managed block in existing allowlisted `README.md`; no arbitrary path parameter. | R3 crosses the project-source write boundary once without creating a general file tool. |
+| Runtime role | Reuse isolated ephemeral Codex for a schema-only semantic intent proposal; keep all tools disabled. Forme compiles the only permissible effect plan. | Harness runtimes remain replaceable proposers and never receive the writer. |
+| Approval and staleness | Show the exact rendered block, target, before hash, after hash, and effect-plan hash. A separate owner command approves that one immutable plan once. Require an unbroken Twin revision chain through execution. | Approval cannot silently authorize changed content, a new target, or a later project state. |
+| Durable agency state | Introduce `TwinRevisionV3` only when the first valid action proposal is admitted. Persist proposal, approval, receipts, hashes, authority, scope, and status—not file bodies or sessions. | Agency becomes inspectable and restart-safe without making runtime state canonical. |
+| Executor, retry, and rollback | Use an exact marker parser, target preconditions, atomic replacement, a write-ahead journal, terminal receipts, and hash-guarded rollback. Never invoke Git. | Crashes and retries fail closed; human edits cannot be overwritten by execution or rollback. |
+
+### Proposed contracts
+
+`ActionContextPacketV1` is deterministic and disposable:
+
+- packet ID/hash, base Twin revision, owner frame, and owner-supplied action goal;
+- the active corrected Reflection, evidence coordinates, and correction ID;
+- the single allowed action kind and structured field limits;
+- the fixed relative target and marker ID, without the target file body;
+- constraints forbidding commands, patches, paths, tools, and additional effects.
+
+`ActionIntentProposalV1` is the only accepted runtime output:
+
+- deterministic proposal ID and exact base Twin revision;
+- active corrected Reflection ID and one causal rationale;
+- action kind fixed to `render_next_move_brief.v1`;
+- bounded title, why-now, next-move, success-check, and owner-challenge fields;
+- no target path, raw Markdown, command, patch, approval claim, or rollback instruction.
+
+`EffectPlanV1` is compiled only by Forme:
+
+- plan ID/hash, proposal ID/hash, current Twin revision, fixed target and markers;
+- expected full-file and placeholder-block hashes;
+- deterministic rendered-block hash and expected full-file after-hash;
+- exact read/write scope of `README.md` only;
+- idempotency key derived from the canonical plan.
+
+`TwinRevisionV3` preserves the complete V2 cognition state and adds:
+
+- action proposals with `proposed`, `approved`, `executed`, `rolled-back`, `invalidated`, or terminal failure status;
+- owner approvals bound to one proposal hash, effect-plan hash, base/admitted revision, and one execution;
+- execution and rollback receipts with authority, scope, before/after hashes, status, timestamps, verification, and linked receipt IDs;
+- minimal action-runtime receipts using the same no-tools audit boundary as R2.
+
+The successful execution or rollback revision also updates the existing `README.md` evidence record and `changes` field from the verified target bytes. The effect receipt and the Twin's observed source state therefore become current together; a later ordinary observation must be a no-op unless another source change occurred.
+
+`PendingEffectV1` lives under `.forme/` only for crash recovery. It contains identifiers, phase, hashes, and the deterministic plan—not README bodies. On restart:
+
+- target matches `beforeHash`: the write has not happened and may resume;
+- target matches `afterHash`: the write happened and Forme may finalize the missing receipt;
+- target matches neither: mark the attempt indeterminate and stop for the owner; never overwrite.
+
+### Approval, execution, and rollback sequence
+
+1. Forme builds and displays the body-free Action Context manifest before the model call.
+2. Codex returns one `ActionIntentProposalV1` with zero tool events; invalid, stale, or multi-effect output creates no revision.
+3. Forme admits the proposal into `TwinRevisionV3`, compiles the one fixed effect, and renders an Action Review showing the exact block diff and hashes.
+4. The owner runs a separate approval command naming both proposal ID and effect-plan hash. Approval creates a new Twin revision but changes no project source.
+5. Execution reacquires the current Twin, approval, target hashes, markers, and idempotency key under the existing writer lock.
+6. Forme writes `PendingEffectV1`, atomically replaces only the marker body, verifies the complete file hash and block hash, then records a terminal receipt and the updated README evidence in the next Twin revision.
+7. Repeating execution returns the same receipt and performs no second write.
+8. Explicit rollback requires the successful receipt and exact after-hash, restores the known placeholder, verifies the before-hash, records a linked rollback receipt and restored README evidence, and creates the next revision.
+9. If a human changed `README.md` after execution, rollback refuses instead of erasing the human change.
+
+### Five-minute owner demo
+
+1. Confirm the R3 Owner Frame through the existing `observe` command, then start from a clean tracked `README.md` while leaving the unrelated untracked architecture draft present as a privacy canary.
+2. Display current Twin revision, corrected Reflection, fixed capability, and Action Context manifest.
+3. Run isolated Codex and show the structured Next Move Brief proposal plus zero-tool runtime receipt.
+4. Open Action Review and inspect the exact managed-block diff, target, before/after hashes, and effect-plan hash.
+5. Try execution before approval and confirm it fails without changing `README.md` or the Twin.
+6. Approve the exact plan, execute it, inspect the one-block diff, verification, terminal receipt, and new Twin revision.
+7. Retry execution and confirm no duplicate write or receipt.
+8. Restart Forme and reconstruct the same executed state.
+9. Roll back, verify the placeholder and original full-file hash return, and confirm the Git working tree matches its baseline except for the untouched owner draft.
+
+### Acceptance and failure conditions
+
+R3 passes only if:
+
+- the owner judges the proposed brief and exact effect preview useful and understandable;
+- the proposal causally references the active corrected Reflection and current Twin revision;
+- Codex sees no ambient source body and produces zero tool events;
+- pre-approval, stale, wrong-hash, wrong-marker, duplicate, and unsupported actions fail closed;
+- only the managed block changes and no Git, network, shell, or other file authority is exercised;
+- every attempted approved execution reaches a recoverable terminal receipt, including injected interruption boundaries;
+- retry is idempotent, restart preserves state, and rollback restores the exact before-hash;
+- unexpected human edits prevent rollback from overwriting them;
+- the owner experiences the full proposal → approval → effect → receipt → rollback loop and accepts it.
+
+R3 excludes arbitrary file edits, generic effect plugins, shell commands, Git staging/commits/pushes, GitHub or server actions, background execution, delegated authorization, approval classes, multi-action plans, OpenCode live parity, and any permission escalation based on prior acceptance rate.
+
+### Archive reuse boundary
+
+The archived executor is evidence, not the R3 implementation. It combined arbitrary file updates with Git staging, commits, reset-on-error, and broader path input, which exceeds this contract. R3 may selectively port only reviewed path-confinement, target-cleanliness, write-lock, and receipt-correlation ideas; it must implement the fixed marker, immutable approval, no-Git executor, journal recovery, and rollback contracts against the new schemas.
+
+### Owner stop gate — decisions required
+
+Implementation pauses here until the owner accepts or changes these five recommendations:
+
+1. use one `README.md` managed block as the first and only writable surface;
+2. let Codex propose structured intent only, with no new visibility or tools;
+3. bind a separate one-use owner approval to the exact effect-plan hash and unbroken Twin revision chain;
+4. introduce additive `TwinRevisionV3` agency records and body-free terminal receipts;
+5. use a Forme-only atomic marker executor with journal recovery, idempotent retry, explicit hash-guarded rollback, and no Git authority.
 
 ## Owner–agent working agreement
 
