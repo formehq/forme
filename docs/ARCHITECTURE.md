@@ -1,7 +1,7 @@
 # Architecture boundaries
 
-- Status: initial constraints, not a frozen implementation design
-- Updated: 2026-07-17
+- Status: owner-approved R1 boundaries, not a frozen long-term implementation design
+- Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -60,10 +60,23 @@ Runtime transcripts are disposable computation. They are never the Project Twin.
 12. R1 durable state is project-local and Git-ignored. It must be excluded from source observation and remain replaceable by a future storage adapter.
 13. The R1 owner surface is generated Markdown. It renders the Twin but never becomes canonical state.
 
+## Accepted R1 implementation boundary
+
+- one root TypeScript / Node 24 npm package;
+- Node's built-in test runner and TypeScript constrained to directly executable erasable syntax;
+- Ajv and `ajv-formats` as the only runtime dependencies, for persisted JSON Schema validation;
+- `.forme/` as the project-local, Git-ignored state root;
+- a validated owner workspace contract, immutable full revisions, atomic `HEAD`, reconstructible Markdown, and idempotent pending-transition recovery;
+- one explicit Forme repo source allowlist; no ambient repo-wide extension discovery;
+- one local file-store implementation behind a small internal storage boundary, not a storage plugin system;
+- selective port of reviewed archive path-safety, hashing, no-op, recovery, and privacy tests or algorithms only.
+
+The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapters, console, launchd, projection, and multi-agent concepts are not inherited by R1.
+
 ## Decisions intentionally deferred
 
-- programming language and package topology;
-- exact R1 state schema and storage format;
+- package or service topology beyond the single R1 package;
+- storage backends, backup, sync, and cross-device durability beyond the R1 local file store;
 - long-term CLI, local web, or native primary surface beyond the approved R1 Markdown view;
 - runtime adapter protocol details;
 - background scheduling;

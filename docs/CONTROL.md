@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-17
-- Active gate: **R0 — owner-approved; documentation publication pending**
-- Active issue: [#48 — Approve the walking-skeleton Control Packet](https://github.com/formehq/forme/issues/48)
+- Updated: 2026-07-18
+- Active gate: **R1 — implementation contract owner-approved; ready to build**
+- Active issue: [#49 — Continuity: one project to a durable restart view](https://github.com/formehq/forme/issues/49)
 - P0 implementation: **not started on the new main**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: publish the approved R1 contract, then prepare the exact R1 implementation proposal
+- Next action: build the first deterministic Forme repo → durable Twin → Markdown view slice
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -20,9 +20,9 @@ The four required effects are **Continuity, Cognition, Bounded Agency, and Contr
 ## You are here
 
 ```text
-R0 Shared understanding   ✓ OWNER APPROVED · PUBLICATION PENDING
-  ↓ publish the approved contract
-R1 Continuity             ← NEXT: implementation proposal and build
+R0 Shared understanding   ✓ COMPLETE
+  ↓
+R1 Continuity             ← YOU ARE HERE · CONTRACT APPROVED · BUILD NEXT
   ↓
 R2 Cognition              Codex Reflection → correction → invalidation
   ↓
@@ -38,8 +38,9 @@ Current truth:
 - the new `main` intentionally has no product implementation;
 - the previous implementation is preserved in the archive as evidence and a parts library;
 - archived code is not the default architecture and is not reused without an explicit contract;
-- #47 tracks the whole MVP; #48 records the now-approved R0 Control Packet;
-- the R1 implementation proposal must expose the exact schema, directory, language, and foundational dependencies before crossing any relevant stop gate.
+- #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
+- #49 contains the owner-approved R1 implementation contract;
+- no product implementation exists yet on the new `main`; the first R1 build is the next change.
 
 ## System map
 
@@ -107,7 +108,7 @@ If these cannot be answered in roughly five minutes, implementation pauses and t
 
 ## Active Control Packet — R1 walking skeleton
 
-- Status: **owner-approved on 2026-07-17; pending publication**
+- Status: **product and implementation contract owner-approved on 2026-07-18**
 
 ### User outcome
 
@@ -132,18 +133,20 @@ Forme repo
 | Question | R1 proposal |
 |---|---|
 | What enters? | One explicitly selected workspace: the Forme repo. Observation follows an explicit root and exclusions; no vault-wide discovery and no symlink escape. |
-| What becomes durable? | Workspace identity, source boundary, owner-entered Active Intent, revision, evidence metadata/provenance, observation events or snapshot, and the minimum state needed to reconstruct the view. Source bodies are not copied into the Twin by default. |
+| What becomes durable? | A validated workspace contract, immutable Twin revisions, an atomic `HEAD` pointer, evidence metadata/provenance, and the minimum owner frame needed to reconstruct the view. Source bodies are not copied into the Twin. |
 | What can the runtime see? | R1 uses no Codex or OpenCode reasoning. The first live Codex context begins in R2 through a scoped Context Packet. |
 | What may the agent change? | R1 observation is read-only toward project sources. Deterministic Forme code may create or update only the approved, project-local state and generated view. |
 | How does recovery work? | Canonical state survives process and runtime loss. A no-op observation does not create a new revision. Interrupted writes must not replace the last valid state; restart reconstructs from the last valid revision. |
 
-### First persistence and surface proposal
+### Accepted implementation boundary
 
-- keep Forme-owned state in a project-local, Git-ignored directory;
-- keep the durable representation machine-readable and inspectable;
-- render the first owner surface as Markdown;
-- keep runtime sessions and transcripts disposable;
-- do not select the final long-term database, package topology, or UI framework in R1.
+- one root TypeScript / Node 24 npm package;
+- JSON Schema validation through Ajv, with no other R1 runtime dependency;
+- project-local, Git-ignored `.forme/` state;
+- validated workspace contract, immutable full revisions, atomic `HEAD`, and idempotent pending-transition recovery;
+- generated Markdown owner view that is reconstructible and non-canonical;
+- explicit Forme repo source allowlist only, with no ambient extension-based discovery;
+- selective port of named archive safety algorithms and tests, never the old schema, state layout, or broader modules.
 
 ### Five-minute owner demo
 
@@ -163,8 +166,12 @@ Confirmed:
 - **Runtime boundary:** keep R1 fully deterministic and introduce the first real Codex path only in R2.
 - **Persistence boundary:** use project-local, Git-ignored durable state. R1 durability covers process and runtime loss, not project-directory or machine loss.
 - **First surface:** use a generated Markdown Restart View. It is a rendering of the Twin, never canonical state.
+- **Toolchain:** use one TypeScript / Node 24 npm package, with Ajv for persisted JSON Schema validation and no other R1 runtime dependency.
+- **State contract:** use `.forme/` with an owner workspace contract, immutable full revisions, atomic `HEAD`, reconstructible Markdown, and pending-transition recovery.
+- **Source scope:** observe only the explicit Forme repo allowlist recorded in #49; do not scan the rest of the repo by extension or discovery.
+- **Archive reuse:** port only the named safety algorithms and tests; do not copy the old schema, `98_Forme/` layout, or broader modules.
 
-These choices make the R1 Control Packet ready. They do not approve the exact schema, directory name, programming language, dependency set, or package topology; those must be proposed only as the walking skeleton requires them.
+These choices make R1 ready to build. Exact command spelling, internal function names, and non-foundational implementation details remain within the agent's approved implementation authority. Any expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
 
 ## Owner–agent working agreement
 
