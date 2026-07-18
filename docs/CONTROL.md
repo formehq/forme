@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R2 — Cognition Control Packet; implementation not yet approved**
+- Active gate: **R2 — Cognition; Technical Review**
 - Active issue: [#50 — Cognition: evidence-backed Reflection and correction](https://github.com/formehq/forme/issues/50)
-- P0 implementation: **R1 owner-accepted; R2–R5 not started**
+- P0 implementation: **R1 owner-accepted; R2 technically verified and awaiting Owner Acceptance; R3–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: review and approve or challenge the R2 Cognition boundary
+- Next action: run and challenge the first real Reflection and correction demo
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -24,7 +24,7 @@ R0 Shared understanding   ✓ COMPLETE
   ↓
 R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R2 Cognition              ← YOU ARE HERE · CONTROL PACKET NEXT
+R2 Cognition              ← YOU ARE HERE · TECHNICAL REVIEW
   ↓
 R3 Bounded Agency         approved effect → receipt → rollback
   ↓
@@ -40,9 +40,9 @@ Current truth:
 - archived code is not the default architecture and is not reused without an explicit contract;
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
-- #50 is the next gate and must define Codex visibility, evidence, durable semantic state, correction, and invalidation before implementation;
+- #50 is the active build gate; its Codex visibility, evidence, durable semantic state, correction, and invalidation contract is owner-approved;
 - the deterministic walking skeleton exists without Codex, OpenCode, source-write, network, or server authority;
-- R1 is Done; R2 has no implementation authority until its Control Packet is owner-approved.
+- R1 is Done; R2 implementation authority is limited to the five recommendations approved by the owner on 2026-07-18.
 
 ## System map
 
@@ -184,9 +184,9 @@ Confirmed:
 
 These choices produced the accepted R1 substrate. Any R2 expansion of state, source scope, dependencies, runtime visibility, or permissions returns to an owner stop gate.
 
-## Next Control Packet — R2 Cognition
+## Active Control Packet — R2 Cognition
 
-- Status: **proposal prepared on 2026-07-18; not owner-approved and not authorized to build**
+- Status: **all five recommendations owner-approved; implementation and first real Codex Reflection technically verified on 2026-07-18; Owner Acceptance pending**
 - User outcome: one Reflection depends on evidence from at least two time points, exposes uncertainty, and can be corrected by the owner so stale dependent output is invalidated.
 - Required map delta: durable Twin → scoped Context Packet → Codex proposal → evidence and quality validation → admitted Reflection → correction and invalidation.
 
@@ -282,7 +282,7 @@ Local research used installed `codex-cli 0.144.3` and current OpenAI Codex docum
 
 Bundled Codex system and safety instructions remain part of the runtime itself; Forme does not redefine or persist them. The isolation contract removes owner-global and project instructions and records the effective Codex version and environment summary so this runtime-owned influence remains visible.
 
-Proposal research used Codex prompt-debug rather than a model call: no Forme project content was transmitted. The verified effective profile contained only `:minimal`, the isolated context root, and Codex runtime bootstrap paths; it did not expose the Forme repo. Actual model execution remains blocked on owner approval.
+Proposal research used Codex prompt-debug rather than a model call: no Forme project content was transmitted during research. The verified effective profile contained only `:minimal`, the isolated context root, and Codex runtime bootstrap paths; it did not expose the Forme repo. Owner approval now authorizes the first model call with only the manifest-reviewed packet.
 
 The Codex service request itself necessarily uses the owner's authenticated network path. The "network disabled" boundary applies to model-generated commands and tools, not the model invocation. Relevant official references are [Non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode), [Permissions](https://learn.chatgpt.com/docs/permissions), and [Agent approvals and security](https://learn.chatgpt.com/docs/agent-approvals-security). The permission-profile feature is beta, so the runtime version and effective environment summary must be receipted.
 
@@ -322,9 +322,20 @@ R2 passes only if:
 
 R2 excludes source writes, action approval, rollback effectors, background scheduling, server deployment, notes, OpenCode live parity, automatic historical discovery, dirty-working-tree time points, and generalized semantic memory.
 
-### Owner stop gate
+### Implementation evidence
 
-Approval must explicitly confirm all five recommendations before implementation:
+- the real Forme workspace built a 9,014-byte packet from the approved commits and admitted Reflection `ref_403269dc2ce5d90e7284f3db835d0a7d` into Twin revision 16;
+- runtime receipt `run_c2161146e800cdf8685acc2a41fb7372` records `codex-cli 0.144.3`, authenticated-catalog model `gpt-5.6-sol`, the packet/proposal hashes, a completed turn, and zero tool events;
+- the Reflection cites both exact Git blobs and line ranges, labels uncertainty `medium`, includes an alternative explanation and implication, and remains visibly `inferred`;
+- persisted-state sweeps found no historical document bodies, absolute workspace path, session, transcript, or untracked draft reference; the generated view reconstructed byte-for-byte;
+- `npm run check` passes 30 tests covering deterministic packets, evidence resolution, schema and staleness rejection, model catalog selection, runtime audit, persistence privacy, correction, invalidation, V2 continuity, and every recovery boundary;
+- the real run exposed and then closed two adapter gaps before admission: generic model names can differ from the authenticated catalog, and the API structured-output schema is narrower than Ajv. Both now fail closed and have regression tests.
+
+Technical Review does not complete R2. The owner must still judge whether this Reflection is more valuable than a summary and enter the real correction text. Forme will then create the next revision, invalidate the old derived output, and prove that a rebuilt packet contains the correction.
+
+### Owner stop gate — approved 2026-07-18
+
+The owner explicitly confirmed all five recommendations before implementation:
 
 - Git-only committed evidence from the explicit commit/path pair;
 - isolated packet-only Codex visibility and no model-generated tool use;
@@ -332,7 +343,7 @@ Approval must explicitly confirm all five recommendations before implementation:
 - `TwinRevisionV2` with clearly labeled inferred state and minimal receipts;
 - owner correction by new revision with dependent-output invalidation.
 
-Until that approval, no project content is sent to Codex and no R2 schema or durable state is implemented.
+Implementation must remain inside these five decisions. Any broader source visibility, tool authority, automatic history discovery, runtime parity, or semantic durability returns to a new Owner stop gate.
 
 ## Owner–agent working agreement
 

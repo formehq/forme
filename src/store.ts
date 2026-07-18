@@ -14,7 +14,9 @@ import { basename, dirname, join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 import { assertSafeRelativePath, scanWorkspace } from "./boundary.ts";
 import {
+  assertContextPacket,
   assertHeadRecord,
+  assertReflectionProposal,
   assertTwinRevision,
   assertWorkspaceContract,
   canonicalJson,
@@ -23,14 +25,23 @@ import {
   sha256,
 } from "./contracts.ts";
 import { renderRestartView } from "./render.ts";
+import { validateReflectionProposalForPacket } from "./reflection.ts";
 import type {
+  CognitionState,
+  ContextPacketBuild,
+  CorrectionRecord,
   EvidenceRecord,
   HeadRecord,
+  InvalidationRecord,
   ObservationResult,
   OwnerFrame,
   PendingTransition,
+  ReflectionRecord,
+  RuntimeProposalResult,
+  RuntimeReceipt,
   SourceChanges,
   TwinRevision,
+  TwinRevisionV2,
   WorkspaceContract,
 } from "./types.ts";
 
@@ -46,6 +57,10 @@ interface ClockOptions {
 interface StoreOptions extends ClockOptions {
   failurePoint?: FailurePoint;
   ownerFrame?: Partial<OwnerFrame>;
+}
+
+export interface CognitionTransitionOptions extends ClockOptions {
+  failurePoint?: FailurePoint;
 }
 
 export interface InitWorkspaceOptions extends ClockOptions {
@@ -84,6 +99,18 @@ function paths(workspaceRoot: string): {
 
 function timestamp(options: ClockOptions): string {
   return (options.now?.() ?? new Date()).toISOString();
+}
+
+function shortHash(value: string): string {
+  return sha256(value).slice("sha256:".length, "sha256:".length + 32);
+}
+
+function emptyCognition(): CognitionState {
+  return { reflections: [], corrections: [], invalidations: [], runtimeReceipts: [] };
+}
+
+function cognitionFrom(revision: TwinRevision): CognitionState {
+  return structuredClone(revision.schemaVersion === "2" ? revision.cognition : emptyCognition());
 }
 
 function atomicWrite(path: string, content: string): void {
@@ -354,8 +381,7 @@ export function observeWorkspace(workspaceRoot: string, options: StoreOptions = 
       return { changed: false, revision: previous, view };
     }
 
-    const revision: TwinRevision = {
-      schemaVersion: "1",
+    const baseRevision = {
       workspaceId: contract.workspaceId,
       revision: (previous?.revision ?? 0) + 1,
       previousRevision: previous?.revision ?? null,
@@ -366,9 +392,206 @@ export function observeWorkspace(workspaceRoot: string, options: StoreOptions = 
       ownerFrame: contract.ownerFrame,
       warnings: scan.warnings,
     };
+    const revision: TwinRevision = previous?.schemaVersion === "2"
+      ? { schemaVersion: "2", ...baseRevision, cognition: structuredClone(previous.cognition) }
+      : { schemaVersion: "1", ...baseRevision };
     assertTwinRevision(revision);
     const view = renderRestartView(revision);
     if (ownerFrameChanged) atomicWrite(paths(root).workspace, prettyJson(contract));
+    persistTransition(root, revision, view, options.failurePoint);
+    return { changed: true, revision, view };
+  });
+}
+
+export function admitReflection(
+  workspaceRoot: string,
+  packetBuild: ContextPacketBuild,
+  runtime: RuntimeProposalResult,
+  options: CognitionTransitionOptions = {},
+): ObservationResult {
+  const root = resolve(workspaceRoot);
+  assertGitIgnored(root);
+  assertContextPacket(packetBuild.packet);
+  assertReflectionProposal(runtime.proposal);
+  validateReflectionProposalForPacket(runtime.proposal, packetBuild.packet);
+  if (packetBuild.packetHash !== sha256(canonicalJson(packetBuild.packet))) {
+    throw new Error("Context Packet hash does not match its canonical content");
+  }
+  if (runtime.audit.toolEventCount !== 0 || !runtime.audit.turnCompleted) {
+    throw new Error("unauthorized or incomplete runtime audit cannot enter the Twin");
+  }
+  return withLock(root, () => {
+    recoverPending(root);
+    loadWorkspaceContract(root);
+    const current = readCurrentRevision(root);
+    if (!current) throw new Error("workspace has no committed Twin revision");
+    if (current.revision !== packetBuild.packet.baseTwinRevision) {
+      throw new Error("Reflection proposal base revision is stale");
+    }
+    const cognition = cognitionFrom(current);
+    if (cognition.reflections.some((item) => item.proposalId === runtime.proposal.proposalId)) {
+      throw new Error("Reflection proposal has already been admitted");
+    }
+    const proposalHash = sha256(canonicalJson(runtime.proposal));
+    const receiptId = `run_${shortHash(canonicalJson({
+      packetHash: packetBuild.packetHash,
+      proposalHash,
+      cliVersion: runtime.cliVersion,
+      model: runtime.model,
+    }))}`;
+    const reflectionId = `ref_${shortHash(canonicalJson({
+      proposalId: runtime.proposal.proposalId,
+      proposalHash,
+      receiptId,
+    }))}`;
+    const dependentOutputId = `out_${shortHash(`restart-view:${reflectionId}`)}`;
+    const receipt: RuntimeReceipt = {
+      receiptId,
+      adapter: "codex-exec",
+      cliVersion: runtime.cliVersion,
+      model: runtime.model,
+      packetHash: packetBuild.packetHash,
+      proposalHash,
+      baseTwinRevision: packetBuild.packet.baseTwinRevision,
+      validationResult: "accepted",
+      completedAt: runtime.completedAt,
+      audit: runtime.audit,
+    };
+    const evidenceById = new Map(packetBuild.packet.evidence.map((item) => [item.evidenceId, item]));
+    const reflection: ReflectionRecord = {
+      reflectionId,
+      status: "inferred",
+      authoredBy: "codex",
+      baseTwinRevision: packetBuild.packet.baseTwinRevision,
+      claim: runtime.proposal.claim,
+      relationType: runtime.proposal.relationType,
+      evidence: runtime.proposal.evidenceIds.map((id) => {
+        const evidence = evidenceById.get(id);
+        if (!evidence) throw new Error(`Reflection evidence disappeared before admission: ${id}`);
+        return evidence;
+      }),
+      uncertainty: runtime.proposal.uncertainty,
+      alternativeExplanation: runtime.proposal.alternativeExplanation,
+      implication: runtime.proposal.implication,
+      ownerQuestion: runtime.proposal.ownerQuestion,
+      proposalId: runtime.proposal.proposalId,
+      runtimeReceiptId: receiptId,
+      dependentOutputIds: [dependentOutputId],
+      supersedesReflectionId: null,
+      supersededByReflectionId: null,
+      createdAt: runtime.completedAt,
+    };
+    cognition.reflections.push(reflection);
+    cognition.runtimeReceipts.push(receipt);
+    const revision: TwinRevisionV2 = {
+      schemaVersion: "2",
+      workspaceId: current.workspaceId,
+      revision: current.revision + 1,
+      previousRevision: current.revision,
+      observedAt: timestamp(options),
+      workspaceContractHash: current.workspaceContractHash,
+      evidence: current.evidence,
+      changes: { added: [], modified: [], deleted: [] },
+      ownerFrame: current.ownerFrame,
+      warnings: current.warnings,
+      cognition,
+    };
+    assertTwinRevision(revision);
+    const view = renderRestartView(revision);
+    persistTransition(root, revision, view, options.failurePoint);
+    return { changed: true, revision, view };
+  });
+}
+
+export function correctReflection(
+  workspaceRoot: string,
+  targetReflectionId: string,
+  correctionText: string,
+  options: CognitionTransitionOptions = {},
+): ObservationResult {
+  const root = resolve(workspaceRoot);
+  assertGitIgnored(root);
+  const text = correctionText.trim();
+  if (text.length === 0 || text.length > 4000) throw new Error("owner correction must be between 1 and 4000 characters");
+  return withLock(root, () => {
+    recoverPending(root);
+    loadWorkspaceContract(root);
+    const current = readCurrentRevision(root);
+    if (!current || current.schemaVersion !== "2") throw new Error("workspace has no R2 Reflection to correct");
+    const cognition = cognitionFrom(current);
+    const targetIndex = cognition.reflections.findIndex((item) => item.reflectionId === targetReflectionId);
+    const target = cognition.reflections[targetIndex];
+    if (!target) throw new Error(`unknown Reflection: ${targetReflectionId}`);
+    if (target.status !== "inferred" && target.status !== "corrected") {
+      throw new Error(`Reflection is not active and cannot be corrected: ${targetReflectionId}`);
+    }
+    const correctedAt = timestamp(options);
+    const correctionId = `cor_${shortHash(canonicalJson({
+      targetReflectionId,
+      text,
+      baseTwinRevision: current.revision,
+    }))}`;
+    const correctedReflectionId = `ref_${shortHash(canonicalJson({ correctionId, text }))}`;
+    const correctedOutputId = `out_${shortHash(`restart-view:${correctedReflectionId}`)}`;
+    cognition.reflections[targetIndex] = {
+      ...target,
+      status: "superseded",
+      supersededByReflectionId: correctedReflectionId,
+    };
+    const corrected: ReflectionRecord = {
+      reflectionId: correctedReflectionId,
+      status: "corrected",
+      authoredBy: "owner",
+      baseTwinRevision: current.revision,
+      claim: text,
+      relationType: target.relationType,
+      evidence: target.evidence,
+      uncertainty: null,
+      alternativeExplanation: null,
+      implication: "Future proposals must use this owner-authored correction as active context.",
+      ownerQuestion: null,
+      proposalId: null,
+      runtimeReceiptId: null,
+      dependentOutputIds: [correctedOutputId],
+      supersedesReflectionId: target.reflectionId,
+      supersededByReflectionId: null,
+      createdAt: correctedAt,
+    };
+    const correction: CorrectionRecord = {
+      correctionId,
+      targetReflectionId: target.reflectionId,
+      correctedReflectionId,
+      correctionText: text,
+      authority: "owner",
+      baseTwinRevision: current.revision,
+      correctedAt,
+    };
+    const invalidations: InvalidationRecord[] = target.dependentOutputIds.map((targetId) => ({
+      invalidationId: `inv_${shortHash(canonicalJson({ targetId, correctionId }))}`,
+      targetType: "derived-output",
+      targetId,
+      causedByCorrectionId: correctionId,
+      reason: "Owner correction superseded the interpretation used to derive this output.",
+      invalidatedAt: correctedAt,
+    }));
+    cognition.reflections.push(corrected);
+    cognition.corrections.push(correction);
+    cognition.invalidations.push(...invalidations);
+    const revision: TwinRevisionV2 = {
+      schemaVersion: "2",
+      workspaceId: current.workspaceId,
+      revision: current.revision + 1,
+      previousRevision: current.revision,
+      observedAt: correctedAt,
+      workspaceContractHash: current.workspaceContractHash,
+      evidence: current.evidence,
+      changes: { added: [], modified: [], deleted: [] },
+      ownerFrame: current.ownerFrame,
+      warnings: current.warnings,
+      cognition,
+    };
+    assertTwinRevision(revision);
+    const view = renderRestartView(revision);
     persistTransition(root, revision, view, options.failurePoint);
     return { changed: true, revision, view };
   });

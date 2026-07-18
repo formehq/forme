@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/context-packet-v1.json",
+  "title": "Forme R2 Context Packet v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "packetId",
+    "createdAt",
+    "baseTwinRevision",
+    "ownerFrame",
+    "task",
+    "documents",
+    "evidence",
+    "activeCorrections",
+    "allowedEvidenceIds",
+    "constraints"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1" },
+    "packetId": { "type": "string", "pattern": "^ctx_[a-f0-9]{32}$" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "baseTwinRevision": { "type": "integer", "minimum": 1 },
+    "ownerFrame": { "$ref": "#/$defs/ownerFrame" },
+    "task": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "documents": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/document" }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/gitLineEvidence" }
+    },
+    "activeCorrections": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "#/$defs/activeCorrection" }
+    },
+    "allowedEvidenceIds": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/evidenceId" }
+    },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "gitOid": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "not": {
+        "anyOf": [
+          { "pattern": "^(?:/|[A-Za-z]:)" },
+          { "pattern": "(?:^|[/\\\\])[.][.](?:[/\\\\]|$)" }
+        ]
+      }
+    },
+    "evidenceId": { "type": "string", "pattern": "^ev_[a-f0-9]{32}$" },
+    "ownerFrame": {
+      "type": "object",
+      "required": ["activeIntent", "nextMove", "unresolved"],
+      "properties": {
+        "activeIntent": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "nextMove": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "unresolved": {
+          "type": "array",
+          "maxItems": 100,
+          "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "document": {
+      "type": "object",
+      "required": ["timepointId", "commit", "committedAt", "relativePath", "blobHash", "sizeBytes", "body"],
+      "properties": {
+        "timepointId": { "enum": ["earlier", "later"] },
+        "commit": { "$ref": "#/$defs/gitOid" },
+        "committedAt": { "type": "string", "format": "date-time" },
+        "relativePath": { "$ref": "#/$defs/relativePath" },
+        "blobHash": { "$ref": "#/$defs/gitOid" },
+        "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 65536 },
+        "body": { "type": "string", "minLength": 1, "maxLength": 65536 }
+      },
+      "additionalProperties": false
+    },
+    "gitLineEvidence": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "evidenceId",
+        "timepointId",
+        "commit",
+        "committedAt",
+        "relativePath",
+        "blobHash",
+        "lineStart",
+        "lineEnd",
+        "excerptHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "1" },
+        "evidenceId": { "$ref": "#/$defs/evidenceId" },
+        "timepointId": { "enum": ["earlier", "later"] },
+        "commit": { "$ref": "#/$defs/gitOid" },
+        "committedAt": { "type": "string", "format": "date-time" },
+        "relativePath": { "$ref": "#/$defs/relativePath" },
+        "blobHash": { "$ref": "#/$defs/gitOid" },
+        "lineStart": { "type": "integer", "minimum": 1 },
+        "lineEnd": { "type": "integer", "minimum": 1 },
+        "excerptHash": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "activeCorrection": {
+      "type": "object",
+      "required": ["correctionId", "targetReflectionId", "correctedReflectionId", "correctionText", "correctedAt"],
+      "properties": {
+        "correctionId": { "type": "string", "pattern": "^cor_[a-f0-9]{32}$" },
+        "targetReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "correctedReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "correctionText": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "correctedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/twin-revision-v2.json",
+  "title": "Forme R2 Twin Revision v2",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "workspaceId",
+    "revision",
+    "previousRevision",
+    "observedAt",
+    "workspaceContractHash",
+    "evidence",
+    "changes",
+    "ownerFrame",
+    "warnings",
+    "cognition"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "2" },
+    "workspaceId": { "type": "string", "pattern": "^wsp_[a-f0-9]{32}$" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "previousRevision": {
+      "anyOf": [
+        { "type": "integer", "minimum": 1 },
+        { "type": "null" }
+      ]
+    },
+    "observedAt": { "type": "string", "format": "date-time" },
+    "workspaceContractHash": { "$ref": "#/$defs/sha256" },
+    "evidence": { "type": "array", "items": { "$ref": "#/$defs/sourceEvidence" } },
+    "changes": {
+      "type": "object",
+      "required": ["added", "modified", "deleted"],
+      "properties": {
+        "added": { "$ref": "#/$defs/pathList" },
+        "modified": { "$ref": "#/$defs/pathList" },
+        "deleted": { "$ref": "#/$defs/pathList" }
+      },
+      "additionalProperties": false
+    },
+    "ownerFrame": { "$ref": "#/$defs/ownerFrame" },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+    },
+    "cognition": {
+      "type": "object",
+      "required": ["reflections", "corrections", "invalidations", "runtimeReceipts"],
+      "properties": {
+        "reflections": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/reflection" } },
+        "corrections": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/correction" } },
+        "invalidations": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/invalidation" } },
+        "runtimeReceipts": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/runtimeReceipt" } }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "gitOid": { "type": "string", "pattern": "^(?:[a-f0-9]{40}|[a-f0-9]{64})$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000,
+      "not": {
+        "anyOf": [
+          { "pattern": "^(?:/|[A-Za-z]:)" },
+          { "pattern": "(?:^|[/\\\\])[.][.](?:[/\\\\]|$)" }
+        ]
+      }
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "ownerFrame": {
+      "type": "object",
+      "required": ["activeIntent", "nextMove", "unresolved"],
+      "properties": {
+        "activeIntent": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "nextMove": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "unresolved": {
+          "type": "array",
+          "maxItems": 100,
+          "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceEvidence": {
+      "type": "object",
+      "required": ["relativePath", "contentHash", "sizeBytes", "modifiedAt"],
+      "properties": {
+        "relativePath": { "$ref": "#/$defs/relativePath" },
+        "contentHash": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 0, "maximum": 1048576 },
+        "modifiedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "gitLineEvidence": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "evidenceId",
+        "timepointId",
+        "commit",
+        "committedAt",
+        "relativePath",
+        "blobHash",
+        "lineStart",
+        "lineEnd",
+        "excerptHash"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "1" },
+        "evidenceId": { "type": "string", "pattern": "^ev_[a-f0-9]{32}$" },
+        "timepointId": { "enum": ["earlier", "later"] },
+        "commit": { "$ref": "#/$defs/gitOid" },
+        "committedAt": { "type": "string", "format": "date-time" },
+        "relativePath": { "$ref": "#/$defs/relativePath" },
+        "blobHash": { "$ref": "#/$defs/gitOid" },
+        "lineStart": { "type": "integer", "minimum": 1 },
+        "lineEnd": { "type": "integer", "minimum": 1 },
+        "excerptHash": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "uncertainty": {
+      "type": "object",
+      "required": ["level", "rationale"],
+      "properties": {
+        "level": { "enum": ["low", "medium", "high"] },
+        "rationale": { "type": "string", "minLength": 30, "maxLength": 2000 }
+      },
+      "additionalProperties": false
+    },
+    "reflection": {
+      "type": "object",
+      "required": [
+        "reflectionId",
+        "status",
+        "authoredBy",
+        "baseTwinRevision",
+        "claim",
+        "relationType",
+        "evidence",
+        "uncertainty",
+        "alternativeExplanation",
+        "implication",
+        "ownerQuestion",
+        "proposalId",
+        "runtimeReceiptId",
+        "dependentOutputIds",
+        "supersedesReflectionId",
+        "supersededByReflectionId",
+        "createdAt"
+      ],
+      "properties": {
+        "reflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "status": { "enum": ["inferred", "corrected", "superseded", "invalidated"] },
+        "authoredBy": { "enum": ["codex", "owner"] },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "claim": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "relationType": { "enum": ["pattern", "tension", "trajectory", "unfinished"] },
+        "evidence": { "type": "array", "minItems": 2, "maxItems": 20, "items": { "$ref": "#/$defs/gitLineEvidence" } },
+        "uncertainty": { "anyOf": [{ "$ref": "#/$defs/uncertainty" }, { "type": "null" }] },
+        "alternativeExplanation": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 2000 },
+            { "type": "null" }
+          ]
+        },
+        "implication": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "ownerQuestion": {
+          "anyOf": [
+            { "type": "string", "minLength": 1, "maxLength": 1000 },
+            { "type": "null" }
+          ]
+        },
+        "proposalId": {
+          "anyOf": [
+            { "type": "string", "pattern": "^prp_[a-f0-9]{32}$" },
+            { "type": "null" }
+          ]
+        },
+        "runtimeReceiptId": {
+          "anyOf": [
+            { "type": "string", "pattern": "^run_[a-f0-9]{32}$" },
+            { "type": "null" }
+          ]
+        },
+        "dependentOutputIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^out_[a-f0-9]{32}$" }
+        },
+        "supersedesReflectionId": {
+          "anyOf": [
+            { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+            { "type": "null" }
+          ]
+        },
+        "supersededByReflectionId": {
+          "anyOf": [
+            { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+            { "type": "null" }
+          ]
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "correction": {
+      "type": "object",
+      "required": ["correctionId", "targetReflectionId", "correctedReflectionId", "correctionText", "authority", "baseTwinRevision", "correctedAt"],
+      "properties": {
+        "correctionId": { "type": "string", "pattern": "^cor_[a-f0-9]{32}$" },
+        "targetReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "correctedReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "correctionText": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "authority": { "const": "owner" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "correctedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "invalidation": {
+      "type": "object",
+      "required": ["invalidationId", "targetType", "targetId", "causedByCorrectionId", "reason", "invalidatedAt"],
+      "properties": {
+        "invalidationId": { "type": "string", "pattern": "^inv_[a-f0-9]{32}$" },
+        "targetType": { "const": "derived-output" },
+        "targetId": { "type": "string", "pattern": "^out_[a-f0-9]{32}$" },
+        "causedByCorrectionId": { "type": "string", "pattern": "^cor_[a-f0-9]{32}$" },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "invalidatedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "runtimeReceipt": {
+      "type": "object",
+      "required": ["receiptId", "adapter", "cliVersion", "model", "packetHash", "proposalHash", "baseTwinRevision", "validationResult", "completedAt", "audit"],
+      "properties": {
+        "receiptId": { "type": "string", "pattern": "^run_[a-f0-9]{32}$" },
+        "adapter": { "const": "codex-exec" },
+        "cliVersion": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "model": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "packetHash": { "$ref": "#/$defs/sha256" },
+        "proposalHash": { "$ref": "#/$defs/sha256" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "validationResult": { "const": "accepted" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "audit": {
+          "type": "object",
+          "required": ["eventCount", "itemTypes", "toolEventCount", "turnCompleted", "inputTokens", "outputTokens"],
+          "properties": {
+            "eventCount": { "type": "integer", "minimum": 1 },
+            "itemTypes": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 200 } },
+            "toolEventCount": { "const": 0 },
+            "turnCompleted": { "const": true },
+            "inputTokens": { "type": "integer", "minimum": 0 },
+            "outputTokens": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

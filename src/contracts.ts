@@ -4,8 +4,12 @@ import { createRequire } from "node:module";
 import { Ajv2020, type ValidateFunction } from "ajv/dist/2020.js";
 import type { FormatsPlugin } from "ajv-formats";
 import type {
+  ContextPacket,
   HeadRecord,
+  ReflectionProposal,
   TwinRevision,
+  TwinRevisionV1,
+  TwinRevisionV2,
   WorkspaceContract,
 } from "./types.ts";
 
@@ -19,7 +23,12 @@ function schema(relativePath: string): object {
 }
 
 const validateWorkspace = ajv.compile<WorkspaceContract>(schema("../schemas/workspace-v1.schema.json"));
-const validateRevision = ajv.compile<TwinRevision>(schema("../schemas/twin-revision-v1.schema.json"));
+const validateRevisionV1 = ajv.compile<TwinRevisionV1>(schema("../schemas/twin-revision-v1.schema.json"));
+const validateRevisionV2 = ajv.compile<TwinRevisionV2>(schema("../schemas/twin-revision-v2.schema.json"));
+const contextPacketSchema = schema("../schemas/context-packet-v1.schema.json");
+const reflectionProposalSchema = schema("../schemas/reflection-proposal-v1.schema.json");
+const validateContextPacket = ajv.compile<ContextPacket>(contextPacketSchema);
+const validateReflectionProposal = ajv.compile<ReflectionProposal>(reflectionProposalSchema);
 
 function validationMessage(name: string, validator: ValidateFunction): string {
   return `${name} contract failed: ${ajv.errorsText(validator.errors, { separator: "; " })}`;
@@ -30,7 +39,33 @@ export function assertWorkspaceContract(value: unknown): asserts value is Worksp
 }
 
 export function assertTwinRevision(value: unknown): asserts value is TwinRevision {
-  if (!validateRevision(value)) throw new Error(validationMessage("Twin revision", validateRevision));
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Twin revision contract failed");
+  }
+  const version = (value as { schemaVersion?: unknown }).schemaVersion;
+  if (version === "1") {
+    if (!validateRevisionV1(value)) throw new Error(validationMessage("Twin revision", validateRevisionV1));
+    return;
+  }
+  if (version === "2") {
+    if (!validateRevisionV2(value)) throw new Error(validationMessage("Twin revision", validateRevisionV2));
+    return;
+  }
+  throw new Error("Twin revision contract failed: unsupported schemaVersion");
+}
+
+export function assertContextPacket(value: unknown): asserts value is ContextPacket {
+  if (!validateContextPacket(value)) throw new Error(validationMessage("Context packet", validateContextPacket));
+}
+
+export function assertReflectionProposal(value: unknown): asserts value is ReflectionProposal {
+  if (!validateReflectionProposal(value)) {
+    throw new Error(validationMessage("Reflection proposal", validateReflectionProposal));
+  }
+}
+
+export function reflectionProposalJsonSchema(): object {
+  return structuredClone(reflectionProposalSchema);
 }
 
 export function assertHeadRecord(value: unknown): asserts value is HeadRecord {

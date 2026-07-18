@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 
 import { resolve } from "node:path";
-import { initWorkspace, observeWorkspace, statusWorkspace } from "./store.ts";
+import { runReflection } from "./cognition.ts";
+import {
+  buildContextPacket,
+  defaultReflectionTask,
+  parseLineRange,
+  type ContextSelection,
+} from "./context.ts";
+import { CodexExecRuntime } from "./runtime.ts";
+import { correctReflection, initWorkspace, observeWorkspace, statusWorkspace } from "./store.ts";
 
 type ParsedOptions = Map<string, string[]>;
 
@@ -9,6 +17,9 @@ const ALLOWED_OPTIONS: Record<string, Set<string>> = {
   init: new Set(["--workspace", "--name", "--intent", "--next", "--unresolved", "--include", "--source-root"]),
   observe: new Set(["--workspace", "--intent", "--next", "--unresolved"]),
   status: new Set(["--workspace"]),
+  packet: new Set(["--workspace", "--earlier", "--later", "--path", "--earlier-lines", "--later-lines", "--task"]),
+  reflect: new Set(["--workspace", "--earlier", "--later", "--path", "--earlier-lines", "--later-lines", "--task"]),
+  correct: new Set(["--workspace", "--reflection", "--text"]),
 };
 const LIST_OPTIONS = new Set(["--include", "--unresolved"]);
 
@@ -47,14 +58,28 @@ function required(options: ParsedOptions, name: string): string {
   return value;
 }
 
+function contextSelection(options: ParsedOptions): ContextSelection {
+  return {
+    earlierCommit: required(options, "--earlier"),
+    laterCommit: required(options, "--later"),
+    relativePath: required(options, "--path"),
+    earlierLines: parseLineRange(required(options, "--earlier-lines"), "--earlier-lines"),
+    laterLines: parseLineRange(required(options, "--later-lines"), "--later-lines"),
+    task: option(options, "--task") ?? defaultReflectionTask(),
+  };
+}
+
 function help(): string {
   return [
-    "Forme R1 Continuity",
+    "Forme Living Project Twin — R1 Continuity + R2 Cognition",
     "",
     "Commands:",
     "  init     connect one bounded workspace and create revision 1",
     "  observe  record a meaningful source or owner-frame change",
     "  status   reconstruct and print the current Restart View",
+    "  packet   preview the exact cross-time manifest without a model call",
+    "  reflect  run one isolated Codex Reflection and admit validated meaning",
+    "  correct  replace an active interpretation with owner-authored meaning",
     "",
     "Init options:",
     "  --workspace <path>       defaults to the current directory",
@@ -71,7 +96,20 @@ function help(): string {
     "  --next <text>            replace the owner-confirmed Next Move",
     "  --unresolved <text>      repeatable or comma-separated replacement list",
     "",
-    "R1 invokes no model and never writes project sources.",
+    "R2 packet / reflect options:",
+    "  --workspace <path>       defaults to the current directory",
+    "  --earlier <commit>       full reachable Git commit ID",
+    "  --later <commit>         full reachable descendant Git commit ID",
+    "  --path <path>            one allowlisted UTF-8 text path",
+    "  --earlier-lines <S:E>    cited line range at the earlier commit",
+    "  --later-lines <S:E>      cited line range at the later commit",
+    "  --task <text>            optional owner Reflection task",
+    "",
+    "Correct options:",
+    "  --reflection <id>        active inferred or corrected Reflection",
+    "  --text <text>            owner-authored replacement meaning",
+    "",
+    "Forme never grants the model canonical write authority or writes project sources.",
   ].join("\n");
 }
 
@@ -103,6 +141,23 @@ try {
       console.log(observeWorkspace(workspaceRoot, { ownerFrame }).view);
     } else if (command === "status") {
       console.log(statusWorkspace(workspaceRoot).view);
+    } else if (command === "packet") {
+      const packet = buildContextPacket(workspaceRoot, contextSelection(options));
+      console.log(JSON.stringify(packet.manifest, null, 2));
+    } else if (command === "reflect") {
+      const result = runReflection(workspaceRoot, contextSelection(options), new CodexExecRuntime(), {
+        onPacket: (packet) => {
+          console.error("Forme R2 will send only this approved Context Packet manifest:");
+          console.error(JSON.stringify(packet.manifest, null, 2));
+        },
+      });
+      console.log(result.observation.view);
+    } else if (command === "correct") {
+      console.log(correctReflection(
+        workspaceRoot,
+        required(options, "--reflection"),
+        required(options, "--text"),
+      ).view);
     }
   }
 } catch (error) {
