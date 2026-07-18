@@ -1,4 +1,4 @@
-import type { SourceChanges, TwinRevision } from "./types.ts";
+import type { ReflectionRecord, SourceChanges, TwinRevision } from "./types.ts";
 
 function list(items: string[], empty: string): string {
   return items.length === 0 ? `- ${empty}` : items.map((item) => `- ${item}`).join("\n");
@@ -23,6 +23,33 @@ function changeSection(changes: SourceChanges): string[] {
   ];
 }
 
+function reflectionSection(reflections: ReflectionRecord[]): string[] {
+  const active = reflections.filter((item) => item.status === "inferred" || item.status === "corrected");
+  if (active.length === 0) return ["No active Reflection has been admitted."];
+  return active.flatMap((reflection, index) => [
+    ...(index === 0 ? [] : [""]),
+    `### ${reflection.reflectionId}`,
+    "",
+    `- Status: ${reflection.status}`,
+    `- Authored by: ${reflection.authoredBy}`,
+    `- Relation: ${reflection.relationType}`,
+    `- Claim: ${reflection.claim}`,
+    ...(reflection.uncertainty ? [
+      `- Uncertainty: ${reflection.uncertainty.level} — ${reflection.uncertainty.rationale}`,
+    ] : []),
+    ...(reflection.alternativeExplanation ? [
+      `- Alternative: ${reflection.alternativeExplanation}`,
+    ] : []),
+    `- Implication: ${reflection.implication}`,
+    ...(reflection.ownerQuestion ? [`- Owner question: ${reflection.ownerQuestion}`] : []),
+    "",
+    "Evidence:",
+    ...reflection.evidence.map((item) => (
+      `- ${item.evidenceId}: ${item.commit.slice(0, 12)} · ${item.relativePath}:${item.lineStart}-${item.lineEnd} · blob ${item.blobHash.slice(0, 12)}`
+    )),
+  ]);
+}
+
 export function renderRestartView(revision: TwinRevision): string {
   return [
     "# Living Project Twin — Restart View",
@@ -45,14 +72,30 @@ export function renderRestartView(revision: TwinRevision): string {
     "## Next Move",
     "",
     `- ${revision.ownerFrame.nextMove}`,
+    ...(revision.schemaVersion === "2" ? [
+      "",
+      "## Reflection",
+      "",
+      ...reflectionSection(revision.cognition.reflections),
+      "",
+      "## Owner Corrections and Invalidation",
+      "",
+      `- Corrections recorded: ${revision.cognition.corrections.length}`,
+      `- Dependent outputs invalidated: ${revision.cognition.invalidations.length}`,
+      ...revision.cognition.corrections.map((item) => (
+        `- ${item.correctionId}: ${item.targetReflectionId} → ${item.correctedReflectionId}`
+      )),
+    ] : []),
     "",
     "## Evidence Boundary",
     "",
-    "This view was rendered only from the committed Twin revision. Forme stored relative paths, hashes, sizes, and timestamps—not source bodies or absolute paths. R1 used no model runtime.",
+    revision.schemaVersion === "1"
+      ? "This view was rendered only from the committed Twin revision. Forme stored relative paths, hashes, sizes, and timestamps—not source bodies or absolute paths. R1 used no model runtime."
+      : "This view was rendered only from the committed Twin revision. R2 persisted evidence coordinates, inferred or corrected meaning, and minimal runtime receipts—not historical source bodies, absolute paths, Codex transcripts, or session state.",
     "",
     "## Recovery",
     "",
-    `Revision ${revision.revision} is the latest validated state selected by HEAD. This Markdown file is derived and can be reconstructed.`,
+    `Revision ${revision.revision} (schema v${revision.schemaVersion}) is the latest validated state selected by HEAD. This Markdown file is derived and can be reconstructed.`,
     ...(revision.warnings.length === 0 ? [] : [
       "",
       "## Observation Warnings",

@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: R1 implemented and owner-accepted; R2 runtime and cognition boundaries are not yet approved
+- Status: R1 and R2 owner-accepted; R3 Bounded Agency is the next architecture gate
 - Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -59,6 +59,19 @@ Runtime transcripts are disposable computation. They are never the Project Twin.
 11. R1 Continuity is deterministic and invokes no model runtime; the first live Codex path begins in R2 through a scoped Context Packet.
 12. R1 durable state is project-local and Git-ignored. It must be excluded from source observation and remain replaceable by a future storage adapter.
 13. The R1 owner surface is generated Markdown. It renders the Twin but never becomes canonical state.
+14. R2 historical input is limited to explicit reachable Git commits, allowlisted UTF-8 paths, bounded bytes, and resolvable line evidence.
+15. R2 runs Codex from an isolated packet root with an exact readable-root permission profile; shell, MCP, apps, hooks, multi-agent, and web capabilities are disabled, and any unauthorized audit item prevents admission.
+16. `TwinRevisionV2` begins only with a validated Reflection. It preserves V1 revisions and stores evidence coordinates, labeled meaning, owner correction, invalidation, and minimal receipts—never source bodies or runtime transcripts.
+17. Owner correction creates a new immutable revision, supersedes the active interpretation, invalidates dependent output, and becomes input to later Context Packets.
+
+## Accepted R2 implementation boundary
+
+- deterministic `ContextPacketV1` from two full Git commit IDs, one explicit allowlisted path, and two line ranges;
+- `ReflectionProposalV1` as the only runtime output, with a deterministic proposal ID, two-timepoint evidence, uncertainty, an alternative, an implication, and an owner question;
+- `codex exec` through an internal replaceable runtime interface, using ephemeral sessions, JSONL audit, structured output, isolated `CODEX_HOME`, packet-only readable roots, no model-generated tools, and the authenticated catalog's highest-priority visible model for the first demo;
+- `TwinRevisionV2` as an additive upgrade over immutable V1 history;
+- generated Markdown as the first Reflection/correction owner surface;
+- no OpenCode live path, actions, source writes, projection, notes, server, automatic history selection, or generalized memory in R2.
 
 ## Accepted R1 implementation boundary
 
@@ -78,7 +91,7 @@ The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapt
 - package or service topology beyond the single R1 package;
 - storage backends, backup, sync, and cross-device durability beyond the R1 local file store;
 - long-term CLI, local web, or native primary surface beyond the approved R1 Markdown view;
-- runtime adapter protocol details;
+- runtime adapter protocol beyond the accepted internal Codex boundary;
 - background scheduling;
 - server deployment.
 

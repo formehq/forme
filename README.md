@@ -10,10 +10,10 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R2 — Cognition Control Packet; implementation not yet approved**
-- Product implementation: **R1 accepted** — deterministic Forme repo → durable Twin revision → Markdown Restart View
+- Current gate: **R3 — Bounded Agency; Needs Decision**
+- Product implementation: **R1 and R2 owner-accepted; R3–R5 not started**
 
-Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 issue [#49](https://github.com/formehq/forme/issues/49), and next R2 issue [#50](https://github.com/formehq/forme/issues/50).
+Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 
@@ -70,3 +70,39 @@ npm run forme -- observe --workspace . \
 Owner Frame options replace the supplied field; omitted fields keep their current values. Unknown or misplaced CLI options fail instead of being silently ignored.
 
 The owner view is `.forme/restart.md`. Deleting that derived file and running `status` reconstructs it from the latest validated revision selected by `.forme/HEAD`.
+
+## R2 Cognition — accepted 2026-07-18
+
+R2 adds one bounded cross-time cognition loop without giving Codex canonical write authority. It requires an authenticated `codex` CLI. Historical source bodies exist only in the disposable Context Packet sent to OpenAI; the Twin persists evidence coordinates, labeled meaning, corrections, invalidations, and minimal receipts.
+
+Preview the exact body-free manifest before any model call:
+
+```sh
+npm run forme -- packet --workspace . \
+  --earlier 81a002744156128c1e370bf6b8a3526e72bddbf9 \
+  --later 3cc2ac567d22b5b1c5bb1bfd7ed790d3ebd59052 \
+  --path docs/DECISIONS.md \
+  --earlier-lines 29:33 \
+  --later-lines 59:63
+```
+
+Run the same packet through the isolated Codex adapter:
+
+```sh
+npm run forme -- reflect --workspace . \
+  --earlier 81a002744156128c1e370bf6b8a3526e72bddbf9 \
+  --later 3cc2ac567d22b5b1c5bb1bfd7ed790d3ebd59052 \
+  --path docs/DECISIONS.md \
+  --earlier-lines 29:33 \
+  --later-lines 59:63
+```
+
+Copy the active `ref_...` ID from the generated view and replace its interpretation through the owner surface:
+
+```sh
+npm run forme -- correct --workspace . \
+  --reflection ref_REPLACE_WITH_ACTIVE_ID \
+  --text "The owner-authored corrected interpretation."
+```
+
+The real Forme demo admitted an evidence-backed Codex Reflection, then recorded the owner's narrower interpretation in Twin revision 19. The original inference became `superseded`, one dependent output was invalidated, the next Context Packet carried the correction, and restart reconstruction remained byte-identical.
