@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: owner-approved R1 boundaries, not a frozen long-term implementation design
+- Status: R1 implemented and owner-accepted; R2 runtime and cognition boundaries are not yet approved
 - Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.

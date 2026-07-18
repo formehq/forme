@@ -10,10 +10,10 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R1 — Continuity walking skeleton in Technical Review**
-- Product implementation: deterministic Forme repo → durable Twin revision → Markdown Restart View
+- Current gate: **R2 — Cognition Control Packet; implementation not yet approved**
+- Product implementation: **R1 accepted** — deterministic Forme repo → durable Twin revision → Markdown Restart View
 
-Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), and active R1 issue [#49](https://github.com/formehq/forme/issues/49).
+Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 issue [#49](https://github.com/formehq/forme/issues/49), and next R2 issue [#50](https://github.com/formehq/forme/issues/50).
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 
@@ -27,7 +27,7 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
-## R1 Continuity
+## R1 Continuity — accepted 2026-07-18
 
 R1 uses no model runtime and never writes project sources. It observes only an explicit allowlist, stores relative-path evidence metadata in project-local Git-ignored `.forme/` revisions, and renders a reconstructible Markdown view.
 
