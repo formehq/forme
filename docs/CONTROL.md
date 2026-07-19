@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R3 — Bounded Agency; Technical Review**
+- Active gate: **R3 — Bounded Agency; Owner Acceptance / product validation**
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 implemented with 41 passing checks and awaiting the real owner demo; R4–R5 not started**
+- P0 implementation: **R1 and R2 owner-accepted; R3 passed 41 checks and completed its real bounded control demo through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-confirm a fresh R3 Owner Frame, then run the real proposal → approval → execution → retry → restart → rollback demo from Draft PR #60
+- Next action: decide how to validate Twin-derived usefulness against a mature Harness baseline before broadening R3 or starting R4
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -26,7 +26,7 @@ R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         ← YOU ARE HERE · TECHNICAL REVIEW
+R3 Bounded Agency         ← YOU ARE HERE · OWNER ACCEPTANCE / PRODUCT VALIDATION
   ↓
 R4 Controlled Presence    allowlist → static collaborator projection
   ↓
@@ -41,8 +41,9 @@ Current truth:
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
-- #51 is the active gate; the owner approved all five R3 recommendations on 2026-07-18 and implementation is limited to that contract;
-- R1 and R2 are Done; the approved R3 source-write path is implemented and test-verified, but no real Forme proposal, approval, or managed-block effect has been owner-experienced yet.
+- #51 is the active gate; the owner approved all five R3 recommendations on 2026-07-18 and implementation remains limited to that contract;
+- the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
+- the owner has not accepted R3's usefulness or suggestion accuracy from this one case, so R3 is not Done. The current evidence and Harness comparison live in [`VALIDATION.md`](./VALIDATION.md).
 
 ## System map
 
@@ -353,7 +354,7 @@ Implementation must remain inside these five decisions. Any broader source visib
 
 ## Active Control Packet — R3 Bounded Agency
 
-- Status: **all five recommendations owner-approved; implementation complete in Draft PR #60; Technical Review with 41 passing checks; real owner demo pending**
+- Status: **all five recommendations owner-approved; implementation complete in Draft PR #60; 41 checks and the real bounded demo passed; product usefulness remains in Owner Acceptance**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
 - Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
@@ -483,7 +484,28 @@ The successful execution or rollback revision also updates the existing `README.
 - The Forme-only executor writes a body-free `pending-effect.json` before touching the fixed block, preserves file mode, atomically replaces the target, updates Twin evidence, and consumes the approval once.
 - Recovery tests cover interruption after journal creation, source write, revision write, HEAD write, and view write. They converge to one receipt and one result revision; an unknown target becomes `indeterminate` without overwriting it.
 - The suite also verifies packet privacy, schema rejection of paths, exact-marker multiplicity, owner-correction invalidation, idempotent execution retry, successful rollback, and idempotent rollback retry.
-- `npm run check` passes **41/41** tests. This is technical evidence only: the owner has not yet supplied the fresh R3 Owner Frame or experienced a real action.
+- `npm run check` passes **41/41** tests. This is technical evidence; it does not establish suggestion usefulness or accuracy.
+
+### Real owner demo evidence — 2026-07-18
+
+- revision 21 established the fresh owner-authored R3 frame;
+- revision 22 admitted one real Codex proposal from `codex-cli 0.144.3` and `gpt-5.6-sol`, with zero tool events and no project source body in the Action Context;
+- execution before approval failed closed, and revision 23 recorded the owner's exact approval of effect-plan `sha256:1da7ea5bc840ef07ac0a324ca2fa19c5c5ef263fa20a17fa2553189051281bce`;
+- revision 24 recorded successful README execution as receipt `eff_7a5ff5588d87b626eb0f8435c601c4c9`; retry performed no second write or receipt, and restart reconstructed the same state;
+- revision 25 recorded explicit rollback as receipt `eff_4e73ebd064cf44233685ca34a087b107`; the exact original README hash returned and rollback retry was a no-op.
+
+### Owner product feedback — acceptance still open
+
+The owner could not responsibly judge the Codex suggestion from this case. Forme has not yet produced enough use-feel or varied examples, and one plausible-looking suggestion is insufficient evidence of accuracy. The demo proposal was also self-referential—it proposed using the R3 demo as R3's acceptance gate—so it was stronger as a control-path test than as a product-value test.
+
+Current conclusion:
+
+- bounded proposal, approval, effect, receipt, recovery, and rollback are demonstrated within the R3 slice;
+- suggestion usefulness, accuracy, and differentiated Twin value remain unproven;
+- R3 must not move to Done merely because its mechanism worked;
+- the next case should test longitudinal Twin value against what ordinary Codex or OpenCode could do with the same source material.
+
+The full feedback, Harness/Forme ownership analysis, falsification signals, and next validation questions are maintained in [`VALIDATION.md`](./VALIDATION.md).
 
 ### Five-minute owner demo
 
@@ -586,5 +608,6 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
 - [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
+- [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
 - [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map

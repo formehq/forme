@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: R1 and R2 owner-accepted; R3 Bounded Agency implemented and in Technical Review
+- Status: R1 and R2 owner-accepted; R3 bounded control path demonstrated and in Owner Acceptance
 - Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -43,6 +43,14 @@ flowchart LR
 - generation of proposals within the context and schema Forme supplies.
 
 Runtime transcripts are disposable computation. They are never the Project Twin.
+
+### Harness ownership test
+
+A mature Harness may natively provide model invocation, sessions, tools, sandboxing, permission prompts, streaming, undo, MCP, and event APIs. Forme should consume those capabilities through replaceable adapters rather than reproduce a general agent runtime.
+
+Forme's boundary begins where operational runtime state becomes durable product meaning and authority: the Living Project Twin, evidence and correction, canonical proposal admission, revision-bound owner authorization, deterministic effect compilation, durable receipts and recovery, and projection policy.
+
+The same visible action may therefore be possible in Codex or OpenCode without Forme. It counts as Forme behavior only when it is derived from and returns to the Twin under these contracts. See [`VALIDATION.md`](./VALIDATION.md) for the current wheel-reinvention and product-differentiation assessment.
 
 ## Initial invariants
 
