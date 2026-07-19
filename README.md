@@ -107,9 +107,9 @@ npm run forme -- correct --workspace . \
 
 The real Forme demo admitted an evidence-backed Codex Reflection, then recorded the owner's narrower interpretation in Twin revision 19. The original inference became `superseded`, one dependent output was invalidated, the next Context Packet carried the correction, and restart reconstruction remained byte-identical.
 
-## R3 Bounded Agency — technical review
+## R3 Bounded Agency — mechanism demonstrated; product validation active
 
-R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite exercises the complete synthetic loop; no real Forme action has been proposed, approved, or executed yet because the owner must first confirm a fresh R3 Owner Frame.
+R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The bounded mechanism is demonstrated; suggestion usefulness and differentiated Twin value remain under R3-V product validation. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
 
 Preview the packet manifest without calling a model:
 

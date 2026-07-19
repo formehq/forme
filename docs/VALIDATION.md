@@ -1,7 +1,7 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-18
+- Updated: 2026-07-19
 - Current verdict: **R3's bounded control mechanism is demonstrated; Forme's product value and suggestion quality are not yet validated**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -132,6 +132,63 @@ The work so far is neither “a new Harness” nor already a proven differentiat
 - We have not yet demonstrated that a sufficiently rich Twin improves suggestion quality, continuity, or owner judgment enough to justify the additional control system.
 
 The largest near-term product risk is not unsafe execution. It is that Forme becomes **“Codex with an extra approval ledger”** because the Twin remains too thin to create an experience a mature Harness cannot provide on its own.
+
+## Evidence round 3 — R3-V Case 01 prepared
+
+- Date: 2026-07-19
+- Status: local extraction and Forme initialization complete; waiting at the first model-visibility gate
+- Lab: `/Users/zaynw/Documents/Projects/forme-r3v-knowledge-lab`
+- External calls: none
+
+### Case
+
+The first real comparison uses one Obsidian knowledge note, `CCS MVP Spec.md`, at two committed source time points. The note preserves a useful tension: the CCS product requirements remain a baseline while its original schedule, implementation path, and parts of its authorization model were later superseded by the harness-first Forme pivot.
+
+The source vault remains unchanged. The lab contains only derived committed blobs with stable categorical redactions for the owner name, one candidate user, one external contact/message attribution, an owner-named interface, and travel-phase wording. The manifest retains the original source commits and blobs without storing the redacted source identities.
+
+Career, People notes, diary and relationship material, raw transcripts, attachments, runtime cards, and `decisions.jsonl` remain excluded.
+
+### Comparison contract
+
+The same frozen task will be evaluated through three arms:
+
+- **A0 — Fresh Harness:** two approved note versions, no prior correction or Forme state;
+- **A1 — Fresh Harness plus manual correction:** the same material plus the exact owner correction manually reconstructed;
+- **B — Forme Twin:** the same evidence, with admitted Reflection, owner correction, and later R3 proposal carried by the Twin.
+
+If B beats A0 but matches A1, the evidence supports continuity/context portability rather than model superiority. If B beats A1, the Twin's semantic contract may improve judgment beyond manual replay. Similar or worse B results weaken the current Forme value claim.
+
+### Installation evidence
+
+The experiment exposed and closed a portability gap before touching model behavior:
+
+- Forme previously had no installable CLI and its default package would include development files and an untracked architecture draft;
+- the package now exposes a `forme` binary and an explicit runtime file allowlist;
+- `npm pack --dry-run` contains 24 runtime files instead of 46 mixed development files;
+- the lab installed `forme@0.1.0` through a local package dependency and successfully ran the installed CLI;
+- all 41 Forme checks still pass.
+
+This is packaging and adapter hygiene, not new Harness capability.
+
+### Current visibility gate
+
+No model call has been made. The prepared body-free manifest is:
+
+| Field | Value |
+|---|---|
+| Packet | `ctx_27a64618771e2c60a022268b2b4201ba` |
+| Packet hash | `sha256:1e63dfc5d5d0d35e49755a97b3e7217b429e069fd604e05800fed3ec8a573149` |
+| Base Twin revision | 1 |
+| Earlier lab commit | `2a28b9958d8e5b9559593cba212f11604de0ee9b` |
+| Later lab commit | `2df5f5109ecadfb75f22e7c895367df876273ab6` |
+| Path | `knowledge/ccs/CCS MVP Spec.md` |
+| Source bytes | 11,965 earlier + 24,265 later = **36,230 bytes** |
+| Evidence | earlier lines `102:119`; later line `29:29` |
+| Active corrections | 0 |
+
+Approval would transmit both complete redacted note versions, the frozen task, current owner frame, evidence coordinates, and constraints to OpenAI through the owner's authenticated Codex CLI. It would not expose the source vault, any other note, the Forme repo, `.forme`, Career/People material, tools, MCP, web search, shell, or a writer.
+
+The lab records this gate in `evaluation/VISIBILITY-GATE-01.json` with `externalCallMade: false` and no owner approval. The next action is owner inspection of this exact visibility boundary—not a model call inferred from the earlier approval to create the lab.
 
 ## Validation questions for the next development decision
 
