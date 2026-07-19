@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R3 — Bounded Agency; Needs Decision**
+- Active gate: **R3 — Bounded Agency; Ready**
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 Control Packet prepared for owner decision; R4–R5 not started**
+- P0 implementation: **R1 and R2 owner-accepted; R3 contract owner-approved and implementation not started; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review the recommended fixed-block action, runtime visibility, approval, durable-state, and recovery boundaries
+- Next action: implement the approved R3 walking slice inside Draft PR #60 without broadening the five accepted boundaries
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -26,7 +26,7 @@ R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         ← YOU ARE HERE · NEEDS DECISION
+R3 Bounded Agency         ← YOU ARE HERE · READY
   ↓
 R4 Controlled Presence    allowlist → static collaborator projection
   ↓
@@ -41,8 +41,8 @@ Current truth:
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
-- #51 is now the active gate; no R3 write authority or action contract has been approved;
-- R1 and R2 are Done; project sources still have no agent action, background, server, or projection write path.
+- #51 is the active gate; the owner approved all five R3 recommendations on 2026-07-18 and implementation is limited to that contract;
+- R1 and R2 are Done; the R3 source-write contract is approved but no executor or project-source write path has been implemented yet.
 
 ## System map
 
@@ -353,7 +353,7 @@ Implementation must remain inside these five decisions. Any broader source visib
 
 ## Active Control Packet — R3 Bounded Agency
 
-- Status: **proposal prepared; Needs Decision; no implementation or source-write authority is approved**
+- Status: **all five recommendations owner-approved on 2026-07-18; implementation Ready but not started**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
 - Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
@@ -506,15 +506,17 @@ R3 excludes arbitrary file edits, generic effect plugins, shell commands, Git st
 
 The archived executor is evidence, not the R3 implementation. It combined arbitrary file updates with Git staging, commits, reset-on-error, and broader path input, which exceeds this contract. R3 may selectively port only reviewed path-confinement, target-cleanliness, write-lock, and receipt-correlation ideas; it must implement the fixed marker, immutable approval, no-Git executor, journal recovery, and rollback contracts against the new schemas.
 
-### Owner stop gate — decisions required
+### Owner stop gate — approved 2026-07-18
 
-Implementation pauses here until the owner accepts or changes these five recommendations:
+The owner explicitly approved all five recommendations:
 
 1. use one `README.md` managed block as the first and only writable surface;
 2. let Codex propose structured intent only, with no new visibility or tools;
 3. bind a separate one-use owner approval to the exact effect-plan hash and unbroken Twin revision chain;
 4. introduce additive `TwinRevisionV3` agency records and body-free terminal receipts;
 5. use a Forme-only atomic marker executor with journal recovery, idempotent retry, explicit hash-guarded rollback, and no Git authority.
+
+Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
 ## Owner–agent working agreement
 

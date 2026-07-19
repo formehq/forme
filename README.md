@@ -10,8 +10,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R3 — Bounded Agency; Needs Decision**
-- Product implementation: **R1 and R2 owner-accepted; R3–R5 not started**
+- Current gate: **R3 — Bounded Agency; Ready**
+- Product implementation: **R1 and R2 owner-accepted; R3 contract owner-approved and implementation not started; R4–R5 not started**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
 
