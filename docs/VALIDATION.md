@@ -176,9 +176,9 @@ No model call has been made. The prepared body-free manifest is:
 
 | Field | Value |
 |---|---|
-| Packet | `ctx_27a64618771e2c60a022268b2b4201ba` |
-| Packet hash | `sha256:1e63dfc5d5d0d35e49755a97b3e7217b429e069fd604e05800fed3ec8a573149` |
-| Base Twin revision | 1 |
+| Packet | `ctx_368c0372390b81d329faa012d4897a55` |
+| Packet hash | `sha256:69bc286badd7733fcc214bf85f1e40a20106790738598b786ddd2ca7b2be62fd` |
+| Base Twin revision | 2 |
 | Earlier lab commit | `2a28b9958d8e5b9559593cba212f11604de0ee9b` |
 | Later lab commit | `2df5f5109ecadfb75f22e7c895367df876273ab6` |
 | Path | `knowledge/ccs/CCS MVP Spec.md` |

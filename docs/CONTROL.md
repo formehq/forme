@@ -5,7 +5,7 @@
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
 - P0 implementation: **R1 and R2 owner-accepted; R3 passed 41 checks and completed its real bounded control demo through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review R3-V visibility packet `ctx_27a64618771e2c60a022268b2b4201ba` before the first CCS model call
+- Next action: owner-review R3-V visibility packet `ctx_368c0372390b81d329faa012d4897a55` before the first CCS model call
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
