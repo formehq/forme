@@ -4,7 +4,7 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R1 and R2 owner-accepted; R3 Control Packet owner-approved and Ready on 2026-07-18
+- Current gate: R1 and R2 owner-accepted; R3 implementation in Technical Review with 41 passing checks on 2026-07-18; owner demo pending
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates

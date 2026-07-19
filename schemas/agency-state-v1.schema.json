@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/agency-state-v1.json",
+  "title": "Forme R3 Agency State v1",
+  "type": "object",
+  "required": ["proposals", "approvals", "runtimeReceipts", "effectReceipts", "invalidations"],
+  "properties": {
+    "proposals": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/proposalRecord" } },
+    "approvals": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/approval" } },
+    "runtimeReceipts": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/runtimeReceipt" } },
+    "effectReceipts": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/effectReceipt" } },
+    "invalidations": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/invalidation" } }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "proposalId": { "type": "string", "pattern": "^act_[a-f0-9]{32}$" },
+    "proposal": {
+      "type": "object",
+      "required": ["schemaVersion", "proposalId", "baseTwinRevision", "actionKind", "rationale", "title", "whyNow", "nextMove", "successCheck", "ownerChallenge"],
+      "properties": {
+        "schemaVersion": { "const": "1" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "actionKind": { "const": "render_next_move_brief.v1" },
+        "rationale": { "type": "string", "minLength": 30, "maxLength": 2000 },
+        "title": { "type": "string", "minLength": 3, "maxLength": 120, "pattern": "^[^\\r\\n]+$" },
+        "whyNow": { "type": "string", "minLength": 20, "maxLength": 1000 },
+        "nextMove": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "successCheck": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "ownerChallenge": { "type": "string", "minLength": 10, "maxLength": 1000 }
+      },
+      "additionalProperties": false
+    },
+    "effectPlan": {
+      "type": "object",
+      "required": ["schemaVersion", "effectId", "actionKind", "proposalId", "baseTwinRevision", "correctedReflectionId", "targetPath", "markerId", "beforeFileHash", "beforeBlockHash", "afterFileHash", "afterBlockHash", "idempotencyKey"],
+      "properties": {
+        "schemaVersion": { "const": "1" },
+        "effectId": { "type": "string", "pattern": "^efp_[a-f0-9]{32}$" },
+        "actionKind": { "const": "render_next_move_brief.v1" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "correctedReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "targetPath": { "const": "README.md" },
+        "markerId": { "const": "forme:r3-action" },
+        "beforeFileHash": { "$ref": "#/$defs/sha256" },
+        "beforeBlockHash": { "$ref": "#/$defs/sha256" },
+        "afterFileHash": { "$ref": "#/$defs/sha256" },
+        "afterBlockHash": { "$ref": "#/$defs/sha256" },
+        "idempotencyKey": { "type": "string", "pattern": "^idem_[a-f0-9]{32}$" }
+      },
+      "additionalProperties": false
+    },
+    "proposalRecord": {
+      "type": "object",
+      "required": ["proposal", "proposalHash", "packetHash", "correctedReflectionId", "correctionId", "runtimeReceiptId", "effectPlan", "effectPlanHash", "admittedRevision", "status", "approvalId", "effectReceiptIds", "createdAt"],
+      "properties": {
+        "proposal": { "$ref": "#/$defs/proposal" },
+        "proposalHash": { "$ref": "#/$defs/sha256" },
+        "packetHash": { "$ref": "#/$defs/sha256" },
+        "correctedReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
+        "correctionId": { "type": "string", "pattern": "^cor_[a-f0-9]{32}$" },
+        "runtimeReceiptId": { "type": "string", "pattern": "^run_[a-f0-9]{32}$" },
+        "effectPlan": { "$ref": "#/$defs/effectPlan" },
+        "effectPlanHash": { "$ref": "#/$defs/sha256" },
+        "admittedRevision": { "type": "integer", "minimum": 1 },
+        "status": { "enum": ["proposed", "approved", "executed", "rolled-back", "invalidated", "indeterminate"] },
+        "approvalId": { "anyOf": [{ "type": "string", "pattern": "^apr_[a-f0-9]{32}$" }, { "type": "null" }] },
+        "effectReceiptIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^eff_[a-f0-9]{32}$" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "approval": {
+      "type": "object",
+      "required": ["approvalId", "proposalId", "proposalHash", "effectPlanHash", "authority", "baseTwinRevision", "approvedAt", "status", "consumedAt"],
+      "properties": {
+        "approvalId": { "type": "string", "pattern": "^apr_[a-f0-9]{32}$" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "proposalHash": { "$ref": "#/$defs/sha256" },
+        "effectPlanHash": { "$ref": "#/$defs/sha256" },
+        "authority": { "const": "owner" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "status": { "enum": ["approved", "consumed", "invalidated"] },
+        "consumedAt": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] }
+      },
+      "additionalProperties": false
+    },
+    "runtimeReceipt": {
+      "type": "object",
+      "required": ["receiptId", "adapter", "cliVersion", "model", "packetHash", "proposalHash", "baseTwinRevision", "validationResult", "completedAt", "audit"],
+      "properties": {
+        "receiptId": { "type": "string", "pattern": "^run_[a-f0-9]{32}$" },
+        "adapter": { "const": "codex-exec" },
+        "cliVersion": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "model": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "packetHash": { "$ref": "#/$defs/sha256" },
+        "proposalHash": { "$ref": "#/$defs/sha256" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "validationResult": { "const": "accepted" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "audit": {
+          "type": "object",
+          "required": ["eventCount", "itemTypes", "toolEventCount", "turnCompleted", "inputTokens", "outputTokens"],
+          "properties": {
+            "eventCount": { "type": "integer", "minimum": 1 },
+            "itemTypes": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "maxLength": 200 } },
+            "toolEventCount": { "const": 0 },
+            "turnCompleted": { "const": true },
+            "inputTokens": { "type": "integer", "minimum": 0 },
+            "outputTokens": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "effectReceipt": {
+      "type": "object",
+      "required": ["receiptId", "operation", "effectId", "proposalId", "approvalId", "effectPlanHash", "baseTwinRevision", "resultTwinRevision", "targetPath", "expectedBeforeHash", "expectedAfterHash", "observedHash", "status", "completedAt"],
+      "properties": {
+        "receiptId": { "type": "string", "pattern": "^eff_[a-f0-9]{32}$" },
+        "operation": { "enum": ["execute", "rollback"] },
+        "effectId": { "type": "string", "pattern": "^efp_[a-f0-9]{32}$" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "approvalId": { "type": "string", "pattern": "^apr_[a-f0-9]{32}$" },
+        "effectPlanHash": { "$ref": "#/$defs/sha256" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "resultTwinRevision": { "type": "integer", "minimum": 1 },
+        "targetPath": { "const": "README.md" },
+        "expectedBeforeHash": { "$ref": "#/$defs/sha256" },
+        "expectedAfterHash": { "$ref": "#/$defs/sha256" },
+        "observedHash": { "$ref": "#/$defs/sha256" },
+        "status": { "enum": ["succeeded", "indeterminate"] },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    },
+    "invalidation": {
+      "type": "object",
+      "required": ["invalidationId", "proposalId", "causedByCorrectionId", "causedByTwinRevision", "reason", "invalidatedAt"],
+      "properties": {
+        "invalidationId": { "type": "string", "pattern": "^ainv_[a-f0-9]{32}$" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "causedByCorrectionId": { "anyOf": [{ "type": "string", "pattern": "^cor_[a-f0-9]{32}$" }, { "type": "null" }] },
+        "causedByTwinRevision": { "type": "integer", "minimum": 1 },
+        "reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "invalidatedAt": { "type": "string", "format": "date-time" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-18
-- Active gate: **R3 — Bounded Agency; Ready**
+- Active gate: **R3 — Bounded Agency; Technical Review**
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 contract owner-approved and implementation not started; R4–R5 not started**
+- P0 implementation: **R1 and R2 owner-accepted; R3 implemented with 41 passing checks and awaiting the real owner demo; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: implement the approved R3 walking slice inside Draft PR #60 without broadening the five accepted boundaries
+- Next action: owner-confirm a fresh R3 Owner Frame, then run the real proposal → approval → execution → retry → restart → rollback demo from Draft PR #60
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -26,7 +26,7 @@ R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         ← YOU ARE HERE · READY
+R3 Bounded Agency         ← YOU ARE HERE · TECHNICAL REVIEW
   ↓
 R4 Controlled Presence    allowlist → static collaborator projection
   ↓
@@ -42,7 +42,7 @@ Current truth:
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
 - #51 is the active gate; the owner approved all five R3 recommendations on 2026-07-18 and implementation is limited to that contract;
-- R1 and R2 are Done; the R3 source-write contract is approved but no executor or project-source write path has been implemented yet.
+- R1 and R2 are Done; the approved R3 source-write path is implemented and test-verified, but no real Forme proposal, approval, or managed-block effect has been owner-experienced yet.
 
 ## System map
 
@@ -353,7 +353,7 @@ Implementation must remain inside these five decisions. Any broader source visib
 
 ## Active Control Packet — R3 Bounded Agency
 
-- Status: **all five recommendations owner-approved on 2026-07-18; implementation Ready but not started**
+- Status: **all five recommendations owner-approved; implementation complete in Draft PR #60; Technical Review with 41 passing checks; real owner demo pending**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
 - Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
@@ -434,14 +434,14 @@ The revision numbers illustrate the required order. Any unrelated Twin revision 
 `ActionIntentProposalV1` is the only accepted runtime output:
 
 - deterministic proposal ID and exact base Twin revision;
-- active corrected Reflection ID and one causal rationale;
+- one causal rationale; Forme binds the proposal to the corrected Reflection from the packet during admission rather than trusting a model-supplied linkage;
 - action kind fixed to `render_next_move_brief.v1`;
 - bounded title, why-now, next-move, success-check, and owner-challenge fields;
 - no target path, raw Markdown, command, patch, approval claim, or rollback instruction.
 
 `EffectPlanV1` is compiled only by Forme:
 
-- plan ID/hash, proposal ID/hash, current Twin revision, fixed target and markers;
+- effect ID, proposal ID, base Twin revision, corrected Reflection ID, fixed target and markers; the canonical plan hash and proposal hash are stored beside it in the admitted record;
 - expected full-file and placeholder-block hashes;
 - deterministic rendered-block hash and expected full-file after-hash;
 - exact read/write scope of `README.md` only;
@@ -473,6 +473,17 @@ The successful execution or rollback revision also updates the existing `README.
 7. Repeating execution returns the same receipt and performs no second write.
 8. Explicit rollback requires the successful receipt and exact after-hash, restores the known placeholder, verifies the before-hash, records a linked rollback receipt and restored README evidence, and creates the next revision.
 9. If a human changed `README.md` after execution, rollback refuses instead of erasing the human change.
+
+### Technical evidence — 2026-07-18
+
+- `ActionContextPacketV1`, `ActionIntentProposalV1`, and the V3 agency extension are enforced by Ajv contracts; V3 composes the complete V2 cognition contract with `AgencyStateV1`, preserving all prior immutable revisions.
+- `CodexExecRuntime` reuses the R2 packet-only, no-tools capability probe and JSONL audit. R3 adds no repository, shell, web, MCP, Git, or writer visibility to Codex.
+- Forme compiles and previews the only legal `render_next_move_brief.v1` effect, and the stored plan contains hashes and identifiers—not a README source body.
+- Owner approval is a separate revision bound to the exact proposal and effect-plan hashes. Any intervening Twin revision, wrong hash, invalidation, source drift, or marker mismatch fails closed.
+- The Forme-only executor writes a body-free `pending-effect.json` before touching the fixed block, preserves file mode, atomically replaces the target, updates Twin evidence, and consumes the approval once.
+- Recovery tests cover interruption after journal creation, source write, revision write, HEAD write, and view write. They converge to one receipt and one result revision; an unknown target becomes `indeterminate` without overwriting it.
+- The suite also verifies packet privacy, schema rejection of paths, exact-marker multiplicity, owner-correction invalidation, idempotent execution retry, successful rollback, and idempotent rollback retry.
+- `npm run check` passes **41/41** tests. This is technical evidence only: the owner has not yet supplied the fresh R3 Owner Frame or experienced a real action.
 
 ### Five-minute owner demo
 

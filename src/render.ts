@@ -1,4 +1,5 @@
-import type { ReflectionRecord, SourceChanges, TwinRevision } from "./types.ts";
+import { renderManagedBody } from "./action.ts";
+import type { ActionProposalRecord, ReflectionRecord, SourceChanges, TwinRevision } from "./types.ts";
 
 function list(items: string[], empty: string): string {
   return items.length === 0 ? `- ${empty}` : items.map((item) => `- ${item}`).join("\n");
@@ -50,6 +51,31 @@ function reflectionSection(reflections: ReflectionRecord[]): string[] {
   ]);
 }
 
+function actionSection(proposals: ActionProposalRecord[]): string[] {
+  if (proposals.length === 0) return ["No R3 action proposal has been admitted."];
+  return proposals.flatMap((record, index) => [
+    ...(index === 0 ? [] : [""]),
+    `### ${record.proposal.proposalId}`,
+    "",
+    `- Status: ${record.status}`,
+    `- Action kind: ${record.proposal.actionKind}`,
+    `- Target: ${record.effectPlan.targetPath} · marker ${record.effectPlan.markerId}`,
+    `- Proposal hash: ${record.proposalHash}`,
+    `- Effect-plan hash: ${record.effectPlanHash}`,
+    `- Before file hash: ${record.effectPlan.beforeFileHash}`,
+    `- After file hash: ${record.effectPlan.afterFileHash}`,
+    `- Why this action: ${record.proposal.rationale}`,
+    `- Approval: ${record.approvalId ?? "Not approved"}`,
+    `- Effect receipts: ${record.effectReceiptIds.length === 0 ? "None" : record.effectReceiptIds.join(", ")}`,
+    "",
+    "Exact managed-block preview:",
+    "",
+    "```markdown",
+    renderManagedBody(record.proposal, record.effectPlan.effectId, record.correctedReflectionId).trim(),
+    "```",
+  ]);
+}
+
 export function renderRestartView(revision: TwinRevision): string {
   return [
     "# Living Project Twin — Restart View",
@@ -72,7 +98,7 @@ export function renderRestartView(revision: TwinRevision): string {
     "## Next Move",
     "",
     `- ${revision.ownerFrame.nextMove}`,
-    ...(revision.schemaVersion === "2" ? [
+    ...(revision.schemaVersion !== "1" ? [
       "",
       "## Reflection",
       "",
@@ -86,12 +112,29 @@ export function renderRestartView(revision: TwinRevision): string {
         `- ${item.correctionId}: ${item.targetReflectionId} → ${item.correctedReflectionId}`
       )),
     ] : []),
+    ...(revision.schemaVersion === "3" ? [
+      "",
+      "## Action Review",
+      "",
+      ...actionSection(revision.agency.proposals),
+      "",
+      "## Agency Receipts",
+      "",
+      `- Owner approvals: ${revision.agency.approvals.length}`,
+      `- Effect receipts: ${revision.agency.effectReceipts.length}`,
+      `- Action invalidations: ${revision.agency.invalidations.length}`,
+      ...revision.agency.effectReceipts.map((item) => (
+        `- ${item.receiptId}: ${item.operation} · ${item.status} · observed ${item.observedHash}`
+      )),
+    ] : []),
     "",
     "## Evidence Boundary",
     "",
     revision.schemaVersion === "1"
       ? "This view was rendered only from the committed Twin revision. Forme stored relative paths, hashes, sizes, and timestamps—not source bodies or absolute paths. R1 used no model runtime."
-      : "This view was rendered only from the committed Twin revision. R2 persisted evidence coordinates, inferred or corrected meaning, and minimal runtime receipts—not historical source bodies, absolute paths, Codex transcripts, or session state.",
+      : revision.schemaVersion === "2"
+        ? "This view was rendered only from the committed Twin revision. R2 persisted evidence coordinates, inferred or corrected meaning, and minimal runtime receipts—not historical source bodies, absolute paths, Codex transcripts, or session state."
+        : "This view was rendered only from the committed Twin revision. R3 additionally persisted bounded action fields, approval/effect hashes, and body-free receipts—not README source bodies, Codex transcripts, shell commands, or Git authority.",
     "",
     "## Recovery",
     "",

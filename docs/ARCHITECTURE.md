@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: R1 and R2 owner-accepted; R3 Bounded Agency contract owner-approved and Ready
+- Status: R1 and R2 owner-accepted; R3 Bounded Agency implemented and in Technical Review
 - Updated: 2026-07-18
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -77,6 +77,8 @@ Runtime transcripts are disposable computation. They are never the Project Twin.
 - additive `TwinRevisionV3` agency state containing proposals, approvals, minimal runtime receipts, execution/rollback receipts, verification, invalidation, and hashes—not source bodies or runtime transcripts;
 - a Forme-only exact-marker executor with atomic replacement, write-ahead journal recovery, idempotent retry, verified source evidence, and explicit hash-guarded rollback;
 - no arbitrary file effectors, shell, Git staging/commit/push, GitHub mutation, server, background execution, delegated authorization, or OpenCode live R3 path.
+
+The implemented V3 validator deliberately composes the complete persisted V2 schema with `AgencyStateV1`: old V1/V2 snapshots remain byte-unchanged, while every V3 snapshot must validate both inherited cognition and the additive agency records. Source mutation uses a second write-ahead journal coordinated with the existing immutable-revision transition, so restart can reconcile either side of the source/Twin boundary without granting the runtime a writer.
 
 ## Accepted R2 implementation boundary
 

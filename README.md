@@ -10,8 +10,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R3 — Bounded Agency; Ready**
-- Product implementation: **R1 and R2 owner-accepted; R3 contract owner-approved and implementation not started; R4–R5 not started**
+- Current gate: **R3 — Bounded Agency; Technical Review**
+- Product implementation: **R1 and R2 owner-accepted; R3 implemented with 41 passing checks and awaiting the real owner demo; R4–R5 not started**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
 
@@ -106,3 +106,31 @@ npm run forme -- correct --workspace . \
 ```
 
 The real Forme demo admitted an evidence-backed Codex Reflection, then recorded the owner's narrower interpretation in Twin revision 19. The original inference became `superseded`, one dependent output was invalidated, the next Context Packet carried the correction, and restart reconstruction remained byte-identical.
+
+## R3 Bounded Agency — technical review
+
+R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite exercises the complete synthetic loop; no real Forme action has been proposed, approved, or executed yet because the owner must first confirm a fresh R3 Owner Frame.
+
+Preview the packet manifest without calling a model:
+
+```sh
+npm run forme -- action-packet --workspace . \
+  --goal "Prepare one useful, owner-reviewable next move for the R3 walking slice."
+```
+
+After that Owner Frame is confirmed, the owner demo uses separate commands for each authority transition:
+
+```sh
+npm run forme -- action-propose --workspace . --goal "..."
+npm run forme -- action-approve --workspace . --proposal act_... --effect-hash sha256:...
+npm run forme -- action-execute --workspace . --approval apr_...
+npm run forme -- action-rollback --workspace . --receipt eff_...
+```
+
+## Forme R3 managed action
+
+Only Forme's fixed-marker executor may replace the body between these markers, and only after a separate owner approval bound to the exact effect-plan hash.
+
+<!-- forme:r3-action:start -->
+_No approved Forme action is currently applied._
+<!-- forme:r3-action:end -->
