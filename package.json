@@ -5,6 +5,15 @@
   "description": "Owner-controlled Living Project Twin",
   "license": "Apache-2.0",
   "type": "module",
+  "bin": {
+    "forme": "./bin/forme.js"
+  },
+  "files": [
+    "bin",
+    "schemas",
+    "src",
+    "README.md"
+  ],
   "engines": {
     "node": ">=24.0.0"
   },
