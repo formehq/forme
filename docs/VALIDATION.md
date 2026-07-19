@@ -136,9 +136,9 @@ The largest near-term product risk is not unsafe execution. It is that Forme bec
 ## Evidence round 3 — R3-V Case 01 prepared
 
 - Date: 2026-07-19
-- Status: local extraction and Forme initialization complete; waiting at the first model-visibility gate
+- Status: first approved B-arm Reflection admitted; waiting for owner judgment and correction
 - Lab: `/Users/zaynw/Documents/Projects/forme-r3v-knowledge-lab`
-- External calls: none
+- External calls: one exact-hash-approved Forme Reflection; A0/A1 not run
 
 ### Case
 
@@ -170,9 +170,9 @@ The experiment exposed and closed a portability gap before touching model behavi
 
 This is packaging and adapter hygiene, not new Harness capability.
 
-### Current visibility gate
+### Approved visibility call and result
 
-No model call has been made. The prepared body-free manifest is:
+The owner approved the exact packet hash below for one Forme B-arm Reflection call:
 
 | Field | Value |
 |---|---|
@@ -184,11 +184,21 @@ No model call has been made. The prepared body-free manifest is:
 | Path | `knowledge/ccs/CCS MVP Spec.md` |
 | Source bytes | 11,965 earlier + 24,265 later = **36,230 bytes** |
 | Evidence | earlier lines `102:119`; later line `29:29` |
-| Active corrections | 0 |
+| Active corrections at call time | 0 |
 
-Approval would transmit both complete redacted note versions, the frozen task, current owner frame, evidence coordinates, and constraints to OpenAI through the owner's authenticated Codex CLI. It would not expose the source vault, any other note, the Forme repo, `.forme`, Career/People material, tools, MCP, web search, shell, or a writer.
+The call transmitted both complete redacted note versions, the frozen task, current owner frame, evidence coordinates, and constraints to OpenAI through the owner's authenticated Codex CLI. It did not expose the source vault, any other note, the Forme repo, `.forme`, Career/People material, tools, MCP, web search, shell, or a writer.
 
-The lab records this gate in `evaluation/VISIBILITY-GATE-01.json` with `externalCallMade: false` and no owner approval. The next action is owner inspection of this exact visibility boundary—not a model call inferred from the earlier approval to create the lab.
+The accepted proposal created lab Twin revision 3:
+
+- Reflection: `ref_10a7b1b2894516e6602ff24dd1b2a5ac`;
+- runtime receipt: `run_888539343f803e4eafe5d866decd090d`;
+- runtime: `codex-cli 0.144.3`, model `gpt-5.6-sol`;
+- audit: four runtime events, reported item type `agent_message`, zero tool events, completed turn;
+- persistence: source bodies absent from the Twin, source hashes unchanged, byte-identical restart reconstruction, repeated observation no-op at revision 3.
+
+The Reflection says the stable product baseline survived while the original six-week schedule and early card-first authorization assumptions became non-authoritative. It correctly labels medium uncertainty: the schedule pivot is directly supported, while the authorization inversion is visible in the document body but weakly bound to the selected later evidence line.
+
+This is not yet a positive product result. The owner must now judge whether the claim is accurate, whether the authorization conclusion overreaches, and whether the Reflection is more useful than a summary. A0, A1, correction, and R3 action remain unrun so they cannot contaminate that judgment.
 
 ## Validation questions for the next development decision
 

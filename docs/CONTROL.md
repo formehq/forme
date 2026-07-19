@@ -5,7 +5,7 @@
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
 - P0 implementation: **R1 and R2 owner-accepted; R3 passed 41 checks and completed its real bounded control demo through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review R3-V visibility packet `ctx_368c0372390b81d329faa012d4897a55` before the first CCS model call
+- Next action: owner-judge and correct R3-V Reflection `ref_10a7b1b2894516e6602ff24dd1b2a5ac` before A0, A1, or any R3 action
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -44,8 +44,8 @@ Current truth:
 - #51 is the active gate; the owner approved all five R3 recommendations on 2026-07-18 and implementation remains limited to that contract;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - the owner has not accepted R3's usefulness or suggestion accuracy from this one case, so R3 is not Done. The current evidence and Harness comparison live in [`VALIDATION.md`](./VALIDATION.md).
-- the private local `forme-r3v-knowledge-lab` now contains one provenance-preserving, stably redacted CCS note at two real historical time points; Forme is installed and initialized, but no R3-V model call has occurred;
-- the first visibility gate would send only the two approved CCS note versions and frozen task—36,230 source bytes total—through the owner's Codex authentication. Exact hashes and exclusions are recorded in the lab and summarized in [`VALIDATION.md`](./VALIDATION.md).
+- the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
+- the call produced zero tool events and no source changes. A0, A1, owner correction, R3 proposal, and R3 effect have not run. Exact evidence and the pending owner judgment are recorded in the lab and summarized in [`VALIDATION.md`](./VALIDATION.md).
 
 ## System map
 
