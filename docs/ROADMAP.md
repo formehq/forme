@@ -4,7 +4,7 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: CASE-02 produced positive owner evidence after clarification; decide whether that is sufficient for R3 product acceptance, while treating any Twin-context enrichment as an unproven follow-up rather than a blocker
+- Current gate: R3 is owner-accepted for the MVP; prepare the R4 Controlled Presence Owner Control Packet before implementing any projection or broadening visibility
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -18,7 +18,7 @@
 | R4 — Controlled Presence | Aug 5–7 | one versioned static collaborator projection from an allowlist | private canary cannot enter output |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 has satisfied its bounded execution, recovery, rollback, recommendation-first owner surface, and now one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. Because the real ship/closure balance remains unresolved, the experiment establishes no decision-material A1-over-B quality gap. This supports the correction and continuity mechanisms without yet defining the owner's final Career policy. R3 should move only after an explicit owner decision on whether this evidence satisfies the MVP exit condition.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. R4 Control Packet preparation is now active.
 
 ## Cut rules
 

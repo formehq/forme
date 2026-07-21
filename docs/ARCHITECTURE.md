@@ -1,6 +1,6 @@
 # Architecture boundaries
 
-- Status: R1 and R2 owner-accepted; R3 bounded control path and V2 owner surface demonstrated and in Owner Acceptance
+- Status: R1, R2, and R3 owner-accepted; R4 Controlled Presence is in Control Packet preparation
 - Updated: 2026-07-20
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.

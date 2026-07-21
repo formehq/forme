@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-20
-- Active gate: **R3 — Bounded Agency; Owner Acceptance / product validation**
-- Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 and its V2 Owner Decision Brief pass 44 checks; the real bounded control demo completed through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
+- Active gate: **R4 — Controlled Presence; Control Packet preparation**
+- Active issue: [#52 — Controlled Presence: allowlist-only collaborator projection](https://github.com/formehq/forme/issues/52)
+- P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus the real bounded control and independent Career validation; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review the first CASE-02 model visibility gate `sha256:4e3007d5a3d5006ffb54612006b1fbd0bd0486cf50589d84f18753fc9d2bf116`; it requests one R2 Reflection call against exact packet `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041`
+- Next action: prepare the R4 Owner Control Packet for one allowlist-only, versioned static collaborator projection; no R4 implementation or new visibility is authorized yet
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -26,9 +26,9 @@ R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         ← YOU ARE HERE · OWNER ACCEPTANCE / PRODUCT VALIDATION
+R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    allowlist → static collaborator projection
+R4 Controlled Presence    ← YOU ARE HERE · CONTROL PACKET PREPARATION
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -41,14 +41,14 @@ Current truth:
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
-- #51 is the active gate; the owner approved all five original R3 recommendations on 2026-07-18 and all five R3-V2 Owner Decision Brief recommendations on 2026-07-20; implementation remains limited to those contracts;
+- #51 is complete; the owner approved all five original R3 recommendations on 2026-07-18, all five R3-V2 Owner Decision Brief recommendations on 2026-07-20, and accepted the full R3 MVP product gate on 2026-07-20;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
-- CASE-01 did not establish R3 usefulness, but independent Career CASE-02 now provides positive directional evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding. R3 still awaits an explicit product-level exit decision rather than being marked Done automatically. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
+- CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
 - the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. The next gate is the owner-facing output contract, not another effect.
 - CASE-02 local extraction was owner-approved with manifest `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. The two immutable Career blobs became 4,607- and 12,108-byte redacted snapshots under one stable mapping; 139 replacement operations, exact hashes, provenance, and residual re-identification risk are recorded. The original source-vault path remains unmodified.
 - The existing CASE-01 Twin cannot safely admit Career because its immutable source contract allowlists CCS only. Rather than rewrite historical contract hashes or contaminate CASE-02, the lab prepared a fresh local Career workspace gate `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. That gate creates no model authority; after approval, a separately owner-approved exact ContextPacket hash is still required.
-- The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` contains a no-remote Twin with only `README.md` and the redacted Career path allowlisted. Exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` produced one zero-tool inferred Reflection at revision 2. The owner corrected its causal over-weighting without a model call: revision 3 preserves the original as `superseded`, admits owner-authored Reflection `ref_711fd70d727e4ecf74f19005590eda09`, records correction `cor_e48ac14130ab657777b006908a16719b`, and invalidates one dependent output. Under approved comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`, one A0, one A1, and one B call completed with zero tool events. The owner found all three useful, leaned slightly toward A1, and least preferred A0's no-correction closure-only recommendation, then clarified that A1 and B are too close to separate confidently because the real ship/closure balance remains unresolved. B carried the combined corrected direction automatically with zero source bodies and no manual reconstruction. B remains unapproved at Twin revision 4; no source, approval, or effect receipt changed.
+- The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` contains a no-remote Twin with only `README.md` and the redacted Career path allowlisted. Exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` produced one zero-tool inferred Reflection at revision 2. The owner corrected its causal over-weighting without a model call: revision 3 preserves the original as `superseded`, admits owner-authored Reflection `ref_711fd70d727e4ecf74f19005590eda09`, records correction `cor_e48ac14130ab657777b006908a16719b`, and invalidates one dependent output. Under approved comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`, one A0, one A1, and one B call completed with zero tool events. The owner found all three useful, leaned slightly toward A1, and least preferred A0's no-correction closure-only recommendation, then clarified that A1 and B are too close to separate confidently because the real ship/closure balance remains unresolved. B carried the combined corrected direction automatically with zero source bodies and no manual reconstruction. The R3 closeout advanced the Career Twin to revision 5 and invalidated B through `ainv_6c8069a54d2bba64d6f21c4ca5031283`; approvals, effects, source changes, and additional model calls remained zero.
 
 ## System map
 
@@ -357,9 +357,9 @@ The owner explicitly confirmed all five recommendations before implementation:
 
 Implementation must remain inside these five decisions. Any broader source visibility, tool authority, automatic history discovery, runtime parity, or semantic durability returns to a new Owner stop gate.
 
-## Active Control Packet — R3 Bounded Agency
+## Completed Control Packet — R3 Bounded Agency
 
-- Status: **all five original recommendations and all five V2 owner-surface recommendations are approved; the original path passed 41 checks and the additive V2 path brings the suite to 44; the real bounded demo passed; product usefulness remains in Owner Acceptance**
+- Status: **all five original recommendations and all five V2 owner-surface recommendations are approved; 44 checks, the real bounded demo, and independent Career product validation passed; owner-accepted on 2026-07-20**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
 - Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
@@ -512,18 +512,18 @@ The successful execution or rollback revision also updates the existing `README.
 
 The owner could not responsibly judge the Codex suggestion from this case. Forme has not yet produced enough use-feel or varied examples, and one plausible-looking suggestion is insufficient evidence of accuracy. The demo proposal was also self-referential—it proposed using the R3 demo as R3's acceptance gate—so it was stronger as a control-path test than as a product-value test.
 
-Current conclusion:
+R3 acceptance conclusion:
 
 - bounded proposal, approval, effect, receipt, recovery, and rollback are demonstrated within the R3 slice;
-- suggestion usefulness, accuracy, and differentiated Twin value remain unproven;
-- R3 must not move to Done merely because its mechanism worked;
-- the next case should test longitudinal Twin value against what ordinary Codex or OpenCode could do with the same source material.
+- independent CASE-02 supplied enough usefulness and differentiated continuity evidence for the MVP gate;
+- general suggestion accuracy remains unproven and is not implied by R3 acceptance;
+- future longitudinal cases remain product learning, not an R3 blocker.
 
 The full feedback, Harness/Forme ownership analysis, falsification signals, and next validation questions are maintained in [`VALIDATION.md`](./VALIDATION.md).
 
 ### Approved and implemented R3-V2 Control Packet — Owner Decision Brief
 
-- Status: **all five recommendations owner-approved on 2026-07-20; additive contract implemented with 44 passing checks; real recommendation quality still awaits an independent case**
+- Status: **all five recommendations owner-approved on 2026-07-20; additive contract implemented with 44 passing checks; independent CASE-02 supplied accepted MVP product evidence**
 - User outcome: Forme gives the owner one understandable recommended answer first, lets the owner expand it into a small set of editable judgments, and asks the owner to supply missing judgment only when the system cannot responsibly recommend.
 - Map delta: corrected Twin → bounded agent deliberation → recommendation-first Owner Decision Brief → progressive evidence/review → existing exact approval boundary.
 
@@ -628,6 +628,23 @@ The owner explicitly approved all five recommendations:
 5. use a Forme-only atomic marker executor with journal recovery, idempotent retry, explicit hash-guarded rollback, and no Git authority.
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
+
+## Active stop gate — R4 Controlled Presence Control Packet preparation
+
+- Status: **not yet approved or implemented**
+- User outcome under preparation: a collaborator can understand what the project is, where it is going, and what remains with the owner through a current projection that exposes no private source by default.
+- Candidate map delta: confirmed Twin revision → owner-controlled projection allowlist → deterministic compiler → versioned static collaborator projection.
+- Active issue: [#52](https://github.com/formehq/forme/issues/52)
+
+The R4 Control Packet must make five things decision-grade before implementation starts:
+
+1. which exact Twin fields and evidence classes may enter the projection;
+2. who the first collaborator audience is and what they should be able to understand;
+3. what freshness, provenance, unresolved-state, and agency-boundary labels are visible;
+4. how a privacy canary proves that out-of-scope source cannot enter output;
+5. how a projection version is retired or reconstructed when the Twin or allowlist changes.
+
+R3 acceptance grants no automatic R4 visibility or publishing authority. Until the owner approves this Control Packet, Forme may prepare the contract and deterministic test plan only; it may not compile or expose a real collaborator projection.
 
 ## Owner–agent working agreement
 

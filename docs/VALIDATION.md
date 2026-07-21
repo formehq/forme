@@ -2,7 +2,7 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-07-20
-- Current verdict: **R3's bounded control mechanism is demonstrated; independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
+- Current verdict: **R3 is owner-accepted for the MVP: bounded control is demonstrated, and independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -23,7 +23,7 @@ Three claims must not be collapsed into one:
 | The R3 proposal was accurate and useful enough to improve an owner decision | CASE-01 missed; in independent CASE-02 the owner found all outputs useful, least preferred the no-correction baseline, and could not meaningfully separate Forme B from the rich manual-correction baseline | **Positive independent evidence; general accuracy still unproven** |
 | A Living Project Twin creates differentiated value beyond a mature harness plus LLM | CASE-02 B automatically carried correction with zero historical source bytes and no manual reconstruction while matching the useful corrected direction at current owner resolution | **Mechanically and directionally supported in one independent case** |
 
-Passing the first row does not imply either of the other two. R3 therefore remains in Owner Acceptance rather than Done.
+Passing the first row did not imply either of the other two. R3 became Done only after the owner explicitly accepted CASE-02's independent positive evidence as sufficient for the MVP. This acceptance remains bounded: it does not establish general recommendation accuracy or a final Career policy.
 
 ## Evidence — real R3 owner demo
 
@@ -362,11 +362,11 @@ In blinded review, the owner judged all three reasoning paths grounded and usefu
 
 B also demonstrates product-level continuity rather than only transport. It used a 3,541-byte Action Context, 9,770 input tokens, zero historical source bytes, and no manual correction reconstruction; A1 used a 20,470-byte context, 14,992 input tokens, both full bodies, and manually copied correction. A1 named somewhat more concrete source-derived directions, but the owner cannot currently say that difference matters. The honest conclusion is positive and bounded: Forme preserved useful corrected direction at lower reconstruction cost, while any remaining semantic-texture gap is only a hypothesis, not an established blocker.
 
-Do not run another model comparison merely to seek a different winner. The next owner decision is whether this positive case satisfies R3's MVP product exit condition or whether one minimal, non-body-expanding context refinement should preserve current decision levers, tensions, and explicitly downgraded directions before moving to R4.
+The owner accepted this positive case as satisfying R3's MVP product exit condition. Do not run another model comparison merely to seek a different winner. Twin-context enrichment remains an unproven follow-up rather than a blocker. Closeout revision 5 invalidated B without approval or effect and preserved the ship/closure weighting as unresolved; the next active gate is R4 Control Packet preparation.
 
-## Validation questions for the next development decision
+## Follow-up product-learning questions — not R4 blockers
 
-Before broadening R3 or moving blindly into R4, the next plan should answer:
+Keep these questions in the validation backlog while R4 proceeds through its own Control Packet:
 
 1. What two or three real, longitudinal cases will make Twin-derived value judgeable rather than merely plausible?
 2. What baseline will we compare against: ordinary Codex/OpenCode with the same source material, or a static project summary?
