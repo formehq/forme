@@ -338,6 +338,12 @@ The owner approved all five Owner Decision Brief recommendations. `ActionIntentP
 
 This is implementation evidence, not new product-value evidence. No model was called and no new Career note was read or transmitted while implementing the contract. The next gate remains one fresh, non-self-referential R3-V2 case under a separately owner-approved visibility manifest, scored for substantive judgment and owner comprehension cost.
 
+### Evidence round 4 — CASE-02 metadata-only visibility selection prepared
+
+Without opening or content-searching any Career note body, the lab selected one tracked path using file names, byte sizes, and Git metadata only: `03_Outputs/Reports/Career & Opportunity State Diff (Live).md`. The proposed earlier snapshot is commit `2f8b0860f6d6dc5ac87d81ffd269f0e000d8803b`, blob `cd871e1e869822ad6b70849480bd2e41ba695048`, 4,555 bytes; the later snapshot is commit `6ac71bae893ead735477b5789881413dde46f966`, blob `9a4bf94e5c6014ba56cf30e6abe59642a87cce79`, 11,611 bytes. The earlier commit is an ancestor of the later commit and the selected working path is unmodified.
+
+The exact first-gate manifest is `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. It requests permission only to extract those two Git blobs into the private local lab, apply one stable categorical redaction map, record counts and redacted hashes, and commit the derived artifacts locally. It does not authorize a model call. Every other vault path, uncommitted material, attachment, embed, private-message body, external link, Forme state, effect, network action, or source-vault mutation remains excluded. A second exact transmission gate is mandatory after redaction.
+
 Validate it on a new non-self-referential case. `Career & Opportunity` is the recommended topic, but no new private note may be read or transmitted before a separate exact visibility review. Measure substantive quality and owner comprehension cost separately.
 
 ## Validation questions for the next development decision
