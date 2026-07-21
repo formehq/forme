@@ -1,7 +1,7 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-19
+- Updated: 2026-07-20
 - Current verdict: **R3's bounded control mechanism is demonstrated; Forme's product value and suggestion quality are not yet validated**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -136,7 +136,7 @@ The largest near-term product risk is not unsafe execution. It is that Forme bec
 ## Evidence round 3 — R3-V Case 01 prepared
 
 - Date: 2026-07-19
-- Status: first approved B-arm Reflection admitted; waiting for owner judgment and correction
+- Status: first approved B-arm Reflection corrected at lab Twin revision 4; A0/A1/B comparison calls pending visibility approval
 - Lab: `/Users/zaynw/Documents/Projects/forme-r3v-knowledge-lab`
 - External calls: one exact-hash-approved Forme Reflection; A0/A1 not run
 
@@ -198,7 +198,91 @@ The accepted proposal created lab Twin revision 3:
 
 The Reflection says the stable product baseline survived while the original six-week schedule and early card-first authorization assumptions became non-authoritative. It correctly labels medium uncertainty: the schedule pivot is directly supported, while the authorization inversion is visible in the document body but weakly bound to the selected later evidence line.
 
-This is not yet a positive product result. The owner must now judge whether the claim is accurate, whether the authorization conclusion overreaches, and whether the Reflection is more useful than a summary. A0, A1, correction, and R3 action remain unrun so they cannot contaminate that judgment.
+This was not yet a positive product result. The owner next replayed the inputs and processing path, judged that the authorization conclusion overreached, and admitted a narrower correction. A0, A1, the later correction-aware B proposal, and any R3 action effect remain unrun.
+
+## Feedback round 4 — Owner replay and judgment maturation
+
+### Owner feedback
+
+The owner repeatedly needs a plain-language replay to stay synchronized with the system, and the first R3-V review made the underlying pattern explicit:
+
+1. The owner no longer remembered the complete context or decision history behind the selected historical note, so a precise correction could not responsibly be produced from memory alone.
+2. Replaying the exact inputs, model task, conclusion path, and current project state materially improved the owner's ability to judge the Reflection.
+3. The clause-level review questions were useful, but too detailed to expect the owner to answer completely and accurately at every review moment.
+4. Some product or authorization drift becomes legible only after several outputs accumulate. The owner may first register that “something feels off” and only later identify the exact mistaken assumption—as happened with the earlier card-first strategy.
+
+### Product interpretation
+
+Owner judgment is not a deterministic validator that can be invoked once at proposal time. It is partial, attention-bounded, confidence-varying, and sometimes retrospective. A correction therefore needs to be treated as a **maturing judgment**, not only as one final replacement string.
+
+This strengthens, rather than weakens, the need for owner authority. The system should make imperfect human review safe:
+
+- an unconfirmed model interpretation remains visibly inferred and receives correspondingly limited downstream authority;
+- “I cannot judge yet” and “something is off” are valid states, not review failures;
+- the owner can accept one clause, contest another, or defer the rest without reconstructing a complete alternative interpretation;
+- deferred meaning resurfaces when new evidence conflicts, when the same pattern repeats, or before a consequential action depends on it;
+- later correction supersedes prior meaning and invalidates dependent output without pretending the earlier review never happened;
+- autonomy may grow only while legibility grows with it. Review burden cannot be the hidden price of agency.
+
+The working product law is:
+
+> **Human correction is sparse, progressive, and sometimes delayed. Forme must preserve enough evidence and consequence history for the owner to notice, revisit, and safely repair meaning after the first review moment.**
+
+### Missing Owner Replay surface
+
+The current generated Reflection exposes the answer but does not yet supply a sufficient decision surface. Before asking for a precise correction, Forme should be able to show, in progressively disclosed layers:
+
+1. **What entered:** exact source paths, versions, scope, exclusions, and whether the model saw full bodies or selected excerpts.
+2. **What was asked:** the frozen task, Owner Frame, constraints, and active prior corrections.
+3. **Who concluded what:** separate Codex's semantic judgment from Forme's deterministic checks and durable admission.
+4. **Why each clause exists:** direct evidence, inferred support, uncertainty, alternative interpretation, and any evidence-binding gap.
+5. **What the owner can say now:** confirm, reject, narrow, mark “feels off,” or defer—not only author a complete replacement.
+6. **What changes next:** correction preview, superseded meaning, invalidated outputs, and the future packets or actions that will receive the revised meaning.
+
+This is not explanatory polish around the product. It is part of the control surface required by the constitutional Legibility rule. A concise spoken-style summary should be the first layer; exact provenance and clause-level evidence should remain available on demand.
+
+### R3-V Case 01 — working correction, checked against current state
+
+The frozen historical comparison and the current Forme contract must remain separate.
+
+**What the two R3-V source versions support:**
+
+- The original W1–W6 schedule is explicitly superseded by the 07-14 harness-first pivot.
+- At that historical moment, the later note explicitly retained the three cards, two laws, substrate tiers, and hard constraints as its requirements baseline.
+- The later full document explicitly records an intended authorization trajectory: autonomy where taste is known; cards at uncertain moments; confidence, reversibility, blast radius, and an owner trust dial bound the autonomy radius.
+- That authorization text is an owner direction and end-state arc. It does not prove that implementation or active authority had already switched to that model.
+
+**What the 2026-07-19 Forme repo adds:**
+
+- The rebuild's current authority is `docs/PRODUCT.md`, `docs/DECISIONS.md`, and the approved R1–R3 contracts—not the old CCS spec by itself.
+- Current P0 is organized around Continuity, Cognition, Bounded Agency, and Controlled Presence. The original three-card product is therefore historical requirements input, not the complete current MVP contract.
+- The current R3 authority remains deliberately conservative: one exact owner-approved, deterministic, reversible effect. Trust Dial or confidence-based autonomous execution has not been approved or implemented for this MVP.
+- The highest vision still points toward agency through earned trust, and current owner feedback weakens “a card for every action” as an end-state. That supports the Trust Dial idea as a live direction, not as current canonical policy.
+
+Owner-approved correction admitted at lab Twin revision 4:
+
+> For the frozen July source pair, the six-week schedule was explicitly superseded, while the later note declared its product requirements retained at that moment. The note also introduced a proposed authorization trajectory in which cards surface uncertainty and autonomy is bounded by measured confidence, reversibility, blast radius, and an owner trust dial. Treat that as an intended direction, not evidence that the active implementation or all earlier authorization rules had already been replaced. For the current Forme MVP, the rebuilt repo contracts supersede this note as authority: the old three-card scope is design history, and R3 still requires exact owner approval for its one bounded effect.
+
+This correction narrows the Codex Reflection in two places: **“product baseline survived” is time-scoped to the 07-14 pivot**, and **“authorization assumptions became non-authoritative” becomes a proposed trajectory rather than a completed policy transition**.
+
+### Correction and carry-forward evidence
+
+The correction used no model call and changed no source:
+
+- lab Twin revision `4`;
+- correction `cor_36d134100d7220b60829809aeedc56f9`;
+- active owner-authored Reflection `ref_8024aa6d057325cbef9765f3c64f9c28`;
+- original Codex Reflection `ref_10a7b1b2894516e6602ff24dd1b2a5ac` marked `superseded`;
+- invalidation `inv_a94b3c8170880d5b85e661ed95a33b56` for one dependent derived output;
+- restart/status reconstruction selected the same validated revision 4, and the lab Git worktree remained unchanged.
+
+The next R2 packet preview used base revision 4, the same two Git blobs and evidence coordinates, and reported one active correction. After the lab documentation delta and owner-confirmed next move were observed into Twin revision 5, the current R3 Action Context preview automatically selected the corrected Reflection and correction ID while transmitting zero source bytes:
+
+- Action Context `acx_3f7a0e3139853d1f4494ae6d6bb961b3`;
+- hash `sha256:dd073ca0eea72ee0b7d25d83e2debee3b0494c9884b1639502cd38b879f2c764`;
+- proposed common goal: against the same concise current-MVP decision frame, select one bounded, owner-reviewable next move for deciding which historical CCS ideas should inform the current MVP without treating the old spec as current authority.
+
+The lab now freezes the pending A0/A1/B product-system comparison in `evaluation/COMPARISON-GATE-02.json`, hash `sha256:563d3270dfed14d0503210ec0f8d16384c135c5b9d6f3885e37d11fd3fbdaf6a`. All arms receive the same current-MVP decision frame and action goal. A0 receives both approved historical bodies and no correction; A1 receives the same bodies plus the exact correction manually; B receives its body-free Action Context with the correction carried automatically. Output quality and manual context-reconstruction cost will be scored separately. Because the owner has already seen the original B Reflection and B intentionally receives a reduced Twin context rather than the complete bodies, this is not a clean model benchmark; it tests the whole continuity and control system.
 
 ## Validation questions for the next development decision
 
