@@ -4,7 +4,7 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R1 and R2 owner-accepted; R3 bounded control path and V2 Owner Decision Brief pass 44 checks; CASE-02's Career Reflection is owner-corrected and awaits a separately approved recommendation-comparison gate
+- Current gate: R1 and R2 owner-accepted; R3 bounded control path and V2 Owner Decision Brief pass 44 checks; CASE-02 comparison gate `sha256:5d511…8dece` is prepared and awaits owner approval
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -18,7 +18,7 @@
 | R4 — Controlled Presence | Aug 5–7 | one versioned static collaborator projection from an allowlist | private canary cannot enter output |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 has satisfied its bounded execution, recovery, rollback, and recommendation-first owner-surface evidence, but not yet its complete exit condition. In the independent Career CASE-02, the exact-hash-approved first Reflection was corrected by the owner at Twin revision 3, and a local preview proves the correction is carried forward automatically. The A0/A1/B recommendation comparison still requires a separately hashed owner gate. Technical success alone does not move R3 to Done.
+R3 has satisfied its bounded execution, recovery, rollback, and recommendation-first owner-surface evidence, but not yet its complete exit condition. In the independent Career CASE-02, the exact-hash-approved first Reflection was corrected by the owner at Twin revision 3, and a local preview proves the correction is carried forward automatically. The A0/A1/B recommendation comparison is frozen in gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece` but no comparison call is authorized yet. Technical success alone does not move R3 to Done.
 
 ## Cut rules
 
