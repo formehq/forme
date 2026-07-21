@@ -5,7 +5,7 @@
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
 - P0 implementation: **R1 and R2 owner-accepted; R3 passed 41 checks and completed its real bounded control demo through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review the unlabeled R3-V Outputs M/Q/T before revealing arm identity or approving any effect
+- Next action: owner-review the proposed R3-V2 Owner Decision Brief contract before any schema, prompt, or renderer implementation
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -45,7 +45,7 @@ Current truth:
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - the owner has not accepted R3's usefulness or suggestion accuracy from this one case, so R3 is not Done. The current evidence and Harness comparison live in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
-- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison has now run with zero tool events in all three arms; B admitted one unapproved proposal at lab Twin revision 6 with zero transmitted source bytes. No effect is approved or executed. The unlabeled Owner Score Packet is the current gate; arm identity remains hidden until owner judgment.
+- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. The next gate is the owner-facing output contract, not another effect.
 
 ## System map
 
@@ -508,6 +508,62 @@ Current conclusion:
 - the next case should test longitudinal Twin value against what ordinary Codex or OpenCode could do with the same source material.
 
 The full feedback, Harness/Forme ownership analysis, falsification signals, and next validation questions are maintained in [`VALIDATION.md`](./VALIDATION.md).
+
+### Proposed R3-V2 Control Packet — Owner Decision Brief
+
+- Status: **product direction endorsed; exact schema and trigger contract awaiting owner approval**
+- User outcome: Forme gives the owner one understandable recommended answer first, lets the owner expand it into a small set of editable judgments, and asks the owner to supply missing judgment only when the system cannot responsibly recommend.
+- Map delta: corrected Twin → bounded agent deliberation → recommendation-first Owner Decision Brief → progressive evidence/review → existing exact approval boundary.
+
+The intended relationship is:
+
+```text
+agent absorbs broad evidence and complexity
+  → T: one plain-language recommendation by default
+  → M: at most three editable judgment units on demand
+  → Q: one named blocking question only when confidence is genuinely too low
+  → evidence and consequences expand progressively
+  → existing owner approval still gates every effect
+```
+
+The first comparison supports the interaction direction but not the substantive accuracy of T. A0 may have been bolder because it lacked the correction, because it retained both full source bodies, or because of ordinary model variance. The next contract must therefore increase decision compression without hiding uncertainty or weakening evidence.
+
+#### Recommended decisions
+
+| Decision | Recommended answer | Global effect |
+|---|---|---|
+| Default relationship | Use recommendation-first mode by default. The agent must state what it recommends; it may not substitute a neutral classification exercise merely because asking the owner is safer. | Forme absorbs more analysis work and returns a decision-shaped object rather than a new owner task list. |
+| Editable decomposition | Every recommendation exposes one to three independent judgment items, each with a recommended choice, rationale, and bounded alternatives. | T becomes the compact top layer and M becomes its correction surface; the owner can narrow one clause without rewriting the full answer. |
+| Low-confidence fallback | Permit `ask_owner` only when the proposal names one blocking uncertainty and labels confidence `low`. Forme admits the question but compiles no effect plan. | Q remains available as an honest epistemic stop instead of becoming the default low-risk behavior. |
+| Progressive legibility | Render three layers: 30-second recommendation; expandable judgment items; evidence, uncertainty, provenance, and downstream consequences. | Legibility no longer means showing maximum detail at once. Review depth can grow with uncertainty and consequence. |
+| Authority boundary | Change no Context visibility, tools, writer, approval, executor, receipt, or rollback authority. A recommendation is never authorization, and model confidence never grants permission. | This is an owner-surface and proposal-contract change, not an autonomy escalation. |
+
+#### Proposed additive contract
+
+Introduce `ActionIntentProposalV2` while continuing to validate and reconstruct existing V1 revisions. The runtime must produce:
+
+- `mode`: `recommend` or `ask_owner`;
+- one-sentence `plainLanguageSummary`;
+- `recommendation` when in recommend mode, otherwise one `blockingQuestion`;
+- `confidence`: `low`, `medium`, or `high`, plus a rationale;
+- one to three `decisionItems`, each containing the judgment, recommended choice, reason, and bounded alternatives;
+- `whyNow`, `successCheck`, and one `ownerChallenge`;
+- the existing proposal identity, base revision, and fixed action kind.
+
+Local validation enforces the mode rules. `ask_owner` requires low confidence and cannot compile an `EffectPlanV1`. `recommend` may compile only the existing fixed README effect, after which the current exact-hash approval sequence remains unchanged. The generated Owner Decision Brief is a reconstructible surface, never a new source of truth.
+
+Implementation, if approved, is limited to types, schemas, the action runtime prompt, local validators, rendering, backward-compatibility fixtures, and tests. It does not add a model call, source visibility, arbitrary action, or a new effect capability.
+
+#### Next independent case
+
+Do not rerun CASE-01 as the primary evidence; the owner now knows the arms and content. Recommend a small `Career & Opportunity` case because it is personally judgeable and not self-referential. Before reading or transmitting any new note, prepare a new owner visibility manifest with exact paths, commits, bytes, redactions, and exclusions. `Forme` documents are the privacy-safe fallback but risk repeating the self-referential validation problem; more CCS material is too contaminated by this case.
+
+The next case scores two axes separately:
+
+1. **substantive judgment:** accuracy, usefulness, evidence fidelity;
+2. **owner cost:** time to understand, need for re-explanation, number of owner-created judgments, and whether “feels off” can be expressed without a full rewrite.
+
+Required owner stop gate: approve or edit the five recommended decisions above before implementation. Selecting `Career & Opportunity` and approving any source visibility remain a later, separate gate.
 
 ### Five-minute owner demo
 

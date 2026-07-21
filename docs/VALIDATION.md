@@ -2,7 +2,7 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-07-20
-- Current verdict: **R3's bounded control mechanism is demonstrated; Forme's product value and suggestion quality are not yet validated**
+- Current verdict: **R3's bounded control mechanism is demonstrated; the first Twin comparison preserved correction but produced the least preferred owner output**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -20,8 +20,8 @@ Three claims must not be collapsed into one:
 | Claim | Current evidence | Status |
 |---|---|---|
 | Forme can constrain one LLM proposal and execute one exact owner-approved effect safely | 41 deterministic checks plus the real revision 21–25 proposal, approval, execute, retry, restart, and rollback path | **Demonstrated within the fixed R3 slice** |
-| The R3 proposal was accurate and useful enough to improve an owner decision | The proposal looked plausibly useful, but the owner lacked enough use-feel, comparison cases, and confidence to judge its accuracy | **Unproven** |
-| A Living Project Twin creates differentiated value beyond a mature harness plus LLM | The architecture contains distinct Twin, correction, approval, receipt, and projection contracts, but the Twin has not yet accumulated enough longitudinal experience to make that difference felt | **Architecturally plausible; product-unproven** |
+| The R3 proposal was accurate and useful enough to improve an owner decision | In the first blinded comparison the owner preferred recommendation-first T/A0, found M/A1 useful as a possible editable layer, and least preferred Q/B | **First measured owner-output miss; accuracy still unproven** |
+| A Living Project Twin creates differentiated value beyond a mature harness plus LLM | B carried correction automatically with zero source-body retransmission, but that continuity produced the least preferred proposal in CASE-01 | **Mechanically supported; first product comparison negative** |
 
 Passing the first row does not imply either of the other two. R3 therefore remains in Owner Acceptance rather than Done.
 
@@ -296,6 +296,43 @@ The owner approved the exact comparison gate hash above. One call per arm then c
 - the original vault and the lab's five allowlisted source files remained unchanged by the three calls.
 
 The three semantic outputs are reordered and unlabeled in `evaluation/OWNER-SCORE-PACKET-02.md`. The owner may give only a directional reaction—most useful, least useful, or “feels off”—before attempting numeric scores. Arm mapping, token usage, and context-reconstruction cost are recorded separately and should be revealed only after the owner's first product judgment.
+
+### Owner blind judgment and arm reveal
+
+The owner accepted the common direction: old CCS ideas should be selectively judged rather than imported as current authority. The preference order was:
+
+1. **T / A0 — preferred:** Fresh Harness with both full historical bodies and no correction. It supplied a concrete recommended inheritance boundary.
+2. **M / A1 — useful secondary:** Fresh Harness with the full bodies and the exact correction manually reconstructed. It exposed three independent hypotheses but left their disposition to the owner.
+3. **Q / B — least preferred:** Forme Twin with automatic correction carry-forward and zero historical source bytes. It proposed a broader classification exercise and returned the most judgment work to the owner.
+
+The owner preferred T only conditionally: a recommendation-first agent is valuable if it is mature and accurate. T itself remained hard to understand until the outputs were translated into a lower-cost Chinese comparison layer. Once the owner saw the common direction, actual difference, and expected owner work, the judgment became immediate.
+
+This yields a more precise product requirement:
+
+> Forme should absorb analysis complexity, give one plain-language recommended answer first, expose a small editable decomposition on demand, and ask the owner to supply missing judgment only when low confidence is explicit. Progressive explanation is part of the control surface, not presentation polish.
+
+T and M are complementary rather than exclusive: T is the default recommendation layer; M is the clause-level correction layer beneath it. Q is a legitimate fallback only when the agent names what prevents a responsible recommendation. The required owner review should rise with uncertainty, irreversibility, blast radius, externality, and novelty—not with the amount of analysis the agent performed.
+
+The mapping does not prove that A0 was more accurate. Plausible explanations include:
+
+- A0 retained both full source bodies while B received a semantically compressed Twin context;
+- the correction correctly discouraged overclaiming but also pushed A1 and B toward excessive caution;
+- prompt framing or ordinary single-run model variance produced the style difference;
+- the current Action Context lacks enough durable evidence detail for a bold but grounded recommendation.
+
+The B proposal was never approved or executed. An owner-frame observation advanced the lab Twin to revision 7 and invalidated proposal `act_6bec5284c7350af8afaac3585a345c1f`; approvals and effect receipts remain zero. The negative preference result is preserved rather than repaired after the fact.
+
+### Consequence for the next gate
+
+Do not broaden action authority or move directly into R4. First propose an additive Owner Decision Brief contract:
+
+- recommendation-first by default;
+- one to three editable judgment items;
+- explicit confidence and a named low-confidence blocking question;
+- progressive explanation from 30-second summary to evidence and consequences;
+- no change to Context visibility, tools, approval, executor, receipt, or rollback boundaries.
+
+Validate it on a new non-self-referential case. `Career & Opportunity` is the recommended topic, but no new private note may be read or transmitted before a separate exact visibility review. Measure substantive quality and owner comprehension cost separately.
 
 ## Validation questions for the next development decision
 
