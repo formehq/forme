@@ -2,7 +2,7 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-07-20
-- Current verdict: **R3's bounded control mechanism is demonstrated; the first Twin comparison preserved correction but produced the least preferred owner output**
+- Current verdict: **R3's bounded control mechanism is demonstrated; independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -20,8 +20,8 @@ Three claims must not be collapsed into one:
 | Claim | Current evidence | Status |
 |---|---|---|
 | Forme can constrain one LLM proposal and execute one exact owner-approved effect safely | 41 deterministic checks plus the real revision 21–25 proposal, approval, execute, retry, restart, and rollback path | **Demonstrated within the fixed R3 slice** |
-| The R3 proposal was accurate and useful enough to improve an owner decision | In the first blinded comparison the owner preferred recommendation-first T/A0, found M/A1 useful as a possible editable layer, and least preferred Q/B | **First measured owner-output miss; accuracy still unproven** |
-| A Living Project Twin creates differentiated value beyond a mature harness plus LLM | B carried correction automatically with zero source-body retransmission, but that continuity produced the least preferred proposal in CASE-01 | **Mechanically supported; first product comparison negative** |
+| The R3 proposal was accurate and useful enough to improve an owner decision | CASE-01 missed; in independent CASE-02 the owner found all outputs useful, least preferred the no-correction baseline, and could not meaningfully separate Forme B from the rich manual-correction baseline | **Positive independent evidence; general accuracy still unproven** |
+| A Living Project Twin creates differentiated value beyond a mature harness plus LLM | CASE-02 B automatically carried correction with zero historical source bytes and no manual reconstruction while matching the useful corrected direction at current owner resolution | **Mechanically and directionally supported in one independent case** |
 
 Passing the first row does not imply either of the other two. R3 therefore remains in Owner Acceptance rather than Done.
 
@@ -358,9 +358,9 @@ The owner approved that correction. Without a model call, revision 3 preserved t
 
 The owner approved recommendation comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`. A0 and A1 each received the same two complete redacted bodies (16,715 bytes), with the correction absent versus manually reconstructed; B received body-free Action Context `sha256:73f00fb7acdbd29e2d3fd0c831685fb61714f59e8896c822a4df50497a46ff39` from Twin revision 3 with the correction carried automatically. All three one-attempt `gpt-5.6-sol` calls completed under the V2 recommendation-first contract with four runtime events, one `agent_message`, zero tool events, and no retry. A0 and A1 remained local baselines. B admitted proposal `act_05fecd458a2962fcaa5c0b3f30f49862` at Twin revision 4 with an unapproved effect-plan preview; approval and effect receipts remain zero. README and both Career source blobs remained byte-identical, and the original vault path was untouched.
 
-In blinded review, the owner judged all three reasoning paths grounded and useful as parallel scaffolding. The reveal was: 方案一=A1, 方案二=B, 方案三=A0. The owner preferred A1's medium-confidence “signal continues, conversion gets priority” dual loop and least preferred A0's high-confidence closure-only stage switch; B's correction-aware short-loop recommendation remained useful but was not explicitly ranked beyond A1 being preferred. This is evidence that the correction materially changed later action semantics: both correction-aware outputs preserved the combined mechanism, while the no-correction output made the overcommitted stage-switch recommendation the owner liked least.
+In blinded review, the owner judged all three reasoning paths grounded and useful as parallel scaffolding. The reveal was: 方案一=A1, 方案二=B, 方案三=A0. The owner leaned slightly toward A1's medium-confidence dual loop and least preferred A0's high-confidence closure-only stage switch, then clarified that A1 and B are extremely close and cannot be separated confidently because the real ship/closure weighting remains unresolved. This is evidence that the correction materially changed later action semantics: both correction-aware outputs preserved the combined mechanism, while the no-correction output made the overcommitted stage-switch recommendation the owner liked least.
 
-B also demonstrates product-level continuity rather than only transport. It used a 3,541-byte Action Context, 9,770 input tokens, zero historical source bytes, and no manual correction reconstruction; A1 used a 20,470-byte context, 14,992 input tokens, both full bodies, and manually copied correction. A1 was nevertheless more concrete and better matched the owner. One case cannot distinguish lossy Twin compression from normal model variance, but the honest conclusion is now positive and bounded: Forme preserved useful corrected direction at lower reconstruction cost, while the current Twin still lacks some decision-relevant texture present in the rich baseline.
+B also demonstrates product-level continuity rather than only transport. It used a 3,541-byte Action Context, 9,770 input tokens, zero historical source bytes, and no manual correction reconstruction; A1 used a 20,470-byte context, 14,992 input tokens, both full bodies, and manually copied correction. A1 named somewhat more concrete source-derived directions, but the owner cannot currently say that difference matters. The honest conclusion is positive and bounded: Forme preserved useful corrected direction at lower reconstruction cost, while any remaining semantic-texture gap is only a hypothesis, not an established blocker.
 
 Do not run another model comparison merely to seek a different winner. The next owner decision is whether this positive case satisfies R3's MVP product exit condition or whether one minimal, non-body-expanding context refinement should preserve current decision levers, tensions, and explicitly downgraded directions before moving to R4.
 
