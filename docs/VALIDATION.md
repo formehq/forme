@@ -332,6 +332,12 @@ Do not broaden action authority or move directly into R4. First propose an addit
 - progressive explanation from 30-second summary to evidence and consequences;
 - no change to Context visibility, tools, approval, executor, receipt, or rollback boundaries.
 
+### 2026-07-20 superseding implementation status
+
+The owner approved all five Owner Decision Brief recommendations. `ActionIntentProposalV2` is now implemented additively: V1 remains reconstructible; `recommend` can compile only the existing fixed README effect; low-confidence `ask_owner` persists one blocking question with no effect plan and cannot be approved; and the Restart View progressively exposes the compact answer, editable judgments, then evidence and consequences. TypeScript checking and all 44 tests pass.
+
+This is implementation evidence, not new product-value evidence. No model was called and no new Career note was read or transmitted while implementing the contract. The next gate remains one fresh, non-self-referential R3-V2 case under a separately owner-approved visibility manifest, scored for substantive judgment and owner comprehension cost.
+
 Validate it on a new non-self-referential case. `Career & Opportunity` is the recommended topic, but no new private note may be read or transmitted before a separate exact visibility review. Measure substantive quality and owner comprehension cost separately.
 
 ## Validation questions for the next development decision

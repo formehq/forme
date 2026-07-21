@@ -15,6 +15,12 @@
     "sha256": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "proposalId": { "type": "string", "pattern": "^act_[a-f0-9]{32}$" },
     "proposal": {
+      "oneOf": [
+        { "$ref": "#/$defs/proposalV1" },
+        { "$ref": "#/$defs/proposalV2" }
+      ]
+    },
+    "proposalV1": {
       "type": "object",
       "required": ["schemaVersion", "proposalId", "baseTwinRevision", "actionKind", "rationale", "title", "whyNow", "nextMove", "successCheck", "ownerChallenge"],
       "properties": {
@@ -26,6 +32,64 @@
         "title": { "type": "string", "minLength": 3, "maxLength": 120, "pattern": "^[^\\r\\n]+$" },
         "whyNow": { "type": "string", "minLength": 20, "maxLength": 1000 },
         "nextMove": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "successCheck": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "ownerChallenge": { "type": "string", "minLength": 10, "maxLength": 1000 }
+      },
+      "additionalProperties": false
+    },
+    "proposalV2": {
+      "type": "object",
+      "required": ["schemaVersion", "proposalId", "baseTwinRevision", "actionKind", "mode", "plainLanguageSummary", "recommendation", "blockingQuestion", "confidence", "decisionItems", "whyNow", "successCheck", "ownerChallenge"],
+      "properties": {
+        "schemaVersion": { "type": "string", "const": "2" },
+        "proposalId": { "$ref": "#/$defs/proposalId" },
+        "baseTwinRevision": { "type": "integer", "minimum": 1 },
+        "actionKind": { "type": "string", "const": "render_next_move_brief.v1" },
+        "mode": { "type": "string", "enum": ["recommend", "ask_owner"] },
+        "plainLanguageSummary": { "type": "string", "minLength": 10, "maxLength": 300, "pattern": "^[^\\r\\n]+$" },
+        "recommendation": {
+          "anyOf": [
+            { "type": "string", "minLength": 10, "maxLength": 1000 },
+            { "type": "null" }
+          ]
+        },
+        "blockingQuestion": {
+          "anyOf": [
+            { "type": "string", "minLength": 10, "maxLength": 500 },
+            { "type": "null" }
+          ]
+        },
+        "confidence": {
+          "type": "object",
+          "required": ["level", "rationale"],
+          "properties": {
+            "level": { "type": "string", "enum": ["low", "medium", "high"] },
+            "rationale": { "type": "string", "minLength": 10, "maxLength": 500 }
+          },
+          "additionalProperties": false
+        },
+        "decisionItems": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["judgment", "recommendedChoice", "reason", "alternatives"],
+            "properties": {
+              "judgment": { "type": "string", "minLength": 5, "maxLength": 300 },
+              "recommendedChoice": { "type": "string", "minLength": 3, "maxLength": 500 },
+              "reason": { "type": "string", "minLength": 10, "maxLength": 800 },
+              "alternatives": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 3,
+                "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "whyNow": { "type": "string", "minLength": 20, "maxLength": 1000 },
         "successCheck": { "type": "string", "minLength": 10, "maxLength": 1000 },
         "ownerChallenge": { "type": "string", "minLength": 10, "maxLength": 1000 }
       },
@@ -61,8 +125,8 @@
         "correctedReflectionId": { "type": "string", "pattern": "^ref_[a-f0-9]{32}$" },
         "correctionId": { "type": "string", "pattern": "^cor_[a-f0-9]{32}$" },
         "runtimeReceiptId": { "type": "string", "pattern": "^run_[a-f0-9]{32}$" },
-        "effectPlan": { "$ref": "#/$defs/effectPlan" },
-        "effectPlanHash": { "$ref": "#/$defs/sha256" },
+        "effectPlan": { "anyOf": [{ "$ref": "#/$defs/effectPlan" }, { "type": "null" }] },
+        "effectPlanHash": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
         "admittedRevision": { "type": "integer", "minimum": 1 },
         "status": { "enum": ["proposed", "approved", "executed", "rolled-back", "invalidated", "indeterminate"] },
         "approvalId": { "anyOf": [{ "type": "string", "pattern": "^apr_[a-f0-9]{32}$" }, { "type": "null" }] },

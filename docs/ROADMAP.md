@@ -1,10 +1,10 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-07-18
+- Updated: 2026-07-20
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R1 and R2 owner-accepted; R3 bounded control path passed 41 checks and the real revision 21–25 demo; product usefulness remains in Owner Acceptance
+- Current gate: R1 and R2 owner-accepted; R3 bounded control path and V2 Owner Decision Brief pass 44 checks; the real revision 21–25 control demo is complete; product usefulness remains in Owner Acceptance
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -18,7 +18,7 @@
 | R4 — Controlled Presence | Aug 5–7 | one versioned static collaborator projection from an allowlist | private canary cannot enter output |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 has satisfied its bounded execution, recovery, and rollback evidence, but not yet its complete exit condition: the owner cannot judge suggestion usefulness or accuracy from the single self-referential demo case. The next gate decision must use the evidence and open questions in [`VALIDATION.md`](./VALIDATION.md); technical success alone does not move R3 to Done.
+R3 has satisfied its bounded execution, recovery, rollback, and recommendation-first owner-surface evidence, but not yet its complete exit condition: the owner cannot judge suggestion usefulness or accuracy from the single self-referential demo case. The next independent R3-V2 case requires a separate visibility approval before any new private note is read or transmitted. Technical success alone does not move R3 to Done.
 
 ## Cut rules
 

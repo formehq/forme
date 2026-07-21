@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/action-intent-proposal-v2.json",
+  "title": "Forme Action Intent Proposal v2",
+  "type": "object",
+  "required": ["schemaVersion", "proposalId", "baseTwinRevision", "actionKind", "mode", "plainLanguageSummary", "recommendation", "blockingQuestion", "confidence", "decisionItems", "whyNow", "successCheck", "ownerChallenge"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "2" },
+    "proposalId": { "type": "string", "pattern": "^act_[a-f0-9]{32}$" },
+    "baseTwinRevision": { "type": "integer", "minimum": 1 },
+    "actionKind": { "type": "string", "const": "render_next_move_brief.v1" },
+    "mode": { "type": "string", "enum": ["recommend", "ask_owner"] },
+    "plainLanguageSummary": { "type": "string", "minLength": 10, "maxLength": 300, "pattern": "^[^\\r\\n]+$" },
+    "recommendation": {
+      "anyOf": [
+        { "type": "string", "minLength": 10, "maxLength": 1000 },
+        { "type": "null" }
+      ]
+    },
+    "blockingQuestion": {
+      "anyOf": [
+        { "type": "string", "minLength": 10, "maxLength": 500 },
+        { "type": "null" }
+      ]
+    },
+    "confidence": {
+      "type": "object",
+      "required": ["level", "rationale"],
+      "properties": {
+        "level": { "type": "string", "enum": ["low", "medium", "high"] },
+        "rationale": { "type": "string", "minLength": 10, "maxLength": 500 }
+      },
+      "additionalProperties": false
+    },
+    "decisionItems": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["judgment", "recommendedChoice", "reason", "alternatives"],
+        "properties": {
+          "judgment": { "type": "string", "minLength": 5, "maxLength": 300 },
+          "recommendedChoice": { "type": "string", "minLength": 3, "maxLength": 500 },
+          "reason": { "type": "string", "minLength": 10, "maxLength": 800 },
+          "alternatives": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": { "type": "string", "minLength": 1, "maxLength": 300 }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "whyNow": { "type": "string", "minLength": 20, "maxLength": 1000 },
+    "successCheck": { "type": "string", "minLength": 10, "maxLength": 1000 },
+    "ownerChallenge": { "type": "string", "minLength": 10, "maxLength": 1000 }
+  },
+  "additionalProperties": false
+}

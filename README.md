@@ -10,8 +10,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R3 — Bounded Agency; Technical Review**
-- Product implementation: **R1 and R2 owner-accepted; R3 implemented with 41 passing checks and awaiting the real owner demo; R4–R5 not started**
+- Current gate: **R3 — Bounded Agency; Owner Acceptance / product validation**
+- Product implementation: **R1 and R2 owner-accepted; the R3 control path and R3-V2 Owner Decision Brief pass 44 checks; recommendation accuracy remains unaccepted; R4–R5 not started**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
 
@@ -109,7 +109,7 @@ The real Forme demo admitted an evidence-backed Codex Reflection, then recorded 
 
 ## R3 Bounded Agency — mechanism demonstrated; product validation active
 
-R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The bounded mechanism is demonstrated; suggestion usefulness and differentiated Twin value remain under R3-V product validation. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
+R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The additive `ActionIntentProposalV2` now returns one recommendation first, one to three editable judgments, explicit confidence, and a low-confidence `ask_owner` fallback that cannot compile an effect. Existing V1 revisions remain reconstructible. The bounded mechanism and new owner surface are implemented; suggestion usefulness, accuracy, and differentiated Twin value remain under R3-V product validation. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
 
 Preview the packet manifest without calling a model:
 

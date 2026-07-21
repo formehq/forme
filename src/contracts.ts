@@ -6,6 +6,8 @@ import type { FormatsPlugin } from "ajv-formats";
 import type {
   ActionContextPacket,
   ActionIntentProposal,
+  ActionIntentProposalV1,
+  ActionIntentProposalV2,
   AgencyState,
   ContextPacket,
   HeadRecord,
@@ -33,11 +35,13 @@ const validateAgency = ajv.compile<AgencyState>(schema("../schemas/agency-state-
 const contextPacketSchema = schema("../schemas/context-packet-v1.schema.json");
 const reflectionProposalSchema = schema("../schemas/reflection-proposal-v1.schema.json");
 const actionContextPacketSchema = schema("../schemas/action-context-packet-v1.schema.json");
-const actionIntentProposalSchema = schema("../schemas/action-intent-proposal-v1.schema.json");
+const actionIntentProposalV1Schema = schema("../schemas/action-intent-proposal-v1.schema.json");
+const actionIntentProposalV2Schema = schema("../schemas/action-intent-proposal-v2.schema.json");
 const validateContextPacket = ajv.compile<ContextPacket>(contextPacketSchema);
 const validateReflectionProposal = ajv.compile<ReflectionProposal>(reflectionProposalSchema);
 const validateActionContextPacket = ajv.compile<ActionContextPacket>(actionContextPacketSchema);
-const validateActionIntentProposal = ajv.compile<ActionIntentProposal>(actionIntentProposalSchema);
+const validateActionIntentProposalV1 = ajv.compile<ActionIntentProposalV1>(actionIntentProposalV1Schema);
+const validateActionIntentProposalV2 = ajv.compile<ActionIntentProposalV2>(actionIntentProposalV2Schema);
 
 function validationMessage(name: string, validator: ValidateFunction): string {
   return `${name} contract failed: ${ajv.errorsText(validator.errors, { separator: "; " })}`;
@@ -66,6 +70,7 @@ export function assertTwinRevision(value: unknown): asserts value is TwinRevisio
     delete base.agency;
     if (!validateRevisionV2(base)) throw new Error(validationMessage("Twin revision", validateRevisionV2));
     if (!validateAgency(revision.agency)) throw new Error(validationMessage("Agency state", validateAgency));
+    assertAgencyProposalSemantics(revision.agency);
     return;
   }
   throw new Error("Twin revision contract failed: unsupported schemaVersion");
@@ -92,13 +97,72 @@ export function assertActionContextPacket(value: unknown): asserts value is Acti
 }
 
 export function assertActionIntentProposal(value: unknown): asserts value is ActionIntentProposal {
-  if (!validateActionIntentProposal(value)) {
-    throw new Error(validationMessage("Action intent proposal", validateActionIntentProposal));
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Action intent proposal contract failed");
   }
+  const version = (value as { schemaVersion?: unknown }).schemaVersion;
+  if (version === "1") {
+    if (!validateActionIntentProposalV1(value)) {
+      throw new Error(validationMessage("Action intent proposal", validateActionIntentProposalV1));
+    }
+    return;
+  }
+  if (version === "2") {
+    if (!validateActionIntentProposalV2(value)) {
+      throw new Error(validationMessage("Action intent proposal", validateActionIntentProposalV2));
+    }
+    assertActionIntentProposalV2Semantics(value);
+    return;
+  }
+  throw new Error("Action intent proposal contract failed: unsupported schemaVersion");
 }
 
 export function actionIntentProposalJsonSchema(): object {
-  return structuredClone(actionIntentProposalSchema);
+  return structuredClone(actionIntentProposalV2Schema);
+}
+
+function assertActionIntentProposalV2Semantics(proposal: ActionIntentProposalV2): void {
+  if (proposal.mode === "recommend") {
+    if (proposal.recommendation === null || proposal.blockingQuestion !== null) {
+      throw new Error("Action intent proposal contract failed: recommend mode requires one recommendation and no blocking question");
+    }
+    return;
+  }
+  if (
+    proposal.confidence.level !== "low"
+    || proposal.recommendation !== null
+    || proposal.blockingQuestion === null
+  ) {
+    throw new Error("Action intent proposal contract failed: ask_owner mode requires low confidence, one blocking question, and no recommendation");
+  }
+}
+
+function assertAgencyProposalSemantics(agency: AgencyState): void {
+  const askOwnerProposalIds = new Set<string>();
+  for (const record of agency.proposals) {
+    assertActionIntentProposal(record.proposal);
+    const asksOwner = record.proposal.schemaVersion === "2" && record.proposal.mode === "ask_owner";
+    if (asksOwner) {
+      askOwnerProposalIds.add(record.proposal.proposalId);
+      if (
+        record.effectPlan !== null
+        || record.effectPlanHash !== null
+        || record.approvalId !== null
+        || record.effectReceiptIds.length !== 0
+        || (record.status !== "proposed" && record.status !== "invalidated")
+      ) {
+        throw new Error("Agency state contract failed: ask_owner proposals cannot carry an effect, approval, or effect receipt");
+      }
+    } else if (record.effectPlan === null || record.effectPlanHash === null) {
+      throw new Error("Agency state contract failed: actionable proposals require an effect plan and hash");
+    }
+  }
+  if (
+    agency.approvals.some((item) => askOwnerProposalIds.has(item.proposalId))
+    || agency.effectReceipts.some((item) => askOwnerProposalIds.has(item.proposalId))
+  ) {
+    throw new Error("Agency state contract failed: ask_owner proposals cannot be referenced by approvals or effect receipts");
+  }
 }
 
 export function assertHeadRecord(value: unknown): asserts value is HeadRecord {

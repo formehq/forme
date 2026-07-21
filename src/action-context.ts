@@ -43,9 +43,10 @@ export function buildActionContextPacket(workspaceRoot: string, actionGoal: stri
       markerId: "forme:r3-action" as const,
     },
     constraints: [
-      "Propose only the five bounded semantic fields; never propose a path, patch, command, tool call, or raw file body.",
+      "Return only the bounded Owner Decision Brief fields; never propose a path, patch, command, tool call, or raw file body.",
+      "Recommend by default with one to three editable judgments; ask one blocking owner question only when confidence is low.",
       "Treat the owner-corrected Reflection and Owner Frame as the complete decision context.",
-      "The proposal has no authority until the owner separately approves the exact compiled effect-plan hash.",
+      "A recommendation has no authority until the owner separately approves its exact compiled effect-plan hash; ask_owner cannot compile or receive that approval.",
     ],
   };
   const packet: ActionContextPacket = {

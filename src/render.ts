@@ -1,4 +1,4 @@
-import { renderManagedBody } from "./action.ts";
+import { markdownText, renderManagedBody } from "./action.ts";
 import type { ActionProposalRecord, ReflectionRecord, SourceChanges, TwinRevision } from "./types.ts";
 
 function list(items: string[], empty: string): string {
@@ -51,29 +51,111 @@ function reflectionSection(reflections: ReflectionRecord[]): string[] {
   ]);
 }
 
-function actionSection(proposals: ActionProposalRecord[]): string[] {
+function actionSection(proposals: ActionProposalRecord[], reflections: ReflectionRecord[]): string[] {
   if (proposals.length === 0) return ["No R3 action proposal has been admitted."];
-  return proposals.flatMap((record, index) => [
-    ...(index === 0 ? [] : [""]),
-    `### ${record.proposal.proposalId}`,
-    "",
-    `- Status: ${record.status}`,
-    `- Action kind: ${record.proposal.actionKind}`,
-    `- Target: ${record.effectPlan.targetPath} · marker ${record.effectPlan.markerId}`,
-    `- Proposal hash: ${record.proposalHash}`,
-    `- Effect-plan hash: ${record.effectPlanHash}`,
-    `- Before file hash: ${record.effectPlan.beforeFileHash}`,
-    `- After file hash: ${record.effectPlan.afterFileHash}`,
-    `- Why this action: ${record.proposal.rationale}`,
-    `- Approval: ${record.approvalId ?? "Not approved"}`,
-    `- Effect receipts: ${record.effectReceiptIds.length === 0 ? "None" : record.effectReceiptIds.join(", ")}`,
-    "",
-    "Exact managed-block preview:",
-    "",
-    "```markdown",
-    renderManagedBody(record.proposal, record.effectPlan.effectId, record.correctedReflectionId).trim(),
-    "```",
-  ]);
+  return proposals.flatMap((record, index) => {
+    const prefix = index === 0 ? [] : [""];
+    if (record.proposal.schemaVersion === "1") {
+      if (record.effectPlan === null || record.effectPlanHash === null) {
+        throw new Error("V1 action proposal is missing its effect plan");
+      }
+      return [
+        ...prefix,
+        `### ${record.proposal.proposalId}`,
+        "",
+        `- Status: ${record.status}`,
+        `- Action kind: ${record.proposal.actionKind}`,
+        `- Target: ${record.effectPlan.targetPath} · marker ${record.effectPlan.markerId}`,
+        `- Proposal hash: ${record.proposalHash}`,
+        `- Effect-plan hash: ${record.effectPlanHash}`,
+        `- Before file hash: ${record.effectPlan.beforeFileHash}`,
+        `- After file hash: ${record.effectPlan.afterFileHash}`,
+        `- Why this action: ${record.proposal.rationale}`,
+        `- Approval: ${record.approvalId ?? "Not approved"}`,
+        `- Effect receipts: ${record.effectReceiptIds.length === 0 ? "None" : record.effectReceiptIds.join(", ")}`,
+        "",
+        "Exact managed-block preview:",
+        "",
+        "```markdown",
+        renderManagedBody(record.proposal, record.effectPlan.effectId, record.correctedReflectionId).trim(),
+        "```",
+      ];
+    }
+
+    const proposal = record.proposal;
+    const correctedReflection = reflections.find((item) => item.reflectionId === record.correctedReflectionId);
+    const topAnswer = proposal.mode === "recommend"
+      ? [`**Recommendation:** ${markdownText(proposal.recommendation ?? "")}`]
+      : [`**Owner input needed:** ${markdownText(proposal.blockingQuestion ?? "")}`];
+    const decisionItems = proposal.decisionItems.flatMap((item, itemIndex) => [
+      `${itemIndex + 1}. **Judgment:** ${markdownText(item.judgment)}`,
+      `   - Recommended choice: ${markdownText(item.recommendedChoice)}`,
+      `   - Reason: ${markdownText(item.reason)}`,
+      `   - Alternatives: ${item.alternatives.map(markdownText).join(" / ")}`,
+    ]);
+    const evidence = correctedReflection?.evidence.map((item) => (
+      `- ${item.evidenceId}: ${item.commit.slice(0, 12)} · ${item.relativePath}:${item.lineStart}-${item.lineEnd} · blob ${item.blobHash.slice(0, 12)}`
+    )) ?? ["- Corrected Reflection evidence is unavailable"];
+    const effectDetails = record.effectPlan === null || record.effectPlanHash === null
+      ? [
+        "- Downstream consequence: no effect plan was compiled; this question cannot be approved or executed.",
+      ]
+      : [
+        `- Downstream consequence: exact approval would authorize only ${record.effectPlan.targetPath} · marker ${record.effectPlan.markerId}.`,
+        `- Effect-plan hash: ${record.effectPlanHash}`,
+        `- Before file hash: ${record.effectPlan.beforeFileHash}`,
+        `- After file hash: ${record.effectPlan.afterFileHash}`,
+        "",
+        "Exact managed-block preview:",
+        "",
+        "```markdown",
+        renderManagedBody(proposal, record.effectPlan.effectId, record.correctedReflectionId).trim(),
+        "```",
+      ];
+    return [
+      ...prefix,
+      `### ${proposal.proposalId} · Owner Decision Brief`,
+      "",
+      "#### Layer 1 — 30-second answer",
+      "",
+      `**${markdownText(proposal.plainLanguageSummary)}**`,
+      "",
+      ...topAnswer,
+      "",
+      `- Confidence: ${proposal.confidence.level}`,
+      `- Why now: ${markdownText(proposal.whyNow)}`,
+      `- Status: ${record.status}`,
+      "",
+      "<details>",
+      "<summary>Layer 2 — editable judgment items</summary>",
+      "",
+      ...decisionItems,
+      "",
+      `- Success check: ${markdownText(proposal.successCheck)}`,
+      `- Owner challenge: ${markdownText(proposal.ownerChallenge)}`,
+      "",
+      "</details>",
+      "",
+      "<details>",
+      "<summary>Layer 3 — evidence, uncertainty, provenance, and consequences</summary>",
+      "",
+      `- Confidence basis: ${markdownText(proposal.confidence.rationale)}`,
+      `- Corrected Reflection: ${record.correctedReflectionId}`,
+      `- Owner correction: ${record.correctionId}`,
+      "",
+      "Evidence carried by that corrected Reflection:",
+      ...evidence,
+      "",
+      `- Proposal hash: ${record.proposalHash}`,
+      `- Context packet hash: ${record.packetHash}`,
+      `- Runtime receipt: ${record.runtimeReceiptId}`,
+      `- Approval: ${record.approvalId ?? "Not approved"}`,
+      `- Effect receipts: ${record.effectReceiptIds.length === 0 ? "None" : record.effectReceiptIds.join(", ")}`,
+      ...effectDetails,
+      "",
+      "</details>",
+    ];
+  });
 }
 
 export function renderRestartView(revision: TwinRevision): string {
@@ -116,7 +198,7 @@ export function renderRestartView(revision: TwinRevision): string {
       "",
       "## Action Review",
       "",
-      ...actionSection(revision.agency.proposals),
+      ...actionSection(revision.agency.proposals, revision.cognition.reflections),
       "",
       "## Agency Receipts",
       "",

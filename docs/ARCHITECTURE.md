@@ -1,7 +1,7 @@
 # Architecture boundaries
 
-- Status: R1 and R2 owner-accepted; R3 bounded control path demonstrated and in Owner Acceptance
-- Updated: 2026-07-18
+- Status: R1 and R2 owner-accepted; R3 bounded control path and V2 owner surface demonstrated and in Owner Acceptance
+- Updated: 2026-07-20
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -71,7 +71,7 @@ The same visible action may therefore be possible in Codex or OpenCode without F
 15. R2 runs Codex from an isolated packet root with an exact readable-root permission profile; shell, MCP, apps, hooks, multi-agent, and web capabilities are disabled, and any unauthorized audit item prevents admission.
 16. `TwinRevisionV2` begins only with a validated Reflection. It preserves V1 revisions and stores evidence coordinates, labeled meaning, owner correction, invalidation, and minimal receipts—never source bodies or runtime transcripts.
 17. Owner correction creates a new immutable revision, supersedes the active interpretation, invalidates dependent output, and becomes input to later Context Packets.
-18. R3 Codex output remains a schema-only intent proposal. Forme alone compiles the fixed effect plan; no harness runtime receives the writer.
+18. R3 Codex output remains a schema-only intent proposal. V2 recommends by default, exposes one to three editable judgments, and may ask one blocking owner question only at low confidence. Forme alone compiles the fixed effect plan; `ask_owner` compiles none, and no harness runtime receives the writer.
 19. The first project-source authority is limited to one named managed block in `README.md`; arbitrary paths, patches, commands, Git, network, and external actions remain unavailable.
 20. Owner approval binds one immutable proposal and effect-plan hash to an unbroken Twin revision chain and one execution.
 21. Execution and rollback use target hashes, atomic replacement, a write-ahead journal, terminal receipts, and fail-closed recovery so retries cannot duplicate effects and human edits cannot be overwritten.
@@ -79,7 +79,7 @@ The same visible action may therefore be possible in Codex or OpenCode without F
 ## Approved R3 implementation boundary
 
 - one `ActionContextPacketV1` containing the current owner frame, active corrected Reflection, evidence coordinates, explicit owner action goal, and the fixed action contract—but no README body or ambient repository content;
-- one `ActionIntentProposalV1` with bounded semantic fields for `render_next_move_brief.v1`, never a path, patch, command, tool request, approval, or raw Markdown effect;
+- additive `ActionIntentProposalV2` with one recommendation by default, one to three editable judgments, explicit confidence, and a low-confidence `ask_owner` fallback; V1 remains valid and reconstructible, and neither version may contain a path, patch, command, tool request, approval, or raw Markdown effect;
 - deterministic Forme compilation into one exact `README.md` marker-block plan with before/after and plan hashes;
 - a separate, one-use owner approval bound to the immutable effect-plan hash and strict current Twin revision;
 - additive `TwinRevisionV3` agency state containing proposals, approvals, minimal runtime receipts, execution/rollback receipts, verification, invalidation, and hashes—not source bodies or runtime transcripts;

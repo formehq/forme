@@ -215,7 +215,7 @@ export interface ActionContextPacket {
   constraints: string[];
 }
 
-export interface ActionIntentProposal {
+export interface ActionIntentProposalV1 {
   schemaVersion: "1";
   proposalId: string;
   baseTwinRevision: number;
@@ -227,6 +227,37 @@ export interface ActionIntentProposal {
   successCheck: string;
   ownerChallenge: string;
 }
+
+export type ActionProposalMode = "recommend" | "ask_owner";
+export type RecommendationConfidence = "low" | "medium" | "high";
+
+export interface ActionDecisionItem {
+  judgment: string;
+  recommendedChoice: string;
+  reason: string;
+  alternatives: string[];
+}
+
+export interface ActionIntentProposalV2 {
+  schemaVersion: "2";
+  proposalId: string;
+  baseTwinRevision: number;
+  actionKind: ActionKind;
+  mode: ActionProposalMode;
+  plainLanguageSummary: string;
+  recommendation: string | null;
+  blockingQuestion: string | null;
+  confidence: {
+    level: RecommendationConfidence;
+    rationale: string;
+  };
+  decisionItems: ActionDecisionItem[];
+  whyNow: string;
+  successCheck: string;
+  ownerChallenge: string;
+}
+
+export type ActionIntentProposal = ActionIntentProposalV1 | ActionIntentProposalV2;
 
 export interface ActionContextPacketBuild {
   packet: ActionContextPacket;
@@ -274,8 +305,8 @@ export interface ActionProposalRecord {
   correctedReflectionId: string;
   correctionId: string;
   runtimeReceiptId: string;
-  effectPlan: EffectPlan;
-  effectPlanHash: string;
+  effectPlan: EffectPlan | null;
+  effectPlanHash: string | null;
   admittedRevision: number;
   status: ActionProposalStatus;
   approvalId: string | null;

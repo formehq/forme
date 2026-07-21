@@ -19,7 +19,7 @@ function assertSafeRenderedText(value: string, label: string): void {
   }
 }
 
-function markdownText(value: string): string {
+export function markdownText(value: string): string {
   return value
     .replace(/\s+/g, " ")
     .trim()
@@ -53,14 +53,34 @@ export function validateActionProposalForPacket(
   if (Buffer.byteLength(canonicalJson(proposal), "utf8") > MAX_PROPOSAL_BYTES) {
     throw new Error("Action proposal exceeds the output byte ceiling");
   }
+  if (proposal.schemaVersion === "1") {
+    for (const [label, value] of Object.entries({
+      rationale: proposal.rationale,
+      title: proposal.title,
+      whyNow: proposal.whyNow,
+      nextMove: proposal.nextMove,
+      successCheck: proposal.successCheck,
+      ownerChallenge: proposal.ownerChallenge,
+    })) assertSafeRenderedText(value, label);
+    return;
+  }
   for (const [label, value] of Object.entries({
-    rationale: proposal.rationale,
-    title: proposal.title,
+    plainLanguageSummary: proposal.plainLanguageSummary,
+    recommendation: proposal.recommendation ?? "",
+    blockingQuestion: proposal.blockingQuestion ?? "",
+    confidenceRationale: proposal.confidence.rationale,
     whyNow: proposal.whyNow,
-    nextMove: proposal.nextMove,
     successCheck: proposal.successCheck,
     ownerChallenge: proposal.ownerChallenge,
   })) assertSafeRenderedText(value, label);
+  proposal.decisionItems.forEach((item, itemIndex) => {
+    assertSafeRenderedText(item.judgment, `decisionItems[${itemIndex}].judgment`);
+    assertSafeRenderedText(item.recommendedChoice, `decisionItems[${itemIndex}].recommendedChoice`);
+    assertSafeRenderedText(item.reason, `decisionItems[${itemIndex}].reason`);
+    item.alternatives.forEach((alternative, alternativeIndex) => {
+      assertSafeRenderedText(alternative, `decisionItems[${itemIndex}].alternatives[${alternativeIndex}]`);
+    });
+  });
 }
 
 export function managedBody(fileBody: string): string {
@@ -85,6 +105,38 @@ export function renderManagedBody(
   effectId: string,
   correctedReflectionId: string,
 ): string {
+  if (proposal.schemaVersion === "2") {
+    if (proposal.mode === "ask_owner" || proposal.recommendation === null) {
+      throw new Error("ask_owner proposals cannot render an effect body");
+    }
+    const decisionItems = proposal.decisionItems.flatMap((item, index) => [
+      `${index + 1}. **${markdownText(item.judgment)}**`,
+      `   - Recommended: ${markdownText(item.recommendedChoice)}`,
+      `   - Why: ${markdownText(item.reason)}`,
+      `   - Alternatives: ${item.alternatives.map(markdownText).join(" / ")}`,
+    ]);
+    return [
+      "",
+      "### Owner Decision Brief",
+      "",
+      `**30-second answer:** ${markdownText(proposal.plainLanguageSummary)}`,
+      "",
+      `**Recommendation:** ${markdownText(proposal.recommendation)}`,
+      "",
+      `**Why now:** ${markdownText(proposal.whyNow)}`,
+      "",
+      "#### Editable judgment items",
+      "",
+      ...decisionItems,
+      "",
+      `**Success check:** ${markdownText(proposal.successCheck)}`,
+      "",
+      `**Owner challenge:** ${markdownText(proposal.ownerChallenge)}`,
+      "",
+      `<sub>Forme R3 · Twin revision ${proposal.baseTwinRevision} · ${correctedReflectionId} · ${effectId} · ${proposal.proposalId}</sub>`,
+      "",
+    ].join("\n");
+  }
   return [
     "",
     `### ${markdownText(proposal.title)}`,
@@ -107,6 +159,9 @@ export function compileEffectPlan(
   proposal: ActionIntentProposal,
   correctedReflectionId: string,
 ): EffectPlan {
+  if (proposal.schemaVersion === "2" && proposal.mode === "ask_owner") {
+    throw new Error("ask_owner proposals cannot compile an effect plan");
+  }
   const beforeBody = managedBody(fileBody);
   if (beforeBody !== R3_PLACEHOLDER_BODY) {
     throw new Error("README.md Forme R3 block is not the approved empty placeholder");

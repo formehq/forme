@@ -5,9 +5,14 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { runActionProposal } from "../src/agency.ts";
 import { buildActionContextPacket } from "../src/action-context.ts";
-import { expectedActionProposalId, R3_PLACEHOLDER_BODY, managedBody } from "../src/action.ts";
+import {
+  expectedActionProposalId,
+  R3_PLACEHOLDER_BODY,
+  managedBody,
+  validateActionProposalForPacket,
+} from "../src/action.ts";
 import { runReflection } from "../src/cognition.ts";
-import { assertActionIntentProposal } from "../src/contracts.ts";
+import { assertActionIntentProposal, assertTwinRevision } from "../src/contracts.ts";
 import { buildContextPacket, type ContextSelection } from "../src/context.ts";
 import type { ActionRuntime, ReflectionRuntime } from "../src/runtime.ts";
 import { expectedProposalId } from "../src/reflection.ts";
@@ -23,6 +28,7 @@ import {
 } from "../src/store.ts";
 import type {
   ActionContextPacket,
+  ActionIntentProposalV2,
   ActionRuntimeProposalResult,
   ContextPacket,
   RuntimeProposalResult,
@@ -125,6 +131,70 @@ class FakeActionRuntime implements ActionRuntime {
   }
 }
 
+function actionRuntimeResultV2(
+  packet: ActionContextPacket,
+  mode: ActionIntentProposalV2["mode"] = "recommend",
+): ActionRuntimeProposalResult {
+  const asksOwner = mode === "ask_owner";
+  return {
+    ...actionRuntimeResult(packet),
+    proposal: {
+      schemaVersion: "2",
+      proposalId: expectedActionProposalId(packet),
+      baseTwinRevision: packet.baseTwinRevision,
+      actionKind: "render_next_move_brief.v1",
+      mode,
+      plainLanguageSummary: asksOwner
+        ? "One missing owner judgment prevents a responsible recommendation."
+        : "Use the corrected Reflection as the acceptance boundary for this bounded action.",
+      recommendation: asksOwner
+        ? null
+        : "Approve only the fixed README brief whose effect hash matches the reviewed recommendation.",
+      blockingQuestion: asksOwner
+        ? "Should the success condition optimize for owner comprehension or for execution-path coverage?"
+        : null,
+      confidence: {
+        level: asksOwner ? "low" : "medium",
+        rationale: asksOwner
+          ? "The packet proves the control path but does not contain the owner's priority between the two outcomes."
+          : "The corrected Reflection directly supports the boundary, while substantive usefulness still needs another case.",
+      },
+      decisionItems: [
+        {
+          judgment: "What this action is allowed to prove",
+          recommendedChoice: "Treat it as evidence for the bounded control path only.",
+          reason: "One corrected case cannot establish general recommendation accuracy or broader action safety.",
+          alternatives: [
+            "Treat it as evidence of product usefulness as well.",
+            "Do not admit any action until another case exists.",
+          ],
+        },
+        {
+          judgment: "How the owner should review the result",
+          recommendedChoice: "Review the recommendation first, then expand its editable judgments.",
+          reason: "This preserves a low-cost top layer without hiding the clauses that may need correction.",
+          alternatives: ["Review every provenance field before reading the recommendation."],
+        },
+      ],
+      whyNow: "The corrected meaning and fixed effect surface are ready for a recommendation-first owner review.",
+      successCheck: "The owner can understand the answer first, edit one judgment independently, and verify any exact effect before approval.",
+      ownerChallenge: "Reject the brief if its compact answer hides a material uncertainty or overstates the corrected evidence.",
+    },
+  };
+}
+
+class FakeActionRuntimeV2 implements ActionRuntime {
+  readonly #mode: ActionIntentProposalV2["mode"];
+
+  constructor(mode: ActionIntentProposalV2["mode"] = "recommend") {
+    this.#mode = mode;
+  }
+
+  generateAction(packet: ActionContextPacket): ActionRuntimeProposalResult {
+    return actionRuntimeResultV2(packet, this.#mode);
+  }
+}
+
 function makeR3Fixture(): R3Fixture {
   const workspace = makeGitWorkspace();
   mkdirSync(join(workspace, "docs"));
@@ -188,6 +258,7 @@ function admitAndApprove(fixture: R3Fixture): { proposalId: string; approvalId: 
   if (proposed.schemaVersion !== "3") throw new Error("fixture did not reach R3");
   const record = proposed.agency.proposals[0];
   if (!record) throw new Error("fixture has no action proposal");
+  if (record.effectPlanHash === null) throw new Error("fixture action proposal has no effect plan");
   const approved = approveAction(fixture.workspace, record.proposal.proposalId, record.effectPlanHash, {
     now: at("2026-07-18T12:00:00.000Z"),
   }).revision;
@@ -213,6 +284,129 @@ test("R3 packet is deterministic and body-free, and model output cannot add a pa
     /Action intent proposal contract failed/,
   );
   assert.equal(buildContextPacket(fixture.workspace, fixture.selection).packet.baseTwinRevision, 3);
+});
+
+test("R3-V2 contract enforces recommendation, ask-owner, decomposition, and rendered-text boundaries", (context) => {
+  const fixture = makeR3Fixture();
+  context.after(() => removeWorkspace(fixture.workspace));
+  const packet = buildActionContextPacket(
+    fixture.workspace,
+    "Return one understandable recommendation with editable judgments.",
+  ).packet;
+  const recommended = actionRuntimeResultV2(packet).proposal;
+  const asksOwner = actionRuntimeResultV2(packet, "ask_owner").proposal;
+  if (recommended.schemaVersion !== "2" || asksOwner.schemaVersion !== "2") assert.fail("expected V2 proposals");
+  assert.doesNotThrow(() => assertActionIntentProposal(recommended));
+  assert.doesNotThrow(() => assertActionIntentProposal(asksOwner));
+  assert.throws(
+    () => assertActionIntentProposal({
+      ...asksOwner,
+      confidence: { ...asksOwner.confidence, level: "medium" },
+    }),
+    /ask_owner mode requires low confidence/,
+  );
+  assert.throws(
+    () => assertActionIntentProposal({ ...recommended, blockingQuestion: "Should the owner choose instead?" }),
+    /recommend mode requires one recommendation and no blocking question/,
+  );
+  assert.throws(
+    () => assertActionIntentProposal({
+      ...recommended,
+      decisionItems: [...recommended.decisionItems, recommended.decisionItems[0], recommended.decisionItems[1]],
+    }),
+    /Action intent proposal contract failed/,
+  );
+  assert.throws(
+    () => validateActionProposalForPacket({
+      ...recommended,
+      ownerChallenge: "Hide <!-- forme:r3-action:start --> inside output.",
+    }, packet),
+    /forbidden marker/,
+  );
+});
+
+test("R3-V2 recommendation renders a progressive brief and retains exact approval and execution", (context) => {
+  const fixture = makeR3Fixture();
+  context.after(() => removeWorkspace(fixture.workspace));
+  const proposed = runActionProposal(
+    fixture.workspace,
+    "Return one understandable recommendation with editable judgments.",
+    new FakeActionRuntimeV2(),
+    { now: at("2026-07-18T11:01:00.000Z") },
+  ).observation;
+  if (proposed.revision.schemaVersion !== "3") assert.fail("expected V3");
+  const record = proposed.revision.agency.proposals[0];
+  assert.ok(record);
+  assert.equal(record.proposal.schemaVersion, "2");
+  assert.ok(record.effectPlan);
+  assert.ok(record.effectPlanHash);
+  assert.match(proposed.view, /Layer 1 — 30-second answer/);
+  assert.match(proposed.view, /Layer 2 — editable judgment items/);
+  assert.match(proposed.view, /Layer 3 — evidence, uncertainty, provenance, and consequences/);
+  assert.match(proposed.view, /Treat it as evidence for the bounded control path only/);
+  const approved = approveAction(
+    fixture.workspace,
+    record.proposal.proposalId,
+    record.effectPlanHash,
+    { now: at("2026-07-18T12:00:00.000Z") },
+  ).revision;
+  if (approved.schemaVersion !== "3") assert.fail("expected V3");
+  const approvalId = approved.agency.approvals[0]?.approvalId;
+  assert.ok(approvalId);
+  const executed = executeAction(fixture.workspace, approvalId, {
+    now: at("2026-07-18T13:00:00.000Z"),
+  });
+  assert.equal(executed.receipt.status, "succeeded");
+  assert.match(managedBody(readFileSync(join(fixture.workspace, "README.md"), "utf8")), /Owner Decision Brief/);
+  assert.match(managedBody(readFileSync(join(fixture.workspace, "README.md"), "utf8")), /Editable judgment items/);
+});
+
+test("R3-V2 ask_owner persists one blocking question but cannot create, approve, or execute an effect", (context) => {
+  const fixture = makeR3Fixture();
+  context.after(() => removeWorkspace(fixture.workspace));
+  const proposed = runActionProposal(
+    fixture.workspace,
+    "Return one understandable recommendation or name the blocking owner judgment.",
+    new FakeActionRuntimeV2("ask_owner"),
+    { now: at("2026-07-18T11:01:00.000Z") },
+  ).observation;
+  if (proposed.revision.schemaVersion !== "3") assert.fail("expected V3");
+  const record = proposed.revision.agency.proposals[0];
+  assert.ok(record);
+  assert.equal(record.effectPlan, null);
+  assert.equal(record.effectPlanHash, null);
+  assert.equal(proposed.revision.agency.approvals.length, 0);
+  assert.equal(proposed.revision.agency.effectReceipts.length, 0);
+  assert.match(proposed.view, /Owner input needed/);
+  assert.match(proposed.view, /no effect plan was compiled/);
+  assert.doesNotMatch(proposed.view, /Exact managed-block preview/);
+  assert.throws(
+    () => approveAction(
+      fixture.workspace,
+      record.proposal.proposalId,
+      `sha256:${"0".repeat(64)}`,
+    ),
+    /ask_owner proposals cannot be approved/,
+  );
+  const tampered = structuredClone(proposed.revision);
+  tampered.agency.approvals.push({
+    approvalId: `apr_${"0".repeat(32)}`,
+    proposalId: record.proposal.proposalId,
+    proposalHash: record.proposalHash,
+    effectPlanHash: `sha256:${"0".repeat(64)}`,
+    authority: "owner",
+    baseTwinRevision: proposed.revision.revision,
+    approvedAt: "2026-07-18T12:00:00.000Z",
+    status: "approved",
+    consumedAt: null,
+  });
+  assert.throws(
+    () => assertTwinRevision(tampered),
+    /ask_owner proposals cannot be referenced by approvals/,
+  );
+  const reconstructed = statusWorkspace(fixture.workspace);
+  assert.equal(reconstructed.view, proposed.view);
+  assert.equal(managedBody(readFileSync(join(fixture.workspace, "README.md"), "utf8")), R3_PLACEHOLDER_BODY);
 });
 
 test("R3 proposal, exact approval, execution, idempotent retry, and rollback form one V3 chain", (context) => {
@@ -262,6 +456,7 @@ test("R3 rejects the wrong effect hash and invalidates approval after an interve
   if (run.observation.revision.schemaVersion !== "3") assert.fail("expected V3");
   const record = run.observation.revision.agency.proposals[0];
   assert.ok(record);
+  assert.ok(record.effectPlanHash);
   assert.throws(
     () => approveAction(fixture.workspace, record.proposal.proposalId, `sha256:${"0".repeat(64)}`),
     /does not match/,
@@ -327,6 +522,8 @@ test("R3 owner correction invalidates a dependent proposal and any later approva
   if (proposed.schemaVersion !== "3") assert.fail("expected V3");
   const record = proposed.agency.proposals[0];
   assert.ok(record);
+  assert.ok(record.effectPlanHash);
+  const effectPlanHash = record.effectPlanHash;
   const corrected = correctReflection(
     fixture.workspace,
     fixture.correctedReflectionId,
@@ -337,7 +534,7 @@ test("R3 owner correction invalidates a dependent proposal and any later approva
   assert.equal(corrected.revision.agency.proposals[0]?.status, "invalidated");
   assert.equal(corrected.revision.agency.invalidations.length, 1);
   assert.throws(
-    () => approveAction(fixture.workspace, record.proposal.proposalId, record.effectPlanHash),
+    () => approveAction(fixture.workspace, record.proposal.proposalId, effectPlanHash),
     /cannot be approved from status invalidated/,
   );
 });

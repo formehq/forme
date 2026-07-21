@@ -284,15 +284,17 @@ export class CodexExecRuntime implements ReflectionRuntime, ActionRuntime {
       packet,
       forbiddenPaths,
       schema: actionIntentProposalJsonSchema(),
-      schemaFilename: "action-intent-proposal-v1.schema.json",
+      schemaFilename: "action-intent-proposal-v2.schema.json",
       packetFilename: "action-context-packet.json",
       prompt: [
         "Act only as Forme's bounded schema-only action proposer.",
         "Use the ActionContextPacketV1 supplied on stdin as the complete and only project context.",
-        "Propose one useful next-move brief using only rationale, title, whyNow, nextMove, successCheck, and ownerChallenge.",
+        "Return a recommendation-first Owner Decision Brief: one plain-language answer followed by one to three independently editable judgment items with recommended choices, reasons, and bounded alternatives.",
+        "Use mode recommend by default. Use ask_owner only when one named uncertainty blocks a responsible recommendation; then set confidence to low, recommendation to null, and supply exactly one blockingQuestion. In recommend mode, supply one recommendation and set blockingQuestion to null.",
+        "Expose confidence and its rationale, why the decision matters now, a success check, and one way the owner should challenge the result.",
         "Never propose a path, patch, command, tool call, Markdown document, or file body.",
         `Set proposalId exactly to ${expectedActionProposalId(packet)}, baseTwinRevision exactly to ${packet.baseTwinRevision}, and actionKind exactly to render_next_move_brief.v1.`,
-        "Do not call tools or request more context. Return only the JSON object required by ActionIntentProposalV1.",
+        "Do not call tools or request more context. Return only the JSON object required by ActionIntentProposalV2.",
       ].join(" "),
     });
     assertActionIntentProposal(result.proposal);

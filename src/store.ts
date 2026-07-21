@@ -820,9 +820,15 @@ export function admitActionProposal(
     ));
     if (!activeReflection || !activeCorrection) throw new Error("Action proposal no longer has an active owner-corrected Reflection");
     assertWorkspaceMatchesRevision(root, contract, current);
-    const target = targetFile(root, contract, current);
-    const plan = compileEffectPlan(readFileSync(target, "utf8"), runtime.proposal, activeReflection.reflectionId);
-    const effectPlanHash = sha256(canonicalJson(plan));
+    const asksOwner = runtime.proposal.schemaVersion === "2" && runtime.proposal.mode === "ask_owner";
+    const plan = asksOwner
+      ? null
+      : compileEffectPlan(
+        readFileSync(targetFile(root, contract, current), "utf8"),
+        runtime.proposal,
+        activeReflection.reflectionId,
+      );
+    const effectPlanHash = plan === null ? null : sha256(canonicalJson(plan));
     const proposalHash = sha256(canonicalJson(runtime.proposal));
     const agency = agencyFrom(current);
     if (agency.proposals.some((item) => item.proposal.proposalId === runtime.proposal.proposalId)) {
@@ -893,15 +899,22 @@ export function approveAction(
     const record = agency.proposals.find((item) => item.proposal.proposalId === proposalId);
     if (!record) throw new Error(`unknown action proposal: ${proposalId}`);
     if (record.status !== "proposed") throw new Error(`action proposal cannot be approved from status ${record.status}`);
+    if (record.proposal.schemaVersion === "2" && record.proposal.mode === "ask_owner") {
+      throw new Error("ask_owner proposals cannot be approved or compiled into an effect");
+    }
+    const plan = record.effectPlan;
+    if (plan === null || record.effectPlanHash === null) {
+      throw new Error("action proposal has no approvable effect plan");
+    }
     if (current.revision !== record.admittedRevision) throw new Error("action proposal revision chain is no longer unbroken");
     if (record.effectPlanHash !== effectPlanHash) throw new Error("owner approval effect-plan hash does not match the proposed effect");
-    if (sha256(canonicalJson(record.effectPlan)) !== effectPlanHash) throw new Error("stored effect plan hash is invalid");
+    if (sha256(canonicalJson(plan)) !== effectPlanHash) throw new Error("stored effect plan hash is invalid");
     assertWorkspaceMatchesRevision(root, contract, current);
     const target = targetFile(root, contract, current);
     const body = readFileSync(target, "utf8");
     if (
-      sha256(body) !== record.effectPlan.beforeFileHash
-      || sha256(managedBody(body)) !== record.effectPlan.beforeBlockHash
+      sha256(body) !== plan.beforeFileHash
+      || sha256(managedBody(body)) !== plan.beforeBlockHash
     ) throw new Error("README.md changed after effect compilation");
     const approvedAt = timestamp(options);
     const approvalId = `apr_${shortHash(canonicalJson({
@@ -987,6 +1000,7 @@ function applyPendingEffect(
   if (record.effectPlanHash !== pending.effectPlanHash || approval.effectPlanHash !== pending.effectPlanHash) {
     throw new Error("pending effect hash no longer matches its approval");
   }
+  if (record.effectPlan === null) throw new Error("pending effect cannot resolve an effect plan");
   const target = targetFile(workspaceRoot, contract, current);
   let body = readFileSync(target, "utf8");
   const plan = record.effectPlan;
