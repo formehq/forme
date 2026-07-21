@@ -4,7 +4,7 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R1 and R2 owner-accepted; R3 bounded control path and V2 Owner Decision Brief pass 44 checks; CASE-02's three-arm comparison completed and awaits blinded owner judgment
+- Current gate: CASE-02 produced positive owner evidence after reveal; decide whether that is sufficient for R3 product acceptance and which minimal Twin-context gap, if any, belongs before R4
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -18,7 +18,7 @@
 | R4 — Controlled Presence | Aug 5–7 | one versioned static collaborator projection from an allowlist | private canary cannot enter output |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 has satisfied its bounded execution, recovery, rollback, and recommendation-first owner-surface evidence, but not yet its complete exit condition. In independent Career CASE-02, the owner-corrected Twin reached revision 3, then approved gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece` completed one zero-tool A0, A1, and B call. B is an unapproved proposal at revision 4; sources remain unchanged. R3 now waits for the owner's blinded product judgment before arm reveal or any next decision. Technical success alone does not move R3 to Done.
+R3 has satisfied its bounded execution, recovery, rollback, recommendation-first owner surface, and now one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, preferred the rich manual-correction baseline, and least preferred the no-correction baseline. Forme's zero-source-body B output preserved the useful corrected direction without manual context reconstruction, but was less concrete than A1. This supports the correction and continuity mechanisms while exposing a bounded semantic-compression gap. R3 should move only after an explicit owner decision on whether this evidence satisfies the MVP exit condition or warrants one minimal context refinement.
 
 ## Cut rules
 
