@@ -5,7 +5,7 @@
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
 - P0 implementation: **R1 and R2 owner-accepted; R3 passed 41 checks and completed its real bounded control demo through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review A0/A1/B comparison visibility gate `sha256:563d3270dfed14d0503210ec0f8d16384c135c5b9d6f3885e37d11fd3fbdaf6a` before any second R3-V model call
+- Next action: owner-review the unlabeled R3-V Outputs M/Q/T before revealing arm identity or approving any effect
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -45,7 +45,7 @@ Current truth:
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - the owner has not accepted R3's usefulness or suggestion accuracy from this one case, so R3 is not Done. The current evidence and Harness comparison live in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
-- the call produced zero tool events and no source changes. The owner correction is now active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and both R2 and R3 packet previews automatically carry the corrected meaning. A0, A1, the later B proposal, and any R3 effect have not run. Exact evidence and the pending comparison gate are recorded in the lab and summarized in [`VALIDATION.md`](./VALIDATION.md).
+- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison has now run with zero tool events in all three arms; B admitted one unapproved proposal at lab Twin revision 6 with zero transmitted source bytes. No effect is approved or executed. The unlabeled Owner Score Packet is the current gate; arm identity remains hidden until owner judgment.
 
 ## System map
 

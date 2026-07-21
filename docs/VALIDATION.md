@@ -136,7 +136,7 @@ The largest near-term product risk is not unsafe execution. It is that Forme bec
 ## Evidence round 3 — R3-V Case 01 prepared
 
 - Date: 2026-07-19
-- Status: first approved B-arm Reflection corrected at lab Twin revision 4; A0/A1/B comparison calls pending visibility approval
+- Status: first B-arm Reflection corrected; approved A0/A1/B next-move comparison completed; blind owner judgment pending
 - Lab: `/Users/zaynw/Documents/Projects/forme-r3v-knowledge-lab`
 - External calls: one exact-hash-approved Forme Reflection; A0/A1 not run
 
@@ -283,6 +283,19 @@ The next R2 packet preview used base revision 4, the same two Git blobs and evid
 - proposed common goal: against the same concise current-MVP decision frame, select one bounded, owner-reviewable next move for deciding which historical CCS ideas should inform the current MVP without treating the old spec as current authority.
 
 The lab now freezes the pending A0/A1/B product-system comparison in `evaluation/COMPARISON-GATE-02.json`, hash `sha256:563d3270dfed14d0503210ec0f8d16384c135c5b9d6f3885e37d11fd3fbdaf6a`. All arms receive the same current-MVP decision frame and action goal. A0 receives both approved historical bodies and no correction; A1 receives the same bodies plus the exact correction manually; B receives its body-free Action Context with the correction carried automatically. Output quality and manual context-reconstruction cost will be scored separately. Because the owner has already seen the original B Reflection and B intentionally receives a reduced Twin context rather than the complete bodies, this is not a clean model benchmark; it tests the whole continuity and control system.
+
+### Approved comparison calls completed — owner judgment blinded
+
+The owner approved the exact comparison gate hash above. One call per arm then completed under `codex-cli 0.144.3` and `gpt-5.6-sol`:
+
+- every run returned the same six semantic fields through a constrained schema;
+- every audit completed with four runtime events, only an `agent_message`, and zero tool events;
+- A0 and A1 each received only the two approved complete historical bodies plus the frozen common frame and their declared correction condition;
+- B received the approved body-free Action Context, automatically selected the active correction, and transmitted zero historical source bytes;
+- B admitted one proposal at lab Twin revision 6; it remains `proposed`, with no owner approval, source effect, or effect receipt;
+- the original vault and the lab's five allowlisted source files remained unchanged by the three calls.
+
+The three semantic outputs are reordered and unlabeled in `evaluation/OWNER-SCORE-PACKET-02.md`. The owner may give only a directional reaction—most useful, least useful, or “feels off”—before attempting numeric scores. Arm mapping, token usage, and context-reconstruction cost are recorded separately and should be revealed only after the owner's first product judgment.
 
 ## Validation questions for the next development decision
 
