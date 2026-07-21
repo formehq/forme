@@ -348,6 +348,10 @@ The owner approved that local-extraction gate. The earlier snapshot is now 4,607
 
 The CASE-01 Twin's immutable source contract does not include Career. Rewriting it would make stored workspace-contract hashes false and contaminate the independent case with CASE-01 state. The next proposed gate therefore creates a fresh no-remote local Career workspace, initializes a new Twin with only `README.md` and the redacted Career path, and constructs a body-free R2 packet. Exact setup manifest: `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. It authorizes no model call; the generated packet must return for a separate transmission approval.
 
+The owner approved the setup manifest. The new workspace `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` has no Git remote, deterministic workspace ID `wsp_08690e7119a4c25d7180434e9f5e4468`, Twin revision 1, and an allowlist containing only `README.md` plus the redacted Career state-diff. Repeated local packet construction is stable at `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` and 16,715 transmitted source bytes. No model call occurred during setup.
+
+Visibility gate `sha256:4e3007d5a3d5006ffb54612006b1fbd0bd0486cf50589d84f18753fc9d2bf116` now requests exactly one `gpt-5.6-sol` Forme R2 Reflection call. It exposes only the two complete redacted snapshots, revision-1 Owner Frame, frozen task, and evidence anchors in a disposable packet-only root; it grants no baseline, R3-V2 proposal, correction, effect, retry after state change, or external-action authority. If accepted, the next human step is to replay and correct the inferred Career meaning before constructing the A0/A1/B comparison.
+
 Validate it on a new non-self-referential case. `Career & Opportunity` is the recommended topic, but no new private note may be read or transmitted before a separate exact visibility review. Measure substantive quality and owner comprehension cost separately.
 
 ## Validation questions for the next development decision

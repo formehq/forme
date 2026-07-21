@@ -5,7 +5,7 @@
 - Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
 - P0 implementation: **R1 and R2 owner-accepted; R3 and its V2 Owner Decision Brief pass 44 checks; the real bounded control demo completed through revision 25; usefulness and accuracy remain unaccepted; R4–R5 not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner-review the isolated CASE-02 workspace setup manifest `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`; approval permits a fresh local Twin and exact packet construction only, never model transmission
+- Next action: owner-review the first CASE-02 model visibility gate `sha256:4e3007d5a3d5006ffb54612006b1fbd0bd0486cf50589d84f18753fc9d2bf116`; it requests one R2 Reflection call against exact packet `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041`
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -48,6 +48,7 @@ Current truth:
 - the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. The next gate is the owner-facing output contract, not another effect.
 - CASE-02 local extraction was owner-approved with manifest `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. The two immutable Career blobs became 4,607- and 12,108-byte redacted snapshots under one stable mapping; 139 replacement operations, exact hashes, provenance, and residual re-identification risk are recorded. No model call, network transmission, or source-vault mutation occurred.
 - The existing CASE-01 Twin cannot safely admit Career because its immutable source contract allowlists CCS only. Rather than rewrite historical contract hashes or contaminate CASE-02, the lab prepared a fresh local Career workspace gate `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. That gate creates no model authority; after approval, a separately owner-approved exact ContextPacket hash is still required.
+- The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` now contains a fresh no-remote Twin at revision 1 with only `README.md` and the redacted Career path allowlisted. Repeated construction yields exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041`; no model was called. Visibility gate `sha256:4e3007d5a3d5006ffb54612006b1fbd0bd0486cf50589d84f18753fc9d2bf116` requests one bounded R2 Reflection call and no later authority.
 
 ## System map
 
