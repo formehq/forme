@@ -1,7 +1,7 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; R4 Controlled Presence is in Control Packet preparation
-- Updated: 2026-07-20
+- Status: R1, R2, and R3 owner-accepted; R4 Social Presence product replan is awaiting owner decision
+- Updated: 2026-07-22
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -120,6 +120,32 @@ The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapt
 - server deployment.
 
 Each is selected only when the next walking slice requires it and after its Control Packet is reviewed.
+
+## Proposed extensions awaiting owner decision
+
+Three connected proposals now make previously implicit highest-vision mechanics explicit. None changes implemented authority yet.
+
+### Agency and trust
+
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) separates the cognitive modes Routine, Collaborative, and Exploratory from the effect-authority ladder `observe → propose → shadow → owner-confirmed effect → authorized autonomous effect`. Confidence and shadow agreement inform review but cannot grant permission. Any later autonomy remains scoped, expiring, reversible where feasible, and explicitly promoted by the owner.
+
+### Stewardship and entropy
+
+[`STEWARDSHIP.md`](./STEWARDSHIP.md) treats Entropy Reduction as a cross-cutting metabolism rather than a Knowledge Vault directory convention. The universal Twin substrate would preserve evidence, lifecycle, policy, receipts, and health observations; an explicit Workspace Stewardship Profile would define artifact roles, drift, maturity, allowed maintenance, triggers, and metrics for a code repo, vault, file repo, or project workspace. No scheduler, repo-wide inference, or autonomous maintenance is authorized.
+
+### Hosted Social Presence
+
+[`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) proposes this additional boundary:
+
+```text
+private local Twin
+  → deterministic owner-allowed Projection Capsule
+  → exact published version in one hosted Forme Room
+  → bounded capsule-only Ask / Seed / Resonance
+  → typed external signal for later owner/Twin review
+```
+
+The server would receive no local source handle, Twin store, source-writing authority, commitment authority, or autonomous-reply grant. Hosting, persistence, messaging, model access, retention, and public behavior remain blocked until both the product proposal and a subsequent technical Control Packet are owner-approved.
 
 ## Archive policy
 

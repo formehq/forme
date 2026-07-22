@@ -364,6 +364,26 @@ B also demonstrates product-level continuity rather than only transport. It used
 
 The owner accepted this positive case as satisfying R3's MVP product exit condition. Do not run another model comparison merely to seek a different winner. Twin-context enrichment remains an unproven follow-up rather than a blocker. Closeout revision 5 invalidated B without approval or effect and preserved the ship/closure weighting as unresolved; the next active gate is R4 Control Packet preparation.
 
+## Evidence round 4 — Agency, long-running entropy, and R4 Social Presence reframe
+
+On 2026-07-22 the owner re-entered the project through the highest-vision and MVP comparison, then supplied three connected product challenges.
+
+First, agency should include a conservative pattern-following layer, a collaborative medium-confidence layer with a lower-cost human interface, and a creative layer that can explore more broadly through low-risk, traceable, reversible experiments. The architecture consequence is to separate cognitive mode from effect authority: confidence and historical agreement affect review and calibration, while scope, reversibility, blast radius, externality, recency, and explicit owner grants determine permission.
+
+Second, an owner-supplied investigation of the long-running Knowledge Vault found low structural entropy but high temporal and execution entropy. Its maturity pipeline, dual knowledge/action navigation, work contracts, drift detection, decision cards, receipts, and partial taste learning remain important Forme evidence. The current rebuild has strong revision, correction, invalidation, receipt, and rollback semantics, but it has not implemented capture/promotion/archive, Incubation, Stewardship, health-driven timing, permission aging, or recurring maintenance. The resulting proposal treats Entropy Reduction as the metabolism of all four product dimensions and keeps repo-specific ontology in a Workspace Stewardship Profile.
+
+Third, the owner judged the static, safety-led R4 direction insufficiently social or desirable. The preferred feeling is a simple but creative hosted experience in which another person can meet a Twin, interact, leave a message or signal, and begin to experience future Twin-to-Twin relationships. The product consequence is a proposed Forme Room with one real host Twin, capsule-only Ask, Leave a Seed, a lightweight Guest Capsule, and a Resonance artifact. Essential isolation remains invisible plumbing instead of the main experience narrative.
+
+This feedback does not yet prove:
+
+- that owner decision history can safely predict decisions across categories;
+- that the Knowledge Vault mechanisms generalize to arbitrary repos;
+- that a hosted room or Resonance artifact is useful or fun to a real collaborator;
+- that a server runtime can remain understandable and bounded at acceptable implementation cost;
+- that social interaction exposes differentiated Twin value rather than producing a themed chatbot.
+
+The immediate consequence is documentation and owner review, not implementation. Three proposal briefs now define the Agency & Trust model, Stewardship loop, and R4 Social Presence experience. The prior static projection remains the approved P0 floor until the owner approves the revised product target and a separate technical Control Packet.
+
 ## Follow-up product-learning questions — not R4 blockers
 
 Keep these questions in the validation backlog while R4 proceeds through its own Control Packet:

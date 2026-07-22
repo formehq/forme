@@ -1,7 +1,7 @@
 # Product
 
 - Status: owner-reviewed starting frame for the rebuild
-- Updated: 2026-07-17
+- Updated: 2026-07-22
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -25,6 +25,8 @@ Long-term forms may include person, project, and team Twins; specialized cogniti
 - **Reversibility:** meaningful effects preserve provenance, receipts, and rollback where feasible.
 - **Non-finality:** learned claims remain scoped, evidence-backed, uncertain, revisable, and able to age out.
 - **Controlled projection:** private existence never implies permission to publish.
+
+Two cross-cutting proposals now make the long-term direction more explicit without changing current authority: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) separates cognitive mode from effect permission, and [`STEWARDSHIP.md`](./STEWARDSHIP.md) treats Entropy Reduction as the metabolism that keeps all four dimensions coherent. Both await owner approval.
 
 ## MVP vision
 
@@ -71,6 +73,12 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - native Apple Notes integration;
 - whole-vault or whole-digital-life ingestion;
 - multiple workspaces, general automation, or a plugin marketplace.
+
+## Pending R4 scope proposal
+
+The owner has asked to explore a more social and desirable R4: one hosted **Forme Room** in which an invited collaborator can meet the project Twin, ask a bounded question, leave a Seed, and optionally compare a lightweight Guest Capsule to produce a Resonance artifact.
+
+This is a proposal, not current P0 authority. The committed static, allowlist-only projection remains the fallback floor until the five product recommendations in [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and a subsequent technical Control Packet are owner-approved. No hosting, server model, message persistence, publishing, or interactive runtime is authorized yet.
 
 ## Golden acceptance story
 

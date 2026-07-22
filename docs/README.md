@@ -10,6 +10,9 @@ The repository keeps a deliberately small decision surface.
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Which boundaries must survive implementation choices? |
 | [`DECISIONS.md`](./DECISIONS.md) | Which important choices have been made, and why? |
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
+| [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Proposed: how reasoning mode, effect authority, shadow learning, and creative experiment envelopes relate. |
+| [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
+| [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Proposed: the hosted Forme Room, Guest Capsule, interaction loop, and revised R4 owner decisions. |
 
 Stable product and architecture contracts stay in their named documents. Demo feedback and working judgments enter `VALIDATION.md` first; only owner-confirmed changes move into `DECISIONS.md` or alter the stable contracts.
 
