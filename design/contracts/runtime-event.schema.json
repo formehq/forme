@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/runtime-event-v0.json",
+  "title": "Forme Runtime Event v0",
+  "$defs": {
+    "runtime": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {
+          "enum": ["codex", "opencode"]
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "base": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "eventId",
+        "runId",
+        "seq",
+        "at",
+        "runtime",
+        "type",
+        "payload"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "0"
+        },
+        "eventId": {
+          "type": "string",
+          "pattern": "^rte_[A-Za-z0-9_-]+$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^run_[A-Za-z0-9_-]+$"
+        },
+        "seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "runtime": {
+          "$ref": "#/$defs/runtime"
+        },
+        "type": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "object"
+        }
+      }
+    },
+    "runStarted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "run.started"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["pass"],
+              "properties": {
+                "pass": {
+                  "enum": [
+                    "continuity",
+                    "reflection",
+                    "action",
+                    "projection",
+                    "verification"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "assistantDelta": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "assistant.delta"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["content"],
+              "properties": {
+                "content": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "proposalCreated": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "proposal.created"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["proposalId", "schemaId"],
+              "properties": {
+                "proposalId": {
+                  "type": "string",
+                  "pattern": "^prp_[A-Za-z0-9_-]+$"
+                },
+                "schemaId": {
+                  "type": "string",
+                  "format": "uri-reference"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "toolRequested": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tool.requested"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["toolCallId", "name", "arguments", "policy"],
+              "properties": {
+                "toolCallId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_.:/-]+$"
+                },
+                "arguments": {
+                  "type": "object"
+                },
+                "policy": {
+                  "enum": ["allowed", "denied"]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "permissionRequested": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "permission.requested"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["requestId", "action", "scope", "reason"],
+              "properties": {
+                "requestId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "scope": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "toolCompleted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tool.completed"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["toolCallId", "status"],
+              "properties": {
+                "toolCallId": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "status": {
+                  "enum": ["succeeded", "failed", "denied", "cancelled"]
+                },
+                "outputRef": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "error": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "workspaceDiff": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "workspace.diff"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["diffRef", "files"],
+              "properties": {
+                "diffRef": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "usageUpdated": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "usage.updated"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["inputTokens", "outputTokens"],
+              "properties": {
+                "inputTokens": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "outputTokens": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "costUsd": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "runCompleted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/base"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "run.completed"
+            },
+            "payload": {
+              "type": "object",
+              "required": ["status"],
+              "properties": {
+                "status": {
+                  "enum": ["succeeded", "failed", "cancelled"]
+                },
+                "error": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/runStarted"
+    },
+    {
+      "$ref": "#/$defs/assistantDelta"
+    },
+    {
+      "$ref": "#/$defs/proposalCreated"
+    },
+    {
+      "$ref": "#/$defs/toolRequested"
+    },
+    {
+      "$ref": "#/$defs/permissionRequested"
+    },
+    {
+      "$ref": "#/$defs/toolCompleted"
+    },
+    {
+      "$ref": "#/$defs/workspaceDiff"
+    },
+    {
+      "$ref": "#/$defs/usageUpdated"
+    },
+    {
+      "$ref": "#/$defs/runCompleted"
+    }
+  ]
+}

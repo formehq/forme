@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/action-receipt-v0.json",
+  "title": "Forme Action Receipt v0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "receiptId",
+    "effectId",
+    "idempotencyKey",
+    "proposalId",
+    "twinId",
+    "baseRevision",
+    "runtimeRunId",
+    "authority",
+    "effector",
+    "scope",
+    "status",
+    "startedAt",
+    "beforeRefs",
+    "afterRefs",
+    "rollback"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0"
+    },
+    "receiptId": {
+      "type": "string",
+      "pattern": "^rcp_[A-Za-z0-9_-]+$"
+    },
+    "effectId": {
+      "type": "string",
+      "pattern": "^efx_[A-Za-z0-9_-]+$"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "minLength": 16,
+      "maxLength": 256
+    },
+    "proposalId": {
+      "type": "string",
+      "pattern": "^prp_[A-Za-z0-9_-]+$"
+    },
+    "twinId": {
+      "type": "string",
+      "pattern": "^twn_[A-Za-z0-9_-]+$"
+    },
+    "baseRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "resultRevision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "runtimeRunId": {
+      "type": "string",
+      "pattern": "^run_[A-Za-z0-9_-]+$"
+    },
+    "authority": {
+      "type": "object",
+      "required": ["type", "actorId"],
+      "properties": {
+        "type": {
+          "enum": ["owner", "authorization-grant"]
+        },
+        "actorId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grantId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "effector": {
+      "type": "string",
+      "pattern": "^forme[.][a-z0-9.-]+$"
+    },
+    "scope": {
+      "type": "object",
+      "required": ["reads", "writes"],
+      "properties": {
+        "reads": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "writes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": ["started", "succeeded", "failed", "indeterminate", "rolled-back"]
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "beforeRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "afterRefs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "error": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rollback": {
+      "type": "object",
+      "required": ["supported", "status"],
+      "properties": {
+        "supported": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": ["not-requested", "pending", "succeeded", "failed", "unsupported"]
+        },
+        "receiptId": {
+          "type": "string",
+          "pattern": "^rcp_[A-Za-z0-9_-]+$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authority": {
+            "properties": {
+              "type": {
+                "const": "authorization-grant"
+              }
+            },
+            "required": ["type"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "authority": {
+            "required": ["grantId"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["succeeded", "failed", "indeterminate", "rolled-back"]
+          }
+        }
+      },
+      "then": {
+        "required": ["completedAt"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "succeeded"
+          }
+        }
+      },
+      "then": {
+        "required": ["resultRevision"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

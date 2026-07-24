@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "0",
+  "twinId": "twn_forme_project",
+  "workspaceId": "wsp_forme",
+  "revision": 12,
+  "updatedAt": "2026-07-15T20:00:00Z",
+  "identity": [
+    {
+      "claimId": "clm_identity",
+      "status": "confirmed",
+      "statement": "Forme is a Living Project Twin that extends continuity, cognition, agency, and presence.",
+      "evidenceRefs": [
+        "evd_owner_pivot"
+      ],
+      "createdRevision": 8,
+      "lastEvaluatedRevision": 12,
+      "correctionRefs": [],
+      "sensitivity": "shareable",
+      "projectionEligibility": "approved"
+    }
+  ],
+  "activeIntent": [
+    {
+      "claimId": "clm_active_intent",
+      "status": "confirmed",
+      "statement": "Build the one-month MVP around one coherent Living Project Twin loop.",
+      "evidenceRefs": [
+        "evd_owner_pivot"
+      ],
+      "createdRevision": 10,
+      "lastEvaluatedRevision": 12,
+      "correctionRefs": [],
+      "sensitivity": "restricted",
+      "projectionEligibility": "pending"
+    }
+  ],
+  "currentState": [],
+  "confirmedDecisions": [],
+  "openQuestions": [],
+  "unresolvedTensions": [],
+  "emergingPatterns": [
+    {
+      "claimId": "clm_runtime_pattern",
+      "status": "inferred",
+      "statement": "The runtime strategy is converging on a neutral kernel with native Codex and OpenCode adapters.",
+      "evidenceRefs": [
+        "evd_runtime_history"
+      ],
+      "confidence": 0.82,
+      "createdRevision": 12,
+      "lastEvaluatedRevision": 12,
+      "correctionRefs": [],
+      "sensitivity": "restricted",
+      "projectionEligibility": "denied"
+    }
+  ],
+  "userCorrections": [],
+  "allowedProjectionScope": {
+    "scopeId": "scp_collaboration",
+    "claimIds": [
+      "clm_identity"
+    ],
+    "updatedAt": "2026-07-15T19:59:00Z"
+  }
+}

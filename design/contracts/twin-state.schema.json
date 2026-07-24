@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/twin-state-v0.json",
+  "title": "Forme Twin State v0",
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "required": [
+        "claimId",
+        "status",
+        "statement",
+        "evidenceRefs",
+        "createdRevision",
+        "lastEvaluatedRevision",
+        "correctionRefs",
+        "sensitivity",
+        "projectionEligibility"
+      ],
+      "properties": {
+        "claimId": {
+          "type": "string",
+          "pattern": "^clm_[A-Za-z0-9_-]+$"
+        },
+        "status": {
+          "enum": ["inferred", "confirmed", "disputed", "superseded", "unresolved"]
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4000
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^evd_[A-Za-z0-9_-]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "createdRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "lastEvaluatedRevision": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supersededBy": {
+          "type": "string",
+          "pattern": "^clm_[A-Za-z0-9_-]+$"
+        },
+        "correctionRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^cor_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        },
+        "sensitivity": {
+          "enum": ["private", "restricted", "shareable"]
+        },
+        "projectionEligibility": {
+          "enum": ["denied", "pending", "approved"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "inferred"
+              }
+            }
+          },
+          "then": {
+            "required": ["confidence"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "superseded"
+              }
+            }
+          },
+          "then": {
+            "required": ["supersededBy"]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "claimSet": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      },
+      "uniqueItems": true
+    }
+  },
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "twinId",
+    "workspaceId",
+    "revision",
+    "updatedAt",
+    "identity",
+    "activeIntent",
+    "currentState",
+    "confirmedDecisions",
+    "openQuestions",
+    "unresolvedTensions",
+    "emergingPatterns",
+    "userCorrections",
+    "allowedProjectionScope"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "0"
+    },
+    "twinId": {
+      "type": "string",
+      "pattern": "^twn_[A-Za-z0-9_-]+$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^wsp_[A-Za-z0-9_-]+$"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "identity": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "activeIntent": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "currentState": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "confirmedDecisions": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "openQuestions": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "unresolvedTensions": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "emergingPatterns": {
+      "$ref": "#/$defs/claimSet"
+    },
+    "userCorrections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["correctionId", "claimId", "eventRef"],
+        "properties": {
+          "correctionId": {
+            "type": "string",
+            "pattern": "^cor_[A-Za-z0-9_-]+$"
+          },
+          "claimId": {
+            "type": "string",
+            "pattern": "^clm_[A-Za-z0-9_-]+$"
+          },
+          "eventRef": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "allowedProjectionScope": {
+      "type": "object",
+      "required": ["scopeId", "claimIds", "updatedAt"],
+      "properties": {
+        "scopeId": {
+          "type": "string",
+          "pattern": "^scp_[A-Za-z0-9_-]+$"
+        },
+        "claimIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^clm_[A-Za-z0-9_-]+$"
+          },
+          "uniqueItems": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
