@@ -1,7 +1,7 @@
 # Stewardship and entropy loop v0.1
 
 - Status: **owner proposal — not yet approved as an implementation contract**
-- Updated: 2026-07-22
+- Updated: 2026-07-23
 - Purpose: define how a Living Twin remains useful as its sources, decisions, actions, relationships, and projections accumulate
 
 ## Product claim
@@ -139,11 +139,13 @@ Metrics inform timing and scope. They do not become vanity dashboards or grant a
 
 The full stewardship engine is not required before Demo Day. The minimum useful bridge is:
 
-1. R4 accepts external messages only as typed, untrusted signals tied to a Projection Capsule version.
-2. Projection compilation consumes active, explicitly allowed Twin claims only.
-3. Twin or allowlist change makes affected projections stale, retired, or reconstructible.
-4. R5 rehearses return/catch-up, projection freshness, expiry, and no-op behavior.
-5. Full workspace profiles, automatic wake, maturity pipelines, and authorized routine maintenance remain separately gated follow-up work.
+1. R4 accepts external messages only as typed, untrusted Interaction Requests tied to a Projection Capsule version.
+2. The server Signal Queue transports and tracks lifecycle; the local Signal Box performs private-context judgment and owner review.
+3. Projection compilation consumes active, explicitly allowed Twin claims only.
+4. Twin or allowlist change makes affected projections stale, retired, or reconstructible.
+5. Approved responses return as bounded capsules; no external request enters Twin meaning automatically.
+6. R5 rehearses return/catch-up, projection freshness, expiry, and no-op behavior.
+7. Full workspace profiles, automatic wake, maturity pipelines, and authorized routine maintenance remain separately gated follow-up work.
 
 This keeps the R4 social experience from creating an ungoverned inbox while avoiding a pre-demo rebuild of the historical CCS vault runtime.
 

@@ -1,7 +1,7 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-20
+- Updated: 2026-07-23
 - Current verdict: **R3 is owner-accepted for the MVP: bounded control is demonstrated, and independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -384,6 +384,37 @@ This feedback does not yet prove:
 
 The immediate consequence is documentation and owner review, not implementation. Three proposal briefs now define the Agency & Trust model, Stewardship loop, and R4 Social Presence experience. The prior static projection remains the approved P0 floor until the owner approves the revised product target and a separate technical Control Packet.
 
+## Evidence round 5 — Mentor Lens and R4 edge-intelligence correction
+
+On 2026-07-23 the owner added a concrete relationship use case and then redrew the proposed Forme Room topology.
+
+The use case came from an INTDEV Studio partner who sometimes wants, while working on a project, to know how his mentor and studio lead—a web master—would judge the situation. The underlying need is not generic advice or a personality imitation. It is access to a trusted person's role-specific judgment patterns at the moment of work, with a clear distinction between a likely lens and the mentor's actual decision.
+
+This suggests a **Mentor Lens** or role-scoped Judgment Projection. A responsible answer would expose the likely lens, current recommendation, variables that could change it, confidence and counterexamples, and the point at which the real mentor should be consulted. It appears closely aligned with the highest vision of projecting bounded human agency, but has not yet been tested with a mentor-authored capsule, a real question, or the mentor's review.
+
+The owner's architecture map then corrected the v0.1 assumption that the Forme server itself should answer from a capsule. The corrected judgment is:
+
+- a server Projection Capsule is intentionally a shallow, immutable snapshot;
+- the server provides registry, deterministic rendering, signal queueing, and response relay, with no LLM or host-side inference;
+- an Agent Guest brings its own agent to read the capsule and reason locally;
+- a Manual Guest uses the website to browse and submit a structured request;
+- insufficient public context becomes an asynchronous Interaction Request;
+- deeper judgment happens in the local Forme environment, where the local agent may draft and the owner reviews;
+- an admitted result returns as a bounded Response Capsule rather than through a live server-to-local tunnel.
+
+The useful mental model is therefore **a reception room connected to the real local Twin by a reviewed mailbox**, not a shallow remote clone. “Signal Box” has two layers: server transport/lifecycle and local private-context judgment. Guest identity depth is also separate from the current Interaction Request; R4 may support anonymous manual guests, lightweight guest profiles, and projections made by non-Forme agents without pretending that every guest has a full Living Twin.
+
+This correction improves conceptual integrity but does not yet prove:
+
+- that the shallow public capsule is useful enough for orientation and discovery;
+- that asynchronous review feels alive rather than like decorated email;
+- which Guest Capsule fields are worth the privacy and interaction cost;
+- whether guest-side shallow Resonance or host-reviewed deep Resonance belongs in P0;
+- whether Mentor Lens is accurate, desirable, or sufficiently different from asking a capable agent with the same documents;
+- what response latency, notification, identity, retention, and local-sync design real users will tolerate.
+
+The immediate consequence is to supersede the v0.1 server-agent assumption in the R4 proposal, Architecture, Control, Roadmap, Product, Agency, and Stewardship maps. It is not implementation approval. The five corrected product recommendations and a later technical Control Packet remain stop gates.
+
 ## Follow-up product-learning questions — not R4 blockers
 
 Keep these questions in the validation backlog while R4 proceeds through its own Control Packet:
@@ -394,6 +425,8 @@ Keep these questions in the validation backlog while R4 proceeds through its own
 4. How much approval and review friction is acceptable for the value of the action?
 5. Which current runtime glue can be replaced by a native Codex API boundary, and what minimal adapter contract is required for an OpenCode spike?
 6. Does R4 Controlled Presence help expose the unique value of one shared Twin, or would it distract from the unresolved usefulness question?
+7. Does the Mentor Lens produce recognizably mentor-specific judgment, and does the mentor agree with its boundaries?
+8. Does asynchronous capsule exchange feel like a relationship with continuity or merely a themed mailbox?
 
 ## Falsification signals
 

@@ -1,7 +1,7 @@
 # Product
 
 - Status: owner-reviewed starting frame for the rebuild
-- Updated: 2026-07-22
+- Updated: 2026-07-23
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -76,9 +76,9 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 
 ## Pending R4 scope proposal
 
-The owner has asked to explore a more social and desirable R4: one hosted **Forme Room** in which an invited collaborator can meet the project Twin, ask a bounded question, leave a Seed, and optionally compare a lightweight Guest Capsule to produce a Resonance artifact.
+The owner has asked to explore a more social and desirable R4: one hosted **Forme Room** in which an invited collaborator can meet the project Twin. A Manual Guest can browse and leave a structured signal; an Agent Guest can fetch the same public capsule and reason with its own agent. Questions requiring deeper context return asynchronously to the local Forme Agent and owner, then may come back as a reviewed Response Capsule.
 
-This is a proposal, not current P0 authority. The committed static, allowlist-only projection remains the fallback floor until the five product recommendations in [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and a subsequent technical Control Packet are owner-approved. No hosting, server model, message persistence, publishing, or interactive runtime is authorized yet.
+The server is proposed as registry, deterministic renderer, signal queue, and response relay—not an AI conversational authority. This is a proposal, not current P0 authority. The committed static, allowlist-only projection remains the fallback floor until the five product recommendations in [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and a subsequent technical Control Packet are owner-approved. No hosting, signal relay, message persistence, publishing, local synchronization, or interactive runtime is authorized yet.
 
 ## Golden acceptance story
 

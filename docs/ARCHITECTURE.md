@@ -1,7 +1,7 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; R4 Social Presence product replan is awaiting owner decision
-- Updated: 2026-07-22
+- Status: R1, R2, and R3 owner-accepted; corrected R4 Forme Room proposal is awaiting owner decision
+- Updated: 2026-07-23
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -139,13 +139,27 @@ Three connected proposals now make previously implicit highest-vision mechanics 
 
 ```text
 private local Twin
-  → deterministic owner-allowed Projection Capsule
-  → exact published version in one hosted Forme Room
-  → bounded capsule-only Ask / Seed / Resonance
-  → typed external signal for later owner/Twin review
+  → locally prepared projection candidate
+  → owner publication gate
+  → immutable Projection Capsule
+  → server registry + deterministic room renderer
+
+guest
+  → public capsule exploration or guest-side agent reasoning
+  → Interaction Request when deeper context is needed
+  → server Signal Queue
+  → local Signal Box
+  → local Forme Agent draft + owner review
+  → Response Capsule
+  → server relay
+  → guest
 ```
 
-The server would receive no local source handle, Twin store, source-writing authority, commitment authority, or autonomous-reply grant. Hosting, persistence, messaging, model access, retention, and public behavior remain blocked until both the product proposal and a subsequent technical Control Packet are owner-approved.
+The R4 server is a Capsule Registry, deterministic Room Renderer, Signal Queue, and Response Relay. It has no LLM, inference authority, local source handle, Twin store, source-writing authority, commitment authority, or autonomous-reply grant. Intelligence remains at the owner-local edge and, optionally, the guest edge.
+
+“Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
+
+Hosting, persistence, messaging, authentication, local synchronization, retention, and public behavior remain blocked until both the corrected product proposal and a subsequent technical Control Packet are owner-approved.
 
 ## Archive policy
 

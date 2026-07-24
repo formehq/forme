@@ -1,7 +1,7 @@
 # Agency and trust model v0.1
 
 - Status: **owner proposal — not yet approved as an implementation contract**
-- Updated: 2026-07-22
+- Updated: 2026-07-23
 - Purpose: separate how Forme reasons from what it may do, then give the owner a low-cost way to expand or reduce agency over time
 
 ## Product claim
@@ -110,14 +110,30 @@ Show the question being explored, sandbox boundary, budget, stop condition, arti
 
 ## R4 boundary
 
-The proposed R4 server agent remains below source-effect authority:
+The corrected R4 topology has no server agent. The server may register and render immutable capsules, queue bounded external signals, and relay reviewed responses. It may not infer a host answer, compare people, read the private Twin or workspace, promise on the owner's behalf, publish a new claim, modify source, or autonomously send a later reply.
 
-- it may answer from one published Projection Capsule;
-- it may compare that capsule with an explicitly supplied Guest Capsule;
-- it may accept a bounded external signal or message;
-- it may not read the private Twin or workspace, promise on the owner's behalf, publish a new claim, modify source, or autonomously send a later reply.
+Reasoning remains at the edges:
+
+- a Guest Agent may interpret the public Projection Capsule locally for its own user;
+- the local Forme Agent may use allowed private context to draft a deeper response;
+- the owner reviews, adjusts, approves, declines, or parks that response;
+- a published Response Capsule carries only the admitted result and its governing versions.
 
 External interaction is evidence for later owner/Twin judgment. It is not authority.
+
+## Mentor Lens
+
+One real candidate use case is a studio partner asking, during a project, “How would my mentor and studio lead judge this?” Forme should represent this as a role-scoped **Judgment Projection**, not a clone or an assertion that the mentor has actually decided.
+
+A useful Mentor Lens response should show:
+
+1. the likely mentor lens;
+2. the recommendation under current evidence;
+3. the variables that could change it;
+4. confidence, counterexamples, and missing context;
+5. when to escalate to the real mentor.
+
+The mentor chooses which judgment patterns may be projected. Public context may support a preliminary guest-side reading; private history or consequential judgment routes through the local Forme Agent and mentor review. This use case enters validation, but grants no new R4 authority.
 
 ## Recommended owner decisions
 

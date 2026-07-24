@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-22
-- Active gate: **R4 — Social Presence product proposal awaiting owner decision; no implementation**
+- Updated: 2026-07-23
+- Active gate: **R4 — Forme Room v0.2 owner correction captured; product decisions pending; no implementation**
 - Active issue: [#52 — Controlled Presence: allowlist-only collaborator projection](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus the real bounded control and independent Career validation; R4 product replan proposed, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner reviews the five R4 Social Presence recommendations; if approved, prepare a separate technical Control Packet before any projection, hosting, model, messaging, persistence, or public behavior is implemented
+- Next action: owner reviews the five corrected R4 recommendations; if approved, prepare a separate technical Control Packet before any projection, hosting, messaging, local synchronization, persistence, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -631,23 +631,23 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
 
 ## Active stop gate — R4 Social Presence product proposal
 
-- Status: **not yet approved or implemented**
+- Status: **v0.2 owner correction captured; not yet approved or implemented**
 - Committed floor: a collaborator can understand what the project is, where it is going, and what remains with the owner through a current static projection that exposes no private source by default.
-- Proposed outcome: one invited collaborator can meet the Forme project Twin in a hosted Forme Room, understand its current direction, Ask one bounded question, Leave a Seed, and optionally bring a lightweight Guest Capsule to receive a Resonance artifact.
-- Candidate map delta: confirmed Twin revision → owner-controlled projection allowlist → deterministic Projection Capsule compiler → exact hosted capsule version → bounded Ask / Seed / Resonance → typed external signal for later owner/Twin review.
+- Proposed outcome: one invited collaborator can meet the Forme project Twin in a hosted Forme Room. A Manual Guest may browse and submit a signal; an Agent Guest may fetch the same public capsule and reason locally. Any question requiring deeper context returns asynchronously to the local Forme Agent and owner for reviewed response.
+- Candidate map delta: confirmed Twin revision → locally prepared candidate → owner publication gate → immutable Projection Capsule → server registry/renderer → guest-side exploration or reasoning → typed Interaction Request → server Signal Queue → local Signal Box and owner-reviewed Response Capsule → server relay.
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Product proposal: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Related proposals: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and [`STEWARDSHIP.md`](./STEWARDSHIP.md)
 
 The owner must first decide these five product recommendations:
 
-1. replace the static-only experience with one hosted, interactive Forme Room while keeping one real host Twin and one three-minute encounter;
-2. use one invited collaborator first and include Ask, Leave a Seed, and Find Resonance through a lightweight Guest Capsule;
-3. publish only an exact, versioned Projection Capsule containing owner-allowed current claims, open questions, contribution openings, freshness, provenance class, and agency boundary;
-4. let the server answer and create interaction artifacts from published capsules and accept typed signals, but grant no private-source, source-write, commitment, or autonomous-reply authority;
-5. require expiry, revocation, stale-version handling, a private canary, a durable signal lifecycle, and one real collaborator's product judgment before R4 is Done.
+1. use one hosted Forme Room as a reception room and relay for one real host Twin and one three-minute encounter;
+2. support both a Manual Guest website path and an Agent Guest API path, without requiring Forme continuity on the guest side;
+3. publish only immutable, owner-admitted Projection Capsule versions; local continuous preparation does not imply live server synchronization;
+4. run no AI on the server; keep intelligence at the owner-local and optional guest edges, connected by a two-layer Signal Box and reviewed capsule exchange;
+5. require expiry, revocation, stale-version handling, a private canary, a durable request/response lifecycle, and one real collaborator's product judgment before R4 is Done.
 
-Approval of these five recommendations would establish the product target only. A second technical Control Packet must name exact stores, schemas, APIs, credentials, retention, deployment topology, runtime visibility, failure behavior, tests, and cuts. R3 acceptance grants no R4 visibility or publishing authority, and the current proposal grants none by itself.
+Approval of these five recommendations would establish the product target only. A second technical Control Packet must name exact stores, schemas, APIs, authentication, retention, deployment topology, local synchronization, notification behavior, failure handling, tests, and cuts. R3 acceptance grants no R4 visibility or publishing authority, and the current proposal grants none by itself.
 
 The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
 
