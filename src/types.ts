@@ -188,7 +188,185 @@ export interface TwinRevisionV2 extends TwinRevisionBase {
   cognition: CognitionState;
 }
 
-export type TwinRevision = TwinRevisionV1 | TwinRevisionV2;
+export type ActionKind = "render_next_move_brief.v1";
+export type ActionProposalStatus = "proposed" | "approved" | "executed" | "rolled-back" | "invalidated" | "indeterminate";
+
+export interface ActionContextPacket {
+  schemaVersion: "1";
+  packetId: string;
+  createdAt: string;
+  baseTwinRevision: number;
+  ownerFrame: OwnerFrame;
+  actionGoal: string;
+  correctedReflection: {
+    reflectionId: string;
+    claim: string;
+    relationType: RelationType;
+    implication: string;
+    evidence: GitLineEvidence[];
+    correctionId: string;
+    correctedAt: string;
+  };
+  capability: {
+    actionKind: ActionKind;
+    targetPath: "README.md";
+    markerId: "forme:r3-action";
+  };
+  constraints: string[];
+}
+
+export interface ActionIntentProposalV1 {
+  schemaVersion: "1";
+  proposalId: string;
+  baseTwinRevision: number;
+  actionKind: ActionKind;
+  rationale: string;
+  title: string;
+  whyNow: string;
+  nextMove: string;
+  successCheck: string;
+  ownerChallenge: string;
+}
+
+export type ActionProposalMode = "recommend" | "ask_owner";
+export type RecommendationConfidence = "low" | "medium" | "high";
+
+export interface ActionDecisionItem {
+  judgment: string;
+  recommendedChoice: string;
+  reason: string;
+  alternatives: string[];
+}
+
+export interface ActionIntentProposalV2 {
+  schemaVersion: "2";
+  proposalId: string;
+  baseTwinRevision: number;
+  actionKind: ActionKind;
+  mode: ActionProposalMode;
+  plainLanguageSummary: string;
+  recommendation: string | null;
+  blockingQuestion: string | null;
+  confidence: {
+    level: RecommendationConfidence;
+    rationale: string;
+  };
+  decisionItems: ActionDecisionItem[];
+  whyNow: string;
+  successCheck: string;
+  ownerChallenge: string;
+}
+
+export type ActionIntentProposal = ActionIntentProposalV1 | ActionIntentProposalV2;
+
+export interface ActionContextPacketBuild {
+  packet: ActionContextPacket;
+  packetHash: string;
+  manifest: {
+    packetId: string;
+    packetHash: string;
+    baseTwinRevision: number;
+    correctedReflectionId: string;
+    correctionId: string;
+    actionKind: ActionKind;
+    targetPath: "README.md";
+    transmittedSourceBytes: 0;
+  };
+}
+
+export interface ActionRuntimeProposalResult {
+  proposal: ActionIntentProposal;
+  cliVersion: string;
+  model: string;
+  completedAt: string;
+  audit: RuntimeAuditSummary;
+}
+
+export interface EffectPlan {
+  schemaVersion: "1";
+  effectId: string;
+  actionKind: ActionKind;
+  proposalId: string;
+  baseTwinRevision: number;
+  correctedReflectionId: string;
+  targetPath: "README.md";
+  markerId: "forme:r3-action";
+  beforeFileHash: string;
+  beforeBlockHash: string;
+  afterFileHash: string;
+  afterBlockHash: string;
+  idempotencyKey: string;
+}
+
+export interface ActionProposalRecord {
+  proposal: ActionIntentProposal;
+  proposalHash: string;
+  packetHash: string;
+  correctedReflectionId: string;
+  correctionId: string;
+  runtimeReceiptId: string;
+  effectPlan: EffectPlan | null;
+  effectPlanHash: string | null;
+  admittedRevision: number;
+  status: ActionProposalStatus;
+  approvalId: string | null;
+  effectReceiptIds: string[];
+  createdAt: string;
+}
+
+export interface ActionApprovalRecord {
+  approvalId: string;
+  proposalId: string;
+  proposalHash: string;
+  effectPlanHash: string;
+  authority: "owner";
+  baseTwinRevision: number;
+  approvedAt: string;
+  status: "approved" | "consumed" | "invalidated";
+  consumedAt: string | null;
+}
+
+export interface EffectReceipt {
+  receiptId: string;
+  operation: "execute" | "rollback";
+  effectId: string;
+  proposalId: string;
+  approvalId: string;
+  effectPlanHash: string;
+  baseTwinRevision: number;
+  resultTwinRevision: number;
+  targetPath: "README.md";
+  expectedBeforeHash: string;
+  expectedAfterHash: string;
+  observedHash: string;
+  status: "succeeded" | "indeterminate";
+  completedAt: string;
+}
+
+export interface ActionInvalidationRecord {
+  invalidationId: string;
+  proposalId: string;
+  causedByCorrectionId: string | null;
+  causedByTwinRevision: number;
+  reason: string;
+  invalidatedAt: string;
+}
+
+export interface AgencyState {
+  proposals: ActionProposalRecord[];
+  approvals: ActionApprovalRecord[];
+  runtimeReceipts: RuntimeReceipt[];
+  effectReceipts: EffectReceipt[];
+  invalidations: ActionInvalidationRecord[];
+}
+
+export interface TwinRevisionV3 extends TwinRevisionBase {
+  schemaVersion: "3";
+  cognition: CognitionState;
+  agency: AgencyState;
+}
+
+export type TwinRevision = TwinRevisionV1 | TwinRevisionV2 | TwinRevisionV3;
 
 export interface HeadRecord {
   schemaVersion: "1";
@@ -229,4 +407,22 @@ export interface RuntimeProposalResult {
   model: string;
   completedAt: string;
   audit: RuntimeAuditSummary;
+}
+
+export interface PendingEffect {
+  schemaVersion: "1";
+  operation: "execute" | "rollback";
+  proposalId: string;
+  approvalId: string;
+  effectReceiptId: string;
+  effectPlanHash: string;
+  baseTwinRevision: number;
+  resultTwinRevision: number;
+  createdAt: string;
+}
+
+export interface ActionExecutionResult {
+  changed: boolean;
+  observation: ObservationResult;
+  receipt: EffectReceipt;
 }

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.dev/schemas/action-intent-proposal-v1.json",
+  "title": "Forme R3 Action Intent Proposal v1",
+  "type": "object",
+  "required": ["schemaVersion", "proposalId", "baseTwinRevision", "actionKind", "rationale", "title", "whyNow", "nextMove", "successCheck", "ownerChallenge"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1" },
+    "proposalId": { "type": "string", "pattern": "^act_[a-f0-9]{32}$" },
+    "baseTwinRevision": { "type": "integer", "minimum": 1 },
+    "actionKind": { "type": "string", "const": "render_next_move_brief.v1" },
+    "rationale": { "type": "string", "minLength": 30, "maxLength": 2000 },
+    "title": { "type": "string", "minLength": 3, "maxLength": 120, "pattern": "^[^\\r\\n]+$" },
+    "whyNow": { "type": "string", "minLength": 20, "maxLength": 1000 },
+    "nextMove": { "type": "string", "minLength": 10, "maxLength": 1000 },
+    "successCheck": { "type": "string", "minLength": 10, "maxLength": 1000 },
+    "ownerChallenge": { "type": "string", "minLength": 10, "maxLength": 1000 }
+  },
+  "additionalProperties": false
+}

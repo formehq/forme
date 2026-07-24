@@ -10,11 +10,17 @@ import {
 import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import {
+  actionIntentProposalJsonSchema,
+  assertActionIntentProposal,
   canonicalJson,
   reflectionProposalJsonSchema,
 } from "./contracts.ts";
+import { expectedActionProposalId, validateActionProposalForPacket } from "./action.ts";
 import { expectedProposalId, validateReflectionProposalForPacket } from "./reflection.ts";
 import type {
+  ActionContextPacket,
+  ActionIntentProposal,
+  ActionRuntimeProposalResult,
   ContextPacket,
   ReflectionProposal,
   RuntimeAuditSummary,
@@ -26,6 +32,10 @@ const ALLOWED_ITEM_TYPES = new Set(["agent_message", "reasoning"]);
 
 export interface ReflectionRuntime {
   generate(packet: ContextPacket, forbiddenPaths?: string[]): RuntimeProposalResult;
+}
+
+export interface ActionRuntime {
+  generateAction(packet: ActionContextPacket, forbiddenPaths?: string[]): ActionRuntimeProposalResult;
 }
 
 interface CodexRuntimeOptions {
@@ -83,7 +93,7 @@ function isolatedEnvironment(codexHome: string): NodeJS.ProcessEnv {
 function initializeCodexHome(codexHome: string): void {
   const ownerCodexHome = process.env.CODEX_HOME ?? join(homedir(), ".codex");
   const auth = join(ownerCodexHome, "auth.json");
-  if (!existsSync(auth)) throw new Error("Codex authentication is unavailable; run `codex login` before R2");
+  if (!existsSync(auth)) throw new Error("Codex authentication is unavailable; run `codex login` before using the model runtime");
   symlinkSync(auth, join(codexHome, "auth.json"));
 }
 
@@ -228,7 +238,15 @@ export function auditCodexJsonl(output: string): AuditedOutput {
   };
 }
 
-export class CodexExecRuntime implements ReflectionRuntime {
+interface StructuredRuntimeResult {
+  proposal: unknown;
+  cliVersion: string;
+  model: string;
+  completedAt: string;
+  audit: RuntimeAuditSummary;
+}
+
+export class CodexExecRuntime implements ReflectionRuntime, ActionRuntime {
   readonly #executable: string;
   readonly #requestedModel: string | undefined;
   readonly #timeoutMs: number;
@@ -242,8 +260,58 @@ export class CodexExecRuntime implements ReflectionRuntime {
   }
 
   generate(packet: ContextPacket, forbiddenPaths: string[] = []): RuntimeProposalResult {
-    const codexHome = mkdtempSync(join(tmpdir(), "forme-r2-codex-home-"));
-    const packetRoot = mkdtempSync(join(tmpdir(), "forme-r2-packet-"));
+    const result = this.#generateStructured({
+      packet,
+      forbiddenPaths,
+      schema: reflectionProposalJsonSchema(),
+      schemaFilename: "reflection-proposal-v1.schema.json",
+      packetFilename: "context-packet.json",
+      prompt: [
+        "Act only as Forme's bounded cognition function.",
+        "Use the ContextPacketV1 supplied on stdin as the complete and only project evidence.",
+        "Infer one cross-time relationship that is more useful than a summary.",
+        "Cite both allowed evidence IDs, expose uncertainty and an alternative explanation, and ask one correction question.",
+        `Set proposalId exactly to ${expectedProposalId(packet)} and baseTwinRevision exactly to ${packet.baseTwinRevision}.`,
+        "Do not call tools or request more context. Return only the JSON object required by ReflectionProposalV1.",
+      ].join(" "),
+    });
+    validateReflectionProposalForPacket(result.proposal, packet);
+    return { ...result, proposal: result.proposal as ReflectionProposal };
+  }
+
+  generateAction(packet: ActionContextPacket, forbiddenPaths: string[] = []): ActionRuntimeProposalResult {
+    const result = this.#generateStructured({
+      packet,
+      forbiddenPaths,
+      schema: actionIntentProposalJsonSchema(),
+      schemaFilename: "action-intent-proposal-v2.schema.json",
+      packetFilename: "action-context-packet.json",
+      prompt: [
+        "Act only as Forme's bounded schema-only action proposer.",
+        "Use the ActionContextPacketV1 supplied on stdin as the complete and only project context.",
+        "Return a recommendation-first Owner Decision Brief: one plain-language answer followed by one to three independently editable judgment items with recommended choices, reasons, and bounded alternatives.",
+        "Use mode recommend by default. Use ask_owner only when one named uncertainty blocks a responsible recommendation; then set confidence to low, recommendation to null, and supply exactly one blockingQuestion. In recommend mode, supply one recommendation and set blockingQuestion to null.",
+        "Expose confidence and its rationale, why the decision matters now, a success check, and one way the owner should challenge the result.",
+        "Never propose a path, patch, command, tool call, Markdown document, or file body.",
+        `Set proposalId exactly to ${expectedActionProposalId(packet)}, baseTwinRevision exactly to ${packet.baseTwinRevision}, and actionKind exactly to render_next_move_brief.v1.`,
+        "Do not call tools or request more context. Return only the JSON object required by ActionIntentProposalV2.",
+      ].join(" "),
+    });
+    assertActionIntentProposal(result.proposal);
+    validateActionProposalForPacket(result.proposal, packet);
+    return { ...result, proposal: result.proposal as ActionIntentProposal };
+  }
+
+  #generateStructured(options: {
+    packet: unknown;
+    forbiddenPaths: string[];
+    schema: object;
+    schemaFilename: string;
+    packetFilename: string;
+    prompt: string;
+  }): StructuredRuntimeResult {
+    const codexHome = mkdtempSync(join(tmpdir(), "forme-codex-home-"));
+    const packetRoot = mkdtempSync(join(tmpdir(), "forme-packet-"));
     try {
       initializeCodexHome(codexHome);
       const environment = isolatedEnvironment(codexHome);
@@ -275,7 +343,7 @@ export class CodexExecRuntime implements ReflectionRuntime {
 
       const probe = spawnSync(
         this.#executable,
-        ["debug", "prompt-input", ...configArgs(model), "FORME_R2_CAPABILITY_PROBE"],
+        ["debug", "prompt-input", ...configArgs(model), "FORME_PACKET_ONLY_CAPABILITY_PROBE"],
         {
           cwd: packetRoot,
           encoding: "utf8",
@@ -285,19 +353,11 @@ export class CodexExecRuntime implements ReflectionRuntime {
         },
       );
       if (probe.status !== 0) throw processFailure("Codex capability probe", probe.status, probe.stderr);
-      inspectCapabilityProbe(probe.stdout, packetRoot, forbiddenPaths);
+      inspectCapabilityProbe(probe.stdout, packetRoot, options.forbiddenPaths);
 
-      const schemaPath = join(packetRoot, "reflection-proposal-v1.schema.json");
-      writeFileSync(schemaPath, `${JSON.stringify(reflectionProposalJsonSchema(), null, 2)}\n`, { mode: 0o600 });
-      writeFileSync(join(packetRoot, "context-packet.json"), `${JSON.stringify(packet, null, 2)}\n`, { mode: 0o600 });
-      const prompt = [
-        "Act only as Forme's bounded cognition function.",
-        "Use the ContextPacketV1 supplied on stdin as the complete and only project evidence.",
-        "Infer one cross-time relationship that is more useful than a summary.",
-        "Cite both allowed evidence IDs, expose uncertainty and an alternative explanation, and ask one correction question.",
-        `Set proposalId exactly to ${expectedProposalId(packet)} and baseTwinRevision exactly to ${packet.baseTwinRevision}.`,
-        "Do not call tools or request more context. Return only the JSON object required by ReflectionProposalV1.",
-      ].join(" ");
+      const schemaPath = join(packetRoot, options.schemaFilename);
+      writeFileSync(schemaPath, `${JSON.stringify(options.schema, null, 2)}\n`, { mode: 0o600 });
+      writeFileSync(join(packetRoot, options.packetFilename), `${JSON.stringify(options.packet, null, 2)}\n`, { mode: 0o600 });
       const execution = spawnSync(
         this.#executable,
         [
@@ -313,13 +373,13 @@ export class CodexExecRuntime implements ReflectionRuntime {
           "--model", model,
           "-C", packetRoot,
           ...configArgs(model),
-          prompt,
+          options.prompt,
         ],
         {
           cwd: packetRoot,
           encoding: "utf8",
           env: environment,
-          input: canonicalJson(packet),
+          input: canonicalJson(options.packet),
           timeout: this.#timeoutMs,
           maxBuffer: 16_000_000,
         },
@@ -333,11 +393,10 @@ export class CodexExecRuntime implements ReflectionRuntime {
       try {
         proposal = JSON.parse(audited.finalMessage) as unknown;
       } catch {
-        throw new Error("Codex final message is not a JSON Reflection proposal");
+        throw new Error("Codex final message is not a JSON structured proposal");
       }
-      validateReflectionProposalForPacket(proposal, packet);
       return {
-        proposal: proposal as ReflectionProposal,
+        proposal,
         cliVersion,
         model,
         completedAt: this.#now().toISOString(),

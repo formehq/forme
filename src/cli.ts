@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { resolve } from "node:path";
+import { runActionProposal } from "./agency.ts";
+import { buildActionContextPacket } from "./action-context.ts";
 import { runReflection } from "./cognition.ts";
 import {
   buildContextPacket,
@@ -9,7 +11,15 @@ import {
   type ContextSelection,
 } from "./context.ts";
 import { CodexExecRuntime } from "./runtime.ts";
-import { correctReflection, initWorkspace, observeWorkspace, statusWorkspace } from "./store.ts";
+import {
+  approveAction,
+  correctReflection,
+  executeAction,
+  initWorkspace,
+  observeWorkspace,
+  rollbackAction,
+  statusWorkspace,
+} from "./store.ts";
 
 type ParsedOptions = Map<string, string[]>;
 
@@ -20,6 +30,11 @@ const ALLOWED_OPTIONS: Record<string, Set<string>> = {
   packet: new Set(["--workspace", "--earlier", "--later", "--path", "--earlier-lines", "--later-lines", "--task"]),
   reflect: new Set(["--workspace", "--earlier", "--later", "--path", "--earlier-lines", "--later-lines", "--task"]),
   correct: new Set(["--workspace", "--reflection", "--text"]),
+  "action-packet": new Set(["--workspace", "--goal"]),
+  "action-propose": new Set(["--workspace", "--goal"]),
+  "action-approve": new Set(["--workspace", "--proposal", "--effect-hash"]),
+  "action-execute": new Set(["--workspace", "--approval"]),
+  "action-rollback": new Set(["--workspace", "--receipt"]),
 };
 const LIST_OPTIONS = new Set(["--include", "--unresolved"]);
 
@@ -71,7 +86,7 @@ function contextSelection(options: ParsedOptions): ContextSelection {
 
 function help(): string {
   return [
-    "Forme Living Project Twin — R1 Continuity + R2 Cognition",
+    "Forme Living Project Twin — R1 Continuity + R2 Cognition + R3 Bounded Agency",
     "",
     "Commands:",
     "  init     connect one bounded workspace and create revision 1",
@@ -80,6 +95,11 @@ function help(): string {
     "  packet   preview the exact cross-time manifest without a model call",
     "  reflect  run one isolated Codex Reflection and admit validated meaning",
     "  correct  replace an active interpretation with owner-authored meaning",
+    "  action-packet   preview the body-free R3 Action Context manifest",
+    "  action-propose  ask Codex for one schema-only bounded action proposal",
+    "  action-approve  owner-approve one exact proposal/effect-plan hash pair",
+    "  action-execute  consume one approval through the fixed-marker executor",
+    "  action-rollback explicitly restore the approved pre-effect marker body",
     "",
     "Init options:",
     "  --workspace <path>       defaults to the current directory",
@@ -109,7 +129,14 @@ function help(): string {
     "  --reflection <id>        active inferred or corrected Reflection",
     "  --text <text>            owner-authored replacement meaning",
     "",
-    "Forme never grants the model canonical write authority or writes project sources.",
+    "R3 action options:",
+    "  --goal <text>             owner-framed goal for packet/proposal",
+    "  --proposal <id>           exact act_ proposal ID",
+    "  --effect-hash <sha256>    exact effect-plan hash shown in Action Review",
+    "  --approval <id>           one-use apr_ approval ID",
+    "  --receipt <id>            successful eff_ execution receipt to roll back",
+    "",
+    "The model never receives canonical write authority. Only Forme may replace the fixed README.md managed block after exact owner approval.",
   ].join("\n");
 }
 
@@ -158,6 +185,29 @@ try {
         required(options, "--reflection"),
         required(options, "--text"),
       ).view);
+    } else if (command === "action-packet") {
+      console.log(JSON.stringify(buildActionContextPacket(
+        workspaceRoot,
+        required(options, "--goal"),
+      ).manifest, null, 2));
+    } else if (command === "action-propose") {
+      const result = runActionProposal(workspaceRoot, required(options, "--goal"), new CodexExecRuntime(), {
+        onPacket: (packet) => {
+          console.error("Forme R3 will send only this approved Action Context manifest:");
+          console.error(JSON.stringify(packet.manifest, null, 2));
+        },
+      });
+      console.log(result.observation.view);
+    } else if (command === "action-approve") {
+      console.log(approveAction(
+        workspaceRoot,
+        required(options, "--proposal"),
+        required(options, "--effect-hash"),
+      ).view);
+    } else if (command === "action-execute") {
+      console.log(executeAction(workspaceRoot, required(options, "--approval")).observation.view);
+    } else if (command === "action-rollback") {
+      console.log(rollbackAction(workspaceRoot, required(options, "--receipt")).observation.view);
     }
   }
 } catch (error) {

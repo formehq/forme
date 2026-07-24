@@ -10,8 +10,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R3 — Bounded Agency; Needs Decision**
-- Product implementation: **R1 and R2 owner-accepted; R3–R5 not started**
+- Current gate: **R3 — Bounded Agency; Owner Acceptance / product validation**
+- Product implementation: **R1 and R2 owner-accepted; the R3 control path and R3-V2 Owner Decision Brief pass 44 checks; recommendation accuracy remains unaccepted; R4–R5 not started**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
 
@@ -106,3 +106,31 @@ npm run forme -- correct --workspace . \
 ```
 
 The real Forme demo admitted an evidence-backed Codex Reflection, then recorded the owner's narrower interpretation in Twin revision 19. The original inference became `superseded`, one dependent output was invalidated, the next Context Packet carried the correction, and restart reconstruction remained byte-identical.
+
+## R3 Bounded Agency — mechanism demonstrated; product validation active
+
+R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The additive `ActionIntentProposalV2` now returns one recommendation first, one to three editable judgments, explicit confidence, and a low-confidence `ask_owner` fallback that cannot compile an effect. Existing V1 revisions remain reconstructible. The bounded mechanism and new owner surface are implemented; suggestion usefulness, accuracy, and differentiated Twin value remain under R3-V product validation. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
+
+Preview the packet manifest without calling a model:
+
+```sh
+npm run forme -- action-packet --workspace . \
+  --goal "Prepare one useful, owner-reviewable next move for the R3 walking slice."
+```
+
+After that Owner Frame is confirmed, the owner demo uses separate commands for each authority transition:
+
+```sh
+npm run forme -- action-propose --workspace . --goal "..."
+npm run forme -- action-approve --workspace . --proposal act_... --effect-hash sha256:...
+npm run forme -- action-execute --workspace . --approval apr_...
+npm run forme -- action-rollback --workspace . --receipt eff_...
+```
+
+## Forme R3 managed action
+
+Only Forme's fixed-marker executor may replace the body between these markers, and only after a separate owner approval bound to the exact effect-plan hash.
+
+<!-- forme:r3-action:start -->
+_No approved Forme action is currently applied._
+<!-- forme:r3-action:end -->

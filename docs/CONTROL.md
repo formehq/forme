@@ -1,11 +1,11 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-18
-- Active gate: **R3 — Bounded Agency; Needs Decision**
-- Active issue: [#51 — Bounded Agency: one approved reversible action](https://github.com/formehq/forme/issues/51)
-- P0 implementation: **R1 and R2 owner-accepted; R3 awaiting its Control Packet; R4–R5 not started**
+- Updated: 2026-07-23
+- Active gate: **R4 — Forme Room v0.2 owner correction captured; product decisions pending; no implementation**
+- Active issue: [#52 — Controlled Presence: allowlist-only collaborator projection](https://github.com/formehq/forme/issues/52)
+- P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus the real bounded control and independent Career validation; R4 product replan proposed, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: prepare and review the R3 action, approval, effect, receipt, verification, and rollback contract
+- Next action: owner reviews the five corrected R4 recommendations; if approved, prepare a separate technical Control Packet before any projection, hosting, messaging, local synchronization, persistence, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -26,9 +26,9 @@ R1 Continuity             ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
-R3 Bounded Agency         ← YOU ARE HERE · NEEDS DECISION
+R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    allowlist → static collaborator projection
+R4 Controlled Presence    ← YOU ARE HERE · PRODUCT REPLAN DECISION
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -41,8 +41,14 @@ Current truth:
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
-- #51 is now the active gate; no R3 write authority or action contract has been approved;
-- R1 and R2 are Done; project sources still have no agent action, background, server, or projection write path.
+- #51 is complete; the owner approved all five original R3 recommendations on 2026-07-18, all five R3-V2 Owner Decision Brief recommendations on 2026-07-20, and accepted the full R3 MVP product gate on 2026-07-20;
+- the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
+- CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
+- the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
+- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. The next gate is the owner-facing output contract, not another effect.
+- CASE-02 local extraction was owner-approved with manifest `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. The two immutable Career blobs became 4,607- and 12,108-byte redacted snapshots under one stable mapping; 139 replacement operations, exact hashes, provenance, and residual re-identification risk are recorded. The original source-vault path remains unmodified.
+- The existing CASE-01 Twin cannot safely admit Career because its immutable source contract allowlists CCS only. Rather than rewrite historical contract hashes or contaminate CASE-02, the lab prepared a fresh local Career workspace gate `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. That gate creates no model authority; after approval, a separately owner-approved exact ContextPacket hash is still required.
+- The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` contains a no-remote Twin with only `README.md` and the redacted Career path allowlisted. Exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` produced one zero-tool inferred Reflection at revision 2. The owner corrected its causal over-weighting without a model call: revision 3 preserves the original as `superseded`, admits owner-authored Reflection `ref_711fd70d727e4ecf74f19005590eda09`, records correction `cor_e48ac14130ab657777b006908a16719b`, and invalidates one dependent output. Under approved comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`, one A0, one A1, and one B call completed with zero tool events. The owner found all three useful, leaned slightly toward A1, and least preferred A0's no-correction closure-only recommendation, then clarified that A1 and B are too close to separate confidently because the real ship/closure balance remains unresolved. B carried the combined corrected direction automatically with zero source bodies and no manual reconstruction. The R3 closeout advanced the Career Twin to revision 5 and invalidated B through `ainv_6c8069a54d2bba64d6f21c4ca5031283`; approvals, effects, source changes, and additional model calls remained zero.
 
 ## System map
 
@@ -351,13 +357,299 @@ The owner explicitly confirmed all five recommendations before implementation:
 
 Implementation must remain inside these five decisions. Any broader source visibility, tool authority, automatic history discovery, runtime parity, or semantic durability returns to a new Owner stop gate.
 
-## Next Control Packet — R3 Bounded Agency
+## Completed Control Packet — R3 Bounded Agency
 
-- Status: **Needs Decision; no implementation or source-write authority is approved**
+- Status: **all five original recommendations and all five V2 owner-surface recommendations are approved; 44 checks, the real bounded demo, and independent Career product validation passed; owner-accepted on 2026-07-20**
 - User outcome: after correcting Forme, the owner can approve one concrete action against the corrected project state and see exactly what happened, why, and how to reverse it.
-- Required map delta: corrected Twin revision → structured action proposal → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
+- Required map delta: corrected Twin revision → structured action proposal → exact effect plan → explicit owner approval → deterministic typed effect → terminal receipt → verification → rollback.
 
-The next proposal must recommend the smallest real Forme-owned artifact to change, define the exact readable and writable paths, bind approval and execution to one Twin revision, make retries safe, and prove both the intended effect and rollback. Choosing that action or granting any write capability remains an owner stop gate.
+R3 proves one narrow control loop. It is not a general tool system, arbitrary file editor, shell agent, Git bot, or reusable authorization framework.
+
+### Recommended first effect
+
+Use one fixed Forme-managed block in `README.md` as the only writable project-source surface. Codex proposes a structured **Next Move Brief** from the active corrected Reflection and an owner-supplied action goal. Forme—not Codex—renders that proposal into exact Markdown, previews the complete block diff, and writes it only after the owner approves its content hash and effect-plan hash.
+
+The implementation adds inert markers and a known placeholder:
+
+```text
+<!-- forme:r3-action:start -->
+_No approved Forme action is currently applied._
+<!-- forme:r3-action:end -->
+```
+
+The action kind remains fixed to `render_next_move_brief.v1`. The current model output is an `ActionIntentProposalV2`: a plain-language recommendation, one to three editable judgments, confidence, why now, success check, and owner challenge—or one low-confidence blocking question with no effect. It cannot choose a path, operation, command, patch, tool, or renderer. Forme adds provenance—the Twin revision, corrected Reflection ID, proposal ID, and effect hash—during deterministic rendering.
+
+Before the first real R3 proposal, the owner must replace the now-stale R2 Owner Frame through the already accepted R1 `observe` surface. Forme must not infer or silently advance the owner's Active Intent or Next Move. The Action Context is built only after that owner-authored revision exists.
+
+Why this target:
+
+| Candidate | Benefit | Problem | Recommendation |
+|---|---|---|---|
+| Update only the Twin Owner Frame | smallest authority and reuses R1 state transitions | demonstrates the system changing itself, not acting on a project artifact | retain as the schedule fallback, not the first choice |
+| Replace one fixed `README.md` managed block | visible real-project effect, exact narrow write scope, easy diff and rollback, no new path discovery | grants Forme its first project-source write and therefore needs this stop gate | **recommended** |
+| Mutate a GitHub Issue or Project | externally meaningful and collaborative | adds credentials, network, API idempotency, remote rollback, and messaging authority | defer beyond R3 |
+
+### Proposed walking slice
+
+```text
+active corrected Reflection at Twin revision N
+  → owner-supplied action goal
+  → disposable Action Context Packet
+  → isolated Codex structured intent proposal
+  → Forme validation and fixed-effect compilation
+  → exact managed-block preview and effect-plan hash
+  → owner approval recorded at revision N+2
+  → Forme-only deterministic README block rewrite
+  → verification and terminal receipt at revision N+3
+  → explicit rollback against the after-hash
+  → placeholder restored and rollback receipt at revision N+4
+```
+
+The revision numbers illustrate the required order. Any unrelated Twin revision between proposal, approval, execution, or the first rollback makes that step stale and forces a new proposal or owner decision.
+
+### Five-question contract
+
+| Question | R3 recommendation |
+|---|---|
+| What enters? | The current Twin revision, the one active owner-corrected Reflection, its evidence coordinates and correction ID, the owner frame, an explicit owner-supplied action goal, and the fixed `render_next_move_brief.v1` capability description. No historical source body or ambient workspace content enters. |
+| What becomes durable? | Additive `TwinRevisionV3` agency state: admitted action proposals, compiled effect-plan hashes, owner approvals, terminal execution/rollback receipts, invalidations, and minimal action-runtime receipts. V1/V2 history remains unchanged; README bodies and runtime transcripts are not copied into the Twin. |
+| What can Codex or OpenCode see? | For P0, the existing isolated Codex adapter receives only the disposable Action Context Packet. It sees the relative target name and managed-block contract, but not the README body, repository, `.forme/`, untracked draft, credentials, tools, web, or shell. OpenCode remains contract-compatible but has no live R3 path. |
+| What may an agent change? | Codex changes nothing. After exact owner approval, deterministic Forme code may read `README.md` and replace only the bytes between the two named markers. It cannot add paths, modify text outside the block, stage, commit, push, call the network, or execute a model-generated command. |
+| How does recovery work? | A write-ahead effect journal plus before/after hashes distinguishes not-started, completed-but-unreceipted, and unexpected states. Retry returns the existing receipt instead of duplicating the effect. Rollback is an explicit owner command and succeeds only while the target still matches the recorded after-hash. |
+
+### Recommended decisions
+
+| Decision | Recommended answer | Global effect |
+|---|---|---|
+| First writable surface | One fixed managed block in existing allowlisted `README.md`; no arbitrary path parameter. | R3 crosses the project-source write boundary once without creating a general file tool. |
+| Runtime role | Reuse isolated ephemeral Codex for a schema-only semantic intent proposal; keep all tools disabled. Forme compiles the only permissible effect plan. | Harness runtimes remain replaceable proposers and never receive the writer. |
+| Approval and staleness | Show the exact rendered block, target, before hash, after hash, and effect-plan hash. A separate owner command approves that one immutable plan once. Require an unbroken Twin revision chain through execution. | Approval cannot silently authorize changed content, a new target, or a later project state. |
+| Durable agency state | Introduce `TwinRevisionV3` only when the first valid action proposal is admitted. Persist proposal, approval, receipts, hashes, authority, scope, and status—not file bodies or sessions. | Agency becomes inspectable and restart-safe without making runtime state canonical. |
+| Executor, retry, and rollback | Use an exact marker parser, target preconditions, atomic replacement, a write-ahead journal, terminal receipts, and hash-guarded rollback. Never invoke Git. | Crashes and retries fail closed; human edits cannot be overwritten by execution or rollback. |
+
+### Proposed contracts
+
+`ActionContextPacketV1` is deterministic and disposable:
+
+- packet ID/hash, base Twin revision, owner frame, and owner-supplied action goal;
+- the active corrected Reflection, evidence coordinates, and correction ID;
+- the single allowed action kind and structured field limits;
+- the fixed relative target and marker ID, without the target file body;
+- constraints forbidding commands, patches, paths, tools, and additional effects.
+
+`ActionIntentProposalV1` remains accepted only for validating and reconstructing existing revisions:
+
+- deterministic proposal ID and exact base Twin revision;
+- one causal rationale; Forme binds the proposal to the corrected Reflection from the packet during admission rather than trusting a model-supplied linkage;
+- action kind fixed to `render_next_move_brief.v1`;
+- bounded title, why-now, next-move, success-check, and owner-challenge fields;
+- no target path, raw Markdown, command, patch, approval claim, or rollback instruction.
+
+`ActionIntentProposalV2` is the current runtime output:
+
+- the same deterministic proposal identity, exact base revision, and fixed action kind;
+- `recommend` by default with one plain-language answer and one to three editable judgment items;
+- explicit low, medium, or high confidence and its rationale;
+- `ask_owner` only at low confidence with one blocking question and no recommendation;
+- bounded why-now, success-check, and owner-challenge fields;
+- no target path, raw Markdown, command, patch, approval claim, or rollback instruction.
+
+`EffectPlanV1` is compiled only by Forme:
+
+- effect ID, proposal ID, base Twin revision, corrected Reflection ID, fixed target and markers; the canonical plan hash and proposal hash are stored beside it in the admitted record;
+- expected full-file and placeholder-block hashes;
+- deterministic rendered-block hash and expected full-file after-hash;
+- exact read/write scope of `README.md` only;
+- idempotency key derived from the canonical plan.
+
+`TwinRevisionV3` preserves the complete V2 cognition state and adds:
+
+- action proposals with `proposed`, `approved`, `executed`, `rolled-back`, `invalidated`, or terminal failure status;
+- owner approvals bound to one proposal hash, effect-plan hash, base/admitted revision, and one execution;
+- execution and rollback receipts with authority, scope, before/after hashes, status, timestamps, verification, and linked receipt IDs;
+- minimal action-runtime receipts using the same no-tools audit boundary as R2.
+
+The successful execution or rollback revision also updates the existing `README.md` evidence record and `changes` field from the verified target bytes. The effect receipt and the Twin's observed source state therefore become current together; a later ordinary observation must be a no-op unless another source change occurred.
+
+`PendingEffectV1` lives under `.forme/` only for crash recovery. It contains identifiers, phase, hashes, and the deterministic plan—not README bodies. On restart:
+
+- target matches `beforeHash`: the write has not happened and may resume;
+- target matches `afterHash`: the write happened and Forme may finalize the missing receipt;
+- target matches neither: mark the attempt indeterminate and stop for the owner; never overwrite.
+
+### Approval, execution, and rollback sequence
+
+1. Forme builds and displays the body-free Action Context manifest before the model call.
+2. Codex returns one `ActionIntentProposalV2` with zero tool events; invalid, stale, or multi-effect output creates no revision.
+3. Forme admits the proposal into `TwinRevisionV3`. `recommend` compiles the one fixed effect and renders an Action Review showing the exact block diff and hashes; `ask_owner` stores one blocking question with `null` effect fields and stops before approval.
+4. The owner runs a separate approval command naming both proposal ID and effect-plan hash. Approval creates a new Twin revision but changes no project source.
+5. Execution reacquires the current Twin, approval, target hashes, markers, and idempotency key under the existing writer lock.
+6. Forme writes `PendingEffectV1`, atomically replaces only the marker body, verifies the complete file hash and block hash, then records a terminal receipt and the updated README evidence in the next Twin revision.
+7. Repeating execution returns the same receipt and performs no second write.
+8. Explicit rollback requires the successful receipt and exact after-hash, restores the known placeholder, verifies the before-hash, records a linked rollback receipt and restored README evidence, and creates the next revision.
+9. If a human changed `README.md` after execution, rollback refuses instead of erasing the human change.
+
+### Technical evidence — 2026-07-18
+
+- `ActionContextPacketV1`, `ActionIntentProposalV1`, and the V3 agency extension are enforced by Ajv contracts; V3 composes the complete V2 cognition contract with `AgencyStateV1`, preserving all prior immutable revisions.
+- `CodexExecRuntime` reuses the R2 packet-only, no-tools capability probe and JSONL audit. R3 adds no repository, shell, web, MCP, Git, or writer visibility to Codex.
+- Forme compiles and previews the only legal `render_next_move_brief.v1` effect, and the stored plan contains hashes and identifiers—not a README source body.
+- Owner approval is a separate revision bound to the exact proposal and effect-plan hashes. Any intervening Twin revision, wrong hash, invalidation, source drift, or marker mismatch fails closed.
+- The Forme-only executor writes a body-free `pending-effect.json` before touching the fixed block, preserves file mode, atomically replaces the target, updates Twin evidence, and consumes the approval once.
+- Recovery tests cover interruption after journal creation, source write, revision write, HEAD write, and view write. They converge to one receipt and one result revision; an unknown target becomes `indeterminate` without overwriting it.
+- The suite also verifies packet privacy, schema rejection of paths, exact-marker multiplicity, owner-correction invalidation, idempotent execution retry, successful rollback, and idempotent rollback retry.
+- `npm run check` passes **41/41** tests. This is technical evidence; it does not establish suggestion usefulness or accuracy.
+
+### Real owner demo evidence — 2026-07-18
+
+- revision 21 established the fresh owner-authored R3 frame;
+- revision 22 admitted one real Codex proposal from `codex-cli 0.144.3` and `gpt-5.6-sol`, with zero tool events and no project source body in the Action Context;
+- execution before approval failed closed, and revision 23 recorded the owner's exact approval of effect-plan `sha256:1da7ea5bc840ef07ac0a324ca2fa19c5c5ef263fa20a17fa2553189051281bce`;
+- revision 24 recorded successful README execution as receipt `eff_7a5ff5588d87b626eb0f8435c601c4c9`; retry performed no second write or receipt, and restart reconstructed the same state;
+- revision 25 recorded explicit rollback as receipt `eff_4e73ebd064cf44233685ca34a087b107`; the exact original README hash returned and rollback retry was a no-op.
+
+### Owner product feedback — acceptance still open
+
+The owner could not responsibly judge the Codex suggestion from this case. Forme has not yet produced enough use-feel or varied examples, and one plausible-looking suggestion is insufficient evidence of accuracy. The demo proposal was also self-referential—it proposed using the R3 demo as R3's acceptance gate—so it was stronger as a control-path test than as a product-value test.
+
+R3 acceptance conclusion:
+
+- bounded proposal, approval, effect, receipt, recovery, and rollback are demonstrated within the R3 slice;
+- independent CASE-02 supplied enough usefulness and differentiated continuity evidence for the MVP gate;
+- general suggestion accuracy remains unproven and is not implied by R3 acceptance;
+- future longitudinal cases remain product learning, not an R3 blocker.
+
+The full feedback, Harness/Forme ownership analysis, falsification signals, and next validation questions are maintained in [`VALIDATION.md`](./VALIDATION.md).
+
+### Approved and implemented R3-V2 Control Packet — Owner Decision Brief
+
+- Status: **all five recommendations owner-approved on 2026-07-20; additive contract implemented with 44 passing checks; independent CASE-02 supplied accepted MVP product evidence**
+- User outcome: Forme gives the owner one understandable recommended answer first, lets the owner expand it into a small set of editable judgments, and asks the owner to supply missing judgment only when the system cannot responsibly recommend.
+- Map delta: corrected Twin → bounded agent deliberation → recommendation-first Owner Decision Brief → progressive evidence/review → existing exact approval boundary.
+
+The intended relationship is:
+
+```text
+agent absorbs broad evidence and complexity
+  → T: one plain-language recommendation by default
+  → M: at most three editable judgment units on demand
+  → Q: one named blocking question only when confidence is genuinely too low
+  → evidence and consequences expand progressively
+  → existing owner approval still gates every effect
+```
+
+The first comparison supports the interaction direction but not the substantive accuracy of T. A0 may have been bolder because it lacked the correction, because it retained both full source bodies, or because of ordinary model variance. The next contract must therefore increase decision compression without hiding uncertainty or weakening evidence.
+
+#### Recommended decisions
+
+| Decision | Recommended answer | Global effect |
+|---|---|---|
+| Default relationship | Use recommendation-first mode by default. The agent must state what it recommends; it may not substitute a neutral classification exercise merely because asking the owner is safer. | Forme absorbs more analysis work and returns a decision-shaped object rather than a new owner task list. |
+| Editable decomposition | Every recommendation exposes one to three independent judgment items, each with a recommended choice, rationale, and bounded alternatives. | T becomes the compact top layer and M becomes its correction surface; the owner can narrow one clause without rewriting the full answer. |
+| Low-confidence fallback | Permit `ask_owner` only when the proposal names one blocking uncertainty and labels confidence `low`. Forme admits the question but compiles no effect plan. | Q remains available as an honest epistemic stop instead of becoming the default low-risk behavior. |
+| Progressive legibility | Render three layers: 30-second recommendation; expandable judgment items; evidence, uncertainty, provenance, and downstream consequences. | Legibility no longer means showing maximum detail at once. Review depth can grow with uncertainty and consequence. |
+| Authority boundary | Change no Context visibility, tools, writer, approval, executor, receipt, or rollback authority. A recommendation is never authorization, and model confidence never grants permission. | This is an owner-surface and proposal-contract change, not an autonomy escalation. |
+
+#### Proposed additive contract
+
+Introduce `ActionIntentProposalV2` while continuing to validate and reconstruct existing V1 revisions. The runtime must produce:
+
+- `mode`: `recommend` or `ask_owner`;
+- one-sentence `plainLanguageSummary`;
+- `recommendation` when in recommend mode, otherwise one `blockingQuestion`;
+- `confidence`: `low`, `medium`, or `high`, plus a rationale;
+- one to three `decisionItems`, each containing the judgment, recommended choice, reason, and bounded alternatives;
+- `whyNow`, `successCheck`, and one `ownerChallenge`;
+- the existing proposal identity, base revision, and fixed action kind.
+
+Local validation enforces the mode rules. `ask_owner` requires low confidence and cannot compile an `EffectPlanV1`. `recommend` may compile only the existing fixed README effect, after which the current exact-hash approval sequence remains unchanged. The generated Owner Decision Brief is a reconstructible surface, never a new source of truth.
+
+Implementation is limited to types, schemas, the action runtime prompt, local validators, rendering, backward-compatibility fixtures, and tests. It does not add a model call, source visibility, arbitrary action, or a new effect capability.
+
+Implementation evidence:
+
+- the runtime output schema is now `ActionIntentProposalV2`; persisted V1 proposals continue to validate and reconstruct without migration;
+- `recommend` compiles only the pre-existing fixed README effect and continues through the same exact-hash approval, execution, receipt, and rollback chain;
+- `ask_owner` is admitted only with low confidence and one blocking question; its stored effect plan and effect-plan hash are `null`, and approval fails closed;
+- the Restart View renders the 30-second answer first, then expandable editable judgments, then evidence, uncertainty, provenance, and exact downstream consequences;
+- 44 tests and TypeScript checking pass. No implementation-time model call, new source read, private-note access, new writer, or authority expansion occurred.
+
+#### Next independent case
+
+Do not rerun CASE-01 as the primary evidence; the owner now knows the arms and content. Recommend a small `Career & Opportunity` case because it is personally judgeable and not self-referential. Before reading or transmitting any new note, prepare a new owner visibility manifest with exact paths, commits, bytes, redactions, and exclusions. `Forme` documents are the privacy-safe fallback but risk repeating the self-referential validation problem; more CCS material is too contaminated by this case.
+
+The next case scores two axes separately:
+
+1. **substantive judgment:** accuracy, usefulness, evidence fidelity;
+2. **owner cost:** time to understand, need for re-explanation, number of owner-created judgments, and whether “feels off” can be expressed without a full rewrite.
+
+Required owner stop gate: approve or edit the five recommended decisions above before implementation. Selecting `Career & Opportunity` and approving any source visibility remain a later, separate gate.
+
+### Five-minute owner demo
+
+1. Confirm the R3 Owner Frame through the existing `observe` command, then start from a clean tracked `README.md` while leaving the unrelated untracked architecture draft present as a privacy canary.
+2. Display current Twin revision, corrected Reflection, fixed capability, and Action Context manifest.
+3. Run isolated Codex and show the structured Next Move Brief proposal plus zero-tool runtime receipt.
+4. Open Action Review and inspect the exact managed-block diff, target, before/after hashes, and effect-plan hash.
+5. Try execution before approval and confirm it fails without changing `README.md` or the Twin.
+6. Approve the exact plan, execute it, inspect the one-block diff, verification, terminal receipt, and new Twin revision.
+7. Retry execution and confirm no duplicate write or receipt.
+8. Restart Forme and reconstruct the same executed state.
+9. Roll back, verify the placeholder and original full-file hash return, and confirm the Git working tree matches its baseline except for the untouched owner draft.
+
+### Acceptance and failure conditions
+
+R3 passes only if:
+
+- the owner judges the proposed brief and exact effect preview useful and understandable;
+- the proposal causally references the active corrected Reflection and current Twin revision;
+- Codex sees no ambient source body and produces zero tool events;
+- pre-approval, stale, wrong-hash, wrong-marker, duplicate, and unsupported actions fail closed;
+- only the managed block changes and no Git, network, shell, or other file authority is exercised;
+- every attempted approved execution reaches a recoverable terminal receipt, including injected interruption boundaries;
+- retry is idempotent, restart preserves state, and rollback restores the exact before-hash;
+- unexpected human edits prevent rollback from overwriting them;
+- the owner experiences the full proposal → approval → effect → receipt → rollback loop and accepts it.
+
+R3 excludes arbitrary file edits, generic effect plugins, shell commands, Git staging/commits/pushes, GitHub or server actions, background execution, delegated authorization, approval classes, multi-action plans, OpenCode live parity, and any permission escalation based on prior acceptance rate.
+
+### Archive reuse boundary
+
+The archived executor is evidence, not the R3 implementation. It combined arbitrary file updates with Git staging, commits, reset-on-error, and broader path input, which exceeds this contract. R3 may selectively port only reviewed path-confinement, target-cleanliness, write-lock, and receipt-correlation ideas; it must implement the fixed marker, immutable approval, no-Git executor, journal recovery, and rollback contracts against the new schemas.
+
+### Owner stop gate — approved 2026-07-18
+
+The owner explicitly approved all five recommendations:
+
+1. use one `README.md` managed block as the first and only writable surface;
+2. let Codex propose structured intent only, with no new visibility or tools;
+3. bind a separate one-use owner approval to the exact effect-plan hash and unbroken Twin revision chain;
+4. introduce additive `TwinRevisionV3` agency records and body-free terminal receipts;
+5. use a Forme-only atomic marker executor with journal recovery, idempotent retry, explicit hash-guarded rollback, and no Git authority.
+
+Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
+
+## Active stop gate — R4 Social Presence product proposal
+
+- Status: **v0.2 owner correction captured; not yet approved or implemented**
+- Committed floor: a collaborator can understand what the project is, where it is going, and what remains with the owner through a current static projection that exposes no private source by default.
+- Proposed outcome: one invited collaborator can meet the Forme project Twin in a hosted Forme Room. A Manual Guest may browse and submit a signal; an Agent Guest may fetch the same public capsule and reason locally. Any question requiring deeper context returns asynchronously to the local Forme Agent and owner for reviewed response.
+- Candidate map delta: confirmed Twin revision → locally prepared candidate → owner publication gate → immutable Projection Capsule → server registry/renderer → guest-side exploration or reasoning → typed Interaction Request → server Signal Queue → local Signal Box and owner-reviewed Response Capsule → server relay.
+- Active issue: [#52](https://github.com/formehq/forme/issues/52)
+- Product proposal: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
+- Related proposals: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and [`STEWARDSHIP.md`](./STEWARDSHIP.md)
+
+The owner must first decide these five product recommendations:
+
+1. use one hosted Forme Room as a reception room and relay for one real host Twin and one three-minute encounter;
+2. support both a Manual Guest website path and an Agent Guest API path, without requiring Forme continuity on the guest side;
+3. publish only immutable, owner-admitted Projection Capsule versions; local continuous preparation does not imply live server synchronization;
+4. run no AI on the server; keep intelligence at the owner-local and optional guest edges, connected by a two-layer Signal Box and reviewed capsule exchange;
+5. require expiry, revocation, stale-version handling, a private canary, a durable request/response lifecycle, and one real collaborator's product judgment before R4 is Done.
+
+Approval of these five recommendations would establish the product target only. A second technical Control Packet must name exact stores, schemas, APIs, authentication, retention, deployment topology, local synchronization, notification behavior, failure handling, tests, and cuts. R3 acceptance grants no R4 visibility or publishing authority, and the current proposal grants none by itself.
+
+The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
 
 ## Owner–agent working agreement
 
@@ -416,5 +708,9 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
 - [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
+- [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
+- [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — proposed cognitive modes, effect-authority ladder, and earned-trust contract
+- [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
+- [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — proposed hosted Forme Room experience and five owner decisions
 - [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map

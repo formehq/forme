@@ -79,3 +79,27 @@ Keep this file short. Record only decisions that change product scope, constitut
 **Decision:** accept R2 Cognition after the real Forme workspace produced an evidence-backed cross-time Reflection, exposed its uncertainty and alternative explanation, and accepted the owner's narrower interpretation through the real correction surface. Twin revision 19 superseded the original Codex inference, invalidated its dependent output, carried the correction into the next Context Packet, and reconstructed the corrected state after restart.
 
 **Reason:** R2 demonstrated a controlled cognition loop rather than a summary feature: Codex could propose bounded meaning, but Forme retained evidence validation, durable admission, staleness control, and owner authority to revise what the project currently means. The single R1 example supports keeping Owner Acceptance as a control path; it does not establish a general law from one case. R3 may now propose one reversible action only against the corrected revision and must pass a new owner stop gate before gaining write authority.
+
+## 2026-07-18 — R3 bounded agency contract approved
+
+**Decision:** implement the first R3 effect as `render_next_move_brief.v1` against one fixed Forme-managed block in `README.md`. Codex may return only a bounded structured intent proposal through the existing isolated no-tools runtime boundary. Forme compiles the exact effect; a separate one-use owner approval binds its hash and Twin revision; `TwinRevisionV3` records proposals, approvals, terminal execution and rollback receipts; and a Forme-only exact-marker executor uses atomic replacement, journal recovery, idempotent retry, verification, and hash-guarded rollback without Git authority.
+
+**Reason:** this is the smallest action that visibly changes a real project artifact while preserving the architectural separation between probabilistic proposal and deterministic effect. A Twin-only action is retained as the schedule fallback because it proves less agency; GitHub and other external actions remain deferred because they add network, credentials, remote idempotency, messaging, and broader rollback risk.
+
+## 2026-07-18 — R3 enters Technical Review
+
+**Decision:** treat the approved R3 walking slice as technically implemented after 41 checks passed, including the schema-only runtime boundary, additive V3 state, exact one-use approval, fixed-marker source effect, five injected recovery boundaries, indeterminate-state handling, idempotent retry, correction invalidation, and hash-guarded rollback. Do not mark R3 Done and do not perform a real action until the owner supplies a fresh R3 Owner Frame and experiences the complete demo.
+
+**Reason:** the implementation now proves the mechanism under synthetic, bounded tests without broadening Codex or Forme authority. The reboot's Definition of Done still requires the owner to understand and judge the real proposal, preview, approval, effect, receipt, recovery, and rollback loop.
+
+## 2026-07-20 — R3-V2 Owner Decision Brief approved
+
+**Decision:** make the R3 proposal recommendation-first by default, with one plain-language answer and one to three independently editable judgment items. Permit `ask_owner` only at low confidence with one named blocking question and no effect plan. Render evidence, uncertainty, provenance, and consequences progressively beneath the compact answer. Preserve all existing Context, runtime, writer, exact approval, executor, receipt, and rollback authority boundaries, and retain reconstruction of V1 proposals.
+
+**Reason:** the first R3-V comparison showed that the owner values a concrete recommendation but needs a lower-cost explanation and a clause-level correction surface. A neutral question-first output returned too much analysis work to the owner. This changes the decision surface without treating model confidence as permission or claiming that recommendation accuracy has already been proven.
+
+## 2026-07-20 — R3 MVP product acceptance
+
+**Decision:** accept R3 Bounded Agency for the MVP and move the active gate to R4 Control Packet preparation. The independent Career CASE-02 is sufficient positive product evidence: owner correction materially changed the later recommendation, and the body-free Forme arm automatically preserved that corrected direction without manual reconstruction. Close R3 without approving or executing the experimental Career proposal. Preserve ship/closure weighting and its switching signals as unresolved owner judgments rather than inventing a policy. Treat richer Twin decision texture as an unproven follow-up, not an R3 blocker.
+
+**Reason:** the bounded mechanism was already demonstrated end to end, while CASE-02 added the missing owner-experienced usefulness evidence. The owner found all outputs useful, least preferred the no-correction baseline, and could not meaningfully separate the rich manual-correction baseline from Forme at the current judgment resolution. This is enough to validate the MVP mechanism, but not enough to claim general recommendation accuracy or adopt one Career strategy.

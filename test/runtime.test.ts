@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { auditCodexJsonl, inspectCapabilityProbe, selectCodexModel } from "../src/runtime.ts";
-import { reflectionProposalJsonSchema } from "../src/contracts.ts";
+import { actionIntentProposalJsonSchema, reflectionProposalJsonSchema } from "../src/contracts.ts";
 import { removeWorkspace } from "./helpers.ts";
 
 test("R2 runtime audit accepts only reasoning and a final agent message", () => {
@@ -52,6 +52,7 @@ test("R2 structured-output const and enum nodes declare explicit JSON types", ()
     Object.values(node).forEach(visit);
   };
   visit(reflectionProposalJsonSchema());
+  visit(actionIntentProposalJsonSchema());
 });
 
 test("R2 runtime audit fails closed on command, file, MCP, web, or unknown item types", () => {
