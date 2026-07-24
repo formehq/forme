@@ -1,7 +1,7 @@
 # Architecture boundaries
 
 - Status: R1, R2, and R3 owner-accepted; corrected R4 Forme Room proposal is awaiting owner decision
-- Updated: 2026-07-23
+- Updated: 2026-07-24
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -50,7 +50,7 @@ A mature Harness may natively provide model invocation, sessions, tools, sandbox
 
 Forme's boundary begins where operational runtime state becomes durable product meaning and authority: the Living Project Twin, evidence and correction, canonical proposal admission, revision-bound owner authorization, deterministic effect compilation, durable receipts and recovery, and projection policy.
 
-The same visible action may therefore be possible in Codex or OpenCode without Forme. It counts as Forme behavior only when it is derived from and returns to the Twin under these contracts. See [`VALIDATION.md`](./VALIDATION.md) for the current wheel-reinvention and product-differentiation assessment.
+The same visible action may therefore be possible in Codex or OpenCode without Forme. It counts as Forme behavior only when it is derived from and returns to the Twin under these contracts. See [`VALIDATION.md`](./VALIDATION.md) for the current wheel-reinvention and product-differentiation assessment, and the dated [`agent runtime strategy`](./research/agent-runtime-strategy-2026-07-15.md) for the adapter integration ladder and runtime-gate questions.
 
 ## Initial invariants
 

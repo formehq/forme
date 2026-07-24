@@ -14,6 +14,9 @@ The repository keeps a deliberately small decision surface.
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Proposed: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and revised R4 decisions. |
 | [`reference/architecture-understanding-contract-v0.1.md`](./reference/architecture-understanding-contract-v0.1.md) | Reference only: owner-authored rebuild map retained for shared understanding and historical open questions. |
+| [`reference/design-lineage.md`](./reference/design-lineage.md) | Reference only: how the early effects, cognitive-organ model, and harness exploration became the current Living Project Twin architecture. |
+| [`research/agent-runtime-strategy-2026-07-15.md`](./research/agent-runtime-strategy-2026-07-15.md) | Research and durable boundary guidance: what Codex/OpenCode own, what Forme owns, and how adapters should deepen without forks or forced parity. |
+| [`research/runtime-gate-baseline-2026-07-15.md`](./research/runtime-gate-baseline-2026-07-15.md) | Research only: the dated local Codex/OpenCode reachability probe and the capabilities it did not establish. |
 | [`research/vault-entropy-investigation-2026-07-22.md`](./research/vault-entropy-investigation-2026-07-22.md) | Research only: evidence from the prior Knowledge Vault for Stewardship and long-running entropy design. |
 
 Stable product and architecture contracts stay in their named documents. Demo feedback and working judgments enter `VALIDATION.md` first; only owner-confirmed changes move into `DECISIONS.md` or alter the stable contracts.

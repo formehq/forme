@@ -1,6 +1,6 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-23
+- Updated: 2026-07-24
 - Active gate: **R4 — Forme Room v0.2 owner correction captured; product decisions pending; no implementation**
 - Active issue: [#52 — Controlled Presence: allowlist-only collaborator projection](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus the real bounded control and independent Career validation; R4 product replan proposed, R4–R5 implementation not started**
@@ -35,7 +35,7 @@ R5 Demo hardening         clean run → privacy → recovery → rehearsal
 
 Current truth:
 
-- the new `main` contains the owner-accepted R1 Continuity substrate;
+- `main` contains the owner-accepted R1 Continuity, R2 Cognition, and R3 Bounded Agency slices;
 - the previous implementation is preserved in the archive as evidence and a parts library;
 - archived code is not the default architecture and is not reused without an explicit contract;
 - #47 tracks the whole MVP; #48 records the completed R0 Control Packet;
