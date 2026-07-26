@@ -103,3 +103,30 @@ Keep this file short. Record only decisions that change product scope, constitut
 **Decision:** accept R3 Bounded Agency for the MVP and move the active gate to R4 Control Packet preparation. The independent Career CASE-02 is sufficient positive product evidence: owner correction materially changed the later recommendation, and the body-free Forme arm automatically preserved that corrected direction without manual reconstruction. Close R3 without approving or executing the experimental Career proposal. Preserve ship/closure weighting and its switching signals as unresolved owner judgments rather than inventing a policy. Treat richer Twin decision texture as an unproven follow-up, not an R3 blocker.
 
 **Reason:** the bounded mechanism was already demonstrated end to end, while CASE-02 added the missing owner-experienced usefulness evidence. The owner found all outputs useful, least preferred the no-correction baseline, and could not meaningfully separate the rich manual-correction baseline from Forme at the current judgment resolution. This is enough to validate the MVP mechanism, but not enough to claim general recommendation accuracy or adopt one Career strategy.
+
+## 2026-07-25 — R4 Hero Encounter, Third Place, and identity target
+
+**Decision:** approve all five revised R4 product decisions. The August target is
+one Hybrid Hero Encounter in a publicly viewable but curator-admitted Forme
+Third Place, with the Forme Project Room as its first and only required
+resident. Manual Guest remains the universal path; an Agent Guest may reason at
+its own edge and submit an optional guest-approved capsule without Forme
+ingesting notes or claiming a Guest Twin. Projection publication requires
+immutable owner-admitted content followed by a distinct curator admission.
+Invite-only controller accounts, public reading, invited or verified-reply
+signals, and narrowly delegated Agent credentials keep account, entity, Room,
+capsule, agent, guest, and curator identity distinct. Durable controller
+accounts are passwordless; the exact provider remains a technical decision. The
+server runs no AI. This supersedes the 2026-07-17 scope decision only for the
+bounded R4 static-projection → signal → local review → response exchange.
+Generalized mailbox behavior, any server-side agent, and full Twin-to-Twin
+interaction remain P2 or later.
+
+**Reason:** the Hybrid encounter preserves the owner-accepted Living Project
+Twin spine while making the Person ↔ Project horizon perceptible. A curated
+Third Place provides an open social surface without turning P0 into a public
+network. Layered identity answers control and attribution without claiming that
+an account or projection is the whole person. Product approval authorizes only
+preparation of the technical Control Packet; no R4 visibility, identity,
+hosting, publishing, persistence, messaging, notes access, or implementation is
+authorized yet.

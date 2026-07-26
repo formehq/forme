@@ -1,13 +1,14 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.1
 
-- Status: **proposal for owner review; no implementation authority**
+- Status: **owner-approved product target; no implementation authority**
 - Updated: 2026-07-25
+- Owner approval: **2026-07-25 — all five revised product decisions**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 
 ## Decision in one minute
 
-The recommended R4 experience is not only “ask a project” or “ask a mentor.”
+The owner-approved R4 experience is not only “ask a project” or “ask a mentor.”
 It is:
 
 > Enter a curated Forme Third Place, meet one bounded living presence, bring a
@@ -28,9 +29,9 @@ For the August P0:
 - accounts prove control and attribution, not that an account is the person or
   that a projection is the whole person.
 
-Approval of this brief would authorize preparation of a separate technical
-Control Packet. It would not authorize accounts, hosting, publishing, note
-access, public visibility, message storage, or implementation.
+Owner approval authorizes preparation of a separate technical Control Packet.
+It does not authorize accounts, hosting, publishing, note access, public
+visibility, message storage, or implementation.
 
 ## Vision calibration
 
@@ -72,7 +73,7 @@ owner-admitted facet, not a complete Person Twin.
 The Mentor Lens remains a valuable instance of a role-scoped personal
 projection. It is not the definition of the Room or the required first P0 case.
 
-## Recommended three-minute encounter
+## Owner-approved encounter shape — exact screens pending
 
 ### Before the encounter
 
@@ -228,8 +229,8 @@ approved curation policy says so.
 - one curator: Zayn;
 - one initial resident: the Forme Project Room;
 - no public sign-up or self-service listing;
-- any additional resident requires a direct curator invitation and explicit
-  admission;
+- no additional resident in P0; a later resident would require a direct curator
+  invitation and explicit admission;
 - no admin dashboard is required if a small operator-controlled allowlist and
   durable curation receipt provide the same control.
 
@@ -250,15 +251,17 @@ There is currently no hosted Forme identity system:
 - no real-world identity verification.
 
 The local workspace and Twin have durable technical identity, while the R4
-proposal names pseudonymous host IDs and guest levels. Those identifiers do not
-prove which human controls them. Authentication remains an open R4 decision.
+product target names pseudonymous host IDs and guest levels. Those identifiers
+do not prove which human controls them. The product identity and access policy
+is approved; exact provider, session/token, and pairing mechanics remain for the
+technical Control Packet.
 
-### Recommended identity model
+### Owner-approved identity model
 
 “Who is who?” is not one field. Forme needs several identities with different
 jobs:
 
-| Layer | Question answered | P0 recommendation | What it does not prove |
+| Layer | Question answered | Approved P0 product target | What it does not prove |
 |---|---|---|---|
 | **Human account** | Who may control, publish, curate, or receive private interaction state? | Invite-only authenticated account for curator and publishers; use a hosted passwordless method rather than building passwords | That the account is the complete person or that every display claim is true |
 | **Twin/entity identity** | What continuous entity is Forme maintaining? | One stable Forme Project entity ID in P0 | Human legal identity or public permission |
@@ -274,9 +277,9 @@ The central rule is:
 > preserves continuity. Projection identity proves the exact public version.
 > None of them alone defines the person.
 
-### Recommended P0 access policy
+### Owner-approved P0 access policy
 
-| Action | Recommended P0 identity requirement |
+| Action | Approved P0 identity requirement |
 |---|---|
 | Browse the Third Place or public Room | No account |
 | Fetch a public capsule | No account, with basic rate limits |
@@ -286,7 +289,7 @@ The central rule is:
 | Admit or unlist a Room in Third Place | Authenticated curator account |
 
 The exact authentication provider and token format belong in the technical
-Control Packet. Product-level recommendation is an invite-only passwordless
+Control Packet. The approved product target is an invite-only passwordless
 account for durable operators, not a custom password database and not mandatory
 accounts for readers.
 
@@ -306,7 +309,7 @@ claim legal or biometric identity.
 
 ## P0 and later boundaries
 
-### P0 — recommended
+### P0 — owner-approved product target
 
 - the existing Forme Project Twin remains the only required Living Twin;
 - one curated public Third Place and one Forme Project Room;
@@ -328,7 +331,9 @@ claim legal or biometric identity.
 - one bounded notes facet rather than whole-vault discovery;
 - First Reading, coarse owner correction, and Personal Projection Draft;
 - the same Room and projection discipline, without claiming a mature Person
-  Twin.
+  Twin;
+- the first additional curator-invited resident only after the single-Room P0
+  is green.
 
 ### Explicitly not P0
 
@@ -342,36 +347,37 @@ claim legal or biometric identity.
 - automatic agent-to-agent federation;
 - multiple curators, moderation organization, or a security platform.
 
-## Revised five product decisions
+## Owner-approved five product decisions
 
-1. **Hero and venue — recommend approve:** make the Hero Encounter a Hybrid
+1. **Hero and venue — approved:** make the Hero Encounter a Hybrid
    meeting in one curated Forme Third Place; the Forme Project Room is the first
    and only required resident.
-2. **Guest and notes boundary — recommend approve:** keep Manual Guest as the
+2. **Guest and notes boundary — approved:** keep Manual Guest as the
    universal path and Agent Guest as an optional edge-intelligent path. Accept a
    guest-approved capsule, but do not build P0 notes ingestion or a Guest Twin.
-3. **Projection and curation — recommend approve:** publish only immutable,
+3. **Projection and curation — approved:** publish only immutable,
    owner-admitted capsule versions, then apply a separate curator admission gate
    before a Room appears in the Third Place.
-4. **Identity — recommend approve:** use invite-only, passwordless accounts for
+4. **Identity — approved:** use invite-only, passwordless accounts for
    durable controllers; allow public reading; require an invite or verified
    reply session for signals; give agents narrowly delegated credentials.
    Account, entity, Room, capsule, agent, guest, and curator identity remain
    distinct.
-5. **Topology and lifecycle — recommend approve:** keep all intelligence at the
+5. **Topology and lifecycle — approved:** keep all intelligence at the
    owner-local and optional guest edges. The server provides identity/control,
    registry, curation listing, deterministic rendering, signal queueing, and
    response relay with the minimum expiry, revocation, retention, attribution,
    abuse, and privacy controls required for one real encounter.
 
-These revise the earlier R4 recommendations by adding the Third Place,
-curator/owner double gate, layered identity, and optional Guest Capsule. They do
-not change the immutable projection or no-server-AI principles.
+These approved decisions revise the earlier R4 recommendations by adding the
+Third Place, curator/owner double gate, layered identity, and optional Guest
+Capsule. They do not change the immutable projection or no-server-AI
+principles.
 
-## What approval would and would not mean
+## Approval status and next gate
 
-Approval would establish the product target and allow preparation of a
-Technical Control Packet covering:
+The 2026-07-25 approval establishes the product target and allows preparation
+of a Technical Control Packet covering:
 
 - exact capsule, identity, pairing, curation, request, response, and receipt
   contracts;
@@ -380,6 +386,6 @@ Technical Control Packet covering:
 - local synchronization and offline/retry behavior;
 - deployment topology, operational ownership, tests, and final P0 cuts.
 
-Approval would not itself authorize implementation, account creation, external
+It does not itself authorize implementation, account creation, external
 messages, note access, deployment, public visibility, persistence, or changes
 to current schemas and trust boundaries.
