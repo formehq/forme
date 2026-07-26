@@ -1,7 +1,8 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; corrected R4 Forme Room proposal is awaiting owner decision
-- Updated: 2026-07-24
+- Status: R1, R2, and R3 owner-accepted; R4 product topology owner-approved,
+  technical Control Packet pending
+- Updated: 2026-07-25
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -121,9 +122,11 @@ The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapt
 
 Each is selected only when the next walking slice requires it and after its Control Packet is reviewed.
 
-## Proposed extensions awaiting owner decision
+## Cross-cutting proposals and approved R4 product boundary
 
-Three connected proposals now make previously implicit highest-vision mechanics explicit. None changes implemented authority yet.
+Three connected briefs make previously implicit highest-vision mechanics
+explicit. Agency/Trust and Stewardship remain owner proposals. The R4 product
+topology is owner-approved, but none changes implemented authority yet.
 
 ### Agency and trust
 
@@ -135,14 +138,18 @@ Three connected proposals now make previously implicit highest-vision mechanics 
 
 ### Hosted Social Presence
 
-[`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) proposes this additional boundary:
+[`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
+[`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
+define this owner-approved product boundary:
 
 ```text
 private local Twin
   → locally prepared projection candidate
   → owner publication gate
   → immutable Projection Capsule
-  → server registry + deterministic room renderer
+  → owner-controlled Room
+  → separate curator admission
+  → Third Place registry + deterministic room renderer
 
 guest
   → public capsule exploration or guest-side agent reasoning
@@ -155,11 +162,24 @@ guest
   → guest
 ```
 
-The R4 server is a Capsule Registry, deterministic Room Renderer, Signal Queue, and Response Relay. It has no LLM, inference authority, local source handle, Twin store, source-writing authority, commitment authority, or autonomous-reply grant. Intelligence remains at the owner-local edge and, optionally, the guest edge.
+The R4 server target is minimal identity/control, a Capsule and Room Registry,
+curation listing, deterministic Third Place/Room rendering, Signal Queue, and
+Response Relay. It has no LLM, inference authority, local source handle, Twin
+store, source-writing authority, commitment authority, or autonomous-reply
+grant. Intelligence remains at the owner-local edge and, optionally, the guest
+edge.
+
+Account identity proves control and attribution, not personhood. Twin/entity,
+Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
+distinct. Public reading requires no account; durable controllers are
+invite-only; local publishing requires an explicit revocable pairing; agents
+receive narrow delegated credentials.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
-Hosting, persistence, messaging, authentication, local synchronization, retention, and public behavior remain blocked until both the corrected product proposal and a subsequent technical Control Packet are owner-approved.
+The product boundary is approved. Hosting, persistence, messaging,
+authentication, pairing, local synchronization, retention, and public behavior
+remain blocked until the subsequent technical Control Packet is owner-approved.
 
 ## Archive policy
 

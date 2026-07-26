@@ -110,7 +110,13 @@ Show the question being explored, sandbox boundary, budget, stop condition, arti
 
 ## R4 boundary
 
-The corrected R4 topology has no server agent. The server may register and render immutable capsules, queue bounded external signals, and relay reviewed responses. It may not infer a host answer, compare people, read the private Twin or workspace, promise on the owner's behalf, publish a new claim, modify source, or autonomously send a later reply.
+The owner-approved R4 product topology has no server agent. The server may,
+subject to a later technical Control Packet, provide minimal identity/control,
+register and render immutable capsules, list curator-admitted Rooms, queue
+bounded external signals, and relay reviewed responses. It may not infer a host
+answer, compare people, read the private Twin or workspace, promise on the
+owner's behalf, publish a new claim, modify source, or autonomously send a later
+reply.
 
 Reasoning remains at the edges:
 

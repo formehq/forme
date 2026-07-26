@@ -1,7 +1,7 @@
 # Product
 
-- Status: owner-reviewed starting frame for the rebuild
-- Updated: 2026-07-23
+- Status: owner-approved product frame; R4 product target approved, technical packet pending
+- Updated: 2026-07-25
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -53,32 +53,60 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - one evidence-backed cross-time reflection;
 - owner correction and stale-output invalidation;
 - one approved, typed, deterministic, reversible action;
-- one versioned allowlist-only static collaborator projection;
+- one versioned allowlist-only Projection Capsule;
+- one publicly viewable, curator-admitted Forme Third Place containing the
+  Forme Project Room;
+- one Manual Guest path, one minimal Agent Guest capsule/request path, and one
+  owner-reviewed Response or Resonance;
+- invite-only durable controller identity with public reading that requires no
+  account;
 - one real Codex execution path;
 - a repeatable demo from a clean checkout with a privacy check.
 
 ### P1 — optional, admitted only when P0 is green
 
-- exported-notes mirror input;
+- bounded `Exported Notes → Personal Facet Bootstrap`, not general notes
+  ingestion;
 - a real OpenCode execution path beyond the compatibility boundary;
 - automatic wake/catch-up;
 - local HTML Twin view;
-- first non-owner installation rehearsal.
+- first non-owner installation rehearsal;
+- first additional curator-invited Third Place resident after the single-Room
+  P0 is green.
 
 ### P2 — after Demo Day
 
-- mailbox and server-side Projection Agent;
-- Agent-to-Agent or Twin-to-Twin interaction;
-- interactive projection Q&A;
+- generalized mailbox and longer-lived Relationship Capsules;
+- Agent-to-Agent or Twin-to-Twin interaction beyond the bounded R4 exchange;
+- open-ended interactive projection Q&A;
 - native Apple Notes integration;
 - whole-vault or whole-digital-life ingestion;
-- multiple workspaces, general automation, or a plugin marketplace.
+- public self-service Room creation, discovery, multiple workspaces, general
+  automation, or a plugin marketplace.
 
-## Pending R4 scope proposal
+## Owner-approved R4 product target — technical gate pending
 
-The owner has asked to explore a more social and desirable R4: one hosted **Forme Room** in which an invited collaborator can meet the project Twin. A Manual Guest can browse and leave a structured signal; an Agent Guest can fetch the same public capsule and reason with its own agent. Questions requiring deeper context return asynchronously to the local Forme Agent and owner, then may come back as a reviewed Response Capsule.
+On 2026-07-25 the owner approved a more social R4 target. One curated,
+publicly viewable **Forme Third Place** contains the Forme Project Room as its
+first and only required resident. A Manual Guest can browse and leave bounded
+context or a signal. An Agent Guest can fetch the public capsule, reason at its
+own edge, and optionally submit a guest-approved capsule. Questions or
+Resonance Requests requiring deeper context return asynchronously to the local
+Forme Agent and owner, then may come back as a reviewed Response Capsule.
 
-The server is proposed as registry, deterministic renderer, signal queue, and response relay—not an AI conversational authority. This is a proposal, not current P0 authority. The committed static, allowlist-only projection remains the fallback floor until the five product recommendations in [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and a subsequent technical Control Packet are owner-approved. No hosting, signal relay, message persistence, publishing, local synchronization, or interactive runtime is authorized yet.
+The owner controls the exact projection content; the Third Place curator
+separately controls admission to the shared venue. Accounts prove control and
+attribution, not personhood or complete identity. Public reading requires no
+account; durable controllers are invite-only, and agents receive only narrowly
+delegated authority.
+
+The server target is identity/control, registry, curation listing,
+deterministic rendering, signal queueing, and response relay—not AI
+conversational authority. The product target is approved, but implementation
+remains unauthorized until a separate technical Control Packet defines and the
+owner approves exact schemas, stores, authentication, pairing, APIs, retention,
+deployment, synchronization, failure handling, tests, and final cuts. The
+versioned static projection remains the schedule fallback floor.
 
 ## Golden acceptance story
 
@@ -91,6 +119,14 @@ One real workspace must complete this sequence without hidden manual reconstruct
 5. Accept an owner correction and invalidate output based on the old interpretation.
 6. Propose one bounded effect against the corrected revision.
 7. Approve, execute, receipt, verify, and roll back that effect.
-8. Compile one versioned projection from allowed claims only; a private canary must remain absent.
+8. Compile one versioned projection from allowed claims only; a private canary
+   must remain absent.
+9. Publish the exact approved capsule into the Forme Project Room and admit the
+   Room to the curated Third Place through a separate curator decision.
+10. Receive one bounded Manual or Agent Guest interaction tied to the exact
+    visible capsule version.
+11. Return one owner-reviewed Response or Resonance without exposing private
+    source, confusing agent attribution, or bypassing revocation and retention
+    controls.
 
 The MVP fails if these steps feel like unrelated AI features instead of one project becoming continuous, understandable, actionable, and projectable.

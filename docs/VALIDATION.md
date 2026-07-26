@@ -382,7 +382,10 @@ This feedback does not yet prove:
 - that a server runtime can remain understandable and bounded at acceptable implementation cost;
 - that social interaction exposes differentiated Twin value rather than producing a themed chatbot.
 
-The immediate consequence is documentation and owner review, not implementation. Three proposal briefs now define the Agency & Trust model, Stewardship loop, and R4 Social Presence experience. The prior static projection remains the approved P0 floor until the owner approves the revised product target and a separate technical Control Packet.
+At that point, the immediate consequence was documentation and owner review,
+not implementation. Three proposal briefs defined the Agency & Trust model,
+Stewardship loop, and R4 Social Presence experience. The prior static projection
+remained the approved P0 floor until a later owner product decision.
 
 ## Evidence round 5 — Mentor Lens and R4 edge-intelligence correction
 
@@ -413,7 +416,49 @@ This correction improves conceptual integrity but does not yet prove:
 - whether Mentor Lens is accurate, desirable, or sufficiently different from asking a capable agent with the same documents;
 - what response latency, notification, identity, retention, and local-sync design real users will tolerate.
 
-The immediate consequence is to supersede the v0.1 server-agent assumption in the R4 proposal, Architecture, Control, Roadmap, Product, Agency, and Stewardship maps. It is not implementation approval. The five corrected product recommendations and a later technical Control Packet remain stop gates.
+At that point, the immediate consequence was to supersede the v0.1
+server-agent assumption in the R4 proposal, Architecture, Control, Roadmap,
+Product, Agency, and Stewardship maps. It was not implementation approval; the
+five corrected product recommendations and a later technical Control Packet
+remained stop gates.
+
+## Evidence round 6 — R4 Hero Encounter, Third Place, and identity approval
+
+On 2026-07-25 the owner approved all five revised R4 product decisions after
+revisiting the highest Vision, the Living Project Twin MVP, a notes-backed
+personal projection, the Mentor Lens, and the desired open social surface.
+
+The approved target is one Hybrid Hero Encounter in a publicly viewable but
+curator-admitted Forme Third Place. The Forme Project Room remains the first and
+only required resident, preserving the R1–R3 causal spine. A Manual Guest can
+browse and submit bounded context or a signal. An Agent Guest can reason at its
+own edge and optionally submit a guest-approved capsule without Forme ingesting
+the notes or claiming a Guest Twin. Deeper questions and Resonance Requests
+return to the local Forme Agent and owner for reviewed response.
+
+The owner also approved two independent social gates and a layered identity
+model:
+
+- the entity owner approves the exact immutable Projection Capsule;
+- the Third Place curator separately admits or removes the Room;
+- invite-only accounts prove durable controller authority, not personhood;
+- public readers need no account;
+- signals use an invite or verified reply session;
+- agents receive narrow delegated credentials;
+- account, entity, Room, capsule, agent, guest, and curator identity remain
+  distinct.
+
+The server still runs no AI. Its product role is limited to the minimum
+identity/control, registry, curation listing, deterministic rendering, queue,
+relay, expiry, revocation, retention, attribution, abuse, and privacy behavior
+needed for one real encounter.
+
+This approval does not prove that the Hybrid encounter is useful or enjoyable,
+that guests will share a capsule, that asynchronous Resonance feels alive, or
+that the hosted topology fits the schedule. It authorizes only preparation of a
+technical Control Packet. No R4 schema, account, Room, public deployment,
+message, persistence, note access, local synchronization, or implementation is
+authorized yet.
 
 ## Follow-up product-learning questions — not R4 blockers
 

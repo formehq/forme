@@ -1,9 +1,12 @@
-# R4 Forme Room experience and protocol brief v0.2
+# R4 Forme Room experience and protocol brief v0.3
 
-- Status: **owner-authored architecture correction captured; product decisions still pending**
-- Updated: 2026-07-23
+- Status: **owner-approved product foundation; technical Control Packet pending**
+- Updated: 2026-07-25
+- Owner approval: **2026-07-25 — all five revised R4 product decisions**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
+- Owner-approved companion decision brief:
+  [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 
 ## What changed from v0.1
 
@@ -16,7 +19,9 @@ The first proposal placed a bounded answering agent on the server. The owner's s
 - questions that exceed the capsule become asynchronous signals to the private local Twin and owner;
 - deeper responses return as reviewed, versioned capsules rather than through a live server-to-local tunnel.
 
-This correction is a product and architecture proposal. It supersedes the v0.1 server-agent assumption but does not authorize R4 implementation.
+This correction now forms part of the owner-approved R4 product target. It
+supersedes the v0.1 server-agent assumption but does not authorize R4
+implementation.
 
 ## Revised user outcome
 
@@ -71,7 +76,9 @@ The differentiator is relational continuity and earned depth, not unrestricted r
 
 ## First audience
 
-The recommended first audience is one owner-invited product or engineering collaborator who does not need local Forme access. The first host is the real Forme project Twin.
+The Third Place is publicly viewable. The first interacting guest and product
+judge is one owner-invited product or engineering collaborator who does not
+need local Forme access. The first host is the real Forme project Twin.
 
 Within three minutes, the collaborator should be able to answer:
 
@@ -217,11 +224,16 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Proposed P0 walking slice
+## Owner-approved P0 product walking slice — technical contract pending
 
-- one hosted Forme Room for the real Forme project Twin;
+- one curated, publicly viewable Forme Third Place with the real Forme Project
+  Room as its first and only required resident;
 - one deterministic, versioned Projection Capsule compiled locally;
-- one deterministic registry and visual renderer with no server AI;
+- one owner publication gate and separate curator admission gate;
+- one deterministic registry, curation listing, and visual renderer with no
+  server AI;
+- one invite-only durable controller identity and narrowly delegated Agent
+  credential path; public reading requires no account;
 - one Manual Guest path for reading and submitting a signal;
 - one Agent Guest API path for fetching a capsule and submitting a request;
 - one durable server Signal Queue and local Signal Box import;
@@ -236,7 +248,8 @@ Safety remains plumbing rather than the visual story:
 
 - no server-side LLM, synthetic owner answer, or generic chat runtime;
 - no open social network, discovery feed, follower system, or multiple public rooms;
-- no full account system unless hosting makes one unavoidable;
+- no public sign-up, self-service Room creation, identity network, or custom
+  password system beyond the one invite-only controller path;
 - no server access to private Twin state or local sources;
 - no permanent server-to-local tunnel or unlimited chat memory;
 - no automatic admission of external messages into canonical Twin meaning;
@@ -260,24 +273,40 @@ R4 passes product and technical review only if:
 
 The owner and collaborator must judge whether this feels like encountering and continuing a real project relationship rather than reading a summary, using email with decoration, or talking to a generic chatbot.
 
-## Recommended owner decisions
+## Owner-approved product decisions — 2026-07-25
 
-1. **Outcome and scope:** use one hosted Forme Room as a reception room and relay for one real host Twin and one three-minute encounter.
-2. **Guest modes:** support both a Manual Guest website path and an Agent Guest API path; Forme continuity is optional for the guest.
-3. **Projection contract:** publish only immutable, owner-admitted Projection Capsule versions; local continuous preparation does not imply live server synchronization.
-4. **Authority and topology:** run no AI on the server; keep intelligence at the owner-local and optional guest edges, connected through a two-layer Signal Box and reviewed capsule exchange.
-5. **Lifecycle and acceptance:** require expiry, revocation, stale-version handling, a private canary, durable request/response lifecycle, and one real collaborator's product judgment before R4 is Done.
+1. **Hero and venue:** use one Hybrid Hero Encounter in one curated Forme
+   Third Place, with the Forme Project Room as the first and only required
+   resident.
+2. **Guest and notes boundary:** keep Manual Guest as the universal path and
+   Agent Guest as an optional edge-intelligent path. Accept a guest-approved
+   capsule, but do not build P0 notes ingestion or a Guest Twin.
+3. **Projection and curation:** publish only immutable owner-admitted capsule
+   versions, then apply a separate curator admission gate before a Room appears
+   in the Third Place.
+4. **Identity:** use invite-only passwordless accounts for durable controllers,
+   allow public reading, require an invite or verified reply session for
+   signals, give agents narrowly delegated credentials, and keep account,
+   entity, Room, capsule, agent, guest, and curator identity distinct.
+5. **Topology and lifecycle:** keep intelligence at the owner-local and
+   optional guest edges. The server provides only the minimum
+   identity/control, registry, curation listing, deterministic rendering,
+   queueing, relay, expiry, revocation, retention, attribution, abuse, and
+   privacy controls required for one real encounter.
 
-Approval of all five recommendations would establish the product target only. A separate technical Control Packet must still name exact schemas, stores, APIs, authentication, retention, local synchronization, notification behavior, deployment topology, failure handling, tests, and P0 cuts before implementation.
+These decisions establish the product target only. A separate technical
+Control Packet must still name exact schemas, stores, APIs, authentication,
+pairing, retention, local synchronization, notification behavior, deployment
+topology, failure handling, tests, and P0 cuts before implementation.
 
 ## Open decisions to close next
 
 - exact public Projection Capsule fields and useful depth;
-- the single hero interaction and first real visitor;
+- the first real visitor and exact on-screen Hybrid encounter;
 - Manual Guest identity, reply, waiting, and notification behavior;
 - which Resonance depth, if any, belongs in P0;
 - publication cadence and owner review policy;
-- authentication, retention, deletion, and abuse floor;
+- authentication provider, pairing, retention, deletion, and abuse mechanics;
 - local Signal Box synchronization and offline behavior;
 - Response Capsule and Relationship Capsule contracts;
 - whether Mentor Lens becomes the first demo case;

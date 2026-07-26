@@ -1,11 +1,17 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-24
-- Active gate: **R4 — Forme Room v0.2 owner correction captured; product decisions pending; no implementation**
+- Updated: 2026-07-25
+- Active gate: **R4 — Hero Encounter, curated Third Place, and layered
+  identity product target owner-approved; technical Control Packet pending; no
+  implementation**
 - Active issue: [#52 — Controlled Presence: allowlist-only collaborator projection](https://github.com/formehq/forme/issues/52)
-- P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus the real bounded control and independent Career validation; R4 product replan proposed, R4–R5 implementation not started**
+- P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus
+  the real bounded control and independent Career validation; R4 product target
+  approved, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: owner reviews the five corrected R4 recommendations; if approved, prepare a separate technical Control Packet before any projection, hosting, messaging, local synchronization, persistence, or public behavior is implemented
+- Next action: prepare the R4 technical Control Packet for owner review before
+  any projection, Third Place, identity, hosting, messaging, local
+  synchronization, persistence, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -28,7 +34,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · PRODUCT REPLAN DECISION
+R4 Controlled Presence    ← YOU ARE HERE · TECHNICAL CONTROL PACKET PREPARATION
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -42,6 +48,12 @@ Current truth:
 - #49 contains the completed R1 contract, technical evidence, and owner acceptance;
 - #50 completed the first real Codex path, evidence-backed Reflection, owner correction, and dependent-output invalidation;
 - #51 is complete; the owner approved all five original R3 recommendations on 2026-07-18, all five R3-V2 Owner Decision Brief recommendations on 2026-07-20, and accepted the full R3 MVP product gate on 2026-07-20;
+- on 2026-07-25 the owner approved all five revised R4 product decisions: the
+  Hybrid Hero Encounter, one curated public Forme Third Place with the Forme
+  Project Room as its first resident, Manual and minimal Agent Guest paths,
+  owner-publication plus curator-admission gates, layered controller/entity/
+  Room/capsule/agent/guest identity, and an edge-intelligent no-server-AI
+  topology. This approval authorizes only the technical Control Packet;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
@@ -629,25 +641,54 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 Social Presence product proposal
+## Active stop gate — R4 technical Control Packet preparation
 
-- Status: **v0.2 owner correction captured; not yet approved or implemented**
-- Committed floor: a collaborator can understand what the project is, where it is going, and what remains with the owner through a current static projection that exposes no private source by default.
-- Proposed outcome: one invited collaborator can meet the Forme project Twin in a hosted Forme Room. A Manual Guest may browse and submit a signal; an Agent Guest may fetch the same public capsule and reason locally. Any question requiring deeper context returns asynchronously to the local Forme Agent and owner for reviewed response.
-- Candidate map delta: confirmed Twin revision → locally prepared candidate → owner publication gate → immutable Projection Capsule → server registry/renderer → guest-side exploration or reasoning → typed Interaction Request → server Signal Queue → local Signal Box and owner-reviewed Response Capsule → server relay.
+- Status: **product target owner-approved on 2026-07-25; technical contract not
+  yet approved or implemented**
+- Schedule fallback floor: a collaborator can understand what the project is,
+  where it is going, and what remains with the owner through a current static
+  projection that exposes no private source by default.
+- Approved outcome: one publicly viewable, curator-admitted Forme Third Place
+  contains the Forme Project Room. A Manual Guest may browse and submit bounded
+  context or a signal. An Agent Guest may fetch the public capsule, reason at
+  its own edge, and optionally submit a guest-approved capsule. A deeper
+  question or Resonance Request returns asynchronously to the local Forme Agent
+  and owner for reviewed response.
+- Approved map delta to specify: confirmed Twin revision → locally prepared
+  candidate → owner publication gate → immutable Projection Capsule →
+  owner-controlled Room → separate curator admission → Third Place
+  registry/renderer → guest-side exploration or reasoning → typed Interaction
+  Request → server Signal Queue → local Signal Box and owner-reviewed Response
+  Capsule → server relay.
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
-- Product proposal: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
+- Approved product briefs:
+  [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
+  [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Related proposals: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and [`STEWARDSHIP.md`](./STEWARDSHIP.md)
 
-The owner must first decide these five product recommendations:
+The owner approved these five product decisions:
 
-1. use one hosted Forme Room as a reception room and relay for one real host Twin and one three-minute encounter;
-2. support both a Manual Guest website path and an Agent Guest API path, without requiring Forme continuity on the guest side;
-3. publish only immutable, owner-admitted Projection Capsule versions; local continuous preparation does not imply live server synchronization;
-4. run no AI on the server; keep intelligence at the owner-local and optional guest edges, connected by a two-layer Signal Box and reviewed capsule exchange;
-5. require expiry, revocation, stale-version handling, a private canary, a durable request/response lifecycle, and one real collaborator's product judgment before R4 is Done.
+1. use one Hybrid Hero Encounter in one curated Forme Third Place, with the
+   Forme Project Room as the first and only required resident;
+2. keep Manual Guest as the universal path and Agent Guest as an optional
+   edge-intelligent path; accept a guest-approved capsule without building P0
+   notes ingestion or a Guest Twin;
+3. publish only immutable owner-admitted capsule versions, then require a
+   separate curator admission before a Room enters the Third Place;
+4. use invite-only passwordless controller accounts, public reading, invited
+   or verified-reply signals, and narrowly delegated Agent credentials while
+   keeping account, entity, Room, capsule, agent, guest, and curator identities
+   distinct; the exact authentication provider remains a technical decision;
+5. run no AI on the server; use it only for the minimum identity/control,
+   registry, curation listing, deterministic rendering, queueing, relay,
+   expiry, revocation, retention, attribution, abuse, and privacy controls
+   required for one real encounter.
 
-Approval of these five recommendations would establish the product target only. A second technical Control Packet must name exact stores, schemas, APIs, authentication, retention, deployment topology, local synchronization, notification behavior, failure handling, tests, and cuts. R3 acceptance grants no R4 visibility or publishing authority, and the current proposal grants none by itself.
+These decisions establish the product target only. A second technical Control
+Packet must name exact stores, schemas, APIs, authentication, pairing,
+retention, deployment topology, local synchronization, notification behavior,
+failure handling, tests, and cuts. R3 acceptance and the R4 product decision
+grant no R4 visibility, identity, hosting, messaging, or publishing authority.
 
 The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
 
@@ -711,6 +752,9 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
 - [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — proposed cognitive modes, effect-authority ladder, and earned-trust contract
 - [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
-- [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — proposed hosted Forme Room experience and five owner decisions
+- [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — owner-approved hosted
+  Forme Room foundation
+- [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
+  — owner-approved Hybrid encounter, Third Place, identity, and P0/P1 boundary
 - [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map
