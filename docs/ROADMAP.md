@@ -4,10 +4,10 @@
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R3 is owner-accepted; the R4 Hero Encounter, curated Third
-  Place, and layered identity product target are owner-approved; the technical
-  Control Packet is next, with no projection, hosting, identity, messaging,
-  synchronization, or server implementation authorized
+- Current gate: R3 is owner-accepted; the R4 product target is owner-approved;
+  the [technical Control Packet](./R4-TECHNICAL-CONTROL-PACKET.md) is proposed
+  for Owner review, with no projection, hosting, identity, messaging,
+  synchronization, persistence, spend, or server implementation authorized
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -21,9 +21,9 @@
 | R4 — Controlled Presence | Aug 5–7 | one curated Third Place with the Forme Project Room, a versioned Projection Capsule, and one reviewed encounter | private canary stays absent and the real request → local review → response lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target is now owner-approved; implementation remains stopped at technical Control Packet preparation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target is owner-approved and its technical contract is now proposed; implementation remains stopped at Owner review.
 
-## R4 owner-approved product target — technical decision pending
+## R4 owner-approved product target — technical proposal pending approval
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -41,9 +41,13 @@ runs no AI.
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
 [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md).
-A separate technical Control Packet must still name exact topology, stores,
-APIs, authentication, pairing, retention, synchronization, notifications,
-failure handling, tests, and cut order before implementation.
+The proposed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now names
+the bounded topology, stores, APIs, authentication, pairing, retention,
+synchronization, notifications, failure handling, tests, cost, and cut order.
+Exact machine schemas and migrations remain a separately hashed pre-write gate.
+Production resources and spend remain a separate Provisioning Grant. The
+packet remains unapproved and currently grants no implementation authority.
 
 The cut order is:
 
@@ -86,7 +90,9 @@ and a general Twin-to-Twin protocol remain outside the critical path. The
 approved R4 product target admits only one curated Third Place, one Forme
 Project Room, Manual and Agent Guest entry paths, bounded capsule exchange, one
 optional lightweight Guest Capsule, and typed external signals. None may be
-implemented until the technical Control Packet is approved.
+implemented until the technical Control Packet is approved; real durable writes
+then wait for the Schema & Migration Manifest, and cloud/public/spend actions
+wait for the Production Provisioning Grant.
 
 ## Progress rule
 

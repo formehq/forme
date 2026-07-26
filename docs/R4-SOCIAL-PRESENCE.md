@@ -1,12 +1,14 @@
 # R4 Forme Room experience and protocol brief v0.3
 
-- Status: **owner-approved product foundation; technical Control Packet pending**
+- Status: **owner-approved product foundation; technical Control Packet proposed and pending Owner approval**
 - Updated: 2026-07-25
 - Owner approval: **2026-07-25 — all five revised R4 product decisions**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
+- Proposed technical contract:
+  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 
 ## What changed from v0.1
 
@@ -32,7 +34,11 @@ The room can support two kinds of visitor:
 - a **Manual Guest** reads the public room and leaves a structured question, Seed, or introduction;
 - an **Agent Guest** uses its own agent to fetch the public capsule, reason locally, and submit a deeper request only when the capsule is insufficient.
 
-The owner later receives deeper requests in the local Forme environment. The local Forme Agent may prepare a draft from the private repo and Twin history, but the owner reviews, adjusts, approves, declines, or parks it. The resulting response is published as a bounded Response Capsule.
+The owner later receives deeper requests in the local Forme environment. The
+local Forme Agent may prepare a draft only from the exact Owner-selected,
+manifest-reviewed subset of local Twin context and allowlisted evidence, with
+no ambient repo access. The owner reviews, adjusts, approves, declines, or
+parks it. The resulting response is published as a bounded Response Capsule.
 
 ## The simplest mental model
 
@@ -130,7 +136,9 @@ Guest identity and interaction payload are separate contracts.
 
 ### Guest Capsule levels
 
-- **G0 — anonymous/manual:** no reusable capsule; the visitor supplies only the current request and reply route.
+- **G0 — anonymous/manual:** no reusable capsule; the visitor supplies only
+  the current request, and the server returns a private reply capability after
+  accepting it.
 - **G1 — lightweight guest:** display name or pseudonym, current focus, offer, seek, one open question, and retention consent.
 - **G2 — agent projection:** a versioned capsule produced by any guest-side agent. It does not require Forme continuity, but it must declare source, scope, freshness, and consent.
 - **Future — Forme projection:** a guest may explicitly provide an allowed capsule from their own Living Twin. This is not required for R4 P0.
@@ -139,28 +147,36 @@ Guest identity and interaction payload are separate contracts.
 
 An Interaction Request separately records:
 
-- request type: `ask`, `seed`, `resonance`, or `disclosure_request`;
+- P0 request type: `ask`, `seed`, or `resonance`;
 - host room and exact Projection Capsule version;
 - guest level and optional Guest Capsule reference;
 - bounded request body;
-- requested response depth and reply route;
-- retention consent, creation time, and lifecycle state.
+- fixed P0 response depth `owner_reviewed`;
+- retention consent and creation time.
 
-This prevents “who the guest is” from being confused with “what the guest asks now.”
+Reply route/capability, account/session/network metadata, and mutable lifecycle
+state stay in the server envelope, never the immutable Interaction Request.
+This prevents “who the guest is” from being confused with “what the guest asks
+now.”
 
-## Projection Capsule v0 candidate fields
+## Projection Capsule v0 product fields
 
-- capsule ID, schema version, and pseudonymous host workspace ID;
-- exact base Twin revision, generated time, expiry, and predecessor;
-- room identity, title, short description, and visual theme token;
+- capsule ID, schema version, Room/entity identity, generated time, expiry, and
+  predecessor;
+- a Projection-scoped public basis ID, never a private workspace ID, internal
+  Twin revision, policy hash, or evidence ID;
+- title, short description, and visual theme token;
 - owner-approved Becoming, Now, Next Move, Tensions, and Open To claims;
-- evidence class per claim: `owner_confirmed`, `inferred_and_allowed`, or `unresolved_and_allowed`;
+- evidence class per claim: `owner_confirmed`, `inferred_allowed`, or
+  `unresolved_allowed`;
 - freshness and provenance class without private evidence bodies;
 - supported interactions, allowed topics, explicit unavailable topics, and expected latency;
 - agency boundary and non-commitment statement;
-- revocation metadata, content hash, and compiler receipt.
+- server-derived lifecycle metadata, content hash, and privacy-safe publication
+  attestation.
 
 Raw source bodies, private corrections, hidden owner notes, credentials, and unallowlisted claims cannot enter the capsule.
+The full compiler and Owner-approval receipts remain local.
 
 “Continuously updated” means the local agent may continually prepare a candidate. The server receives a new immutable version only after the owner or a separately approved publication policy admits it. The server never observes a mutable stream of the private Twin.
 
@@ -176,16 +192,25 @@ If the public capsule is insufficient, the server validates and queues a typed I
 
 ### Leave a Seed
 
-The server stores a length-bounded, typed signal. Initial lifecycle states are `received`, `reviewed`, `admitted`, `parked`, `replied`, `closed`, or `deleted`. Admission into the Twin is a separate local decision.
+The server stores a length-bounded, typed signal. The normative P0 transport
+states proposed by the Technical Control Packet are `queued`, `imported`,
+`parked`, `responded`, `declined`, `expired`, `origin_revoked`,
+`room_retired`, and `interaction_deleted`. `imported` means only that the local
+Signal Box durably received it. Admission into Twin meaning is a separate
+local decision and is not a server lifecycle state.
 
 ### Find Resonance
 
-Two useful depths remain candidates:
+Two useful depths exist, but only one is a Forme P0 feature:
 
-- **guest-side shallow resonance:** the Guest Agent compares public host and guest capsules locally;
-- **host-reviewed deep resonance:** a request enters the Signal Box, the local Forme Agent prepares a draft from explicitly allowed context, and the owner reviews the returned artifact.
+- **guest-side shallow resonance:** a Guest-owned Agent may compare public host
+  and guest capsules at its own edge. Forme permits this use of public data but
+  does not build or endorse the inference;
+- **host-reviewed deep resonance — P0:** a request enters the Signal Box, the
+  local Forme Agent prepares a draft from explicitly allowed context, and the
+  owner reviews the returned artifact.
 
-R4 P0 still needs to decide whether one or both depths are included.
+The hosted server performs neither depth.
 
 ## Two-layer Signal Box
 
@@ -218,7 +243,7 @@ Safety remains plumbing rather than the visual story:
 - the server has no model, private workspace handle, Twin store, or source credential;
 - a private canary and every unallowlisted claim remain absent;
 - every request and response binds to visible capsule versions;
-- the owner can revoke a room or retire a capsule;
+- the owner can revoke a Projection or Response and retire a Room;
 - expiry and Twin/allowlist changes make old capsules visibly stale;
 - no source write, external promise, autonomous later message, money, account action, or third-party tool authority;
 - bounded input, rate limits, deletion, and basic abuse handling;
@@ -240,7 +265,8 @@ Safety remains plumbing rather than the visual story:
 - one owner-reviewed Response Capsule returned through the relay;
 - one small Guest Capsule path;
 - at most one approved Resonance path;
-- room revocation, capsule expiry, stale-version behavior, and privacy-canary verification;
+- Projection revocation, Room retirement, capsule expiry, stale-version
+  behavior, and privacy-canary verification;
 - one clean, creative responsive visual surface;
 - repeatable deployment and a three-minute owner/collaborator demo.
 
@@ -268,7 +294,8 @@ R4 passes product and technical review only if:
 5. the local Forme Agent prepares a private-context draft and the owner can adjust, approve, decline, or park it;
 6. an approved Response Capsule reaches the right guest without exposing the private source;
 7. all parties can see which capsule versions and boundaries governed the exchange;
-8. a stale or retired capsule cannot masquerade as current;
+8. a stale, superseded, expired, or revoked capsule cannot masquerade as
+   current, and a retired Room cannot remain listed;
 9. the private canary and unallowlisted source never enter output.
 
 The owner and collaborator must judge whether this feels like encountering and continuing a real project relationship rather than reading a summary, using email with decoration, or talking to a generic chatbot.
@@ -294,20 +321,22 @@ The owner and collaborator must judge whether this feels like encountering and c
    queueing, relay, expiry, revocation, retention, attribution, abuse, and
    privacy controls required for one real encounter.
 
-These decisions establish the product target only. A separate technical
-Control Packet must still name exact schemas, stores, APIs, authentication,
-pairing, retention, local synchronization, notification behavior, deployment
-topology, failure handling, tests, and P0 cuts before implementation.
+These decisions establish the product target only. The proposed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now names
+semantic schema requirements, stores, APIs, authentication, pairing, retention, local
+synchronization, notification behavior, deployment topology, failure handling,
+tests, costs, and P0 cuts. Exact machine schemas and migrations remain a
+separately hashed pre-write manifest, and production resources/spend remain a
+separate Provisioning Grant. The packet remains unapproved and currently
+grants no implementation authority.
 
-## Open decisions to close next
+## Product-expression questions that remain after the technical proposal
 
-- exact public Projection Capsule fields and useful depth;
 - the first real visitor and exact on-screen Hybrid encounter;
-- Manual Guest identity, reply, waiting, and notification behavior;
-- which Resonance depth, if any, belongs in P0;
 - publication cadence and owner review policy;
-- authentication provider, pairing, retention, deletion, and abuse mechanics;
-- local Signal Box synchronization and offline behavior;
-- Response Capsule and Relationship Capsule contracts;
 - whether Mentor Lens becomes the first demo case;
-- deployment topology and operational ownership.
+- the exact creative visual language of the Third Place and Room.
+
+The technical proposal recommends the remaining identity, contract, sync,
+retention, hosting, and P0 Resonance answers; those answers do not become
+decisions until Owner approval.

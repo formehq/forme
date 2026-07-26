@@ -1,10 +1,12 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.1
 
-- Status: **owner-approved product target; no implementation authority**
+- Status: **owner-approved product target; technical Control Packet proposed; no implementation authority**
 - Updated: 2026-07-25
 - Owner approval: **2026-07-25 — all five revised product decisions**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
+- Proposed technical contract:
+  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 
 ## Decision in one minute
 
@@ -148,9 +150,10 @@ request against the exact host and optional guest capsule versions.
 
 ### 02:10–02:45 — return to the living Twin
 
-The local Signal Box receives the request. The local Forme Agent may use the
-private Project Twin, active owner corrections, and allowed local evidence to
-prepare:
+The local Signal Box receives the request. Nothing active is included
+automatically. The owner first approves a manifest naming the exact Owner Frame
+fields, corrected Reflections, and allowlisted evidence coordinates that the
+local Forme Agent may use to prepare:
 
 - the strongest shared thread;
 - one productive difference rather than forced similarity;
@@ -158,8 +161,13 @@ prepare:
 - missing context and uncertainty;
 - a response draft whose outgoing content is explicit.
 
-The owner may adjust, approve, decline, park, or request more context. Private
-evidence remains local.
+The owner may adjust, approve, decline, park, or request more context. If the
+guest selected `allow_owner_local_ai`, the exact bounded, manifest-reviewed
+packet—including any selected private evidence—is sent to OpenAI through the
+owner's existing local Codex authentication. It is never sent to the Forme
+hosted server or published. Unselected private evidence remains local. With
+`manual_owner_only`, no guest or private context is sent to OpenAI and the
+owner may still write a manual response.
 
 ### 02:45–03:00 — receive owner-reviewed depth
 
@@ -266,7 +274,7 @@ jobs:
 | **Human account** | Who may control, publish, curate, or receive private interaction state? | Invite-only authenticated account for curator and publishers; use a hosted passwordless method rather than building passwords | That the account is the complete person or that every display claim is true |
 | **Twin/entity identity** | What continuous entity is Forme maintaining? | One stable Forme Project entity ID in P0 | Human legal identity or public permission |
 | **Room identity** | Which social surface and relationship boundary is being visited? | One stable Room ID bound to the host entity and controller | Current capsule content |
-| **Projection identity** | Which exact allowed public state was visible? | Immutable capsule ID, version, hash, base revision, freshness, and revocation state | Access to the private Twin |
+| **Projection identity** | Which exact allowed public state was visible? | Immutable capsule ID, version, hash, Projection-scoped public basis ID, freshness, and revocation state | Access to the private Twin or its internal revision |
 | **Agent identity** | Which client acted, for whom, and with what scope? | A scoped credential delegated by an authenticated account or guest session, with `acting_for` attribution | That the agent is the human or may use all account authority |
 | **Guest identity** | Who sent this signal and how may a response return? | Public browse without login; interaction through an invite or verified reply session; public pseudonym remains optional | A reusable Person Twin |
 | **Curator identity** | Who admitted or removed a Room from the Third Place? | The authenticated curator account plus a durable admission/unlisting receipt | Authority to edit the resident's capsule |
@@ -376,16 +384,19 @@ principles.
 
 ## Approval status and next gate
 
-The 2026-07-25 approval establishes the product target and allows preparation
-of a Technical Control Packet covering:
+The 2026-07-25 approval establishes the product target. The proposed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now
+provides:
 
-- exact capsule, identity, pairing, curation, request, response, and receipt
-  contracts;
+- capsule, identity, pairing, curation, request, response, and receipt
+  semantics, with exact machine schemas held to a hashed pre-write subgate;
 - authentication provider and session/token boundaries;
 - hosted stores, retention, deletion, abuse limits, and failure behavior;
 - local synchronization and offline/retry behavior;
 - deployment topology, operational ownership, tests, and final P0 cuts.
 
-It does not itself authorize implementation, account creation, external
-messages, note access, deployment, public visibility, persistence, or changes
-to current schemas and trust boundaries.
+This product brief does not authorize implementation. The proposed packet, if
+separately approved, would authorize repository/fixture work only; its hashed
+Schema & Migration Manifest remains required before a real durable write, and
+its Production Provisioning Grant remains required before account creation,
+external messages, deployment, public visibility, or spend.

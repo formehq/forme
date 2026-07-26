@@ -1,6 +1,6 @@
 # Product
 
-- Status: owner-approved product frame; R4 product target approved, technical packet pending
+- Status: owner-approved product frame; R4 product target approved, technical packet proposed and pending Owner approval
 - Updated: 2026-07-25
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
@@ -84,7 +84,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — technical gate pending
+## Owner-approved R4 product target — technical proposal pending approval
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -103,10 +103,14 @@ delegated authority.
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
 conversational authority. The product target is approved, but implementation
-remains unauthorized until a separate technical Control Packet defines and the
-owner approves exact schemas, stores, authentication, pairing, APIs, retention,
-deployment, synchronization, failure handling, tests, and final cuts. The
-versioned static projection remains the schedule fallback floor.
+remains unauthorized until the Owner approves the proposed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which
+defines semantic schema requirements, stores, authentication, pairing, APIs,
+retention, deployment, synchronization, failure handling, tests, costs, and
+final cuts. Exact machine schemas and migrations remain a separately hashed
+pre-write manifest; cloud resources, deployment, external writes, and spend
+remain a separate Production Provisioning Grant.
+The versioned static projection remains the schedule fallback floor.
 
 ## Golden acceptance story
 

@@ -10,10 +10,10 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R3 — Bounded Agency; Owner Acceptance / product validation**
-- Product implementation: **R1 and R2 owner-accepted; the R3 control path and R3-V2 Owner Decision Brief pass 44 checks; recommendation accuracy remains unaccepted; R4–R5 not started**
+- Current gate: **R4 — Technical Control Packet proposed for Owner review**
+- Product implementation: **R1–R3 owner-accepted; the R4 product target is approved and its technical contract is proposed, but no R4 code, account, hosted resource, public state, or spend is authorized**
 
-Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1 and R2 issues [#49](https://github.com/formehq/forme/issues/49) and [#50](https://github.com/formehq/forme/issues/50), and active R3 issue [#51](https://github.com/formehq/forme/issues/51).
+Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 
@@ -107,9 +107,9 @@ npm run forme -- correct --workspace . \
 
 The real Forme demo admitted an evidence-backed Codex Reflection, then recorded the owner's narrower interpretation in Twin revision 19. The original inference became `superseded`, one dependent output was invalidated, the next Context Packet carried the correction, and restart reconstruction remained byte-identical.
 
-## R3 Bounded Agency — mechanism demonstrated; product validation active
+## R3 Bounded Agency — accepted 2026-07-20
 
-R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The additive `ActionIntentProposalV2` now returns one recommendation first, one to three editable judgments, explicit confidence, and a low-confidence `ask_owner` fallback that cannot compile an effect. Existing V1 revisions remain reconstructible. The bounded mechanism and new owner surface are implemented; suggestion usefulness, accuracy, and differentiated Twin value remain under R3-V product validation. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
+R3 adds a body-free Action Context Packet, a schema-only Codex proposer, additive V3 agency state, exact owner approval, and a Forme-only fixed-marker executor with journal recovery, idempotent retry, terminal receipts, and explicit rollback. The test suite and the real Forme revision 21–25 demo exercised proposal, approval, execution, idempotent retry, restart, and exact rollback. The additive `ActionIntentProposalV2` returns one recommendation first, one to three editable judgments, explicit confidence, and a low-confidence `ask_owner` fallback that cannot compile an effect. Existing V1 revisions remain reconstructible. Independent Career CASE-02 supplied the missing owner-experienced product evidence; it did not establish general recommendation accuracy. See [`docs/VALIDATION.md`](./docs/VALIDATION.md).
 
 Preview the packet manifest without calling a model:
 
@@ -126,6 +126,26 @@ npm run forme -- action-approve --workspace . --proposal act_... --effect-hash s
 npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
+
+## R4 Controlled Presence — technical proposal pending Owner approval
+
+The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
+Manual and minimal Agent Guest paths, separate Owner publication and Curator
+admission, layered identity, and the no-server-AI topology.
+
+[`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
+now proposes the bounded technical direction: one local Presence ledger, a
+pure shared wire protocol, one Next.js UI/API, Supabase Auth/Postgres, scoped
+pairing and guest capabilities, manual persist-before-ack synchronization,
+seven-day Projection freshness, 30-day interaction retention, recovery tests,
+and the precise P0 cuts. Exact machine schemas and migrations remain a
+separately hashed pre-write gate.
+
+The packet is a proposal. Before Owner approval, no R4 repository implementation
+is authorized. Even after packet approval, the separately hashed Schema &
+Migration Manifest must pass before a real durable write, and a separate
+Production Provisioning Grant must pass before any account, cloud resource,
+public endpoint, deployment, external message, or spend.
 
 ## Forme R3 managed action
 
