@@ -1,14 +1,14 @@
 # R4 Forme Room experience and protocol brief v0.3
 
-- Status: **owner-approved product foundation; technical Control Packet proposed and pending Owner approval**
-- Updated: 2026-07-25
+- Status: **owner-approved product foundation; five-card Technical Owner Review active**
+- Updated: 2026-07-26
 - Owner approval: **2026-07-25 — all five revised R4 product decisions**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
-- Proposed technical contract:
-  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
+- Technical Owner review:
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 
 ## What changed from v0.1
 
@@ -249,7 +249,7 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Owner-approved P0 product walking slice — technical contract pending
+## Owner-approved P0 product walking slice — five-card technical review active
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -321,22 +321,22 @@ The owner and collaborator must judge whether this feels like encountering and c
    queueing, relay, expiry, revocation, retention, attribution, abuse, and
    privacy controls required for one real encounter.
 
-These decisions establish the product target only. The proposed
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now names
-semantic schema requirements, stores, APIs, authentication, pairing, retention, local
-synchronization, notification behavior, deployment topology, failure handling,
-tests, costs, and P0 cuts. Exact machine schemas and migrations remain a
-separately hashed pre-write manifest, and production resources/spend remain a
-separate Provisioning Grant. The packet remains unapproved and currently
-grants no implementation authority.
+These decisions establish the product target only. The active
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) closes the
+remaining Owner-facing technical choices. Agents must then rewrite the
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
+confirmed deployment target and Guest decision, re-audit it, and present a new
+exact hash. Schema/migration and production deployment remain separate later
+gates. No current document grants implementation authority.
 
-## Product-expression questions that remain after the technical proposal
+## Product-expression questions that remain during technical review
 
 - the first real visitor and exact on-screen Hybrid encounter;
 - publication cadence and owner review policy;
 - whether Mentor Lens becomes the first demo case;
 - the exact creative visual language of the Third Place and Room.
 
-The technical proposal recommends the remaining identity, contract, sync,
-retention, hosting, and P0 Resonance answers; those answers do not become
-decisions until Owner approval.
+The five-card Owner review closes the remaining Guest, identity, external
+visibility, lifecycle, retention, hosting-integration, and P0 Resonance
+answers. Product-expression questions may continue without weakening those
+gates.

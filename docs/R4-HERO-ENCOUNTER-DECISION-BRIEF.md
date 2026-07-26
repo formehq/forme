@@ -1,12 +1,12 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.1
 
-- Status: **owner-approved product target; technical Control Packet proposed; no implementation authority**
-- Updated: 2026-07-25
+- Status: **owner-approved product target; five-card Technical Owner Review active; no implementation authority**
+- Updated: 2026-07-26
 - Owner approval: **2026-07-25 — all five revised product decisions**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
-- Proposed technical contract:
-  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
+- Technical Owner review:
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 
 ## Decision in one minute
 
@@ -384,9 +384,11 @@ principles.
 
 ## Approval status and next gate
 
-The 2026-07-25 approval establishes the product target. The proposed
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now
-provides:
+The 2026-07-25 approval establishes the product target. The Owner now reviews
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After its
+five cards close, agents will reconcile the detailed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which
+must provide:
 
 - capsule, identity, pairing, curation, request, response, and receipt
   semantics, with exact machine schemas held to a hashed pre-write subgate;
@@ -395,8 +397,9 @@ provides:
 - local synchronization and offline/retry behavior;
 - deployment topology, operational ownership, tests, and final P0 cuts.
 
-This product brief does not authorize implementation. The proposed packet, if
-separately approved, would authorize repository/fixture work only; its hashed
-Schema & Migration Manifest remains required before a real durable write, and
-its Production Provisioning Grant remains required before account creation,
-external messages, deployment, public visibility, or spend.
+This product brief and the active Owner review do not authorize
+implementation. Only the later reconciled and separately approved packet may
+authorize repository/fixture work; its hashed Schema & Migration Manifest
+remains required before a real durable write, and its Production Deployment &
+Provisioning Grant remains required before external messages, deployment,
+public visibility, or spend.

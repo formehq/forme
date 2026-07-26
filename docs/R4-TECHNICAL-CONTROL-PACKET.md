@@ -1,12 +1,22 @@
 # R4 Technical Control Packet v0.1
 
-- Status: **proposal for Owner review; no implementation authority**
-- Updated: 2026-07-25
+- Status: **unreconciled implementation appendix; not an approval target; no implementation authority**
+- Updated: 2026-07-26
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Product/protocol foundation:
   [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
+- Owner review surface:
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
+
+> Review notice, 2026-07-26: the Owner has confirmed the existing
+> Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
+> login for Owner Control, and has reopened the strict one-use Guest model.
+> This implementation appendix has not yet been reconciled to those inputs.
+> Review and close the five cards in
+> [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) first. The
+> prior packet hash is not an approval target.
 
 ## Decision in one minute
 

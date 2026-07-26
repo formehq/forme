@@ -1,18 +1,19 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-25
-- Active gate: **R4 — Hero Encounter, curated Third Place, and layered
-  identity product target owner-approved; technical Control Packet proposed
-  for Owner review; no implementation**
+- Updated: 2026-07-26
+- Active gate: **R4 — product target owner-approved; five-card Technical Owner
+  Review active; detailed Control Packet requires reconciliation before exact
+  approval; no implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus
   the real bounded control and independent Career validation; R4 product target
-  approved and technical contract proposed, R4–R5 implementation not started**
+  approved, five-card technical review active, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: Owner reviews the proposed
-  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) before
-  any projection, Third Place, identity, hosting, messaging, local
-  synchronization, persistence, spend, or public behavior is implemented
+- Next action: Owner reviews
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), then agents
+  reconcile the detailed Control Packet before any projection, Third Place,
+  identity, hosting, messaging, local synchronization, persistence, spend, or
+  public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -35,7 +36,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · TECHNICAL CONTROL PACKET OWNER REVIEW
+R4 Controlled Presence    ← YOU ARE HERE · FIVE-CARD OWNER REVIEW
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -56,14 +57,15 @@ Current truth:
   Room/capsule/agent/guest identity, and an edge-intelligent no-server-AI
   topology. This approval authorizes preparation and review of the technical
   Control Packet, not the packet's proposed implementation;
-- the proposed
-  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) now
-  recommends the three-state-owner model, bounded protocol semantics, Vercel/Supabase
-  topology, scoped identity and pairing, manual sync, retention, recovery,
-  costs, tests, and P0 cuts. It is not yet Owner-approved and authorizes no R4
-  implementation or external resource. If approved, repository/fixture work
-  may begin, while its exact-schema manifest and Production Provisioning Grant
-  remain separate downstream stop gates;
+- the first proposed
+  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) remains
+  an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
+  existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment target,
+  required anywhere Web login for Owner Control, and reopened the strict
+  one-use Guest model. The five-card
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) is now the
+  review surface. The prior packet hash is not approvable; no R4
+  implementation or external resource is authorized;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
@@ -651,10 +653,10 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 technical Control Packet Owner review
+## Active stop gate — R4 five-card Technical Owner Review
 
-- Status: **product target owner-approved on 2026-07-25; technical contract not
-  yet Owner-approved or implemented**
+- Status: **product target owner-approved on 2026-07-25; five technical cards
+  awaiting Owner judgment; detailed packet unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -674,7 +676,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
 - Approved product briefs:
   [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
-- Proposed technical contract:
+- Active Owner review:
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
+- Unreconciled implementation appendix:
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 - Related proposals: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and [`STEWARDSHIP.md`](./STEWARDSHIP.md)
 
@@ -696,15 +700,14 @@ The owner approved these five product decisions:
    expiry, revocation, retention, attribution, abuse, and privacy controls
    required for one real encounter.
 
-These decisions establish the product target only. The proposed technical
-Control Packet now names state ownership, stores, semantic schema and API
-boundaries, authentication, pairing, retention, deployment topology, local
-synchronization, notification behavior, failure handling, tests, costs, and
-cuts; exact machine schemas and migrations remain a separately hashed
-pre-write gate, and production resources/spend remain a separate Provisioning
-Grant. The packet itself remains an Owner stop gate. R3 acceptance and the R4
-product decision grant no R4 visibility, identity, hosting, messaging,
-persistence, spend, or publishing authority.
+These decisions establish the product target only. The five-card Owner Review
+now decides Guest continuity, anywhere Web Control, OpenAI visibility, public
+lifecycle promises, and the asynchronous retention/P0 boundary. Agents must
+then reconcile the implementation packet to the supplied deployment target and
+those answers. Exact schemas/migrations and production deployment remain
+separate later gates. R3 acceptance and the R4 product decision grant no R4
+visibility, identity, hosting, messaging, persistence, spend, or publishing
+authority.
 
 The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
 

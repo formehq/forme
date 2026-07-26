@@ -1,8 +1,8 @@
 # Architecture boundaries
 
 - Status: R1, R2, and R3 owner-accepted; R4 product topology owner-approved,
-  technical Control Packet proposed and pending Owner approval
-- Updated: 2026-07-25
+  five-card Technical Owner Review active; implementation packet unreconciled
+- Updated: 2026-07-26
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -177,16 +177,16 @@ receive narrow delegated credentials.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
-The product boundary is approved. Repository/fixture implementation remains
-blocked until the proposed
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) is
-Owner-approved. Real durable writes additionally require its hashed Schema &
-Migration Manifest; hosting, accounts, public behavior, messaging, and spend
-additionally require its Production Provisioning Grant. The proposal keeps
-Twin meaning, local Presence control state, and hosted public/transport state
-separate; adds a pure shared wire-protocol package and one hosted UI/API; and
-explicitly forbids the hosted dependency graph from importing the local Twin
-store or Codex runtime.
+The product boundary is approved. The Owner now reviews
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
+implementation remains blocked until those five cards are reconciled into a
+new exact
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
+Owner approves it. The confirmed production target is the supplied
+Cloudflare → Caddy → Hetzner → PostgreSQL path; this architecture governs only
+how Forme integrates with it. Real durable writes additionally require the
+Schema & Migration Manifest, and production deployment/public behavior require
+the Production Deployment & Provisioning Grant.
 
 ## Archive policy
 
