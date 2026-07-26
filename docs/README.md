@@ -13,6 +13,7 @@ The repository keeps a deliberately small decision surface.
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Proposed: how reasoning mode, effect authority, shadow learning, and creative experiment envelopes relate. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Proposed: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and revised R4 decisions. |
+| [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md) | Owner decision brief: the Hybrid encounter, curated Forme Third Place, layered identity, and recommended P0/P1 boundary. |
 | [`reference/architecture-understanding-contract-v0.1.md`](./reference/architecture-understanding-contract-v0.1.md) | Reference only: owner-authored rebuild map retained for shared understanding and historical open questions. |
 | [`reference/design-lineage.md`](./reference/design-lineage.md) | Reference only: how the early effects, cognitive-organ model, and harness exploration became the current Living Project Twin architecture. |
 | [`research/agent-runtime-strategy-2026-07-15.md`](./research/agent-runtime-strategy-2026-07-15.md) | Research and durable boundary guidance: what Codex/OpenCode own, what Forme owns, and how adapters should deepen without forks or forced parity. |

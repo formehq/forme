@@ -1,9 +1,11 @@
 # R4 Forme Room experience and protocol brief v0.2
 
 - Status: **owner-authored architecture correction captured; product decisions still pending**
-- Updated: 2026-07-23
+- Updated: 2026-07-25
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
+- Pending companion decision brief:
+  [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 
 ## What changed from v0.1
 
