@@ -1,6 +1,7 @@
-# R4 Technical Owner Review Brief v0.1
+# R4 Technical Owner Review Brief v0.2
 
-- 状态：**Owner review 进行中；不是批准记录**
+- 状态：**T1 public/private Room correction 已批准；T2–T5 Owner review
+  进行中；不是最终 Packet 批准记录**
 - 更新：2026-07-26
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -17,12 +18,13 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. 对五张决策卡分别回答 `批准 / 带条件批准 / 修改`；
-3. 用四个具体场景检查系统行为是否符合直觉；
+2. 对剩余四张决策卡分别回答 `批准 / 带条件批准 / 修改`；
+3. 用五个具体场景检查系统行为是否符合直觉；
 4. 只看 Agent 报告的 red/yellow exception。
 
-五张卡关闭后，Agent 才会按你的答案重写长 Packet、重新审计并计算
-新的 hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
+T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正。T2–T5
+关闭后，Agent 才会按你的答案重写长 Packet、重新审计并计算新的
+hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
 
 ## 已经确认，不再重复问
 
@@ -32,6 +34,11 @@ Owner 的判断界面。你只需要：
 - 现有服务器是 Forme 接入和部署的既有前提。本轮不重新审计或批准
   服务器本身，只负责 Forme 应用怎样开发、接入、发布和回滚。
 - Owner Control 必须可以从任何地点通过 Web 登录。
+- Room 现在有两个明确的 first-class kind：Third Place 中公开可遇见的
+  Room，以及阅读和互动都需要 Owner Grant 的 Private Room。`unlisted`
+  只是 curation/discovery 状态，不等于 private。
+- Third Place Room 允许任何人阅读 current admitted Projection，并默认
+  允许一次 bounded public knock；继续互动必须由 Owner 发 short pass。
 - P0 仍然是一个 curated Third Place、一个必须完成的 Forme Project
   Room、Manual-first、minimum Agent interoperability、Owner publish 与
   Curator admit 分离、layered identity、server no AI。
@@ -76,7 +83,11 @@ flowchart LR
         Proxy["Caddy"]
         App["Forme Web + API"]
         DB["PostgreSQL"]
+        PublicRoom["Third Place Room<br/>public read + one knock"]
+        PrivateRoom["Private Room<br/>grant-gated read + interaction"]
         Edge --> Proxy --> App --> DB
+        App --> PublicRoom
+        App --> PrivateRoom
     end
 
     subgraph Guest["Guest edge"]
@@ -149,66 +160,138 @@ Git commit
 
 Forme 负责这些应用接入与发布合同；现有 server baseline 不在本轮 review。
 
-## T1 — Guest 可以持续多久
+## T1 — 公共敲门与私密关系可以持续多久
+
+- 状态：**Owner-approved correction — 2026-07-26**
 
 ### 你要判断什么
 
-每次 Interaction 都重新发 invite，还是让熟悉的 Guest 在一段短时间内
-回来几次？
+公开空间是否应该让任何人直接互动？Private Room 又应该如何让熟悉的
+Guest 在一段短时间内回来？
 
-### 推荐答案
+### Owner 已批准的答案
 
-只提供两个固定 preset：
+最重要的区分不是“Public Guest 待得更久，还是 Private Guest 待得
+更久”，而是：
 
-| Preset | 有效期 | Accepted Interaction | 同时未结 |
-|---|---:|---:|---:|
-| `single_encounter` | 24 小时或 Projection 到期，取更早者 | 1 | 1 |
-| `short_pass` | Owner 从 24 小时 / 3 天 / 7 天中选择，且不超过 Projection 到期 | 3 | 1 |
+> Public content 可以长期看，但 public write permission 很短；
+> private content 默认看不到，但 Owner 批准后的关系可以稍长。
 
-Invite 本身仍然只能兑换一次；兑换后得到绑定 exact Room + Projection
-的私密 Guest Grant。它是一张 bearer pass，不是账号，也不证明真实身份。
+P0 使用同一套 Room/Projection implementation primitive，但是真实的
+Private Room 与 Third Place Room 是两个不同 Room instance，拥有不同的
+Room ID 和分别批准的 Projection。它们可以属于同一个 Forme entity/Twin：
 
-Manual Guest：
+| Room kind | 阅读 | 默认首次互动 | 后续互动 |
+|---|---|---|---|
+| `third_place_public` | current、fresh、admitted 时无需账号；没有 Guest 阅读时钟 | `public_encounter`：24 小时内 1 次 accepted Interaction | Owner 可另发 `short_pass`，仍基于 public Projection |
+| `private_grant_only` | 只有有效 Owner Grant 才能读取它自己单独批准的 exact Projection | Owner 发 `single_encounter` 或 `short_pass` | 只在 Grant 剩余期限与额度内 |
 
-- 在 Grant 有效期内，可以用私密 re-entry capability 恢复短期 cookie；
-- 只有真正 accepted 的 Interaction 才消耗一次额度；
-- 同一个 idempotent retry 不重复计数；
-- 删除、拒绝或撤回不会返还已经消耗的额度；
-- 每次 Interaction 都有自己的 reply URL、删除权和最多一个 Response。
+`unlisted` 只是 Third Place 的发现/curation 状态，不是 Private Room。
+知道一个 unlisted public URL 的人仍可能读取它；真正的 Private Room
+必须在返回 Projection body 前验证 Owner-issued Grant。
 
-Agent Guest：
+`roomKind` 在 P0 创建后不可改变。Private Room 不能被 Curator admit 进
+Third Place。已经公开过的 Room 不能靠改一个字段“重新变私密”；Owner
+必须 revoke 旧 public Projection，再创建一个不同 ID、不同 Projection
+approval 的 Private Room。
 
-- Grant 只能是 `manual_only` 或 `manual_plus_one_shot_agent`；
-- `manual_plus_one_shot_agent` 表示 Guest 可以按剩余额度逐次 mint
-  derivative token，不是整个 Grant 只能使用一次 Agent；
-- 同一时刻最多存在一个未使用 Agent token；
-- 每个 Agent token 只有 15 分钟、只能提交一次；
-- Agent submission 消耗同一个 Grant 的一次额度；
-- Agent 不能续签、再发 token、读取 private reply、删除 Interaction，
-  也不能拿到可重复使用的 Manual credential。
+P0 的 Hero Room 仍是 public Forme Project Room，但同一个实现合同和
+fixture 必须支持一个真实 grant-gated Private Room；这不增加第二个 Twin
+或另一套交互系统。
 
-生命周期：
+#### Third Place Room：广场加门铃
 
-- stale 或 unlisted：停止新提交；
-- revoked Projection 或 retired Room：取消未来写权限；
-- 删除或 revoke 某一个 Interaction 不会自动结束整个 Grant，也不会
-  返还已经消耗的额度；结束/revoke Grant 是单独动作；
-- 结束或 revoke Grant 只停止未来提交，不隐藏或删除已有
-  Interaction/Response，也不移除它们各自的 reply/delete capability；
-- successor Projection 不继承剩余额度；
-- 延长时间、增加次数、开启 Agent 或迁移 successor 都必须创建新
-  Grant，不能原地扩权；
-- 每条 outgoing Response 仍然需要独立、准确的 Owner approval。
+- Public visitor 不需要 Owner 预先发 invite，就能取得一个绑定 exact
+  Room + Projection 的 `public_encounter` capability。
+- 它允许在 24 小时内 accepted 一次 bounded Interaction，同时最多一个
+  未结 request。它是“敲一次门”，不是账号、身份或持续会话。
+- “一次”是针对 capability/session，不声称能识别真实世界里的“同一个
+  人”。基础 rate limit 与 Room public pool 才负责限制重复滥用。
+- P0 默认每个 Room 在滚动 24 小时内最多 accepted 20 个 public
+  encounters；达到上限后显示 `Room is resting`。Owner-issued pass 不消耗
+  public pool。
+- Capability issuance 也必须有独立的短期 abuse rate limit，不能只限制
+  accepted submissions。短期 network/browser abuse key 不能进入 Guest
+  identity，也不能被当作“这个人是谁”的证明。
+- Guest request 与 Owner Response 默认仍是 private relay，不会因为入口
+  在公共 Room 就变成公开评论。
+- Owner 看过首条 request 后，可以 decline、respond once、删除，或者
+  发一个新的 `short_pass`。熟悉的 Guest 也可以直接收到 short pass，
+  不必先走 public encounter。
+- 对匿名 public Guest，Owner 不是凭空“联系到对方”：Owner 创建一个
+  绑定 exact Interaction 与目标 Room + Projection + preset 的独立 hosted
+  `GrantOffer`。它显示在 reply/status surface，不进入 immutable Response
+  Capsule，也不要求 Owner 先发 Response。Guest 通过已有 private reply
+  capability 查看并接受，server 才原子创建新的 bearer Grant。不要把
+  raw invite secret 塞进 Response body。已知 collaborator 仍可由 Owner
+  通过既有渠道收到一次性 invite URL。
+- `GrantOffer` 创建的是新额度，不会把 public encounter 原地扩权；因此
+  完整路径最多是第一次 public knock 加 short pass 的三次额外
+  Interaction。
+- P0 每个 Interaction 同时最多一个 live Grant Offer。接受必须
+  idempotent，并重新检查 offer 仍有效、reply capability 有权、exact
+  target Room/Projection 仍 active/current/fresh/unrevoked、target mode
+  不是 `closed`。Interaction deletion、origin revoke、origin Room
+  retirement、target successor/expiry/revoke/retirement 都使 offer
+  失效；Curator unlist 是否影响它仍是 T4 待批准的 lifecycle 选择。
+- Public Room 上的 short pass 只延长对同一个 public Projection 的互动
+  权，不会解锁任何 Private Room 内容。把 Guest 邀入 Private Room 必须
+  另外签发绑定那个 Private Room + Projection 的 Grant。
+- Capability issuance 与最终 submission 都必须原子地重新检查 exact
+  Projection 仍 current、fresh、admitted，Room 仍是 `public_single`，
+  public pool 仍有额度；不能靠先领 token 绕过后来发生的关闭。Exact
+  unlist/stale effects 仍由待批准的 T4 决定。
 
-Grant re-entry capability 只负责恢复“未来还可以提交几次”的权限。每个
-Interaction 仍有自己独立的 reply/delete capability；拿到 Grant 不能因此
-读取或删除过去 Interaction 的 private reply。
+Owner 独立控制 Room 的互动模式：
 
-### 你可以这样回复
+| Interaction mode | 新 public knock | 有效 Owner Grant |
+|---|---:|---:|
+| `public_single` | 允许 | 允许 |
+| `invite_only` | 拒绝并永久作废尚未使用的 public capability | 允许 |
+| `closed` | 拒绝并永久作废尚未使用的 public capability | 暂停新提交 |
 
-- `T1 按推荐批准`
-- `T1 保持一次性`
-- `T1 带条件批准：...`
+Curator admission 只决定 Room 是否进入 Third Place，不替 Owner 打开
+inbox。Owner 可以随时切换 interaction mode；打开 public intake、关闭
+intake 与发 Grant 都是留下 receipt 的 Owner action。Curator 只能
+admit/unlist。`closed` 不延长 Grant：若 Owner 在原 expiry 前重新打开，
+尚未过期的 Owner Grant 才能继续使用。任何离开 `public_single` 的切换
+都会永久作废当时未使用的 public encounter；之后重新打开需要发新的
+capability。Private Room 只允许 `invite_only` 或 `closed`，永远不能设置
+`public_single`。
+
+#### Private Room：受邀会客室
+
+- Private Room 不出现在 Third Place，Projection body 与新 Interaction
+  都要求 Owner-issued Guest Grant。
+- `single_encounter`：24 小时或 Projection 到期，取更早者；最多一次
+  accepted Interaction。
+- `short_pass`：Owner 选择 24 小时、3 天或 7 天，且不超过 Projection
+  到期；最多三次 accepted Interaction，同时最多一个未结 request。
+- UI 对熟悉 Guest 推荐 7 天 / 3 次，但 Owner 仍可选择更短。
+- P0 Grant 绑定 exact Room + Projection。successor 不继承；“自动跟随
+  Room 未来 Projection”的 relationship pass 留到 P1。
+- Invite 只能兑换一次；兑换后得到的 bearer Grant 不是账号，也不能证明
+  使用者就是 Owner 心里指定的那个人。
+
+#### 两种 Room 共用的规则
+
+- 只有真正 accepted 的 Interaction 才消耗一次额度；同一个 idempotent
+  retry 不重复计数。
+- 每个 Interaction 都有自己的 private reply URL、删除权和最多一个
+  Response。
+- Manual Guest 可以用 re-entry capability 恢复仍有效的 Grant。
+- Grant 保留 `manual_only` 或 `manual_plus_one_shot_agent` mode。Agent
+  Guest 与 Manual Guest 共用额度；每次只能 mint 一个绑定 exact Room +
+  Projection、15 分钟、单次使用的 derivative token。它只允许读取该
+  exact Projection 并创建一次 Interaction；不能续签、再发 token、读取
+  private reply、删除 Interaction 或取得 reusable Manual credential。
+- stale 或 expired Projection 停止所有新提交；revoke 或 Room retirement
+  停止读取 body 和未来写入。
+- 结束/revoke Grant 只停止未来 Grant 使用，不隐藏已有
+  Interaction/Response，也不返还额度。
+- 延时、增次、启用 Agent 或迁移 successor 都需要新 Grant，不能原地
+  扩权。
+- 每条 outgoing Response 仍需要独立、准确的 Owner approval。
 
 ## T2 — Owner 在任何地方登录后能做什么
 
@@ -218,6 +301,17 @@ Interaction 仍有自己独立的 reply/delete capability；拿到 Grant 不能�
 private Twin、起草和发布内容？
 
 ### 推荐答案
+
+最简单的 mental model 是：
+
+> 手机或任意浏览器是 hosted 前台的遥控器，不是打开本地 Forme
+> 私人书房的远程桌面。
+
+| | Hosted server | Local Forme |
+|---|---|---|
+| 看 | 登录后可看完整 hosted 内容 | Web 永远不可看 |
+| 管 | 普通状态使用较长 session；权限、可见性和删除使用短 step-up | Web 不直接操作 |
+| 产生 Owner 判断 | 只能看已经发布的结果 | local Agent + exact Owner approval |
 
 使用三个逻辑 origin，exact hostname 留到 Production Grant：
 
@@ -239,11 +333,11 @@ Cloudflare/identity-provider account + MFA；如果你希望 email OTP 成为
 Public Third Place 和 Guest routes 不要求 Access；Control page 和 control
 API 必须登录。
 
-普通查看与敏感 mutation 使用不同的 authorization boundary。配对、发出
-或撤销 Grant、admit/unlist、emergency revoke、retire 和 Owner delete
-必须经过 approve origin 的独立 short-session Access
-policy/audience。实现不能把普通长期 Access token 的 `iat` 误当成
-“刚刚重新认证”。
+普通查看与敏感 mutation 使用不同的 authorization boundary。配对、打开
+或关闭 public intake、发出/撤销 Grant 或 Grant Offer、admit/unlist、
+emergency revoke、retire 和 Owner delete 必须经过 approve origin 的
+独立 short-session Access policy/audience。实现不能把普通长期 Access
+token 的 `iat` 误当成“刚刚重新认证”。
 
 P0 中同一个人可以持有两个语义角色，但 receipt 分开：
 
@@ -255,7 +349,9 @@ Anywhere Web Control 可以：
 - 查看已经存在于 hosted server 的完整 Projection、Guest request、
   inline Guest Capsule 和 published Response，以及 lifecycle/receipt
   status；
-- 发出或撤销 Guest Grant；
+- 发出或撤销 Guest Grant，并为一次 public knock 发 short pass；
+- 切换 Room 的 `public_single`、`invite_only` 或 `closed` interaction
+  mode；
 - admit 或 unlist Projection；
 - emergency-revoke Projection/Response；
 - retire Room；
@@ -276,6 +372,10 @@ Anywhere Web Control 不可以：
 meaning。Control 页面必须 `no-store`，且永远不显示 local-only draft、
 private Twin context 或 evidence。若你只想远程看 metadata/status，需要
 在批准 T2 时改成 metadata-only。
+
+这里的 `hosted` 不等于 `public`。Private Room Projection、Guest request
+和 Response 可以是 server 上受保护的 private content；Owner 登录后可以
+查看和控制，但普通访客仍然不能读取。
 
 Sensitive control action 还需要显式二次确认。P0 没有 public sign-up。
 
@@ -304,10 +404,10 @@ Local Forme Agent 能不能用经过选择的 private context，帮助 Owner 起
 1. Guest 选择 `allow_owner_local_ai`；
 2. Owner 主动开始 draft，并批准 exact manifest。
 
-Manifest 会列出 request、public Projection、选中的 Owner Frame 字段、
-选中的 corrected Reflection 和 allowlisted evidence。最终 packet 最多
-32 KiB，没有 ambient repo access、没有 tools，通过 Owner 现有的 local
-Codex authentication 发送给 OpenAI。
+Manifest 会列出 request、它所绑定的 exact origin Projection、选中的
+Owner Frame 字段、选中的 corrected Reflection 和 allowlisted evidence。
+最终 packet 最多 32 KiB，没有 ambient repo access、没有 tools，通过
+Owner 现有的 local Codex authentication 发送给 OpenAI。
 
 Forme server 永远看不到这份 private packet。
 
@@ -334,12 +434,25 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 
 - Owner publication 与 Curator admission 是两个独立动作。
 - Third Place 只展示 current、fresh、admitted Projection。
-- Current 但 never-admitted 或 unlisted 的 Projection，拿到 direct URL
-  的人仍可阅读，但不能发起新 Interaction。
-- Curator unlist 不删除或作废已经 accepted 的 Interaction；它们仍可
-  完成 Owner-reviewed Response。
-- Stale Projection 最多在七天 hard expiry 前带醒目警告 direct-read，
-  但不能发起新 Interaction。
+- `third_place_public` Room 的 current、never-admitted 或 unlisted
+  Projection，拿到 direct URL 的人仍可阅读；但只有 current、fresh、
+  admitted 且 `public_single` 的 Room 才允许新的 public knock。
+- Curator unlist 结束 Third Place discovery 和新的 public knock，但不
+  冒充 Owner 去 revoke 已发出的 short pass。所有未使用的 public
+  encounter capability 立即失效；现有 Owner-issued Grant 仍可在自己的
+  期限、额度和 Projection 生命周期内使用。
+- Private Room 永不进入 Third Place；没有有效 Owner Grant 时，direct
+  URL 也不得返回 Projection body。
+- `roomKind` 在 P0 不可原地从 public 改成 private。Owner 必须 revoke
+  public Projection，再创建不同 Room ID 和单独批准的 private
+  Projection。
+- Owner 切到 `invite_only` 会拒绝尚未使用的 public encounter，但保留
+  有效 Owner Grant；切到 `closed` 会暂停所有新提交。
+- Unlist 或 interaction-mode change 不删除已经 accepted 的 Interaction；
+  它们仍可完成 Owner-reviewed Response。
+- Stale public Projection 最多在七天 hard expiry 前带醒目警告
+  direct-read；持有未过期 Grant 的 Private Guest 也只能带警告读取。
+  public 和 private lane 都不能发起新 Interaction。
 - Revoke 立即停止返回 Projection body。
 - Projection revoke 还会隐藏所有 linked published Response，旧 Guest
   只保留 body-free status/delete；local Presence 收到 tombstone 后
@@ -347,7 +460,8 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 - Room retirement 结束 Room 和所有新写入，隐藏 hosted Projection 与
   Response；旧 Guest 同样只保留 body-free status/delete，local Presence
   在收到 retirement tombstone 后 purge。
-- Successor Projection 需要新的 Curator admission 和 Guest Grant。
+- Public successor Projection 需要新的 Curator admission；public/private
+  successor 都不继承 Guest Grant。
 - 绑定 stale、superseded 或 expired origin 的旧 request，可以得到一个
   明确披露 origin state 的 Owner-reviewed Response。
 - 绑定 revoked origin 的 request 不能再收到新 Response。
@@ -369,8 +483,9 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 - Guest 保存 private reply URL；Owner 显式运行 local sync。
 - P0 没有 email notification、daemon、live chat、WebSocket 或 remote
   local tunnel。
-- 一个 Guest Grant 在 T1 下最多有三个独立 Interaction；每个
-  Interaction 最多一个 Response，不形成 conversation thread。
+- 一个 public encounter 最多一个 Interaction；一个 Owner-issued
+  short pass 最多三个独立 Interaction。每个 Interaction 最多一个
+  Response，不形成 conversation thread。
 - Interaction 和 inline Guest Capsule 最长保存 30 天。
 - Response 保存 7 天，并且绝不超过所属 Interaction 的寿命。
 - Guest deletion 立即让 hosted content 不可读；physical purge 在
@@ -401,35 +516,48 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 - `T5 带条件批准：...`
 - 指出你要求改变的 notification、retention 或 scope。
 
-## 用四个故事检查自己的判断
+## 用五个故事检查自己的判断
 
-### A. 熟悉的 collaborator 回来三次
+### A. 陌生访客在 Third Place 敲一次门
+
+Guest 不登录就能阅读 current admitted Projection，并在
+`public_single` 模式下发送一个 bounded request。这个 capability 只能
+accepted 一次，请求和回复仍然是 private。Owner 不升级关系时，Guest
+不能继续发第二条。
+
+### B. 熟悉的 collaborator 回来三次
 
 Owner 发一个 `short_pass`。Guest 在同一个 exact Projection 有效期内，
 最多提交三个相互独立的 Interaction，不需要每次重新找 Owner。
 每条回复仍然等待 local Owner review。Guest 不会因此得到 profile、
-thread、Twin 或 reusable Agent identity。
+thread、Twin 或 reusable Agent identity。若 Room 是 private，Grant
+同时控制 Projection read；没有 Grant 时同一个 URL 返回 no body，拿到
+exact Grant 后可以读取并成功提交一次 bounded request。若 Room 是
+public，Grant 只延长互动权。
 
-### B. Owner 不在本地电脑旁
+### C. Owner 不在本地电脑旁
 
 Owner 在其他地方登录 Web Control，可以 curate、发出/撤销 Guest Grant、
-查看完整 hosted Guest request/published Response 与 status，并做
-emergency hosted control；不能查看 private Twin、运行 local Agent 或
-绕过 local approval 发布新的 private-context Response。
+切换 `public_single / invite_only / closed`、查看完整 hosted Guest
+request/published Response 与 status，并做 emergency hosted control；
+不能查看 private Twin、运行 local Agent 或绕过 local approval 发布新的
+private-context Response。
 
-### C. Guest 带着自己的 notes
+### D. Guest 带着自己的 notes
 
 Guest-owned Agent 在 Guest edge 选择并压缩 context，形成一个 bounded
 Guest Capsule。Forme 不读取 raw notes，也不创建 Person Twin。Guest 再
 选择 `manual_owner_only` 或明确同意 local Agent draft path。
 
-### D. Project 改了，或者有人删除内容
+### E. Project 改了，或者有人删除内容
 
 新 Twin revision 在下一次 local sync 把 Projection 标成 stale，停止新
-提交。Successor 需要重新 admit 和发 Grant。Unlist 只移除 discovery；
-revoke 移除 body；Room retirement 结束整个 surface。Guest deletion
-立即移除 hosted access，offline local copy 在下一次 Presence run 收到。
-丢失 HTTP response 时，用原 idempotency key 恢复结果，不重复动作。
+提交。Public successor 需要重新 admit；所有 successor 都需要新 Grant。
+Unlist 移除 discovery 和 public knock，但不删除 Owner 已发 private
+continuation；revoke 移除 body；Room retirement 结束整个 surface。
+Guest deletion 立即移除 hosted access，offline local copy 在下一次
+Presence run 收到。丢失 HTTP response 时，用原 idempotency key 恢复
+结果，不重复动作。
 
 ## 哪些部分完全交给 Agent 审计
 
@@ -452,20 +580,19 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-可以一张一张聊，也可以直接：
+T1 已关闭。剩下四张可以一张一张聊，也可以直接：
 
 ```text
-T1：...
 T2：...
 T3：...
 T4：...
 T5：...
 ```
 
-五项关闭后：
+T2–T5 关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；
-2. 删除或替换旧的 Vercel/Supabase 与 strict one-use 内容；
+2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；
 3. 完成技术复核，只报告会改变决策卡的 exception；
 4. 生成新的 packet version、commit 与 SHA-256；
 5. Owner 最后批准那个准确的新对象。

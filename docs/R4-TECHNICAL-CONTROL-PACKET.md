@@ -12,9 +12,11 @@
 
 > Review notice, 2026-07-26: the Owner has confirmed the existing
 > Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
-> login for Owner Control, and has reopened the strict one-use Guest model.
+> login for Owner Control. The Owner also superseded the invite-only Guest
+> ingress with a public one-knock + Owner short-pass model and added a real
+> grant-gated Private Room with a different Room ID and Projection.
 > This implementation appendix has not yet been reconciled to those inputs.
-> Review and close the five cards in
+> T1 is closed; review and close T2–T5 in
 > [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) first. The
 > prior packet hash is not an approval target.
 

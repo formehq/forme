@@ -10,8 +10,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R4 — five-card Technical Owner Review**
-- Product implementation: **R1–R3 owner-accepted; the R4 product target is approved, but its first technical packet must be reconciled to the confirmed self-host target, anywhere Web Control, and Guest Pass review; no R4 implementation or production action is authorized**
+- Current gate: **R4 — T1 public/private Room correction approved; T2–T5 Technical Owner Review**
+- Product implementation: **R1–R3 owner-accepted; the R4 product target and public-knock/private-Grant correction are approved, but its first technical packet must still be reconciled to the confirmed self-host target and remaining Owner review; no R4 implementation or production action is authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -128,7 +128,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — five-card Owner review
+## R4 Controlled Presence — T1 closed, T2–T5 Owner review
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -137,14 +137,16 @@ admission, layered identity, and the no-server-AI topology.
 Start with
 [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md).
 It reduces technical review to one mental model, five Owner decisions, and
-four walkthroughs. The confirmed deployment target is the existing
-Cloudflare → Caddy → Hetzner → PostgreSQL path, Owner Control must support
-anywhere Web login, and the strict one-use Guest model is under review.
+five walkthroughs. T1 is now approved: a Third Place Room supports public
+reading plus one bounded public knock; a true Private Room has a different ID
+and Projection and requires an Owner Grant to read or interact. The confirmed
+deployment target is the existing Cloudflare → Caddy → Hetzner → PostgreSQL
+path, and Owner Control must support anywhere Web login.
 
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After the five cards close, agents will rewrite and re-audit it. No R4
+After T2–T5 close, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

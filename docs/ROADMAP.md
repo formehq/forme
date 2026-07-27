@@ -5,8 +5,9 @@
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
 - Current gate: R3 is owner-accepted; the R4 product target is owner-approved;
-  the [five-card Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) is
-  active, and the first Control Packet is unreconciled; no projection,
+  T1 public/private Room correction is approved; T2–T5 in the
+  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) are active, and the
+  first Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
   server implementation is authorized
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
@@ -19,12 +20,12 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–7 | one curated Third Place with the Forme Project Room, a versioned Projection Capsule, and one reviewed encounter | private canary stays absent and the real request → local review → response lifecycle passes owner acceptance |
+| R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, and one reviewed continuation | private canary stays absent and public request → local review → response → bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target is owner-approved; implementation remains stopped at the five-card Owner review and later packet reconciliation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target and T1 public/private Room correction are owner-approved; implementation remains stopped at T2–T5 review and later packet reconciliation.
 
-## R4 owner-approved product target — five-card technical review
+## R4 owner-approved product target — T1 closed, T2–T5 review
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -32,6 +33,12 @@ leave bounded context or a signal. An Agent Guest can fetch the public capsule,
 reason at its own edge, and optionally submit a guest-approved capsule. A deeper
 question or Resonance Request returns to the local Forme Agent and owner for a
 reviewed response.
+
+While the Owner selects `public_single`, a visitor may use one anonymous
+24-hour capability to send one private public knock. Continued interaction
+requires a new Owner short pass. A true Private Room has a different Room ID
+and separately approved Projection, never enters Third Place, and requires an
+exact Owner Grant for reading and interaction.
 
 Owner publication and curator admission are separate decisions even when the
 same human performs both in P0. Accounts prove control and attribution, not
@@ -42,10 +49,10 @@ runs no AI.
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
 [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md).
-The Owner reviews
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Its five
-cards cover Guest continuity, anywhere Web Control, OpenAI visibility, public
-lifecycle promises, and the async/retention/P0 boundary. The first detailed
+T1 is recorded in
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Its remaining
+cards cover anywhere Web Control, OpenAI visibility, public lifecycle promises,
+and the async/retention/P0 boundary. The first detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
 be rewritten for the confirmed existing deployment path and re-audited.
 Exact schemas/migrations and production deployment remain separate later
@@ -54,9 +61,10 @@ gates. No current document grants implementation authority.
 The cut order is:
 
 1. preserve the deterministic versioned Projection Capsule and revocation/freshness contract;
-2. preserve one real hosted Room inside the curated Third Place and one
-   collaborator encounter;
-3. preserve one durable request → local review → response path;
+2. preserve one real public Room inside the curated Third Place, one public
+   knock, and one exact grant-gated Private Room path;
+3. preserve one durable request → local review → response → optional
+   continuation path;
 4. cut visual flourish before interaction coherence;
 5. cut native notes onboarding, additional residents, public sign-up, search,
    feed, open-ended chat, autonomous replies, and full Twin-to-Twin identity
@@ -82,16 +90,19 @@ bounded source
   → revision-bound action proposal
   → deterministic effect and receipt
   → allowlist-only projection
-  → owner publication + curator admission
-  → Third Place / Forme Room
-  → bounded signal → local review → response
+  → public Room: owner publication + curator admission
+    OR Private Room: owner publication + exact Guest Grant
+  → public knock or grant-gated signal
+  → local review → response → optional Grant Offer
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,
 and a general Twin-to-Twin protocol remain outside the critical path. The
 approved R4 product target admits only one curated Third Place, one Forme
-Project Room, Manual and Agent Guest entry paths, bounded capsule exchange, one
-optional lightweight Guest Capsule, and typed external signals. None may be
+Project Room as the required public resident, one bounded Private Room access
+path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
+exchange, one optional lightweight Guest Capsule, and typed external signals.
+None may be
 implemented until the technical Control Packet is approved; real durable writes
 then wait for the Schema & Migration Manifest, and production/public/spend
 actions wait for the Production Deployment & Provisioning Grant.

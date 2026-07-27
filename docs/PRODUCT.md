@@ -1,6 +1,7 @@
 # Product
 
-- Status: owner-approved product frame; R4 product target approved, five-card technical Owner review active
+- Status: owner-approved product frame; R4 public/private Room correction
+  approved, T2–T5 technical Owner review active
 - Updated: 2026-07-26
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
@@ -53,11 +54,13 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - one evidence-backed cross-time reflection;
 - owner correction and stale-output invalidation;
 - one approved, typed, deterministic, reversible action;
-- one versioned allowlist-only Projection Capsule;
+- one required public versioned allowlist-only Projection Capsule and one
+  separately approved private fixture Capsule over the same Twin;
 - one publicly viewable, curator-admitted Forme Third Place containing the
   Forme Project Room;
-- one Manual Guest path, one minimal Agent Guest capsule/request path, and one
-  owner-reviewed Response or Resonance;
+- one public 24-hour/one-interaction Guest knock, one grant-gated Private Room
+  path over the same Twin, one minimal Agent Guest capsule/request path, and
+  one owner-reviewed Response or Resonance;
 - invite-only durable controller identity with public reading that requires no
   account;
 - one real Codex execution path;
@@ -71,8 +74,8 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - automatic wake/catch-up;
 - local HTML Twin view;
 - first non-owner installation rehearsal;
-- first additional curator-invited Third Place resident after the single-Room
-  P0 is green.
+- first additional curator-invited Third Place resident after the required
+  public-resident P0 is green.
 
 ### P2 — after Demo Day
 
@@ -84,7 +87,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — five-card technical review active
+## Owner-approved R4 product target — T1 closed, T2–T5 active
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -99,6 +102,15 @@ separately controls admission to the shared venue. Accounts prove control and
 attribution, not personhood or complete identity. Public reading requires no
 account; durable controllers are invite-only, and agents receive only narrowly
 delegated authority.
+
+The 2026-07-26 correction makes the public venue approachable rather than only
+viewable. While the Owner selects `public_single`, an anonymous bearer
+capability may submit one private request within 24 hours. Continued
+interaction requires a new Owner short pass. A true Private Room is a different
+Room with a separately approved Projection; it never enters Third Place and
+requires an Owner Grant for both reading and interaction. Public
+request/response bodies do not become comments, and unlisted public content
+does not become private.
 
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
@@ -127,10 +139,13 @@ One real workspace must complete this sequence without hidden manual reconstruct
    must remain absent.
 9. Publish the exact approved capsule into the Forme Project Room and admit the
    Room to the curated Third Place through a separate curator decision.
-10. Receive one bounded Manual or Agent Guest interaction tied to the exact
-    visible capsule version.
+10. Receive one bounded public Manual or Agent Guest knock tied to the exact
+    visible capsule version, without requiring a prior Owner invite.
 11. Return one owner-reviewed Response or Resonance without exposing private
     source, confusing agent attribution, or bypassing revocation and retention
     controls.
+12. Offer one bounded continuation through the private reply capability and
+    prove that a separately approved Private Room remains unreadable without
+    its exact Owner Grant.
 
 The MVP fails if these steps feel like unrelated AI features instead of one project becoming continuous, understandable, actionable, and projectable.

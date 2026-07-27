@@ -1,13 +1,13 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-26
-- Active gate: **R4 — product target owner-approved; five-card Technical Owner
-  Review active; detailed Control Packet requires reconciliation before exact
-  approval; no implementation**
+- Active gate: **R4 — product target and T1 public/private Room correction
+  owner-approved; T2–T5 Technical Owner Review active; detailed Control Packet
+  requires reconciliation before exact approval; no implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus
   the real bounded control and independent Career validation; R4 product target
-  approved, five-card technical review active, R4–R5 implementation not started**
+  approved, T1 closed and T2–T5 review active, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
 - Next action: Owner reviews
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), then agents
@@ -36,7 +36,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · FIVE-CARD OWNER REVIEW
+R4 Controlled Presence    ← YOU ARE HERE · T1 CLOSED · T2–T5 OWNER REVIEW
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -57,14 +57,21 @@ Current truth:
   Room/capsule/agent/guest identity, and an edge-intelligent no-server-AI
   topology. This approval authorizes preparation and review of the technical
   Control Packet, not the packet's proposed implementation;
+- on 2026-07-26 the Owner approved the T1 correction: Third Place Room public
+  reading plus one 24-hour/one-Interaction anonymous bearer knock; Owner-issued
+  short continuation; and a real `private_grant_only` Room with a different
+  Room ID, separately approved Projection, and Grant-gated reading and
+  interaction. Public request/response bodies remain private; unlisted is not
+  private; Curator discovery authority remains separate from Owner intake and
+  Grant authority;
 - the first proposed
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) remains
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
   existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment target,
-  required anywhere Web login for Owner Control, and reopened the strict
-  one-use Guest model. The five-card
-  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) is now the
-  review surface. The prior packet hash is not approvable; no R4
+  required anywhere Web login for Owner Control, and reopened the former
+  invite-only Guest model. T1 is now corrected; T2–T5 in
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) are now the
+  active review surface. The prior packet hash is not approvable; no R4
   implementation or external resource is authorized;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
@@ -653,25 +660,29 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 five-card Technical Owner Review
+## Active stop gate — R4 T2–T5 Technical Owner Review
 
-- Status: **product target owner-approved on 2026-07-25; five technical cards
-  awaiting Owner judgment; detailed packet unreconciled and unimplemented**
+- Status: **product target owner-approved on 2026-07-25; T1 public/private Room
+  correction owner-approved on 2026-07-26; T2–T5 awaiting Owner judgment;
+  detailed packet unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
 - Approved outcome: one publicly viewable, curator-admitted Forme Third Place
-  contains the Forme Project Room. A Manual Guest may browse and submit bounded
-  context or a signal. An Agent Guest may fetch the public capsule, reason at
-  its own edge, and optionally submit a guest-approved capsule. A deeper
-  question or Resonance Request returns asynchronously to the local Forme Agent
-  and owner for reviewed response.
+  contains the public Forme Project Room. A visitor may browse and use one
+  bounded public knock; continued interaction requires an Owner short pass. A
+  different `private_grant_only` Room over the same Twin has its own Room ID
+  and Projection and requires a Grant for read/write. An Agent Guest may fetch
+  the public capsule, reason at its own edge, and optionally submit a
+  guest-approved capsule. A deeper request returns asynchronously to the local
+  Forme Agent and owner for reviewed response.
 - Approved map delta to specify: confirmed Twin revision → locally prepared
   candidate → owner publication gate → immutable Projection Capsule →
-  owner-controlled Room → separate curator admission → Third Place
-  registry/renderer → guest-side exploration or reasoning → typed Interaction
-  Request → server Signal Queue → local Signal Box and owner-reviewed Response
-  Capsule → server relay.
+  owner-controlled Room → either separate curator admission into Third Place
+  or exact Private Room Grant → public knock or grant-gated guest-side
+  exploration/reasoning → typed Interaction Request → server Signal Queue →
+  local Signal Box and owner-reviewed Response Capsule → optional Grant Offer
+  → server relay.
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Approved product briefs:
   [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
@@ -691,23 +702,24 @@ The owner approved these five product decisions:
    notes ingestion or a Guest Twin;
 3. publish only immutable owner-admitted capsule versions, then require a
    separate curator admission before a Room enters the Third Place;
-4. use invite-only passwordless controller accounts, public reading, invited
-   or verified-reply signals, and narrowly delegated Agent credentials while
-   keeping account, entity, Room, capsule, agent, guest, and curator identities
-   distinct; the exact authentication provider remains a technical decision;
+4. use invite-only passwordless controller accounts, public reading, one
+   anonymous bearer public encounter, Owner-issued continuation/Private Room
+   Grants, and narrowly delegated Agent credentials while keeping account,
+   entity, Room, capsule, agent, guest, and curator identities distinct; the
+   exact authentication provider remains a technical decision;
 5. run no AI on the server; use it only for the minimum identity/control,
    registry, curation listing, deterministic rendering, queueing, relay,
    expiry, revocation, retention, attribution, abuse, and privacy controls
    required for one real encounter.
 
-These decisions establish the product target only. The five-card Owner Review
-now decides Guest continuity, anywhere Web Control, OpenAI visibility, public
-lifecycle promises, and the asynchronous retention/P0 boundary. Agents must
-then reconcile the implementation packet to the supplied deployment target and
-those answers. Exact schemas/migrations and production deployment remain
-separate later gates. R3 acceptance and the R4 product decision grant no R4
-visibility, identity, hosting, messaging, persistence, spend, or publishing
-authority.
+These decisions establish the product target only. T1 now records the approved
+Guest continuity and Room exposure correction; the remaining Owner Review covers anywhere Web
+Control, OpenAI visibility, public lifecycle promises, and the asynchronous
+retention/P0 boundary. Agents must then reconcile the implementation packet to
+the supplied deployment target and those answers. Exact schemas/migrations and
+production deployment remain separate later gates. R3 acceptance and the R4
+product decisions grant no R4 implementation, visibility, identity, hosting,
+messaging, persistence, spend, or publishing authority.
 
 The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
 

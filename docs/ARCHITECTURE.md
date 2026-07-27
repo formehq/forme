@@ -1,7 +1,8 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; R4 product topology owner-approved,
-  five-card Technical Owner Review active; implementation packet unreconciled
+- Status: R1, R2, and R3 owner-accepted; R4 product topology and T1
+  public/private Room correction owner-approved, T2–T5 Technical Owner Review
+  active; implementation packet unreconciled
 - Updated: 2026-07-26
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -148,11 +149,16 @@ private local Twin
   → owner publication gate
   → immutable Projection Capsule
   → owner-controlled Room
-  → separate curator admission
-  → Third Place registry + deterministic room renderer
+      ├─ third_place_public Room
+      │    → separate curator admission
+      │    → Third Place registry + deterministic room renderer
+      └─ private_grant_only Room
+           → exact Owner Grant required for Projection read
 
 guest
-  → public capsule exploration or guest-side agent reasoning
+  → public capsule exploration / one public encounter
+    OR exact Private Room Grant
+  → optional guest-side agent reasoning
   → Interaction Request when deeper context is needed
   → server Signal Queue
   → local Signal Box
@@ -175,11 +181,20 @@ distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing; agents
 receive narrow delegated credentials.
 
+Public and private are first-class, separate Room instances under the same
+entity and implementation primitive. They use different Room IDs and
+separately approved Projections; a Private Room can never be curator-admitted.
+`unlisted` is a public discovery state, not privacy. Third Place may allow one
+anonymous public encounter per bearer capability/session, while both the
+request and Response remain private. Continued or Private Room access requires
+an exact Owner Grant. Curator admission controls shared-place discovery; Owner
+actions control intake mode, Grant issue/revoke, and Grant Offers.
+
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
 The product boundary is approved. The Owner now reviews
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
-implementation remains blocked until those five cards are reconciled into a
+implementation remains blocked until the remaining cards are reconciled into a
 new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
 Owner approves it. The confirmed production target is the supplied

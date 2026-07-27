@@ -130,3 +130,30 @@ an account or projection is the whole person. Product approval authorizes only
 preparation of the technical Control Packet; no R4 visibility, identity,
 hosting, publishing, persistence, messaging, notes access, or implementation is
 authorized yet.
+
+## 2026-07-26 — R4 public encounter and Private Room correction
+
+**Decision:** supersede only the 2026-07-25 requirement that every Guest signal
+must begin with an Owner invite or verified reply session. A current, fresh,
+curator-admitted Third Place Room may accept one private Interaction within 24
+hours from each issued anonymous bearer `public_encounter`; this is one
+acceptance per capability/session, not verified one-per-human identity. The
+Owner may then offer a new short pass through the Interaction's private reply
+capability. A real Private Room uses a different Room ID and separately
+Owner-approved Projection, can never enter Third Place, and requires an exact
+Owner Grant for both reading and interaction. Curator admission/unlisting
+controls public discovery; Owner actions control intake mode, Grant issue and
+revoke, and Grant Offers. `unlisted` does not mean private, and public
+Interaction/Response bodies do not become comments. Exact unlist effects on
+active Grants and Grant Offers are not fixed by this T1 decision and remain in
+the pending T4 lifecycle review.
+
+**Reason:** a public Third Place that requires a private invitation before the
+first interaction behaves like a display cabinet rather than an approachable
+third space. One bounded public knock creates the intended sense of play and
+encounter without creating public chat, a Guest account system, or open-ended
+mailbox authority. Separately grant-gating a true Private Room preserves a
+clear relationship boundary and prevents an unlisted public URL from being
+mistaken for privacy. This correction changes the product contract only; it
+authorizes no R4 implementation, durable write, deployment, public endpoint, or
+external interaction.

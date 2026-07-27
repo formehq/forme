@@ -1,8 +1,10 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-23
-- Current verdict: **R3 is owner-accepted for the MVP: bounded control is demonstrated, and independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
+- Updated: 2026-07-26
+- Current verdict: **R3 is owner-accepted for the MVP; R4 T1 public/private
+  Room behavior is owner-approved at the product-contract level but remains
+  unimplemented, and T2–T5 remain under review**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -459,6 +461,48 @@ that the hosted topology fits the schedule. It authorizes only preparation of a
 technical Control Packet. No R4 schema, account, Room, public deployment,
 message, persistence, note access, local synchronization, or implementation is
 authorized yet.
+
+## Evidence round 7 — Public knock and true Private Room correction
+
+On 2026-07-26 the Owner noticed that the first Technical Owner Review applied
+one Guest-duration model to both a public Third Place Room and an assumed
+Private Forme Room. Reviewing the actual product contract exposed two gaps:
+there was no first-class Private Room at all, and the public venue still
+required an Owner invite before every signal. The nearest existing
+`unlisted/direct URL` behavior was publicly readable by possession of the URL
+and therefore was not privacy.
+
+The Owner approved a clearer relationship model:
+
+- a current, fresh, curator-admitted Third Place Room is publicly readable and
+  may accept one private public knock within 24 hours per anonymous bearer
+  capability/session;
+- the system does not claim that anonymous capabilities enforce one request per
+  real human, so a bounded Room-level public pool remains necessary;
+- public requests and Owner Responses remain private rather than becoming
+  comments;
+- after review, the Owner may offer a new short pass through the Guest's
+  existing private reply capability;
+- a true Private Room uses a different Room ID and separately approved
+  Projection under the same Forme entity, never enters Third Place, and
+  requires an exact Owner Grant to read or interact;
+- Curator admission/unlisting controls public discovery, while Owner actions
+  control intake mode, Grant issue/revoke, and continuation offers;
+- `unlisted` cannot be used as a privacy state; exact unlist effects on active
+  Grants and Grant Offers remain a pending T4 decision.
+
+The useful mental model is **public square plus one doorbell; invited meeting
+room for continued private access**. This correction makes the Third Place
+approachable without turning it into open chat or a generalized mailbox, and
+keeps private content behind a separate positive authorization.
+
+This discussion did not test a real visitor, measure spam or Owner workload,
+validate the 20-per-Room rolling-24-hour public pool, or prove that a
+three-interaction short pass feels sufficient. It also did not authorize
+implementation. T1 is
+now closed at the product-contract level; T2–T5, the reconciled Technical
+Control Packet, exact schema/migration manifest, and production deployment
+grant remain stop gates.
 
 ## Follow-up product-learning questions — not R4 blockers
 
