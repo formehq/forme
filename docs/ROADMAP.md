@@ -1,11 +1,13 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-07-26
+- Updated: 2026-07-27
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R3 is owner-accepted; the R4 product target is owner-approved;
-  T1 public/private Room correction is approved; T2–T5 in the
+- Current gate: R3 is owner-accepted; the privacy-first/minimum-friction agency
+  direction is recorded and the R4 product target is owner-approved; T1
+  public/private Room correction is approved; agency formalization P and
+  recalibrated T2–T5 in the
   [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) are active, and the
   first Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
@@ -43,8 +45,17 @@ exact Owner Grant for reading and interaction.
 Owner publication and curator admission are separate decisions even when the
 same human performs both in P0. Accounts prove control and attribution, not
 personhood; public reading needs no account; durable publishers and curators
-are invite-only; Agent Guests receive narrow delegated credentials. The server
-runs no AI.
+are invite-only; Agent Guests receive bounded, revocable delegated
+credentials. The server runs no AI.
+
+The agency-first recalibration proposes keeping the human boundary exact while
+removing ceremonial per-operation approval inside it. The pending P0
+recommendation is one fixed standing `room_operator.v1` scope bundle per exact
+Room for typed sync, deterministic receipt/recovery, exact Owner-approved
+artifact delivery, and deterministic stale attestation. The Agent's standard
+Room workflow calls sync explicitly; read-only commands do not hide writes and
+no background daemon is required. The broader companion guards and exact
+authority remain T2–T5 decisions.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
@@ -69,6 +80,10 @@ The cut order is:
 5. cut native notes onboarding, additional residents, public sign-up, search,
    feed, open-ended chat, autonomous replies, and full Twin-to-Twin identity
    before any control boundary is weakened.
+
+“Cut autonomous replies” means no P0 standing policy for publishing new
+Owner-attributed content. It does not mean cutting routine agency inside the
+proposed Room Operator envelope if T2 approves it.
 
 ## Cut rules
 

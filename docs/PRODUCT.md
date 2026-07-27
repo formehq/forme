@@ -1,8 +1,9 @@
 # Product
 
-- Status: owner-approved product frame; R4 public/private Room correction
+- Status: owner-approved product frame plus owner-stated privacy-first,
+  minimum-friction agency direction; R4 public/private Room correction
   approved, T2–T5 technical Owner review active
-- Updated: 2026-07-26
+- Updated: 2026-07-27
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -12,7 +13,8 @@ Forme extends an entity across four dimensions:
 
 - **Continuity** — preserve intent and context across interruption, tools, and time.
 - **Cognition** — notice change, tension, pattern, and unfinished possibility across time.
-- **Agency** — extend judgment and action beyond the owner's immediate attention through earned trust.
+- **Agency** — extend judgment and action beyond the owner's immediate
+  attention through explicit, bounded, revocable delegation.
 - **Presence** — project a current, bounded part of the entity when the owner is not present.
 
 Its deepest claim is not an AI clone. It is that human agency need not exist only while a person remembers, focuses, and is online.
@@ -26,8 +28,27 @@ Long-term forms may include person, project, and team Twins; specialized cogniti
 - **Reversibility:** meaningful effects preserve provenance, receipts, and rollback where feasible.
 - **Non-finality:** learned claims remain scoped, evidence-backed, uncertain, revisable, and able to age out.
 - **Controlled projection:** private existence never implies permission to publish.
+- **Privacy-first agency:** once a source/provider/audience domain is explicitly
+  admitted, Twin and Agent should receive the broadest useful freedom inside it
+  instead of asking for approval at every mechanical step.
+- **Minimum necessary friction:** explicit authorization is required to
+  establish or widen a boundary; work already covered by it is
+  review-by-exception.
 
-Two cross-cutting proposals now make the long-term direction more explicit without changing current authority: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) separates cognitive mode from effect permission, and [`STEWARDSHIP.md`](./STEWARDSHIP.md) treats Entropy Reduction as the metabolism that keeps all four dimensions coherent. Both await owner approval.
+The current recommended interpretation is **agency-forward and
+boundary-strict**, not approval-forward and not agent-unbounded. “Narrowly
+delegated” means the target, audience, identity, effect class, budget, and
+revocation boundary are exact; it does not mean the Agent must receive only one
+tiny verb or one click at a time. Confidence, owner-history similarity, account
+login, filesystem access, or authority in another Room never creates
+permission by itself.
+
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the Owner's stated direction and
+proposes companion authorship/consequence guards plus a no-self-expansion
+meta-rule. That formalization and its exact runtime mechanics still require
+Owner review and a Control Packet. [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains
+a proposal for Entropy Reduction as the metabolism that keeps all four
+dimensions coherent.
 
 ## MVP vision
 
@@ -71,7 +92,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - bounded `Exported Notes → Personal Facet Bootstrap`, not general notes
   ingestion;
 - a real OpenCode execution path beyond the compatibility boundary;
-- automatic wake/catch-up;
+- background or push-triggered wake/catch-up beyond Agent-invoked typed sync;
 - local HTML Twin view;
 - first non-owner installation rehearsal;
 - first additional curator-invited Third Place resident after the required
@@ -97,11 +118,14 @@ own edge, and optionally submit a guest-approved capsule. Questions or
 Resonance Requests requiring deeper context return asynchronously to the local
 Forme Agent and owner, then may come back as a reviewed Response Capsule.
 
-The owner controls the exact projection content; the Third Place curator
-separately controls admission to the shared venue. Accounts prove control and
-attribution, not personhood or complete identity. Public reading requires no
-account; durable controllers are invite-only, and agents receive only narrowly
-delegated authority.
+The owner controls the projection's exact content and disclosure policy; the
+Third Place curator separately controls admission to the shared venue.
+Accounts prove control and attribution, not personhood or complete identity.
+Public reading requires no account. Durable controllers are invite-only. The
+current pending T2
+recommendation interprets their bounded Agent credentials as exact,
+Room-scoped, revocable authority that is useful and persistent inside its
+approved boundary rather than reduced to repeated per-action approval.
 
 The 2026-07-26 correction makes the public venue approachable rather than only
 viewable. While the Owner selects `public_single`, an anonymous bearer
@@ -123,6 +147,11 @@ Exact machine schemas and migrations remain a separately hashed pre-write
 manifest; production deployment, external writes, and spend remain a separate
 Production Deployment & Provisioning Grant.
 The versioned static projection remains the schedule fallback floor.
+
+The agency-first recalibration of the still-open R4 technical cards is recorded
+in [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
+It does not reopen the approved T1 public/private topology or authorize R4
+implementation.
 
 ## Golden acceptance story
 

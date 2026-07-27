@@ -1,19 +1,23 @@
 # Owner technical cockpit
 
 - Updated: 2026-07-27
-- Active gate: **R4 — product target and T1 public/private Room correction
-  owner-approved; T2–T5 Technical Owner Review active; detailed Control Packet
-  requires reconciliation before exact approval; no implementation**
+- Active gate: **R4 — privacy-first/minimum-friction agency direction recorded;
+  product target and T1 public/private Room correction owner-approved; broader
+  boundary interpretation and T2–T5 Technical Owner Review active; detailed
+  Control Packet requires reconciliation before exact approval; no
+  implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; R3 passes 44 checks plus
   the real bounded control and independent Career validation; R4 product target
   approved, T1 closed and T2–T5 review active, R4–R5 implementation not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: Owner reviews
-  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), then agents
-  reconcile the detailed Control Packet before any projection, Third Place,
-  identity, hosting, messaging, local synchronization, persistence, spend, or
-  public behavior is implemented
+- Next action: Owner reviews the agency formalization P and recalibrated T2–T5 in
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), with the
+  short rationale in
+  [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md);
+  agents then reconcile the detailed Control Packet before any projection,
+  Third Place, identity, hosting, messaging, local synchronization,
+  persistence, spend, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -72,6 +76,15 @@ Current truth:
   recommends independent per-Room bindings, no hosted workspace ID, and no
   multi-Room credential; those exact mechanics and the default permission
   bundle still await Owner judgment;
+- on 2026-07-27 the Owner stated a privacy-first/minimum-friction direction:
+  protect the admitted human privacy boundary, then give Twin/Agent the
+  broadest useful freedom inside it. The current Agent interpretation adds
+  proposed authorship/consequence guards and a no-self-expansion rule, and
+  revises the pending T2 recommendation toward a fixed standing exact per-Room
+  `room_operator.v1` scope bundle for routine transport and deterministic
+  lifecycle enforcement. That formal interpretation, T2 exact verbs, T3–T5,
+  and all R4 implementation remain unapproved; T1 remains approved and
+  unchanged;
 - the first proposed
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) remains
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
@@ -668,7 +681,7 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 T2–T5 Technical Owner Review
+## Active stop gate — R4 P + T2–T5 Technical Owner Review
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; T2–T5 awaiting Owner judgment;
@@ -699,7 +712,11 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Unreconciled implementation appendix:
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
-- Related proposals: [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and [`STEWARDSHIP.md`](./STEWARDSHIP.md)
+- Related cross-cutting docs: owner-stated direction and proposed model in
+  [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) and proposed
+  [`STEWARDSHIP.md`](./STEWARDSHIP.md)
+- Agency-first R4 recalibration:
+  [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
 
 The owner approved these five product decisions:
 
@@ -712,7 +729,7 @@ The owner approved these five product decisions:
    separate curator admission before a Room enters the Third Place;
 4. use invite-only passwordless controller accounts, public reading, one
    anonymous bearer public encounter, Owner-issued continuation/Private Room
-   Grants, and narrowly delegated Agent credentials while keeping account,
+   Grants, and bounded, revocable Agent credentials while keeping account,
    entity, Room, capsule, agent, guest, and curator identities distinct; the
    exact authentication provider remains a technical decision;
 5. run no AI on the server; use it only for the minimum identity/control,
@@ -724,17 +741,24 @@ These decisions establish the product target only. T1 now records the approved
 Guest continuity and Room exposure correction. T2 additionally has a recorded
 Owner direction—GitHub-like hosted management/control/status, API-first Room
 capability parity, a thin CLI, and Repo/Workspace-to-Room-scoped authority.
-Independent exact per-Room bindings are the current recommendation, not yet an
-approved decision; the complete mechanism and default permission bundle remain
-open. The remaining Owner Review covers that boundary, OpenAI visibility,
-public lifecycle promises, and the asynchronous retention/P0 boundary. Agents
-must then reconcile the implementation packet to
+Independent exact per-Room bindings plus a standing `room_operator.v1` scope
+bundle for routine transport and deterministic lifecycle enforcement are the
+current agency-first recommendation, not yet an approved T2 decision; the
+complete verb, lifetime, and revocation contract remains open. The remaining
+Owner Review covers that boundary, OpenAI visibility, public lifecycle
+promises, and the asynchronous retention/P0 boundary. Agents must then
+reconcile the
+implementation packet to
 the supplied deployment target and those answers. Exact schemas/migrations and
 production deployment remain separate later gates. R3 acceptance and the R4
 product decisions grant no R4 implementation, visibility, identity, hosting,
 messaging, persistence, spend, or publishing authority.
 
-The current agency and stewardship briefs are architecture proposals, not autonomous authority. In particular, confidence or shadow agreement cannot grant permission; external R4 interactions remain untrusted signals until separately admitted.
+The privacy-first/minimum-friction direction is Owner-stated; the broader
+human-boundary model and exact R4 authority remain recommendations gated by
+T2–T5. Stewardship remains an architecture proposal. Confidence or shadow
+agreement cannot grant permission; external R4 interactions remain untrusted
+signals until separately admitted.
 
 ## Owner–agent working agreement
 
@@ -759,6 +783,12 @@ owner defines meaning and boundaries
 ```
 
 Passing checks moves a slice to **Technical Review**. A P0 slice becomes **Done** only after the owner can experience the behavior and retain the important technical model.
+
+These stop gates govern **how we build Forme while its contracts are still
+changing**. They do not imply that the finished product should interrupt the
+Owner for every runtime operation. Once an exact envelope is approved and
+implemented, the Agent should execute inside it review-by-exception; only a
+boundary change returns to human judgment.
 
 ## Stop-the-line boundaries
 
@@ -794,7 +824,10 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
 - [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
 - [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
-- [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — proposed cognitive modes, effect-authority ladder, and earned-trust contract
+- [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — Owner-stated privacy-first direction
+  plus proposed companion guards, cognitive modes, and delegation envelope
+- [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md) —
+  what the direction would change in pending T2–T5 now versus after Demo Day
 - [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
 - [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — owner-approved hosted
   Forme Room foundation

@@ -1,14 +1,19 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.2
 
-- Status: **owner-approved product target; public/private Room correction
-  approved; T2–T5 Technical Owner Review active; no implementation authority**
-- Updated: 2026-07-26
+- Status: **owner-approved product target and public/private Room correction;
+  privacy-first agency direction recorded; broader interpretation and T2–T5
+  Technical Owner Review active; no implementation authority**
+- Updated: 2026-07-27
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
+- Owner direction: **2026-07-27 — privacy-first agency + minimum friction;
+  formal boundary interpretation pending**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
+- Agency recalibration:
+  [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
 
 ## Decision in one minute
 
@@ -411,9 +416,11 @@ claim legal or biometric identity.
    before a Room appears in the Third Place.
 4. **Identity — approved on 2026-07-25, Guest ingress corrected on
    2026-07-26:** use invite-only, passwordless accounts for durable
-   controllers; allow public reading; give agents narrowly delegated
+   controllers; allow public reading; give agents bounded, revocable
    credentials; keep account, entity, Room, capsule, agent, guest, and curator
-   identity distinct. The original “invite or verified reply before every
+   identity distinct. The pending T2 recommendation makes the local connector
+   binding exact per-Room with a fixed standing scope bundle; that mechanism is
+   not approved here. The original “invite or verified reply before every
    signal” clause is superseded only for one bounded public first encounter.
 5. **Topology and lifecycle — approved:** keep all intelligence at the
    owner-local and optional guest edges. The server provides identity/control,
@@ -446,7 +453,9 @@ open mailbox, additional Twin, or server AI.
 ## Approval status and next gate
 
 The 2026-07-25 approval and 2026-07-26 correction establish the current product
-target. T1 is closed; the Owner now reviews T2–T5 in
+target. The 2026-07-27 privacy-first/minimum-friction direction informs the
+next review, while its broader formalization and exact mechanics remain
+pending. T1 is closed; the Owner now reviews T2–T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After its
 remaining cards close, agents will reconcile the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which

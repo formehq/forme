@@ -1,9 +1,10 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; R4 product topology and T1
-  public/private Room correction owner-approved, T2–T5 Technical Owner Review
-  active; implementation packet unreconciled
-- Updated: 2026-07-26
+- Status: R1, R2, and R3 owner-accepted; privacy-first agency direction
+  recorded; R4 product topology and T1 public/private Room correction
+  owner-approved; T2–T5 Technical Owner Review active; implementation packet
+  unreconciled
+- Updated: 2026-07-27
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -56,6 +57,12 @@ The same visible action may therefore be possible in Codex or OpenCode without F
 
 ## Initial invariants
 
+These invariants include both constitutional boundaries and slice-specific
+mechanisms used to prove R1–R3 safely. The exact one-use approval, packet-only
+runtime, and no-tools choices remain valid evidence for those slices; they are
+not a permanent ceiling that requires every future Agent action to be approved
+one at a time.
+
 1. Source access is explicit and bounded.
 2. The first demo has one workspace and one Twin.
 3. Runtime input is the minimum required projection of the Twin, not ambient repository access.
@@ -77,6 +84,24 @@ The same visible action may therefore be possible in Codex or OpenCode without F
 19. The first project-source authority is limited to one named managed block in `README.md`; arbitrary paths, patches, commands, Git, network, and external actions remain unavailable.
 20. Owner approval binds one immutable proposal and effect-plan hash to an unbroken Twin revision chain and one execution.
 21. Execution and rollback use target hashes, atomic replacement, a write-ahead journal, terminal receipts, and fail-closed recovery so retries cannot duplicate effects and human edits cannot be overwritten.
+
+### Candidate agency invariants — pending Owner review
+
+The Owner has stated the privacy-first/minimum-friction direction. The current
+recommended architecture interpretation, not yet an approved R4 contract, is:
+
+- human authorization establishes or widens an exact, inspectable, revocable
+  envelope; inside it, routine transport and explicitly predelegated,
+  deterministic monotonic exposure-reducing enforcement proceed
+  review-by-exception;
+- confidence, history, account access, or authority in another Room cannot
+  expand the envelope;
+- companion authorship/consequence guards and a no-self-expansion rule protect
+  the human without turning routine operations back into per-action approval;
+- content-bearing egress is eventually admitted as a policy-compiled artifact
+  bound to exact audience, policy generation, disclosure attestation,
+  attribution, hash, and receipt lineage. Model/tool separation remains
+  defense in depth rather than the only policy fence.
 
 ## Approved R3 implementation boundary
 
@@ -125,13 +150,20 @@ Each is selected only when the next walking slice requires it and after its Cont
 
 ## Cross-cutting proposals and approved R4 product boundary
 
-Three connected briefs make previously implicit highest-vision mechanics
-explicit. Agency/Trust and Stewardship remain owner proposals. The R4 product
-topology is owner-approved, but none changes implemented authority yet.
+Four connected briefs make previously implicit highest-vision mechanics
+explicit. The privacy-first agency direction is Owner-stated and its formal
+boundary model remains proposed; the R4 product topology is owner-approved;
+Stewardship remains an owner proposal. None changes implemented authority yet.
 
 ### Agency and trust
 
-[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) separates the cognitive modes Routine, Collaborative, and Exploratory from the effect-authority ladder `observe → propose → shadow → owner-confirmed effect → authorized autonomous effect`. Confidence and shadow agreement inform review but cannot grant permission. Any later autonomy remains scoped, expiring, reversible where feasible, and explicitly promoted by the owner.
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the Owner's stated
+privacy-first/minimum-friction direction and proposes an
+**agency-forward, boundary-strict** formalization. Routine, Collaborative, and
+Exploratory cognition remain independent from effect authority. The Owner may
+grant a useful standing envelope directly; the prior state sequence is a set
+of calibration states, not a mandatory ladder. Confidence and shadow agreement
+inform review but cannot grant permission.
 
 ### Stewardship and entropy
 
@@ -184,34 +216,44 @@ server remains no-AI: API coverage does not create a generic execution
 endpoint or move private reasoning to the server.
 
 The current, still-unapproved T2 recommendation establishes Owner-local
-connector authority through explicit, revocable
-per-Room bindings rather than inferred from a filesystem path, Git remote,
-account login, or current working directory. The local workspace maps one
-Twin/entity to any number of independent bindings; each hosted binding names
-only one exact Room, opaque Room-scoped host ID, credential digest, action
-scopes, and expiry. The server never receives the local workspace ID or path.
-Public and Private Room credentials can therefore rotate or revoke
-independently. Account-wide Agent wildcards, ambient Room discovery,
-self-expanding scopes, multi-Room bearer credentials, and cross-entity batch
-authority are outside P0. The complete T2 capability bundle remains under
-Owner review.
+connector authority through explicit, revocable per-Room bindings rather than
+inferred from a filesystem path, Git remote, account login, or current working
+directory. The local workspace maps one Twin/entity to any number of
+independent bindings; each hosted binding names only one exact Room, opaque
+Room-scoped host ID, credential digest, action scopes, and lifetime. The server
+never receives the local workspace ID or path. Public and Private Room
+credentials can therefore rotate or revoke independently. Account-wide Agent
+wildcards, ambient Room discovery, self-expanding scopes, multi-Room bearer
+credentials, and cross-entity batch authority are outside P0.
+
+Under the agency-first recalibration, the P0 binding recommendation is a fixed
+standing `room_operator.v1` scope bundle for routine transport and
+deterministic lifecycle enforcement: inspect, typed sync/pull, ACK,
+idempotent recovery, exact Owner-approved artifact push, and deterministic
+stale attestation. Web is the supervisory cockpit, not a per-call approval
+queue. P0 boundary actions execute directly under a
+stepped-up Owner/Curator Web session; Agent handoff for those actions remains
+P1. The exact capability bundle remains under Owner review; see
+[`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
 
 Under that recommendation, the paired credential belongs to the deterministic
-local connector, is not injected into a Forme-managed model prompt/environment
-or generic tool result, and grants no context visibility by itself. An allowed
-Agent requests typed CLI/API operations through a body-free gateway. T3
-separately governs which Guest and private bytes may enter a separate
-packet-only, no-tools Codex or OpenCode run. No Forme-managed model session
-receives both private bodies and Room mutation tools; independently granting a
-general agent ambient shell/filesystem access is a broader Owner action outside
-this P0 guarantee.
+local connector, is not injected into a Forme-managed model
+prompt/environment or generic tool result, and grants no context visibility by
+itself. An allowed Agent requests typed CLI/API operations through a validated
+gateway. T3 separately governs which Guest and private bytes may enter a
+packet-only Codex or OpenCode run. P0 keeps content-bearing draft context
+separate from Room mutation tools as defense in depth. Long-term, a
+policy-compiled artifact may cross that split only when its exact disclosure,
+attribution, policy generation, and content hash are independently admitted;
+ordinary model output is never hosted authority.
 
 Account identity proves control and attribution, not personhood. Twin/entity,
 Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
-invite-only; local publishing requires an explicit revocable pairing; agents
-receive narrow delegated authority. The exact connector/Guest credential split
-is part of the pending T2 recommendation above.
+invite-only; local publishing requires an explicit revocable pairing. Under
+the pending T2 recommendation, the local connector receives exact Room-scoped
+delegated authority with useful standing freedom inside its perimeter. The
+exact connector/Guest credential split is part of the same pending review.
 
 Public and private are first-class, separate Room instances under the same
 entity and implementation primitive. They use different Room IDs and

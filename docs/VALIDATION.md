@@ -1,10 +1,11 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-26
-- Current verdict: **R3 is owner-accepted for the MVP; R4 T1 public/private
-  Room behavior is owner-approved at the product-contract level but remains
-  unimplemented, and T2–T5 remain under review**
+- Updated: 2026-07-27
+- Current verdict: **R3 is owner-accepted for the MVP; the privacy-first agency
+  direction is Owner-stated and R4 T1 public/private Room behavior is
+  owner-approved at the product-contract level; the broader boundary
+  formalization and recalibrated T2–T5 remain under review and unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -503,6 +504,45 @@ implementation. T1 is
 now closed at the product-contract level; T2–T5, the reconciled Technical
 Control Packet, exact schema/migration manifest, and production deployment
 grant remain stop gates.
+
+## Evidence round 8 — Privacy-first agency direction and proposed formalization
+
+On 2026-07-27 the Owner identified a more fundamental preference behind the
+Room/API discussion: Forme should protect the human privacy boundary and
+otherwise minimize friction while allowing Twin/Agent agency to become
+substantial. A whole-system audit found the direction sound. The Agent also
+identified two companion risks for the Owner to judge: an Agent could
+impersonate or commit the human, or cause an irreversible/materially
+high-impact effect without exposing new private data.
+
+The Owner-stated part is the privacy-first/minimum-friction direction. The
+current **proposed formalization**, still pending Owner review, is:
+
+- define the primary perimeter around source/provider/audience domains not
+  already covered by an admitted envelope;
+- add companion identity/commitment and irreversible-consequence guards plus a
+  no-self-expansion rule;
+- grant useful persistent, observable, revocable authority inside it;
+- use receipts, verification, exception reporting, stop/revoke, and undo where
+  feasible instead of repeated ceremonial approval;
+- treat confidence and owner-history similarity as calibration, never
+  permission;
+- interpret “narrow delegation” as an exact perimeter, not a deliberately weak
+  set of one-use verbs.
+
+Applied to R4, this changes the pending T2 recommendation from operational sync
+plus one-use approval for nearly every management action to one fixed,
+exact per-Room `room_operator.v1` scope bundle for routine transport and
+deterministic lifecycle enforcement.
+It also clarifies that T3's exact context manifest and T5's no-daemon design are
+August bootstrap choices, not Forme's long-term agency ceiling. T1 remains
+unchanged.
+
+This round records product judgment, not usage evidence. It does not prove that
+the proposed Room Operator scope feels safe, that exception-based supervision
+is understandable, or that Agent-triggered explicit sync removes enough
+friction. Those require the exact T2–T5 decision, implementation, and owner
+demo. No R4 authority or implementation was granted.
 
 ## Follow-up product-learning questions — not R4 blockers
 

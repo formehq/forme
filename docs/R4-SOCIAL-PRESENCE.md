@@ -1,16 +1,21 @@
 # R4 Forme Room experience and protocol brief v0.5
 
-- Status: **owner-approved product foundation; public/private Room correction
-  approved; T2–T5 Technical Owner Review active**
+- Status: **owner-approved product foundation and public/private Room
+  correction; privacy-first agency direction recorded; broader interpretation
+  and T2–T5 Technical Owner Review active**
 - Updated: 2026-07-27
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
+- Owner direction: **2026-07-27 — privacy-first agency + minimum friction;
+  formal boundary interpretation pending**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Technical Owner review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
+- Agency recalibration:
+  [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
 
 ## What changed from v0.1
 
@@ -36,6 +41,12 @@ The Owner added a second correction on 2026-07-26:
 - a real Private Room has a different Room ID and separately approved
   Projection, and requires an Owner Grant for reading and interaction;
 - unlisted is a public discovery state, not a substitute for privacy.
+
+On 2026-07-27 the Owner stated a privacy-first/minimum-friction agency
+direction. The current Agent recommendation formalizes it with companion
+human-representation/consequence guards and a no-self-expansion rule, then
+applies it to pending T2–T5. That interpretation is still for Owner review; it
+does not change approved T1 or grant implementation authority.
 
 ## Revised user outcome
 
@@ -93,7 +104,7 @@ The current, still-unapproved T2 recommendation says a local Agent receives no
 account-wide Room power merely because it runs in a repo. The local workspace
 may map one Twin/entity to multiple Rooms, but Owner-controlled pairing creates
 a separate revocable binding and credential for each exact Room. The server
-sees only that Room's opaque host binding, scopes, expiry, and credential
+sees only that Room's opaque host binding, scopes, lifetime, and credential
 metadata; the real path, local workspace ID, cross-Room local grouping, and
 repo content stay local. A public and Private Room can therefore rotate or
 revoke independently.
@@ -366,7 +377,7 @@ Safety remains plumbing rather than the visual story:
 - one owner publication gate and separate curator admission gate;
 - one deterministic registry, curation listing, and visual renderer with no
   server AI;
-- one invite-only durable controller identity and narrowly delegated Agent
+- one invite-only durable controller identity and a bounded, revocable Agent
   credential path; public reading requires no account;
 - one Manual Guest public-knock path and one grant-gated private path;
 - one Agent Guest API path for fetching a capsule and submitting a request;
@@ -427,8 +438,11 @@ The owner and collaborator must judge whether this feels like encountering and c
    versions, then apply a separate curator admission gate before a Room appears
    in the Third Place.
 4. **Identity:** use invite-only passwordless accounts for durable controllers,
-   allow public reading, give agents narrowly delegated credentials, and keep
-   account, entity, Room, capsule, agent, guest, and curator identity distinct.
+   allow public reading, give agents bounded and revocable credentials, and
+   keep account, entity, Room, capsule, agent, guest, and curator identity
+   distinct. The pending T2 recommendation makes the local connector binding
+   exact per-Room and gives it a fixed standing scope bundle; that mechanism is
+   not yet approved.
    The original requirement for an invite or verified reply before every
    signal is superseded only for one bounded public first encounter.
 5. **Topology and lifecycle:** keep intelligence at the owner-local and
@@ -466,7 +480,7 @@ gates. No current document grants implementation authority.
 - whether Mentor Lens becomes the first demo case;
 - the exact creative visual language of the Third Place and Room.
 
-T1 closes Guest ingress and Room exposure. T2–T5 close the remaining identity,
-external visibility, lifecycle, retention, hosting-integration, and P0
-Resonance answers. Product-expression questions may continue without weakening
-those gates.
+T1 closes Guest ingress and Room exposure. P and T2–T5 close the remaining
+agency, identity, external visibility, lifecycle, retention,
+hosting-integration, and P0 Resonance answers. Product-expression questions
+may continue without weakening those gates.

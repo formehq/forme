@@ -157,3 +157,32 @@ clear relationship boundary and prevents an unlisted public URL from being
 mistaken for privacy. This correction changes the product contract only; it
 authorizes no R4 implementation, durable write, deployment, public endpoint, or
 external interaction.
+
+## 2026-07-27 — Privacy-first, minimum-friction agency direction
+
+**Owner-stated direction:** make this part of Forme's product principle:
+protect the admitted human privacy boundary, then give Twin and Agent as much
+useful freedom as possible inside it with as little friction as possible.
+Human authorization should establish the boundary rather than be repeated for
+every mechanical action. This direction does not grant any runtime authority
+by itself.
+
+**Recommended interpretation — pending Owner review:** use companion guards for
+human authorship/commitment and irreversible/materially high-impact
+consequences, plus a no-self-expansion rule for authority. Apply the direction
+to open R4 T2 by considering a fixed standing exact per-Room
+`room_operator.v1` scope bundle for routine transport and lifecycle
+enforcement. Keep T1 unchanged and treat T3's exact manifest and T5's no-daemon
+operation as P0 bootstrap choices rather than the long-term ceiling. The
+formal taxonomy, exact T2 verbs, T3–T5, and all implementation remain pending
+Owner approval.
+
+**Reason:** approval friction should correspond to a real human choice, not to
+the number of mechanical API calls. Repeatedly asking for sync, ACK, retry, or
+deterministic staleness enforcement weakens practical agency without widening
+privacy protection. The companion guards are recorded as the Agent's
+recommended interpretation because an Agent can speak for or irreversibly bind
+a human without leaking new private data; the Owner has not yet separately
+approved that formalization. Nothing here authorizes a runtime credential,
+private visibility, provider call, hosted mutation, message, deployment,
+production write, or spend.

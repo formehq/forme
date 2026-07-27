@@ -1,7 +1,8 @@
-# R4 Technical Owner Review Brief v0.3
+# R4 Technical Owner Review Brief v0.4
 
-- 状态：**T1 public/private Room correction 已批准；T2–T5 Owner review
-  进行中；不是最终 Packet 批准记录**
+- 状态：**privacy-first/minimum-friction agency direction 已记录，T1
+  public/private Room correction 已批准；broader boundary interpretation
+  与 T2–T5 Owner review 进行中；不是最终 Packet 批准记录**
 - 更新：2026-07-27
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -9,6 +10,8 @@
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Active gate：[GitHub #52](https://github.com/formehq/forme/issues/52)
 - Draft review：[PR #64](https://github.com/formehq/forme/pull/64)
+- Agency recalibration：
+  [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
 
 ## 先说结论
 
@@ -18,13 +21,21 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. 对剩余四张决策卡分别回答 `批准 / 带条件批准 / 修改`；
+2. 先确认一条 agency 边界解释，再对剩余四张技术决策卡分别回答
+   `批准 / 带条件批准 / 修改`；
 3. 用五个具体场景检查系统行为是否符合直觉；
 4. 只看 Agent 报告的 red/yellow exception。
 
-T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正。T2–T5
+T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正。P 与 T2–T5
 关闭后，Agent 才会按你的答案重写长 Packet、重新审计并计算新的
 hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
+
+2026-07-27 的 agency-first 方向直接修正了**尚未批准的 T2 推荐**，也
+澄清了待决 T3–T5 的 framing：
+Owner 批准的是可持续、可撤销的边界，而不是每一个机械 API 动作。Web
+更像 GitHub 控制台，用来看状态、权限、异常和停止；绑定 exact Room 的
+Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替人承诺、扩权
+和不可逆高影响动作仍返回 Owner。
 
 ## 已经确认，不再重复问
 
@@ -40,6 +51,10 @@ hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
   应对应 local Repo/Workspace 与 Room，而不是自动继承整个 Controller
   account。独立 per-Room binding/credential 是下面的当前推荐方案，
   不是已经批准的 T2 结论。完整 T2 仍待 Owner 批准。
+- Owner 已明确倾向 **privacy-first agency + minimum friction**。当前
+  Agent 推荐用 authorship/commitment、irreversible/material consequence
+  companion guards 和 no-self-expansion rule 来形式化它；这部分解释、
+  下面的 exact T2 verbs 和所有实现仍待 Owner 判断。
 - Room 现在有两个明确的 first-class kind：Third Place 中公开可遇见的
   Room，以及阅读和互动都需要 Owner Grant 的 Private Room。`unlisted`
   只是 curation/discovery 状态，不等于 private。
@@ -301,6 +316,36 @@ capability。Private Room 只允许 `invite_only` 或 `closed`，永远不能设
   扩权。
 - 每条 outgoing Response 仍需要独立、准确的 Owner approval。
 
+## P — Privacy-first agency 在 R4 里怎样解释
+
+- 状态：**Owner 已表达方向；下面的 formalization 待确认**
+
+### Owner 已经说清楚的部分
+
+在人类隐私边界内，尽量给 Twin/Agent 更大的 agency，并尽量减少
+friction。人批准的是边界，不应是每一个机械动作。
+
+### Agent 推荐你额外确认的解释
+
+- **Primary perimeter — privacy:** 只有建立或扩大到当前 envelope 之外的
+  source/provider/audience 时才重新授权；边界内不逐文件、逐 API 请示。
+- **Companion guard — representation:** 新的 Owner-attributed
+  claim/commitment 不能因为“没泄密”就自动替人发出。
+- **Companion guard — consequence:** irreversible/materially high-impact
+  effect 不能因为“没泄密”就自动执行。
+- **Meta-rule — no self-expansion:** 已有 authority 不能给自己增加更宽的
+  Room、scope、audience 或 budget；明确允许的 attenuated derivative
+  token 不算扩权。
+
+这四句只用于解释 R4 authority contract。它们不是要求每次弹 approval，
+也不自动冻结 Forme 未来的完整 agency taxonomy。
+
+### 你可以这样回复
+
+- `P 按 privacy primary + representation/consequence companion guards + no-self-expansion 推荐解释批准用于 R4`
+- `P 只确认 privacy boundary，其余三项继续讨论`
+- `P 带条件批准：...`
+
 ## T2 — Owner 与 Agent 怎样控制 Room
 
 - 状态：**Owner 的 Web/API/Repo-to-Room 方向已记录；完整 T2 待批准**
@@ -326,8 +371,15 @@ Owner 在 2026-07-27 给出的方向可以压缩成一句：
 | Hosted Control Plane | Room/Projection/Interaction/Grant/curation 的共享状态、权限、队列、生命周期与 receipts | 不读取 Twin，不运行 Owner AI，不替 Owner 形成判断 |
 | Forme Web | 人类查看、管理、批准 hosted access/control action 和理解 hosted state 的主要界面 | 不是 private repo 的远程桌面，也不取代 local publication/Response approval |
 | Versioned API | 每个 P0 hosted Room read 与 state transition 的 canonical contract | 不是 generic execute endpoint，也不绕过权限或 approval |
-| Forme CLI | API 的 thin client；Owner 可直接使用，Agent 经 typed gateway 请求它调用同一套能力 | 不复制 server business logic，不因运行在 repo 里就自动获得权限 |
+| Forme CLI | P0 为 public/Guest（适用时）和 `room_operator.v1` lane 提供 thin client；Agent 经 typed gateway 请求 | 不复制 server logic；Controller/Curator boundary-action CLI delegation 留到 P1 |
 | Local Agent Work Plane | 读取明确允许的 local context，理解、起草、准备 Projection/Response 和建议动作 | 不直接成为 hosted canonical authority |
+
+权限默认采用“**窄 perimeter、宽 useful interior**”：一个 exact Room 的
+standing operator 可以持续完成 routine transport 与 deterministic,
+monotonic exposure-reducing lifecycle enforcement；新增 Room/audience、
+private context、Owner-attributed content、scope 或不可逆后果才回到人。
+因此 Web 是 cockpit 和 kill switch，不是 Agent 每执行一步都要排队的
+approval inbox。
 
 这里的“Room 所有功能都有 API”在 P0 的准确含义是：每一个**已经批准的
 P0 hosted semantic operation** 都有 machine contract，但每个 caller
@@ -347,19 +399,24 @@ P0 hosted semantic operation** 都有 machine contract，但每个 caller
 - Agent Guest derivative：只按 T1 读取 exact Room + Projection 并
   create 一次 Interaction；不能 read private reply、delete、接受
   GrantOffer、mint/redelegate、续签或恢复 Manual credential；
-- paired local connector：inspect exact Room/Projection/status/receipts，
-  pull Interaction/tombstone，push exact approved Projection/Response，
-  ACK import/delivery/purge；
-- Controller/Curator：切换 intake mode，issue/revoke Grant/GrantOffer，
-  admit/unlist，emergency revoke、retire、Owner delete，以及管理 pairing；
+- paired local connector（pending T2）：inspect exact
+  Room/Projection/status/receipts，typed sync/pull
+  Interaction/tombstone，deterministic ACK/recovery/stale attestation，并
+  push carrying a current exact Owner approval 的 Projection/Response；
+- Controller：切换 intake mode，issue/revoke Grant/GrantOffer，
+  emergency revoke、retire、Owner delete，以及管理 pairing/scope；
+- Curator：admit/unlist；P0 可以与 Controller 是同一人，但 authority 和
+  receipt 分开；
 - internal operator：只运行 retention/health 等另行批准的 exact
   maintenance contract；
 - 每一个上述 P0 operation 都有 versioned API。未来新增 Room 语义时，也
   必须同时定义 machine contract，不能成为 Web-only behavior；
 - Web 必须使用同一套 application service/API contract，不能拥有绕过
   API authorization 的隐藏业务能力；
-- CLI 覆盖同一组语义动作，命令只负责输入、输出和 credential handling，
-  不在本地重新实现权限或 lifecycle 规则；
+- P0 API 覆盖全部 semantic operation；P0 CLI 只覆盖适用的 public/Guest
+  lane 与 `room_operator.v1` lane，命令不重写 server rules；
+- Controller/Curator boundary operations 由 Web 作为同一 API 的 P0
+  client；boundary-action CLI delegation 与 handoff 留到 P1；
 - visual layout、页面导航和 login ceremony 不要求逐像素 CLI 等价，但
   它们所读取或改变的 hosted state 必须可以通过 API 表达；
 - 每次 mutation 都绑定 exact target、expected version/state、
@@ -374,11 +431,11 @@ Web、CLI 和 Agent 不是三套 authority。它们只是同一套 capability mo
 flowchart LR
     Owner["Owner"] --> Web["Forme Web"]
     Owner --> LocalAgent["Local Forme Agent"]
-    LocalAgent --> Tool["Typed body-free tool gateway"]
+    LocalAgent --> Tool["Typed validated tool gateway"]
     Tool --> Connector["Deterministic local connector / CLI"]
     Web --> API["Versioned Room API"]
     Connector --> API
-    API --> Auth["Actor authority + exact target<br/>Controller/Curator session<br/>OR RoomBinding credential + scope<br/>OR RoomBinding credential + matching ControlActionGrant<br/>OR Guest capability"]
+    API --> Auth["Actor authority + exact target<br/>Controller/Curator session<br/>OR RoomBinding + room_operator.v1<br/>OR Guest capability"]
     Auth --> Hosted["Hosted Room state + receipts"]
     LocalAgent <--> Private["Private repo + Twin"]
 ```
@@ -395,7 +452,7 @@ one local workspace (local-only identity)
   → N independent exact RoomBindings
       → one exact Room ID
       → explicit action scopes
-      → independent expiry/revocation
+      → independent lifetime/revocation
       → one revocable Room-scoped credential
 ```
 
@@ -433,43 +490,62 @@ one local workspace (local-only identity)
   默认位于 Forme-managed model roots 之外，并用 canary 验证两条 lane
   没有合并。
 
-P0 推荐给 paired local connector/binding 的默认 scope 是
-**operational sync**：
+Agency-first 修正后的 P0 推荐，不再是“sync 可以站立授权、其余每一步
+都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
+的 **`room_operator.v1` scope bundle**。它不新增 policy table、
+delegation chain 或 custom-verb UI：
 
-- read exact bound Room/Projection/status/receipts；
-- pull Interaction 与 lifecycle tombstone；
-- push 已经 locally exact-approved 的 Projection/Response；
-- ACK import、delivery 或 purge receipt。
+- 只绑定一个 exact active `RoomBinding` + Room；
+- 可以 read exact Room/Projection/status/health/receipts；
+- Agent 的标准 Room workflow 可以显式请求 typed `room sync`，pull
+  Interaction 与 lifecycle tombstone；read-only CLI command 不能隐式
+  pull private bytes 或产生 durable write；
+- 可以 ACK deterministic import/delivery 和 idempotent recovery；
+- connector 只在验证 local body 已不存在后记录 local deterministic
+  purge receipt；P0 不新增 hosted purge-ACK endpoint；
+- 只能 push 携带 still-current exact local Owner approval attestation 的
+  Projection/Response；
+- 只有在 canonical local Twin HEAD 确实 newer than exact Projection basis
+  时，connector 才能 deterministic attest/mark stale，model 不能任意选择；
+- P0 RoomBinding 从 pairing 起 30 天到期、不自动续期，Owner 可更早
+  revoke；继续使用需要新的 pairing/rotation。所有 mutation 仍需要
+  expected version、idempotency key、verification 和 receipt。
 
-以下能力都有 API/CLI，但默认不因 repo pairing 自动交给 Agent：
+这不是 Controller account，也不是通用 Agent token。它默认**不能**：
 
-- change intake mode；
-- issue/revoke Grant 或 GrantOffer；
-- curator admit/unlist；
-- emergency revoke、Room retire、Owner delete；
-- pairing 与 scope management。
+- pairing、创建新 Room/binding、发现 sibling Room 或扩大自身 scope；
+- 把 public Room 改成 private、增加新 audience 或跨 entity；
+- issue 新 Private/relationship Grant，或扩大 Guest authority；
+- change intake mode、park/decline/dispose Interaction；
+- 创建新的 Owner-attributed claim、promise 或 commitment；
+- 在没有独立 Curator delegation 时 admit Room；
+- irreversible retire/delete、清除 durable evidence；
+- 调用 arbitrary API/tool/code。
 
-Owner/Curator 可以通过 Web 调用这些能力。对应 CLI command 也存在，但
-P0 默认 Agent 没有 standing management scope：Agent 先准备 exact
-Room + action + canonical request hash，Owner/Curator 再通过 approve
-origin 的 step-up 授权；server 只向 local connector 签发一个绑定
-approver role、active exact RoomBinding、Room、action 和 request hash、
-最长 15 分钟、single-use 的 `ControlActionGrant`。它不是单独的 bearer
-login。CLI 必须同时提交仍有效的 RoomBinding credential 和 matching
-Grant；server 重新检查 binding/approver role 未撤销、target lifecycle
-仍允许。CLI 只能提交那个 exact action；同一
-idempotency key 的 retry 返回原结果，不会重复 mutation 或消耗第二次
-authority。
+其中 safe-direction intake narrowing 与 internal `park` 仍可能符合
+privacy-first agency；P0 先留在 Web，是因为它们的 lifecycle/UX 语义还没
+验证，也是 August schedule cut，不是理念上永久禁止。
 
-以后 Owner 也可以显式给某个 exact Room binding 增加 standing management
-scope，但那会扩大持久 authority，需要单独列明 verbs、expiry 和 revoke
-行为。Pairing/scope expansion 本身永远不能由既有 binding 自己批准。
-**API/CLI availability 不等于 Agent authority。**
+上面真正跨越推荐 human boundary 的能力仍有 API，但 P0 直接由
+Owner/Curator 在 Web/approve origin 的 stepped-up session 中执行；暂缓
+的 safe-direction operations 也先由 Web 完成。把 exact boundary action
+再交给 Agent 的 `ControlActionGrant` 留到 P1，P0 不新增它的 schema、
+issuance、consume 或 recovery path。
 
-这个默认值让 local connector 与 Agent 完成 Presence sync 和已批准
-publication，同时把“是否允许 Agent 自己关门、发通行证或撤销内容”
-保留为以后可以逐 Room 授予的权限，而不是 T2 偷偷形成的全局管理员
-权力。
+以后 Owner 可以给 exact Room 增加另一个明确的 standing policy，例如
+Curator admission、relationship Grant 或 policy-compatible publication，
+但 scope expansion 永远不能由已有 binding 自己批准。
+**API/CLI availability 不等于 Agent authority；standing authority 也不
+等于 account-wide authority。**
+
+这个默认值让 Agent 真正完成一个 Room 的日常 transport 与 deterministic
+lifecycle enforcement，同时把新边界和重大后果留给人，而不是把 Web
+变成每次 sync、ACK 或 retry 都要点一次的审批队列。完整 verb、lifetime
+与 revoke 行为仍属于待批准的 T2。
+
+P0 agency demo 应至少证明一次：Agent 不再逐步请示就完成 typed sync →
+deterministic ACK/stale → exact Owner-approved delivery → receipt；Owner 在
+Web 看见 exact binding scope/history 并 revoke，下一次调用 fail closed。
 
 #### Anywhere Web Control
 
@@ -493,15 +569,19 @@ Cloudflare/identity-provider account + MFA；如果你希望 email OTP 成为
 Public Third Place 和 Guest routes 不要求 Access；Control page 和
 Controller/Curator API 必须登录。Paired-local API 使用每个 Room 独立、
 revocable 的 credential，而不是浏览器 cookie 或 Controller 的长期
-token。Sensitive CLI action 使用上面描述的 short-lived exact
-`ControlActionGrant` 加 active RoomBinding credential，而不是把 step-up
-browser session 交给 Agent。
+token。P0 的 boundary action 由 stepped-up Owner/Curator Web session
+直接调用同一 versioned API；不把 step-up browser session 或
+Controller token 交给 Agent。
 
-普通查看与敏感 mutation 使用不同的 authorization boundary。配对、打开
-或关闭 public intake、发出/撤销 Grant 或 Grant Offer、admit/unlist、
-emergency revoke、retire 和 Owner delete 必须经过 approve origin 的
-独立 short-session Access policy/audience。实现不能把普通长期 Access
-token 的 `iat` 误当成“刚刚重新认证”。
+普通查看与敏感 mutation 使用不同的 authorization boundary。配对、扩大
+scope、把 Room 打开到此前未授权的 public mode、发出新
+Private/relationship Grant、admit/unlist、irreversible retire 和 Owner
+delete 必须经过 approve origin 的独立 short-session Access
+policy/audience。`room_operator.v1` 已授权的 sync、deterministic
+ACK/recovery/stale attestation 和 exact Owner-approved transport 不重复要求
+step-up。Emergency revoke 是减少暴露的 fast path：authenticated control
+session 加显式确认和 receipt 即可，不等待第二次 step-up。实现不能把
+普通长期 Access token 的 `iat` 误当成“刚刚重新认证”。
 
 P0 中同一个人可以持有两个语义角色，但 receipt 分开：
 
@@ -541,22 +621,23 @@ private Twin context 或 evidence。若你只想远程看 metadata/status，需�
 和 Response 可以是 server 上受保护的 private content；Owner 登录后可以
 查看和控制，但普通访客仍然不能读取。
 
-Sensitive control action 还需要显式二次确认。P0 没有 public sign-up。
+跨推荐 human boundary 的 Owner/Curator Web action 需要显式二次确认；
+operator envelope 内的 mutation 不需要。P0 没有 public sign-up。
 
 ### 你可以这样回复
 
-- `T2 按 Web Control Plane + API/CLI parity + local Workspace→independent per-Room bindings 推荐批准`
-- `T2 批准，但 paired connector/Agent 默认也可 manage bound Room`
+- `T2 按 Web Control Plane + API parity + P0 operator CLI + independent per-Room binding + room_operator.v1 推荐批准`
 - `T2 批准，但 paired connector/Agent 只能 read/pull，不能 push approved artifacts`
 - `T2 Control Plane 批准，但 remote Web 只看 metadata/status`
 - `T2 还需要 remote drafting/publishing/responding`
 - `T2 带条件批准：...`
 
-“paired connector/Agent 默认也可 manage”会把关门、发 Grant 和部分
-撤销权变成持久 delegated authority，需要在详细 Packet 中精确定义 expiry、
-revocation 和受影响动作；它不是普通 CLI convenience。“remote
-drafting/publishing/responding”则会改变“private intelligence stays
-local”的架构，需要另行设计，不能当成 Control 页面功能偷偷加进去。
+`room_operator.v1` 会让 deterministic stale attestation、sync 与 exact
+Owner-approved artifact delivery 成为 standing delegated authority；
+详细 Packet 必须精确定义 lifetime、revocation 和 verb list。发新 Grant、
+扩权和不可逆删除仍不在其中。“remote drafting/publishing/responding”则会改变
+“private intelligence stays local”的架构，需要另行设计，不能当成
+Control 页面功能偷偷加进去。
 
 ## T3 — OpenAI 可以看到哪些 private context
 
@@ -570,12 +651,22 @@ Local Forme Agent 能不能用经过选择的 private context，帮助 Owner 起
 只有两个人都作出相应选择时可以：
 
 1. Guest 选择 `allow_owner_local_ai`；
-2. Owner 主动开始 draft，并批准 exact manifest。
+2. Owner 主动开始 draft，并批准 one exact manifest for one model
+   invocation。
 
 Manifest 会列出 request、它所绑定的 exact origin Projection、选中的
 Owner Frame 字段、选中的 corrected Reflection 和 allowlisted evidence。
 最终 packet 最多 32 KiB，没有 ambient repo access、没有 tools，通过
 Owner 现有的 local Codex authentication 发送给 OpenAI。
+
+P0 只需要完成一个真实 draft，因此不新增 `DraftContextGrant` 或多调用
+window。新的 generation、instruction、evidence set、provider、
+Interaction 或 expired manifest 需要重新构造并批准 manifest。Guest
+deletion、origin revoke、Room retirement 或 Interaction expiry 会永久
+关闭这条 P0 draft path，不能再签发 replacement manifest。这是一条
+August bootstrap，而不是长期的 per-call 产品理念；以后可用 Owner 批准
+的 persistent Local Context Policy 覆盖 repeated compatible use，但不
+进入本轮。
 
 Forme server 永远看不到这份 private packet。
 
@@ -619,6 +710,12 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
   冒充 Owner 去 revoke 已发出的 short pass。所有未使用的 public
   encounter capability 立即失效；现有 Owner-issued Grant 仍可在自己的
   期限、额度和 Projection 生命周期内使用。
+- 已经由 Owner 发出、尚未接受的 `GrantOffer` 也不因 Curator unlist
+  自动失效；unlist 是 discovery 决定，不替 Owner 撤回 relationship
+  offer。接受时仍原子重查 private reply authority、offer expiry、source
+  未 delete/revoke 且 source Room 未 retire、target Projection
+  current/fresh/unrevoked、target Room 未 retire 且 mode 不是 `closed`，
+  并且不会延长原 expiry。
 - Private Room 永不进入 Third Place；没有有效 Owner Grant 时，direct
   URL 也不得返回 Projection body。
 - `roomKind` 在 P0 不可原地从 public 改成 private。Owner 必须 revoke
@@ -658,7 +755,9 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 
 ### 推荐答案
 
-- Guest 保存 private reply URL；Owner 显式运行 local sync。
+- Guest 保存 private reply URL；Agent 的标准 Room workflow 显式先调用
+  typed `room sync`，不再向 Owner 逐次请示。Owner 也可手工运行同一命令
+  做恢复与诊断；read-only CLI command 不隐式 pull 或 durable write。
 - P0 没有 email notification、daemon、live chat、WebSocket 或 remote
   local tunnel。
 - 一个 public encounter 最多一个 Interaction；一个 Owner-issued
@@ -679,7 +778,8 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
   Cloudflare/Caddy/app/PostgreSQL log retention；应用日志不得记录
   Guest/Response body、cookie、token 或 secret。
 - Offline local copy 在已知 expiry/deletion 时拒绝读取；更早发生的
-  remote deletion 要在下一次 Presence run 才能收到并 purge。
+  remote deletion 要在下一次 Agent workflow 的显式 typed sync 或 Owner
+  手工 `room sync` 才能收到并 purge。
 - Guest 必须知道 Owner 可能已经读过或复制了 private submission；
   deletion 不能让已经被人读过的内容失忆。
 - 已被别人复制的 public content 和已经发往 OpenAI 的 in-flight bytes
@@ -722,11 +822,13 @@ request/published Response 与 status，并做 emergency hosted control；
 private-context Response。
 
 同一个 Room 的 paired local connector 可以通过 CLI/API 查看状态、pull
-signal，并 push exact locally approved Projection/Response。Forme Agent
-通过 typed tools 请求这些 operation，默认只收到 body-free control
-result；Guest/private body 仍走 T3 packet。它不能看见另一个 Room，
-不能因为 Controller 在 Web 上有更大权限就继承那些权限，也不能自行
-增加 scope。Web 和 CLI 对同一 mutation 返回相同语义的 receipt。
+signal、deterministic ACK/recover/stale attestation，并 push exact
+locally approved Projection/Response。Forme Agent 的标准 Room workflow
+显式请求 typed sync；只读命令不偷偷产生 pull/write。Agent 默认只收到
+body-free control result；Guest/private body 仍走 T3 packet。它不能看见
+另一个 Room，不能因为 Controller 在 Web 上有更大权限就继承那些权限，
+也不能自行增加 scope。Web 和 CLI 对同一 mutation 返回相同语义的
+receipt。
 
 ### D. Guest 带着自己的 notes
 
@@ -741,12 +843,12 @@ Guest Capsule。Forme 不读取 raw notes，也不创建 Person Twin。Guest 再
 Unlist 移除 discovery 和 public knock，但不删除 Owner 已发 private
 continuation；revoke 移除 body；Room retirement 结束整个 surface。
 Guest deletion 立即移除 hosted access，offline local copy 在下一次
-Presence run 收到。丢失 HTTP response 时，用原 idempotency key 恢复
-结果，不重复动作。
+Agent workflow 的显式 typed sync（或 Owner 手工 `room sync`）时收到。
+丢失 HTTP response 时，用原 idempotency key 恢复结果，不重复动作。
 
 ## 哪些部分完全交给 Agent 审计
 
-只要没有改变 T1–T5，Owner 默认不需要读：
+只要没有改变 Owner 对 P/T1–T5 的答案，Owner 默认不需要读：
 
 - repo layout、dependency pin 和 build command；
 - canonical JSON、ID、hash、schema 与 size validation；
@@ -765,16 +867,17 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-T1 已关闭。剩下四张可以一张一张聊，也可以直接：
+T1 已关闭。先确认 P，再看四张技术卡；可以一张一张聊，也可以直接：
 
 ```text
+P：...
 T2：...
 T3：...
 T4：...
 T5：...
 ```
 
-T2–T5 关闭后：
+P 与 T2–T5 关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；
 2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；
