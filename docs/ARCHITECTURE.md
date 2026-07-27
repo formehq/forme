@@ -175,11 +175,43 @@ store, source-writing authority, commitment authority, or autonomous-reply
 grant. Intelligence remains at the owner-local edge and, optionally, the guest
 edge.
 
+The owner-confirmed T2 intent makes the hosted system an API-first control
+plane.
+Every P0 hosted Room read and state transition must have one versioned API
+contract; the human Web surface and an agent-friendly CLI are clients of that
+same contract, not separate authority paths. The CLI remains thin and the
+server remains no-AI: API coverage does not create a generic execution
+endpoint or move private reasoning to the server.
+
+The current, still-unapproved T2 recommendation establishes Owner-local
+connector authority through explicit, revocable
+per-Room bindings rather than inferred from a filesystem path, Git remote,
+account login, or current working directory. The local workspace maps one
+Twin/entity to any number of independent bindings; each hosted binding names
+only one exact Room, opaque Room-scoped host ID, credential digest, action
+scopes, and expiry. The server never receives the local workspace ID or path.
+Public and Private Room credentials can therefore rotate or revoke
+independently. Account-wide Agent wildcards, ambient Room discovery,
+self-expanding scopes, multi-Room bearer credentials, and cross-entity batch
+authority are outside P0. The complete T2 capability bundle remains under
+Owner review.
+
+Under that recommendation, the paired credential belongs to the deterministic
+local connector, is not injected into a Forme-managed model prompt/environment
+or generic tool result, and grants no context visibility by itself. An allowed
+Agent requests typed CLI/API operations through a body-free gateway. T3
+separately governs which Guest and private bytes may enter a separate
+packet-only, no-tools Codex or OpenCode run. No Forme-managed model session
+receives both private bodies and Room mutation tools; independently granting a
+general agent ambient shell/filesystem access is a broader Owner action outside
+this P0 guarantee.
+
 Account identity proves control and attribution, not personhood. Twin/entity,
 Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing; agents
-receive narrow delegated credentials.
+receive narrow delegated authority. The exact connector/Guest credential split
+is part of the pending T2 recommendation above.
 
 Public and private are first-class, separate Room instances under the same
 entity and implementation primitive. They use different Room IDs and

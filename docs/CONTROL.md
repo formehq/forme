@@ -1,6 +1,6 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-26
+- Updated: 2026-07-27
 - Active gate: **R4 — product target and T1 public/private Room correction
   owner-approved; T2–T5 Technical Owner Review active; detailed Control Packet
   requires reconciliation before exact approval; no implementation**
@@ -64,6 +64,14 @@ Current truth:
   interaction. Public request/response bodies remain private; unlisted is not
   private; Curator discovery authority remains separate from Owner intake and
   Grant authority;
+- on 2026-07-27 the Owner clarified the intended T2 control shape: hosted
+  Forme is a GitHub-like management/control/status plane; every P0 Room
+  semantic capability has a versioned API; Web and a thin CLI use the same
+  contract; and Agent authority should correspond to the local Repo/Workspace
+  and Room rather than the whole Controller account. The Owner Review currently
+  recommends independent per-Room bindings, no hosted workspace ID, and no
+  multi-Room credential; those exact mechanics and the default permission
+  bundle still await Owner judgment;
 - the first proposed
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) remains
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
@@ -713,9 +721,14 @@ The owner approved these five product decisions:
    required for one real encounter.
 
 These decisions establish the product target only. T1 now records the approved
-Guest continuity and Room exposure correction; the remaining Owner Review covers anywhere Web
-Control, OpenAI visibility, public lifecycle promises, and the asynchronous
-retention/P0 boundary. Agents must then reconcile the implementation packet to
+Guest continuity and Room exposure correction. T2 additionally has a recorded
+Owner direction—GitHub-like hosted management/control/status, API-first Room
+capability parity, a thin CLI, and Repo/Workspace-to-Room-scoped authority.
+Independent exact per-Room bindings are the current recommendation, not yet an
+approved decision; the complete mechanism and default permission bundle remain
+open. The remaining Owner Review covers that boundary, OpenAI visibility,
+public lifecycle promises, and the asynchronous retention/P0 boundary. Agents
+must then reconcile the implementation packet to
 the supplied deployment target and those answers. Exact schemas/migrations and
 production deployment remain separate later gates. R3 acceptance and the R4
 product decisions grant no R4 implementation, visibility, identity, hosting,

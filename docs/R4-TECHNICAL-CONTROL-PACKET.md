@@ -12,7 +12,14 @@
 
 > Review notice, 2026-07-26: the Owner has confirmed the existing
 > Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
-> login for Owner Control. The Owner also superseded the invite-only Guest
+> login for Owner Control. On 2026-07-27 the Owner further specified an
+> API-first control direction: Web and a thin CLI must use the same P0 Room
+> capability contracts, and Agent authority should correspond to its local
+> Repo/Workspace and Room rather than the whole Controller account. The active
+> Owner Review recommends independent exact per-Room bindings, no hosted local
+> workspace identity, and no multi-Room credential; those exact mechanics
+> remain unapproved T2 detail. The
+> Owner also superseded the invite-only Guest
 > ingress with a public one-knock + Owner short-pass model and added a real
 > grant-gated Private Room with a different Room ID and Projection.
 > This implementation appendix has not yet been reconciled to those inputs.

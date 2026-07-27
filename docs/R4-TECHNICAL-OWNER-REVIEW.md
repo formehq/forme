@@ -1,8 +1,8 @@
-# R4 Technical Owner Review Brief v0.2
+# R4 Technical Owner Review Brief v0.3
 
 - 状态：**T1 public/private Room correction 已批准；T2–T5 Owner review
   进行中；不是最终 Packet 批准记录**
-- 更新：2026-07-26
+- 更新：2026-07-27
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 - 产品依据：
@@ -34,6 +34,12 @@ hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
 - 现有服务器是 Forme 接入和部署的既有前提。本轮不重新审计或批准
   服务器本身，只负责 Forme 应用怎样开发、接入、发布和回滚。
 - Owner Control 必须可以从任何地点通过 Web 登录。
+- Owner 已进一步确认 T2 的界面方向：hosted Forme 是
+  management/control/status plane；每个 P0 Room 语义能力都必须有
+  versioned API，Web 与 CLI 只是同一 API 的不同客户端；Agent authority
+  应对应 local Repo/Workspace 与 Room，而不是自动继承整个 Controller
+  account。独立 per-Room binding/credential 是下面的当前推荐方案，
+  不是已经批准的 T2 结论。完整 T2 仍待 Owner 批准。
 - Room 现在有两个明确的 first-class kind：Third Place 中公开可遇见的
   Room，以及阅读和互动都需要 Owner Grant 的 Private Room。`unlisted`
   只是 curation/discovery 状态，不等于 private。
@@ -81,7 +87,7 @@ flowchart LR
     subgraph Hosted["Existing hosted path — no AI"]
         Edge["Cloudflare"]
         Proxy["Caddy"]
-        App["Forme Web + API"]
+        App["Forme Control Plane<br/>Web renderer + versioned API"]
         DB["PostgreSQL"]
         PublicRoom["Third Place Room<br/>public read + one knock"]
         PrivateRoom["Private Room<br/>grant-gated read + interaction"]
@@ -95,7 +101,9 @@ flowchart LR
         GuestAgent["Guest-owned Agent"]
     end
 
-    Presence <-->|"approved capsule / signal / receipt"| App
+    CLI["Forme CLI<br/>thin API client"]
+    Presence <--> CLI
+    CLI -->|"scoped Workspace ↔ Room API"| Edge
     Manual <-->|"public Room / request / private reply"| Edge
     GuestAgent <-->|"public capsule / short delegated request"| Edge
     OwnerWeb["Owner browser anywhere"] -->|"authenticated hosted control"| Edge
@@ -293,25 +301,177 @@ capability。Private Room 只允许 `invite_only` 或 `closed`，永远不能设
   扩权。
 - 每条 outgoing Response 仍需要独立、准确的 Owner approval。
 
-## T2 — Owner 在任何地方登录后能做什么
+## T2 — Owner 与 Agent 怎样控制 Room
+
+- 状态：**Owner 的 Web/API/Repo-to-Room 方向已记录；完整 T2 待批准**
 
 ### 你要判断什么
 
-“Anywhere Web Control”只是远程控制 hosted state，还是也要远程访问
-private Twin、起草和发布内容？
+“Anywhere Web Control”、Agent API 和 local private work 应该怎样分工？
+一个 repo/workspace 的 local connector 被配对以后，Agent 究竟能通过它
+控制哪些 Room 和哪些动作？
 
 ### 推荐答案
 
-最简单的 mental model 是：
+Owner 在 2026-07-27 给出的方向可以压缩成一句：
 
-> 手机或任意浏览器是 hosted 前台的遥控器，不是打开本地 Forme
-> 私人书房的远程桌面。
+> Forme hosted service 像 GitHub 一样管理共享状态、权限和协作；
+> Web 给人看和控制，API 是统一能力合同，CLI 是 Agent 方便使用的薄
+> client；真正依赖 private repo/Twin 的思考和产出仍在 local Agent。
 
-| | Hosted server | Local Forme |
+更准确地说，系统有一个 **Control Plane** 和一个 **Work Plane**：
+
+| 层 | 负责什么 | 不负责什么 |
 |---|---|---|
-| 看 | 登录后可看完整 hosted 内容 | Web 永远不可看 |
-| 管 | 普通状态使用较长 session；权限、可见性和删除使用短 step-up | Web 不直接操作 |
-| 产生 Owner 判断 | 只能看已经发布的结果 | local Agent + exact Owner approval |
+| Hosted Control Plane | Room/Projection/Interaction/Grant/curation 的共享状态、权限、队列、生命周期与 receipts | 不读取 Twin，不运行 Owner AI，不替 Owner 形成判断 |
+| Forme Web | 人类查看、管理、批准 hosted access/control action 和理解 hosted state 的主要界面 | 不是 private repo 的远程桌面，也不取代 local publication/Response approval |
+| Versioned API | 每个 P0 hosted Room read 与 state transition 的 canonical contract | 不是 generic execute endpoint，也不绕过权限或 approval |
+| Forme CLI | API 的 thin client；Owner 可直接使用，Agent 经 typed gateway 请求它调用同一套能力 | 不复制 server business logic，不因运行在 repo 里就自动获得权限 |
+| Local Agent Work Plane | 读取明确允许的 local context，理解、起草、准备 Projection/Response 和建议动作 | 不直接成为 hosted canonical authority |
+
+这里的“Room 所有功能都有 API”在 P0 的准确含义是：每一个**已经批准的
+P0 hosted semantic operation** 都有 machine contract，但每个 caller
+只能调用自己持有 capability 的那一部分。这里按 **capability lane**
+分类，不假设 HTTP client 一定是人或 Agent：
+
+- Public read/encounter lane：browser 或 Agent client 都可以 read Third
+  Place/Room/Projection，并使用允许的 public encounter capability create
+  一次 Interaction；public capability 本身没有 reply、delete、
+  GrantOffer 或 redelegation authority。Accepted Interaction 另行产生
+  private reply capability；
+- Manual/reply/Grant lane：正常产品流程把 private reply/re-entry secret
+  留给 Guest 的 manual holder。它可在 exact scope 内 read reply/status、
+  delete 自己的 Interaction、接受 GrantOffer，并在 Grant mode 允许时
+  mint one-shot Agent derivative。Owner 若另行把这个较强 root secret
+  直接交给普通 Agent，属于 Forme 默认 delegation 之外的授权；
+- Agent Guest derivative：只按 T1 读取 exact Room + Projection 并
+  create 一次 Interaction；不能 read private reply、delete、接受
+  GrantOffer、mint/redelegate、续签或恢复 Manual credential；
+- paired local connector：inspect exact Room/Projection/status/receipts，
+  pull Interaction/tombstone，push exact approved Projection/Response，
+  ACK import/delivery/purge；
+- Controller/Curator：切换 intake mode，issue/revoke Grant/GrantOffer，
+  admit/unlist，emergency revoke、retire、Owner delete，以及管理 pairing；
+- internal operator：只运行 retention/health 等另行批准的 exact
+  maintenance contract；
+- 每一个上述 P0 operation 都有 versioned API。未来新增 Room 语义时，也
+  必须同时定义 machine contract，不能成为 Web-only behavior；
+- Web 必须使用同一套 application service/API contract，不能拥有绕过
+  API authorization 的隐藏业务能力；
+- CLI 覆盖同一组语义动作，命令只负责输入、输出和 credential handling，
+  不在本地重新实现权限或 lifecycle 规则；
+- visual layout、页面导航和 login ceremony 不要求逐像素 CLI 等价，但
+  它们所读取或改变的 hosted state 必须可以通过 API 表达；
+- 每次 mutation 都绑定 exact target、expected version/state、
+  idempotency key、caller role/action scope，并返回 receipt；
+- server 不提供 model/chat endpoint、arbitrary SQL、generic tool call 或
+  arbitrary code execution。API parity 不是 server-AI。
+
+Web、CLI 和 Agent 不是三套 authority。它们只是同一套 capability model
+的不同调用者：
+
+```mermaid
+flowchart LR
+    Owner["Owner"] --> Web["Forme Web"]
+    Owner --> LocalAgent["Local Forme Agent"]
+    LocalAgent --> Tool["Typed body-free tool gateway"]
+    Tool --> Connector["Deterministic local connector / CLI"]
+    Web --> API["Versioned Room API"]
+    Connector --> API
+    API --> Auth["Actor authority + exact target<br/>Controller/Curator session<br/>OR RoomBinding credential + scope<br/>OR RoomBinding credential + matching ControlActionGrant<br/>OR Guest capability"]
+    Auth --> Hosted["Hosted Room state + receipts"]
+    LocalAgent <--> Private["Private repo + Twin"]
+```
+
+#### Repo/Workspace ↔ Room 权限范围
+
+Server 不能也不应该靠本地路径、Git remote 或“Agent 说自己在哪个 repo”
+来判断权限。推荐由本地 workspace 保存关系，再通过 owner-controlled
+pairing 为**每一个 Room** 创建独立 `RoomBinding`：
+
+```text
+one local workspace (local-only identity)
+  → local mapping to one Forme entity/Twin
+  → N independent exact RoomBindings
+      → one exact Room ID
+      → explicit action scopes
+      → independent expiry/revocation
+      → one revocable Room-scoped credential
+```
+
+- 本地 repo 保留真实 path、workspace identity 和“这些 Room 属于同一个
+  Twin”的 mapping。Server 只看到各 Room 独立的 opaque
+  `hostBindingId`、credential digest/metadata 和 action scopes；它不得到
+  repo path、local workspace ID 或 repo 内容，也不能靠多个 Room binding
+  拼回一个 server-side private workspace identity。
+- 一个 repo/workspace 可以显式绑定同一 entity 下的多个 Room，例如一个
+  public Project Room 和一个 Private Room；本地把它们归在一起，但
+  server 端是两个独立 Room ID、binding 和 credential，可以分别 expire、
+  rotate 或 revoke，权限不互相继承。
+- 每个 API request 必须指定 exact Room；server 同时检查 caller、
+  opaque Room binding、Room、action scope 和当前 lifecycle。P0 没有
+  account-wide Agent wildcard、ambient Room discovery 或 cross-entity
+  batch action。
+- 新增 Room、创建另一个 Room binding 或增加 action scope，都是新的
+  sensitive Owner action；已有 binding 不能原地扩到另一个 Room，也
+  不能由 Agent 自己扩权。
+- Guest Agent 的 one-shot Room + Projection token 是另一条 delegation，
+  不能兑换、恢复或继承 Owner-local `RoomBinding`。
+- Paired credential 属于 Forme local connector，不进入 model prompt、
+  Forme-managed model environment 或 generic tool output，也不把 raw
+  secret 暴露给 Codex/OpenCode。Forme Agent 只能在获准的 typed tool
+  gateway 中向 deterministic connector 请求 CLI/API operation。
+- P0 的 model tool 默认只能返回 body-free status/control result。Connector
+  可以把 Interaction body sync 到 local Presence，但 model 要看
+  Guest/private bytes 仍必须走 T3 consent + exact manifest 的 packet-only
+  draft run；这是两个隔离的 Forme-managed model context。没有一个
+  Forme-managed model session 同时获得 private body 和 Room mutation
+  tool。API scope 不能推导 model visibility。
+- 如果 Owner 另外把通用 shell、connector config 或 local Presence path
+  直接授权给普通 Codex/OpenCode，那是 Forme contract 之外的额外授权，
+  P0 不能声称阻止它。详细 Packet 必须让 credential 与 private inbox
+  默认位于 Forme-managed model roots 之外，并用 canary 验证两条 lane
+  没有合并。
+
+P0 推荐给 paired local connector/binding 的默认 scope 是
+**operational sync**：
+
+- read exact bound Room/Projection/status/receipts；
+- pull Interaction 与 lifecycle tombstone；
+- push 已经 locally exact-approved 的 Projection/Response；
+- ACK import、delivery 或 purge receipt。
+
+以下能力都有 API/CLI，但默认不因 repo pairing 自动交给 Agent：
+
+- change intake mode；
+- issue/revoke Grant 或 GrantOffer；
+- curator admit/unlist；
+- emergency revoke、Room retire、Owner delete；
+- pairing 与 scope management。
+
+Owner/Curator 可以通过 Web 调用这些能力。对应 CLI command 也存在，但
+P0 默认 Agent 没有 standing management scope：Agent 先准备 exact
+Room + action + canonical request hash，Owner/Curator 再通过 approve
+origin 的 step-up 授权；server 只向 local connector 签发一个绑定
+approver role、active exact RoomBinding、Room、action 和 request hash、
+最长 15 分钟、single-use 的 `ControlActionGrant`。它不是单独的 bearer
+login。CLI 必须同时提交仍有效的 RoomBinding credential 和 matching
+Grant；server 重新检查 binding/approver role 未撤销、target lifecycle
+仍允许。CLI 只能提交那个 exact action；同一
+idempotency key 的 retry 返回原结果，不会重复 mutation 或消耗第二次
+authority。
+
+以后 Owner 也可以显式给某个 exact Room binding 增加 standing management
+scope，但那会扩大持久 authority，需要单独列明 verbs、expiry 和 revoke
+行为。Pairing/scope expansion 本身永远不能由既有 binding 自己批准。
+**API/CLI availability 不等于 Agent authority。**
+
+这个默认值让 local connector 与 Agent 完成 Presence sync 和已批准
+publication，同时把“是否允许 Agent 自己关门、发通行证或撤销内容”
+保留为以后可以逐 Room 授予的权限，而不是 T2 偷偷形成的全局管理员
+权力。
+
+#### Anywhere Web Control
 
 使用三个逻辑 origin，exact hostname 留到 Production Grant：
 
@@ -330,8 +490,12 @@ Access 的 signed assertion 和 route-specific audience，并且只把预先
 Cloudflare/identity-provider account + MFA；如果你希望 email OTP 成为
 主要或 fallback 登录方法，需要在批准时明确写出。
 
-Public Third Place 和 Guest routes 不要求 Access；Control page 和 control
-API 必须登录。
+Public Third Place 和 Guest routes 不要求 Access；Control page 和
+Controller/Curator API 必须登录。Paired-local API 使用每个 Room 独立、
+revocable 的 credential，而不是浏览器 cookie 或 Controller 的长期
+token。Sensitive CLI action 使用上面描述的 short-lived exact
+`ControlActionGrant` 加 active RoomBinding credential，而不是把 step-up
+browser session 交给 Agent。
 
 普通查看与敏感 mutation 使用不同的 authorization boundary。配对、打开
 或关闭 public intake、发出/撤销 Grant 或 Grant Offer、admit/unlist、
@@ -381,14 +545,18 @@ Sensitive control action 还需要显式二次确认。P0 没有 public sign-up�
 
 ### 你可以这样回复
 
-- `T2 按 hosted-control-only 推荐批准`
-- `T2 hosted-control-only，但 remote 只看 metadata/status`
-- `T2 hosted-control-only 批准，但整个 Control 都使用单一 15 分钟 session`
+- `T2 按 Web Control Plane + API/CLI parity + local Workspace→independent per-Room bindings 推荐批准`
+- `T2 批准，但 paired connector/Agent 默认也可 manage bound Room`
+- `T2 批准，但 paired connector/Agent 只能 read/pull，不能 push approved artifacts`
+- `T2 Control Plane 批准，但 remote Web 只看 metadata/status`
 - `T2 还需要 remote drafting/publishing/responding`
 - `T2 带条件批准：...`
 
-第四种会改变“private intelligence stays local”的架构，需要重新设计，
-不能当成普通 Control 页面功能偷偷加进去。
+“paired connector/Agent 默认也可 manage”会把关门、发 Grant 和部分
+撤销权变成持久 delegated authority，需要在详细 Packet 中精确定义 expiry、
+revocation 和受影响动作；它不是普通 CLI convenience。“remote
+drafting/publishing/responding”则会改变“private intelligence stays
+local”的架构，需要另行设计，不能当成 Control 页面功能偷偷加进去。
 
 ## T3 — OpenAI 可以看到哪些 private context
 
@@ -410,6 +578,16 @@ Owner Frame 字段、选中的 corrected Reflection 和 allowlisted evidence。
 Owner 现有的 local Codex authentication 发送给 OpenAI。
 
 Forme server 永远看不到这份 private packet。
+
+T2 的 API/CLI parity 不改变这个边界。Paired connector 可以先把 request
+durably sync 到 local Presence。普通 body-free control/tool session
+不返回 Interaction/Response body；另一个独立的 draft run 只有在本 T3
+的 consent 与 exact manifest 成立后，才由 packet builder 选择允许的
+bytes。这个 Codex draft run 继续 packet-only、no-tools，不能调用 Room
+API 或普通 CLI 绕过 manifest。没有一个 model session 同时持有 private
+body 与 Room mutation tools。这个保证适用于 Forme-managed adapter；
+Owner 另行授予普通 Agent ambient shell/filesystem access 会形成更宽的
+外部 authority，不属于这个 P0 隔离声明。
 
 如果 Guest 选择 `manual_owner_only`，Guest content 和 private context
 都不会发给 OpenAI；Owner 仍然可以手工写回复。
@@ -542,6 +720,13 @@ Owner 在其他地方登录 Web Control，可以 curate、发出/撤销 Guest Gr
 request/published Response 与 status，并做 emergency hosted control；
 不能查看 private Twin、运行 local Agent 或绕过 local approval 发布新的
 private-context Response。
+
+同一个 Room 的 paired local connector 可以通过 CLI/API 查看状态、pull
+signal，并 push exact locally approved Projection/Response。Forme Agent
+通过 typed tools 请求这些 operation，默认只收到 body-free control
+result；Guest/private body 仍走 T3 packet。它不能看见另一个 Room，
+不能因为 Controller 在 Web 上有更大权限就继承那些权限，也不能自行
+增加 scope。Web 和 CLI 对同一 mutation 返回相同语义的 receipt。
 
 ### D. Guest 带着自己的 notes
 
