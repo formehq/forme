@@ -46,6 +46,20 @@ distinct where temporary runtime activity is admitted into a durable model of
 what the entity currently means, what the owner has corrected, and what the
 system is allowed to do or show.
 
+The early Harness was imagined as a complete operational body, including
+sessions, files, shell, tools, Skills, MCP, plugins, subagents, permissions,
+and ongoing runtime interaction. During the rebuild, R2/R3 deliberately
+narrowed the first proof to an exact packet, zero-tool pass and a deterministic
+Forme effect. That narrowing proved visibility, admission, correction, and
+receipts; it did not reject the Native Harness shape from the Highest Vision.
+
+The Owner confirmed this lineage clarification on 2026-07-28. The current
+authority is
+[`../NATIVE-HARNESS-ARCHITECTURE.md`](../NATIVE-HARNESS-ARCHITECTURE.md):
+Native Harness Workbench, Forme Semantic Spine, and Managed Privacy Run are
+distinct roles, while NH1/NH2 remain open decisions. This reference records
+history and grants no runtime or implementation authority.
+
 ## Specialized agents were cognitive organs
 
 The brainstorm's “multi-agent” idea did not mean a collection of autonomous

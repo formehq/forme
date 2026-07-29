@@ -5,6 +5,8 @@ This repository is being rebuilt to keep implementation speed and owner understa
 ## Before changing anything
 
 1. Read `docs/PRODUCT.md`, `docs/CONTROL.md`, and the active GitHub issue.
+   Before runtime, context, file/tool authority, or R4 T3 work, also read
+   `docs/NATIVE-HARNESS-ARCHITECTURE.md`.
 2. Name the user-visible outcome and current roadmap gate.
 3. Identify whether the change touches an owner stop gate.
 4. Keep one pull request to one demonstrable outcome.
@@ -26,7 +28,11 @@ Do not implement past the proposal stage without explicit owner confirmation whe
 - The owner retains final authority over meaning and authorship.
 - Runtime sessions are disposable computation, never canonical truth.
 - Agent inference remains evidence-backed, uncertain, revisable, and invalidatable.
-- Canonical writes are deterministic, authorized, inspectable, and reversible where feasible.
+- Until NH2 closes, implemented Forme-authoritative writes remain
+  deterministic, authorized, inspectable, and reversible where feasible.
+- Ordinary Workspace activity is not automatically admitted as canonical Forme
+  meaning or a Forme-authoritative effect; the Native Harness clarification
+  grants no new write authority.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

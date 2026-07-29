@@ -1,8 +1,9 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.2
 
 - Status: **owner-approved product target, public/private Room correction, P
-  human-boundary interpretation, and T2 Room control contract; T3–T5 Technical
-  Owner Review active; no implementation authority**
+  human-boundary interpretation, and T2 Room control contract; Native Harness
+  roles clarified; NH1/NH2 open before paused T3; T4/T5 remain open; no
+  implementation authority**
 - Updated: 2026-07-28
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
@@ -16,6 +17,8 @@
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Agency recalibration:
   [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
+- Native Harness architecture:
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md)
 
 ## Decision in one minute
 
@@ -170,10 +173,10 @@ request against the exact host and optional guest capsule versions.
 
 ### 02:10–02:45 — return to the living Twin
 
-The local Signal Box receives the request. Nothing active is included
-automatically. The owner first approves a manifest naming the exact Owner Frame
-fields, corrected Reflections, and allowlisted evidence coordinates that the
-local Forme Agent may use to prepare:
+The local Signal Box receives the request. It returns through the context
+contract that NH1/NH2 and revised T3 eventually approve; this product brief
+does not choose Native Workspace Session versus Managed Privacy Run. The local
+system may prepare:
 
 - the strongest shared thread;
 - one productive difference rather than forced similarity;
@@ -181,13 +184,13 @@ local Forme Agent may use to prepare:
 - missing context and uncertainty;
 - a response draft whose outgoing content is explicit.
 
-The owner may adjust, approve, decline, park, or request more context. If the
-guest selected `allow_owner_local_ai`, the exact bounded, manifest-reviewed
-packet—including any selected private evidence—is sent to OpenAI through the
-owner's existing local Codex authentication. It is never sent to the Forme
-hosted server or published. Unselected private evidence remains local. With
-`manual_owner_only`, no guest or private context is sent to OpenAI and the
-owner may still write a manual response.
+The owner may adjust, approve, decline, park, or request more context. The
+current P0 candidate for `allow_owner_local_ai` is a Managed Privacy Run whose
+exact manifest names every Forme-selected Guest/Owner/workspace content byte;
+runtime-owned system/schema/metadata are separately disclosed. This candidate
+is not approved until revised T3. Forme hosted server never receives the
+private drafting context. With `manual_owner_only`, no guest or private context
+is sent to OpenAI and the owner may still write a manual response.
 
 ### 02:45–03:00 — receive owner-reviewed depth
 
@@ -459,9 +462,11 @@ target. The 2026-07-28 P approval makes the privacy-primary perimeter,
 representation/consequence companion guards, no-self-expansion, and
 review-by-exception the R4 human-boundary contract. The separate 2026-07-28 T2
 approval closes the Room Operator authority contract. P, T1, and T2 are
-closed; the Owner now reviews T3–T5 in
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After its
-remaining cards close, agents will reconcile the detailed
+closed. The Owner now closes NH1/NH2 in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
+reviews revised T3 and T4/T5 in
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After those
+cards close, agents will reconcile the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which
 must provide:
 

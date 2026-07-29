@@ -12,10 +12,12 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Demo Day: **2026-08-12**
 - Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   T1 public/private Room correction, and T2 Room control contract approved;
-  T3–T5 under Technical Owner Review**
+  Native Harness roles clarified; NH1/NH2 must close before paused T3, with
+  T4/T5 still under Technical Owner Review**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
   public-knock/private-Grant correction, P boundary model, and T2 Room control
-  contract are approved; T3–T5 and the first technical packet still require
+  contract are approved; the architecture clarification grants no new runtime
+  authority; NH1/NH2, T3–T5, and the first technical packet still require
   Owner review and reconciliation to the confirmed self-host target; no R4
   implementation or production action is authorized**
 
@@ -27,14 +29,16 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 
 1. [`docs/PRODUCT.md`](./docs/PRODUCT.md) — highest vision, MVP vision, and scope
 2. [`docs/CONTROL.md`](./docs/CONTROL.md) — current state, owner gates, and definition of done
-3. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner-approved
+3. [`docs/NATIVE-HARNESS-ARCHITECTURE.md`](./docs/NATIVE-HARNESS-ARCHITECTURE.md)
+   — the current Harness/Forme mental model and NH1/NH2 decision brief
+4. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner-approved
    privacy-first P boundary and proposed delegation/application guidance
-4. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
+5. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
    current R4 mental model, agency-formalization check, technical cards, and
    walkthroughs
-5. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
-6. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-7. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
+6. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
+7. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
+8. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
@@ -138,25 +142,28 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — P/T1/T2 closed, T3–T5 Owner review
+## R4 Controlled Presence — P/T1/T2 closed, NH1/NH2 next
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
 admission, layered identity, and the no-server-AI topology.
 
 Start with
+[`docs/NATIVE-HARNESS-ARCHITECTURE.md`](./docs/NATIVE-HARNESS-ARCHITECTURE.md),
+then continue to
 [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md).
-It reduces technical review to one mental model, the closed P/T1/T2 decisions,
-three remaining Owner decisions, and five walkthroughs. T1 establishes the
+The first document distinguishes the Native Harness Workbench, Forme Semantic
+Spine, and Managed Privacy Run, then presents NH1/NH2. T1 establishes the
 public knock and true Private Room. T2 establishes the API-first Web cockpit,
 independent per-Room 30-day non-renewing bindings, and the fixed
-connector-held `room_operator.v1` bundle. The confirmed deployment target is
-the existing Cloudflare → Caddy → Hetzner → PostgreSQL path.
+connector-held `room_operator.v1` bundle. T3 is paused until NH1/NH2 close.
+The confirmed deployment target is the existing Cloudflare → Caddy → Hetzner
+→ PostgreSQL path.
 
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After T3–T5 close, agents will rewrite and re-audit it. No R4
+After NH1/NH2 and T3–T5 close, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

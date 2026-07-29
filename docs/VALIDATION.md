@@ -4,13 +4,16 @@
 - Updated: 2026-07-28
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, and T2 Room control
-  contract are owner-approved; T3–T5 remain under review and all R4 behavior
+  contract are owner-approved; Native Harness roles are clarified; NH1/NH2
+  remain open before paused T3, T4/T5 remain under review, and all R4 behavior
   remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
 - [`PRODUCT.md`](./PRODUCT.md), which states the product claim and scope;
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md), which states durable system boundaries;
+- [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), which
+  states the current Harness/Forme role clarification and NH1/NH2 gate;
 - [`CONTROL.md`](./CONTROL.md), which states the current gate and next decision;
 - [`DECISIONS.md`](./DECISIONS.md), which records owner-confirmed decisions only.
 
@@ -504,7 +507,9 @@ three-interaction short pass feels sufficient. It also did not authorize
 implementation. At that point T1 closed at the product-contract level while
 T2–T5 remained stop gates. T2 has since closed separately; T3–T5, the
 reconciled Technical Control Packet, exact schema/migration manifest, and
-production deployment grant remain stop gates.
+production deployment grant remain stop gates. A later Native Harness
+architecture clarification inserted NH1/NH2 before T3 without changing this
+historical evidence.
 
 ## Evidence round 8 — Privacy-first agency direction and proposed formalization
 

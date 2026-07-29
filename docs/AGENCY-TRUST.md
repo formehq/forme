@@ -1,8 +1,9 @@
 # Agency and human-boundary model v0.2
 
 - Status: **privacy-first P human-boundary interpretation and T2 Room control
-  envelope Owner-approved for R4 on 2026-07-28; T3–T5 and implementation remain
-  subject to separate Owner review**
+  envelope Owner-approved for R4 on 2026-07-28; Native Harness roles clarified;
+  NH1/NH2 open before paused T3; T4/T5 and implementation remain subject to
+  separate Owner review**
 - Updated: 2026-07-28
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -33,6 +34,31 @@ path, with undo where feasible.
 interior. An exact Room, purpose, audience, and consequence class may contain
 many useful routine verbs. A one-click grant for every mechanical action is
 not safer when it merely trains the owner to approve prompts without thinking.
+
+## Native capability is not Forme authority
+
+A mature Codex/OpenCode workbench may have files, shell, tools, MCP, Skills,
+plugins, subagents, and native permission prompts. Those capabilities are the
+Agent's operational body; their existence does not establish a Forme source,
+provider, audience, representation, consequence, or delegation envelope.
+
+The Owner-confirmed architecture therefore separates:
+
+- **Native Harness Workbench** — performs operational work inside an exact
+  Owner-admitted runtime envelope;
+- **Forme Semantic Spine** — owns Twin meaning, correction, policy, authority,
+  receipts, and projection;
+- **Managed Privacy Run** — uses an exact packet/no-ambient-tools profile when
+  the product needs an exact manifest of Forme-selected private/workspace
+  content. Runtime-owned instructions, schema, and metadata remain separately
+  disclosed.
+
+NH1/NH2 still decide the default local carrier and when ordinary Workspace work
+crosses into a Forme-authoritative effect. Until they close, this clarification
+grants no new capability. A Native Workbench never gains the T2 connector
+credential, Guest content, or Room authority merely because it can read a
+Workspace. See
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Privacy-first human boundary
 
@@ -271,6 +297,6 @@ the human boundary and returns to the real mentor.
 The approved P model changes Forme's guiding architecture; T2 closes the first
 exact Room authority envelope. Neither approval by itself authorizes an Agent
 runtime, credential issuance, private source/provider visibility, hosted
-mutation, external message, deployment, or spend. T3–T5, the reconciled
-Control Packet, schemas/migrations, implementation, and production grants
-remain separate gates.
+mutation, external message, deployment, or spend. NH1/NH2, T3–T5, the
+reconciled Control Packet, schemas/migrations, implementation, and production
+grants remain separate gates.

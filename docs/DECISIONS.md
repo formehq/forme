@@ -253,3 +253,31 @@ spend remain unapproved. Exact auth provider, hostnames, token/wire format,
 secret-storage adapter, and re-pair/rotation race behavior remain later
 implementation/production decisions. The old packet's broader paired-local
 revoke and `signal:disposition` verbs are explicitly not part of this approval.
+
+## 2026-07-28 — Native Harness roles clarified; NH1/NH2 remain open
+
+**Decision:** confirm the architecture correction that a mature
+Codex/OpenCode **Native Harness Workbench**, the **Forme Semantic Spine**, and a
+Forme-controlled **Managed Privacy Run** are distinct roles. The Harness may
+provide the operational body—sessions, files, shell, tools, Skills, MCP,
+plugins, subagents, permissions, and runtime interaction. Forme owns the
+durable Twin, evidence, corrections, authority, product-level receipts,
+projection, and continuity across runtime loss. A packet-only/no-tools run is
+one exact-Forme-selected-content execution profile, not the permanent
+definition of every Forme Agent.
+
+**Reason:** the Highest Vision expected Forme to use a mature Harness rather
+than rebuild its workbench. The one-month MVP and accepted R2/R3 slices narrowed
+the first proofs to exact packets and deterministic effects. Those proofs are
+valid, but treating their narrow adapter as the whole system would erase native
+Harness value and accidentally turn the pending R4 T3 context recommendation
+into a global Agent architecture.
+
+**Effect:** R1–R3 acceptance and T2 remain unchanged. T3 is paused until the
+Owner closes NH1 (default local carrier) and NH2 (ordinary Workspace work
+versus Forme-authoritative effect). This clarification does not approve the
+Native Workbench as the P0 default, any file/shell/tool/provider visibility,
+generic writes, Room access, private Guest content, schema, implementation,
+deployment, external action, or spend. The authoritative role model and the
+two open decision cards are in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).

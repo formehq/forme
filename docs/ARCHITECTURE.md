@@ -2,58 +2,96 @@
 
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
-  contract owner-approved; T3–T5 Technical Owner Review active;
-  implementation packet unreconciled
+  contract owner-approved; Native Harness roles owner-confirmed; NH1/NH2 open
+  before paused T3; T4/T5 Technical Owner Review active; implementation packet
+  unreconciled
 - Updated: 2026-07-28
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
-## System shape
+## System shape — Harness-native, Twin-governed
 
 ```mermaid
 flowchart LR
-    Source["Bounded project sources"] --> Observe["Deterministic observation"]
-    Observe --> Twin["Durable Project Twin"]
-    Twin --> Context["Scoped context packet"]
-    Context --> Runtime["Codex first; OpenCode-compatible boundary"]
-    Runtime --> Proposal["Schema-constrained proposal"]
-    Proposal --> Judgment["Owner and policy judgment"]
-    Judgment --> Effect["Deterministic typed effect"]
-    Effect --> Receipt["Receipt, verification, rollback"]
-    Receipt --> Twin
-    Twin --> Scope["Allowed Projection Scope"]
-    Scope --> Projection["Versioned static projection"]
+    Owner["Owner<br/>authorship · intent · boundary"] -->|"candidate primary entry — NH1"| Workbench["Native Harness Workbench<br/>Codex / OpenCode<br/>sessions · files · shell · tools"]
+    Owner -->|"confirmed correction · boundary"| Core
+    Workbench <--> Core["Forme Semantic Spine<br/>Twin · evidence · corrections<br/>policy · authority · receipts · projection"]
+    Workbench <--> Workspace["Owner-admitted Workspace"]
+    Core -->|"exact Forme-content manifest needed"| Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
+    Managed -->|"typed proposal"| Core
+    Core --> Connector["Deterministic Local Connector<br/>typed Room operations"]
+    Connector <--> Server["No-AI Room server<br/>control · registry · render · queue · relay"]
 ```
+
+This is the global architecture clarification. The accepted R1–R3 code proves
+a deliberately narrow managed-pass slice:
+
+```text
+bounded source → durable Twin → exact packet → no-tools Codex proposal
+→ Forme admission/Owner gate → deterministic effect/receipt → Twin
+```
+
+That slice remains valid. It is one **Managed Privacy Run** and the first
+Forme-authoritative effect proof, not the permanent shape of all local work.
+See
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Responsibility boundary
 
-### Forme owns
+### Native Harness Workbench owns
+
+- model/provider invocation and interactive runtime sessions;
+- planning, compaction, streaming, cancellation, and runtime events;
+- native files, shell, tools, MCP, Skills, plugins, subagents, permissions,
+  and diffs inside an Owner-admitted capability envelope;
+- ordinary Workspace work when NH1/NH2 and a concrete runtime envelope allow
+  it.
+
+### Forme Semantic Spine owns
 
 - durable entity state and revision history;
 - evidence references and provenance;
 - confirmed versus inferred meaning;
 - corrections and dependent-output invalidation;
-- context minimization;
+- context planning, minimization, and declared visibility class;
 - schema validation and proposal admission;
 - authorization policy;
-- deterministic effects, receipts, verification, and rollback;
+- Forme-authoritative semantic/external effects and the receipts, verification,
+  recovery, and rollback guarantees Forme claims for them;
 - projection allowlists and versions.
 
-### Agent runtimes own
+### Managed Privacy Run and connector
 
-- model invocation and provider integration;
-- runtime-native sessions, streaming, cancellation, and supported tools;
-- generation of proposals within the context and schema Forme supplies.
+A Managed Privacy Run receives one exact compiled packet as the complete
+manifest of Forme-selected Owner/Guest/workspace content and no ambient tools.
+Runtime-owned system/safety instructions, output schema, and operational
+metadata remain separately disclosed/audited rather than hidden inside that
+guarantee. The deterministic local connector holds exact T2 Room credentials
+and executes only admitted typed operations; a generic model session never
+receives that secret by implication.
 
 Runtime transcripts are disposable computation. They are never the Project Twin.
 
 ### Harness ownership test
 
-A mature Harness may natively provide model invocation, sessions, tools, sandboxing, permission prompts, streaming, undo, MCP, and event APIs. Forme should consume those capabilities through replaceable adapters rather than reproduce a general agent runtime.
+A mature Harness may natively provide model invocation, sessions, tools,
+sandboxing, permission prompts, streaming, undo, MCP, and event APIs. Forme
+should consume those capabilities through replaceable CLI/API/MCP/Skill/Plugin
+adapters rather than reproduce a general agent runtime.
 
-Forme's boundary begins where operational runtime state becomes durable product meaning and authority: the Living Project Twin, evidence and correction, canonical proposal admission, revision-bound owner authorization, deterministic effect compilation, durable receipts and recovery, and projection policy.
+Forme's boundary begins where operational runtime state becomes durable product
+meaning or Forme-authoritative effect: the Living Project Twin, evidence and
+correction, canonical proposal admission, revision-bound authorization,
+product-level verification/receipts/recovery, and projection/Room policy.
+Ordinary Workspace source-of-truth files and Forme-authoritative semantic state
+are not the same object. NH2 decides their exact P0 relationship.
 
-The same visible action may therefore be possible in Codex or OpenCode without Forme. It counts as Forme behavior only when it is derived from and returns to the Twin under these contracts. See [`VALIDATION.md`](./VALIDATION.md) for the current wheel-reinvention and product-differentiation assessment, and the dated [`agent runtime strategy`](./research/agent-runtime-strategy-2026-07-15.md) for the adapter integration ladder and runtime-gate questions.
+The same visible action may therefore be possible in Codex or OpenCode without
+Forme. It carries Forme's semantic/authority guarantees only when it returns
+through these contracts. See [`VALIDATION.md`](./VALIDATION.md) for the current
+wheel-reinvention and product-differentiation assessment and the dated
+[`agent runtime strategy`](./research/agent-runtime-strategy-2026-07-15.md) for
+the adapter integration ladder.
 
 ## Initial invariants
 
@@ -63,13 +101,22 @@ runtime, and no-tools choices remain valid evidence for those slices; they are
 not a permanent ceiling that requires every future Agent action to be approved
 one at a time.
 
-1. Source access is explicit and bounded.
+1. Source, provider, audience, and capability access is explicit and bounded.
 2. The first demo has one workspace and one Twin.
-3. Runtime input is the minimum required projection of the Twin, not ambient repository access.
-4. The model cannot write canonical state directly.
+3. Every run declares its context contract. A Native Workspace Session may
+   dynamically inspect only an Owner-admitted Workspace envelope and cannot
+   claim an exact manifest of dynamically selected content; a Managed Privacy
+   Run receives only its exact Forme-selected content packet and no ambient
+   repository access. Runtime-owned instructions/schema/metadata remain
+   separately disclosed.
+4. A runtime may perform ordinary Workspace work only under its native Owner
+   permissions. It cannot directly admit Twin meaning, manufacture Owner
+   approval, expand authority, or bypass a Forme-authoritative gate/effect.
 5. Every proposal names its base revision and evidence.
 6. Invalid, stale, oversized, or unauthorized output fails closed.
-7. Meaningful effects are idempotent or explicitly non-retryable, terminally receipted, and reversible where feasible.
+7. Effects for which Forme claims authority guarantees are idempotent or
+   explicitly non-retryable, terminally receipted, and reversible where
+   feasible.
 8. Projection rendering has no private-source handle and consumes only an explicit allowlist.
 9. Product behavior does not depend on a resident runtime session.
 10. Codex is the first live demo path; OpenCode remains an architectural integration target without forced MVP parity.
@@ -80,8 +127,14 @@ one at a time.
 15. R2 runs Codex from an isolated packet root with an exact readable-root permission profile; shell, MCP, apps, hooks, multi-agent, and web capabilities are disabled, and any unauthorized audit item prevents admission.
 16. `TwinRevisionV2` begins only with a validated Reflection. It preserves V1 revisions and stores evidence coordinates, labeled meaning, owner correction, invalidation, and minimal receipts—never source bodies or runtime transcripts.
 17. Owner correction creates a new immutable revision, supersedes the active interpretation, invalidates dependent output, and becomes input to later Context Packets.
-18. R3 Codex output remains a schema-only intent proposal. V2 recommends by default, exposes one to three editable judgments, and may ask one blocking owner question only at low confidence. Forme alone compiles the fixed effect plan; `ask_owner` compiles none, and no harness runtime receives the writer.
-19. The first project-source authority is limited to one named managed block in `README.md`; arbitrary paths, patches, commands, Git, network, and external actions remain unavailable.
+18. In the accepted R3 slice, Codex output remains a schema-only intent
+    proposal. V2 recommends by default, exposes one to three editable
+    judgments, and may ask one blocking owner question only at low confidence.
+    Forme alone compiles the fixed effect plan; `ask_owner` compiles none, and
+    that Managed Privacy Run receives no writer.
+19. The accepted R3 project's Forme-authoritative source effect is limited to
+    one named managed block in `README.md`; arbitrary paths, patches, commands,
+    Git, network, and external actions remain unavailable to that effect path.
 20. Owner approval binds one immutable proposal and effect-plan hash to an unbroken Twin revision chain and one execution.
 21. Execution and rollback use target hashes, atomic replacement, a write-ahead journal, terminal receipts, and fail-closed recovery so retries cannot duplicate effects and human edits cannot be overwritten.
 
@@ -363,9 +416,12 @@ Under that contract, the paired credential belongs to the deterministic
 local connector, is not injected into a Forme-managed model
 prompt/environment or generic tool result, and grants no context visibility by
 itself. An allowed Agent requests typed CLI/API operations through a validated
-gateway. T3 separately governs which Guest and private bytes may enter a
-packet-only Codex or OpenCode run. P0 keeps content-bearing draft context
-separate from Room mutation tools as defense in depth. Long-term, a
+gateway. A Native Workbench may be a legitimate local actor, but Workspace
+access never implies connector-secret, Guest-inbox, or Room-mutation access.
+After NH1/NH2 close, revised T3 chooses the P0 drafting context contract; a
+separate Managed Privacy Run remains the current recommendation, not an
+approved result. The current P0 recommendation keeps content-bearing draft
+context separate from Room mutation tools as defense in depth. Long-term, a
 policy-compiled artifact may cross that split only when its exact disclosure,
 attribution, policy generation, and content hash are independently admitted;
 ordinary model output is never hosted authority.
@@ -375,9 +431,9 @@ Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing. Under
 approved T2, the local connector receives exact Room-scoped delegated authority
-with useful standing freedom inside its perimeter. T3 still governs whether
-private Guest bytes may enter a model run; the connector credential grants no
-such visibility.
+with useful standing freedom inside its perimeter. Revised T3 still governs
+whether private Guest bytes may enter a model run; the connector credential
+grants no such visibility.
 
 Public and private are first-class, separate Room instances under the same
 entity and implementation primitive. They use different Room IDs and
@@ -391,10 +447,12 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
 The product boundary and T2 Room authority contract are approved. The Owner now
-reviews T3–T5 in
+closes NH1/NH2 in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
+reviews revised T3 and T4/T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
-implementation remains blocked until the remaining cards are reconciled into a
-new exact
+implementation remains blocked until those cards are reconciled into a new
+exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
 Owner approves it. The confirmed production target is the supplied
 Cloudflare → Caddy → Hetzner → PostgreSQL path; this architecture governs only

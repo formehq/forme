@@ -1,0 +1,342 @@
+# Native Harness architecture clarification and Owner decision brief v0.1
+
+- Status: **Owner-confirmed architecture clarification; NH1 and NH2 remain
+  open Owner decisions; no new runtime, provider, file, shell, tool, Room, or
+  implementation authority**
+- Updated: 2026-07-28
+- Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
+- Related review:
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
+- Historical lineage:
+  [`reference/design-lineage.md`](./reference/design-lineage.md)
+- Runtime research:
+  [`research/agent-runtime-strategy-2026-07-15.md`](./research/agent-runtime-strategy-2026-07-15.md)
+
+## 60 秒 Owner 摘要
+
+这份文档现在只请你关闭两个问题：
+
+1. **NH1：你平时坐在哪个工作台里？** 推荐继续直接使用
+   Codex/OpenCode 的成熟工作台，让 Forme 作为它的长期语义与控制层；
+   MVP 不另造一套本地聊天/Agent UI。
+2. **NH2：哪些动作算带着 Forme 的印章？** 推荐把 Owner 直接要求的普通
+   workspace 工作交给 Harness 原生完成；一旦要改变 Twin 正式意义、代表
+   Owner、使用 Forme delegation，或声称 Forme 的 verification/receipt/
+   rollback 保证，就必须经过 Forme contract。
+
+你现在确认的是产品与架构关系，不是在批准 Codex 读取文件、运行 shell、
+使用 tools、看到 Guest 内容、操作 Room，或开始实现。NH1/NH2 关闭后，
+我们才会重写并判断 T3。
+
+## Why this clarification exists
+
+The Highest Vision began with a mature Agent Harness as the operational body:
+sessions, files, shell, tools, Skills, MCP, plugins, subagents, permissions,
+diffs, and runtime events. Forme was meant to give that body continuity,
+durable meaning, correction, agency boundaries, receipts, and projection.
+
+The one-month MVP formalization then narrowed each cognition pass to a scoped
+Context Packet and deterministic Forme effects. R2 and R3 implemented an even
+narrower packet-only, zero-tool Codex path to prove provider visibility,
+correction, semantic admission, exact authorization, recovery, and rollback.
+Those proofs are valid, but the narrow run was never meant to become the whole
+theory of a Forme Agent.
+
+The Owner confirmed this correction on 2026-07-28:
+
+> Native Harness Workbench, Forme Semantic Spine, and Managed Privacy Run are
+> distinct architectural roles. Packet-only/no-tools is one controlled run
+> profile, not the permanent shape of Forme or of Codex/OpenCode.
+
+`Native Harness Mode` is a new name for a shape strongly present in the
+historical vision. The archive did not finish or approve it as the default
+product carrier. NH1 and NH2 below therefore remain real decisions rather than
+being retroactively declared settled.
+
+## One-sentence model
+
+> **Harness-native, Twin-governed:** Codex or OpenCode supplies the mature
+> operational workbench; Forme supplies the durable semantic spine and human
+> boundary; an exact packet-only run remains available when the product needs
+> a strong guarantee about which Forme-selected private/workspace content is
+> sent to the provider.
+
+## Confirmed role separation
+
+```mermaid
+flowchart LR
+    Owner["Owner<br/>authorship · intent · boundary"] -->|"candidate primary entry — NH1"| Host["Native Harness Workbench<br/>Codex / OpenCode<br/>sessions · files · shell · tools"]
+    Owner -->|"confirmed correction · boundary"| Core
+
+    Signals["Return · file change · schedule<br/>Room signal · explicit request"] --> Core["Forme Semantic Spine<br/>Twin · evidence · corrections<br/>policy · timing · projection · receipts"]
+
+    Core -->|"resume seed · durable meaning<br/>context and authority envelope"| Host
+    Host -->|"work evidence · proposals<br/>diffs · judgment requests"| Core
+    Host <-->|"CLI · API · MCP<br/>Skill · Plugin · adapter"| Core
+
+    Core -->|"when exact Forme-content manifest is required"| PrivateRun["Managed Privacy Run<br/>exact packet · bounded output<br/>no ambient tools"]
+    PrivateRun -->|"typed proposal"| Core
+
+    Host --> Workspace["Owner-admitted Workspace"]
+    Core --> Connector["Deterministic Projection / Room connector"]
+    Connector <--> Server["No-AI Room server<br/>registry · renderer · queue · relay"]
+```
+
+### Owner
+
+The Owner keeps final authorship and establishes or widens source, provider,
+audience, representation, consequence, and authority boundaries.
+
+### Native Harness Workbench
+
+Codex or OpenCode owns commodity Agent mechanics: model/provider invocation,
+interactive sessions, planning, compaction, streaming, cancellation, native
+files and shell, tools, MCP, Skills, plugins, subagents, permissions, diffs,
+and runtime events.
+
+The existence of a native capability does not grant it to every session or
+Forme pass. Exact availability remains governed by the active runtime profile,
+the Owner's provider/source envelope, and the unresolved NH1/NH2 decisions.
+
+### Forme Semantic Spine
+
+Forme owns the state and contracts that must survive any runtime, model, or
+session:
+
+- Twin identity, intent, current state, and revision history;
+- evidence, provenance, confirmed/inferred/unresolved status;
+- Owner corrections and dependent-output invalidation;
+- context and proposal admission;
+- agency envelopes and human-boundary checks;
+- product-level receipts, recovery, and rollback lineage;
+- projection basis, audience, version, freshness, and revocation;
+- trigger, stewardship, and timing state when those mechanisms are admitted.
+
+Runtime transcripts and native session state remain disposable computation.
+
+### Managed Privacy Run
+
+A Managed Privacy Run is a special Forme-controlled invocation whose complete
+**Forme-selected Owner/Guest/workspace content** is named by an exact packet and
+whose runtime profile excludes ambient workspace access and tools. The runtime
+or provider request may still add required system instructions, output schema,
+and operational metadata; the product must not claim that every provider
+request byte equals the packet. R2 and R3 prove narrow versions of this lane.
+The pending R4 T3 proposal would use it for one private response draft.
+
+The proposed 32 KiB ceiling is an August R4 input budget, not a model limit and
+not a constitutional definition of Agent context.
+
+### Deterministic connector and no-AI server
+
+The local connector holds exact Room credentials and performs only admitted
+typed operations. Hosted Forme owns shared management, status, registry,
+rendering, queue, relay, and receipts; it does not own the private Twin or run
+an answering model.
+
+## Two invocation directions
+
+The architecture must support both directions even if the MVP implements only
+the smallest useful part of each:
+
+1. **Interactive Native entry:** the Owner opens Codex/OpenCode in an admitted
+   Workspace; the Harness calls Forme through CLI/API/MCP/Skill/Plugin surfaces
+   for restart context, Twin state, correction, authorization, receipts,
+   projection, and Room operations.
+2. **Triggered Forme entry:** a return boundary, explicit command, admitted
+   event, schedule, threshold, or Room signal causes Forme to start or wake a
+   suitable Harness run with an exact context and capability envelope.
+
+Both directions return to the same Twin and human boundary. They must not
+create parallel canonical truth.
+
+## Two context contracts
+
+### Native Workspace Session
+
+This is the candidate daily-work contract under NH1/NH2:
+
+- the Owner admits an exact Workspace/source zone, provider, and capability
+  envelope;
+- Forme supplies a restart/orientation seed, current durable meaning,
+  corrections, unresolved state, and boundary metadata;
+- the Harness may dynamically inspect material covered by that envelope;
+- Forme records the visibility class honestly and does not claim an exact
+  content manifest for the Harness's dynamic Workspace reads;
+- runtime observations and diffs are evidence, not automatically admitted Twin
+  meaning.
+
+Here the Context Compiler primarily supplies orientation, relevance, durable
+meaning, and policy. It is not necessarily the complete runtime read surface.
+
+### Managed Privacy Run
+
+This is the strong-minimization contract already proven in narrow R2/R3 form:
+
+- Forme compiles one exact material manifest and packet;
+- the packet is the complete manifest of Forme-selected
+  Owner/Guest/workspace content; required system instructions, schema, and
+  runtime/provider metadata remain separately disclosed;
+- the run receives no ambient Workspace or Room mutation tools;
+- output is schema-constrained and has no canonical or external authority;
+- Forme validates it before any admission or effect.
+
+Any model used to choose material before the manifest has already received
+content and must be disclosed as an earlier provider-visible step; it cannot be
+described as deterministic pre-processing.
+
+## How Highest Vision mechanisms use a Native Harness
+
+| Forme mechanism | Native Harness relationship | Durable Forme responsibility |
+|---|---|---|
+| **Continuity** | start or resume with current context, then inspect the admitted Workspace as needed | retain intent, open loops, change, decisions, and restart state across sessions and runtimes |
+| **Cognition** | run Reflection, Judgment, or Incubation as Roles, Skills, subagents, or bounded passes | admit evidence-backed inference, uncertainty, correction, supersession, and invalidation |
+| **Agency** | use native interaction and tool surfaces within an exact capability profile | decide human-boundary crossings and preserve authority, effect, verification, and receipt lineage |
+| **Stewardship** | use mature file, shell, search, and tool mechanics for admitted maintenance | retain drift, lifecycle, policy, budgets, no-op results, and product-level receipts |
+| **Timing** | execute when explicitly invoked or awakened by an admitted trigger | retain triggers, budgets, intervention history, and whether the moment justifies attention |
+| **Projection** | help select, explain, or draft an external view | own allowed basis, audience, attribution, version, freshness, publish, and revoke authority |
+| **Presence** | receive a local Room signal and reason at the private edge | keep server AI-free and control exact Response/Projection egress through the connector |
+
+Specialized cognitive agents remain roles or passes around one Twin, not
+independent selves with separate truth or effect authority.
+
+## Authority vocabulary
+
+The phrase `canonical write` has hidden two different objects and must be made
+explicit:
+
+1. **Workspace source-of-truth artifact:** code, documents, plans, or other
+   files that the project itself treats as authoritative.
+2. **Forme-authoritative state/effect:** Twin meaning, Owner correction,
+   agency envelope, projection scope, human-attributed publication or
+   commitment, and any effect for which Forme claims exact authorization,
+   recovery, rollback, or receipt guarantees.
+
+NH2 decides how ordinary native Workspace writes relate to the second class.
+Until NH2 closes, the current repository rule remains in force: implemented
+Forme-authoritative writes use deterministic, authorized, inspectable
+effectors. Nothing in this clarification grants a generic writer.
+
+## Preservation of R1–R4
+
+- **R1** remains the first deterministic Continuity substrate.
+- **R2** remains the evidence, inference, correction, and invalidation proof.
+- **R3** remains the first Forme-authoritative deterministic effect and
+  receipt/rollback proof.
+- The packet-only Codex adapter remains useful as the first Managed Privacy Run;
+  it should not grow into a home-built general Harness.
+- **R4 T2** remains the exact Room Operator/connector envelope.
+- **R4 T3** must be rewritten only after NH1/NH2 clarify whether the first
+  private response runs in a Native Workspace Session, a Managed Privacy Run,
+  or an explicitly disclosed relationship between them.
+
+This clarification changes the global map, not the acceptance evidence of
+completed slices.
+
+## NH1 — What is the default local Forme experience?
+
+### Question
+
+Does the Owner primarily work inside a mature Codex/OpenCode experience with
+Forme installed as its durable semantic/control layer, or primarily inside a
+Forme-owned local Agent surface that invokes those runtimes as workers?
+
+### Options
+
+1. **Native Harness Workbench first — recommended.** Codex is the first P0
+   workbench and OpenCode remains a first-class compatible target. Forme appears
+   through CLI/API/MCP/Skill/Plugin/adapter surfaces and derived Twin views.
+   Forme may also start bounded or triggered runs. Do not build a competing
+   local chat shell for the MVP.
+2. **Forme surface first.** Build a Forme-owned local conversation/workbench
+   that hosts Codex/OpenCode behind it. This gives UI control but risks
+   rebuilding mature Harness behavior and increasing schedule scope.
+3. **Keep the carrier undefined.** Continue using isolated commands and
+   generated reports. This avoids a new commitment but leaves the central
+   product relationship ambiguous.
+
+### Recommended effect
+
+The first option makes the mature Harness the operational body while keeping
+Forme's distinct value in continuity, meaning, authority, and presence. It also
+matches the approved R4 pattern: Web is a GitHub-like control plane while
+Agents use shared CLI/API contracts.
+
+NH1 approval would choose the primary local carrier. It would not itself grant
+files, shell, tools, provider visibility, or implementation authority.
+
+## NH2 — What is ordinary Workspace work versus a Forme-authoritative effect?
+
+### Question
+
+When the Native Harness edits a file, runs a command, or uses a tool inside an
+Owner-admitted Workspace, when is that ordinary Harness work and when does
+Forme claim semantic authority, authorization, recovery, and receipt
+guarantees?
+
+### Options
+
+1. **Two-class P0 boundary — recommended.**
+   - Ordinary Owner/Harness Workspace work remains governed by the Harness's
+     native permissions. Forme may observe its result as evidence, but the
+     activity does not automatically become Twin meaning or a
+     Forme-authoritative action.
+   - Changing Twin meaning/correction, agency envelopes, Projection/Response
+     scope, human-attributed publication/commitment, or claiming Forme
+     receipt/rollback guarantees still requires a typed Forme
+     proposal/gate/effect path.
+   - For the MVP, admitted Forme-authoritative effects keep the current narrow
+     deterministic effectors. Later, their **physical execution** may reuse
+     Harness-native tools inside a standing Forme envelope with independent
+     verification and receipts; the canonical semantic transition still
+     belongs to Forme.
+2. **All Forme Workspace writes use typed effectors.** This preserves the
+   strongest current deterministic boundary but makes the Native Workbench less
+   native and risks recreating generic file/tool machinery.
+3. **Native-first, adopt after the fact.** Let the Harness perform ordinary and
+   delegated work, then let Forme observe or label the result later. This is
+   simple, but it lets execution bypass base revision, semantic authority,
+   representation, verification, and failure guarantees before Forme sees it.
+
+### Recommended effect
+
+Use option 1 for the August MVP. It preserves the existing R3 guarantee for
+actions that Forme claims as its own while allowing the Owner to use a mature
+Harness normally. The later Harness-native physical-execution path inside
+option 1 still requires its own implementation/evaluation gate after native
+runtime diffs, hooks, recovery, and receipts are evaluated.
+
+NH2 approval would define semantic classification. It would not grant any
+specific session, path, command, provider, or external action.
+Forme-authoritative also does not mean per-click approval: a separately
+approved standing envelope may operate review-by-exception.
+
+## Relationship to T3
+
+T3 is paused behind NH1 and NH2. After they close, T3 should answer only the
+remaining R4-specific question:
+
+> Under which disclosed local context contract may one Guest request and
+> selected private Owner context reach a provider for drafting, and what exact
+> consent and lifecycle rules apply?
+
+It must not silently define the entire local Forme Agent as packet-only, nor
+use a Native Harness that already saw wider context while claiming that the
+final 32 KiB manifest names all Forme-selected content sent during the whole
+interaction.
+
+## What this document does not authorize
+
+This clarification authorizes no:
+
+- new Workspace or source visibility;
+- provider call or model spend;
+- file, shell, tool, MCP, plugin, or subagent capability;
+- generic or Forme-authoritative write;
+- credential, Room mutation, private Guest content sync, Response, or
+  Projection publication;
+- schema, migration, implementation, deployment, or public behavior.
+
+Those remain governed by NH1/NH2, T3–T5, the reconciled Technical Control
+Packet, Schema & Migration Manifest, and Production Deployment & Provisioning
+Grant.

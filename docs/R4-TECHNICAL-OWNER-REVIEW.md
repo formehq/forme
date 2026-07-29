@@ -1,8 +1,9 @@
-# R4 Technical Owner Review Brief v0.6
+# R4 Technical Owner Review Brief v0.7
 
 - 状态：**P privacy-first human-boundary interpretation、T1
-  public/private Room correction 与 T2 Room control contract 已批准；T3–T5
-  Owner review 进行中；不是最终 Packet 批准记录**
+  public/private Room correction 与 T2 Room control contract 已批准；Native
+  Harness roles 已确认；NH1/NH2 需先关闭，T3 暂停，T4/T5 仍待 Owner
+  review；不是最终 Packet 批准记录**
 - 更新：2026-07-28
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -12,6 +13,8 @@
 - Draft review：[PR #64](https://github.com/formehq/forme/pull/64)
 - Agency recalibration：
   [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md)
+- Native Harness architecture：
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md)
 
 ## 先说结论
 
@@ -21,15 +24,18 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. P、T1 与 T2 已经关闭；现在对剩余三张技术决策卡分别回答
-   `批准 / 带条件批准 / 修改`；
-3. 用五个具体场景检查系统行为是否符合直觉；
-4. 只看 Agent 报告的 red/yellow exception。
+2. P、T1 与 T2 已经关闭；先关闭 NH1/NH2；
+3. Agent 按这两个答案重写 T3，再由你判断 T3、T4、T5；
+4. 用五个具体场景检查系统行为，只看 Agent 报告的 red/yellow
+   exception。
 
 T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正，P 与 T2 已在
-2026-07-28 按推荐解释批准。T3–T5 关闭后，Agent 才会按你的答案重写长
-Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash 已经失效，
-不应再被批准。
+2026-07-28 按推荐解释批准。2026-07-28 也确认了一次重要架构纠正：
+Native Harness Workbench、Forme Semantic Spine 和 Managed Privacy Run
+不是同一个东西；R2/R3 的 packet-only/no-tools 路径是一种窄运行模式，
+不是整个 Forme Agent。NH1/NH2 关闭后才重写 T3；T3–T5 全部关闭后，
+Agent 才会重写长 Packet、重新审计并计算新的 hash。之前那份 Packet 的
+hash 已经失效，不应再被批准。
 
 2026-07-27 的 agency-first 方向修正了 T2 推荐；Owner 已在 2026-07-28
 批准该推荐。它也继续澄清待决 T3–T5 的 framing：
@@ -95,10 +101,14 @@ Exact schema/migration 仍有单独的 **Schema & Migration Manifest**。
 ```mermaid
 flowchart LR
     subgraph Local["Owner Local — private intelligence"]
-        Twin["Living Project Twin"]
-        Agent["Local Forme Agent"]
+        Workbench["Native Harness Workbench<br/>Codex / OpenCode"]
+        Spine["Forme Semantic Spine<br/>Living Twin · correction · authority"]
+        Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
         Presence["Local Presence ledger"]
-        Twin --> Agent --> Presence
+        Connector["Deterministic Local Connector<br/>T2 credential"]
+        Workbench <--> Spine
+        Spine -->|"when exact Forme-content manifest is needed"| Managed
+        Spine --> Presence --> Connector
     end
 
     subgraph Hosted["Existing hosted path — no AI"]
@@ -118,21 +128,23 @@ flowchart LR
         GuestAgent["Guest-owned Agent"]
     end
 
-    CLI["Forme CLI<br/>thin API client"]
-    Presence <--> CLI
-    CLI -->|"scoped Workspace ↔ Room API"| Edge
+    Connector -->|"scoped Workspace ↔ Room API"| Edge
     Manual <-->|"public Room / request / private reply"| Edge
     GuestAgent <-->|"public capsule / short delegated request"| Edge
     OwnerWeb["Owner browser anywhere"] -->|"authenticated hosted control"| Edge
 ```
 
-系统里有三个真正的 state owner：
+系统里有三个真正的 durable state owner：
 
 1. **Local Twin**：项目现在意味着什么。
 2. **Local Presence**：Owner 准备、批准、接收和发送过什么。
 3. **Hosted Presence**：什么正在公开、排队、返回、过期或撤回。
 
 Guest 的消息到达 server 或 local inbox，不等于它已经成为 Twin truth。
+Codex/OpenCode 可以拥有 Owner 明确授予的 Workspace 能力，也不等于它
+自动拿到 connector credential、Guest body 或 Room mutation authority。
+NH1/NH2 决定默认本地入口和 ordinary work / Forme-authoritative effect
+边界；T3 只决定第一条 private Response 的 provider visibility。
 
 授权也分三步：
 
@@ -393,13 +405,18 @@ Owner 在 2026-07-27 给出的方向可以压缩成一句：
 
 更准确地说，系统有一个 **Control Plane** 和一个 **Work Plane**：
 
+下表中的 `Local Agent Work Plane` 是产品口语简称，不是一个单体技术
+actor。它内部至少分成 Native Harness Workbench、Forme Semantic Spine
+和 deterministic connector；NH1/NH2 仍决定默认入口与 ordinary
+work/Forme-authoritative effect 边界。
+
 | 层 | 负责什么 | 不负责什么 |
 |---|---|---|
 | Hosted Control Plane | Room/Projection/Interaction/Grant/curation 的共享状态、权限、队列、生命周期与 receipts | 不读取 Twin，不运行 Owner AI，不替 Owner 形成判断 |
 | Forme Web | 人类查看、管理、批准 hosted access/control action 和理解 hosted state 的主要界面 | 不是 private repo 的远程桌面，也不取代 local publication/Response approval |
 | Versioned API | 每个 P0 hosted Room read 与 state transition 的 canonical contract | 不是 generic execute endpoint，也不绕过权限或 approval |
 | Forme CLI | P0 为 public/Guest（适用时）和 `room_operator.v1` lane 提供 thin client；Agent 经 typed gateway 请求 | 不复制 server logic；Controller/Curator boundary-action CLI delegation 留到 P1 |
-| Local Agent Work Plane | 读取明确允许的 local context，理解、起草、准备 Projection/Response 和建议动作 | 不直接成为 hosted canonical authority |
+| Local Agent Work Plane（产品简称） | Workbench 与 Semantic Spine 按最终 NH1/NH2/T3 contract 处理 local context、判断、Projection/Response candidate 和建议动作 | 不直接成为 hosted canonical authority；connector secret 与 model/context authority 仍分开 |
 
 权限默认采用“**窄 perimeter、宽 useful interior**”：一个 exact Room 的
 standing operator 可以持续完成 routine transport 与 deterministic,
@@ -457,14 +474,18 @@ Web、CLI 和 Agent 不是三套 authority。它们只是同一套 capability mo
 ```mermaid
 flowchart LR
     Owner["Owner"] --> Web["Forme Web"]
-    Owner --> LocalAgent["Local Forme Agent"]
-    LocalAgent --> Tool["Typed validated tool gateway"]
+    Owner -->|"candidate primary entry — NH1"| Workbench["Native Harness Workbench"]
+    Owner -->|"correction · boundary"| Spine["Forme Semantic Spine"]
+    Workbench <-->|"Forme interface"| Spine
+    Workbench --> Tool["Typed validated tool gateway"]
+    Spine --> Tool
     Tool --> Connector["Deterministic local connector / CLI"]
     Web --> API["Versioned Room API"]
     Connector --> API
     API --> Auth["Actor authority + exact target<br/>Controller/Curator session<br/>OR RoomBinding + room_operator.v1<br/>OR Guest capability"]
     Auth --> Hosted["Hosted Room state + receipts"]
-    LocalAgent <--> Private["Private repo + Twin"]
+    Workbench <--> Workspace["Owner-admitted Workspace"]
+    Spine <--> Twin["Private Twin"]
 ```
 
 #### Repo/Workspace ↔ Room 权限范围
@@ -503,19 +524,18 @@ one local workspace (local-only identity)
   不能兑换、恢复或继承 Owner-local `RoomBinding`。
 - Paired credential 属于 Forme local connector，不进入 model prompt、
   Forme-managed model environment 或 generic tool output，也不把 raw
-  secret 暴露给 Codex/OpenCode。Forme Agent 只能在获准的 typed tool
-  gateway 中向 deterministic connector 请求 CLI/API operation。
-- P0 的 model tool 默认只能返回 body-free status/control result。Connector
-  可以把 Interaction body sync 到 local Presence，但 model 要看
-  Guest/private bytes 仍必须走 T3 consent + exact manifest 的 packet-only
-  draft run；这是两个隔离的 Forme-managed model context。没有一个
-  Forme-managed model session 同时获得 private body 和 Room mutation
-  tool。API scope 不能推导 model visibility。
-- 如果 Owner 另外把通用 shell、connector config 或 local Presence path
-  直接授权给普通 Codex/OpenCode，那是 Forme contract 之外的额外授权，
-  P0 不能声称阻止它。详细 Packet 必须让 credential 与 private inbox
-  默认位于 Forme-managed model roots 之外，并用 canary 验证两条 lane
-  没有合并。
+  secret 暴露给 Codex/OpenCode。Native Workbench 或其他 Agent 只能在
+  另行获准的 typed gateway 中向 deterministic connector 请求 CLI/API
+  operation。
+- T2 只批准 connector/binding/API authority，不决定哪个 model session
+  可以看到 Interaction/Response body，也不决定该 session 使用 Native
+  Workspace 还是 Managed Privacy contract。API scope 不能推导 model
+  visibility；Workspace access 也不能推导 connector secret、Guest inbox
+  或 Room mutation authority。
+- 具体的 body/session/tool topology 等 NH1/NH2 与 revised T3 决定。当前
+  P0 候选仍是把 exact-manifest Managed Privacy draft 与 connector
+  mutation 分开，但这不是已批准 T2 的一部分。详细 Packet 必须按最终
+  contract 隔离 credential，并用 canary 验证没有未授权的跨界。
 
 Agency-first 修正后批准的 P0 contract，不再是“sync 可以站立授权、其余每一步
 都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
@@ -678,56 +698,49 @@ Control 页面功能偷偷加进去。
 
 ## T3 — OpenAI 可以看到哪些 private context
 
-### 你要判断什么
+> **PAUSED：现在不要批准 T3。** 旧推荐把一个 packet-only draft run
+> 写得太像整个 Local Forme Agent。先关闭
+> [NH1/NH2](./NATIVE-HARNESS-ARCHITECTURE.md)，Agent 再把本卡重写成
+> 准确、可批准的 R4-specific contract。
 
-Local Forme Agent 能不能用经过选择的 private context，帮助 Owner 起草
-给 Guest 的回复？
+### 关闭 NH1/NH2 后，T3 只判断什么
 
-### 推荐答案
+对第一条 Guest request，哪种**已披露的本地 context contract**可以把
+Guest content 和选中的 Owner private context 发给 provider 来起草
+Response？它不再决定 Owner 平时是否能在 Codex/OpenCode 中原生读写
+Workspace。
 
-只有两个人都作出相应选择时可以：
+### 当前候选方向，不是批准建议
+
+保留 **Managed Privacy Run** 作为 P0 官方敏感回复路径：
 
 1. Guest 选择 `allow_owner_local_ai`；
-2. Owner 主动开始 draft，并批准 one exact manifest for one model
-   invocation。
+2. Owner 主动开始 draft；
+3. Forme Context Planner 固定 request 和 origin Projection，只从已经
+   admitted 的 Twin basis 生成一份 body-free candidate list；
+4. Owner 可增删候选；
+5. deterministic Context Compiler 才解析 exact bytes，计算
+   manifest/hash/size；超过拟议 32 KiB 就返回 Owner 调整，不静默截断，
+   也不偷偷用另一个模型先总结；
+6. 独立的 no-tools run 只接收这份 exact packet，并返回 typed draft；
+7. draft 没有 publish authority；Owner review 后由 connector 发送 exact
+   approved Response。
 
-Manifest 会列出 request、它所绑定的 exact origin Projection、选中的
-Owner Frame 字段、选中的 corrected Reflection 和 allowlisted evidence。
-最终 packet 最多 32 KiB，没有 ambient repo access、没有 tools，通过
-Owner 现有的 local Codex authentication 发送给 OpenAI。
+这条 lane 可以承诺“所有 Forme 选择的 Guest/Owner/workspace content 都
+在 exact manifest 里”。Codex/provider 自己所需的 system/safety
+instructions、output schema 和 operational metadata 仍需另行披露/审计，
+不能声称整个 provider request 只有 32 KiB。Native Workspace Session
+则只能承诺“provider visibility 在 Owner 批准的 Workspace/provider
+envelope 内”。两种声明都可以合法存在，但不能混用。
 
-P0 只需要完成一个真实 draft，因此不新增 `DraftContextGrant` 或多调用
-window。新的 generation、instruction、evidence set、provider、
-Interaction 或 expired manifest 需要重新构造并批准 manifest。Guest
-deletion、origin revoke、Room retirement 或 Interaction expiry 会永久
-关闭这条 P0 draft path，不能再签发 replacement manifest。这是一条
-August bootstrap，而不是长期的 per-call 产品理念；以后可用 Owner 批准
-的 persistent Local Context Policy 覆盖 repeated compatible use，但不
-进入本轮。
+T2 仍不被重开：connector credential 不进入 prompt/environment；Native
+Workbench 也不会因为拥有 Workspace 权限自动得到 Guest inbox 或 Room
+mutation tools。如果 Guest 选择 `manual_owner_only`，Guest content 和
+private context 都不发给 OpenAI，Owner 仍可手写回复。
 
-Forme server 永远看不到这份 private packet。
-
-T2 的 API/CLI parity 不改变这个边界。Paired connector 可以先把 request
-durably sync 到 local Presence。普通 body-free control/tool session
-不返回 Interaction/Response body；另一个独立的 draft run 只有在本 T3
-的 consent 与 exact manifest 成立后，才由 packet builder 选择允许的
-bytes。这个 Codex draft run 继续 packet-only、no-tools，不能调用 Room
-API 或普通 CLI 绕过 manifest。没有一个 model session 同时持有 private
-body 与 Room mutation tools。这个保证适用于 Forme-managed adapter；
-Owner 另行授予普通 Agent ambient shell/filesystem access 会形成更宽的
-外部 authority，不属于这个 P0 隔离声明。
-
-如果 Guest 选择 `manual_owner_only`，Guest content 和 private context
-都不会发给 OpenAI；Owner 仍然可以手工写回复。
-
-在发送前发现 deletion 会阻止 model call；已经 in-flight 的 bytes 无法
-追回，这一点会直接告诉 Guest。
-
-### 你可以这样回复
-
-- `T3 按推荐批准`
-- `T3 R4 只允许 manual response`
-- `T3 带条件批准：...`
+新的 generation、instruction、evidence set、provider、Interaction 或
+expired manifest 是否需要重新批准，以及 deletion/in-flight bytes 的
+精确行为，将在 NH1/NH2 关闭后的 revised T3 卡中给出最终推荐。
 
 ## T4 — Public、unlist、stale 和 revoke 分别意味着什么
 
@@ -862,10 +875,10 @@ private-context Response。
 signal、deterministic ACK/recover/stale attestation，并 push exact
 locally approved Projection/Response。Forme Agent 的标准 Room workflow
 显式请求 typed sync；只读命令不偷偷产生 pull/write。Agent 默认只收到
-body-free control result；Guest/private body 仍走 T3 packet。它不能看见
-另一个 Room，不能因为 Controller 在 Web 上有更大权限就继承那些权限，
-也不能自行增加 scope。Web 和 CLI 对同一 mutation 返回相同语义的
-receipt。
+body-free control result；Guest/private body 的 model visibility 等
+NH1/NH2 与 revised T3 决定。它不能看见另一个 Room，不能因为 Controller
+在 Web 上有更大权限就继承那些权限，也不能自行增加 scope。Web 和 CLI
+对同一 mutation 返回相同语义的 receipt。
 
 ### D. Guest 带着自己的 notes
 
@@ -904,15 +917,14 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-P、T1 与 T2 已关闭。现在只需看三张技术卡；可以一张一张聊，也可以直接：
+P、T1 与 T2 已关闭。现在先回复 NH1/NH2；最省力的形式是：
 
 ```text
-T3：...
-T4：...
-T5：...
+NH1：...
+NH2：...
 ```
 
-T3–T5 关闭后：
+NH1/NH2 关闭后，Agent 先重写 T3，再继续 T3–T5。全部关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；
 2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；

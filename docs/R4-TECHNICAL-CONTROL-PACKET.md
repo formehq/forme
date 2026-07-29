@@ -23,15 +23,21 @@
 > The Owner also superseded the invite-only Guest
 > ingress with a public one-knock + Owner short-pass model and added a real
 > grant-gated Private Room with a different Room ID and Projection.
-> This implementation appendix has not yet been reconciled to those inputs.
-> T1 and T2 are closed; review and close T3–T5 in
+> This implementation appendix has not yet been reconciled to those inputs or
+> to the Owner-confirmed Native Harness / Forme role clarification. Its
+> `local Forme Agent` actor and T3 packet-only drafting topology must be split
+> into Native Harness Workbench, Forme Semantic Spine, Managed Privacy Run, and
+> deterministic connector after NH1/NH2 close.
+> T1 and T2 are closed; close NH1/NH2 in
+> [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
+> review and close T3–T5 in
 > [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) first. The
 > prior packet hash is not an approval target.
 
-## Decision in one minute
+## Historical v0.1 decision summary
 
-The recommended R4 implementation is a small Presence system around the
-existing local Living Project Twin:
+The v0.1 proposal recommended a small Presence system around the existing local
+Living Project Twin. It is retained for reconciliation only:
 
 ```text
 Owner local
@@ -108,7 +114,12 @@ At no point does the hosted service:
 
 ## Owner architecture checksum
 
-| Question | Proposed R4 answer |
+> **Historical v0.1 proposal only.** This checksum predates the approved
+> self-host target, T1/T2 corrections, and Native Harness clarification. It is
+> retained for reconciliation work and is not a current recommendation or
+> approval surface.
+
+| Question | Historical v0.1 proposed answer |
 |---|---|
 | **Input — what enters Forme?** | Locally: the exact public Projection frame, one invited Interaction Request, an optional bounded Guest Capsule, and any Owner-selected response context. Hosted: only approved public capsule bytes, minimum account/control metadata, guest payload, lifecycle state, and reviewed response bytes. |
 | **Durability — what survives, and where?** | The Twin remains local canonical project meaning. `.forme/presence/` durably stores local candidates, exact approvals, inbox/outbox objects, cursors, and receipts. Supabase Postgres durably stores current public/curation state, capability hashes, interactions, responses, and server receipts. |
@@ -116,12 +127,18 @@ At no point does the hosted service:
 | **Authority — who may change what?** | A paired local credential may publish/revoke the exact Owner-approved capsule, pull/ack signals, and publish an exact Owner-approved response for one Room. Only the authenticated Curator account may admit/unlist. Guest capabilities may create one bounded request. None may write Twin meaning. |
 | **Recovery — what happens after failure?** | Local outbox/inbox persistence happens before network acknowledgement. Every mutation is idempotent and transactional on the server. Unknown network outcomes are resolved by querying the idempotency key. Sync advances its cursor only after local validation, atomic persistence, and acknowledgement. |
 
-If this table stops being true during implementation, work returns to the
-Owner stop gate.
+This table is already superseded in several places and must not govern
+implementation. It is retained only so the next Packet can reconcile each
+historical proposal explicitly.
 
-## Proposed technical decisions requiring Owner approval
+## Historical v0.1 technical proposals — not an approval surface
 
-| Decision | Recommended answer | Consequence |
+> Do not approve the table below. In particular, its provider topology,
+> identity, Guest, credential, and local-model rows are superseded or paused.
+> NH1/NH2 and revised T3 must replace the local runtime/context recommendation
+> in the next packet.
+
+| Decision | Historical v0.1 answer | Consequence |
 |---|---|---|
 | Hosted topology | One Vercel-hosted Next.js UI/API and one Supabase Auth/Postgres project | Two managed control planes; no custom server fleet, broker, cache, object store, or server model |
 | Repository shape | Keep the existing root package in place; add `packages/presence-protocol`, `apps/third-place`, and local `src/presence` | R1–R3 are not moved or rewritten; only shared wire contracts cross the local/server boundary |
@@ -130,7 +147,7 @@ Owner stop gate.
 | Local pairing | One 10-minute, single-use 256-bit challenge produces one 30-day Room-bound opaque credential after local confirmation | The CLI never receives the Controller's Supabase session; the Curator scope is never delegated |
 | Guest identity | Public read; one Curator-issued, one-use invite creates a capability session; Agent Guest receives a 15-minute one-signal derivative token | No guest account, profile, email, reusable Agent identity, or verified real-world identity in P0 |
 | Synchronization | Manual `presence sync` polling with persist-before-ack and an opaque cursor | No daemon, push, WebSocket, webhook, notification worker, or permanent local tunnel |
-| Local model visibility | Before one response draft, show a manifest and send only the exact request, public capsule, Owner-selected Owner Frame fields, Owner-selected corrected Reflections, and explicitly selected allowlisted evidence in a maximum 32 KiB isolated packet to OpenAI through the existing Codex authentication | The hosted Room never sees private context, but the exact selected packet does leave the machine for OpenAI; nothing is included merely because it is current or active, and there is no ambient repo access or model tool |
+| Local model visibility | **Paused historical proposal:** before one response draft, show a manifest and send selected request/capsule/Twin content in a maximum 32 KiB isolated packet through existing Codex authentication | Managed Privacy remains a candidate after NH1/NH2; revised T3 must define the exact Forme-selected-content guarantee and separately disclose runtime-owned instructions/schema/metadata |
 | Freshness | Any new local Twin revision conservatively marks the current Projection stale; every Projection hard-expires after seven days | P0 may ask for more Owner re-publication than a later dependency-aware system; an offline server cannot claim freshness forever |
 | Listing and direct access | Curator unlisting removes the Room from Third Place but leaves an unexpired Owner-published direct Room readable; interaction is disabled until admitted | Owner publication and shared-place curation remain meaningfully distinct |
 | Existing requests after change | A stale, superseded, or expired origin may receive an Owner-reviewed response that discloses the origin state; a revoked origin may not | A legitimate waiting guest is not silently abandoned, while explicit revocation remains a hard stop |
@@ -138,11 +155,10 @@ Owner stop gate.
 | Notification | The guest keeps a private reply URL and refreshes it; the Owner runs manual sync; no guest or Owner email notification | One fewer provider and no background messaging, at the cost of an intentionally asynchronous/manual P0 |
 | Production plans | Vercel Pro + Supabase Pro, currently about $45/month, with Spend Management alerts and the opt-in pause action | Avoids Vercel Hobby's non-commercial restriction and Supabase Free pausing/no-backup risk; the budget/pause is not a strict real-time cost cap |
 
-Approval of this packet would approve these answers as one bounded R4
-technical direction and authorize repository/fixture implementation up to the
-separate first-durable-write manifest gate. A different provider, TTL,
-retention policy, notification path, credential scope, server AI path, or state
-ownership model would return to an Owner decision.
+In v0.1, approval would have approved these answers as one bounded R4 technical
+direction. That statement is now superseded: this packet cannot be approved and
+authorizes no repository/fixture implementation. A new reconciled packet must
+follow NH1/NH2 and T3–T5, then return to the Owner with a new exact hash.
 
 ## System topology
 

@@ -6,9 +6,10 @@
 - Scope model: P0 committed, P1 conditional, P2 post-demo
 - Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
   human-boundary model, R4 product target, T1 public/private Room correction,
-  and T2 Room control contract are owner-approved; recalibrated T3–T5 in the
-  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) are active, and the
-  first Control Packet is unreconciled; no projection,
+  and T2 Room control contract are owner-approved; Native Harness roles are
+  clarified, NH1/NH2 must close before paused T3, T4/T5 remain in the
+  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md), and the first
+  Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
   server implementation is authorized
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
@@ -24,9 +25,9 @@
 | R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, and one reviewed continuation | private canary stays absent and public request → local review → response → bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, and T2 Room control contract are owner-approved; implementation remains stopped at T3–T5 review and later packet reconciliation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, and T2 Room control contract are owner-approved; implementation remains stopped at NH1/NH2, revised T3, T4/T5, and later packet reconciliation.
 
-## R4 owner-approved product target — T1/T2 closed, T3–T5 review
+## R4 owner-approved product target — T1/T2 closed, NH1/NH2 next
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -55,14 +56,17 @@ artifact delivery, and deterministic stale attestation. The Agent's standard
 Room workflow calls sync explicitly; read-only commands do not hide writes and
 no background daemon is required. The companion human-boundary guards are
 approved; the T2 authority, verbs, scopes, and 30-day non-renewing lifetime are
-closed, while T3–T5 remain decisions.
+closed. Native Harness roles are clarified; NH1/NH2 remain decisions and T3 is
+paused behind them, while T4/T5 also remain open.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
 [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md).
-T1 and T2 are recorded in
+The Harness/Forme role clarification and NH1/NH2 are in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T1 and T2
+are recorded in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Its remaining
-cards cover OpenAI visibility, public lifecycle promises, and the
+cards cover the paused Managed Privacy T3, public lifecycle promises, and the
 async/retention/P0 boundary. The first detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
 be rewritten for the confirmed existing deployment path and re-audited.
@@ -109,6 +113,17 @@ bounded source
     OR Private Room: owner publication + exact Guest Grant
   → public knock or grant-gated signal
   → local review → response → optional Grant Offer
+```
+
+The active R4 decision dependency is:
+
+```text
+Native Harness role clarification
+  → NH1 default local carrier
+  → NH2 ordinary work / Forme-authoritative effect boundary
+  → reframed T3 provider-visibility contract
+  → T4/T5
+  → reconciled Technical Control Packet
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,

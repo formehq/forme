@@ -2,7 +2,8 @@
 
 - Status: owner-approved product frame, privacy-first P human-boundary
   interpretation, R4 public/private Room correction, and T2 Room control
-  contract; T3–T5 technical Owner review active
+  contract; Native Harness roles clarified; NH1/NH2 open before paused T3;
+  T4/T5 remain under technical Owner review
 - Updated: 2026-07-28
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
@@ -20,6 +21,23 @@ Forme extends an entity across four dimensions:
 Its deepest claim is not an AI clone. It is that human agency need not exist only while a person remembers, focuses, and is online.
 
 Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the August MVP scope.
+
+### Harness-native product shape
+
+The Highest Vision expects a mature Agent Harness—not a Forme-built chat
+shell—as the operational workbench for sessions, files, shell, tools, Skills,
+MCP, plugins, subagents, and runtime interaction. Forme contributes the durable
+semantic spine that survives the workbench: Twin identity and state, evidence,
+corrections, authority, receipts, projection, and continuity.
+
+The August MVP narrowed entity count, scope, and effect depth. R2/R3
+additionally used a packet-only, no-tools run to prove exact visibility of
+Forme-selected content and semantic/effect admission. That run remains a valid
+**Managed Privacy Run**, not the permanent definition of every Forme Agent.
+The Owner-confirmed clarification and the open NH1/NH2 decisions are in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). This
+clarification does not yet make the Native Workbench the P0 default or grant
+files, shell, tools, provider visibility, or implementation authority.
 
 ## Constitutional floor
 
@@ -45,8 +63,9 @@ permission by itself.
 
 [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
 perimeter, companion authorship/consequence guards, and no-self-expansion
-meta-rule. The T2 Room control envelope is approved; T3–T5 and a reconciled
-Control Packet remain stop gates before implementation.
+meta-rule. The T2 Room control envelope is approved. NH1/NH2 must close before
+T3 is reframed; T3–T5 and a reconciled Control Packet remain stop gates before
+implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -108,7 +127,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T1/T2 closed, T3–T5 active
+## Owner-approved R4 product target — T1/T2 closed, NH1/NH2 next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -141,7 +160,9 @@ The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
 conversational authority. The product target and T2 control contract are
 approved, but implementation remains unauthorized. The Owner first reviews
-T3–T5 in
+NH1/NH2 in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then the
+reframed T3 and T4/T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).

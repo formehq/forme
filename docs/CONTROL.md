@@ -3,21 +3,22 @@
 - Updated: 2026-07-28
 - Active gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   product target, T1 public/private Room correction, and T2 Room control
-  contract owner-approved; T3–T5 Technical Owner Review active; detailed
-  Control Packet requires reconciliation before exact approval; no R4
-  implementation**
+  contract owner-approved; Native Harness roles clarified; NH1/NH2 Owner
+  decisions active before paused T3; T4/T5 remain open; detailed Control
+  Packet requires reconciliation before exact approval; no R4 implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
   regression suite plus the real bounded control and independent Career
-  validation pass; R4 product target and P/T1/T2 are closed, T3–T5 review is
-  active, and R4–R5 implementation has not started**
+  validation pass; R4 product target and P/T1/T2 are closed; NH1/NH2 are the
+  current decision gate, T3 is paused, T4/T5 remain open, and R4–R5
+  implementation has not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: Owner reviews the three remaining T3–T5 cards in
-  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
-  reconcile the detailed Control Packet against the approved P/T1/T2 contracts
-  and required Twin-to-Projection continuity bridge before any projection,
-  Third Place, identity, hosting, messaging, local synchronization,
-  persistence, spend, or public behavior is implemented
+- Next action: Owner closes NH1/NH2 in
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md); agents
+  then reframe T3 as the R4 private-response context contract, after which the
+  Owner reviews T3–T5 and agents reconcile the detailed Control Packet before
+  any projection, Third Place, identity, hosting, messaging, local
+  synchronization, persistence, spend, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -40,7 +41,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · P/T1/T2 CLOSED · T3–T5 OWNER REVIEW
+R4 Controlled Presence    ← YOU ARE HERE · P/T1/T2 CLOSED · NH1/NH2 NEXT
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -88,6 +89,14 @@ Current truth:
   inspectable, revocable envelope proceeds review-by-exception. This closes P
   only. T3–T5 and all R4 implementation remain unapproved; T1 and T2 remain
   separately approved;
+- on 2026-07-28 the Owner confirmed the Native Harness role correction:
+  Codex/OpenCode may be the mature operational Workbench, Forme is the durable
+  Semantic Spine, and the packet-only/no-tools path is a Managed Privacy Run
+  rather than the definition of every Forme Agent. R1–R3 remain valid narrow
+  proofs. NH1 (default local carrier) and NH2 (ordinary Workspace work versus
+  Forme-authoritative effect) remain open, T3 is paused behind them, and this
+  clarification grants no file, shell, tool, provider, Room, or implementation
+  authority;
 - the R1–R3 continuity audit found one real additive Twin chain and one
   cross-version defect: a V3 Twin previously dropped active Owner Corrections
   from a later R2 Context Packet. The defect is repaired with a V3 regression.
@@ -100,9 +109,11 @@ Current truth:
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
   existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment target,
   required anywhere Web login for Owner Control, and reopened the former
-  invite-only Guest model. T1 and T2 are now closed; T3–T5 in
-  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) are now the
-  active review surface. The prior packet hash is not approvable; no R4
+  invite-only Guest model. T1 and T2 are now closed; NH1/NH2 in
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) are the
+  immediate decisions, after which T3–T5 in
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) are the
+  remaining review surface. The prior packet hash is not approvable; no R4
   implementation or external resource is authorized;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
@@ -116,53 +127,50 @@ Current truth:
 
 ```mermaid
 flowchart LR
-    Owner["Owner<br/>intent · correction · approval"]
-    Source["Bounded project sources<br/>Forme repo first"]
+    Owner["Owner<br/>authorship · intent · boundary"] -->|"candidate primary entry — NH1"| Workbench["Native Harness Workbench<br/>Codex / OpenCode<br/>sessions · files · shell · tools"]
+    Workbench <--> Workspace["Owner-admitted Workspace<br/>Forme repo first"]
+    Interface["Forme interface / gate<br/>CLI · API · MCP · Skill / Plugin"]
 
-    subgraph Forme["Forme owns continuity and control"]
-        Observe["R1 Deterministic observation"]
-        Twin["Living Project Twin<br/>durable state · revisions · evidence<br/>confirmed / inferred / unresolved"]
-        Context["R2 Scoped Context Packet"]
-        Gate["Validation · policy · owner judgment"]
-        Effect["R3 Deterministic effect<br/>verify · receipt · rollback"]
-        Scope["R4 Projection allowlist"]
+    subgraph Spine["Forme Semantic Spine"]
+        Observe["R1 observation"]
+        Twin["Living Project Twin<br/>durable meaning · revisions · evidence"]
+        Gate["correction · policy · authority"]
+        Receipt["verification · receipts · recovery"]
+        Scope["R4 projection / Room scope"]
+        Observe --> Twin --> Gate
+        Receipt --> Twin
+        Twin --> Scope
     end
 
-    subgraph Runtime["Replaceable harness runtime"]
-        Codex["Codex — P0 live path"]
-        OpenCode["OpenCode — compatible boundary<br/>P1 live path"]
-    end
-
-    subgraph Surfaces["Experiences derived from the same Twin"]
-        Restart["R1 Restart View"]
-        Reflection["R2 Reflection"]
-        Review["R3 Action Review"]
-        Projection["R4 Collaborator Projection"]
-    end
-
-    Source --> Observe --> Twin
-    Owner -->|"intent / correction"| Twin
-    Twin --> Restart --> Owner
-    Twin --> Context --> Codex
-    Context -.-> OpenCode
-    Codex -->|"typed proposal only"| Gate
-    OpenCode -.->|"typed proposal only"| Gate
-    Gate -->|"admitted interpretation"| Twin
-    Twin --> Reflection --> Owner
-    Owner -->|"explicit approval"| Gate
-    Gate --> Review
-    Gate --> Effect -->|"bounded change"| Source
-    Effect -->|"receipt"| Twin
-    Twin --> Scope --> Projection
+    Owner -->|"confirmed correction · boundary"| Gate
+    Workbench <--> Interface <--> Gate
+    Twin -->|"exact Forme-content manifest needed"| Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
+    Managed -->|"typed proposal"| Gate
+    Gate --> Connector["Deterministic Local Connector<br/>T2 typed Room operations"]
+    Connector <--> Server["No-AI Room server<br/>control · registry · render · queue · relay"]
 ```
 
 ### How to read the map
 
-- **Sources** say what happened in files; they remain authoritative for their own content.
-- **The Twin** is Forme's durable, versioned understanding of the project. It is not a chat transcript, runtime session, file copy, or summary page.
-- **Codex and OpenCode** are replaceable cognition runtimes. They receive scoped context and return proposals; they do not own the Twin or write canonical state directly.
-- **The gate and executor** keep interpretation probabilistic but effects deterministic, authorized, inspectable, and reversible where feasible.
-- **Surfaces** are views of one Twin. They must not create private parallel truths.
+- **The Native Harness Workbench** is the mature operational body. Its exact
+  Workspace/provider/capability envelope remains an Owner decision; the
+  clarification itself grants nothing.
+- **The Twin / Semantic Spine** is Forme's durable, versioned meaning and
+  authority. It is not a transcript, runtime session, file copy, or summary
+  page.
+- **A Managed Privacy Run** receives an exact packet as the complete manifest
+  of Forme-selected Owner/Guest/workspace content. Runtime-owned system/safety
+  instructions, schema, and operational metadata remain separately disclosed
+  and audited. R2/R3 prove this narrower lane; it is not all of Codex/OpenCode.
+- **Ordinary Workspace truth and Forme-authoritative state/effect are distinct.**
+  NH2 closes how they interact. A runtime never admits Twin meaning or expands
+  Forme authority by itself.
+- **The connector and no-AI server** preserve the approved T2 credential and
+  Room boundary. Native Workspace access never implies Guest inbox or Room
+  credential access.
+
+The full role model and the two open choices are in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Owner architecture checksum
 
@@ -484,7 +492,7 @@ The revision numbers illustrate the required order. Any unrelated Twin revision 
 | Decision | Recommended answer | Global effect |
 |---|---|---|
 | First writable surface | One fixed managed block in existing allowlisted `README.md`; no arbitrary path parameter. | R3 crosses the project-source write boundary once without creating a general file tool. |
-| Runtime role | Reuse isolated ephemeral Codex for a schema-only semantic intent proposal; keep all tools disabled. Forme compiles the only permissible effect plan. | Harness runtimes remain replaceable proposers and never receive the writer. |
+| Runtime role | Reuse isolated ephemeral Codex for a schema-only semantic intent proposal; keep all tools disabled. Forme compiles the only permissible effect plan. | This accepted R3 Managed Privacy Run remains a replaceable proposer and never receives its writer; it does not define every Native Harness session. |
 | Approval and staleness | Show the exact rendered block, target, before hash, after hash, and effect-plan hash. A separate owner command approves that one immutable plan once. Require an unbroken Twin revision chain through execution. | Approval cannot silently authorize changed content, a new target, or a later project state. |
 | Durable agency state | Introduce `TwinRevisionV3` only when the first valid action proposal is admitted. Persist proposal, approval, receipts, hashes, authority, scope, and status—not file bodies or sessions. | Agency becomes inspectable and restart-safe without making runtime state canonical. |
 | Executor, retry, and rollback | Use an exact marker parser, target preconditions, atomic replacement, a write-ahead journal, terminal receipts, and hash-guarded rollback. Never invoke Git. | Crashes and retries fail closed; human edits cannot be overwritten by execution or rollback. |
@@ -691,12 +699,13 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 T3–T5 Technical Owner Review
+## Active stop gate — Native Harness NH1/NH2 before R4 T3
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; P human-boundary interpretation
-  and T2 Room control contract owner-approved on 2026-07-28; T3–T5 awaiting
-  Owner judgment; detailed packet unreconciled and unimplemented**
+  and T2 Room control contract owner-approved on 2026-07-28; Native Harness
+  role clarification confirmed; NH1/NH2 awaiting Owner judgment; T3 paused
+  behind them; T4/T5 open; detailed packet unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -720,6 +729,7 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Active Owner review:
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Unreconciled implementation appendix:
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -756,21 +766,23 @@ capability parity, a thin P0 public/Guest and Room Operator CLI, independent
 exact per-Room bindings, and one fixed 30-day non-renewing
 `room_operator.v1` bundle for routine transport and deterministic lifecycle
 enforcement. Boundary mutations remain stepped-up Web actions; the connector
-holds the credential and the model never receives it. The remaining Owner
-Review covers OpenAI visibility, public lifecycle promises, and the
-asynchronous retention/P0 boundary. Agents must then
-reconcile the
-implementation packet to
-the supplied deployment target and those answers. Exact schemas/migrations and
-production deployment remain separate later gates. R3 acceptance and the R4
-product decisions grant no R4 implementation, visibility, identity, hosting,
-messaging, persistence, spend, or publishing authority.
+holds the credential and the model never receives it. NH1/NH2 first decide the
+default local carrier and the boundary between ordinary Workspace work and
+Forme-authoritative effects. Only then may T3 choose and specify the
+provider-visibility contract for one R4 response; a Managed Privacy Run is the
+current candidate, not an approved result. T4/T5 cover public lifecycle
+promises and the asynchronous retention/P0 boundary. Agents must then
+reconcile the implementation packet to the supplied deployment target and
+those answers. Exact schemas/migrations and production deployment remain
+separate later gates. R3 acceptance and the R4 product decisions grant no R4
+implementation, visibility, identity, hosting, messaging, persistence, spend,
+or publishing authority.
 
 The privacy-first/minimum-friction P human-boundary model and T2 Room authority
-contract are Owner-approved for R4. T3–T5 and every implementation mechanism
-remain gated. Stewardship remains an architecture proposal. Confidence or
-shadow agreement cannot grant permission; external R4 interactions remain
-untrusted signals until separately admitted.
+contract are Owner-approved for R4. NH1/NH2, T3–T5, and every implementation
+mechanism remain gated. Stewardship remains an architecture proposal.
+Confidence or shadow agreement cannot grant permission; external R4
+interactions remain untrusted signals until separately admitted.
 
 ## Owner–agent working agreement
 
@@ -834,12 +846,14 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`PRODUCT.md`](./PRODUCT.md) — product vision, constitutional floor, and Demo Day acceptance story
 - [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
+- [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) —
+  Owner-confirmed role clarification and active NH1/NH2 decision brief
 - [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
 - [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
 - [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — Owner-approved privacy-first P
   boundary plus still-proposed cognitive/delegation application guidance
 - [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md) —
-  the approved T2 Room Operator contract and what pending T3–T5 defer
+  the approved T2 Room Operator contract and what pending NH1/NH2 and T3–T5 defer
 - [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
 - [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — owner-approved hosted
   Forme Room foundation
