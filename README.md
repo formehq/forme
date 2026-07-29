@@ -10,14 +10,14 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R4 — privacy-first/minimum-friction agency direction
-  recorded; T1 public/private Room correction approved; broader interpretation
-  (P) and recalibrated T2–T5 under Technical Owner Review**
+- Current gate: **R4 — privacy-first/minimum-friction P human-boundary model
+  and T1 public/private Room correction approved; T2–T5 under Technical Owner
+  Review**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
-  public-knock/private-Grant correction are approved, and the agency-first
-  direction is recorded; its formal boundary model and first technical packet
-  still require Owner review and reconciliation to the confirmed self-host
-  target; no R4 implementation or production action is authorized**
+  public-knock/private-Grant correction, and P boundary model are approved;
+  T2–T5 and the first technical packet still require Owner review and
+  reconciliation to the confirmed self-host target; no R4 implementation or
+  production action is authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -27,8 +27,8 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 
 1. [`docs/PRODUCT.md`](./docs/PRODUCT.md) — highest vision, MVP vision, and scope
 2. [`docs/CONTROL.md`](./docs/CONTROL.md) — current state, owner gates, and definition of done
-3. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner's privacy-first
-   direction and the proposed formal boundary model
+3. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner-approved
+   privacy-first P boundary and proposed delegation/application guidance
 4. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
    current R4 mental model, agency-formalization check, technical cards, and
    walkthroughs
@@ -138,7 +138,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — T1 closed, T2–T5 Owner review
+## R4 Controlled Presence — P/T1 closed, T2–T5 Owner review
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -156,7 +156,7 @@ path, and Owner Control must support anywhere Web login.
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After P and T2–T5 close, agents will rewrite and re-audit it. No R4
+After T2–T5 close, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

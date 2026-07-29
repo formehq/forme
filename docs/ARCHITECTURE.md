@@ -1,10 +1,9 @@
 # Architecture boundaries
 
-- Status: R1, R2, and R3 owner-accepted; privacy-first agency direction
-  recorded; R4 product topology and T1 public/private Room correction
-  owner-approved; T2–T5 Technical Owner Review active; implementation packet
-  unreconciled
-- Updated: 2026-07-27
+- Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
+  R4 product topology, and T1 public/private Room correction owner-approved;
+  T2–T5 Technical Owner Review active; implementation packet unreconciled
+- Updated: 2026-07-28
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -85,19 +84,25 @@ one at a time.
 20. Owner approval binds one immutable proposal and effect-plan hash to an unbroken Twin revision chain and one execution.
 21. Execution and rollback use target hashes, atomic replacement, a write-ahead journal, terminal receipts, and fail-closed recovery so retries cannot duplicate effects and human edits cannot be overwritten.
 
-### Candidate agency invariants — pending Owner review
+### Approved P human-boundary invariants; proposed egress direction
 
-The Owner has stated the privacy-first/minimum-friction direction. The current
-recommended architecture interpretation, not yet an approved R4 contract, is:
+The Owner approved this privacy-first/minimum-friction architecture
+interpretation for R4 on 2026-07-28:
 
+- privacy is the primary source, provider, and audience perimeter;
 - human authorization establishes or widens an exact, inspectable, revocable
   envelope; inside it, routine transport and explicitly predelegated,
   deterministic monotonic exposure-reducing enforcement proceed
   review-by-exception;
 - confidence, history, account access, or authority in another Room cannot
   expand the envelope;
-- companion authorship/consequence guards and a no-self-expansion rule protect
-  the human without turning routine operations back into per-action approval;
+- companion human representation/commitment and irreversible/materially
+  high-impact consequence guards, plus a no-self-expansion rule, protect the
+  human without turning routine operations back into per-action approval.
+
+The following remains a proposed long-term egress direction, not part of the P
+approval or current R4 implementation authority:
+
 - content-bearing egress is eventually admitted as a policy-compiled artifact
   bound to exact audience, policy generation, disclosure attestation,
   attribution, hash, and receipt lineage. Model/tool separation remains
@@ -114,6 +119,117 @@ recommended architecture interpretation, not yet an approved R4 contract, is:
 - no arbitrary file effectors, shell, Git staging/commit/push, GitHub mutation, server, background execution, delegated authorization, or OpenCode live R3 path.
 
 The implemented V3 validator deliberately composes the complete persisted V2 schema with `AgencyStateV1`: old V1/V2 snapshots remain byte-unchanged, while every V3 snapshot must validate both inherited cognition and the additive agency records. Source mutation uses a second write-ahead journal coordinated with the existing immutable-revision transition, so restart can reconcile either side of the source/Twin boundary without granting the runtime a writer.
+
+## Required continuity bridge from R3 to R4
+
+R4 is not a separate social profile or mailbox product. Its public presence and
+deeper response path must be causally derived from the same accepted Living
+Project Twin:
+
+```text
+current validated TwinRevisionV3
+  → locally selected eligible bases
+  → deterministic Projection Candidate
+  → exact Owner publication decision
+  → immutable Projection Capsule
+  → Room and optional Third Place admission
+  → Guest Interaction
+  → untrusted local Signal Box import
+  → selected current Twin context + local judgment
+  → exact Owner-reviewed Response Capsule
+  → hosted and local receipts
+```
+
+The reconciled R4 Control Packet must encode these continuity requirements. The
+final schema names remain part of that later packet and its separate Schema &
+Migration Manifest.
+
+### Local Projection basis
+
+Every public claim keeps a local-only basis record containing:
+
+- exact current Twin revision number and revision hash;
+- workspace-contract hash and projection-policy generation;
+- claim text, public slot, attribution class, disclosure class, and
+  transformation/Owner-edit classification;
+- exact source kind, internal source reference, source content hash, and
+  current semantic/effect status;
+- exact publication payload hash, Owner decision, and receipt lineage.
+
+Only a Projection-scoped opaque `publicBasisId` may leave the local edge. The
+hosted service never receives a local workspace ID, Twin revision, Reflection
+ID, correction body, evidence path/body, workspace-contract hash, or policy
+hash.
+
+For P0, the exact selected basis records and any separately hashed,
+Owner-admitted Projection-only text form the complete Projection allowlist.
+No ambient Twin field, workspace source, model-generated claim, or freehand
+server text enters the candidate.
+
+The local eligibility floor is:
+
+| Twin basis | P0 Projection eligibility |
+|---|---|
+| Current Owner Frame field or unresolved item | allowed as exact Owner-authored current state |
+| Active Owner-corrected Reflection | allowed as `owner_confirmed` when explicitly selected |
+| Active inferred Reflection | allowed only when explicitly admitted and visibly labeled `inferred_allowed` with uncertainty |
+| Superseded or invalidated Reflection | prohibited |
+| Proposed or merely approved R3 action | cannot appear as a completed/current accomplishment |
+| Successfully executed and still-current R3 effect | may support an exact current fact |
+| Rolled-back R3 effect | may support only an exact historical “tested and rolled back” fact, never a current accomplishment |
+| Invalidated or indeterminate effect | prohibited as a positive current claim |
+| New Owner-authored Projection-only wording | allowed only as separately hashed text in the exact Owner-admitted Projection input manifest and labeled locally as Owner-authored; it must not masquerade as Twin-derived cognition |
+
+This table prevents a hand-authored page from satisfying R4 merely by looking
+like Forme. Owner authorship remains valid, but the system must distinguish it
+from a claim derived from R1 Continuity, R2 Cognition, or R3 Agency.
+
+### Freshness and correction
+
+- Immediately before first publication, Forme rechecks the exact Twin HEAD,
+  policy generation, every selected basis, semantic/effect status, payload
+  hash, and still-current Owner decision.
+- An actual new Twin revision conservatively makes the P0 Projection stale; a
+  no-op observation does not.
+- A correction, invalidation, rollback, source-boundary change, or disclosure
+  policy change invalidates an unsubmitted candidate whose basis it changes.
+- A submitted-unknown publication first reconciles its original idempotency
+  key. If it committed against an older Twin, Forme receipts it and marks it
+  stale rather than pretending it never existed.
+- Hosted Presence and the local Presence ledger remain derived transport and
+  publication state. Neither becomes canonical Twin meaning.
+
+### Signal return boundary
+
+An imported Guest Interaction remains untrusted Presence input. Sync, ACK,
+drafting, response publication, or Guest deletion creates no Twin revision in
+R4 P0. A local response may use only the exact selected current Twin context
+and Guest-approved provider visibility. Admitting any external signal into
+canonical Twin meaning is a future Owner/policy stop gate.
+
+### Required causal acceptance evidence
+
+The R4 demo and tests must prove:
+
+1. the real Forme Projection is compiled from a freshly observed real Forme
+   Twin, not only from a fixture or freehand public page;
+2. its local basis includes at least one R1 Owner Frame fact, one eligible R2
+   corrected meaning, and one truthful R3 receipt/effect fact;
+3. superseded/invalidated meaning and rolled-back/indeterminate action cannot
+   masquerade as current;
+4. a candidate approved at revision N cannot publish as current at N+1, while
+   a no-op observation does not create false staleness;
+5. Guest import creates no Twin revision;
+6. the full deeper Response path uses at least one exact current private Twin
+   basis beyond the public capsule;
+7. private canaries remain absent from candidates, capsules, packets,
+   responses, hosted state, and receipts.
+
+These requirements preserve the causal R1 → R2 → R3 → R4 product story. They
+do not authorize an R4 schema, Presence store, model call, credential,
+publication, hosted mutation, deployment, or external interaction. A visibly
+labeled manual/static Response may remain a degraded schedule fallback, but it
+does not satisfy the full causal R4 acceptance criterion.
 
 ## Accepted R2 implementation boundary
 
@@ -148,22 +264,22 @@ The archived broad claim schema, `98_Forme/` layout, notes mirror, runtime adapt
 
 Each is selected only when the next walking slice requires it and after its Control Packet is reviewed.
 
-## Cross-cutting proposals and approved R4 product boundary
+## Cross-cutting contracts and approved R4 product boundary
 
 Four connected briefs make previously implicit highest-vision mechanics
-explicit. The privacy-first agency direction is Owner-stated and its formal
-boundary model remains proposed; the R4 product topology is owner-approved;
-Stewardship remains an owner proposal. None changes implemented authority yet.
+explicit. The privacy-first agency direction and P boundary model are
+Owner-approved for R4; the R4 product topology is owner-approved; Stewardship
+remains an owner proposal. None grants implemented R4 authority yet.
 
 ### Agency and trust
 
-[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the Owner's stated
-privacy-first/minimum-friction direction and proposes an
-**agency-forward, boundary-strict** formalization. Routine, Collaborative, and
-Exploratory cognition remain independent from effect authority. The Owner may
-grant a useful standing envelope directly; the prior state sequence is a set
-of calibration states, not a mandatory ladder. Confidence and shadow agreement
-inform review but cannot grant permission.
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the Owner-approved
+privacy-primary P boundary and still-proposed **agency-forward,
+boundary-strict** application guidance. P keeps confidence and historical
+agreement from creating authority. The proposed guidance treats Routine,
+Collaborative, and Exploratory cognition as independent from effect authority
+and lets the Owner grant a useful standing envelope directly rather than
+requiring a mandatory maturity ladder.
 
 ### Stewardship and entropy
 

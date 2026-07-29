@@ -1,13 +1,12 @@
 # R4 Forme Room experience and protocol brief v0.5
 
-- Status: **owner-approved product foundation and public/private Room
-  correction; privacy-first agency direction recorded; broader interpretation
-  and T2–T5 Technical Owner Review active**
-- Updated: 2026-07-27
+- Status: **owner-approved product foundation, public/private Room correction,
+  and P human-boundary interpretation; T2–T5 Technical Owner Review active**
+- Updated: 2026-07-28
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
-- Owner direction: **2026-07-27 — privacy-first agency + minimum friction;
-  formal boundary interpretation pending**
+- P approval: **2026-07-28 — privacy-primary boundary +
+  representation/consequence companion guards + no self-expansion**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -43,10 +42,12 @@ The Owner added a second correction on 2026-07-26:
 - unlisted is a public discovery state, not a substitute for privacy.
 
 On 2026-07-27 the Owner stated a privacy-first/minimum-friction agency
-direction. The current Agent recommendation formalizes it with companion
-human-representation/consequence guards and a no-self-expansion rule, then
-applies it to pending T2–T5. That interpretation is still for Owner review; it
-does not change approved T1 or grant implementation authority.
+direction. On 2026-07-28 the Owner approved its P formalization for R4:
+privacy is the primary source/provider/audience perimeter,
+human-representation/commitment and irreversible/material consequence are
+companion guards, existing authority cannot expand itself, and covered work
+inside the envelope proceeds review-by-exception. This closes P only; it does
+not change approved T1, approve T2–T5, or grant implementation authority.
 
 ## Revised user outcome
 
@@ -480,7 +481,8 @@ gates. No current document grants implementation authority.
 - whether Mentor Lens becomes the first demo case;
 - the exact creative visual language of the Third Place and Room.
 
-T1 closes Guest ingress and Room exposure. P and T2–T5 close the remaining
-agency, identity, external visibility, lifecycle, retention,
-hosting-integration, and P0 Resonance answers. Product-expression questions
-may continue without weakening those gates.
+P and T1 close the human-boundary interpretation, Guest ingress, and Room
+exposure. T2–T5 close the remaining exact agency, identity, external
+visibility, lifecycle, retention, hosting-integration, and P0 Resonance
+answers. Product-expression questions may continue without weakening those
+gates.

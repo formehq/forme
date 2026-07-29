@@ -1,9 +1,9 @@
 # R4 agency-first recalibration v0.1
 
-- Status: **Owner-stated privacy-first/minimum-friction direction applied as a
-  recommendation to the open R4 review; T1 stays approved, the broader boundary
-  interpretation, T2–T5, and implementation remain unapproved**
-- Updated: 2026-07-27
+- Status: **P privacy-first human-boundary interpretation Owner-approved on
+  2026-07-28; T1 stays approved; exact T2–T5 mechanisms and implementation
+  remain unapproved**
+- Updated: 2026-07-28
 - Purpose: distinguish the authority Forme should grant now from useful
   long-term agency, without turning the August MVP into a policy-engine project
 
@@ -153,9 +153,10 @@ path. The later product generalizes the same contract rather than replacing it.
 
 This document:
 
-- records the Owner's privacy-first/minimum-friction product direction;
-- proposes companion human-boundary guards and revises the **pending
-  recommendation** for T2 while clarifying T3–T5 framing;
+- records the Owner-approved P privacy-first/minimum-friction human-boundary
+  model;
+- applies that approved boundary to the **pending recommendation** for T2 while
+  clarifying T3–T5 framing;
 - preserves the approved T1 product behavior and all existing R1–R3 evidence;
 - grants no R4 implementation, credential, provider visibility, deployment,
   public behavior, external message, durable production write, or spend.

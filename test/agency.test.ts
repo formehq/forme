@@ -286,6 +286,33 @@ test("R3 packet is deterministic and body-free, and model output cannot add a pa
   assert.equal(buildContextPacket(fixture.workspace, fixture.selection).packet.baseTwinRevision, 3);
 });
 
+test("R2 Context Packet preserves active owner corrections after the Twin reaches V3", (context) => {
+  const fixture = makeR3Fixture();
+  context.after(() => removeWorkspace(fixture.workspace));
+  const beforePromotion = statusWorkspace(fixture.workspace).revision;
+  if (beforePromotion.schemaVersion !== "2") assert.fail("expected corrected V2 fixture");
+  const correction = beforePromotion.cognition.corrections[0];
+  assert.ok(correction);
+
+  const promoted = runActionProposal(
+    fixture.workspace,
+    "Render one bounded next-move brief for owner-controlled R3 validation.",
+    new FakeActionRuntime(),
+    { now: at("2026-07-18T11:01:00.000Z") },
+  ).observation.revision;
+  if (promoted.schemaVersion !== "3") assert.fail("expected fixture to reach V3");
+
+  const nextPacket = buildContextPacket(fixture.workspace, fixture.selection).packet;
+  assert.equal(nextPacket.baseTwinRevision, promoted.revision);
+  assert.deepEqual(nextPacket.activeCorrections, [{
+    correctionId: correction.correctionId,
+    targetReflectionId: correction.targetReflectionId,
+    correctedReflectionId: correction.correctedReflectionId,
+    correctionText: correction.correctionText,
+    correctedAt: correction.correctedAt,
+  }]);
+});
+
 test("R3-V2 contract enforces recommendation, ask-owner, decomposition, and rendered-text boundaries", (context) => {
   const fixture = makeR3Fixture();
   context.after(() => removeWorkspace(fixture.workspace));

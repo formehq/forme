@@ -1,11 +1,10 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-27
-- Current verdict: **R3 is owner-accepted for the MVP; the privacy-first agency
-  direction is Owner-stated and R4 T1 public/private Room behavior is
-  owner-approved at the product-contract level; the broader boundary
-  formalization and recalibrated T2–T5 remain under review and unimplemented**
+- Updated: 2026-07-28
+- Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
+  human-boundary model and R4 T1 public/private Room behavior are
+  owner-approved; recalibrated T2–T5 remain under review and unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -515,8 +514,9 @@ identified two companion risks for the Owner to judge: an Agent could
 impersonate or commit the human, or cause an irreversible/materially
 high-impact effect without exposing new private data.
 
-The Owner-stated part is the privacy-first/minimum-friction direction. The
-current **proposed formalization**, still pending Owner review, is:
+At that point the Owner-stated part was the
+privacy-first/minimum-friction direction. The **proposed formalization** taken
+into the next Owner review was:
 
 - define the primary perimeter around source/provider/audience domains not
   already covered by an admitted envelope;
@@ -543,6 +543,39 @@ the proposed Room Operator scope feels safe, that exception-based supervision
 is understandable, or that Agent-triggered explicit sync removes enough
 friction. Those require the exact T2–T5 decision, implementation, and owner
 demo. No R4 authority or implementation was granted.
+
+## Evidence round 9 — P approval and R1–R4 continuity audit
+
+On 2026-07-28 the Owner approved P for the R4 authority contract:
+
+- privacy is the primary source/provider/audience perimeter;
+- representation/commitment and irreversible/material consequence are
+  companion guards;
+- existing authority cannot expand itself;
+- covered work inside an explicit, inspectable, revocable envelope proceeds
+  review-by-exception.
+
+This is governance evidence, not usage evidence. It closes the human-boundary
+interpretation only; it does not validate the proposed Room Operator experience
+or approve T2–T5, schemas, implementation, provider visibility, hosted
+mutation, external interaction, deployment, or spend.
+
+The same round audited whether R1–R3 actually support R4. The state chain is
+genuinely additive: V3 retains V2 cognition, R3 action requires an active
+Owner-corrected Reflection, and execution/rollback return receipts and source
+state to the same Twin. The audit also found one concrete regression gap:
+`ContextPacketV1` forwarded active corrections only when the current Twin was
+exactly V2, so a later cognition run after V3 promotion silently lost them.
+The fix now forwards corrections from every non-V1 Twin and a real
+V2-correction → V3-promotion → next-Context-Packet regression raises the suite
+from 44 to 45 passing checks.
+
+Architectural continuity does not yet prove the R4 experience. The required
+acceptance bridge now demands a real, freshly observed Forme Twin, claim-level
+local basis, truthful correction/effect eligibility, stale/no-op behavior, no
+automatic Signal-to-Twin admission, and one real
+Twin → Projection → Guest Signal → local judgment → Response path. Until that
+path runs, R4 product value and interaction quality remain unproven.
 
 ## Follow-up product-learning questions — not R4 blockers
 

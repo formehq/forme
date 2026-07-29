@@ -11,6 +11,7 @@ import type {
   ContextPacketBuild,
   GitLineEvidence,
   TwinRevisionV2,
+  TwinRevisionV3,
   WorkspaceContract,
 } from "./types.ts";
 
@@ -157,7 +158,7 @@ function resolveDocument(
   return { document, evidence };
 }
 
-function activeCorrections(revision: TwinRevisionV2): ActiveCorrectionContext[] {
+function activeCorrections(revision: TwinRevisionV2 | TwinRevisionV3): ActiveCorrectionContext[] {
   const activeReflectionIds = new Set(
     revision.cognition.reflections
       .filter((reflection) => reflection.status === "corrected")
@@ -207,7 +208,7 @@ export function buildContextPacket(workspaceRoot: string, selection: ContextSele
     task,
     documents,
     evidence,
-    activeCorrections: current.schemaVersion === "2" ? activeCorrections(current) : [],
+    activeCorrections: current.schemaVersion === "1" ? [] : activeCorrections(current),
     allowedEvidenceIds: evidence.map((item) => item.evidenceId),
     constraints: [
       "Use only the supplied documents and evidence IDs.",

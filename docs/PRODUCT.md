@@ -1,9 +1,9 @@
 # Product
 
-- Status: owner-approved product frame plus owner-stated privacy-first,
-  minimum-friction agency direction; R4 public/private Room correction
-  approved, T2–T5 technical Owner review active
-- Updated: 2026-07-27
+- Status: owner-approved product frame and privacy-first, minimum-friction P
+  human-boundary interpretation; R4 public/private Room correction approved,
+  T2–T5 technical Owner review active
+- Updated: 2026-07-28
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -35,7 +35,7 @@ Long-term forms may include person, project, and team Twins; specialized cogniti
   establish or widen a boundary; work already covered by it is
   review-by-exception.
 
-The current recommended interpretation is **agency-forward and
+The Owner-approved P interpretation is **agency-forward and
 boundary-strict**, not approval-forward and not agent-unbounded. “Narrowly
 delegated” means the target, audience, identity, effect class, budget, and
 revocation boundary are exact; it does not mean the Agent must receive only one
@@ -43,12 +43,11 @@ tiny verb or one click at a time. Confidence, owner-history similarity, account
 login, filesystem access, or authority in another Room never creates
 permission by itself.
 
-[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the Owner's stated direction and
-proposes companion authorship/consequence guards plus a no-self-expansion
-meta-rule. That formalization and its exact runtime mechanics still require
-Owner review and a Control Packet. [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains
-a proposal for Entropy Reduction as the metabolism that keeps all four
-dimensions coherent.
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
+perimeter, companion authorship/consequence guards, and no-self-expansion
+meta-rule. Exact runtime mechanics still require T2–T5 review and a reconciled
+Control Packet. [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
+Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
 ## MVP vision
 

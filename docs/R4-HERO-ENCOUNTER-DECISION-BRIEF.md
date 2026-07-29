@@ -1,13 +1,13 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.2
 
-- Status: **owner-approved product target and public/private Room correction;
-  privacy-first agency direction recorded; broader interpretation and T2–T5
-  Technical Owner Review active; no implementation authority**
-- Updated: 2026-07-27
+- Status: **owner-approved product target, public/private Room correction, and
+  P human-boundary interpretation; T2–T5 Technical Owner Review active; no
+  implementation authority**
+- Updated: 2026-07-28
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
-- Owner direction: **2026-07-27 — privacy-first agency + minimum friction;
-  formal boundary interpretation pending**
+- P approval: **2026-07-28 — privacy-primary boundary +
+  representation/consequence companion guards + no self-expansion**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
@@ -453,9 +453,10 @@ open mailbox, additional Twin, or server AI.
 ## Approval status and next gate
 
 The 2026-07-25 approval and 2026-07-26 correction establish the current product
-target. The 2026-07-27 privacy-first/minimum-friction direction informs the
-next review, while its broader formalization and exact mechanics remain
-pending. T1 is closed; the Owner now reviews T2–T5 in
+target. The 2026-07-28 P approval makes the privacy-primary perimeter,
+representation/consequence companion guards, no-self-expansion, and
+review-by-exception the R4 human-boundary contract. Exact mechanisms remain
+pending. P and T1 are closed; the Owner now reviews T2–T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After its
 remaining cards close, agents will reconcile the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which

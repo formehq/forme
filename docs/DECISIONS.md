@@ -167,22 +167,43 @@ Human authorization should establish the boundary rather than be repeated for
 every mechanical action. This direction does not grant any runtime authority
 by itself.
 
-**Recommended interpretation — pending Owner review:** use companion guards for
-human authorship/commitment and irreversible/materially high-impact
-consequences, plus a no-self-expansion rule for authority. Apply the direction
-to open R4 T2 by considering a fixed standing exact per-Room
-`room_operator.v1` scope bundle for routine transport and lifecycle
-enforcement. Keep T1 unchanged and treat T3's exact manifest and T5's no-daemon
-operation as P0 bootstrap choices rather than the long-term ceiling. The
-formal taxonomy, exact T2 verbs, T3–T5, and all implementation remain pending
-Owner approval.
+**Recommended interpretation at the time:** use companion guards for human
+authorship/commitment and irreversible/materially high-impact consequences,
+plus a no-self-expansion rule for authority. Apply the direction to open R4 T2
+by considering a fixed standing exact per-Room `room_operator.v1` scope bundle
+for routine transport and lifecycle enforcement. Keep T1 unchanged and treat
+T3's exact manifest and T5's no-daemon operation as P0 bootstrap choices rather
+than the long-term ceiling. The Owner approved this boundary interpretation as
+P on 2026-07-28; exact T2 verbs, T3–T5, and all R4 implementation remain
+separate pending decisions.
 
 **Reason:** approval friction should correspond to a real human choice, not to
 the number of mechanical API calls. Repeatedly asking for sync, ACK, retry, or
 deterministic staleness enforcement weakens practical agency without widening
-privacy protection. The companion guards are recorded as the Agent's
-recommended interpretation because an Agent can speak for or irreversibly bind
-a human without leaking new private data; the Owner has not yet separately
-approved that formalization. Nothing here authorizes a runtime credential,
-private visibility, provider call, hosted mutation, message, deployment,
-production write, or spend.
+privacy protection. The companion guards were initially recorded as the
+Agent's recommended interpretation because an Agent can speak for or
+irreversibly bind a human without leaking new private data. Nothing here
+authorizes a runtime credential, private visibility, provider call, hosted
+mutation, message, deployment, production write, or spend.
+
+## 2026-07-28 — P human-boundary interpretation approved for R4
+
+**Decision:** approve privacy as the primary source/provider/audience perimeter,
+with companion guards for human representation/commitment and
+irreversible/materially high-impact consequences, plus a no-self-expansion
+rule. Inside an explicit, inspectable, revocable envelope, covered operations
+run review-by-exception: act, verify, receipt, and report; return to the Owner
+for a boundary crossing, material drift, failed verification, exhausted budget,
+or another named exception.
+
+**Reason:** privacy is Forme's primary human perimeter, but privacy alone does
+not prevent an Agent from speaking for the Owner, irreversibly binding them, or
+expanding its own authority. These companion guards protect those human
+boundaries without turning routine API calls into ceremonial approvals.
+
+**Effect:** this closes P and makes the four-part boundary interpretation an
+R4 architecture invariant. It does not approve the proposed
+`room_operator.v1` verb list or lifetime, T3 private-context visibility, T4
+lifecycle behavior, T5 synchronization/retention behavior, a reconciled R4
+Control Packet, any R4 implementation, provider call, credential, hosted
+mutation, external message, deployment, production write, or spend.

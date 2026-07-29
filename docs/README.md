@@ -10,13 +10,13 @@ The repository keeps a deliberately small decision surface.
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Which boundaries must survive implementation choices? |
 | [`DECISIONS.md`](./DECISIONS.md) | Which important choices have been made, and why? |
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
-| [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-stated privacy-first/minimum-friction direction plus the proposed companion guards and delegation model. |
+| [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |
 | [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md) | Owner-approved product target: the Hybrid encounter, curated Forme Third Place, layered identity, and P0/P1 boundary. |
-| [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) | Start here for R4 technical review: ten-minute mental model, T1 public/private Room decision, one agency-formalization check, four remaining technical cards, and five walkthroughs. |
+| [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) | Start here for R4 technical review: ten-minute mental model, closed P/T1 decisions, four remaining technical cards, and five walkthroughs. |
 | [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md) | Short audit: what minimum-friction agency changes in pending R4 T2–T5 now, what waits, and what human boundaries stay hard. |
-| [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) | Unreconciled implementation appendix: its protocol/identity/sync/lifecycle detail remains useful, but the former Vercel/Supabase and invite-only Guest access recommendations must be rewritten after P and T2–T5 close. |
+| [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) | Unreconciled implementation appendix: its protocol/identity/sync/lifecycle detail remains useful, but the former Vercel/Supabase and invite-only Guest access recommendations must be rewritten after T2–T5 close. |
 | [`reference/architecture-understanding-contract-v0.1.md`](./reference/architecture-understanding-contract-v0.1.md) | Reference only: owner-authored rebuild map retained for shared understanding and historical open questions. |
 | [`reference/design-lineage.md`](./reference/design-lineage.md) | Reference only: how the early effects, cognitive-organ model, and harness exploration became the current Living Project Twin architecture. |
 | [`research/agent-runtime-strategy-2026-07-15.md`](./research/agent-runtime-strategy-2026-07-15.md) | Research and durable boundary guidance: what Codex/OpenCode own, what Forme owns, and how adapters should deepen without forks or forced parity. |

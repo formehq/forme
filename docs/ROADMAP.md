@@ -1,13 +1,12 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-07-27
+- Updated: 2026-07-28
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R3 is owner-accepted; the privacy-first/minimum-friction agency
-  direction is recorded and the R4 product target is owner-approved; T1
-  public/private Room correction is approved; agency formalization P and
-  recalibrated T2–T5 in the
+- Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
+  human-boundary model, R4 product target, and T1 public/private Room correction
+  are owner-approved; recalibrated T2–T5 in the
   [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) are active, and the
   first Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
@@ -48,14 +47,15 @@ personhood; public reading needs no account; durable publishers and curators
 are invite-only; Agent Guests receive bounded, revocable delegated
 credentials. The server runs no AI.
 
-The agency-first recalibration proposes keeping the human boundary exact while
-removing ceremonial per-operation approval inside it. The pending P0
+The approved P model keeps the human boundary exact while removing ceremonial
+per-operation approval inside it. The pending T2 P0
 recommendation is one fixed standing `room_operator.v1` scope bundle per exact
 Room for typed sync, deterministic receipt/recovery, exact Owner-approved
 artifact delivery, and deterministic stale attestation. The Agent's standard
 Room workflow calls sync explicitly; read-only commands do not hide writes and
-no background daemon is required. The broader companion guards and exact
-authority remain T2–T5 decisions.
+no background daemon is required. The companion human-boundary guards are
+approved; the exact authority, verbs, scopes, and lifetimes remain T2–T5
+decisions.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and

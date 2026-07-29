@@ -1,9 +1,9 @@
 # Agency and human-boundary model v0.2
 
-- Status: **privacy-first, minimum-friction direction stated by the Owner on
-  2026-07-27; the formal human-boundary model and exact mechanisms below remain
-  proposed and subject to Owner review**
-- Updated: 2026-07-27
+- Status: **privacy-first, minimum-friction direction and the P human-boundary
+  interpretation Owner-approved for R4 on 2026-07-28; exact T2–T5 mechanisms
+  and implementation remain subject to separate Owner review**
+- Updated: 2026-07-28
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
   control
@@ -17,9 +17,11 @@ friction**:
 > inspectable, revocable boundary, the Twin and Agent should have the broadest
 > useful freedom and the least necessary friction.
 
-The rest of this document is the current recommended formalization of that
-direction. It helps the Owner inspect its consequences; it does not silently
-turn the added categories or R4 mechanisms into approved decisions.
+The **Privacy-first human boundary** section below is the Owner-approved P
+formalization of that direction for R4. The later cognitive-mode, delegation,
+and R4-application sections remain design guidance unless an exact mechanism
+is separately approved. P does not silently turn any credential, visibility
+grant, or implementation into an approved decision.
 
 This is neither “ask before everything” nor “let the Agent do anything.”
 Forme's job is to make the boundary real: exact scope, audience, attribution,
@@ -39,7 +41,7 @@ inside it. Two companion guards prevent the Agent from speaking for or
 irreversibly binding the human without reintroducing routine approval
 friction. A final meta-rule prevents an envelope from expanding itself.
 
-The proposed model requires explicit human authorization to **establish or
+The approved model requires explicit human authorization to **establish or
 widen** an envelope across one of these boundaries:
 
 1. **Information and audience — primary perimeter:** admitting a source zone,
@@ -261,11 +263,11 @@ freely apply those admitted patterns inside it, but new private history,
 consequential commitment, or an assertion that “the mentor decided” crosses
 the human boundary and returns to the real mentor.
 
-## What this direction does not do
+## What this approval does not do
 
-The Owner's stated privacy-first direction changes the Product's guiding
-language. The companion boundary taxonomy and exact R4 mechanisms remain
-recommendations until reviewed. None of this by itself authorizes an Agent
+The approved P model changes Forme's guiding architecture and the way later
+authority contracts are judged. It does not approve the exact R4 mechanisms
+that instantiate that model. None of this by itself authorizes an Agent
 runtime, credential, private source, provider call, hosted mutation, external
 message, deployment, or spend. Those require the relevant exact Control Packet
 and production grants.

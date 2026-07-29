@@ -1,9 +1,9 @@
-# R4 Technical Owner Review Brief v0.4
+# R4 Technical Owner Review Brief v0.5
 
-- 状态：**privacy-first/minimum-friction agency direction 已记录，T1
-  public/private Room correction 已批准；broader boundary interpretation
-  与 T2–T5 Owner review 进行中；不是最终 Packet 批准记录**
-- 更新：2026-07-27
+- 状态：**P privacy-first human-boundary interpretation 与 T1
+  public/private Room correction 已批准；T2–T5 Owner review 进行中；不是
+  最终 Packet 批准记录**
+- 更新：2026-07-28
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 - 产品依据：
@@ -21,14 +21,15 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. 先确认一条 agency 边界解释，再对剩余四张技术决策卡分别回答
+2. P agency 边界解释已经关闭；现在对剩余四张技术决策卡分别回答
    `批准 / 带条件批准 / 修改`；
 3. 用五个具体场景检查系统行为是否符合直觉；
 4. 只看 Agent 报告的 red/yellow exception。
 
-T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正。P 与 T2–T5
-关闭后，Agent 才会按你的答案重写长 Packet、重新审计并计算新的
-hash。之前那份 Packet 的 hash 已经失效，不应再被批准。
+T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正，P 已在
+2026-07-28 按推荐解释批准。T2–T5 关闭后，Agent 才会按你的答案重写
+长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash 已经
+失效，不应再被批准。
 
 2026-07-27 的 agency-first 方向直接修正了**尚未批准的 T2 推荐**，也
 澄清了待决 T3–T5 的 framing：
@@ -51,10 +52,11 @@ Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替�
   应对应 local Repo/Workspace 与 Room，而不是自动继承整个 Controller
   account。独立 per-Room binding/credential 是下面的当前推荐方案，
   不是已经批准的 T2 结论。完整 T2 仍待 Owner 批准。
-- Owner 已明确倾向 **privacy-first agency + minimum friction**。当前
-  Agent 推荐用 authorship/commitment、irreversible/material consequence
-  companion guards 和 no-self-expansion rule 来形式化它；这部分解释、
-  下面的 exact T2 verbs 和所有实现仍待 Owner 判断。
+- Owner 已批准 P：以 privacy 作为 primary source/provider/audience
+  perimeter，加入 authorship/commitment、irreversible/material
+  consequence companion guards 与 no-self-expansion rule；明确可撤销
+  envelope 内 review-by-exception。下面的 exact T2 verbs/scopes/lifetime
+  和所有实现仍待 Owner 判断。
 - Room 现在有两个明确的 first-class kind：Third Place 中公开可遇见的
   Room，以及阅读和互动都需要 Owner Grant 的 Private Room。`unlisted`
   只是 curation/discovery 状态，不等于 private。
@@ -318,14 +320,14 @@ capability。Private Room 只允许 `invite_only` 或 `closed`，永远不能设
 
 ## P — Privacy-first agency 在 R4 里怎样解释
 
-- 状态：**Owner 已表达方向；下面的 formalization 待确认**
+- 状态：**Owner-approved — 2026-07-28**
 
 ### Owner 已经说清楚的部分
 
 在人类隐私边界内，尽量给 Twin/Agent 更大的 agency，并尽量减少
 friction。人批准的是边界，不应是每一个机械动作。
 
-### Agent 推荐你额外确认的解释
+### Owner 批准的解释
 
 - **Primary perimeter — privacy:** 只有建立或扩大到当前 envelope 之外的
   source/provider/audience 时才重新授权；边界内不逐文件、逐 API 请示。
@@ -337,14 +339,40 @@ friction。人批准的是边界，不应是每一个机械动作。
   Room、scope、audience 或 budget；明确允许的 attenuated derivative
   token 不算扩权。
 
-这四句只用于解释 R4 authority contract。它们不是要求每次弹 approval，
-也不自动冻结 Forme 未来的完整 agency taxonomy。
+这四句用于解释 R4 authority contract。它们不是要求每次弹 approval，
+也不自动冻结 Forme 未来的完整 agency taxonomy。这个批准不包含
+`room_operator.v1` exact verbs/scopes/lifetime、T3–T5、Control Packet、
+schema/migration、实现、部署或生产 authority。
 
-### 你可以这样回复
+## R1–R3 怎样真正接到 R4
 
-- `P 按 privacy primary + representation/consequence companion guards + no-self-expansion 推荐解释批准用于 R4`
-- `P 只确认 privacy boundary，其余三项继续讨论`
-- `P 带条件批准：...`
+R4 不能靠手写一页项目介绍来“看起来像 Forme”。它必须证明同一个 Twin
+一路走到 Presence：
+
+```text
+current Twin
+  → eligible local claim bases
+  → Projection Candidate
+  → exact Owner publication
+  → Room
+  → Guest Signal
+  → local Twin + Agent + Owner judgment
+  → reviewed Response
+```
+
+因此 revised Packet 必须满足三条：
+
+1. 每个公开 claim 在本地绑定 exact current Twin revision、eligible
+   Owner Frame/Reflection/effect state、source hash 与 publication receipt；
+   server 只看到 opaque public basis。
+2. superseded/invalidated meaning 不能投射；rolled-back action 不能冒充
+   current accomplishment；真实 Twin change 会 stale，no-op 不会。
+3. Guest import 保持 untrusted Presence input，P0 不自动写入 Twin；首个
+   demo 必须从真实 Forme Twin 编译，而不是只跑 hard-coded fixture。
+
+完整 requirement 在
+[`ARCHITECTURE.md`](./ARCHITECTURE.md#required-continuity-bridge-from-r3-to-r4)。
+这是一条 R4 reconciliation/acceptance constraint，不是新的实现批准。
 
 ## T2 — Owner 与 Agent 怎样控制 Room
 
@@ -867,17 +895,16 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-T1 已关闭。先确认 P，再看四张技术卡；可以一张一张聊，也可以直接：
+P 与 T1 已关闭。现在只需看四张技术卡；可以一张一张聊，也可以直接：
 
 ```text
-P：...
 T2：...
 T3：...
 T4：...
 T5：...
 ```
 
-P 与 T2–T5 关闭后：
+T2–T5 关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；
 2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；
