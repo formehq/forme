@@ -174,8 +174,8 @@ by considering a fixed standing exact per-Room `room_operator.v1` scope bundle
 for routine transport and lifecycle enforcement. Keep T1 unchanged and treat
 T3's exact manifest and T5's no-daemon operation as P0 bootstrap choices rather
 than the long-term ceiling. The Owner approved this boundary interpretation as
-P on 2026-07-28; exact T2 verbs, T3–T5, and all R4 implementation remain
-separate pending decisions.
+P on 2026-07-28. At that point, exact T2 verbs, T3–T5, and all R4
+implementation were still pending; T2 was approved separately below.
 
 **Reason:** approval friction should correspond to a real human choice, not to
 the number of mechanical API calls. Repeatedly asking for sync, ACK, retry, or
@@ -207,3 +207,49 @@ R4 architecture invariant. It does not approve the proposed
 lifecycle behavior, T5 synchronization/retention behavior, a reconciled R4
 Control Packet, any R4 implementation, provider call, credential, hosted
 mutation, external message, deployment, production write, or spend.
+
+## 2026-07-28 — T2 Room control contract approved for R4
+
+**Decision:** approve hosted Forme as a GitHub-like management/control/status
+plane over one versioned API contract, with Web as the P0 human cockpit and a
+thin CLI/typed gateway for applicable public, Guest, and
+`room_operator.v1` operations. Private Twin reasoning and drafting remain
+local. Each Owner-controlled pairing creates one independently revocable
+`RoomBinding` and credential for one exact Room; a workspace may hold multiple
+bindings, but no credential spans Rooms or creates a hosted workspace identity.
+
+Approve one fixed `room_operator.v1` bundle for 30 days from pairing, with no
+automatic renewal and earlier Owner revocation. It may inspect exact
+Room/Projection/status/health/receipts, explicitly sync/pull accepted
+Interactions and tombstones, ACK deterministic import/delivery, recover
+idempotently, record a local purge receipt after verifying local deletion,
+deliver only a still-current exactly Owner-approved Projection/Response, and
+attest stale only when the canonical local Twin HEAD is newer than the exact
+Projection basis. Every mutation retains exact target, expected version,
+idempotency, verification, and receipt checks.
+
+The credential belongs to the deterministic connector and never enters a model
+prompt, model environment, or generic tool result. The bundle cannot pair,
+create or discover Rooms, widen scope/audience, issue Grants, change intake or
+Interaction disposition, create new Owner-attributed content, curate, revoke
+content, irreversibly retire/delete, or invoke arbitrary tools. P0
+Controller/Curator boundary actions remain explicit stepped-up Web actions
+against the same API; Agent handoff for those actions remains P1. Anywhere Web
+Control may inspect and control already-hosted content but cannot read the
+private Twin, invoke the local Agent, or bypass exact local publication
+approval.
+
+**Reason:** this gives the Agent meaningful standing agency for routine Room
+transport and deterministic lifecycle enforcement without turning every sync,
+ACK, retry, or already-approved delivery into a new approval prompt. Exact
+Room scope, short lifetime, independent revocation, connector-held credentials,
+and prohibition on self-expansion preserve the approved P boundary.
+
+**Effect:** this closes T2 only. T3 private provider/context visibility, T4
+public lifecycle behavior, T5 synchronization/retention mechanics, the
+reconciled Technical Control Packet, schemas/migrations, implementation,
+credential issuance, deployment, production writes, external interaction, and
+spend remain unapproved. Exact auth provider, hostnames, token/wire format,
+secret-storage adapter, and re-pair/rotation race behavior remain later
+implementation/production decisions. The old packet's broader paired-local
+revoke and `signal:disposition` verbs are explicitly not part of this approval.

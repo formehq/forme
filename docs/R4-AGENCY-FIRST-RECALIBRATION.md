@@ -1,8 +1,8 @@
 # R4 agency-first recalibration v0.1
 
-- Status: **P privacy-first human-boundary interpretation Owner-approved on
-  2026-07-28; T1 stays approved; exact T2–T5 mechanisms and implementation
-  remain unapproved**
+- Status: **P privacy-first human-boundary interpretation and T2 Room control
+  contract Owner-approved on 2026-07-28; T1 stays approved; T3–T5 and
+  implementation remain unapproved**
 - Updated: 2026-07-28
 - Purpose: distinguish the authority Forme should grant now from useful
   long-term agency, without turning the August MVP into a policy-engine project
@@ -29,7 +29,7 @@ Owner defines exact boundary
 | R4 area | Earlier center of gravity | Agency-first correction | August P0 |
 |---|---|---|---|
 | T1 Guest continuity | short exact capabilities and no successor inheritance | keep the clear public/private perimeter; later allow owner-defined relationship envelopes across compatible successors | **Keep approved T1 unchanged.** One public knock; owner-issued 24h/3d/7d short pass; exact Projection binding |
-| T2 Room control | paired Agent handles sync; most management requires a 15-minute one-use action approval | use a fixed standing exact per-Room `room_operator.v1` scope bundle for routine transport and deterministic lifecycle enforcement; Web is a supervisory cockpit | **Change the pending recommendation now.** No dynamic policy/grant object |
+| T2 Room control | paired Agent handles sync; most management requires a 15-minute one-use action approval | use a fixed standing exact per-Room `room_operator.v1` scope bundle for routine transport and deterministic lifecycle enforcement; Web is a supervisory cockpit | **Owner-approved.** Fixed 30-day, non-renewing, independently revocable binding; no dynamic policy/grant object |
 | T3 private drafting | every draft requires Guest choice, Owner start, and exact manifest | Guest/provider/audience consent remains hard; repeated compatible use should later be governed by a persistent context policy | **Keep exact manifest for the first real private draft.** Record it as bootstrap, not permanent UX |
 | T4 lifecycle | every new Projection/Response is separately approved; successor never inherits | deterministic safety enforcement can run automatically; later allow policy-compatible content and successor publication | **Keep exact outward content review and successor re-admission for P0.** Let Room Operator attest stale/recover |
 | T5 async operation | Owner explicitly runs sync; no daemon | the Agent's standard Room workflow invokes typed sync without asking the Owner; background continuity can come later | **Agent-triggered explicit sync plus manual recovery.** Read-only CLI commands do not hide writes |
@@ -40,7 +40,7 @@ explicit later decision.
 
 ## P0 standing Room Operator
 
-The current T2 recommendation should encode one fixed versioned scope bundle
+The Owner-approved T2 contract encodes one fixed versioned scope bundle
 on the local connector's exact RoomBinding. It creates no new policy table,
 delegation chain, or custom-verb UI:
 
@@ -75,6 +75,7 @@ preset may not:
 - issue a new Private Room/relationship Grant or broaden a Guest's authority;
 - change intake mode, dispose/decline an Interaction, or publish a new
   human-attributed judgment;
+- revoke Projection or Response content;
 - create a new human-attributed claim, promise, or externally binding action;
 - admit a Room into Third Place unless Curator authority was separately
   delegated;
@@ -155,13 +156,13 @@ This document:
 
 - records the Owner-approved P privacy-first/minimum-friction human-boundary
   model;
-- applies that approved boundary to the **pending recommendation** for T2 while
-  clarifying T3–T5 framing;
+- records the approved T2 Room Operator application while clarifying pending
+  T3–T5 framing;
 - preserves the approved T1 product behavior and all existing R1–R3 evidence;
 - grants no R4 implementation, credential, provider visibility, deployment,
   public behavior, external message, durable production write, or spend.
 
 The next Owner decision surface remains
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Once T2–T5
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Once T3–T5
 close, the detailed Technical Control Packet must encode the exact approved
 boundary and be hashed again.

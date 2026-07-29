@@ -1,13 +1,15 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.2
 
-- Status: **owner-approved product target, public/private Room correction, and
-  P human-boundary interpretation; T2–T5 Technical Owner Review active; no
-  implementation authority**
+- Status: **owner-approved product target, public/private Room correction, P
+  human-boundary interpretation, and T2 Room control contract; T3–T5 Technical
+  Owner Review active; no implementation authority**
 - Updated: 2026-07-28
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
   representation/consequence companion guards + no self-expansion**
+- T2 approval: **2026-07-28 — API-first control plane + independent per-Room
+  30-day `room_operator.v1` bindings**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
@@ -418,9 +420,9 @@ claim legal or biometric identity.
    2026-07-26:** use invite-only, passwordless accounts for durable
    controllers; allow public reading; give agents bounded, revocable
    credentials; keep account, entity, Room, capsule, agent, guest, and curator
-   identity distinct. The pending T2 recommendation makes the local connector
-   binding exact per-Room with a fixed standing scope bundle; that mechanism is
-   not approved here. The original “invite or verified reply before every
+   identity distinct. Approved T2 makes the local connector binding exact
+   per-Room with a fixed 30-day, non-renewing, revocable standing scope bundle.
+   The original “invite or verified reply before every
    signal” clause is superseded only for one bounded public first encounter.
 5. **Topology and lifecycle — approved:** keep all intelligence at the
    owner-local and optional guest edges. The server provides identity/control,
@@ -455,8 +457,9 @@ open mailbox, additional Twin, or server AI.
 The 2026-07-25 approval and 2026-07-26 correction establish the current product
 target. The 2026-07-28 P approval makes the privacy-primary perimeter,
 representation/consequence companion guards, no-self-expansion, and
-review-by-exception the R4 human-boundary contract. Exact mechanisms remain
-pending. P and T1 are closed; the Owner now reviews T2–T5 in
+review-by-exception the R4 human-boundary contract. The separate 2026-07-28 T2
+approval closes the Room Operator authority contract. P, T1, and T2 are
+closed; the Owner now reviews T3–T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After its
 remaining cards close, agents will reconcile the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which

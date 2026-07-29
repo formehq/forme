@@ -1,8 +1,9 @@
 # Architecture boundaries
 
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
-  R4 product topology, and T1 public/private Room correction owner-approved;
-  T2–T5 Technical Owner Review active; implementation packet unreconciled
+  R4 product topology, T1 public/private Room correction, and T2 Room control
+  contract owner-approved; T3–T5 Technical Owner Review active;
+  implementation packet unreconciled
 - Updated: 2026-07-28
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -323,7 +324,7 @@ store, source-writing authority, commitment authority, or autonomous-reply
 grant. Intelligence remains at the owner-local edge and, optionally, the guest
 edge.
 
-The owner-confirmed T2 intent makes the hosted system an API-first control
+The Owner-approved T2 contract makes the hosted system an API-first control
 plane.
 Every P0 hosted Room read and state transition must have one versioned API
 contract; the human Web surface and an agent-friendly CLI are clients of that
@@ -331,7 +332,7 @@ same contract, not separate authority paths. The CLI remains thin and the
 server remains no-AI: API coverage does not create a generic execution
 endpoint or move private reasoning to the server.
 
-The current, still-unapproved T2 recommendation establishes Owner-local
+The approved T2 contract establishes Owner-local
 connector authority through explicit, revocable per-Room bindings rather than
 inferred from a filesystem path, Git remote, account login, or current working
 directory. The local workspace maps one Twin/entity to any number of
@@ -342,17 +343,23 @@ credentials can therefore rotate or revoke independently. Account-wide Agent
 wildcards, ambient Room discovery, self-expanding scopes, multi-Room bearer
 credentials, and cross-entity batch authority are outside P0.
 
-Under the agency-first recalibration, the P0 binding recommendation is a fixed
+Under the agency-first recalibration, the approved P0 binding is a fixed
 standing `room_operator.v1` scope bundle for routine transport and
 deterministic lifecycle enforcement: inspect, typed sync/pull, ACK,
 idempotent recovery, exact Owner-approved artifact push, and deterministic
-stale attestation. Web is the supervisory cockpit, not a per-call approval
-queue. P0 boundary actions execute directly under a
+stale attestation. Each binding expires 30 days after pairing, never
+auto-renews, and may be revoked earlier. Web is the supervisory cockpit, not a
+per-call approval queue. P0 boundary actions execute directly under a
 stepped-up Owner/Curator Web session; Agent handoff for those actions remains
-P1. The exact capability bundle remains under Owner review; see
+P1. The Room Operator cannot create/discover Rooms, widen scope/audience, issue
+Grants, change intake or Interaction disposition, author new Owner content,
+curate, revoke content, or irreversibly retire/delete. This semantic bundle is
+approved; exact wire verbs, endpoints, rotation
+races, storage adapters, schemas, and implementation remain for the reconciled
+Packet and later gates. See
 [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
 
-Under that recommendation, the paired credential belongs to the deterministic
+Under that contract, the paired credential belongs to the deterministic
 local connector, is not injected into a Forme-managed model
 prompt/environment or generic tool result, and grants no context visibility by
 itself. An allowed Agent requests typed CLI/API operations through a validated
@@ -367,9 +374,10 @@ Account identity proves control and attribution, not personhood. Twin/entity,
 Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing. Under
-the pending T2 recommendation, the local connector receives exact Room-scoped
-delegated authority with useful standing freedom inside its perimeter. The
-exact connector/Guest credential split is part of the same pending review.
+approved T2, the local connector receives exact Room-scoped delegated authority
+with useful standing freedom inside its perimeter. T3 still governs whether
+private Guest bytes may enter a model run; the connector credential grants no
+such visibility.
 
 Public and private are first-class, separate Room instances under the same
 entity and implementation primitive. They use different Room IDs and
@@ -382,7 +390,8 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
-The product boundary is approved. The Owner now reviews
+The product boundary and T2 Room authority contract are approved. The Owner now
+reviews T3–T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
 implementation remains blocked until the remaining cards are reconciled into a
 new exact

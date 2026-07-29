@@ -1,7 +1,7 @@
 # R4 Technical Control Packet v0.1
 
 - Status: **unreconciled implementation appendix; not an approval target; no implementation authority**
-- Updated: 2026-07-26
+- Updated: 2026-07-28
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Product/protocol foundation:
@@ -10,20 +10,21 @@
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 
-> Review notice, 2026-07-26: the Owner has confirmed the existing
+> Review notice, updated 2026-07-28: the Owner has confirmed the existing
 > Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
-> login for Owner Control. On 2026-07-27 the Owner further specified an
-> API-first control direction: Web and a thin CLI must use the same P0 Room
-> capability contracts, and Agent authority should correspond to its local
-> Repo/Workspace and Room rather than the whole Controller account. The active
-> Owner Review recommends independent exact per-Room bindings, no hosted local
-> workspace identity, and no multi-Room credential; those exact mechanics
-> remain unapproved T2 detail. The
-> Owner also superseded the invite-only Guest
+> login for Owner Control. On 2026-07-28 the Owner approved T2: an API-first
+> Web control plane, thin P0 public/Guest and Room Operator CLI, independent
+> exact per-Room 30-day non-renewing bindings, connector-held credentials, and
+> the fixed `room_operator.v1` semantic bundle. The body below has **not** been
+> reconciled to that approval. In particular, its paired-local
+> `projection:revoke`, `response:revoke`, and `signal:disposition` scopes are
+> broader than approved T2 and must not be implemented or treated as approved;
+> content revoke and Interaction disposition remain Owner Web control actions.
+> The Owner also superseded the invite-only Guest
 > ingress with a public one-knock + Owner short-pass model and added a real
 > grant-gated Private Room with a different Room ID and Projection.
 > This implementation appendix has not yet been reconciled to those inputs.
-> T1 is closed; review and close T2–T5 in
+> T1 and T2 are closed; review and close T3–T5 in
 > [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) first. The
 > prior packet hash is not an approval target.
 

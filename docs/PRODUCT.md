@@ -1,8 +1,8 @@
 # Product
 
-- Status: owner-approved product frame and privacy-first, minimum-friction P
-  human-boundary interpretation; R4 public/private Room correction approved,
-  T2–T5 technical Owner review active
+- Status: owner-approved product frame, privacy-first P human-boundary
+  interpretation, R4 public/private Room correction, and T2 Room control
+  contract; T3–T5 technical Owner review active
 - Updated: 2026-07-28
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
@@ -45,8 +45,9 @@ permission by itself.
 
 [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
 perimeter, companion authorship/consequence guards, and no-self-expansion
-meta-rule. Exact runtime mechanics still require T2–T5 review and a reconciled
-Control Packet. [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
+meta-rule. The T2 Room control envelope is approved; T3–T5 and a reconciled
+Control Packet remain stop gates before implementation.
+[`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
 ## MVP vision
@@ -107,7 +108,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T1 closed, T2–T5 active
+## Owner-approved R4 product target — T1/T2 closed, T3–T5 active
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -121,10 +122,11 @@ The owner controls the projection's exact content and disclosure policy; the
 Third Place curator separately controls admission to the shared venue.
 Accounts prove control and attribution, not personhood or complete identity.
 Public reading requires no account. Durable controllers are invite-only. The
-current pending T2
-recommendation interprets their bounded Agent credentials as exact,
+approved T2 contract interprets bounded Agent credentials as exact,
 Room-scoped, revocable authority that is useful and persistent inside its
-approved boundary rather than reduced to repeated per-action approval.
+approved boundary rather than reduced to repeated per-action approval. Each
+binding covers one exact Room for 30 days without automatic renewal; a local
+workspace may hold several independently paired and revocable bindings.
 
 The 2026-07-26 correction makes the public venue approachable rather than only
 viewable. While the Owner selects `public_single`, an anonymous bearer
@@ -137,8 +139,9 @@ does not become private.
 
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
-conversational authority. The product target is approved, but implementation
-remains unauthorized. The Owner first reviews
+conversational authority. The product target and T2 control contract are
+approved, but implementation remains unauthorized. The Owner first reviews
+T3–T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).
@@ -147,7 +150,7 @@ manifest; production deployment, external writes, and spend remain a separate
 Production Deployment & Provisioning Grant.
 The versioned static projection remains the schedule fallback floor.
 
-The agency-first recalibration of the still-open R4 technical cards is recorded
+The agency-first recalibration and approved T2 contract are recorded
 in [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
 It does not reopen the approved T1 public/private topology or authorize R4
 implementation.

@@ -5,8 +5,8 @@
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
 - Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
-  human-boundary model, R4 product target, and T1 public/private Room correction
-  are owner-approved; recalibrated T2–T5 in the
+  human-boundary model, R4 product target, T1 public/private Room correction,
+  and T2 Room control contract are owner-approved; recalibrated T3–T5 in the
   [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) are active, and the
   first Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
@@ -24,9 +24,9 @@
 | R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, and one reviewed continuation | private canary stays absent and public request → local review → response → bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target and T1 public/private Room correction are owner-approved; implementation remains stopped at T2–T5 review and later packet reconciliation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, and T2 Room control contract are owner-approved; implementation remains stopped at T3–T5 review and later packet reconciliation.
 
-## R4 owner-approved product target — T1 closed, T2–T5 review
+## R4 owner-approved product target — T1/T2 closed, T3–T5 review
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -48,22 +48,22 @@ are invite-only; Agent Guests receive bounded, revocable delegated
 credentials. The server runs no AI.
 
 The approved P model keeps the human boundary exact while removing ceremonial
-per-operation approval inside it. The pending T2 P0
-recommendation is one fixed standing `room_operator.v1` scope bundle per exact
+per-operation approval inside it. The approved T2 P0 contract is one fixed
+standing `room_operator.v1` scope bundle per exact
 Room for typed sync, deterministic receipt/recovery, exact Owner-approved
 artifact delivery, and deterministic stale attestation. The Agent's standard
 Room workflow calls sync explicitly; read-only commands do not hide writes and
 no background daemon is required. The companion human-boundary guards are
-approved; the exact authority, verbs, scopes, and lifetimes remain T2–T5
-decisions.
+approved; the T2 authority, verbs, scopes, and 30-day non-renewing lifetime are
+closed, while T3–T5 remain decisions.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
 [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md).
-T1 is recorded in
+T1 and T2 are recorded in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Its remaining
-cards cover anywhere Web Control, OpenAI visibility, public lifecycle promises,
-and the async/retention/P0 boundary. The first detailed
+cards cover OpenAI visibility, public lifecycle promises, and the
+async/retention/P0 boundary. The first detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
 be rewritten for the confirmed existing deployment path and re-audited.
 Exact schemas/migrations and production deployment remain separate later
@@ -83,7 +83,7 @@ The cut order is:
 
 “Cut autonomous replies” means no P0 standing policy for publishing new
 Owner-attributed content. It does not mean cutting routine agency inside the
-proposed Room Operator envelope if T2 approves it.
+approved Room Operator envelope.
 
 ## Cut rules
 

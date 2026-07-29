@@ -10,14 +10,14 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-11**
 - Demo Day: **2026-08-12**
-- Current gate: **R4 — privacy-first/minimum-friction P human-boundary model
-  and T1 public/private Room correction approved; T2–T5 under Technical Owner
-  Review**
+- Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
+  T1 public/private Room correction, and T2 Room control contract approved;
+  T3–T5 under Technical Owner Review**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
-  public-knock/private-Grant correction, and P boundary model are approved;
-  T2–T5 and the first technical packet still require Owner review and
-  reconciliation to the confirmed self-host target; no R4 implementation or
-  production action is authorized**
+  public-knock/private-Grant correction, P boundary model, and T2 Room control
+  contract are approved; T3–T5 and the first technical packet still require
+  Owner review and reconciliation to the confirmed self-host target; no R4
+  implementation or production action is authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -138,7 +138,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — P/T1 closed, T2–T5 Owner review
+## R4 Controlled Presence — P/T1/T2 closed, T3–T5 Owner review
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -146,17 +146,17 @@ admission, layered identity, and the no-server-AI topology.
 
 Start with
 [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md).
-It reduces technical review to one mental model, five Owner decisions, and
-five walkthroughs. T1 is now approved: a Third Place Room supports public
-reading plus one bounded public knock; a true Private Room has a different ID
-and Projection and requires an Owner Grant to read or interact. The confirmed
-deployment target is the existing Cloudflare → Caddy → Hetzner → PostgreSQL
-path, and Owner Control must support anywhere Web login.
+It reduces technical review to one mental model, the closed P/T1/T2 decisions,
+three remaining Owner decisions, and five walkthroughs. T1 establishes the
+public knock and true Private Room. T2 establishes the API-first Web cockpit,
+independent per-Room 30-day non-renewing bindings, and the fixed
+connector-held `room_operator.v1` bundle. The confirmed deployment target is
+the existing Cloudflare → Caddy → Hetzner → PostgreSQL path.
 
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After T2–T5 close, agents will rewrite and re-audit it. No R4
+After T3–T5 close, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

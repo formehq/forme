@@ -2,21 +2,22 @@
 
 - Updated: 2026-07-28
 - Active gate: **R4 — privacy-first/minimum-friction P human-boundary model,
-  product target, and T1 public/private Room correction owner-approved; T2–T5
-  Technical Owner Review active; detailed Control Packet requires
-  reconciliation before exact approval; no R4 implementation**
+  product target, T1 public/private Room correction, and T2 Room control
+  contract owner-approved; T3–T5 Technical Owner Review active; detailed
+  Control Packet requires reconciliation before exact approval; no R4
+  implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
   regression suite plus the real bounded control and independent Career
-  validation pass; R4 product target and P/T1 are closed, T2–T5 review is
+  validation pass; R4 product target and P/T1/T2 are closed, T3–T5 review is
   active, and R4–R5 implementation has not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: Owner reviews the four remaining T2–T5 cards in
+- Next action: Owner reviews the three remaining T3–T5 cards in
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
-  reconcile the detailed Control Packet against the approved P boundary and
-  required Twin-to-Projection continuity bridge before any projection, Third
-  Place, identity, hosting, messaging, local synchronization, persistence,
-  spend, or public behavior is implemented
+  reconcile the detailed Control Packet against the approved P/T1/T2 contracts
+  and required Twin-to-Projection continuity bridge before any projection,
+  Third Place, identity, hosting, messaging, local synchronization,
+  persistence, spend, or public behavior is implemented
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -39,7 +40,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · P/T1 CLOSED · T2–T5 OWNER REVIEW
+R4 Controlled Presence    ← YOU ARE HERE · P/T1/T2 CLOSED · T3–T5 OWNER REVIEW
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -67,21 +68,26 @@ Current truth:
   interaction. Public request/response bodies remain private; unlisted is not
   private; Curator discovery authority remains separate from Owner intake and
   Grant authority;
-- on 2026-07-27 the Owner clarified the intended T2 control shape: hosted
+- on 2026-07-28 the Owner approved the recommended T2 control contract: hosted
   Forme is a GitHub-like management/control/status plane; every P0 Room
   semantic capability has a versioned API; Web and a thin CLI use the same
   contract; and Agent authority should correspond to the local Repo/Workspace
-  and Room rather than the whole Controller account. The Owner Review currently
-  recommends independent per-Room bindings, no hosted workspace ID, and no
-  multi-Room credential; those exact mechanics and the default permission
-  bundle still await Owner judgment;
+  and exact Room rather than the whole Controller account. One workspace may
+  hold multiple independent per-Room bindings, but no credential spans Rooms
+  or creates a hosted workspace identity. The fixed `room_operator.v1` bundle
+  lasts 30 days without automatic renewal, is revocable earlier, stays in the
+  deterministic connector rather than the model, and covers inspect,
+  typed sync/pull, deterministic ACK/recovery, exact Owner-approved delivery,
+  and deterministic stale attestation only. New Rooms/scopes/audiences,
+  Grants, intake/disposition, new Owner content, curation, content revoke, and
+  irreversible retire/delete remain outside it;
 - on 2026-07-28 the Owner approved P for the R4 authority contract: privacy is
   the primary source/provider/audience perimeter; representation/commitment
   and irreversible/materially high-impact consequence are companion guards;
   existing authority cannot expand itself; and covered work inside an explicit,
   inspectable, revocable envelope proceeds review-by-exception. This closes P
-  only. T2 exact verbs/scopes/lifetimes, T3–T5, and all R4 implementation remain
-  unapproved; T1 remains approved and unchanged;
+  only. T3–T5 and all R4 implementation remain unapproved; T1 and T2 remain
+  separately approved;
 - the R1–R3 continuity audit found one real additive Twin chain and one
   cross-version defect: a V3 Twin previously dropped active Owner Corrections
   from a later R2 Context Packet. The defect is repaired with a V3 regression.
@@ -94,7 +100,7 @@ Current truth:
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
   existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment target,
   required anywhere Web login for Owner Control, and reopened the former
-  invite-only Guest model. T1 is now corrected; T2–T5 in
+  invite-only Guest model. T1 and T2 are now closed; T3–T5 in
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) are now the
   active review surface. The prior packet hash is not approvable; no R4
   implementation or external resource is authorized;
@@ -685,12 +691,12 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — R4 T2–T5 Technical Owner Review
+## Active stop gate — R4 T3–T5 Technical Owner Review
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; P human-boundary interpretation
-  owner-approved on 2026-07-28; T2–T5 awaiting Owner judgment; detailed packet
-  unreconciled and unimplemented**
+  and T2 Room control contract owner-approved on 2026-07-28; T3–T5 awaiting
+  Owner judgment; detailed packet unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -743,16 +749,16 @@ The owner approved these five product decisions:
    expiry, revocation, retention, attribution, abuse, and privacy controls
    required for one real encounter.
 
-These decisions establish the product target only. T1 now records the approved
-Guest continuity and Room exposure correction. T2 additionally has a recorded
-Owner direction—GitHub-like hosted management/control/status, API-first Room
-capability parity, a thin CLI, and Repo/Workspace-to-Room-scoped authority.
-Independent exact per-Room bindings plus a standing `room_operator.v1` scope
-bundle for routine transport and deterministic lifecycle enforcement are the
-current agency-first recommendation, not yet an approved T2 decision; the
-complete verb, lifetime, and revocation contract remains open. The remaining
-Owner Review covers that boundary, OpenAI visibility, public lifecycle
-promises, and the asynchronous retention/P0 boundary. Agents must then
+These decisions establish the product target and T2 authority contract only.
+T1 records the approved Guest continuity and Room exposure correction. T2
+approves GitHub-like hosted management/control/status, API-first Room
+capability parity, a thin P0 public/Guest and Room Operator CLI, independent
+exact per-Room bindings, and one fixed 30-day non-renewing
+`room_operator.v1` bundle for routine transport and deterministic lifecycle
+enforcement. Boundary mutations remain stepped-up Web actions; the connector
+holds the credential and the model never receives it. The remaining Owner
+Review covers OpenAI visibility, public lifecycle promises, and the
+asynchronous retention/P0 boundary. Agents must then
 reconcile the
 implementation packet to
 the supplied deployment target and those answers. Exact schemas/migrations and
@@ -760,11 +766,11 @@ production deployment remain separate later gates. R3 acceptance and the R4
 product decisions grant no R4 implementation, visibility, identity, hosting,
 messaging, persistence, spend, or publishing authority.
 
-The privacy-first/minimum-friction P human-boundary model is Owner-approved for
-R4. Exact R4 authority and mechanisms remain gated by T2–T5. Stewardship
-remains an architecture proposal. Confidence or shadow agreement cannot grant
-permission; external R4 interactions remain untrusted signals until separately
-admitted.
+The privacy-first/minimum-friction P human-boundary model and T2 Room authority
+contract are Owner-approved for R4. T3–T5 and every implementation mechanism
+remain gated. Stewardship remains an architecture proposal. Confidence or
+shadow agreement cannot grant permission; external R4 interactions remain
+untrusted signals until separately admitted.
 
 ## Owner–agent working agreement
 
@@ -833,7 +839,7 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — Owner-approved privacy-first P
   boundary plus still-proposed cognitive/delegation application guidance
 - [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md) —
-  what the direction would change in pending T2–T5 now versus after Demo Day
+  the approved T2 Room Operator contract and what pending T3–T5 defer
 - [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
 - [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — owner-approved hosted
   Forme Room foundation

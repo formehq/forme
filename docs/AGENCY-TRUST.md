@@ -1,8 +1,8 @@
 # Agency and human-boundary model v0.2
 
-- Status: **privacy-first, minimum-friction direction and the P human-boundary
-  interpretation Owner-approved for R4 on 2026-07-28; exact T2–T5 mechanisms
-  and implementation remain subject to separate Owner review**
+- Status: **privacy-first P human-boundary interpretation and T2 Room control
+  envelope Owner-approved for R4 on 2026-07-28; T3–T5 and implementation remain
+  subject to separate Owner review**
 - Updated: 2026-07-28
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -18,10 +18,11 @@ friction**:
 > useful freedom and the least necessary friction.
 
 The **Privacy-first human boundary** section below is the Owner-approved P
-formalization of that direction for R4. The later cognitive-mode, delegation,
-and R4-application sections remain design guidance unless an exact mechanism
-is separately approved. P does not silently turn any credential, visibility
-grant, or implementation into an approved decision.
+formalization of that direction for R4. The exact R4 Room Operator envelope
+identified below is separately Owner-approved T2. Other cognitive-mode,
+delegation, and long-term application guidance remains proposed unless an
+exact mechanism is separately approved. Neither P nor T2 silently creates a
+credential or authorizes implementation.
 
 This is neither “ask before everything” nor “let the Agent do anything.”
 Forme's job is to make the boundary real: exact scope, audience, attribution,
@@ -206,9 +207,11 @@ Room is an API-first control plane: shared state, permissions, queues,
 lifecycle, receipts, and a human Web cockpit. It does not read the private
 Twin or invent an Owner answer.
 
-The agency-first recommendation for the pending T2 contract is a standing,
-revocable, exact per-Room **Room Operator envelope** for routine transport and
-deterministic lifecycle enforcement.
+The Owner-approved T2 contract is a standing, revocable, exact per-Room
+**Room Operator envelope** for routine transport and deterministic lifecycle
+enforcement: one independently revocable binding per Room, valid for 30 days
+without automatic renewal, with its raw credential held only by the
+deterministic connector.
 The Web surface supervises status, scope, exceptions, lifetime, and emergency
 stop. It should not require the Owner to approve each sync, pull, ACK,
 idempotent recovery, exact Owner-approved artifact push, or deterministic stale
@@ -263,11 +266,11 @@ freely apply those admitted patterns inside it, but new private history,
 consequential commitment, or an assertion that “the mentor decided” crosses
 the human boundary and returns to the real mentor.
 
-## What this approval does not do
+## What these approvals do not do
 
-The approved P model changes Forme's guiding architecture and the way later
-authority contracts are judged. It does not approve the exact R4 mechanisms
-that instantiate that model. None of this by itself authorizes an Agent
-runtime, credential, private source, provider call, hosted mutation, external
-message, deployment, or spend. Those require the relevant exact Control Packet
-and production grants.
+The approved P model changes Forme's guiding architecture; T2 closes the first
+exact Room authority envelope. Neither approval by itself authorizes an Agent
+runtime, credential issuance, private source/provider visibility, hosted
+mutation, external message, deployment, or spend. T3–T5, the reconciled
+Control Packet, schemas/migrations, implementation, and production grants
+remain separate gates.

@@ -1,12 +1,15 @@
 # R4 Forme Room experience and protocol brief v0.5
 
 - Status: **owner-approved product foundation, public/private Room correction,
-  and P human-boundary interpretation; T2–T5 Technical Owner Review active**
+  P human-boundary interpretation, and T2 Room control contract; T3–T5
+  Technical Owner Review active**
 - Updated: 2026-07-28
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
   representation/consequence companion guards + no self-expansion**
+- T2 approval: **2026-07-28 — API-first control plane + independent per-Room
+  30-day `room_operator.v1` bindings**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -47,7 +50,8 @@ privacy is the primary source/provider/audience perimeter,
 human-representation/commitment and irreversible/material consequence are
 companion guards, existing authority cannot expand itself, and covered work
 inside the envelope proceeds review-by-exception. This closes P only; it does
-not change approved T1, approve T2–T5, or grant implementation authority.
+not change approved T1 or grant implementation authority. T2 was separately
+approved later; T3–T5 remain open.
 
 ## Revised user outcome
 
@@ -94,14 +98,14 @@ local Signal Box <────────────────────�
 
 The server is a **Capsule Registry + deterministic Room Renderer + Signal Queue/Response Relay**. Intelligence lives at the owner-local edge and, optionally, the guest edge.
 
-The owner-confirmed T2 intent adds a GitHub-like control model without changing
+The Owner-approved T2 contract adds a GitHub-like control model without changing
 that topology: hosted Forme owns shared management/control/status, while
 private context work remains local. Every P0 hosted Room semantic capability
 must have a versioned API. Forme Web and Forme CLI are human- and
 agent-friendly clients of that same API; neither receives a hidden authority
 path.
 
-The current, still-unapproved T2 recommendation says a local Agent receives no
+The approved T2 contract says a local Agent receives no
 account-wide Room power merely because it runs in a repo. The local workspace
 may map one Twin/entity to multiple Rooms, but Owner-controlled pairing creates
 a separate revocable binding and credential for each exact Room. The server
@@ -116,8 +120,8 @@ Forme Agent requests typed operations; body-free status/control may return
 directly, while Guest/private content still requires the pending T3 consent
 and exact context manifest. A separately Owner-authorized ambient
 shell/filesystem agent would be outside this P0 guarantee. API authority does
-not imply model visibility. Exact default connector/binding scopes remain part
-of the pending T2 Owner decision.
+not imply model visibility. T2 closes the connector/binding authority; T3 still
+decides which exact Guest/private bytes may enter a model run.
 
 ## Product feeling
 
@@ -365,7 +369,7 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Owner-approved P0 product walking slice — T1 closed, T2–T5 active
+## Owner-approved P0 product walking slice — T1/T2 closed, T3–T5 active
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -441,9 +445,8 @@ The owner and collaborator must judge whether this feels like encountering and c
 4. **Identity:** use invite-only passwordless accounts for durable controllers,
    allow public reading, give agents bounded and revocable credentials, and
    keep account, entity, Room, capsule, agent, guest, and curator identity
-   distinct. The pending T2 recommendation makes the local connector binding
-   exact per-Room and gives it a fixed standing scope bundle; that mechanism is
-   not yet approved.
+   distinct. Approved T2 makes each local connector binding exact per-Room and
+   gives it a fixed 30-day, non-renewing, revocable standing scope bundle.
    The original requirement for an invite or verified reply before every
    signal is superseded only for one bounded public first encounter.
 5. **Topology and lifecycle:** keep intelligence at the owner-local and
@@ -468,7 +471,7 @@ On 2026-07-26 the Owner approved one public/private access correction:
 
 These decisions establish the product target only. The active
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) closes the
-remaining T2–T5 Owner-facing technical choices. Agents must then rewrite the
+remaining T3–T5 Owner-facing technical choices. Agents must then rewrite the
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
 confirmed deployment target and Guest decision, re-audit it, and present a new
 exact hash. Schema/migration and production deployment remain separate later
@@ -481,8 +484,8 @@ gates. No current document grants implementation authority.
 - whether Mentor Lens becomes the first demo case;
 - the exact creative visual language of the Third Place and Room.
 
-P and T1 close the human-boundary interpretation, Guest ingress, and Room
-exposure. T2–T5 close the remaining exact agency, identity, external
-visibility, lifecycle, retention, hosting-integration, and P0 Resonance
+P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
+exposure, and local Room Operator authority. T3–T5 close the remaining private
+model visibility, lifecycle, retention, hosting-integration, and P0 Resonance
 answers. Product-expression questions may continue without weakening those
 gates.

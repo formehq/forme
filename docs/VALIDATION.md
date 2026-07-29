@@ -3,8 +3,9 @@
 - Status: active MVP evidence register
 - Updated: 2026-07-28
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
-  human-boundary model and R4 T1 public/private Room behavior are
-  owner-approved; recalibrated T2–T5 remain under review and unimplemented**
+  human-boundary model, R4 T1 public/private Room behavior, and T2 Room control
+  contract are owner-approved; T3–T5 remain under review and all R4 behavior
+  remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -439,13 +440,14 @@ the notes or claiming a Guest Twin. Deeper questions and Resonance Requests
 return to the local Forme Agent and owner for reviewed response.
 
 The owner also approved two independent social gates and a layered identity
-model:
+model. In the then-current pre-T1 brief:
 
 - the entity owner approves the exact immutable Projection Capsule;
 - the Third Place curator separately admits or removes the Room;
 - invite-only accounts prove durable controller authority, not personhood;
 - public readers need no account;
-- signals use an invite or verified reply session;
+- signals used an invite or verified reply session; T1 later superseded this
+  only for one bounded public first knock;
 - agents receive narrow delegated credentials;
 - account, entity, Room, capsule, agent, guest, and curator identity remain
   distinct.
@@ -499,10 +501,10 @@ keeps private content behind a separate positive authorization.
 This discussion did not test a real visitor, measure spam or Owner workload,
 validate the 20-per-Room rolling-24-hour public pool, or prove that a
 three-interaction short pass feels sufficient. It also did not authorize
-implementation. T1 is
-now closed at the product-contract level; T2–T5, the reconciled Technical
-Control Packet, exact schema/migration manifest, and production deployment
-grant remain stop gates.
+implementation. At that point T1 closed at the product-contract level while
+T2–T5 remained stop gates. T2 has since closed separately; T3–T5, the
+reconciled Technical Control Packet, exact schema/migration manifest, and
+production deployment grant remain stop gates.
 
 ## Evidence round 8 — Privacy-first agency direction and proposed formalization
 
@@ -541,8 +543,9 @@ unchanged.
 This round records product judgment, not usage evidence. It does not prove that
 the proposed Room Operator scope feels safe, that exception-based supervision
 is understandable, or that Agent-triggered explicit sync removes enough
-friction. Those require the exact T2–T5 decision, implementation, and owner
-demo. No R4 authority or implementation was granted.
+friction. At that point those required the exact T2–T5 decisions,
+implementation, and owner demo. T2 has since closed as governance, but the
+usage proof remains absent. No R4 implementation was granted.
 
 ## Evidence round 9 — P approval and R1–R4 continuity audit
 
@@ -555,10 +558,11 @@ On 2026-07-28 the Owner approved P for the R4 authority contract:
 - covered work inside an explicit, inspectable, revocable envelope proceeds
   review-by-exception.
 
-This is governance evidence, not usage evidence. It closes the human-boundary
-interpretation only; it does not validate the proposed Room Operator experience
-or approve T2–T5, schemas, implementation, provider visibility, hosted
-mutation, external interaction, deployment, or spend.
+This is governance evidence, not usage evidence. The P approval by itself
+closes the human-boundary interpretation only; it does not validate the
+proposed Room Operator experience or approve T2–T5, schemas, implementation,
+provider visibility, hosted mutation, external interaction, deployment, or
+spend. T2 was approved separately afterward.
 
 The same round audited whether R1–R3 actually support R4. The state chain is
 genuinely additive: V3 retains V2 cognition, R3 action requires an active
@@ -576,6 +580,38 @@ local basis, truthful correction/effect eligibility, stale/no-op behavior, no
 automatic Signal-to-Twin admission, and one real
 Twin → Projection → Guest Signal → local judgment → Response path. Until that
 path runs, R4 product value and interaction quality remain unproven.
+
+## Evidence round 10 — T2 Room control contract approval
+
+On 2026-07-28 the Owner approved the full recommended T2 branch after a
+low-cognitive-load review. The accepted mental model is one independently
+revocable Room work permit per exact Room—not one credential for an entire
+account or workspace:
+
+- hosted Forme is the no-AI GitHub-like Web/API control plane, and private
+  reasoning remains local;
+- every approved P0 Room semantic operation has one versioned API; P0 CLI
+  covers applicable public/Guest operations and `room_operator.v1`, while
+  Controller/Curator CLI delegation remains P1;
+- one workspace may hold multiple Room bindings, but each binding and
+  credential covers one exact Room for 30 days, never auto-renews, and may be
+  revoked earlier;
+- the connector—not the model—holds the credential;
+- the operator may inspect, explicitly sync/pull, ACK/recover, deterministically
+  attest stale, and transport only still-current exactly Owner-approved
+  Projection/Response artifacts;
+- it may not create/discover Rooms, widen scope/audience, issue Grants, change
+  intake or Interaction disposition, author Owner content, curate, revoke
+  content, retire/delete, or invoke arbitrary tools;
+- authenticated Owner Web may see and control content already hosted on the
+  server, but never the private Twin or local draft context.
+
+This is governance evidence, not a successful Room usage result. No binding,
+credential, API, Room, Projection, hosted record, model run, deployment, or
+external interaction was created or exercised. T3–T5, the reconciled Packet,
+wire schemas, implementation, and production authority remain unapproved. The
+old packet's broader paired-local revoke and `signal:disposition` scopes are
+explicitly excluded from T2.
 
 ## Follow-up product-learning questions — not R4 blockers
 
