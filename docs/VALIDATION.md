@@ -1,19 +1,19 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-28
+- Updated: 2026-07-29
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
-  human-boundary model, R4 T1 public/private Room behavior, and T2 Room control
-  contract are owner-approved; Native Harness roles are clarified; NH1/NH2
-  remain open before paused T3, T4/T5 remain under review, and all R4 behavior
-  remains unimplemented**
+  human-boundary model, R4 T1 public/private Room behavior, T2 Room control
+  contract, and NH1/NH2 are Owner-approved; revised T3 is the active
+  unapproved decision, T4/T5 and Packet reconciliation remain open, and all R4
+  behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
 - [`PRODUCT.md`](./PRODUCT.md), which states the product claim and scope;
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md), which states durable system boundaries;
 - [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), which
-  states the current Harness/Forme role clarification and NH1/NH2 gate;
+  states the approved Harness/Forme role and two-class authority contract;
 - [`CONTROL.md`](./CONTROL.md), which states the current gate and next decision;
 - [`DECISIONS.md`](./DECISIONS.md), which records owner-confirmed decisions only.
 
@@ -617,6 +617,37 @@ external interaction was created or exercised. T3–T5, the reconciled Packet,
 wire schemas, implementation, and production authority remain unapproved. The
 old packet's broader paired-local revoke and `signal:disposition` scopes are
 explicitly excluded from T2.
+
+## Evidence round 11 — NH1/NH2 Native Harness architecture approval
+
+On 2026-07-29 the Owner approved NH1 option 1 and NH2 option 1 as recommended:
+
+- the Native Harness Workbench is the default local carrier, with Codex as the
+  P0 workbench and OpenCode retained as a first-class architectural
+  compatibility target whose live path remains P1;
+- Forme integrates through CLI/API/MCP/Skill/Plugin/adapter surfaces rather
+  than building a competing local chat shell for the MVP;
+- those are architecture-level integration forms, not simultaneous P0
+  deliverables; August requires only the minimum Codex-facing path for the
+  walking slice and no live OpenCode path;
+- ordinary Owner/Harness Workspace activity may use native capabilities only
+  inside a separately approved runtime envelope; its results may be offered
+  and admitted as evidence only through a separately approved
+  source/observation contract, never automatically ingested as Twin meaning or
+  a Forme-authoritative effect;
+- canonical meaning, correction, authority, Projection/Response scope,
+  human-attributed publication or commitment, and claimed Forme
+  receipt/rollback guarantees continue through typed Forme contracts;
+- P0 Forme-authoritative effects remain narrow and deterministic; later
+  Harness-native physical execution requires a separately approved Forme
+  envelope, verification, and receipts.
+
+This is architecture-governance evidence, not a successful Native Workbench or
+R4 usage result. No concrete runtime profile, file, shell, tool, provider,
+Guest, Room, credential, schema, implementation, deployment, external action,
+or spend was approved or exercised. NH1/NH2 are closed; revised T3 is now the
+active unapproved Owner card. T4/T5 and reconciliation of the detailed
+Technical Control Packet remain open.
 
 ## Follow-up product-learning questions — not R4 blockers
 

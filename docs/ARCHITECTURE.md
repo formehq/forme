@@ -2,10 +2,10 @@
 
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
-  contract owner-approved; Native Harness roles owner-confirmed; NH1/NH2 open
-  before paused T3; T4/T5 Technical Owner Review active; implementation packet
-  unreconciled
-- Updated: 2026-07-28
+  contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
+  revised T3 is the current unapproved gate; T4/T5 and implementation-packet
+  reconciliation remain open
+- Updated: 2026-07-29
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -13,7 +13,7 @@ The rebuild begins from product behavior and contracts. It does not copy the arc
 
 ```mermaid
 flowchart LR
-    Owner["Owner<br/>authorship · intent · boundary"] -->|"candidate primary entry — NH1"| Workbench["Native Harness Workbench<br/>Codex / OpenCode<br/>sessions · files · shell · tools"]
+    Owner["Owner<br/>authorship · intent · boundary"] -->|"approved default local carrier<br/>separate envelope required"| Workbench["Native Harness Workbench<br/>Codex P0 / OpenCode architectural target<br/>sessions · files · shell · tools"]
     Owner -->|"confirmed correction · boundary"| Core
     Workbench <--> Core["Forme Semantic Spine<br/>Twin · evidence · corrections<br/>policy · authority · receipts · projection"]
     Workbench <--> Workspace["Owner-admitted Workspace"]
@@ -35,6 +35,9 @@ That slice remains valid. It is one **Managed Privacy Run** and the first
 Forme-authoritative effect proof, not the permanent shape of all local work.
 See
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
+The NH1/NH2 approval chooses roles and boundaries; it grants no concrete
+runtime, file, shell, tool, network, provider, credential, Guest, or Room
+authority.
 
 ## Responsibility boundary
 
@@ -44,8 +47,8 @@ See
 - planning, compaction, streaming, cancellation, and runtime events;
 - native files, shell, tools, MCP, Skills, plugins, subagents, permissions,
   and diffs inside an Owner-admitted capability envelope;
-- ordinary Workspace work when NH1/NH2 and a concrete runtime envelope allow
-  it.
+- ordinary Workspace work only when a separate, concrete Owner-approved
+  runtime envelope allows it. NH1/NH2 grant no such envelope by themselves.
 
 ### Forme Semantic Spine owns
 
@@ -84,7 +87,10 @@ meaning or Forme-authoritative effect: the Living Project Twin, evidence and
 correction, canonical proposal admission, revision-bound authorization,
 product-level verification/receipts/recovery, and projection/Room policy.
 Ordinary Workspace source-of-truth files and Forme-authoritative semantic state
-are not the same object. NH2 decides their exact P0 relationship.
+are not the same object. Under the approved NH2 two-class boundary, native
+ordinary work remains ordinary work; a result may be offered and admitted as
+evidence only through a separate typed Forme contract, and is never
+auto-ingested as canonical meaning or a Forme-authoritative effect.
 
 The same visible action may therefore be possible in Codex or OpenCode without
 Forme. It carries Forme's semantic/authority guarantees only when it returns
@@ -119,7 +125,10 @@ one at a time.
    feasible.
 8. Projection rendering has no private-source handle and consumes only an explicit allowlist.
 9. Product behavior does not depend on a resident runtime session.
-10. Codex is the first live demo path; OpenCode remains an architectural integration target without forced MVP parity.
+10. Codex is the P0 live carrier; OpenCode remains a first-class architectural
+    compatibility target whose live path is P1. P0 requires only the minimum
+    Codex integration needed by the walking slice, not every adapter surface
+    or a live OpenCode path.
 11. R1 Continuity is deterministic and invokes no model runtime; the first live Codex path begins in R2 through a scoped Context Packet.
 12. R1 durable state is project-local and Git-ignored. It must be excluded from source observation and remain replaceable by a future storage adapter.
 13. The R1 owner surface is generated Markdown. It renders the Twin but never becomes canonical state.
@@ -274,9 +283,15 @@ The R4 demo and tests must prove:
 4. a candidate approved at revision N cannot publish as current at N+1, while
    a no-op observation does not create false staleness;
 5. Guest import creates no Twin revision;
-6. the full deeper Response path uses at least one exact current private Twin
+6. a normal Codex Workbench session invokes one minimum Forme CLI/Skill
+   surface and receives durable Twin orientation or body-free typed operation
+   status without a Forme-built chat shell;
+7. Guest bodies, exact private-context previews, and body-bearing drafts stay
+   outside the ordinary Native Workspace read surface and Agent-callable tool
+   output;
+8. the full deeper Response path uses at least one exact current private Twin
    basis beyond the public capsule;
-7. private canaries remain absent from candidates, capsules, packets,
+9. private canaries remain absent from candidates, capsules, packets,
    responses, hosted state, and receipts.
 
 These requirements preserve the causal R1 → R2 → R3 → R4 product story. They
@@ -418,13 +433,14 @@ prompt/environment or generic tool result, and grants no context visibility by
 itself. An allowed Agent requests typed CLI/API operations through a validated
 gateway. A Native Workbench may be a legitimate local actor, but Workspace
 access never implies connector-secret, Guest-inbox, or Room-mutation access.
-After NH1/NH2 close, revised T3 chooses the P0 drafting context contract; a
-separate Managed Privacy Run remains the current recommendation, not an
-approved result. The current P0 recommendation keeps content-bearing draft
-context separate from Room mutation tools as defense in depth. Long-term, a
-policy-compiled artifact may cross that split only when its exact disclosure,
-attribution, policy generation, and content hash are independently admitted;
-ordinary model output is never hosted authority.
+With NH1/NH2 closed, revised T3 is the current unapproved gate and chooses the
+P0 drafting context contract; a separate Managed Privacy Run remains the
+current recommendation, not an approved result. The current P0 recommendation
+keeps content-bearing draft context separate from Room mutation tools as
+defense in depth. Long-term, a policy-compiled artifact may cross that split
+only when its exact disclosure, attribution, policy generation, and content
+hash are independently admitted; ordinary model output is never hosted
+authority.
 
 Account identity proves control and attribution, not personhood. Twin/entity,
 Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
@@ -446,10 +462,8 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
-The product boundary and T2 Room authority contract are approved. The Owner now
-closes NH1/NH2 in
-[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
-reviews revised T3 and T4/T5 in
+The product boundary, T2 Room authority contract, and NH1/NH2 architecture
+contract are approved. The Owner now reviews revised T3, then T4/T5, in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
 implementation remains blocked until those cards are reconciled into a new
 exact

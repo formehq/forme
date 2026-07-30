@@ -1,15 +1,18 @@
-# R4 Forme Room experience and protocol brief v0.6
+# R4 Forme Room experience and protocol brief v0.7
 
 - Status: **owner-approved product foundation, public/private Room correction,
-  P human-boundary interpretation, and T2 Room control contract; Native Harness
-  roles clarified; NH1/NH2 open before paused T3; T4/T5 remain open**
-- Updated: 2026-07-28
+  P human-boundary interpretation, T2 Room control contract, and NH1/NH2
+  Native Harness architecture; revised T3 is active and unapproved; T4/T5
+  remain open**
+- Updated: 2026-07-29
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
   representation/consequence companion guards + no self-expansion**
 - T2 approval: **2026-07-28 — API-first control plane + independent per-Room
   30-day `room_operator.v1` bindings**
+- NH approval: **2026-07-29 — Native Harness default local carrier +
+  two-class ordinary-work/Forme-authority boundary**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -53,14 +56,18 @@ human-representation/commitment and irreversible/material consequence are
 companion guards, existing authority cannot expand itself, and covered work
 inside the envelope proceeds review-by-exception. This closes P only; it does
 not change approved T1 or grant implementation authority. T2 was separately
-approved later; NH1/NH2 remain open, T3 is paused behind them, and T4/T5 remain
-open.
+approved later. NH1/NH2 closed on 2026-07-29; revised T3 is now active and
+unapproved, and T4/T5 remain open.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
 Room topology below while correcting the local actor model: packet-only/no-tools
-is one sensitive drafting lane, not every Forme Agent session. NH1/NH2 remain
-open and T3 is paused behind them.
+is one sensitive drafting lane, not every Forme Agent session. On 2026-07-29
+the Owner approved the Native Harness Workbench as the default local carrier
+with Codex P0 and OpenCode as an architectural compatibility target with no
+required live P0 path, plus the two-class boundary between ordinary native
+Workspace work and typed Forme authority. Revised T3 is now active and
+unapproved; T4/T5 remain open.
 
 ## Revised user outcome
 
@@ -73,7 +80,7 @@ The room can support two kinds of visitor:
 - an **Agent Guest** uses its own agent to fetch the public capsule, reason locally, and submit a deeper request only when the capsule is insufficient.
 
 The owner later receives deeper requests in the local Forme environment. The
-exact drafting contract remains pending NH1/NH2 and revised T3. The current P0
+exact private drafting contract remains pending revised T3. The current P0
 candidate uses a Managed Privacy Run with an exact Owner-adjusted manifest and
 no ambient tools; a Native Workspace Session would use a broader disclosed
 Workspace/provider envelope and could not claim an exact content manifest.
@@ -134,8 +141,9 @@ contract. A Managed Privacy Run may promise an exact manifest of
 Forme-selected content; runtime-owned instructions/schema/metadata are
 separately disclosed. A Native Workspace Session has broader disclosed
 provider visibility. API authority does
-not imply model visibility. T2 closes connector/binding authority; NH1/NH2 and
-then T3 close the local runtime and private-byte relationship.
+not imply model visibility. T2 closes connector/binding authority; NH1/NH2
+close the default local carrier and semantic classification; revised T3 still
+must close the R4 private-byte/provider relationship.
 
 ## Product feeling
 
@@ -324,8 +332,9 @@ and cannot read replies, delete, delegate again, or recover a Manual credential.
 
 If the public capsule is insufficient, the server validates and queues a typed
 Interaction Request. The local Signal Box binds it to its origin and capsule
-version. The local system may draft through the NH1/NH2/T3-approved context
-contract; the owner decides whether and what to publish.
+version. The local system may draft under the approved NH1/NH2 classification
+and the still-pending T3 private-context contract; the owner decides whether
+and what to publish.
 
 ### Leave a Seed
 
@@ -344,8 +353,9 @@ Two useful depths exist, but only one is a Forme P0 feature:
   and guest capsules at its own edge. Forme permits this use of public data but
   does not build or endorse the inference;
 - **host-reviewed deep resonance — P0:** a request enters the Signal Box, the
-  local system prepares a draft through the still-pending NH1/NH2/T3 context
-  contract, and the owner reviews the returned artifact.
+  local system prepares a draft through the approved NH1/NH2 actor split and
+  the still-pending revised T3 context contract, and the owner reviews the
+  returned artifact.
 
 The hosted server performs neither depth.
 
@@ -386,7 +396,7 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Owner-approved P0 product walking slice — T1/T2 closed, NH1/NH2 next
+## Owner-approved P0 product walking slice — P/T1/T2/NH1/NH2 closed, T3 next
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -435,8 +445,8 @@ R4 passes product and technical review only if:
 4. a Manual Guest or Agent Guest can send one public insufficient-scope
    question as a typed private signal without a prior Owner invite;
 5. the local system prepares a private-context draft through the
-   NH1/NH2/T3-approved contract, and the owner can adjust, approve, decline, or
-   park it;
+   approved NH1/NH2 classification and the T3-approved private-context
+   contract, and the owner can adjust, approve, decline, or park it;
 6. an approved Response Capsule reaches the right guest without exposing the private source;
 7. the Owner can offer a short continuation, and the Guest can accept it through
    the reply capability without gaining any other Room or Projection;
@@ -489,10 +499,10 @@ On 2026-07-26 the Owner approved one public/private access correction:
   Grant Offers remain in pending T4 rather than this approved T1 correction.
 
 These decisions establish the product target only. The active
-[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) closes
-NH1/NH2 first; the
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) then closes the
-reframed T3 and T4/T5 Owner-facing technical choices. Agents must then rewrite the
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
+the approved NH1/NH2 choices. The active
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) now presents
+revised T3, followed by T4/T5. Agents must then rewrite the
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
 confirmed deployment target and Guest decision, re-audit it, and present a new
 exact hash. Schema/migration and production deployment remain separate later
@@ -506,8 +516,8 @@ gates. No current document grants implementation authority.
 - the exact creative visual language of the Third Place and Room.
 
 P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
-exposure, and local Room Operator authority. NH1/NH2 close the local carrier
-and ordinary-work/Forme-authority boundary. Revised T3 plus T4/T5 then close the
-remaining private model visibility, lifecycle, retention, hosting-integration,
-and P0 Resonance answers. Product-expression questions may continue without
-weakening those gates.
+exposure, and local Room Operator authority. Approved NH1/NH2 close the local
+carrier and ordinary-work/Forme-authority boundary. Revised T3 plus T4/T5 then
+close the remaining private model visibility, lifecycle, retention,
+hosting-integration, and P0 Resonance answers. Product-expression questions may
+continue without weakening those gates.

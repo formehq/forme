@@ -1,22 +1,22 @@
 # Owner technical cockpit
 
-- Updated: 2026-07-28
+- Updated: 2026-07-29
 - Active gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   product target, T1 public/private Room correction, and T2 Room control
-  contract owner-approved; Native Harness roles clarified; NH1/NH2 Owner
-  decisions active before paused T3; T4/T5 remain open; detailed Control
+  contract owner-approved; NH1/NH2 Owner-approved as recommended; revised T3
+  is the active unapproved decision; T4/T5 remain open; detailed Control
   Packet requires reconciliation before exact approval; no R4 implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
   regression suite plus the real bounded control and independent Career
-  validation pass; R4 product target and P/T1/T2 are closed; NH1/NH2 are the
-  current decision gate, T3 is paused, T4/T5 remain open, and R4–R5
+  validation pass; R4 product target and P/T1/T2/NH1/NH2 are closed; revised
+  T3 is the current decision gate, T4/T5 remain open, and R4–R5
   implementation has not started**
 - First real workspace: **Forme repo — owner confirmed**
-- Next action: Owner closes NH1/NH2 in
-  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md); agents
-  then reframe T3 as the R4 private-response context contract, after which the
-  Owner reviews T3–T5 and agents reconcile the detailed Control Packet before
+- Next action: Owner reviews revised T3 in
+  [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), then T4/T5;
+  agents reconcile the detailed Control Packet only after those decisions,
+  before
   any projection, Third Place, identity, hosting, messaging, local
   synchronization, persistence, spend, or public behavior is implemented
 
@@ -41,7 +41,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · P/T1/T2 CLOSED · NH1/NH2 NEXT
+R4 Controlled Presence    ← YOU ARE HERE · P/T1/T2/NH1/NH2 CLOSED · T3 REVIEW
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -93,10 +93,15 @@ Current truth:
   Codex/OpenCode may be the mature operational Workbench, Forme is the durable
   Semantic Spine, and the packet-only/no-tools path is a Managed Privacy Run
   rather than the definition of every Forme Agent. R1–R3 remain valid narrow
-  proofs. NH1 (default local carrier) and NH2 (ordinary Workspace work versus
-  Forme-authoritative effect) remain open, T3 is paused behind them, and this
-  clarification grants no file, shell, tool, provider, Room, or implementation
-  authority;
+  proofs. On 2026-07-29 the Owner then approved NH1 option 1 and NH2 option 1:
+  Native Harness Workbench is the default local carrier, Codex is the P0
+  workbench, OpenCode remains a first-class architectural compatibility target
+  with no live P0 path, and ordinary native Workspace work is distinct from
+  typed Forme-authoritative meaning/effects. Native results may be
+  offered/admitted as evidence only under a separate source/observation
+  contract. The approval grants no
+  runtime, provider, file, shell, tool, Guest, Room, credential,
+  implementation, deployment, external-action, or spend authority;
 - the R1–R3 continuity audit found one real additive Twin chain and one
   cross-version defect: a V3 Twin previously dropped active Owner Corrections
   from a later R2 Context Packet. The defect is repaired with a V3 regression.
@@ -109,9 +114,8 @@ Current truth:
   an unreconciled implementation appendix. On 2026-07-26 the Owner supplied the
   existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment target,
   required anywhere Web login for Owner Control, and reopened the former
-  invite-only Guest model. T1 and T2 are now closed; NH1/NH2 in
-  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) are the
-  immediate decisions, after which T3–T5 in
+  invite-only Guest model. T1, T2, NH1, and NH2 are now closed; revised T3,
+  followed by T4/T5, in
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) are the
   remaining review surface. The prior packet hash is not approvable; no R4
   implementation or external resource is authorized;
@@ -127,7 +131,7 @@ Current truth:
 
 ```mermaid
 flowchart LR
-    Owner["Owner<br/>authorship · intent · boundary"] -->|"candidate primary entry — NH1"| Workbench["Native Harness Workbench<br/>Codex / OpenCode<br/>sessions · files · shell · tools"]
+    Owner["Owner<br/>authorship · intent · boundary"] -->|"approved default local carrier — no capability grant"| Workbench["Native Harness Workbench<br/>Codex P0 / OpenCode architectural target<br/>sessions · files · shell · tools"]
     Workbench <--> Workspace["Owner-admitted Workspace<br/>Forme repo first"]
     Interface["Forme interface / gate<br/>CLI · API · MCP · Skill / Plugin"]
 
@@ -152,9 +156,9 @@ flowchart LR
 
 ### How to read the map
 
-- **The Native Harness Workbench** is the mature operational body. Its exact
-  Workspace/provider/capability envelope remains an Owner decision; the
-  clarification itself grants nothing.
+- **The Native Harness Workbench** is the approved default local carrier and
+  mature operational body. Its exact Workspace/provider/capability envelope
+  remains separately gated; NH1 grants no concrete capability.
 - **The Twin / Semantic Spine** is Forme's durable, versioned meaning and
   authority. It is not a transcript, runtime session, file copy, or summary
   page.
@@ -163,13 +167,14 @@ flowchart LR
   instructions, schema, and operational metadata remain separately disclosed
   and audited. R2/R3 prove this narrower lane; it is not all of Codex/OpenCode.
 - **Ordinary Workspace truth and Forme-authoritative state/effect are distinct.**
-  NH2 closes how they interact. A runtime never admits Twin meaning or expands
+  Under approved NH2, native results remain outside Forme until separately
+  offered/admitted as evidence. A runtime never admits Twin meaning or expands
   Forme authority by itself.
 - **The connector and no-AI server** preserve the approved T2 credential and
   Room boundary. Native Workspace access never implies Guest inbox or Room
   credential access.
 
-The full role model and the two open choices are in
+The full role model and approved NH1/NH2 decision record are in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Owner architecture checksum
@@ -699,13 +704,13 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — Native Harness NH1/NH2 before R4 T3
+## Active stop gate — revised R4 T3 after closed NH1/NH2
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; P human-boundary interpretation
-  and T2 Room control contract owner-approved on 2026-07-28; Native Harness
-  role clarification confirmed; NH1/NH2 awaiting Owner judgment; T3 paused
-  behind them; T4/T5 open; detailed packet unreconciled and unimplemented**
+  and T2 Room control contract owner-approved on 2026-07-28; NH1/NH2
+  owner-approved as recommended on 2026-07-29; revised T3 awaiting Owner
+  judgment; T4/T5 open; detailed packet unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -728,8 +733,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
 - Approved product briefs:
   [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
+- Approved Native Harness record:
+  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md)
 - Active Owner review:
-  [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Unreconciled implementation appendix:
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -766,11 +772,11 @@ capability parity, a thin P0 public/Guest and Room Operator CLI, independent
 exact per-Room bindings, and one fixed 30-day non-renewing
 `room_operator.v1` bundle for routine transport and deterministic lifecycle
 enforcement. Boundary mutations remain stepped-up Web actions; the connector
-holds the credential and the model never receives it. NH1/NH2 first decide the
-default local carrier and the boundary between ordinary Workspace work and
-Forme-authoritative effects. Only then may T3 choose and specify the
+holds the credential and the model never receives it. Approved NH1/NH2 select
+the Native Workbench default carrier and the two-class ordinary
+Workspace/Forme-authority boundary. Revised T3 now chooses the
 provider-visibility contract for one R4 response; a Managed Privacy Run is the
-current candidate, not an approved result. T4/T5 cover public lifecycle
+recommended option, not yet an approved result. T4/T5 cover public lifecycle
 promises and the asynchronous retention/P0 boundary. Agents must then
 reconcile the implementation packet to the supplied deployment target and
 those answers. Exact schemas/migrations and production deployment remain
@@ -778,9 +784,10 @@ separate later gates. R3 acceptance and the R4 product decisions grant no R4
 implementation, visibility, identity, hosting, messaging, persistence, spend,
 or publishing authority.
 
-The privacy-first/minimum-friction P human-boundary model and T2 Room authority
-contract are Owner-approved for R4. NH1/NH2, T3–T5, and every implementation
-mechanism remain gated. Stewardship remains an architecture proposal.
+The privacy-first/minimum-friction P human-boundary model, T2 Room authority
+contract, and NH1/NH2 architecture choices are Owner-approved for R4. Revised
+T3–T5 and every implementation mechanism remain gated. Stewardship remains an
+architecture proposal.
 Confidence or shadow agreement cannot grant permission; external R4
 interactions remain untrusted signals until separately admitted.
 
@@ -847,13 +854,13 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
 - [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) —
-  Owner-confirmed role clarification and active NH1/NH2 decision brief
+  Owner-approved Native Harness role and NH1/NH2 decision record
 - [`DECISIONS.md`](./DECISIONS.md) — confirmed product, date, scope, and architecture decisions
 - [`VALIDATION.md`](./VALIDATION.md) — real demo evidence, owner feedback, product confidence, and Harness comparison
 - [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) — Owner-approved privacy-first P
   boundary plus still-proposed cognitive/delegation application guidance
 - [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md) —
-  the approved T2 Room Operator contract and what pending NH1/NH2 and T3–T5 defer
+  the approved T2/NH1/NH2 framing and what pending T3–T5 defer
 - [`STEWARDSHIP.md`](./STEWARDSHIP.md) — proposed repo-agnostic low-entropy and long-running maintenance loop
 - [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) — owner-approved hosted
   Forme Room foundation

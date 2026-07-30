@@ -28,11 +28,15 @@ Do not implement past the proposal stage without explicit owner confirmation whe
 - The owner retains final authority over meaning and authorship.
 - Runtime sessions are disposable computation, never canonical truth.
 - Agent inference remains evidence-backed, uncertain, revisable, and invalidatable.
-- Until NH2 closes, implemented Forme-authoritative writes remain
-  deterministic, authorized, inspectable, and reversible where feasible.
-- Ordinary Workspace activity is not automatically admitted as canonical Forme
-  meaning or a Forme-authoritative effect; the Native Harness clarification
-  grants no new write authority.
+- Under the Owner-approved NH2 two-class boundary, implemented
+  Forme-authoritative writes remain deterministic, authorized, inspectable,
+  and reversible where feasible.
+- Ordinary Native Workbench activity may use harness-native capabilities only
+  inside a separately approved runtime envelope. Its results may be offered
+  and admitted as evidence only through a separate typed Forme contract; they
+  are never auto-ingested as canonical meaning or a Forme-authoritative effect.
+- The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
+  tool, network, provider, credential, Guest, or Room authority.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

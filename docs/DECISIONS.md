@@ -281,3 +281,39 @@ generic writes, Room access, private Guest content, schema, implementation,
 deployment, external action, or spend. The authoritative role model and the
 two open decision cards are in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
+
+## 2026-07-29 — NH1/NH2 Native Harness architecture approved
+
+**Decision:** approve NH1 option 1 and NH2 option 1 as recommended. The Native
+Harness Workbench is the default local carrier: Codex is the P0 workbench,
+OpenCode remains a first-class architectural compatibility target whose live
+path is P1, and Forme integrates through CLI/API/MCP/Skill/Plugin/adapter
+surfaces instead of building a competing local chat shell for the MVP. Those
+are supported integration forms, not simultaneous P0 deliverables: August
+requires only the minimum Codex-facing integration for the walking slice and
+no live OpenCode path.
+
+Use the two-class authority boundary. Ordinary Owner/Harness Workspace work may
+run only inside a separately approved native runtime envelope. Its results may
+be offered and admitted as evidence only under a separately approved
+source/observation contract; neither the work nor its output automatically
+becomes Twin meaning or a Forme-authoritative effect. Canonical meaning,
+correction, agency envelopes, Projection/Response scope, human-attributed
+publication or commitment, and any effect for which Forme claims
+authorization, recovery, rollback, or receipt guarantees continue through a
+typed Forme contract. P0 Forme-authoritative effects retain narrow
+deterministic effectors. Later physical execution may reuse Harness-native
+tools only inside a separately approved Forme envelope with independent
+verification and receipts.
+
+**Reason:** this restores the Highest Vision's harness-native operating shape
+without discarding the exact visibility, correction, authority, and effect
+guarantees proven by R1–R3. It keeps mature workbench capability and durable
+Forme authority distinct instead of rebuilding Codex/OpenCode or treating
+every native file edit as canonical Forme meaning.
+
+**Effect:** NH1/NH2 are closed. Revised R4 T3 is now the active, still
+unapproved Owner decision; T4/T5 and detailed Control Packet reconciliation
+remain open. This approval classifies architecture only. It grants no concrete
+runtime, file, shell, tool, provider, Guest, Room, credential, implementation,
+deployment, external action, or spend authority.

@@ -1,7 +1,8 @@
 # Agent runtime strategy — curated 2026-07-15 research
 
 - Status: dated research plus durable architecture guidance; Native
-  Workbench/Managed Privacy dual-mode clarification added 2026-07-28
+  Workbench/Managed Privacy dual-mode clarification added 2026-07-28;
+  NH1/NH2 architecture choices Owner-approved 2026-07-29
 - Curated: 2026-07-24
 - Original: [`harness-first/design/agent-runtime-strategy.md`](https://github.com/formehq/forme/blob/harness-first/design/agent-runtime-strategy.md)
 
@@ -25,12 +26,17 @@ before implementing or upgrading an adapter.
 This avoids two bad outcomes: rebuilding commodity harness machinery inside
 Forme, or reducing mature runtimes to a lowest-common-denominator interface.
 
-The Owner-confirmed 2026-07-28 clarification is authoritative in
+The Owner-confirmed 2026-07-28 clarification and 2026-07-29 NH1/NH2 approvals
+are authoritative in
 [`../NATIVE-HARNESS-ARCHITECTURE.md`](../NATIVE-HARNESS-ARCHITECTURE.md):
 Codex/OpenCode may act as the mature Native Harness Workbench; Forme is the
 durable Semantic Spine; an exact packet/no-tools invocation is a Managed
-Privacy Run, not the definition of every runtime session. NH1/NH2 still decide
-the P0 default and authority boundary.
+Privacy Run, not the definition of every runtime session. Codex is the P0
+default Workbench and OpenCode remains a first-class architectural
+compatibility target whose live path is P1. Ordinary native work stays outside
+Forme unless its results are separately offered/admitted as evidence;
+canonical meaning and claimed Forme authority continue through typed Forme
+contracts. These decisions grant no concrete runtime capability.
 
 ## Responsibility split
 

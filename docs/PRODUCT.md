@@ -2,9 +2,9 @@
 
 - Status: owner-approved product frame, privacy-first P human-boundary
   interpretation, R4 public/private Room correction, and T2 Room control
-  contract; Native Harness roles clarified; NH1/NH2 open before paused T3;
-  T4/T5 remain under technical Owner review
-- Updated: 2026-07-28
+  contract; NH1/NH2 approved; revised T3 is the active unapproved Owner
+  decision; T4/T5 remain under technical Owner review
+- Updated: 2026-07-29
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -34,10 +34,13 @@ The August MVP narrowed entity count, scope, and effect depth. R2/R3
 additionally used a packet-only, no-tools run to prove exact visibility of
 Forme-selected content and semantic/effect admission. That run remains a valid
 **Managed Privacy Run**, not the permanent definition of every Forme Agent.
-The Owner-confirmed clarification and the open NH1/NH2 decisions are in
+The Owner-approved relationship and NH1/NH2 decision record are in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). This
-clarification does not yet make the Native Workbench the P0 default or grant
-files, shell, tools, provider visibility, or implementation authority.
+decision makes the Native Harness Workbench the default local carrier: Codex
+is the P0 workbench, while OpenCode remains a first-class architectural
+compatibility target whose live path is P1. It does not grant any concrete
+session files, shell, tools, provider visibility, observation, or
+implementation authority.
 
 ## Constitutional floor
 
@@ -63,9 +66,9 @@ permission by itself.
 
 [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
 perimeter, companion authorship/consequence guards, and no-self-expansion
-meta-rule. The T2 Room control envelope is approved. NH1/NH2 must close before
-T3 is reframed; T3–T5 and a reconciled Control Packet remain stop gates before
-implementation.
+meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
+approved. Revised T3–T5 and a reconciled Control Packet remain stop gates
+before implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -88,7 +91,8 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 
 ### P0 — committed demo core
 
-- one local project as the canonical demo input;
+- one admitted Forme project Workspace as the bounded project source zone,
+  plus one Living Project Twin as canonical Forme semantic state;
 - durable project state that survives process and runtime loss;
 - a legible Now / What Changed / Next Move view;
 - one evidence-backed cross-time reflection;
@@ -103,7 +107,12 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
   one owner-reviewed Response or Resonance;
 - invite-only durable controller identity with public reading that requires no
   account;
-- one real Codex execution path;
+- one minimum Codex-first Native Workbench → Forme integration proof: from a
+  normal admitted Forme Workspace, the Owner can invoke one existing or
+  minimal Forme CLI/Skill surface for durable Twin orientation or a typed
+  Forme operation, without a Forme-built chat shell;
+- one real Codex-backed Managed Privacy execution path for an exact-content
+  run that must not inherit ambient Workspace access;
 - a repeatable demo from a clean checkout with a privacy check.
 
 ### P1 — optional, admitted only when P0 is green
@@ -127,7 +136,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T1/T2 closed, NH1/NH2 next
+## Owner-approved R4 product target — T1/T2/NH1/NH2 closed, revised T3 next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -159,10 +168,9 @@ does not become private.
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
 conversational authority. The product target and T2 control contract are
-approved, but implementation remains unauthorized. The Owner first reviews
-NH1/NH2 in
-[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), then the
-reframed T3 and T4/T5 in
+approved, and NH1/NH2 now select the Native Workbench carrier and two-class
+authority boundary. Implementation remains unauthorized. The Owner next
+reviews revised T3 and then T4/T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).
