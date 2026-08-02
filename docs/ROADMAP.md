@@ -1,13 +1,14 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-07-29
+- Updated: 2026-08-01
 - MVP complete and repeatable: 2026-08-11
 - Demo Day: 2026-08-12
 - Scope model: P0 committed, P1 conditional, P2 post-demo
 - Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
   human-boundary model, R4 product target, T1 public/private Room correction,
   T2 Room control contract, and NH1/NH2 architecture contract are
-  owner-approved; revised T3 is the current unapproved
+  owner-approved; Fresh Native Response Session (Option 2B) is the selected
+  R4 P0 direction and its exact T3 contract is the current unapproved
   [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) gate, T4/T5 remain
   open, and the first Control Packet is unreconciled; no projection,
   hosting, identity, messaging, synchronization, persistence, spend, or
@@ -22,12 +23,12 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status without a new chat shell; private canary stays absent; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
+| R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, and NH1/NH2 architecture contract are owner-approved; implementation remains stopped at revised T3, T4/T5, and later packet reconciliation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, and NH1/NH2 architecture contract are owner-approved; the Option 2B direction is selected, while implementation remains stopped at exact T3, T4/T5, and later packet reconciliation.
 
-## R4 owner-approved product target — T1/T2/NH1/NH2 closed, revised T3 next
+## R4 owner-approved product target — Option 2B direction selected, exact T3 next
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -63,7 +64,11 @@ NH2 contract separates ordinary native work from typed Forme-authoritative
 transitions: ordinary results may only be offered and admitted as evidence
 through a separate contract, never auto-ingested. Those approvals grant no
 concrete runtime, file, shell, tool, provider, credential, Guest, or Room
-authority. Revised T3 is the current unapproved gate; T4/T5 also remain open.
+authority. On 2026-08-01 the Owner selected one Fresh Native Response Session
+per Interaction as the R4 P0 direction and moved the Managed Privacy response
+lane/trust-tier selector to P1/future. Exact T3 consent, source/provider/
+capability, session budget, physical isolation and lifecycle remain the current
+unapproved gate; T4/T5 also remain open.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
@@ -72,7 +77,7 @@ The approved Harness/Forme role and NH1/NH2 boundary are in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T1 and T2
 are recorded in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Its remaining
-cards cover the current revised T3 Managed Privacy decision, public lifecycle
+cards cover the current exact T3 Fresh Native Response Session contract, public lifecycle
 promises, and the async/retention/P0 boundary. The first detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
 be rewritten for the confirmed existing deployment path and re-audited.
@@ -127,7 +132,8 @@ The active R4 decision dependency is:
 Native Harness role clarification
   → NH1 default local carrier [closed]
   → NH2 ordinary work / Forme-authoritative effect boundary [closed]
-  → revised T3 provider-visibility contract [current]
+  → Option 2B Fresh Native Response Session direction [selected]
+  → exact T3 consent/session/source/capability contract [current]
   → T4/T5
   → reconciled Technical Control Packet
 ```

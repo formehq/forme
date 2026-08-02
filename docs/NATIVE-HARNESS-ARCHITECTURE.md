@@ -1,10 +1,10 @@
-# Native Harness architecture contract v0.2
+# Native Harness architecture contract v0.3
 
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
-  Owner-approved as recommended on 2026-07-29; revised T3 is the active Owner
-  decision; no new runtime, provider, file, shell, tool, Room, or implementation
-  authority**
-- Updated: 2026-07-29
+  Owner-approved; Fresh Native Response Session (Option 2B) selected as the
+  R4 P0 direction on 2026-08-01; its exact T3 contract remains unapproved; no
+  new runtime, provider, file, shell, tool, Room, or implementation authority**
+- Updated: 2026-08-01
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
@@ -28,8 +28,10 @@
 
 这次批准确认的是产品与架构关系，不是批准某个 Codex session 读取文件、
 运行 shell、使用 tools、看到 Guest 内容、操作 Room，或开始实现。下一张
-需要判断的是 revised T3：第一条 private Response 应使用什么
-provider/context contract。
+需要判断的是 revised T3 的 exact contract：第一条 Response 怎样进入一个
+全新、不继承当前聊天、只读 sanitized current Forme source snapshot 的
+Native session，以及它的
+consent、session budget、physical isolation 和 lifecycle 怎样固定。
 
 ## Why this clarification exists
 
@@ -60,9 +62,9 @@ than pretending it had always been settled.
 
 > **Harness-native, Twin-governed:** Codex or OpenCode supplies the mature
 > operational workbench; Forme supplies the durable semantic spine and human
-> boundary; an exact packet-only run remains available when the product needs
-> a strong guarantee about which Forme-selected private/workspace content is
-> sent to the provider.
+> boundary. R4 P0 uses one Fresh Native Response Session inside a disclosed,
+> read-only source/capability envelope; an exact packet-only run remains a
+> future option when stronger content minimization is required.
 
 ## Confirmed role separation
 
@@ -77,10 +79,14 @@ flowchart LR
     Host -->|"results offered for admission<br/>proposals · diffs · judgment requests"| Core
     Host <-->|"CLI · API · MCP<br/>Skill · Plugin · adapter"| Core
 
-    Core -->|"when exact Forme-content manifest is required"| PrivateRun["Managed Privacy Run<br/>exact packet · bounded output<br/>no ambient tools"]
+    Host --> Workspace["Owner-admitted Workspace"]
+    Core -->|"R4: one explicit Interaction"| FreshRun["Fresh Native Response Session<br/>new transcript · bounded authority"]
+    Workspace -->|"clean HEAD · deterministic preflight"| ResponseSource["Sanitized Response Source Snapshot<br/>eligible current files · read-only"]
+    FreshRun -->|"dynamic read/search"| ResponseSource
+    FreshRun -->|"typed Response candidate"| Core
+    Core -->|"future exact-content guarantee"| PrivateRun["Managed Privacy Run<br/>exact packet · bounded output<br/>no ambient tools"]
     PrivateRun -->|"typed proposal"| Core
 
-    Host --> Workspace["Owner-admitted Workspace"]
     Core --> Connector["Deterministic Projection / Room connector"]
     Connector <--> Server["No-AI Room server<br/>registry · renderer · queue · relay"]
 ```
@@ -124,11 +130,10 @@ A Managed Privacy Run is a special Forme-controlled invocation whose complete
 whose runtime profile excludes ambient workspace access and tools. The runtime
 or provider request may still add required system instructions, output schema,
 and operational metadata; the product must not claim that every provider
-request byte equals the packet. R2 and R3 prove narrow versions of this lane.
-The pending R4 T3 proposal would use it for one private response draft.
-
-The proposed 32 KiB ceiling is an August R4 input budget, not a model limit and
-not a constitutional definition of Agent context.
+request byte equals the packet. R2/R3 prove narrow versions of this lane. It
+is no longer the R4 P0 response
+recommendation; it remains a P1/future option for sensitive sources or a
+strong exact-Forme-selected-content guarantee. R4 P0 has no trust-tier picker.
 
 ### Deterministic connector and no-AI server
 
@@ -138,13 +143,15 @@ rendering, queue, relay, and receipts; it does not own the private Twin or run
 an answering model.
 
 Native Workspace access must not become physical Guest-inbox access by storage
-accident. Once imported at the Owner-local edge, body-bearing Guest input,
-exact manifests/previews, and private drafts live outside the ordinary Native
-Workspace read surface or behind an equivalent enforceable deny boundary.
-This does not deny the hosted server's T1/T2/T5 ownership of the original Guest
-submission. The Workbench receives only opaque IDs and body-free status unless
-a later, separately disclosed context contract explicitly admits more. Exact
-storage layout remains a T3/Control Packet decision.
+accident. Once imported at the Owner-local edge, body-bearing Guest input and
+private drafts live outside the ordinary Native Workspace read surface or
+behind an equivalent enforceable deny boundary. This does not deny the hosted
+server's T1/T2/T5 ownership of the original Guest submission. Ordinary
+Workbench sessions receive only opaque IDs and body-free status. One explicit
+Owner `Prepare response` action may release one exact request only to its new
+Fresh Native Response Session under the T3 envelope; that session cannot
+browse the Guest store or other Interactions. Exact storage/enforcement layout
+remains a Control Packet decision after T3 approval.
 
 ## Two invocation directions
 
@@ -186,6 +193,37 @@ This is the Owner-approved default daily-work architecture under NH1:
 
 Here the Context Compiler primarily supplies orientation, relevance, durable
 meaning, and policy. It is not necessarily the complete runtime read surface.
+
+### Fresh Native Response Session — selected R4 P0 direction
+
+This is a constrained, disposable profile of Native Workspace Session rather
+than a third general workbench:
+
+- one exact Interaction starts one brand-new, non-resumed transcript after an
+  explicit Owner `Prepare response` action;
+- Forme injects the exact request, origin Room/Projection, versioned response
+  instruction, and a size-bounded, body/path-free typed current Twin
+  orientation/correction summary;
+- the Harness may dynamically read/search only a deterministic sanitized
+  read-only snapshot of current eligible Forme files; P0 exposes no Git
+  history. It receives no other Interaction, Guest store,
+  sibling workspace, secret environment, writer, Web/network tool, MCP,
+  plugin, subagent, connector credential, Room tool, or publish authority;
+- a neutral cwd plus deny-by-default OS/container sandbox exposes only that
+  snapshot to model-generated read/search commands. `AGENTS.md`, `.codex`,
+  `.git`, secrets, symlinks/submodules and runtime auth are outside the mount;
+  if exact-root read isolation cannot be proven, the AI path fails closed;
+- Forme records a source/provider/capability **Session Envelope**, not an exact
+  provider-visible byte manifest or complete file-read claim;
+- output is an untrusted typed Response candidate, still bound to current
+  basis and exact Owner publication approval before the T2 connector may
+  transport it;
+- the session is never reused across Guests or Interactions and terminates on
+  its bounded budget, approval, abandonment, or terminal lifecycle event.
+
+The Owner selected this direction on 2026-08-01. Exact consent, source root,
+provider, session budget, physical isolation, deletion, and retention terms
+remain the active T3 approval surface. No capability is granted yet.
 
 ### Managed Privacy Run
 
@@ -247,11 +285,12 @@ generic writer or a concrete runtime envelope.
 - **R2** remains the evidence, inference, correction, and invalidation proof.
 - **R3** remains the first Forme-authoritative deterministic effect and
   receipt/rollback proof.
-- The packet-only Codex adapter remains useful as the first Managed Privacy Run;
-  it should not grow into a home-built general Harness.
+- The packet-only Codex adapter remains useful as the first Managed Privacy
+  Run; it should not grow into a home-built general Harness. It remains an
+  R2/R3 proof and P1/future sensitive lane, not the R4 P0 response path.
 - **R4 T2** remains the exact Room Operator/connector envelope.
-- **R4 T3** is now rewritten as the next Owner card. It chooses the P0
-  private-response context contract without reopening NH1/NH2.
+- **R4 T3** now formalizes the selected Fresh Native Response Session direction
+  without reopening NH1/NH2. The exact contract is still unapproved.
 
 This clarification changes the global map, not the acceptance evidence of
 completed slices.
@@ -343,17 +382,22 @@ approved standing envelope may operate review-by-exception.
 
 ## Relationship to T3
 
-NH1/NH2 are closed. Revised T3 now answers only the remaining R4-specific
-question:
+NH1/NH2 are closed. On 2026-08-01 the Owner selected Fresh Native Response
+Session (Option 2B) as the R4 P0 direction. Revised T3 now answers only the
+remaining exact-contract question:
 
-> Under which disclosed local context contract may one Guest request and
-> selected private Owner context reach a provider for drafting, and what exact
-> consent and lifecycle rules apply?
+> Under which disclosed source/provider/capability Session Envelope may one
+> exact Guest request reach a fresh Codex session that dynamically inspects a
+> sanitized read-only snapshot of current eligible Forme files, and what
+> consent, budget, isolation, approval, and
+> lifecycle rules apply?
 
-It must not silently define the entire local Forme Agent as packet-only, nor
-use a Native Harness that already saw wider context while claiming that the
-final 32 KiB manifest names all Forme-selected content sent during the whole
-interaction.
+It must not reuse the Owner's current/saved conversation, expose the whole
+Guest inbox, connector credentials, other roots, writers, or Room authority.
+It must also not claim an exact provider-visible byte manifest: dynamic reads
+are the reason to choose this profile. The former Managed Privacy Response
+recommendation remains historical/P1, and P0 does not build a trust-tier
+selector.
 
 ## What this document does not authorize
 
@@ -368,5 +412,5 @@ This clarification authorizes no:
 - schema, migration, implementation, deployment, or public behavior.
 
 Those remain governed by separately approved runtime/source/provider
-envelopes, revised T3–T5, the reconciled Technical Control Packet, Schema &
+envelopes, the exact revised T3 contract, T4/T5, the reconciled Technical Control Packet, Schema &
 Migration Manifest, and Production Deployment & Provisioning Grant.

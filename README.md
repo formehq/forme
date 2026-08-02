@@ -12,13 +12,15 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Demo Day: **2026-08-12**
 - Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   T1 public/private Room correction, and T2 Room control contract approved;
-  NH1/NH2 approved; revised T3 is the current unapproved Technical Owner
-  Review gate, with T4/T5 and packet reconciliation still open**
+  NH1/NH2 approved; Fresh Native Response Session (Option 2B) selected as the
+  R4 P0 direction; its exact T3 contract is the current unapproved Technical
+  Owner Review gate, with T4/T5 and packet reconciliation still open**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
   public-knock/private-Grant correction, P boundary model, and T2 Room control
   contract are approved; NH1 option 1 and NH2 option 1 were Owner-approved on
   2026-07-29, but grant no concrete runtime, file, shell, tool, provider,
-  credential, Guest, or Room authority; revised T3–T5 and the first technical
+  credential, Guest, or Room authority; the 2026-08-01 Option 2B direction
+  grants no capability; exact T3–T5 and the first technical
   packet still require Owner review and reconciliation to the confirmed
   self-host target; no R4 implementation or production action is authorized**
 
@@ -143,7 +145,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — P/T1/T2/NH1/NH2 closed, revised T3 next
+## R4 Controlled Presence — Option 2B direction selected, exact T3 next
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -154,7 +156,7 @@ Start with
 then continue to
 [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md).
 The first document distinguishes the Native Harness Workbench, Forme Semantic
-Spine, and Managed Privacy Run. NH1 makes the Native Harness Workbench the
+Spine, Fresh Native Response Session, and Managed Privacy Run. NH1 makes the Native Harness Workbench the
 default local carrier, with Codex first for P0 and OpenCode a first-class
 architectural compatibility target whose live path remains P1. NH2 separates
 ordinary native work from typed,
@@ -163,7 +165,16 @@ as evidence through a separate contract, but are never auto-ingested. This
 architecture approval grants no concrete runtime or tool authority. T1
 establishes the public knock and true Private Room. T2 establishes the
 API-first Web cockpit, independent per-Room 30-day non-renewing bindings, and
-the fixed connector-held `room_operator.v1` bundle. Revised T3 is now the
+the fixed connector-held `room_operator.v1` bundle. On 2026-08-01 the Owner
+selected Fresh Native Response Session (Option 2B) for R4 P0: one new,
+non-resumed session per exact Interaction may dynamically read/search only a
+sanitized, read-only snapshot of current eligible Forme files plus typed,
+body/path-free current Twin orientation. The ordinary
+Workbench cannot browse the Guest inbox; the fresh session has no writer,
+Web/network tool, connector credential, cross-Room or publish authority; and
+its draft still requires exact Owner approval. The old Managed Privacy
+response recommendation remains an R2/R3 proof and P1/future sensitive lane;
+P0 does not build a trust-tier selector. The exact T3 contract is now the
 current unapproved gate.
 
 P0 needs only the minimum Codex integration required by the walking slice. It
@@ -175,7 +186,7 @@ The confirmed deployment target is the existing Cloudflare → Caddy → Hetzner
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After revised T3–T5 close, agents will rewrite and re-audit it. No R4
+After exact T3–T5 close, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

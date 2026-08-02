@@ -2,9 +2,10 @@
 
 - Status: owner-approved product frame, privacy-first P human-boundary
   interpretation, R4 public/private Room correction, and T2 Room control
-  contract; NH1/NH2 approved; revised T3 is the active unapproved Owner
-  decision; T4/T5 remain under technical Owner review
-- Updated: 2026-07-29
+  contract; NH1/NH2 approved; Fresh Native Response Session (Option 2B)
+  selected as the R4 P0 direction on 2026-08-01; its exact T3 contract remains
+  unapproved; T4/T5 remain under technical Owner review
+- Updated: 2026-08-01
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -67,7 +68,9 @@ permission by itself.
 [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
 perimeter, companion authorship/consequence guards, and no-self-expansion
 meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
-approved. Revised T3–T5 and a reconciled Control Packet remain stop gates
+approved. The R4 P0 T3 direction is one Fresh Native Response Session per
+Interaction, not a Managed-vs-Native trust selector; its exact contract,
+T4/T5, and a reconciled Control Packet remain stop gates
 before implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
@@ -111,8 +114,11 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
   normal admitted Forme Workspace, the Owner can invoke one existing or
   minimal Forme CLI/Skill surface for durable Twin orientation or a typed
   Forme operation, without a Forme-built chat shell;
-- one real Codex-backed Managed Privacy execution path for an exact-content
-  run that must not inherit ambient Workspace access;
+- one real Codex-backed Fresh Native Response Session: one explicit
+  Interaction, one new/non-resumed transcript, exact request + typed current
+  Twin orientation, dynamic read/search only inside a sanitized read-only
+  snapshot of current eligible Forme files, and one Owner-approved outgoing
+  Response;
 - a repeatable demo from a clean checkout with a privacy check.
 
 ### P1 — optional, admitted only when P0 is green
@@ -120,6 +126,8 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - bounded `Exported Notes → Personal Facet Bootstrap`, not general notes
   ingestion;
 - a real OpenCode execution path beyond the compatibility boundary;
+- an optional Managed Privacy Response Lane for sensitive sources or an exact
+  Forme-selected-content guarantee; no P0 trust-tier selector;
 - background or push-triggered wake/catch-up beyond Agent-invoked typed sync;
 - local HTML Twin view;
 - first non-owner installation rehearsal;
@@ -136,7 +144,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T1/T2/NH1/NH2 closed, revised T3 next
+## Owner-approved R4 product target — Option 2B direction selected, exact T3 next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -169,8 +177,14 @@ The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
 conversational authority. The product target and T2 control contract are
 approved, and NH1/NH2 now select the Native Workbench carrier and two-class
-authority boundary. Implementation remains unauthorized. The Owner next
-reviews revised T3 and then T4/T5 in
+authority boundary. On 2026-08-01 the Owner selected a Fresh Native Response
+Session for R4 P0: one new session per Interaction may dynamically inspect only
+a sanitized read-only current Forme source snapshot plus typed body/path-free
+Twin orientation, while the ordinary
+Workbench remains body-free and exact publication approval remains separate.
+The former Managed Privacy response recommendation is P1/future. Implementation
+remains unauthorized. The Owner next reviews the exact revised T3 contract and
+then T4/T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).
@@ -201,9 +215,11 @@ One real workspace must complete this sequence without hidden manual reconstruct
    Room to the curated Third Place through a separate curator decision.
 10. Receive one bounded public Manual or Agent Guest knock tied to the exact
     visible capsule version, without requiring a prior Owner invite.
-11. Return one owner-reviewed Response or Resonance without exposing private
-    source, confusing agent attribution, or bypassing revocation and retention
-    controls.
+11. Start one fresh, non-resumed Codex response session for that exact
+    Interaction; let it dynamically search only a sanitized read-only snapshot
+    of current eligible Forme files plus typed body/path-free Twin orientation;
+    then return one exactly owner-approved Response or
+    Resonance without exposing excluded sources, credentials, or another Room.
 12. Offer one bounded continuation through the private reply capability and
     prove that a separately approved Private Room remains unreadable without
     its exact Owner Grant.

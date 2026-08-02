@@ -3,9 +3,10 @@
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
-  revised T3 is the current unapproved gate; T4/T5 and implementation-packet
+  Fresh Native Response Session (Option 2B) selected as the R4 P0 direction;
+  its exact T3 contract is the current unapproved gate; T4/T5 and implementation-packet
   reconciliation remain open
-- Updated: 2026-07-29
+- Updated: 2026-08-01
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -17,7 +18,11 @@ flowchart LR
     Owner -->|"confirmed correction · boundary"| Core
     Workbench <--> Core["Forme Semantic Spine<br/>Twin · evidence · corrections<br/>policy · authority · receipts · projection"]
     Workbench <--> Workspace["Owner-admitted Workspace"]
-    Core -->|"exact Forme-content manifest needed"| Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
+    Core -->|"R4 explicit Prepare response"| Fresh["Fresh Native Response Session<br/>one Interaction · fresh transcript"]
+    Workspace -->|"clean HEAD · deterministic preflight"| Snapshot
+    Fresh -->|"dynamic read/search"| Snapshot["Sanitized Response Source Snapshot<br/>eligible current files · read-only"]
+    Fresh -->|"typed Response candidate"| Core
+    Core -->|"future exact-content guarantee"| Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
     Managed -->|"typed proposal"| Core
     Core --> Connector["Deterministic Local Connector<br/>typed Room operations"]
     Connector <--> Server["No-AI Room server<br/>control · registry · render · queue · relay"]
@@ -63,7 +68,18 @@ authority.
   recovery, and rollback guarantees Forme claims for them;
 - projection allowlists and versions.
 
-### Managed Privacy Run and connector
+### Fresh Native Response Session, Managed Privacy Run, and connector
+
+The selected R4 P0 direction uses one Fresh Native Response Session per exact
+Interaction: a new/non-resumed transcript receives the exact request and typed
+body/path-free current Twin orientation, then may dynamically read/search only
+a sanitized read-only snapshot of current eligible Forme files. P0 does not
+expose Git history. It receives no generic writer,
+Web/network tool, other Interaction, Guest store, sibling root, secret
+environment, connector credential, Room tool, or publish authority. Forme
+records this Session Envelope honestly; dynamic reads do not support an exact
+provider-visible byte-manifest claim. Its output remains an untrusted typed
+candidate requiring exact Owner publication approval.
 
 A Managed Privacy Run receives one exact compiled packet as the complete
 manifest of Forme-selected Owner/Guest/workspace content and no ambient tools.
@@ -113,8 +129,12 @@ one at a time.
    dynamically inspect only an Owner-admitted Workspace envelope and cannot
    claim an exact manifest of dynamically selected content; a Managed Privacy
    Run receives only its exact Forme-selected content packet and no ambient
-   repository access. Runtime-owned instructions/schema/metadata remain
-   separately disclosed.
+   repository access. The R4 Fresh Native Response profile additionally binds
+   one exact Interaction, a new transcript, a sanitized read-only current
+   Forme source snapshot and typed body/path-free Twin orientation while
+   excluding ambient conversation, other Guest bodies,
+   writers, network tools, credentials, and publication authority.
+   Runtime-owned instructions/schema/metadata remain separately disclosed.
 4. A runtime may perform ordinary Workspace work only under its native Owner
    permissions. It cannot directly admit Twin meaning, manufacture Owner
    approval, expand authority, or bypass a Forme-authoritative gate/effect.
@@ -266,9 +286,14 @@ from a claim derived from R1 Continuity, R2 Cognition, or R3 Agency.
 
 An imported Guest Interaction remains untrusted Presence input. Sync, ACK,
 drafting, response publication, or Guest deletion creates no Twin revision in
-R4 P0. A local response may use only the exact selected current Twin context
-and Guest-approved provider visibility. Admitting any external signal into
-canonical Twin meaning is a future Owner/policy stop gate.
+R4 P0. Ordinary Workbench sessions receive only opaque/body-free status. After
+an explicit Owner `Prepare response`, one exact request may enter only its
+Fresh Native Response Session, which may dynamically inspect only a sanitized
+read-only snapshot of current eligible Forme files plus typed body/path-free
+Twin orientation. Guest-approved provider visibility does not
+grant other inbox, source, tool, connector, publication, or canonical-meaning
+authority. Admitting any external signal into canonical Twin meaning is a
+future Owner/policy stop gate.
 
 ### Required causal acceptance evidence
 
@@ -286,13 +311,21 @@ The R4 demo and tests must prove:
 6. a normal Codex Workbench session invokes one minimum Forme CLI/Skill
    surface and receives durable Twin orientation or body-free typed operation
    status without a Forme-built chat shell;
-7. Guest bodies, exact private-context previews, and body-bearing drafts stay
-   outside the ordinary Native Workspace read surface and Agent-callable tool
-   output;
-8. the full deeper Response path uses at least one exact current private Twin
-   basis beyond the public capsule;
-9. private canaries remain absent from candidates, capsules, packets,
-   responses, hosted state, and receipts.
+7. Guest bodies and body-bearing drafts stay outside the ordinary Native
+   Workspace read surface and Agent-callable tool output; one exact request is
+   released only after Owner start to a new/non-resumed response session that
+   cannot browse the Guest store;
+8. that response session receives typed body/path-free current Twin
+   orientation, dynamically reads/searches only a sanitized read-only snapshot
+   of current eligible Forme files, and
+   physically fails attempts to write, use Web/network, read secret/sibling/
+   cross-Room roots, obtain connector credentials, or publish;
+9. its receipt records the Session Envelope and best-effort access evidence
+   without claiming a complete byte manifest; the full deeper Response path
+   still binds current Twin basis and exact Owner outgoing approval;
+10. private/excluded-root canaries remain absent from candidates, capsules,
+    responses, hosted state, prompts/tool output outside their admitted
+    envelope, and receipts.
 
 These requirements preserve the causal R1 → R2 → R3 → R4 product story. They
 do not authorize an R4 schema, Presence store, model call, credential,
@@ -433,23 +466,25 @@ prompt/environment or generic tool result, and grants no context visibility by
 itself. An allowed Agent requests typed CLI/API operations through a validated
 gateway. A Native Workbench may be a legitimate local actor, but Workspace
 access never implies connector-secret, Guest-inbox, or Room-mutation access.
-With NH1/NH2 closed, revised T3 is the current unapproved gate and chooses the
-P0 drafting context contract; a separate Managed Privacy Run remains the
-current recommendation, not an approved result. The current P0 recommendation
-keeps content-bearing draft context separate from Room mutation tools as
-defense in depth. Long-term, a policy-compiled artifact may cross that split
-only when its exact disclosure, attribution, policy generation, and content
-hash are independently admitted; ordinary model output is never hosted
-authority.
+With NH1/NH2 closed, the Owner selected Fresh Native Response Session (Option
+2B) as the R4 P0 direction on 2026-08-01. The exact T3 consent, source/provider/
+capability envelope, session budget, physical isolation, and lifecycle remain
+unapproved. The selected direction keeps content-bearing response work in a
+new per-Interaction session and separate from Room mutation tools; it does not
+reuse the Owner's current conversation. A Managed Privacy Run remains an
+R2/R3 proof and P1/future sensitive lane, not a P0 trust tier. Long-term, a
+policy-compiled artifact may cross the model/connector split only when its
+disclosure, attribution, policy generation, and content hash are independently
+admitted; ordinary model output is never hosted authority.
 
 Account identity proves control and attribution, not personhood. Twin/entity,
 Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing. Under
 approved T2, the local connector receives exact Room-scoped delegated authority
-with useful standing freedom inside its perimeter. Revised T3 still governs
-whether private Guest bytes may enter a model run; the connector credential
-grants no such visibility.
+with useful standing freedom inside its perimeter. The exact T3 contract still
+governs how one Guest request may enter its fresh response session; the
+connector credential grants no such visibility.
 
 Public and private are first-class, separate Room instances under the same
 entity and implementation primitive. They use different Room IDs and
@@ -463,7 +498,8 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
 The product boundary, T2 Room authority contract, and NH1/NH2 architecture
-contract are approved. The Owner now reviews revised T3, then T4/T5, in
+contract are approved. The Owner now reviews the exact Fresh Native Response
+Session T3 contract, then T4/T5, in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
 implementation remains blocked until those cards are reconciled into a new
 exact

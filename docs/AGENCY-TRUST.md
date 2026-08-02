@@ -2,9 +2,10 @@
 
 - Status: **privacy-first P human-boundary interpretation and T2 Room control
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
-  2026-07-29; revised T3 is active and unapproved; T4/T5 and implementation
-  remain subject to separate Owner review**
-- Updated: 2026-07-29
+  2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0
+  direction on 2026-08-01; exact T3, T4/T5 and implementation remain subject
+  to separate Owner review**
+- Updated: 2026-08-01
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
   control
@@ -48,6 +49,11 @@ The Owner-confirmed architecture therefore separates:
   Owner-admitted runtime envelope;
 - **Forme Semantic Spine** — owns Twin meaning, correction, policy, authority,
   receipts, and projection;
+- **Fresh Native Response Session** — the selected R4 P0 response profile:
+  one new transcript for one exact Interaction, with dynamic read/search only
+  inside a sanitized read-only current Forme source snapshot plus typed
+  body/path-free Twin orientation and no other Guest,
+  writer, network tool, credential, Room or publish authority;
 - **Managed Privacy Run** — uses an exact packet/no-ambient-tools profile when
   the product needs an exact manifest of Forme-selected private/workspace
   content. Runtime-owned instructions, schema, and metadata remain separately
@@ -65,7 +71,9 @@ projection, representation, and claimed Forme effect guarantees continue
 through typed Forme contracts. Neither approval creates a concrete runtime
 envelope or capability. A Native Workbench never gains the T2 connector
 credential, Guest content, or Room authority merely because it can read a
-Workspace. See
+Workspace. One explicit T3 `Prepare response` may release one exact request to
+its Fresh Native Response Session; that exception does not grant ordinary
+sessions Guest-inbox access. See
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Privacy-first human boundary
@@ -257,13 +265,16 @@ human-attributed publication or commitment,
 Curator admission unless separately delegated, and irreversible retirement or
 deletion.
 
-The August P0 may still use conservative bootstrap mechanisms—an exact context
-manifest before the first private drafting path, no background daemon, and
-Owner review of every outward Response—because they make one safe path
-buildable by August 11. They are schedule choices, not the long-term agency
-philosophy. Later policy-compatible context use, successor publication,
-responses, relationship grants, and background work should be able to run
-inside explicit standing envelopes.
+The August P0 uses one conservative outer boundary—one exact Interaction,
+fresh session, sanitized read-only current Forme source snapshot, typed
+body/path-free Twin orientation, named provider, bounded lifetime,
+physical secret/cross-Room isolation, and Owner review of every outward
+Response—while allowing dynamic context discovery inside it. It does not build
+an exact-context picker or trust-tier selector. A Managed Privacy lane remains
+future work for sensitive sources. These are schedule choices, not the
+long-term agency philosophy. Later policy-compatible context use, successor
+publication, responses, relationship grants, and background work should be
+able to run inside explicit standing envelopes.
 
 The exact P0/future split is maintained in
 [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
@@ -307,6 +318,7 @@ exact Room authority envelope; NH1/NH2 close the default local carrier and
 ordinary-work/Forme-authority classification. These approvals do not authorize
 a concrete Agent runtime envelope, file, shell, tool, provider visibility,
 credential issuance, private Guest content, hosted mutation, external message,
-deployment, or spend. Revised T3, T4/T5, the reconciled Control Packet,
+deployment, or spend. The Option 2B direction itself grants no capability;
+exact T3, T4/T5, the reconciled Control Packet,
 schemas/migrations, implementation, and production grants remain separate
 gates.

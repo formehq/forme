@@ -1,11 +1,12 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-29
+- Updated: 2026-08-01
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
-  contract, and NH1/NH2 are Owner-approved; revised T3 is the active
-  unapproved decision, T4/T5 and Packet reconciliation remain open, and all R4
+  contract, and NH1/NH2 are Owner-approved; Fresh Native Response Session
+  (Option 2B) is the selected R4 P0 direction, while its exact T3 contract is
+  unapproved; T4/T5 and Packet reconciliation remain open, and all R4
   behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -648,6 +649,36 @@ Guest, Room, credential, schema, implementation, deployment, external action,
 or spend was approved or exercised. NH1/NH2 are closed; revised T3 is now the
 active unapproved Owner card. T4/T5 and reconciliation of the detailed
 Technical Control Packet remain open.
+
+## Evidence round 12 — Fresh Native Response Session direction selected
+
+On 2026-08-01 the Owner selected Option 2B as the direction for R4 P0 after
+revisiting how Native Harness Mode was expected in the Highest and MVP Vision:
+
+- do not reuse the Owner's current/saved Codex conversation for Guest work;
+- start one brand-new, disposable session for one exact Interaction;
+- let that session dynamically read/search a sanitized read-only snapshot of
+  current eligible Forme files plus typed body/path-free Twin orientation
+  instead of asking the Owner to choose an
+  exact 32 KiB private-context manifest;
+- keep Guest inbox browsing, other Interactions/Rooms, writers, Web/network
+  tools, environment secrets, connector credentials, Room mutation, and
+  publication outside the session;
+- keep the output as a candidate requiring exact Owner publication approval;
+- move the Managed Privacy response lane and trust-tier selector to P1/future,
+  while preserving accepted R2/R3 Managed Privacy evidence.
+
+The product judgment is that this direction better demonstrates mature
+Harness agency and Forme's distinct continuity/authority/presence layer with
+less MVP friction. The explicit scope assumption is the Forme project repo,
+not a personal Knowledge Vault or highly sensitive source zone.
+
+This round is **direction/architecture evidence only**. No session was run and
+no product usefulness, containment, privacy, consent, provider behavior,
+deletion, or response quality was validated. Full T3 consent, exact source/
+provider/capability envelope, session budget, physical boundary and lifecycle
+remain awaiting Owner approval; T4/T5, the reconciled Control Packet,
+implementation and production authority remain open.
 
 ## Follow-up product-learning questions — not R4 blockers
 

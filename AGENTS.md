@@ -37,6 +37,9 @@ Do not implement past the proposal stage without explicit owner confirmation whe
   are never auto-ingested as canonical meaning or a Forme-authoritative effect.
 - The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
   tool, network, provider, credential, Guest, or Room authority.
+- The 2026-08-01 R4 Option 2B decision selects a direction only. Until exact
+  T3 approval, no Fresh Native Response Session, Guest-body release, dynamic
+  response-snapshot read, OpenAI call, or response capability is authorized.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

@@ -317,3 +317,32 @@ unapproved Owner decision; T4/T5 and detailed Control Packet reconciliation
 remain open. This approval classifies architecture only. It grants no concrete
 runtime, file, shell, tool, provider, Guest, Room, credential, implementation,
 deployment, external action, or spend authority.
+
+## 2026-08-01 — R4 T3 selects Fresh Native Response Session direction
+
+**Decision:** select Option 2B as the R4 P0 direction. One exact Interaction
+will use one brand-new, non-resumed Fresh Native Response Session rather than
+the Owner's current conversation or a file-by-file Managed Privacy picker. The
+session should receive the exact request and a typed body/path-free current
+Twin orientation, then dynamically read/search only a sanitized read-only
+snapshot of current eligible Forme files. P0 excludes Git history. Its output
+remains a candidate requiring exact Owner publication
+approval and separate T2 connector transport.
+
+The former Managed Privacy Response Lane recommendation is superseded for R4
+P0 and deferred to P1/future sensitive or exact-content use. R2/R3's Managed
+Privacy proof remains valid. P0 will not build a Managed/Native trust-tier
+selector.
+
+**Reason:** this better demonstrates the Highest Vision's harness-native
+agency and reduces MVP friction and schedule scope. Codex can discover
+relevant project context as a mature Harness, while Forme still binds the work
+to one Twin, Interaction, human boundary, approval, and receipt chain.
+
+**Effect:** this is a direction decision, not final T3 approval. The rewritten
+T3 still requires explicit Owner approval of Guest consent, exact source/
+provider/capability envelope, fresh-session budget, physical Guest-store and
+credential isolation, output authority, deletion, and retention. Until that,
+T4/T5, and a reconciled Control Packet are approved, no new runtime
+capability, provider call, Guest data handling, schema, implementation,
+deployment, external action, or spend is authorized.

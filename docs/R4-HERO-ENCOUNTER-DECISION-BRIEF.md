@@ -2,9 +2,10 @@
 
 - Status: **owner-approved product target, public/private Room correction, P
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
-  Harness architecture; revised T3 is active and unapproved; T4/T5 remain
-  open; no implementation authority**
-- Updated: 2026-07-29
+  Harness architecture; Fresh Native Response Session (Option 2B) selected as
+  the R4 P0 direction; exact T3 remains unapproved; T4/T5 remain open; no
+  implementation authority**
+- Updated: 2026-08-01
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
@@ -176,9 +177,10 @@ request against the exact host and optional guest capsule versions.
 ### 02:10–02:45 — return to the living Twin
 
 The local Signal Box receives the request. It returns through the context
-shape established by approved NH1/NH2; revised T3 still decides the exact
-private-response provider/context contract. This product brief does not make
-that T3 choice. The local system may prepare:
+shape established by approved NH1/NH2. On 2026-08-01 the Owner selected one
+Fresh Native Response Session per exact Interaction as the P0 direction; the
+exact consent/source/provider/capability/session/lifecycle contract remains
+pending T3 approval. The local system may prepare:
 
 - the strongest shared thread;
 - one productive difference rather than forced similarity;
@@ -187,14 +189,17 @@ that T3 choice. The local system may prepare:
 - a response draft whose outgoing content is explicit.
 
 The owner may adjust, approve, decline, park, or request more context. The
-current P0 candidate for `allow_owner_local_ai` is a Managed Privacy Run whose
-exact manifest names every Forme-selected Guest/Owner/workspace content byte;
-runtime-owned system/schema/metadata are separately disclosed. This candidate
-is not approved until revised T3. Forme hosted server never receives Owner
-private context, the local selection manifest/packet, or an unpublished draft.
-With `manual_owner_only`, no content from this Interaction is sent from the
-Owner edge to a remote AI provider, and the owner may still write a manual
-response.
+selected direction uses a brand-new, non-resumed Codex response session that
+receives the exact request and typed body/path-free current Twin orientation,
+then can dynamically read/search only a sanitized read-only snapshot of
+current eligible Forme files. It has no
+writer, Web/network tool, other Interaction, connector credential, Room or
+publish authority, and it makes no exact provider-visible byte-manifest claim.
+Forme hosted server never receives Owner private context or an unpublished
+draft. With `manual_owner_only`, no content from this Interaction is sent from
+the Owner edge to a remote AI provider, and the owner may still write a manual
+response. The old Managed Privacy response lane is P1/future, not a P0
+trust-tier selector.
 
 ### 02:45–03:00 — receive owner-reviewed depth
 
@@ -468,7 +473,7 @@ review-by-exception the R4 human-boundary contract. The separate 2026-07-28 T2
 approval closes the Room Operator authority contract. P, T1, and T2 are
 closed. NH1/NH2 are also Owner-approved in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). The Owner
-now reviews revised T3, then T4/T5, in
+now reviews the exact Fresh Native Response Session T3, then T4/T5, in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After those
 cards close, agents will reconcile the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which

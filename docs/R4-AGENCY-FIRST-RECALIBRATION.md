@@ -2,9 +2,10 @@
 
 - Status: **P privacy-first human-boundary interpretation and T2 Room control
   contract Owner-approved on 2026-07-28; T1 stays approved; Native Harness
-  roles plus NH1/NH2 Owner-approved on 2026-07-29; revised T3 is active and
-  unapproved; T4/T5 and implementation remain unapproved**
-- Updated: 2026-07-29
+  roles plus NH1/NH2 Owner-approved on 2026-07-29; Fresh Native Response
+  Session (Option 2B) selected as the R4 P0 direction on 2026-08-01; exact T3,
+  T4/T5 and implementation remain unapproved**
+- Updated: 2026-08-01
 - Purpose: distinguish the authority Forme should grant now from useful
   long-term agency, without turning the August MVP into a policy-engine project
 
@@ -31,7 +32,7 @@ Owner defines exact boundary
 |---|---|---|---|
 | T1 Guest continuity | short exact capabilities and no successor inheritance | keep the clear public/private perimeter; later allow owner-defined relationship envelopes across compatible successors | **Keep approved T1 unchanged.** One public knock; owner-issued 24h/3d/7d short pass; exact Projection binding |
 | T2 Room control | paired Agent handles sync; most management requires a 15-minute one-use action approval | use a fixed standing exact per-Room `room_operator.v1` scope bundle for routine transport and deterministic lifecycle enforcement; Web is a supervisory cockpit | **Owner-approved.** Fixed 30-day, non-renewing, independently revocable binding; no dynamic policy/grant object |
-| T3 private drafting | every draft requires Guest choice, Owner start, and exact manifest | Guest/provider/audience consent remains hard; repeated compatible use should later be governed by a persistent context policy | **Active Owner review.** Approved NH1 makes Native Harness the default local carrier, but revised T3 still decides the first private-response lane; Managed exact-manifest drafting remains the recommendation, not the definition of the entire local Agent |
+| T3 response drafting | every draft requires Guest choice, Owner start, and exact manifest | approve one source/provider/capability perimeter, then let one fresh session dynamically find useful project context inside it | **Direction selected; exact contract open.** One new/non-resumed session per Interaction, sanitized read-only current Forme source snapshot + typed body/path-free Twin orientation, no other Guest/Room, writer, network, credential or publish authority; Managed exact-manifest mode moves to P1/future |
 | T4 lifecycle | every new Projection/Response is separately approved; successor never inherits | deterministic safety enforcement can run automatically; later allow policy-compatible content and successor publication | **Keep exact outward content review and successor re-admission for P0.** Let Room Operator attest stale/recover |
 | T5 async operation | Owner explicitly runs sync; no daemon | the Agent's standard Room workflow invokes typed sync without asking the Owner; background continuity can come later | **Agent-triggered explicit sync plus manual recovery.** Read-only CLI commands do not hide writes |
 
@@ -132,8 +133,8 @@ Owner-approved transport, and deterministic staleness enforcement are not.
 These ideas fit the philosophy but should not enter the August critical path:
 
 - a general visual policy/envelope builder;
-- persistent provider/source visibility policies replacing the first exact
-  T3 manifest;
+- an optional exact-content Managed Privacy lane and user-facing trust tiers
+  for sensitive personal/vault sources;
 - policy-compatible automatic Projection successor publication or Curator
   re-admission;
 - automatic outward Twin/Agent replies under a standing representation policy;
@@ -158,14 +159,15 @@ This document:
 - records the Owner-approved P privacy-first/minimum-friction human-boundary
   model;
 - records the approved T2 Room Operator application and NH1/NH2 Native Harness
-  architecture while preserving the separate T3–T5 gates;
+  architecture and selected Option 2B direction while preserving the exact
+  T3–T5 gates;
 - preserves the approved T1 product behavior and all existing R1–R3 evidence;
 - grants no R4 implementation, credential, provider visibility, deployment,
   public behavior, external message, durable production write, or spend.
 
 The approved Native Harness decisions are recorded in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). The next
-Owner decision surface is revised T3 in
+Owner decision surface is the exact Fresh Native Response Session T3 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md), followed by
 T4/T5. Once T3–T5 close, the detailed Technical Control Packet must encode the
 exact approved boundary and be hashed again.
