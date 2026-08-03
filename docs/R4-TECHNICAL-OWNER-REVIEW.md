@@ -1,10 +1,11 @@
-# R4 Technical Owner Review Brief v0.10
+# R4 Technical Owner Review Brief v0.11
 
 - 状态：**P privacy-first human-boundary interpretation、T1
-  public/private Room correction、T2 Room control contract 与 NH1/NH2
-  Native Harness architecture，以及 Fresh Native Response Session exact
-  T3 contract 均已批准；T4 public / unlist / stale / revoke lifecycle 是
-  当前 Owner 决策，T5 仍待决定；不是最终 Packet 批准记录**
+  public/private Room correction、T2 Room control contract、NH1/NH2
+  Native Harness architecture、Fresh Native Response Session exact T3
+  contract，以及 T4 public / unlist / stale / revoke lifecycle 均已批准；
+  T5 async / deletion / retention / P0 cut 是当前 Owner 决策；不是最终
+  Packet 批准记录**
 - 更新：2026-08-03
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -25,9 +26,9 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. P、T1、T2、NH1、NH2 与 T3 已经关闭；
+2. P、T1、T2、NH1、NH2、T3 与 T4 已经关闭；
 3. 现在只判断下面这张低负担的
-   [T4 lifecycle card](#current-t4)，再继续 T5；
+   [T5 async / retention card](#current-t5)；
 4. 用五个具体场景检查系统行为，只看 Agent 报告的 red/yellow
    exception。
 
@@ -41,12 +42,13 @@ NH2 option 1。2026-08-01，Owner 又选择了 Option 2B：R4 P0 不走逐文件
 Interaction 新开一次 Fresh Native Response Session。原来的 Managed
 Privacy Response Lane 仍是 R2/R3 已证明的能力，并留作 P1/未来敏感模式，
 不进入本次 MVP 的信任分层。2026-08-03，Owner 按推荐正式批准了下面的
-Fresh Native Response Session exact T3 contract。T4–T5 全部关闭后，Agent 才会重写
-长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash 已经失效，
-不应再被批准。
+Fresh Native Response Session exact T3 contract。同日，Owner 又按推荐正式
+批准了 T4 public / unlist / stale / revoke lifecycle。T5 关闭后，Agent
+才会重写长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash
+已经失效，不应再被批准。
 
 2026-07-27 的 agency-first 方向修正了 T2 推荐；Owner 已在 2026-07-28
-批准该推荐。它也继续澄清当时待决 T3–T5 的 framing：
+批准该推荐。它也继续澄清之后各 technical gate 的 framing：
 Owner 批准的是可持续、可撤销的边界，而不是每一个机械 API 动作。Web
 更像 GitHub 控制台，用来看状态、权限、异常和停止；绑定 exact Room 的
 Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替人承诺、扩权
@@ -81,6 +83,12 @@ Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替�
 - Room 现在有两个明确的 first-class kind：Third Place 中公开可遇见的
   Room，以及阅读和互动都需要 Owner Grant 的 Private Room。`unlisted`
   只是 curation/discovery 状态，不等于 private。
+- Owner 已批准 T4：Third Place 只发现 current、fresh、admitted
+  Projection；unlisted / never-admitted public Projection 仍可通过 direct
+  URL 读取，但停止 discovery 与新的 public knock；stale 最多七天
+  warning-only direct-read 且不接受新 Interaction；revoke 与 Room
+  retirement 立即隐藏 Projection 和 linked published Response。Curator
+  unlist 不替 Owner 撤销仍有效的 Grant 或 GrantOffer。
 - Third Place Room 允许任何人阅读 current admitted Projection，并默认
   允许一次 bounded public knock；继续互动必须由 Owner 发 short pass。
 - P0 仍然是一个 curated Third Place、一个必须完成的 Forme Project
@@ -292,14 +300,14 @@ fixture 必须支持一个真实 grant-gated Private Room；这不增加第二�
   target Room/Projection 仍 active/current/fresh/unrevoked、target mode
   不是 `closed`。Interaction deletion、origin revoke、origin Room
   retirement、target successor/expiry/revoke/retirement 都使 offer
-  失效；Curator unlist 是否影响它仍是 T4 待批准的 lifecycle 选择。
+  失效；按已批准 T4，Curator unlist 不会让它自动失效。
 - Public Room 上的 short pass 只延长对同一个 public Projection 的互动
   权，不会解锁任何 Private Room 内容。把 Guest 邀入 Private Room 必须
   另外签发绑定那个 Private Room + Projection 的 Grant。
 - Capability issuance 与最终 submission 都必须原子地重新检查 exact
   Projection 仍 current、fresh、admitted，Room 仍是 `public_single`，
   public pool 仍有额度；不能靠先领 token 绕过后来发生的关闭。Exact
-  unlist/stale effects 仍由待批准的 T4 决定。
+  unlist/stale effects 遵守已批准的 T4 lifecycle contract。
 
 Owner 独立控制 Room 的互动模式：
 
@@ -560,7 +568,7 @@ one local workspace (local-only identity)
   Owner 当前会话。Future implementation 必须遵守已批准的 exact roots、
   consent、provider、session budget、physical isolation 与 session lifecycle。
   详细 Packet 仍必须隔离 credential，并用 canary 验证没有未授权的跨界；
-  T4/T5 与 Packet approval 仍是 stop gates。
+  T5 与 Packet approval 仍是 stop gates。
 
 Agency-first 修正后批准的 P0 contract，不再是“sync 可以站立授权、其余每一步
 都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
@@ -768,7 +776,7 @@ Harness；Forme 负责把它放进正确的 Twin、Interaction、权限和人类
 | Provider | 只用披露的 Owner-local Codex → OpenAI；Guest 可选 manual-only |
 | Freedom | 边界内动态 read/search；无 write、其他 network、secret、cross-Room、connector 或 publish |
 | Budget | 60 分钟；一次自动 draft 最多 3 个内部 provider dispatches、128k input / 8k output；适用时 US$1 |
-| Human boundary | 输出只是 candidate；exact Owner approval 后 connector 才发送；retention 等 T4/T5 |
+| Human boundary | 输出只是 candidate；exact Owner approval 后 connector 才发送；public lifecycle 遵守 T4，retention 等待 T5 |
 
 <details>
 <summary>展开：完整 T3 contract 与 Agent 实现 / 审计义务</summary>
@@ -968,8 +976,8 @@ environment、prompt、transcript 或 tool output。
   transcript/log/crash artifact 或 OpenAI copy 已删除。Local artifact 的
   retention/purge 由 T5 固定；provider-side retention 只能按披露的 OpenAI
   regime 诚实说明，Forme 不冒充可以删除；
-- T4 仍决定 stale/unlist 等 public lifecycle，T5 仍决定 durable retention
-  和 purge。T3 不偷着替它们下结论。
+- 已批准 T4 决定 stale/unlist/revoke 等 public lifecycle；T5 仍决定 durable
+  retention 和 purge。T3 不偷着替它们下结论。
 
 </details>
 
@@ -1001,13 +1009,13 @@ publication approval 和 deletion honesty。
 >
 > Managed Privacy Response Lane 与 trust-tier selector 移到 P1/未来。
 
-T3 的批准只允许 Agent 将它编译进新的 Control Packet；在 T4/T5 和新
-Packet 都关闭前，仍不允许实现、OpenAI/provider call、Guest data、schema、
+T3 与 T4 的批准只允许 Agent 将它们编译进新的 Control Packet；在 T5 和
+新 Packet 都关闭前，仍不允许实现、OpenAI/provider call、Guest data、schema、
 部署、spend、Room mutation 或 production action。
 
 ### 本卡已关闭
 
-当前 Owner 决策已移到 T4；本卡不再等待回复。
+当前 Owner 决策已移到 T5；本卡不再等待回复。
 
 <details>
 <summary>历史记录：2026-07-29 的 Managed Privacy T3 提案（已被 2B 方向取代，不再批准）</summary>
@@ -1250,7 +1258,7 @@ Interaction
 本身必须仍 live、未 deleted、未 expired，并且仍带有
 `allow_owner_local_ai`；origin 不得 revoked，Room 不得 retired。Server
 unavailable 时 fail closed。其他 Projection lifecycle 变化会使旧
-manifest 失效，并交给最终批准的 T4 contract 决定是否可在披露状态后
+manifest 失效，并交给已批准的 T4 contract 决定是否可在披露状态后
 重新 compile。
 
 - Forme 在调用 provider 前已知道 Interaction deletion/expiry、origin
@@ -1267,10 +1275,10 @@ manifest 失效，并交给最终批准的 T4 contract 决定是否可在披露�
   Owner approval。Interaction deletion、origin revoke 或 Room retirement
   阻止发送；unlist 或 interaction-mode change 不阻止已 accepted
   Interaction 的回复。Stale、superseded 或 expired Projection 的处理不
-  由 T3 偷偷决定；按当前 T4 推荐，它们必须重新 compile/approve，并在
+  由 T3 偷偷决定；按已批准 T4，它们必须重新 compile/approve，并在
   Response 中明确披露 origin state。
 - Response 已送达后才删除，不能声称它从未发送；后续 hosted
-  hide/revoke/retention 行为由 T4 决定。
+  hide/revoke 行为由已批准 T4 决定，retention/purge 仍由 T5 决定。
 
 #### 6. Draft 与发送仍是两件事
 
@@ -1313,20 +1321,27 @@ connector；`room_operator.v1` 只负责验证和运送，不能替 Owner 写内
 ### 历史回复格式
 
 - 以下旧回复格式已失效：`T3 按推荐批准`、`T3 希望改写为 Option 2`、
-  `T3 选 Option 3`。此历史卡不再接收回复；当前 Owner 决策见下面的 T4。
+  `T3 选 Option 3`。此历史卡不再接收回复；当前 Owner 决策见下面的 T5。
 
 </details>
 
 <a id="current-t4"></a>
 
-## T4 — Public、unlist、stale 和 revoke 分别意味着什么（当前待批准）
+## T4 — Public、unlist、stale 和 revoke 分别意味着什么（Owner-approved — 2026-08-03）
 
-### 你要判断什么
+- 状态：**Owner 已在 2026-08-03 按推荐正式批准以下完整 lifecycle
+  contract**
+- 该批准固定 public discovery、direct-read、stale、revoke、Grant 与 Room
+  retirement 的语义；不批准 T5 retention/deletion/async/P0 cut，也不授权
+  实现、provider call、Guest data、schema、deployment、spend 或 Room
+  mutation。
+
+### 你批准了什么
 
 Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 别人究竟还能看到什么？
 
-### 推荐答案
+### Owner 已批准的答案
 
 - Owner publication 与 Curator admission 是两个独立动作。
 - Third Place 只展示 current、fresh、admitted Projection。
@@ -1368,13 +1383,22 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
   明确披露 origin state 的 Owner-reviewed Response。
 - 绑定 revoked origin 的 request 不能再收到新 Response。
 
-### 你可以这样回复
+### 批准结果
 
-- `T4 按推荐批准`
-- `T4 unlisted/never-admitted 也不允许 direct-read`
-- `T4 带条件批准：...`
+- Curator 管 Third Place 的展示与发现；Owner 管内容、关系和最终隐私
+  刹车。Unlist 不等于 private，也不等于 revoke。
+- Stale 是可披露的短暂过时状态，不是继续互动许可；revoke 与 Room
+  retirement 是立即停止返回正文的终止状态。
+- T4 lifecycle 现在是后续 reconciled Packet 的权威输入，但这次批准只
+  允许更新权威文档与之后的 Packet reconciliation。
 
-## T5 — 异步体验、删除、保留和 P0 cut
+### 本卡已关闭
+
+当前 Owner 决策已移到 T5；本卡不再等待回复。
+
+<a id="current-t5"></a>
+
+## T5 — 异步体验、删除、保留和 P0 cut（当前待批准）
 
 ### 你要判断什么
 
@@ -1498,15 +1522,14 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-P、T1、T2、NH1、NH2 与 T3 已关闭。现在只需判断上面的 T4 lifecycle
-contract；最省力的形式是：
+P、T1、T2、NH1、NH2、T3 与 T4 已关闭。现在只需判断上面的 T5 async /
+deletion / retention / P0 cut contract；最省力的形式是：
 
 ```text
-T4 按推荐批准
+T5 按推荐批准
 ```
 
-也可以用 T4 卡片列出的替代回复，或附上条件。T4 关闭后再继续 T5；两项
-全部关闭后：
+也可以用 T5 卡片列出的替代回复，或附上条件。T5 关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；
 2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；

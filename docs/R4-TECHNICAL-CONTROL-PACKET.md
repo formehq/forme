@@ -1,6 +1,7 @@
 # R4 Technical Control Packet v0.1
 
-- Status: **unreconciled implementation appendix; not an approval target; no implementation authority**
+- Status: **unreconciled implementation appendix after Owner-approved T4; T5
+  is current; not an approval target; no implementation authority**
 - Updated: 2026-08-03
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
@@ -45,6 +46,21 @@
 > writer, generic-network, cross-Room, mutation, and publication separation;
 > and exact Owner approval before separate T2 delivery. This closes T3 as a
 > design input only and does not authorize implementation or any capability.
+> On 2026-08-03 the Owner also approved the full recommended T4 lifecycle
+> contract. Owner publication and Curator admission remain independent;
+> Third Place shows only current/fresh/admitted Projections; an unrevoked,
+> unexpired public Projection remains direct-readable when never admitted or
+> unlisted; and unlist stops discovery/public knocks and invalidates unused
+> public encounter capabilities without silently revoking still-valid exact
+> Owner Grants or `GrantOffer` objects. Stale content is warning-only with no new
+> Interaction; Projection revoke and Room retirement hide hosted bodies and
+> require tombstone-driven local purge; old stale/superseded/expired requests
+> may receive only an origin-disclosed reviewed Response, while revoked-origin
+> requests may not receive a new Response; and no successor inherits a Grant,
+> with public successors also requiring new admission. These are behavioral
+> design inputs only. The exact schemas, routes, transactions, cache controls,
+> persistence, and synchronization mechanisms in this historical body remain
+> unreconciled and unapproved.
 > Its `.forme/presence/` proposal is also historical: after local import,
 > body-bearing Guest input, exact context previews/manifests, and drafts must
 > not sit inside the ordinary Native Workspace read surface or appear in
@@ -53,11 +69,11 @@
 > sessions only opaque IDs/body-free status. One exact request may be released
 > only to its new T3 Fresh Native Response Session after explicit Owner start.
 > The
-> hosted original Guest submission still follows T1/T2/T5.
-> T1, T2, NH1, NH2, and exact T3 are closed; T4 is the current Owner gate and
-> T5 remains open in
+> hosted original Guest submission still follows T1/T2/T4/T5.
+> T1, T2, NH1, NH2, exact T3, and T4 are closed; T5 is the current Owner gate
+> in
 > [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Only after
-> both close may this appendix be replaced by a reconciled Packet, audited,
+> T5 closes may this appendix be replaced by a reconciled Packet, audited,
 > hashed, and returned for separate Owner approval. The prior packet hash is
 > not an approval target, and this v0.1 body still grants no implementation,
 > provider call, Guest-data, Room-mutation, schema, deployment, or spend
@@ -178,8 +194,8 @@ historical proposal explicitly.
 | Synchronization | Manual `presence sync` polling with persist-before-ack and an opaque cursor | No daemon, push, WebSocket, webhook, notification worker, or permanent local tunnel |
 | Local model visibility | **Superseded historical proposal:** before one response draft, show a manifest and send selected request/capsule/Twin content in a maximum 32 KiB isolated packet through existing Codex authentication | The Owner selected this direction on 2026-08-01 and approved its full exact T3 contract on 2026-08-03: a new/non-resumed Fresh Native Response Session may dynamically read only a sanitized read-only clean-HEAD snapshot of eligible Forme files plus previewed typed body/path-free Twin orientation, inside the approved provider/session/capability envelope. This historical row and unreconciled packet still authorize no implementation. |
 | Freshness | Any new local Twin revision conservatively marks the current Projection stale; every Projection hard-expires after seven days | P0 may ask for more Owner re-publication than a later dependency-aware system; an offline server cannot claim freshness forever |
-| Listing and direct access | Curator unlisting removes the Room from Third Place but leaves an unexpired Owner-published direct Room readable; interaction is disabled until admitted | Owner publication and shared-place curation remain meaningfully distinct |
-| Existing requests after change | A stale, superseded, or expired origin may receive an Owner-reviewed response that discloses the origin state; a revoked origin may not | A legitimate waiting guest is not silently abandoned, while explicit revocation remains a hard stop |
+| Listing and direct access | Curator unlisting removes the Room from Third Place but leaves an unexpired Owner-published direct Room readable; interaction is disabled until admitted | **T4-approved supersession note:** the direct-read/discovery split is approved, but the historical blanket interaction-disabled claim is superseded: unlist invalidates public knocks while still-valid exact Owner Grants and `GrantOffer` objects survive under the T4 conditions; exact implementation remains subject to the reconciled Packet |
+| Existing requests after change | A stale, superseded, or expired origin may receive an Owner-reviewed response that discloses the origin state; a revoked origin may not | **T4-approved behavior:** a legitimate waiting guest is not silently abandoned, while explicit revocation remains a hard stop; exact implementation remains subject to the reconciled Packet |
 | Retention | Guest/interaction payloads become unreadable at 30 days or immediately on guest deletion; the next successful daily janitor physically purges them, with a target lag under 24 hours; responses are available for seven days and never beyond the interaction cap; backups may retain purged bytes for seven additional days | Logical deletion is synchronous while physical deletion and backup expiry are honest, separately observable phases; deletion cannot claw back text already read or an offline local copy before its next Presence run |
 | Notification | The guest keeps a private reply URL and refreshes it; the Owner runs manual sync; no guest or Owner email notification | One fewer provider and no background messaging, at the cost of an intentionally asynchronous/manual P0 |
 | Production plans | Vercel Pro + Supabase Pro, currently about $45/month, with Spend Management alerts and the opt-in pause action | Avoids Vercel Hobby's non-commercial restriction and Supabase Free pausing/no-backup risk; the budget/pause is not a strict real-time cost cap |
@@ -187,7 +203,7 @@ historical proposal explicitly.
 In v0.1, approval would have approved these answers as one bounded R4 technical
 direction. That statement is now superseded: this packet cannot be approved and
 authorizes no repository/fixture implementation. A new reconciled packet must
-follow approved NH1/NH2 and exact T3 plus the eventually approved T4/T5, then
+follow approved NH1/NH2, exact T3, and T4 plus the eventually approved T5, then
 return to the
 Owner with a new exact hash.
 

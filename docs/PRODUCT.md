@@ -3,8 +3,8 @@
 - Status: owner-approved product frame, privacy-first P human-boundary
   interpretation, R4 public/private Room correction, and T2 Room control
   contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
-  approved; T4 is the current unapproved technical Owner gate and T5 remains
-  open
+  approved; the recommended T4 public/admission/lifecycle contract approved;
+  T5 is the current unapproved technical Owner gate
 - Updated: 2026-08-03
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
@@ -70,8 +70,9 @@ perimeter, companion authorship/consequence guards, and no-self-expansion
 meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
 approved. The R4 P0 T3 direction is one Fresh Native Response Session per
 Interaction, not a Managed-vs-Native trust selector. The Owner approved its
-exact contract on 2026-08-03; T4/T5 and a reconciled Control Packet remain stop
-gates before implementation.
+exact contract on 2026-08-03, followed by the recommended T4 lifecycle contract
+on the same date; T5 and a reconciled Control Packet remain stop gates before
+implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -144,7 +145,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — exact T3 approved, T4 next
+## Owner-approved R4 product target — T3/T4 approved, T5 next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -184,9 +185,20 @@ Twin orientation, while the ordinary
 Workbench remains body-free and exact publication approval remains separate.
 The former Managed Privacy response recommendation is P1/future. On 2026-08-03
 the Owner approved the exact Fresh Native Response Session T3 contract. This
-permits authority-document and later Control Packet reconciliation only;
-implementation, OpenAI calls, Guest data handling, schema, deployment, spend,
-and Room mutation remain unauthorized. The Owner next reviews T4 and then T5 in
+permits authority-document and later Control Packet reconciliation only. On the
+same date the Owner approved the recommended T4 lifecycle contract: publication
+and Curator admission remain independent; never-admitted or unlisted public
+Projection remains direct-readable but loses discovery and new public knocks;
+stale Projection allows only visibly warned, time-bounded reads and no new
+Interaction; revoke and Room retirement immediately hide hosted bodies and
+enter T5-governed purge; public successors require new Curator admission, and
+no successor inherits a Grant.
+Accepted requests tied to stale, superseded, or expired origin may receive a
+newly compiled, newly approved Response with that state disclosed; revoked
+origin may not. T4 does not expand `room_operator.v1` or approve a physical
+purge schedule. Implementation, OpenAI calls, Guest data handling, schema,
+deployment, spend, and Room mutation remain unauthorized. The Owner next
+reviews T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).

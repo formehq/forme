@@ -3,7 +3,8 @@
 - Status: **owner-approved product target, public/private Room correction, P
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
   Harness architecture; Fresh Native Response Session (Option 2B) exact T3
-  contract Owner-approved; T4 is current and T5 remains open; no
+  contract and T4 public lifecycle Owner-approved; T5 is the current
+  unapproved gate; no
   implementation authority**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
@@ -16,6 +17,8 @@
   two-class ordinary-work/Forme-authority boundary**
 - T3 approval: **2026-08-03 — complete recommended Fresh Native Response
   Session contract; documentation and later Packet reconciliation only**
+- T4 approval: **2026-08-03 — complete recommended public / unlist / stale /
+  revoke lifecycle contract; documentation and later Packet reconciliation only**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
@@ -263,7 +266,7 @@ primitive, but they are not the same Room instance or payload:
 
 | Room kind | Discovery and reading | Interaction |
 |---|---|---|
-| `third_place_public` | Curator-admitted current Projection is public; unlisted public content may remain direct-readable | Owner may open one public knock, allow only grants, or close intake |
+| `third_place_public` | Curator-admitted current Projection is discoverable; an unrevoked, unexpired never-admitted or unlisted Projection remains direct-readable | Only a current, fresh, admitted `public_single` Projection accepts a new public knock; Owner may instead allow Grants or close intake |
 | `private_grant_only` | Never curator-admitted; direct URL without a valid Grant returns no Projection body | Owner-issued exact Room + Projection Grant only |
 
 Each has a different Room ID and separately Owner-approved Projection.
@@ -289,7 +292,16 @@ and separately attributable.
 The curator may admit, reject, or unlist a Room, but cannot rewrite its
 projection. The owner may publish a successor, revoke a capsule, or retire the
 Room. In P0 every public successor requires a new explicit Curator admission;
-any future inheritance policy is post-P0 and requires separate approval.
+no public or private successor inherits a Guest Grant. Any future inheritance
+policy is post-P0 and requires separate approval.
+
+The Owner-approved T4 lifecycle keeps these meanings distinct: unlist removes
+Third Place discovery and new public knocks without revoking a still-valid
+Owner Grant or GrantOffer; stale content is warning-only/read-only until its
+seven-day hard expiry; revoke immediately hides the Projection and linked
+Responses; Room retirement ends the entire surface. Accepted requests may
+still receive an origin-disclosed reviewed Response after stale, supersede, or
+expiry, but never after origin revoke.
 
 ### P0 curation
 
@@ -356,7 +368,8 @@ The central rule is:
 | Continue in a public Room | Owner-issued short pass or accepted Grant Offer through the prior private reply capability |
 | Read or interact with a Private Room | Owner-issued exact Room + Projection Grant; a direct URL is insufficient |
 | Submit through an Agent Guest | A short-lived, one-submission token derived from the relevant public encounter or Owner Grant |
-| Publish or revoke a Room capsule | Authenticated publisher account plus an explicitly paired local Forme workspace |
+| Publish an exact Room capsule | Authenticated publisher account plus an explicitly paired local Forme workspace; the connector transports only the exact Owner-approved artifact |
+| Emergency-revoke a Projection/Response or retire a Room | Authenticated Owner/Controller Web session with step-up; the paired connector does not inherit this boundary authority |
 | Admit or unlist a Room in Third Place | Authenticated curator account |
 
 The exact authentication provider and token format belong in the technical
@@ -462,7 +475,12 @@ On 2026-07-26 the Owner approved this narrower correction:
 - Curator admission controls public discovery; Owner controls intake modes,
   Grants, and Grant Offers;
 - `unlisted` is not a privacy state. Exact unlist effects on active Grants and
-  Grant Offers remain a pending T4 decision.
+  Grant Offers were left to the later T4 lifecycle decision.
+
+On 2026-08-03 the Owner approved T4 as recommended: unlist invalidates unused
+public encounter capabilities but does not itself revoke an otherwise-valid
+exact Owner Grant or GrantOffer. Stale, revoke, retirement, successor, and
+accepted-request behavior now follow the contract summarized above.
 
 This correction creates no Guest account, reusable identity, public comments,
 open mailbox, additional Twin, or server AI.
@@ -476,10 +494,10 @@ review-by-exception the R4 human-boundary contract. The separate 2026-07-28 T2
 approval closes the Room Operator authority contract. P, T1, and T2 are
 closed. NH1/NH2 and the exact T3 Fresh Native Response Session contract are
 also Owner-approved in
-[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). The Owner
-now reviews T4, then T5, in
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After those
-cards close, agents will reconcile them and the approved T3 contract into the detailed
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T4 is
+Owner-approved as well. The Owner now reviews T5 in
+[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After it
+closes, agents will reconcile all approved contracts into the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which
 must provide:
 

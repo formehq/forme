@@ -4,8 +4,8 @@
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
   2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0
   direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; T4 is current, T5 and implementation remain subject to separate
-  Owner review**
+  2026-08-03; T4 public lifecycle contract Owner-approved on 2026-08-03; T5 is
+  current, and implementation remains subject to separate Owner review**
 - Updated: 2026-08-03
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -22,10 +22,11 @@ friction**:
 
 The **Privacy-first human boundary** section below is the Owner-approved P
 formalization of that direction for R4. The exact R4 Room Operator envelope
-identified below is separately Owner-approved T2. Other cognitive-mode,
-delegation, and long-term application guidance remains proposed unless an
-exact mechanism is separately approved. Neither P nor T2 silently creates a
-credential or authorizes implementation.
+identified below is separately Owner-approved T2; the Fresh Native Response
+Session is Owner-approved T3; and the public lifecycle split is Owner-approved
+T4. Other cognitive-mode, delegation, and long-term application guidance
+remains proposed unless an exact mechanism is separately approved. None of
+P/T2/T3/T4 silently creates a credential or authorizes implementation.
 
 This is neither “ask before everything” nor “let the Agent do anything.”
 Forme's job is to make the boundary real: exact scope, audience, attribution,
@@ -280,6 +281,20 @@ long-term agency philosophy. Later policy-compatible context use, successor
 publication, responses, relationship grants, and background work should be
 able to run inside explicit standing envelopes.
 
+The Owner-approved T4 contract keeps discovery authority, relationship access,
+freshness, and emergency privacy stops distinct. Curator unlist removes Third
+Place discovery and unused public encounters without silently revoking a
+still-valid exact Owner Grant or `GrantOffer`; a direct URL to an unrevoked,
+unexpired public Projection remains readable even when never admitted or
+unlisted. Stale content becomes warning-only and cannot accept a new
+Interaction. Projection revoke and Room retirement remove hosted bodies and
+require local Presence to purge request and linked Response bodies after the
+corresponding tombstone arrives. No successor inherits a Guest Grant, so
+continued grant-based access requires a new exact Grant; a public successor
+also requires new Curator admission. These are
+lifecycle requirements for the later reconciled Packet, not authority for the
+current connector, model, or repository to perform them.
+
 The exact P0/future split is maintained in
 [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
 
@@ -321,10 +336,11 @@ The approved P model changes Forme's guiding architecture; T2 closes the first
 exact Room authority envelope; NH1/NH2 close the default local carrier and
 ordinary-work/Forme-authority classification; exact T3 now closes the R4 P0
 response session/source/provider/capability/consent boundary as design
-authority. None of these approvals instantiates that runtime or authorizes a
+authority; and T4 closes the public/unlist/stale/revoke/retire lifecycle
+contract. None of these approvals instantiates that runtime or authorizes a
 Fresh session, file read, provider call, credential issuance, private Guest
 data, Room mutation, external message, schema, implementation, deployment, or
-spend. T3 grants documentation and later Packet-reconciliation authority only.
-T4 is the current Owner gate; T5, a new reconciled and separately approved
+spend. T3/T4 grant documentation and later Packet-reconciliation authority
+only. T5 is the current Owner gate; a new reconciled and separately approved
 Control Packet, schemas/migrations, implementation, and production grants
 remain separate gates.

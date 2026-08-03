@@ -13,16 +13,18 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   T1 public/private Room correction, and T2 Room control contract approved;
   NH1/NH2 and the exact Fresh Native Response Session T3 contract approved;
-  T4 is the current unapproved Technical Owner Review gate, with T5 and packet
-  reconciliation still open**
+  the recommended T4 public/admission/lifecycle contract approved; T5 is the
+  current unapproved Technical Owner Review gate, with packet reconciliation
+  still open**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
   public-knock/private-Grant correction, P boundary model, and T2 Room control
   contract are approved; NH1 option 1 and NH2 option 1 were Owner-approved on
   2026-07-29, but grant no concrete runtime, file, shell, tool, provider,
   credential, Guest, or Room authority; the exact T3 contract was
-  Owner-approved on 2026-08-03, but authorizes only authority-document and
-  later packet reconciliation; T4/T5 and the first technical packet still
-  require Owner review and reconciliation to the confirmed self-host target;
+  Owner-approved on 2026-08-03; the recommended T4 contract was also
+  Owner-approved on 2026-08-03, but both authorize only authority-document and
+  later packet reconciliation; T5 and the first technical packet still require
+  Owner review and reconciliation to the confirmed self-host target;
   no R4 implementation or production action is authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
@@ -146,7 +148,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — exact T3 approved, T4 next
+## R4 Controlled Presence — T3/T4 approved, T5 next
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -176,8 +178,15 @@ Web/network tool, connector credential, cross-Room or publish authority; and
 its draft still requires exact Owner approval. The old Managed Privacy
 response recommendation remains an R2/R3 proof and P1/future sensitive lane;
 P0 does not build a trust-tier selector. The Owner approved this exact T3
-contract on 2026-08-03. That approval permits authority-document and later
-packet reconciliation only; T4 is now the current unapproved gate.
+contract on 2026-08-03. On the same date, the Owner approved the recommended
+T4 lifecycle contract: Owner publication and Curator admission remain
+separate; never-admitted or unlisted public content remains direct-readable but
+loses discovery and new public knocks; stale content is visibly bounded and
+cannot receive new Interaction; revoke and retirement fail closed; and
+public successors require new Curator admission, while no successor inherits a
+Grant. These approvals permit
+authority-document and later packet reconciliation only; T5 is now the current
+unapproved gate.
 
 P0 needs only the minimum Codex integration required by the walking slice. It
 does not require every CLI/API/MCP/Skill/Plugin adapter surface or a live
@@ -188,7 +197,7 @@ The confirmed deployment target is the existing Cloudflare → Caddy → Hetzner
 The first
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is now an unreconciled implementation appendix, not an approvable exact object.
-After T4/T5 close, agents will rewrite and re-audit it. No R4
+After T5 closes, agents will rewrite and re-audit it. No R4
 repository implementation or production action is currently authorized.
 
 ## Forme R3 managed action

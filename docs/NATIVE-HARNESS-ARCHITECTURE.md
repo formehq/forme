@@ -3,8 +3,9 @@
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
   R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; no
-  new runtime, provider, file, shell, tool, Room, or implementation authority**
+  2026-08-03; T4 public lifecycle Owner-approved on 2026-08-03; T5 is the
+  current unapproved gate; no new runtime, provider, file, shell, tool, Room,
+  or implementation authority**
 - Updated: 2026-08-03
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
@@ -30,10 +31,12 @@
 NH1/NH2 确认了产品与架构关系；2026-08-03 批准的 T3 又固定了第一条
 Response 未来必须怎样进入一个全新、不继承当前聊天、只读 sanitized
 current Forme source snapshot 的 Native session，以及它的 consent、session
-budget、physical isolation 和 session lifecycle。它仍不是批准某个 Codex
-session 现在读取文件、运行 shell、使用 tools、看到 Guest 内容、操作 Room，
-调用 provider 或开始实现。下一张需要判断的是 T4 public / unlist / stale /
-revoke lifecycle；T5 和重写后的 Control Packet 仍在后面。
+budget、physical isolation 和 session lifecycle。同日批准的 T4 又固定了
+public / unlist / stale / revoke 对 Projection、Interaction、Response 与
+session authority 的影响。它们仍不是批准某个 Codex session 现在读取
+文件、运行 shell、使用 tools、看到 Guest 内容、操作 Room、调用 provider
+或开始实现。下一张需要判断的是 T5 async / deletion / retention / P0 cut；
+重写后的 Control Packet 仍在后面。
 
 ## Why this clarification exists
 
@@ -405,6 +408,29 @@ are the reason to choose this profile. The former Managed Privacy Response
 recommendation remains historical/P1, and P0 does not build a trust-tier
 selector.
 
+## Relationship to approved T4
+
+T4 fixes how hosted public lifecycle state constrains the Fresh Native
+Response Session without giving the session Room authority:
+
+- Curator unlist ends Third Place discovery and new public knocks, but does
+  not cancel an already accepted Interaction or an otherwise-valid Owner
+  Grant/GrantOffer;
+- stale, superseded, or expired origin requests may still receive one newly
+  compiled and Owner-approved Response that clearly discloses the origin
+  state;
+- a revoked origin may not receive a new Response;
+- Projection revoke or Room retirement terminates computational authority and
+  invalidates any unpublished candidate; linked published Response bodies are
+  hidden by the hosted lifecycle contract;
+- T4 says when content becomes unavailable, while T5 still decides durable
+  retention, physical purge, and asynchronous reconciliation timing.
+
+These are authoritative constraints for a future implementation. They do not
+grant the Harness direct lifecycle inspection, mutation, connector, or publish
+capability; those paths still require the separately approved T2 gateway and
+the remaining gates.
+
 ## What this document does not authorize
 
 This clarification authorizes no:
@@ -417,6 +443,6 @@ This clarification authorizes no:
   Projection publication;
 - schema, migration, implementation, deployment, or public behavior.
 
-Those remain governed by the owner-approved T3 contract, T4/T5, the
+Those remain governed by the owner-approved T3/T4 contracts, pending T5, the
 reconciled Technical Control Packet, Schema &
 Migration Manifest, and Production Deployment & Provisioning Grant.

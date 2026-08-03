@@ -145,8 +145,8 @@ Owner Grant for both reading and interaction. Curator admission/unlisting
 controls public discovery; Owner actions control intake mode, Grant issue and
 revoke, and Grant Offers. `unlisted` does not mean private, and public
 Interaction/Response bodies do not become comments. Exact unlist effects on
-active Grants and Grant Offers are not fixed by this T1 decision and remain in
-the pending T4 lifecycle review.
+active Grants and Grant Offers were not fixed by this T1 decision and were left
+for the then-pending T4 lifecycle review; T4 later closed below.
 
 **Reason:** a public Third Place that requires a private invitation before the
 first interaction behaves like a display cabinet rather than an approachable
@@ -312,9 +312,9 @@ guarantees proven by R1–R3. It keeps mature workbench capability and durable
 Forme authority distinct instead of rebuilding Codex/OpenCode or treating
 every native file edit as canonical Forme meaning.
 
-**Effect:** NH1/NH2 are closed. Revised R4 T3 is now the active, still
-unapproved Owner decision; T4/T5 and detailed Control Packet reconciliation
-remain open. This approval classifies architecture only. It grants no concrete
+**Effect:** NH1/NH2 are closed. At that point revised R4 T3 was the active,
+still-unapproved Owner decision; T4/T5 and detailed Control Packet
+reconciliation remained open. This approval classifies architecture only. It grants no concrete
 runtime, file, shell, tool, provider, Guest, Room, credential, implementation,
 deployment, external action, or spend authority.
 
@@ -374,8 +374,9 @@ file-by-file context picker and a misleading claim that Forme knows every byte
 the provider inspected.
 
 **Effect:** T3 is closed and authoritative for R4 P0. This approval authorizes
-documentation and later Technical Control Packet reconciliation only. T4 is
-the current Owner gate and T5 remains open; the existing packet is still
+documentation and later Technical Control Packet reconciliation only. At the
+time of this approval T4 was the current Owner gate and T5 remained open; T4
+later closed below. The existing packet is still
 unreconciled and cannot be approved or implemented. No Fresh session,
 provider call, Guest-data handling, Room mutation, schema/migration,
 repository implementation, deployment, external action, production write, or
@@ -383,3 +384,74 @@ spend is authorized. After T4/T5 close, a new exact Packet must be audited,
 hashed, and separately approved before repository implementation or
 fixture/local tests may begin; schema/migration and production grants remain
 later independent gates.
+
+## 2026-08-03 — R4 T4 public lifecycle contract approved
+
+**Decision:** approve the full recommended T4 lifecycle contract. Owner
+publication and Curator admission remain independent: Third Place lists only
+the exact current, fresh, curator-admitted Projection. An Owner-published,
+unrevoked and unexpired `third_place_public` Projection remains readable by
+direct URL when never admitted or later unlisted, but only a current, fresh,
+admitted Projection in a `public_single` Room may accept a new public knock.
+
+Curator unlist removes Third Place discovery, stops new public knocks, and
+immediately invalidates every unused public encounter capability. It does not
+act as an Owner revoke: an existing Owner-issued Grant remains usable only
+within its original Room + Projection scope, expiry, quota, interaction mode,
+and Projection lifecycle. An already-issued `GrantOffer` also survives unlist
+alone. Acceptance must atomically recheck private reply authority, offer
+expiry, that the source has not been deleted or revoked and its Room has not
+retired, that the exact target Projection remains current, fresh, and
+unrevoked, and that the target Room is neither retired nor `closed`;
+acceptance never extends the original expiry.
+
+A Private Room never enters Third Place and returns no Projection body from a
+direct URL without a valid exact Owner Grant. P0 does not convert a public
+Room to private in place: the Owner must revoke the public Projection and
+create a different Room ID with a separately approved private Projection.
+`invite_only` rejects and permanently invalidates unused public encounters
+while preserving valid Grants; `closed` does the same to unused public
+encounters and pauses every new submission without extending Grant expiry.
+Unlist and interaction-mode changes do not delete already-accepted
+Interactions, which may still complete an Owner-reviewed Response.
+
+A stale public Projection may remain direct-readable only with a dominant
+warning until its seven-day hard expiry; a still-valid Private Guest Grant may
+likewise read only with a stale warning. Neither lane may accept a new
+Interaction. Projection revoke immediately stops serving its body, hides every
+linked published Response, reduces old Guest access to body-free
+status/delete, and requires the local Presence to purge request and linked
+Response bodies after its tombstone arrives. Room retirement ends the Room
+and all new writes, hides hosted Projection and Response bodies, leaves old
+Guests only body-free status/delete, and requires equivalent local purge after
+the retirement tombstone.
+
+Every public successor requires a new Curator admission, and no public or
+private successor inherits a Guest Grant. An already-accepted request whose
+origin later becomes stale, superseded, or expired may receive one
+Owner-reviewed Response only with the origin state explicitly disclosed. A
+request bound to a revoked origin cannot receive a new Response.
+
+**Reason:** this keeps public discovery, Owner-controlled relationship
+authority, content freshness, and emergency privacy revocation as separate
+concepts. A Curator may remove something from the shared place without
+silently cancelling an Owner relationship; accepted work is not lost merely
+because listing or intake changes; and revoke/retire remain strong,
+body-removing privacy stops. Exact Projection-bound Grants and fresh successor
+admission prevent access from silently following changed content.
+
+**Effect:** T4 is closed and authoritative for later R4 Packet reconciliation;
+T5 becomes the current Owner gate. This approval may update authority
+documentation and later be compiled into a new Technical Control Packet after
+T5. It supersedes conflicting T4 proposals in the existing unreconciled
+packet, but does not approve that packet or any low-level schema, transaction,
+route, caching, or storage mechanism.
+
+No Room, Projection, Grant, GrantOffer, Interaction, or Response is created,
+read, mutated, revoked, or retired by this approval. It changes none of the
+approved P/T1/T2/NH1/NH2/T3 boundaries and grants no new connector or model
+authority. T5 synchronization/deletion/retention mechanics, the reconciled
+and separately Owner-approved Control Packet, schemas/migrations, repository
+implementation, runtime/provider calls, Guest-data handling, credentials,
+hosted mutation, external messaging, deployment, production writes, public
+behavior, and spend remain unauthorized.

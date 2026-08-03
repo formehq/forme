@@ -3,9 +3,10 @@
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
-  Fresh Native Response Session (Option 2B) exact T3 contract owner-approved;
-  T4 is the current unapproved gate; T5 and implementation-packet reconciliation
-  remain open
+  Fresh Native Response Session (Option 2B) exact T3 contract and T4 public
+  lifecycle contract owner-approved; T5 async / deletion / retention / P0 cut
+  is the current unapproved gate, and implementation-packet reconciliation
+  remains open
 - Updated: 2026-08-03
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -495,14 +496,26 @@ request and Response remain private. Continued or Private Room access requires
 an exact Owner Grant. Curator admission controls shared-place discovery; Owner
 actions control intake mode, Grant issue/revoke, and Grant Offers.
 
+The Owner-approved T4 lifecycle keeps those authorities distinct. Third Place
+discovers only a current, fresh, admitted Projection. A current public
+Projection that is never admitted or later unlisted remains direct-readable,
+but unlisting ends discovery and new public knocks without revoking an
+otherwise-valid Owner Grant or GrantOffer. A stale Projection permits at most
+seven days of warning-only direct-read and no new Interaction. Projection
+revoke immediately hides its body and linked published Response bodies; Room
+retirement does the same for the whole Room and stops all new writes. A public
+successor requires new Curator admission, and no public or private successor
+inherits a Guest Grant. These are lifecycle semantics, not retention or purge
+timings; T5 still owns those decisions.
+
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
 The product boundary, T2 Room authority contract, NH1/NH2 architecture
-contract, and exact Fresh Native Response Session T3 contract are approved.
-The Owner now reviews T4, then T5, in
+contract, exact Fresh Native Response Session T3 contract, and T4 lifecycle
+contract are approved. The Owner now reviews T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
-implementation remains blocked until those cards and the approved T3 contract are reconciled into a new
-exact
+implementation remains blocked until T5 and the approved T3/T4 contracts are
+reconciled into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
 Owner approves it. The confirmed production target is the supplied
 Cloudflare → Caddy → Hetzner → PostgreSQL path; this architecture governs only

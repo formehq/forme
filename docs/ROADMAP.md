@@ -7,10 +7,11 @@
 - Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
   human-boundary model, R4 product target, T1 public/private Room correction,
   T2 Room control contract, and NH1/NH2 architecture contract are
-  owner-approved; the Fresh Native Response Session exact T3 contract is also
-  owner-approved; T4 public lifecycle is the current unapproved
-  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) gate, T5 remains
-  open, and the first Control Packet is unreconciled; no R4 implementation,
+  owner-approved; the Fresh Native Response Session exact T3 contract and T4
+  public lifecycle contract are also owner-approved; T5 async / deletion /
+  retention / P0 cut is the current unapproved
+  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) gate, and the first
+  Control Packet is unreconciled; no R4 implementation,
   OpenAI/provider call, real Guest data, schema, deployment, spend, Room
   mutation, projection, hosting, identity, messaging, synchronization, or
   persistence is authorized
@@ -27,9 +28,9 @@
 | R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, and Fresh Native Response Session exact T3 contract are owner-approved; implementation remains stopped at T4/T5 and later packet reconciliation.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, and T4 public lifecycle contract are owner-approved; implementation remains stopped at T5 and later packet reconciliation.
 
-## R4 owner-approved product target — T3 approved, T4 public lifecycle next
+## R4 owner-approved product target — T4 approved, T5 async/retention next
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -69,8 +70,14 @@ authority. On 2026-08-01 the Owner selected one Fresh Native Response Session
 per Interaction as the R4 P0 direction and moved the Managed Privacy response
 lane/trust-tier selector to P1/future. On 2026-08-03 the Owner approved the
 exact T3 consent, source/provider/capability, session budget, physical
-isolation and lifecycle contract. T4 public lifecycle is now the current
-unapproved gate; T5 also remains open.
+isolation and lifecycle contract. On 2026-08-03 the Owner also approved T4:
+Third Place discovery requires a current, fresh, admitted Projection;
+unlisted/never-admitted public Projections remain direct-readable but accept no
+new public knock; stale Projections have at most seven days of warning-only
+direct-read and no new Interaction; revoke or Room retirement immediately
+hides Projection and linked published Response bodies. Curator unlist does not
+revoke an otherwise-valid Owner Grant or GrantOffer. T5 is now the current
+unapproved gate.
 
 The approved product target is documented in
 [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) and
@@ -79,9 +86,9 @@ The approved Harness/Forme role and NH1/NH2 boundary are in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T1 and T2
 are recorded in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). That brief also
-records the approved exact T3 Fresh Native Response Session contract; its
-remaining cards cover public lifecycle promises and the async/retention/P0
-boundary. The first detailed
+records the approved exact T3 Fresh Native Response Session and T4 lifecycle
+contracts; its remaining card covers the async/retention/P0 boundary. The first
+detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
 be rewritten for the confirmed existing deployment path and re-audited.
 Exact schemas/migrations and production deployment remain separate later
@@ -137,8 +144,8 @@ Native Harness role clarification
   → NH2 ordinary work / Forme-authoritative effect boundary [closed]
   → Option 2B Fresh Native Response Session direction [selected]
   → exact T3 consent/session/source/capability contract [closed]
-  → T4 public lifecycle [current]
-  → T5
+  → T4 public lifecycle [closed]
+  → T5 async / deletion / retention / P0 cut [current]
   → reconciled Technical Control Packet
 ```
 

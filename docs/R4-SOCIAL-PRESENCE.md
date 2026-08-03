@@ -3,7 +3,8 @@
 - Status: **owner-approved product foundation, public/private Room correction,
   P human-boundary interpretation, T2 Room control contract, and NH1/NH2
   Native Harness architecture; Fresh Native Response Session (Option 2B) exact
-  T3 contract Owner-approved; T4 is current and T5 remains open; no R4
+  T3 contract and T4 public lifecycle Owner-approved; T5 is the current
+  unapproved gate; no R4
   implementation authority**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
@@ -16,6 +17,8 @@
   two-class ordinary-work/Forme-authority boundary**
 - T3 approval: **2026-08-03 — complete recommended Fresh Native Response
   Session contract; documentation and later Packet reconciliation only**
+- T4 approval: **2026-08-03 — complete recommended public / unlist / stale /
+  revoke lifecycle contract; documentation and later Packet reconciliation only**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -61,7 +64,8 @@ inside the envelope proceeds review-by-exception. This closes P only; it does
 not change approved T1 or grant implementation authority. T2 was separately
 approved later. NH1/NH2 closed on 2026-07-29. The Option 2B direction was
 selected on 2026-08-01 and its exact T3 contract was Owner-approved on
-2026-08-03; T4 is current and T5 remains open.
+2026-08-03. The recommended T4 public lifecycle contract was also
+Owner-approved on 2026-08-03; T5 is current.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
@@ -72,7 +76,8 @@ with Codex P0 and OpenCode as an architectural compatibility target with no
 required live P0 path, plus the two-class boundary between ordinary native
 Workspace work and typed Forme authority. On 2026-08-01 the Owner selected one
 Fresh Native Response Session per Interaction as the R4 P0 direction; its exact
-T3 contract was approved on 2026-08-03, while T4/T5 remain open.
+T3 contract and the separate T4 public lifecycle contract were approved on
+2026-08-03, while T5 remains open.
 
 ## Revised user outcome
 
@@ -321,7 +326,9 @@ mutating the public encounter. It is a separate hosted object, at most one live
 per Interaction in P0. Acceptance rechecks the offer, reply authority, exact
 target lifecycle, and intake mode. Source deletion/revoke/retirement or target
 successor/expiry/revoke/retirement invalidates it; exact unlist behavior remains
-part of pending T4.
+governed by approved T4: unlist alone does not invalidate the offer, but
+acceptance atomically rechecks the source, target, reply authority, original
+expiry, and target mode without extending that expiry.
 
 ### Private Room
 
@@ -406,7 +413,16 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Owner-approved P0 product walking slice — exact T3 approved, T4 next
+The Owner-approved T4 lifecycle treats discovery, relationship, freshness, and
+privacy stop as separate axes. Unlist removes Third Place discovery and new
+public knocks, while existing exact Grants and GrantOffers survive only within
+their original limits. Stale content becomes warning-only/read-only with no new
+Interaction until hard expiry. Revoke hides the Projection and linked Responses
+immediately; Room retirement ends the whole surface. Successors inherit neither
+Grant nor, for public successors, Curator admission; a revoked-origin request
+cannot receive a new Response.
+
+## Owner-approved P0 product walking slice — exact T3/T4 approved, T5 next
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -513,13 +529,15 @@ On 2026-07-26 the Owner approved one public/private access correction:
 - a true Private Room uses a different Room ID and Projection, never enters
   Third Place, and requires an Owner Grant to read or interact;
 - `unlisted` is not a privacy state. Exact unlist effects on active Grants and
-  Grant Offers remain in pending T4 rather than this approved T1 correction.
+  Grant Offers were left to T4 rather than the earlier T1 correction. Approved
+  T4 now preserves otherwise-valid exact Grants and GrantOffers across unlist,
+  while invalidating unused public encounter capabilities.
 
 These decisions establish the product target only. The active
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
 the approved NH1/NH2 choices. The active
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) now presents
-approved exact T3 followed by the current T4 and open T5. Agents must then rewrite the
+approved exact T3/T4 followed by the current T5. Agents must then rewrite the
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
 confirmed deployment target and Guest decision, re-audit it, and present a new
 exact hash. Schema/migration and production deployment remain separate later
@@ -535,6 +553,6 @@ gates. No current document grants implementation authority.
 P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
 exposure, and local Room Operator authority. Approved NH1/NH2 close the local
 carrier and ordinary-work/Forme-authority boundary. The 2B direction and exact
-T3 contract are approved; T4/T5 still close the remaining public lifecycle, retention,
-hosting-integration, and P0 Resonance answers. Product-expression questions may
+T3 contract plus T4 lifecycle are approved; T5 still closes the remaining
+retention, hosting-integration, and P0 Resonance answers. Product-expression questions may
 continue without weakening those gates.

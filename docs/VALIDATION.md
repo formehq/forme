@@ -5,8 +5,9 @@
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
-  are Owner-approved; T4 is the current gate, T5 and Packet reconciliation
-  remain open, and all R4 behavior remains unimplemented**
+  and T4 public lifecycle contract are Owner-approved; T5 is the current gate,
+  Packet reconciliation remains open, and all R4 behavior remains
+  unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -493,8 +494,9 @@ The Owner approved a clearer relationship model:
   requires an exact Owner Grant to read or interact;
 - Curator admission/unlisting controls public discovery, while Owner actions
   control intake mode, Grant issue/revoke, and continuation offers;
-- `unlisted` cannot be used as a privacy state; exact unlist effects on active
-  Grants and Grant Offers remain a pending T4 decision.
+- `unlisted` cannot be used as a privacy state; at that round exact unlist
+  effects on active Grants and Grant Offers remained a pending T4 decision.
+  T4 later closed in Evidence round 14 below.
 
 The useful mental model is **public square plus one doorbell; invited meeting
 room for continued private access**. This correction makes the Third Place
@@ -505,8 +507,8 @@ This discussion did not test a real visitor, measure spam or Owner workload,
 validate the 20-per-Room rolling-24-hour public pool, or prove that a
 three-interaction short pass feels sufficient. It also did not authorize
 implementation. At that point T1 closed at the product-contract level while
-T2–T5 remained stop gates. T2 and T3 have since closed separately; T4/T5, the
-reconciled Technical Control Packet, exact schema/migration manifest, and
+T2–T5 remained stop gates. T2, T3, and T4 have since closed separately; T5,
+the reconciled Technical Control Packet, exact schema/migration manifest, and
 production deployment grant remain stop gates. A later Native Harness
 architecture clarification inserted NH1/NH2 before T3 without changing this
 historical evidence.
@@ -549,8 +551,9 @@ This round records product judgment, not usage evidence. It does not prove that
 the proposed Room Operator scope feels safe, that exception-based supervision
 is understandable, or that Agent-triggered explicit sync removes enough
 friction. At that point those required the exact T2–T5 decisions,
-implementation, and owner demo. T2 has since closed as governance, but the
-usage proof remains absent. No R4 implementation was granted.
+implementation, and owner demo. T2, T3, and T4 have since closed as
+governance, but the usage proof remains absent. No R4 implementation was
+granted.
 
 ## Evidence round 9 — P approval and R1–R4 continuity audit
 
@@ -614,9 +617,9 @@ account or workspace:
 This is governance evidence, not a successful Room usage result. No binding,
 credential, API, Room, Projection, hosted record, model run, deployment, or
 external interaction was created or exercised. At that round T3–T5 remained
-unapproved; T3 has since closed, while T4/T5, the reconciled Packet, wire
-schemas, implementation, and production authority remain unapproved. The
-old packet's broader paired-local revoke and `signal:disposition` scopes are
+unapproved; T3 and T4 have since closed, while T5, the reconciled Packet, wire
+schemas, implementation, and production authority remain unapproved. The old
+packet's broader paired-local revoke and `signal:disposition` scopes are
 explicitly excluded from T2.
 
 ## Evidence round 11 — NH1/NH2 Native Harness architecture approval
@@ -648,8 +651,8 @@ R4 usage result. The exact T3 runtime/source/capability design is now approved,
 but no concrete runtime capability, file access, provider call, Guest data,
 Room mutation, credential, schema, implementation, deployment, external
 action, or spend was exercised or authorized. NH1/NH2 and T3 are closed; T4 is
-the active Owner card, while T5 and reconciliation of the detailed Technical
-Control Packet remain open.
+now also closed separately, while T5 is the active Owner card and
+reconciliation of the detailed Technical Control Packet remains open.
 
 ## Evidence round 12 — Fresh Native Response Session direction selected
 
@@ -702,11 +705,53 @@ approval permits documentation and later Packet reconciliation only. No Fresh
 session, source read, provider call, Guest data, Room mutation, schema,
 implementation, deployment, external action, production write, or spend was
 authorized or exercised, and no containment, response quality, deletion, or
-retention claim was validated. T4 is now the current Owner gate, T5 remains
-open, and the old Technical Control Packet remains unreconciled and
-unapprovable. Repository implementation and fixture/local tests still wait for
-a new audited, hashed, separately Owner-approved Packet; schema/migration and
-production authority remain later independent gates.
+retention claim was validated. T4 subsequently closed through Evidence round
+14 below; T5 is now the current Owner gate, and the old Technical Control
+Packet remains unreconciled and unapprovable. Repository implementation and
+fixture/local tests still wait for a new audited, hashed, separately
+Owner-approved Packet; schema/migration and production authority remain later
+independent gates.
+
+## Evidence round 14 — R4 T4 public lifecycle contract approved
+
+On 2026-08-03 the Owner approved the full recommended T4 lifecycle contract:
+
+- Owner publication and Curator admission are independent;
+- Third Place shows only current, fresh, admitted Projections;
+- an unrevoked, unexpired public Projection remains direct-readable when never
+  admitted or unlisted, while unlist stops discovery and public knocks;
+- unlist invalidates unused public encounter capabilities but does not by
+  itself revoke a still-valid exact Owner Grant or `GrantOffer`;
+- `GrantOffer` acceptance atomically rechecks source, target, private reply
+  authority, expiry, and Room mode and never extends expiry;
+- Private Room bodies always require an exact Owner Grant, and P0 never changes
+  a Room from public to private in place;
+- `invite_only` stops unused public encounters, while `closed` pauses all new
+  submissions; neither unlist nor a mode change deletes accepted Interactions;
+- stale content is warning-only and read-only until hard expiry, with no new
+  public or private Interaction;
+- revoke immediately removes the Projection body, hides linked Responses, and
+  terminates new response authority for requests bound to that origin;
+- retirement ends the entire Room surface and all new writes;
+- revoke and retirement leave only body-free Guest status/delete and require
+  local purge after the corresponding tombstone is received;
+- public successors require fresh Curator admission, no successor inherits a
+  Grant, and old stale, superseded, or expired requests may receive only an
+  origin-disclosed reviewed Response.
+
+This is **Owner governance evidence, not runtime, safety, or product
+evidence**. No lifecycle route, database transaction, expiry clock,
+direct-read surface, Grant/GrantOffer recheck, tombstone delivery, local purge,
+race recovery, or Guest experience was exercised. It therefore does not prove
+that unlisted direct-read is understandable, that stale warnings are noticed,
+that revoke propagates promptly, or that accepted requests and Responses
+behave correctly under concurrent lifecycle changes.
+
+T4 permits documentation and later Packet reconciliation only. T5 is the
+current Owner gate, the existing Technical Control Packet remains unreconciled
+and unapprovable, and no schema, implementation, provider call, Guest data,
+credential, hosted mutation, external interaction, deployment, production
+write, public behavior, or spend has been authorized or validated.
 
 ## Follow-up product-learning questions — not R4 blockers
 
