@@ -2,10 +2,10 @@
 
 - Status: owner-approved product frame, privacy-first P human-boundary
   interpretation, R4 public/private Room correction, and T2 Room control
-  contract; NH1/NH2 approved; Fresh Native Response Session (Option 2B)
-  selected as the R4 P0 direction on 2026-08-01; its exact T3 contract remains
-  unapproved; T4/T5 remain under technical Owner review
-- Updated: 2026-08-01
+  contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
+  approved; T4 is the current unapproved technical Owner gate and T5 remains
+  open
+- Updated: 2026-08-03
 - MVP complete: 2026-08-11
 - Demo Day: 2026-08-12
 
@@ -69,9 +69,9 @@ permission by itself.
 perimeter, companion authorship/consequence guards, and no-self-expansion
 meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
 approved. The R4 P0 T3 direction is one Fresh Native Response Session per
-Interaction, not a Managed-vs-Native trust selector; its exact contract,
-T4/T5, and a reconciled Control Packet remain stop gates
-before implementation.
+Interaction, not a Managed-vs-Native trust selector. The Owner approved its
+exact contract on 2026-08-03; T4/T5 and a reconciled Control Packet remain stop
+gates before implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -144,7 +144,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — Option 2B direction selected, exact T3 next
+## Owner-approved R4 product target — exact T3 approved, T4 next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -182,9 +182,11 @@ Session for R4 P0: one new session per Interaction may dynamically inspect only
 a sanitized read-only current Forme source snapshot plus typed body/path-free
 Twin orientation, while the ordinary
 Workbench remains body-free and exact publication approval remains separate.
-The former Managed Privacy response recommendation is P1/future. Implementation
-remains unauthorized. The Owner next reviews the exact revised T3 contract and
-then T4/T5 in
+The former Managed Privacy response recommendation is P1/future. On 2026-08-03
+the Owner approved the exact Fresh Native Response Session T3 contract. This
+permits authority-document and later Control Packet reconciliation only;
+implementation, OpenAI calls, Guest data handling, schema, deployment, spend,
+and Room mutation remain unauthorized. The Owner next reviews T4 and then T5 in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).

@@ -37,9 +37,14 @@ Do not implement past the proposal stage without explicit owner confirmation whe
   are never auto-ingested as canonical meaning or a Forme-authoritative effect.
 - The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
   tool, network, provider, credential, Guest, or Room authority.
-- The 2026-08-01 R4 Option 2B decision selects a direction only. Until exact
-  T3 approval, no Fresh Native Response Session, Guest-body release, dynamic
-  response-snapshot read, OpenAI call, or response capability is authorized.
+- The 2026-08-03 R4 T3 approval fixes the exact Fresh Native Response Session
+  contract, but authorizes only authority-document and later Control Packet
+  reconciliation. Until T4/T5 and a reconciled packet are separately
+  Owner-approved, no Fresh Native Response Session implementation, Guest-body
+  release, dynamic response-snapshot read, OpenAI call, schema, deployment,
+  spend, Room mutation, or response capability is authorized.
+  Schema/migration and production deployment/public action still require their
+  own later manifest/grant even after a reconciled packet is approved.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

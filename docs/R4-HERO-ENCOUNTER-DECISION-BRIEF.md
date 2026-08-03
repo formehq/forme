@@ -2,10 +2,10 @@
 
 - Status: **owner-approved product target, public/private Room correction, P
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
-  Harness architecture; Fresh Native Response Session (Option 2B) selected as
-  the R4 P0 direction; exact T3 remains unapproved; T4/T5 remain open; no
+  Harness architecture; Fresh Native Response Session (Option 2B) exact T3
+  contract Owner-approved; T4 is current and T5 remains open; no
   implementation authority**
-- Updated: 2026-08-01
+- Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
@@ -14,6 +14,8 @@
   30-day `room_operator.v1` bindings**
 - NH approval: **2026-07-29 — Native Harness default local carrier +
   two-class ordinary-work/Forme-authority boundary**
+- T3 approval: **2026-08-03 — complete recommended Fresh Native Response
+  Session contract; documentation and later Packet reconciliation only**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
@@ -178,9 +180,10 @@ request against the exact host and optional guest capsule versions.
 
 The local Signal Box receives the request. It returns through the context
 shape established by approved NH1/NH2. On 2026-08-01 the Owner selected one
-Fresh Native Response Session per exact Interaction as the P0 direction; the
-exact consent/source/provider/capability/session/lifecycle contract remains
-pending T3 approval. The local system may prepare:
+Fresh Native Response Session per exact Interaction as the P0 direction; on
+2026-08-03 the Owner approved its exact consent/source/provider/capability/
+session/lifecycle contract. A future implementation constrained by that
+contract may prepare:
 
 - the strongest shared thread;
 - one productive difference rather than forced similarity;
@@ -471,11 +474,12 @@ target. The 2026-07-28 P approval makes the privacy-primary perimeter,
 representation/consequence companion guards, no-self-expansion, and
 review-by-exception the R4 human-boundary contract. The separate 2026-07-28 T2
 approval closes the Room Operator authority contract. P, T1, and T2 are
-closed. NH1/NH2 are also Owner-approved in
+closed. NH1/NH2 and the exact T3 Fresh Native Response Session contract are
+also Owner-approved in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). The Owner
-now reviews the exact Fresh Native Response Session T3, then T4/T5, in
+now reviews T4, then T5, in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After those
-cards close, agents will reconcile the detailed
+cards close, agents will reconcile them and the approved T3 contract into the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which
 must provide:
 

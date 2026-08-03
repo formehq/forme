@@ -2,9 +2,10 @@
 
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
-  R4 P0 direction on 2026-08-01; its exact T3 contract remains unapproved; no
+  R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on
+  2026-08-03; no
   new runtime, provider, file, shell, tool, Room, or implementation authority**
-- Updated: 2026-08-01
+- Updated: 2026-08-03
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
@@ -26,12 +27,13 @@
    Owner、使用 Forme delegation，或声称 Forme 的 verification/receipt/
    rollback 保证，就必须经过 Forme contract。
 
-这次批准确认的是产品与架构关系，不是批准某个 Codex session 读取文件、
-运行 shell、使用 tools、看到 Guest 内容、操作 Room，或开始实现。下一张
-需要判断的是 revised T3 的 exact contract：第一条 Response 怎样进入一个
-全新、不继承当前聊天、只读 sanitized current Forme source snapshot 的
-Native session，以及它的
-consent、session budget、physical isolation 和 lifecycle 怎样固定。
+NH1/NH2 确认了产品与架构关系；2026-08-03 批准的 T3 又固定了第一条
+Response 未来必须怎样进入一个全新、不继承当前聊天、只读 sanitized
+current Forme source snapshot 的 Native session，以及它的 consent、session
+budget、physical isolation 和 session lifecycle。它仍不是批准某个 Codex
+session 现在读取文件、运行 shell、使用 tools、看到 Guest 内容、操作 Room，
+调用 provider 或开始实现。下一张需要判断的是 T4 public / unlist / stale /
+revoke lifecycle；T5 和重写后的 Control Packet 仍在后面。
 
 ## Why this clarification exists
 
@@ -194,7 +196,7 @@ This is the Owner-approved default daily-work architecture under NH1:
 Here the Context Compiler primarily supplies orientation, relevance, durable
 meaning, and policy. It is not necessarily the complete runtime read surface.
 
-### Fresh Native Response Session — selected R4 P0 direction
+### Fresh Native Response Session — Owner-approved R4 P0 contract
 
 This is a constrained, disposable profile of Native Workspace Session rather
 than a third general workbench:
@@ -221,9 +223,12 @@ than a third general workbench:
 - the session is never reused across Guests or Interactions and terminates on
   its bounded budget, approval, abandonment, or terminal lifecycle event.
 
-The Owner selected this direction on 2026-08-01. Exact consent, source root,
-provider, session budget, physical isolation, deletion, and retention terms
-remain the active T3 approval surface. No capability is granted yet.
+The Owner selected this direction on 2026-08-01 and approved the complete
+recommended T3 contract on 2026-08-03. Its consent, clean-HEAD sanitized source
+snapshot, OpenAI provider transport exception, budget, isolation, output gate,
+and session termination rules are now authoritative constraints on a future
+implementation. T5 still owns durable retention and purge. No operational
+capability or implementation authority is granted yet.
 
 ### Managed Privacy Run
 
@@ -290,7 +295,8 @@ generic writer or a concrete runtime envelope.
   R2/R3 proof and P1/future sensitive lane, not the R4 P0 response path.
 - **R4 T2** remains the exact Room Operator/connector envelope.
 - **R4 T3** now formalizes the selected Fresh Native Response Session direction
-  without reopening NH1/NH2. The exact contract is still unapproved.
+  without reopening NH1/NH2. Its exact contract is Owner-approved as a future
+  implementation constraint, not as operational or implementation authority.
 
 This clarification changes the global map, not the acceptance evidence of
 completed slices.
@@ -380,11 +386,11 @@ provider, or external action.
 Forme-authoritative also does not mean per-click approval: a separately
 approved standing envelope may operate review-by-exception.
 
-## Relationship to T3
+## Relationship to approved T3
 
 NH1/NH2 are closed. On 2026-08-01 the Owner selected Fresh Native Response
-Session (Option 2B) as the R4 P0 direction. Revised T3 now answers only the
-remaining exact-contract question:
+Session (Option 2B) as the R4 P0 direction. On 2026-08-03 the Owner approved
+the complete recommended T3 contract, answering:
 
 > Under which disclosed source/provider/capability Session Envelope may one
 > exact Guest request reach a fresh Codex session that dynamically inspects a
@@ -411,6 +417,6 @@ This clarification authorizes no:
   Projection publication;
 - schema, migration, implementation, deployment, or public behavior.
 
-Those remain governed by separately approved runtime/source/provider
-envelopes, the exact revised T3 contract, T4/T5, the reconciled Technical Control Packet, Schema &
+Those remain governed by the owner-approved T3 contract, T4/T5, the
+reconciled Technical Control Packet, Schema &
 Migration Manifest, and Production Deployment & Provisioning Grant.

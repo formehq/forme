@@ -1,7 +1,7 @@
 # R4 Technical Control Packet v0.1
 
 - Status: **unreconciled implementation appendix; not an approval target; no implementation authority**
-- Updated: 2026-08-01
+- Updated: 2026-08-03
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
 - Product/protocol foundation:
@@ -10,7 +10,7 @@
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 
-> Review notice, updated 2026-08-01: the Owner has confirmed the existing
+> Review notice, updated 2026-08-03: the Owner has confirmed the existing
 > Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
 > login for Owner Control. On 2026-07-28 the Owner approved T2: an API-first
 > Web control plane, thin P0 public/Guest and Room Operator CLI, independent
@@ -36,8 +36,15 @@
 > this packet's response-context picker, exact manifest, 32 KiB response
 > context ceiling, one-dispatch authorization, zero-tool drafting profile, and
 > `.forme/presence` body layout are superseded for R4 P0. Managed Privacy
-> remains an R2/R3 proof and P1/future sensitive lane. Exact T3 is not yet
-> approved.
+> remains an R2/R3 proof and P1/future sensitive lane. On 2026-08-03 the Owner
+> approved the full recommended exact T3 contract: one new/non-resumed session
+> per exact Interaction; a clean-HEAD sanitized read-only Forme snapshot plus
+> previewed body/path-free Twin orientation; the disclosed Owner-local Codex →
+> OpenAI transport; fixed session/dispatch/token/applicable spend ceilings;
+> Guest consent with a manual-only fallback; physical Guest-store, credential,
+> writer, generic-network, cross-Room, mutation, and publication separation;
+> and exact Owner approval before separate T2 delivery. This closes T3 as a
+> design input only and does not authorize implementation or any capability.
 > Its `.forme/presence/` proposal is also historical: after local import,
 > body-bearing Guest input, exact context previews/manifests, and drafts must
 > not sit inside the ordinary Native Workspace read surface or appear in
@@ -47,9 +54,14 @@
 > only to its new T3 Fresh Native Response Session after explicit Owner start.
 > The
 > hosted original Guest submission still follows T1/T2/T5.
-> T1, T2, NH1, and NH2 are closed; review and close exact T3, then T4/T5, in
-> [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) first. The
-> prior packet hash is not an approval target.
+> T1, T2, NH1, NH2, and exact T3 are closed; T4 is the current Owner gate and
+> T5 remains open in
+> [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Only after
+> both close may this appendix be replaced by a reconciled Packet, audited,
+> hashed, and returned for separate Owner approval. The prior packet hash is
+> not an approval target, and this v0.1 body still grants no implementation,
+> provider call, Guest-data, Room-mutation, schema, deployment, or spend
+> authority.
 
 ## Historical v0.1 decision summary
 
@@ -152,7 +164,7 @@ historical proposal explicitly.
 
 > Do not approve the table below. In particular, its provider topology,
 > identity, Guest, credential, and local-model rows are superseded or paused.
-> The approved NH1/NH2 contract and the eventually approved exact T3 must
+> The approved NH1/NH2 and exact T3 contracts must
 > replace the local runtime/context recommendation in the next packet.
 
 | Decision | Historical v0.1 answer | Consequence |
@@ -164,7 +176,7 @@ historical proposal explicitly.
 | Local pairing | One 10-minute, single-use 256-bit challenge produces one 30-day Room-bound opaque credential after local confirmation | The CLI never receives the Controller's Supabase session; the Curator scope is never delegated |
 | Guest identity | Public read; one Curator-issued, one-use invite creates a capability session; Agent Guest receives a 15-minute one-signal derivative token | No guest account, profile, email, reusable Agent identity, or verified real-world identity in P0 |
 | Synchronization | Manual `presence sync` polling with persist-before-ack and an opaque cursor | No daemon, push, WebSocket, webhook, notification worker, or permanent local tunnel |
-| Local model visibility | **Superseded historical proposal:** before one response draft, show a manifest and send selected request/capsule/Twin content in a maximum 32 KiB isolated packet through existing Codex authentication | On 2026-08-01 the Owner selected a new/non-resumed Fresh Native Response Session with dynamic reads inside a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation; exact T3 remains unapproved, so neither row authorizes implementation |
+| Local model visibility | **Superseded historical proposal:** before one response draft, show a manifest and send selected request/capsule/Twin content in a maximum 32 KiB isolated packet through existing Codex authentication | The Owner selected this direction on 2026-08-01 and approved its full exact T3 contract on 2026-08-03: a new/non-resumed Fresh Native Response Session may dynamically read only a sanitized read-only clean-HEAD snapshot of eligible Forme files plus previewed typed body/path-free Twin orientation, inside the approved provider/session/capability envelope. This historical row and unreconciled packet still authorize no implementation. |
 | Freshness | Any new local Twin revision conservatively marks the current Projection stale; every Projection hard-expires after seven days | P0 may ask for more Owner re-publication than a later dependency-aware system; an offline server cannot claim freshness forever |
 | Listing and direct access | Curator unlisting removes the Room from Third Place but leaves an unexpired Owner-published direct Room readable; interaction is disabled until admitted | Owner publication and shared-place curation remain meaningfully distinct |
 | Existing requests after change | A stale, superseded, or expired origin may receive an Owner-reviewed response that discloses the origin state; a revoked origin may not | A legitimate waiting guest is not silently abandoned, while explicit revocation remains a hard stop |
@@ -175,8 +187,8 @@ historical proposal explicitly.
 In v0.1, approval would have approved these answers as one bounded R4 technical
 direction. That statement is now superseded: this packet cannot be approved and
 authorizes no repository/fixture implementation. A new reconciled packet must
-follow approved NH1/NH2, the selected Option 2B direction, and the eventually
-approved exact T3–T5, then return to the
+follow approved NH1/NH2 and exact T3 plus the eventually approved T4/T5, then
+return to the
 Owner with a new exact hash.
 
 ## System topology

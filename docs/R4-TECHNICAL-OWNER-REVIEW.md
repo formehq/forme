@@ -1,12 +1,11 @@
-# R4 Technical Owner Review Brief v0.9
+# R4 Technical Owner Review Brief v0.10
 
 - 状态：**P privacy-first human-boundary interpretation、T1
   public/private Room correction、T2 Room control contract 与 NH1/NH2
-  Native Harness architecture 已批准；Owner 已在 2026-08-01 选择
-  Fresh Native Response Session（Option 2B）作为 R4 P0 方向；下面重写后
-  的 exact T3 contract 仍待正式批准，T4/T5 仍待决定；不是最终 Packet
-  批准记录**
-- 更新：2026-08-01
+  Native Harness architecture，以及 Fresh Native Response Session exact
+  T3 contract 均已批准；T4 public / unlist / stale / revoke lifecycle 是
+  当前 Owner 决策，T5 仍待决定；不是最终 Packet 批准记录**
+- 更新：2026-08-03
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
 - 产品依据：
@@ -26,9 +25,9 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. P、T1、T2、NH1 与 NH2 已经关闭；
-3. 2B 方向已经选定；现在只判断下面这张低负担的
-   [exact T3 card](#current-t3)，再继续 T4、T5；
+2. P、T1、T2、NH1、NH2 与 T3 已经关闭；
+3. 现在只判断下面这张低负担的
+   [T4 lifecycle card](#current-t4)，再继续 T5；
 4. 用五个具体场景检查系统行为，只看 Agent 报告的 red/yellow
    exception。
 
@@ -41,13 +40,13 @@ NH2 option 1。2026-08-01，Owner 又选择了 Option 2B：R4 P0 不走逐文件
 挑选、exact manifest 和 32 KiB private-context packet，而为每个
 Interaction 新开一次 Fresh Native Response Session。原来的 Managed
 Privacy Response Lane 仍是 R2/R3 已证明的能力，并留作 P1/未来敏感模式，
-不进入本次 MVP 的信任分层。下面的完整 T3 约束仍需 Owner 正式批准。
-T3–T5 全部关闭后，Agent 才会重写
+不进入本次 MVP 的信任分层。2026-08-03，Owner 按推荐正式批准了下面的
+Fresh Native Response Session exact T3 contract。T4–T5 全部关闭后，Agent 才会重写
 长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash 已经失效，
 不应再被批准。
 
 2026-07-27 的 agency-first 方向修正了 T2 推荐；Owner 已在 2026-07-28
-批准该推荐。它也继续澄清待决 T3–T5 的 framing：
+批准该推荐。它也继续澄清当时待决 T3–T5 的 framing：
 Owner 批准的是可持续、可撤销的边界，而不是每一个机械 API 动作。Web
 更像 GitHub 控制台，用来看状态、权限、异常和停止；绑定 exact Room 的
 Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替人承诺、扩权
@@ -439,7 +438,7 @@ actor。它内部至少分成 Native Harness Workbench、Forme Semantic Spine
 | Forme Web | 人类查看、管理、批准 hosted access/control action 和理解 hosted state 的主要界面 | 不是 private repo 的远程桌面，也不取代 local publication/Response approval |
 | Versioned API | 每个 P0 hosted Room read 与 state transition 的 canonical contract | 不是 generic execute endpoint，也不绕过权限或 approval |
 | Forme CLI | P0 为 public/Guest（适用时）和 `room_operator.v1` lane 提供 thin client；Agent 经 typed gateway 请求 | 不复制 server logic；Controller/Curator boundary-action CLI delegation 留到 P1 |
-| Local Agent Work Plane（产品简称） | Workbench 与 Semantic Spine 按 approved NH1/NH2 和待批准的 Fresh Native Response Session contract 处理 local context、判断、Projection/Response candidate 和建议动作 | 不直接成为 hosted canonical authority；connector secret 与 model/context authority 仍分开 |
+| Local Agent Work Plane（产品简称） | Workbench 与 Semantic Spine 按 approved NH1/NH2 和 Owner-approved Fresh Native Response Session contract 处理 local context、判断、Projection/Response candidate 和建议动作 | 不直接成为 hosted canonical authority；connector secret 与 model/context authority 仍分开；T3 仍未授权实际 session 或实现 |
 
 权限默认采用“**窄 perimeter、宽 useful interior**”：一个 exact Room 的
 standing operator 可以持续完成 routine transport 与 deterministic,
@@ -556,11 +555,12 @@ one local workspace (local-only identity)
   visibility；Workspace access 也不能推导 connector secret、Guest inbox
   或 Room mutation authority。
 - NH1/NH2 已决定默认 carrier 与两类 authority。Owner 已选择 Option 2B
-  方向：每个 Interaction 使用独立 Fresh Native Response Session，并与
-  connector mutation 分开；它不会复用 Owner 当前会话。exact roots、
-  consent、provider、session budget、physical isolation 与 lifecycle 仍需
-  在下面 T3 card 正式批准。详细 Packet 必须按最终 contract 隔离
-  credential，并用 canary 验证没有未授权的跨界。
+  方向，并在 2026-08-03 批准 exact T3：每个 Interaction 使用独立 Fresh
+  Native Response Session，并与 connector mutation 分开；它不会复用
+  Owner 当前会话。Future implementation 必须遵守已批准的 exact roots、
+  consent、provider、session budget、physical isolation 与 session lifecycle。
+  详细 Packet 仍必须隔离 credential，并用 canary 验证没有未授权的跨界；
+  T4/T5 与 Packet approval 仍是 stop gates。
 
 Agency-first 修正后批准的 P0 contract，不再是“sync 可以站立授权、其余每一步
 都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
@@ -723,12 +723,11 @@ Control 页面功能偷偷加进去。
 
 <a id="current-t3"></a>
 
-## T3 — Fresh Native Response Session exact contract（当前待批准）
+## T3 — Fresh Native Response Session exact contract（Owner-approved — 2026-08-03）
 
-- 状态：**Owner 已在 2026-08-01 选择 Option 2B 方向；以下完整 contract
-  仍待正式批准**
+- 状态：**Owner 已在 2026-08-03 按推荐正式批准以下完整 contract**
 - 本卡只决定 R4 P0 怎样为一个 Interaction 准备 AI-assisted Response。
-- 本卡不批准实现、provider call、model spend、schema、deployment、真实
+- 该批准不授权实现、provider call、model spend、schema、deployment、真实
   Guest interaction 或任何 Room mutation。
 
 ### 先用白话说
@@ -987,9 +986,9 @@ disclosure、one-Interaction fresh session、read-only exact root、secret /
 cross-Room / connector physical isolation、session expiry、Owner final
 publication approval 和 deletion honesty。
 
-### 推荐结论
+### Owner 批准记录（2026-08-03）
 
-> **正式批准 T3 时，采用上面的 Fresh Native Response Session contract。**
+> **T3 按推荐批准：采用上面的 Fresh Native Response Session contract。**
 >
 > P0：sanitized current Forme source snapshot + typed body/path-free current
 > Twin orientation 是唯一 provider-eligible Owner source；OpenAI/Codex 是
@@ -1002,14 +1001,13 @@ publication approval 和 deletion honesty。
 >
 > Managed Privacy Response Lane 与 trust-tier selector 移到 P1/未来。
 
-正式批准只允许 Agent 将它编译进新的 Control Packet；在 T4/T5 和新
-Packet 都关闭前，仍不允许实现、provider call、Guest data、schema、部署
-或 production action。
+T3 的批准只允许 Agent 将它编译进新的 Control Packet；在 T4/T5 和新
+Packet 都关闭前，仍不允许实现、OpenAI/provider call、Guest data、schema、
+部署、spend、Room mutation 或 production action。
 
-### 你可以这样回复
+### 本卡已关闭
 
-- `T3 按 Fresh Native Response Session 推荐批准`
-- `T3 带条件批准：...`
+当前 Owner 决策已移到 T4；本卡不再等待回复。
 
 <details>
 <summary>历史记录：2026-07-29 的 Managed Privacy T3 提案（已被 2B 方向取代，不再批准）</summary>
@@ -1312,14 +1310,16 @@ connector；`room_operator.v1` 只负责验证和运送，不能替 Owner 写内
 - 批准 T3 只允许 Agent 更新权威设计与后续 Control Packet；不允许开始
   实现、调用 OpenAI、创建 schema、部署或处理真实 Guest 数据。
 
-### 你可以这样回复
+### 历史回复格式
 
 - 以下旧回复格式已失效：`T3 按推荐批准`、`T3 希望改写为 Option 2`、
-  `T3 选 Option 3`。请使用上方当前 T3 card 的回复格式。
+  `T3 选 Option 3`。此历史卡不再接收回复；当前 Owner 决策见下面的 T4。
 
 </details>
 
-## T4 — Public、unlist、stale 和 revoke 分别意味着什么
+<a id="current-t4"></a>
+
+## T4 — Public、unlist、stale 和 revoke 分别意味着什么（当前待批准）
 
 ### 你要判断什么
 
@@ -1498,16 +1498,14 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-P、T1、T2、NH1 与 NH2 已关闭，Fresh Native Response Session 方向也已
-选择。现在只需确认上面已经补全的 exact T3 contract；最省力的形式是：
+P、T1、T2、NH1、NH2 与 T3 已关闭。现在只需判断上面的 T4 lifecycle
+contract；最省力的形式是：
 
 ```text
-T3 按 Fresh Native Response Session 推荐批准
+T4 按推荐批准
 ```
 
-也可以附上条件，尤其是 60 分钟 / 3 dispatches、sanitized current Forme
-source snapshot、
-manual-only fallback 或 OpenAI disclosure。T3 关闭后再继续 T4/T5；三项
+也可以用 T4 卡片列出的替代回复，或附上条件。T4 关闭后再继续 T5；两项
 全部关闭后：
 
 1. Agent 按答案重写详细 Technical Control Packet；

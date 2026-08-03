@@ -2,10 +2,10 @@
 
 - Status: **owner-approved product foundation, public/private Room correction,
   P human-boundary interpretation, T2 Room control contract, and NH1/NH2
-  Native Harness architecture; Fresh Native Response Session (Option 2B)
-  selected as the R4 P0 direction; exact T3 remains unapproved; T4/T5 remain
-  open**
-- Updated: 2026-08-01
+  Native Harness architecture; Fresh Native Response Session (Option 2B) exact
+  T3 contract Owner-approved; T4 is current and T5 remains open; no R4
+  implementation authority**
+- Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
 - P approval: **2026-07-28 — privacy-primary boundary +
@@ -14,6 +14,8 @@
   30-day `room_operator.v1` bindings**
 - NH approval: **2026-07-29 — Native Harness default local carrier +
   two-class ordinary-work/Forme-authority boundary**
+- T3 approval: **2026-08-03 — complete recommended Fresh Native Response
+  Session contract; documentation and later Packet reconciliation only**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -58,7 +60,8 @@ companion guards, existing authority cannot expand itself, and covered work
 inside the envelope proceeds review-by-exception. This closes P only; it does
 not change approved T1 or grant implementation authority. T2 was separately
 approved later. NH1/NH2 closed on 2026-07-29. The Option 2B direction was
-selected on 2026-08-01; exact T3 and T4/T5 remain open.
+selected on 2026-08-01 and its exact T3 contract was Owner-approved on
+2026-08-03; T4 is current and T5 remains open.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
@@ -68,8 +71,8 @@ the Owner approved the Native Harness Workbench as the default local carrier
 with Codex P0 and OpenCode as an architectural compatibility target with no
 required live P0 path, plus the two-class boundary between ordinary native
 Workspace work and typed Forme authority. On 2026-08-01 the Owner selected one
-Fresh Native Response Session per Interaction as the R4 P0 direction; exact
-T3 remains unapproved and T4/T5 remain open.
+Fresh Native Response Session per Interaction as the R4 P0 direction; its exact
+T3 contract was approved on 2026-08-03, while T4/T5 remain open.
 
 ## Revised user outcome
 
@@ -88,8 +91,9 @@ current Twin orientation, then can dynamically read/search only a sanitized
 read-only snapshot of current eligible Forme files. It cannot claim an exact provider-visible byte
 manifest. The ordinary Workbench remains body-free, and the owner still
 reviews, adjusts, approves, declines, or parks the draft before any bounded
-Response Capsule is published. Exact consent, session budget, physical
-isolation and lifecycle remain pending T3 approval.
+Response Capsule is published. The exact consent, budget, isolation, source/
+provider envelope, and session lifecycle are now owner-approved T3 constraints
+on a future implementation; this approval does not start a session or provider call.
 The Owner may then offer a short continuation against the same public
 Projection or a separately approved Private Room; it is never an automatic
 access upgrade.
@@ -148,8 +152,8 @@ reads, so it
 does not promise an exact byte manifest. The Managed Privacy lane remains a
 future sensitive option. API authority does
 not imply model visibility. T2 closes connector/binding authority; NH1/NH2
-close the default local carrier and semantic classification; exact T3 still
-must close the R4 Guest-byte/provider/session relationship.
+close the default local carrier and semantic classification; exact T3 closes
+the R4 Guest-byte/provider/session contract without granting operational authority.
 
 ## Product feeling
 
@@ -338,8 +342,8 @@ and cannot read replies, delete, delegate again, or recover a Manual credential.
 
 If the public capsule is insufficient, the server validates and queues a typed
 Interaction Request. The local Signal Box binds it to its origin and capsule
-version. The local system may draft under the approved NH1/NH2 classification
-and the still-pending exact Fresh Native Response Session contract; the owner
+version. A future local system may draft under the approved NH1/NH2
+classification and exact Fresh Native Response Session contract; the owner
 decides whether and what to publish.
 
 ### Leave a Seed
@@ -360,7 +364,7 @@ Two useful depths exist, but only one is a Forme P0 feature:
   does not build or endorse the inference;
 - **host-reviewed deep resonance — P0:** a request enters the Signal Box, the
   local system prepares a draft through the approved NH1/NH2 actor split and
-  the still-pending exact T3 session contract, and the owner reviews the
+  the owner-approved exact T3 session contract, and the owner reviews the
   returned artifact.
 
 The hosted server performs neither depth.
@@ -402,7 +406,7 @@ Safety remains plumbing rather than the visual story:
 - bounded input, rate limits, deletion, and basic abuse handling;
 - guest consent and retention choice are explicit.
 
-## Owner-approved P0 product walking slice — Option 2B selected, exact T3 next
+## Owner-approved P0 product walking slice — exact T3 approved, T4 next
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -515,7 +519,7 @@ These decisions establish the product target only. The active
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
 the approved NH1/NH2 choices. The active
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) now presents
-the exact Fresh Native Response Session T3, followed by T4/T5. Agents must then rewrite the
+approved exact T3 followed by the current T4 and open T5. Agents must then rewrite the
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
 confirmed deployment target and Guest decision, re-audit it, and present a new
 exact hash. Schema/migration and production deployment remain separate later
@@ -530,8 +534,7 @@ gates. No current document grants implementation authority.
 
 P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
 exposure, and local Room Operator authority. Approved NH1/NH2 close the local
-carrier and ordinary-work/Forme-authority boundary. The 2B direction is
-selected; exact T3 plus T4/T5 then close the remaining model visibility,
-session, lifecycle, retention,
+carrier and ordinary-work/Forme-authority boundary. The 2B direction and exact
+T3 contract are approved; T4/T5 still close the remaining public lifecycle, retention,
 hosting-integration, and P0 Resonance answers. Product-expression questions may
 continue without weakening those gates.

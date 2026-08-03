@@ -1,13 +1,12 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-01
+- Updated: 2026-08-03
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
-  contract, and NH1/NH2 are Owner-approved; Fresh Native Response Session
-  (Option 2B) is the selected R4 P0 direction, while its exact T3 contract is
-  unapproved; T4/T5 and Packet reconciliation remain open, and all R4
-  behavior remains unimplemented**
+  contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
+  are Owner-approved; T4 is the current gate, T5 and Packet reconciliation
+  remain open, and all R4 behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -506,7 +505,7 @@ This discussion did not test a real visitor, measure spam or Owner workload,
 validate the 20-per-Room rolling-24-hour public pool, or prove that a
 three-interaction short pass feels sufficient. It also did not authorize
 implementation. At that point T1 closed at the product-contract level while
-T2–T5 remained stop gates. T2 has since closed separately; T3–T5, the
+T2–T5 remained stop gates. T2 and T3 have since closed separately; T4/T5, the
 reconciled Technical Control Packet, exact schema/migration manifest, and
 production deployment grant remain stop gates. A later Native Harness
 architecture clarification inserted NH1/NH2 before T3 without changing this
@@ -614,8 +613,9 @@ account or workspace:
 
 This is governance evidence, not a successful Room usage result. No binding,
 credential, API, Room, Projection, hosted record, model run, deployment, or
-external interaction was created or exercised. T3–T5, the reconciled Packet,
-wire schemas, implementation, and production authority remain unapproved. The
+external interaction was created or exercised. At that round T3–T5 remained
+unapproved; T3 has since closed, while T4/T5, the reconciled Packet, wire
+schemas, implementation, and production authority remain unapproved. The
 old packet's broader paired-local revoke and `signal:disposition` scopes are
 explicitly excluded from T2.
 
@@ -644,11 +644,12 @@ On 2026-07-29 the Owner approved NH1 option 1 and NH2 option 1 as recommended:
   envelope, verification, and receipts.
 
 This is architecture-governance evidence, not a successful Native Workbench or
-R4 usage result. No concrete runtime profile, file, shell, tool, provider,
-Guest, Room, credential, schema, implementation, deployment, external action,
-or spend was approved or exercised. NH1/NH2 are closed; revised T3 is now the
-active unapproved Owner card. T4/T5 and reconciliation of the detailed
-Technical Control Packet remain open.
+R4 usage result. The exact T3 runtime/source/capability design is now approved,
+but no concrete runtime capability, file access, provider call, Guest data,
+Room mutation, credential, schema, implementation, deployment, external
+action, or spend was exercised or authorized. NH1/NH2 and T3 are closed; T4 is
+the active Owner card, while T5 and reconciliation of the detailed Technical
+Control Packet remain open.
 
 ## Evidence round 12 — Fresh Native Response Session direction selected
 
@@ -673,12 +674,39 @@ Harness agency and Forme's distinct continuity/authority/presence layer with
 less MVP friction. The explicit scope assumption is the Forme project repo,
 not a personal Knowledge Vault or highly sensitive source zone.
 
-This round is **direction/architecture evidence only**. No session was run and
+This round was **direction/architecture evidence only**. No session was run and
 no product usefulness, containment, privacy, consent, provider behavior,
-deletion, or response quality was validated. Full T3 consent, exact source/
-provider/capability envelope, session budget, physical boundary and lifecycle
-remain awaiting Owner approval; T4/T5, the reconciled Control Packet,
-implementation and production authority remain open.
+deletion, or response quality was validated. At the close of this round on
+2026-08-01, full T3 consent, exact source/provider/capability envelope, session
+budget, physical boundary and lifecycle still awaited Owner approval; that
+contract closed separately on 2026-08-03 in Evidence round 13 below.
+
+## Evidence round 13 — exact Fresh Native Response Session T3 approved
+
+On 2026-08-03 the Owner approved the full recommended T3 contract, not merely
+the earlier Option 2B direction. The approved R4 P0 boundary fixes one new,
+non-resumed session per exact Interaction; a 60-minute, one-automatic-draft
+budget of at most three internal provider dispatches, 128k input tokens, 8k
+output tokens, and an applicable US$1 incremental-spend cap; dynamic
+read/search only inside a deterministic sanitized read-only snapshot generated
+from clean Forme repo HEAD plus a previewed body/path-free Twin orientation;
+disclosed Owner-local Codex → OpenAI transport with no provider/model fallback;
+physical separation from ambient conversations/config, Git history, other
+Rooms and Guest bodies, writers, generic network/tools, connector credentials,
+mutation, and publication; explicit Guest consent with a
+`manual_owner_only` fallback; and exact Owner approval before separate T2
+connector delivery of any outgoing Response.
+
+This is **Owner decision evidence, not runtime or product evidence**. The
+approval permits documentation and later Packet reconciliation only. No Fresh
+session, source read, provider call, Guest data, Room mutation, schema,
+implementation, deployment, external action, production write, or spend was
+authorized or exercised, and no containment, response quality, deletion, or
+retention claim was validated. T4 is now the current Owner gate, T5 remains
+open, and the old Technical Control Packet remains unreconciled and
+unapprovable. Repository implementation and fixture/local tests still wait for
+a new audited, hashed, separately Owner-approved Packet; schema/migration and
+production authority remain later independent gates.
 
 ## Follow-up product-learning questions — not R4 blockers
 

@@ -3,9 +3,10 @@
 - Status: **privacy-first P human-boundary interpretation and T2 Room control
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
   2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0
-  direction on 2026-08-01; exact T3, T4/T5 and implementation remain subject
-  to separate Owner review**
-- Updated: 2026-08-01
+  direction on 2026-08-01 and its exact T3 contract Owner-approved on
+  2026-08-03; T4 is current, T5 and implementation remain subject to separate
+  Owner review**
+- Updated: 2026-08-03
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
   control
@@ -68,12 +69,14 @@ runtime envelope remains ordinary work. Its results may be offered and admitted
 as evidence only through a separately approved source/observation contract;
 they are not automatically ingested. Canonical meaning, correction, authority,
 projection, representation, and claimed Forme effect guarantees continue
-through typed Forme contracts. Neither approval creates a concrete runtime
-envelope or capability. A Native Workbench never gains the T2 connector
+through typed Forme contracts. NH1/NH2 by themselves create no concrete
+runtime envelope or capability. A Native Workbench never gains the T2 connector
 credential, Guest content, or Room authority merely because it can read a
-Workspace. One explicit T3 `Prepare response` may release one exact request to
-its Fresh Native Response Session; that exception does not grant ordinary
-sessions Guest-inbox access. See
+Workspace. The Owner-approved T3 contract permits a future explicit
+`Prepare response` path to release one exact request to its bounded Fresh
+Native Response Session after the later implementation gates close; it grants
+no current capability, and the exception never grants ordinary sessions
+Guest-inbox access. See
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md).
 
 ## Privacy-first human boundary
@@ -265,7 +268,8 @@ human-attributed publication or commitment,
 Curator admission unless separately delegated, and irreversible retirement or
 deletion.
 
-The August P0 uses one conservative outer boundary—one exact Interaction,
+The Owner-approved T3 contract gives the August P0 one conservative outer
+boundary—one exact Interaction,
 fresh session, sanitized read-only current Forme source snapshot, typed
 body/path-free Twin orientation, named provider, bounded lifetime,
 physical secret/cross-Room isolation, and Owner review of every outward
@@ -315,10 +319,12 @@ the human boundary and returns to the real mentor.
 
 The approved P model changes Forme's guiding architecture; T2 closes the first
 exact Room authority envelope; NH1/NH2 close the default local carrier and
-ordinary-work/Forme-authority classification. These approvals do not authorize
-a concrete Agent runtime envelope, file, shell, tool, provider visibility,
-credential issuance, private Guest content, hosted mutation, external message,
-deployment, or spend. The Option 2B direction itself grants no capability;
-exact T3, T4/T5, the reconciled Control Packet,
-schemas/migrations, implementation, and production grants remain separate
-gates.
+ordinary-work/Forme-authority classification; exact T3 now closes the R4 P0
+response session/source/provider/capability/consent boundary as design
+authority. None of these approvals instantiates that runtime or authorizes a
+Fresh session, file read, provider call, credential issuance, private Guest
+data, Room mutation, external message, schema, implementation, deployment, or
+spend. T3 grants documentation and later Packet-reconciliation authority only.
+T4 is the current Owner gate; T5, a new reconciled and separately approved
+Control Packet, schemas/migrations, implementation, and production grants
+remain separate gates.

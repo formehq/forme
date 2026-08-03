@@ -346,3 +346,40 @@ credential isolation, output authority, deletion, and retention. Until that,
 T4/T5, and a reconciled Control Packet are approved, no new runtime
 capability, provider call, Guest data handling, schema, implementation,
 deployment, external action, or spend is authorized.
+
+## 2026-08-03 — R4 T3 Fresh Native Response Session exact contract approved
+
+**Decision:** approve the full recommended Fresh Native Response Session T3
+contract. Each exact Interaction may eventually use one brand-new,
+non-resumed, 60-minute response-preparation session with one automatic draft
+cycle of at most three internal provider dispatches, 128k input tokens, 8k
+output tokens, and an applicable US$1 incremental-spend cap. It may dynamically
+read/search only a deterministic sanitized read-only snapshot generated from
+clean Forme repo HEAD plus a previewed, body/path-free current Twin orientation;
+Git history, ambient conversations/config/instructions, other Rooms or Guest
+bodies, writers, generic network/tools, connector credentials, mutation, and
+publication remain outside the envelope. OpenAI through the disclosed
+Owner-local Codex transport is the only provider path, with no provider/model
+fallback. Guest consent covers that bounded processing, with
+`manual_owner_only` as the non-AI fallback. Every output remains an untrusted
+candidate and exact Owner approval of the current outgoing content is still
+required before separate T2 connector delivery.
+
+**Reason:** this closes the previously selected Option 2B direction as an
+honest, inspectable R4 P0 contract: mature Harness agency may discover useful
+context inside one approved perimeter, while Forme preserves Interaction/Twin
+binding, physical Guest-store and credential separation, expiry, human
+authorship, and deterministic publication authority. It avoids both a
+file-by-file context picker and a misleading claim that Forme knows every byte
+the provider inspected.
+
+**Effect:** T3 is closed and authoritative for R4 P0. This approval authorizes
+documentation and later Technical Control Packet reconciliation only. T4 is
+the current Owner gate and T5 remains open; the existing packet is still
+unreconciled and cannot be approved or implemented. No Fresh session,
+provider call, Guest-data handling, Room mutation, schema/migration,
+repository implementation, deployment, external action, production write, or
+spend is authorized. After T4/T5 close, a new exact Packet must be audited,
+hashed, and separately approved before repository implementation or
+fixture/local tests may begin; schema/migration and production grants remain
+later independent gates.

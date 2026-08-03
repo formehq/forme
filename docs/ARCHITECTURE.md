@@ -3,10 +3,10 @@
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
-  Fresh Native Response Session (Option 2B) selected as the R4 P0 direction;
-  its exact T3 contract is the current unapproved gate; T4/T5 and implementation-packet
-  reconciliation remain open
-- Updated: 2026-08-01
+  Fresh Native Response Session (Option 2B) exact T3 contract owner-approved;
+  T4 is the current unapproved gate; T5 and implementation-packet reconciliation
+  remain open
+- Updated: 2026-08-03
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
 
@@ -467,9 +467,9 @@ itself. An allowed Agent requests typed CLI/API operations through a validated
 gateway. A Native Workbench may be a legitimate local actor, but Workspace
 access never implies connector-secret, Guest-inbox, or Room-mutation access.
 With NH1/NH2 closed, the Owner selected Fresh Native Response Session (Option
-2B) as the R4 P0 direction on 2026-08-01. The exact T3 consent, source/provider/
-capability envelope, session budget, physical isolation, and lifecycle remain
-unapproved. The selected direction keeps content-bearing response work in a
+2B) as the R4 P0 direction on 2026-08-01 and approved its exact T3 consent,
+source/provider/capability envelope, session budget, physical isolation, and
+session-lifecycle contract on 2026-08-03. The approved contract keeps content-bearing response work in a
 new per-Interaction session and separate from Room mutation tools; it does not
 reuse the Owner's current conversation. A Managed Privacy Run remains an
 R2/R3 proof and P1/future sensitive lane, not a P0 trust tier. Long-term, a
@@ -482,7 +482,7 @@ Room, immutable capsule, Agent delegation, Guest, and Curator identities remain
 distinct. Public reading requires no account; durable controllers are
 invite-only; local publishing requires an explicit revocable pairing. Under
 approved T2, the local connector receives exact Room-scoped delegated authority
-with useful standing freedom inside its perimeter. The exact T3 contract still
+with useful standing freedom inside its perimeter. The owner-approved T3 contract
 governs how one Guest request may enter its fresh response session; the
 connector credential grants no such visibility.
 
@@ -497,11 +497,11 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
-The product boundary, T2 Room authority contract, and NH1/NH2 architecture
-contract are approved. The Owner now reviews the exact Fresh Native Response
-Session T3 contract, then T4/T5, in
+The product boundary, T2 Room authority contract, NH1/NH2 architecture
+contract, and exact Fresh Native Response Session T3 contract are approved.
+The Owner now reviews T4, then T5, in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
-implementation remains blocked until those cards are reconciled into a new
+implementation remains blocked until those cards and the approved T3 contract are reconciled into a new
 exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
 Owner approves it. The confirmed production target is the supplied
