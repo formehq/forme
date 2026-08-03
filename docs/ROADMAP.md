@@ -1,8 +1,8 @@
 # MVP rebuild roadmap
 
 - Updated: 2026-08-03
-- MVP complete and repeatable: 2026-08-11
-- Demo Day: 2026-08-12
+- MVP complete and repeatable: 2026-08-18
+- Demo Day: 2026-08-19 (Wednesday)
 - Scope model: P0 committed, P1 conditional, P2 post-demo
 - Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
   human-boundary model, R4 product target, T1 public/private Room correction,
@@ -25,8 +25,8 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–7 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
-| R5 — Demo hardening | Aug 8–11 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
+| R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
+| R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
 R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, and T4 public lifecycle contract are owner-approved; implementation remains stopped at T5 and later packet reconciliation.
 
@@ -115,9 +115,9 @@ approved Room Operator envelope.
 - **Jul 25:** if R1 is not owner-accepted, all P1 work pauses.
 - **Jul 31:** if R2 is not owner-accepted, no optional feature starts.
 - **Aug 4:** if R3 is incomplete, reduce the action to one Forme-owned artifact; do not broaden effectors.
-- **Aug 7:** unfinished P1 work leaves the demo.
-- **Aug 9:** hard feature freeze; only blockers, privacy, reliability, and rehearsal remain.
-- **Aug 11:** release candidate only.
+- **Aug 14:** unfinished P1 work leaves the demo.
+- **Aug 16:** hard feature freeze; only blockers, privacy, reliability, and rehearsal remain.
+- **Aug 18:** release candidate only.
 
 ## Dependency order
 

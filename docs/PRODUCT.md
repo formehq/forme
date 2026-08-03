@@ -6,8 +6,8 @@
   approved; the recommended T4 public/admission/lifecycle contract approved;
   T5 is the current unapproved technical Owner gate
 - Updated: 2026-08-03
-- MVP complete: 2026-08-11
-- Demo Day: 2026-08-12
+- MVP complete: 2026-08-18
+- Demo Day: 2026-08-19 (Wednesday)
 
 ## Highest vision
 

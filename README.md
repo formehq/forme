@@ -2,14 +2,14 @@
 
 Forme explores a controllable digital counterpart that extends an entity across **Continuity, Cognition, Agency, and Presence** without taking away the owner's authorship.
 
-The August 12 MVP is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection.
+The August 19 MVP is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection.
 
 ## Current state
 
 This repository is an owner-controlled rebuild started on 2026-07-17.
 
-- MVP complete and repeatable: **2026-08-11**
-- Demo Day: **2026-08-12**
+- MVP complete and repeatable: **2026-08-18**
+- Demo Day: **2026-08-19 (Wednesday)**
 - Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   T1 public/private Room correction, and T2 Room control contract approved;
   NH1/NH2 and the exact Fresh Native Response Session T3 contract approved;
@@ -27,7 +27,7 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Owner review and reconciliation to the confirmed self-host target;
   no R4 implementation or production action is authorized**
 
-Planning lives in milestone [`MVP Rebuild — Demo 2026-08-12`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
+Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 

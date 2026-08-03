@@ -4,7 +4,7 @@ The repository keeps a deliberately small decision surface.
 
 | Document | Question it answers |
 |---|---|
-| [`PRODUCT.md`](./PRODUCT.md) | What is Forme, and what must the August 12 MVP prove? |
+| [`PRODUCT.md`](./PRODUCT.md) | What is Forme, and what must the August 19 MVP prove? |
 | [`CONTROL.md`](./CONTROL.md) | What is happening now, who decides, and when must work stop? |
 | [`ROADMAP.md`](./ROADMAP.md) | What are the gates, deadlines, and feature cut rules? |
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Which boundaries must survive implementation choices? |

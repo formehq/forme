@@ -1891,9 +1891,13 @@ If the interactive lifecycle is not green by the R4 cut date, the fallback is
 the last separately built, owner-approved static Projection. It does not
 silently pretend that queueing, pairing, or response relay works.
 
-## Approval boundary
+## Historical v0.1 approval boundary — superseded
 
-This proposal requests Owner approval for:
+> **Not a current approval surface.** The requests below belonged to the
+> unreconciled v0.1 proposal. No present authority derives from this section;
+> T5 and a newly reconciled exact packet remain required.
+
+This proposal requested Owner approval for:
 
 - the three-state-owner model and separate `.forme/presence/` store;
 - the repository/package shape and proposed dependencies;
@@ -1908,12 +1912,13 @@ This proposal requests Owner approval for:
 - unlisted direct-read behavior and stale/expired response behavior;
 - the tests, cuts, and implementation sequence.
 
-Approval of this packet would authorize only repository implementation and
-fixture tests inside these boundaries. It would not itself approve the later
-Schema & Migration Manifest, Production Provisioning Grant, cloud provisioning,
-external writes, or spend.
+Approval of this packet would have authorized only repository implementation
+and fixture tests inside these boundaries. It would not itself have approved
+the later Schema & Migration Manifest, Production Provisioning Grant, cloud
+provisioning, external writes, or spend.
 
-Until the Owner approves this exact packet, there is no authority to:
+Because the Owner did not approve this exact historical packet, it granted no
+authority to:
 
 - add R4 code, packages, schemas, SQL, or dependencies;
 - create Vercel, Supabase, SMTP, DNS, database, Auth, or account resources;

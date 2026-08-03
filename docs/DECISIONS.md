@@ -18,7 +18,9 @@ Keep this file short. Record only decisions that change product scope, constitut
 
 **Decision:** MVP complete and repeatable on 2026-08-11; Demo Day on 2026-08-12. Internal feature freeze begins 2026-08-09.
 
-**Reason:** the previous August 15 plan is superseded. Reliability and rehearsal need protected time before the demo.
+**Status:** superseded by the 2026-08-03 schedule decision below.
+
+**Reason:** the previous August 15 plan was superseded. Reliability and rehearsal needed protected time before the demo.
 
 ## 2026-07-17 — Core and optional scope
 
@@ -455,3 +457,13 @@ and separately Owner-approved Control Packet, schemas/migrations, repository
 implementation, runtime/provider calls, Guest-data handling, credentials,
 hosted mutation, external messaging, deployment, production writes, public
 behavior, and spend remain unauthorized.
+
+## 2026-08-03 — Demo schedule extended seven days
+
+**Decision:** internal feature freeze moves to 2026-08-16, the MVP must be
+complete and repeatable on 2026-08-18, and Demo Day moves to Wednesday,
+2026-08-19. Product scope and authority gates remain unchanged.
+
+**Reason:** the presentation moved by one week. The added time protects R4
+implementation and R5 rehearsal; it does not silently admit P1 work or weaken
+any Owner stop gate.
