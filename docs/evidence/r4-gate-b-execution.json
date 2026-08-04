@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "r4.gate-b.execution.v1",
+  "status": "RED_STOPPED",
+  "approvedManifestSha256": "sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa",
+  "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+  "runId": "gb_11bbff9ad7d2806c3c8948eed1538695",
+  "startedAt": "2026-08-04T23:18:00.000Z",
+  "stoppedAt": "2026-08-04T23:25:17.000Z",
+  "overallVerdict": "RED",
+  "stop": {
+    "code": "real_codex_home_read_scope_violation",
+    "phase": "codex_lane_preconstruction_investigation",
+    "realCodexSessionFilesEnteredReadScope": true,
+    "realCodexHomeWriteObserved": false,
+    "contentOrCredentialBytesEmitted": 0,
+    "rawFileContentsEmitted": false,
+    "providerRequestStarted": false,
+    "codexThreadStarted": false,
+    "codexTurnStarted": false,
+    "remainingLanesStopped": true
+  },
+  "lanes": [
+    {
+      "lane": "preflight",
+      "verdict": "GREEN",
+      "checks": {
+        "manifestHashMatched": true,
+        "packageLockHashMatched": true,
+        "gitBaselineMatched": true,
+        "githubBaselineMatched": true,
+        "hostBindingsMatched": true,
+        "fixedPostgresResourcesAbsent": true
+      },
+      "remainingGaps": []
+    },
+    {
+      "lane": "gate-a-regression-and-protocol",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "stoppedBeforeExecution": true
+      },
+      "remainingGaps": [
+        "red_stop"
+      ]
+    },
+    {
+      "lane": "api-and-local-format-contracts",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "partialUnvalidatedFilesRemoved": true
+      },
+      "remainingGaps": [
+        "contracts_not_constructed"
+      ]
+    },
+    {
+      "lane": "postgres-migration-roles-races",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "containerCreated": false,
+        "volumeCreated": false,
+        "imageDownloaded": false,
+        "partialUnvalidatedFilesRemoved": true
+      },
+      "remainingGaps": [
+        "postgres_not_constructed_or_validated"
+      ]
+    },
+    {
+      "lane": "encrypted-field-adapter",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "partialUnvalidatedFilesRemoved": true
+      },
+      "remainingGaps": [
+        "encrypted_field_not_constructed_or_validated"
+      ]
+    },
+    {
+      "lane": "fake-budget-and-event-fence",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "fakeUpstreamCalls": 0
+      },
+      "remainingGaps": [
+        "fake_budget_not_constructed_or_validated"
+      ]
+    },
+    {
+      "lane": "codex-zero-call",
+      "verdict": "RED",
+      "checks": {
+        "officialAggregateProbeCompleted": false,
+        "realCodexHomeReadDenied": false,
+        "realCodexHomeWriteObserved": false,
+        "actualCodexThreadStarts": 0,
+        "actualCodexTurnStarts": 0,
+        "providerSessions": 0,
+        "providerBytes": 0,
+        "actualSpendUsd": 0
+      },
+      "remainingGaps": [
+        "zero_call_boundary_not_proven",
+        "real_codex_home_read_scope_violation"
+      ]
+    },
+    {
+      "lane": "macos-physical-boundary",
+      "verdict": "NOT_RUN",
+      "checks": {
+        "appBuilt": false,
+        "keychainCreated": false,
+        "identityCreated": false,
+        "userPresenceRequested": false
+      },
+      "remainingGaps": [
+        "macos_boundary_not_constructed_or_validated"
+      ]
+    },
+    {
+      "lane": "cleanup-and-artifact-index",
+      "verdict": "GREEN",
+      "checks": {
+        "incidentTemporaryRootAbsent": true,
+        "manifestRunParentAbsent": true,
+        "fixedPostgresTemporaryRootAbsent": true,
+        "fixedContainerAbsent": true,
+        "fixedVolumeAbsent": true,
+        "postgresImageAbsent": true,
+        "formeLocalProcessAbsent": true,
+        "keychainAbsent": true,
+        "identityAbsent": true,
+        "partialRepositoryFilesRemoved": 4,
+        "packageLockUnchanged": true
+      },
+      "remainingGaps": []
+    }
+  ],
+  "cleanup": {
+    "runRootAbsent": true,
+    "containerAbsent": true,
+    "volumeAbsent": true,
+    "temporaryRootAbsent": true,
+    "keychainAbsent": true,
+    "identityAbsent": true,
+    "processesAbsent": true
+  },
+  "verification": {
+    "gateARegression": "NOT_RUN_RED_STOP",
+    "gateBStaticAudit": "NOT_RUN_RED_STOP",
+    "approvedBaselineCi": "SUCCESS",
+    "redReportCommitCi": "PENDING_EXTERNAL_AT_EVIDENCE_FREEZE"
+  },
+  "authority": {
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "providerSessions": 0,
+    "providerBytes": 0,
+    "actualSpendUsd": 0,
+    "actualCodexThreadStarts": 0,
+    "actualCodexTurnStarts": 0,
+    "realGuestBytes": 0,
+    "externalMessages": 0,
+    "productionWrites": 0,
+    "deployments": 0,
+    "merges": 0
+  },
+  "nextAuthority": {
+    "gateBRetryAuthorized": false,
+    "gateCAuthorized": false,
+    "firstProviderCallProposalRecommendation": "DO_NOT_PREPARE_BEFORE_CLEAN_ZERO_CALL_RETRY"
+  }
+}
