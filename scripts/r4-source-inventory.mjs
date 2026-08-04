@@ -64,7 +64,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const report = buildSourceInventory();
   if (process.argv.includes("--markdown")) {
     for (const entry of report.entries) {
-      process.stdout.write(`\`${entry.path}\`  \`sha256:${entry.sha256}\`  \n`);
+      process.stdout.write(`\`${entry.path}\`  \`sha256:${entry.sha256}\`\n`);
     }
   } else {
     process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);

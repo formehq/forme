@@ -1,781 +1,483 @@
 # R4 Gate B Schema, Runtime, and Migration Manifest v0.1
 
-- Status: **approval candidate for exact local/ephemeral validation; not yet
-  approved or executed**
+- Status: **approval candidate; `PROPOSED_NOT_EXECUTED`**
 - Parent authority: R4 Technical Control Packet v0.2
 - Parent Packet SHA-256:
-  `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
 - Gate A evidence:
   [`R4-GATE-A-VERIFICATION.md`](./R4-GATE-A-VERIFICATION.md)
-- Owner decision surface:
+- Low-load Owner decision surface:
   [`R4-GATE-B-OWNER-REVIEW.md`](./R4-GATE-B-OWNER-REVIEW.md)
 - First Provider-Call Test Grant: **NOT REQUESTED**
-- Authorized provider sessions / bytes / spend if this Manifest is approved:
-  **0 / 0 / US$0**
+- Provider sessions / provider bytes / spend authorized here: **0 / 0 / US$0**
 
-This file deliberately does not contain its own SHA-256 or the Git commit that
-contains it. Both are external approval-card values; embedding either would
-create a self-reference. The approval card must bind this file's final
-SHA-256, the containing commit/tree, and the final Gate A evidence hash.
+This Manifest is the exact next stop gate. It proposes repository construction
+and local/ephemeral validation only. Gate A preparation performed isolated,
+read-only version/help/schema/initialize-only Codex observations with zero
+thread, turn, model, account, or provider request; they are recorded as
+preparation facts, not Gate B proof. Nothing here claims that Gate B, SQL,
+Docker, the full Codex Gate B probe, macOS signing, Keychain, or a provider
+call has run.
 
-## 1. Exact decision and stop boundary
+## 1. Exact decision and authority ceiling
 
-Gate A implemented the R4 contract with synthetic identities and content,
-in-memory hosted persistence, fake provider/connector/email boundaries, and
-local temporary files. Gate B is allowed to replace only four fake boundaries
-with **local or disposable validation targets**:
+Approval authorizes only the hash-bound work below:
 
-1. an exact PostgreSQL 16 migration, role/grant model, transaction/constraint
-   proof, and application-layer encrypted-field adapter in a disposable
-   container;
-2. a zero-provider-call capability probe against the exact official Codex
-   build named below;
-3. a macOS test launcher/protection build that proves—or fails closed on—the
-   physical boundary named by the Packet; and
-4. a fake upstream transport replay that proves hard dispatch, token, output,
-   time, and spend accounting without opening a network connection.
+1. construct the listed Gate B repository files without adding a dependency;
+2. generate and validate closed API/local-format schemas;
+3. run a fixed disposable PostgreSQL 16.10 instance with synthetic data;
+4. test the application-layer encrypted-field adapter with a synthetic key;
+5. replay transport budgets against an in-process fake upstream with DNS and
+   sockets denied;
+6. run the official Codex 0.145.0 **zero-call** capability probe—version, help,
+   schema generation, app-server initialize, then exit—with zero thread, turn,
+   model, account, or provider request;
+7. compile and probe a temporary signed macOS launcher, temporary test
+   Keychain, deny-first child profile, user-presence boundary, and cleanup;
+8. return only body-free evidence and stop.
 
-Approval authorizes repository files, local compilation, synthetic test
-secrets, a temporary test Keychain, an ephemeral Docker network/container/
-volume, the pinned public PostgreSQL image download, and body-free technical
-evidence for those four tasks. It does **not** authorize a model call, a real
-Guest or email address, an external message, hosted/production mutation,
-production migration, deployment/public traffic, production credential, merge,
-or spend.
+Approval does **not** authorize a model/provider call, real Guest or email
+address, external message, hosted or production mutation, production schema
+migration, deployment, public traffic, production credential, public response,
+merge, or spend. Unknown capability, hash drift, new file, new dependency,
+unlisted effect, or cleanup ambiguity fails closed.
 
-Any missing command, missing hash, unsupported host capability, unexpected
-network/tool surface, test failure, or version drift stops that lane. No prompt,
-command allowlist, private Codex fork, or weaker substitute is allowed.
+The eight proposed artifacts in Section 3 are part of this decision. Their
+index excludes itself; the Manifest binds both its hash and aggregate. The
+Manifest and Owner Review become immutable approval inputs after approval.
+Changing either or any indexed artifact requires a new Manifest hash and new
+Owner approval.
 
-## 2. Current Gate A implementation binding
+## 2. Gate A implementation and evidence binding
 
-### 2.1 Toolchain and dependency lock
+### 2.1 Code, tree, dependency, and source inventory
 
-| Item | Exact Gate A value |
+| Binding | Exact value |
 |---|---|
-| Repository package | `forme@0.1.0`, private npm workspace |
-| Node contract | `>=24.0.0`; observed validation host `v24.14.1` |
-| npm | `11.11.0`; lockfile format `3` |
-| TypeScript | `7.0.2` |
-| Next.js Node runtime | `16.3.0`; self-hosted Node target, not Vercel runtime |
-| React / React DOM | `19.2.8` / `19.2.8` |
-| Validation | `ajv@8.20.0`, `ajv-formats@3.0.1` |
-| Type packages | `@types/node@24.13.3`, `@types/react@19.2.18`, `@types/react-dom@19.2.4` |
-| Test runner | Node built-in `node:test`; no Jest/Vitest/property-test runtime |
-| Cryptography | Node built-in `node:crypto`; no third-party crypto package |
-| Database/model/email SDK | none in Gate A |
-| Root lockfile SHA-256 | `d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812` |
-| Root `package.json` SHA-256 | `ef5e5817ea510d0fc808676e62bff874b618c2fd88b602846891290015052374` |
+| Gate A implementation commits | `e8fc2232609741733c1b7aca4729d99112e0a779`, `c23988e2c626a92d6d1a2dfacdce5ad089cdb4f7` |
+| Final implementation tree | `fe1071da80310956c11fa0930ec63e710ee1d6e0` |
+| Root package | `forme@0.1.0`, private npm workspace |
+| Node / npm used for final validation | `v24.14.1` / `11.11.0` |
+| Package lock SHA-256 | `d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812` |
+| New Gate B dependency authorized | none |
+| Source inventory evidence | `docs/evidence/r4-gate-a-source-inventory.json` |
+| Source inventory evidence SHA-256 | `1e12957f4a650078087286c8bbee6f51461c8f68ca188428a99cab19e528af98` |
 
-The lockfile is the complete transitive dependency authority. Gate B adds no
-npm package. A lockfile change invalidates this Manifest.
+The exact Gate A source/proposal surface is the **154-file** inventory in
+Appendix A. Its sorted `sha256  path` stream hashes to
+`sha256:32893d5e820a7066603a0abf6befc842f9fadecc5d810f7a2ccf11ce80a56e1c`.
+Generated `.next`, dependencies, transient run bytes, and approval documents
+are not source inventory members.
 
-### 2.2 Canonical protocol and golden vectors
+### 2.2 Canonical protocol
 
-The current external protocol registry contains **38** versioned objects. The
-single Draft 2020-12 bundle contains those 38 objects plus 12 supporting
-definitions (50 `$defs` total).
+The registry contains **39** versioned objects. The Draft 2020-12 bundle has
+53 `$defs` total: 39 public protocol objects and 14 supporting definitions.
 
 | Binding | Exact value |
 |---|---|
 | Bundle | `schemas/r4/protocol.schema.json` |
-| Bundle SHA-256 | `da8653dbabd435f8e6be012a988ee1343c39e8c0c354e060ffec2591f4004011` |
+| Bundle SHA-256 | `e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af` |
 | Index | `schemas/r4/schema-index.json` |
-| Index SHA-256 | `6112c872203950ba12a09d3f44a9eb453a73fe5b8552d7e6cdc6657e63fda51c` |
-| Registry order hash | `sha256:d9a8e2ab94968aa4fa21e1a2299e9f494b6e918f732c9d70998cfbcb7fe49403` |
-| Golden fixture bundle | `sha256:884763fc607c98d7ff7772853cf9beaaa1c567b6bd2b9ad97ded5c7cbf020515` |
-| Canonical sample | `{"a":"é","b":2}` → `sha256:06c264c46ad5ada9493abd3aa2383fb205ae99d7d0bad40b03a43bfec8a1b8de` |
-| Parent Packet embedded by index/package | `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5` |
+| Index SHA-256 | `8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea` |
+| Registry order hash | `sha256:560b404cbae4105d4a59d63c3d68c32ad3493e964d4233d9da68d55bb85484b0` |
+| Golden fixture bundle | `sha256:2b852e34066066af2119760bee7d5749b4f89dbb634a7851fa4ce2831c754d5e` |
+| Parent Packet in index/package | `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5` |
 
-Exact registry order:
+Gate B may generate storage/API mappings for these bytes. It may not change a
+protocol field, enum, limit, canonical hash rule, lifecycle, or authority.
 
-```text
-room.v1
-projection_capsule.v1
-projection_lifecycle.v1
-projection_basis.v1
-public_encounter.v1
-grant.v1
-grant_offer.v1
-direct_grant_invite.v1
-agent_derivative.v1
-guest_capsule.v1
-consent_envelope.v1
-interaction.v1
-response.v1
-artifact_approval.v1
-notification_endpoint.v1
-ready_notice.v1
-response_orientation.v1
-response_source_policy.v1
-response_source_snapshot.v1
-session_envelope.v1
-response_candidate.v1
-fresh_cycle_reservation.v1
-dispatch_permit.v1
-session_receipt.v1
-operation_receipt.v1
-api_mutation_envelope.v1
-room_event.v1
-room_event_batch.v1
-cursor_gone.v1
-room_event_ack.v1
-room_event_ack_receipt.v1
-projection_read_view.v1
-room_operator_request.v1
-snapshot_line_read.v1
-snapshot_search.v1
-snapshot_query_result.v1
-transport_dispatch_intent.v1
-transport_gate_decision.v1
-```
+### 2.3 Exact operation map
 
-The two protocol interfaces are:
+Gate A implements exactly **45** operation definitions under `/api/v1`: 6
+reads and 39 mutations. All **39** mutations require idempotency; 31 also
+require the current expected object version. The complete request/result/auth
+map is the indexed `schemas/r4/gate-b/operations.md` artifact.
 
-- `SnapshotQueryBrokerV1` = `SnapshotLineReadV1` |
-  `SnapshotSearchV1` → `SnapshotQueryResultV1`;
-- `ResponseTransportGateV1` = `TransportDispatchIntentV1` →
-  `TransportGateDecisionV1`.
+### Public and Guest (13)
 
-Gate B may replay these exact bytes and add SQL/storage mappings. It may not
-change a field, enum, limit, hash rule, or semantic transition. Any such change
-returns to an Owner stop gate with a new Manifest.
+`third_place.list`, `projection.read`, `public_encounter.issue`,
+`interaction.create`, `interaction.read`, `interaction.delete`,
+`notification.set`, `notification.remove`, `notification.verify`,
+`grant_offer.accept`, `direct_invite.redeem`, `agent_derivative.mint`,
+`room.pair.exchange`.
 
-### 2.3 Current source/snapshot/broker policy hashes
+### Controller (18)
 
-| Policy | Exact Gate A value |
-|---|---|
-| `ResponseSourcePolicyV1` | `sha256:614377dde9f392b97947cd100e356d6342a204fefb6b4d84d5090ca4debc40b6` |
-| secret-pattern policy | `sha256:8bb3a1ec21b0e88e88d8292ff1b28578bcc76aa6a2c4c49508fde4eafeee967f` |
-| broker policy | `sha256:7945102051b25afdc5181470f0f32a0b62c08cec551f0566775a68da3a6f62a1` |
-| file / total snapshot ceiling | 512 KiB / 8 MiB |
-| one line read | 200 lines and 32 KiB |
-| one search | 256-byte pattern, 100 matches, 64 KiB result, 500 ms target |
-| regex state | RE2 is unavailable in Gate A; every `re2` request is denied |
+`control.status`, `control.interaction.read`, `room.create`, `room.pair`,
+`room.binding.revoke`, `room.mode.set`, `room.retire`, `room.delete`,
+`projection.revoke`, `response.revoke`, `grant.issue`, `grant.replace`,
+`grant.revoke`, `grant_offer.issue`, `grant_offer.revoke`,
+`direct_invite.issue`, `direct_invite.revoke`, `interaction.close`.
 
-Gate B may either prove a concrete RE2-compatible engine without changing the
-limits or retain literal-only search. It may not fall back to JavaScript
-`RegExp`.
+### Curator (2)
 
-### 2.4 Exact repository file inventory
-
-The Gate A source inventory is the **90-file** path/SHA-256 list in Appendix A;
-the SHA-256 of the exact `shasum` output (including sorted paths and newlines)
-is `fd27d41a8abfe672264c374608faa1f584779b26bf66f669d063ec6a73149a2e`.
-It covers
-the root build/CLI files and every non-generated file under
-`packages/r4-protocol`, `packages/r4-local`, `apps/room`, `schemas/r4`,
-`scripts`, and `test/r4`. `.next`, `node_modules`, `*.tsbuildinfo`, temporary
-evidence, and the two decision documents are excluded because they are build
-output, dependencies, or self-changing approval bytes.
-
-Inventory method:
-
-```text
-LC_ALL=C find <listed roots> -type f \
-  ! -path '*/node_modules/*' ! -path '*/.next/*' ! -name '*.tsbuildinfo' \
-  -print0 | sort -z | xargs -0 shasum -a 256
-```
-
-## 3. Current API and action map
-
-The canonical prefix is `/api/v1`. Gate A implements exactly **43** operation
-definitions. All 37 mutations require a client idempotency key with at least
-128 bits; the application canonicalizes `{actor, action, expectedVersion,
-params, body}` through `ApiMutationEnvelopeV1`. Routes marked `v` also require
-the current object version. Gate A Controller/Curator/Room-operator identity is
-synthetic header injection only; real Access assertions are Gate C.
-
-Exact implementation binding: `apps/room/src/operation-inventory.ts` at
-`sha256:5482345bbd5569d2639e3e801697ae908cd37b849c29e62251e38beb905028cb`
-and `apps/room/src/application.ts` at
-`sha256:9f136cbcab6f954917f0f5476d30c0dba99ebd7455a3a49f77cf3d76ea6271df`.
-
-### Public and Guest (12)
-
-| Action | Method and path | Actor / version |
-|---|---|---|
-| `third_place.list` | `GET /third-place/projections` | public |
-| `projection.read` | `GET /projections/:projectionId` | public or exact Grant |
-| `public_encounter.issue` | `POST /projections/:projectionId/encounters` | public, `v` |
-| `interaction.create` | `POST /interactions` | exact Guest capability |
-| `interaction.read` | `GET /interactions/:interactionId` | exact reply capability |
-| `interaction.delete` | `DELETE /interactions/:interactionId` | exact delete/reply capability, `v` |
-| `notification.set` | `PUT /interactions/:interactionId/notification` | exact reply capability, `v` |
-| `notification.remove` | `DELETE /interactions/:interactionId/notification` | exact reply capability, `v` |
-| `notification.verify` | `POST /interactions/:interactionId/notification/verify` | verification capability, `v` |
-| `grant_offer.accept` | `POST /grant-offers/:offerId/accept` | exact reply capability, `v` |
-| `direct_invite.redeem` | `POST /direct-invites/:inviteId/redeem` | one-use invite, `v` |
-| `agent_derivative.mint` | `POST /agent-derivatives` | allowed Manual capability |
-
-### Controller and Curator (19)
-
-| Action | Method and path | Actor / version |
-|---|---|---|
-| `control.status` | `GET /control/status` | Controller |
-| `control.interaction.read` | `GET /control/interactions/:interactionId` | Controller |
-| `room.create` | `POST /control/rooms` | Controller |
-| `room.pair` | `POST /control/rooms/:roomId/pairings` | Controller, `v` |
-| `room.mode.set` | `POST /control/rooms/:roomId/mode` | Controller, `v` |
-| `room.retire` | `POST /control/rooms/:roomId/retire` | Controller, `v` |
-| `room.delete` | `DELETE /control/rooms/:roomId` | Controller, `v` |
-| `projection.revoke` | `POST /control/projections/:projectionId/revoke` | Controller, `v` |
-| `response.revoke` | `POST /control/responses/:responseId/revoke` | Controller, `v` |
-| `grant.issue` | `POST /control/grants` | Controller |
-| `grant.replace` | `POST /control/grants/:grantId/replacements` | Controller, `v` |
-| `grant.revoke` | `POST /control/grants/:grantId/revoke` | Controller, `v` |
-| `grant_offer.issue` | `POST /control/grant-offers` | Controller |
-| `grant_offer.revoke` | `POST /control/grant-offers/:offerId/revoke` | Controller, `v` |
-| `direct_invite.issue` | `POST /control/direct-invites` | Controller |
-| `direct_invite.revoke` | `POST /control/direct-invites/:inviteId/revoke` | Controller, `v` |
-| `interaction.close` | `POST /control/interactions/:interactionId/close` | Controller, `v` |
-| `curation.admit` | `POST /curation/projections/:projectionId/admit` | Curator, `v` |
-| `curation.unlist` | `POST /curation/projections/:projectionId/unlist` | Curator, `v` |
+`curation.admit`, `curation.unlist`.
 
 ### `room_operator.v1` (12)
 
-| Action | Method and path | Exact purpose / version |
-|---|---|---|
-| `room_operator.status` | `GET /room-operator/status` | body-free exact Room status |
-| `room_operator.sync` | `POST /room-operator/sync` | `RoomEventBatchV1` only |
-| `room_operator.pull` | `POST /room-operator/interactions/:interactionId/pull` | protected exact-body pull, `v` |
-| `room_operator.cycle.reserve` | `POST /room-operator/interactions/:interactionId/cycle/reserve` | exact start/envelope, `v` |
-| `room_operator.cycle.recover` | `POST /room-operator/interactions/:interactionId/cycle/recover` | same reservation only, `v` |
-| `room_operator.cycle.abandon` | `POST /room-operator/interactions/:interactionId/cycle/abandon` | zero-dispatch release, `v` |
-| `room_operator.dispatch.issue` | `POST /room-operator/interactions/:interactionId/dispatch-permits` | exact 30-second permit, `v` |
-| `room_operator.ack` | `POST /room-operator/events/ack` | `RoomEventAckV1` / receipt |
-| `room_operator.projection.deliver` | `POST /room-operator/projections/deliver` | exact capsule+basis+approval, `v` |
-| `room_operator.response.deliver` | `POST /room-operator/responses/deliver` | exact candidate+approval, `v` |
-| `room_operator.stale.attest` | `POST /room-operator/projections/:projectionId/stale` | deterministic attestation, `v` |
-| `room_operator.local_purge.receipt` | `POST /room-operator/interactions/:interactionId/local-purge` | verified local absence, `v` |
+`room_operator.status`, `room_operator.sync`, `room_operator.pull`,
+`room_operator.cycle.reserve`, `room_operator.cycle.recover`,
+`room_operator.cycle.abandon`, `room_operator.dispatch.issue`,
+`room_operator.ack`, `room_operator.projection.deliver`,
+`room_operator.response.deliver`, `room_operator.stale.attest`,
+`room_operator.local_purge.receipt`.
 
-Current application request/result wrappers that are not among the 38 protocol
-objects remain **Gate A synthetic DTOs**, not stable production wire contracts.
-Gate B persistence work must map the canonical objects and operation receipts
-without widening these 43 actions. Gate C later binds real auth, origins,
-headers, rate buckets, and deployment facts.
+### 2.4 Gate A technical evidence
 
-## 4. Current local formats and honest limits
-
-| Format / location class | Gate A bytes and rule | Status entering Gate B |
-|---|---|---|
-| `r4.local-room-ledger.v1` | one canonical JSON file per Room; cursor, high-water, body-free events, ACK outbox, receipts, tombstones, quarantine, cleanup flag, version; atomic `0600` write + fsync | implemented synthetic/local |
-| `local_room_event_ack_outbox.v1` | exact `RoomEventAckV1` plus body-free server receipt ID | implemented |
-| `r4.body-free-receipt.v1` | Room/action/object/request hash/outcome/error/time only | implemented |
-| `local_encrypted_response_candidate.v1` | outside Workspace; AES-256-GCM ciphertext, 96-bit IV, tag, wrapped-key reference, exact Room/Projection/Interaction/basis/policy/candidate hashes and expiry | implemented with synthetic in-memory key protector only |
-| `r4.candidate-cleanup-journal.v1` | deny first → destroy key → remove ciphertext → receipt; idempotent reconcile | implemented |
-| `r4.candidate-cleanup-receipt.v1` | append-only body-free JSONL | implemented |
-| `r4.local-lock.v1` | one `O_EXCL` Room lock with process/boot/nonce/operation/time; live or ambiguous owner fails closed | implemented local analogue |
-| `local_fresh_start_authorization.v1` | exact Interaction/session/orientation/snapshot/probe/runtime hashes and 60-minute authority | implemented, no real launcher |
-| `local_fresh_run_marker.v1` | body-free active/cleanup-required marker; synthetic runtime bytes live only in a disjoint temp root | implemented fake runtime only |
-| `local_fresh_run_cleanup_receipt.v1` | terminal class and `runtime_bytes_absent` | implemented fake runtime only |
-| Guest CLI secure input | capability/body via stdin descriptor; locally generated recovery secrets leave only the dedicated secret output, never ordinary stdout/argv | implemented interface/fake-port proof |
-
-The current `SyntheticUserPresenceKeyProtector`, `SyntheticPresenceStore`,
-synthetic actor headers, plaintext-in-memory fake notification address, and
-`FakeResponseTransportGate` are explicitly **not** production adapters. Gate B
-may validate their real local/SQL counterparts only as specified below.
-
-## 5. Exact Gate B repository work and validation
-
-The paths and commands in this section are the complete Gate B work request.
-They do not exist as proof merely because this Manifest names them. After
-approval, their implementation and result hashes must be returned for review.
-
-### 5.1 Disposable PostgreSQL 16 and encrypted fields
-
-#### Runtime pin
-
-| Item | Exact value |
+| Check | Final result |
 |---|---|
-| Docker client/server observed for preparation | `29.3.1` / `29.3.1` |
-| Image tag identity used to resolve the pin | `postgres:16.10-bookworm` |
+| Typecheck | pass |
+| R1–R3 spine regression | 45 / 45 pass |
+| R4 offline suite | 293 / 293 pass with external network denied |
+| Static repository/effect audit | pass; external/provider/email/real-Guest/production counts all zero |
+| Room no-AI source assertion | pass |
+| Production Next build | pass; 8 routes; standalone asset preparation and build audit pass |
+| Five-journey deterministic walkthrough | two byte-identical runs; aggregate `sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56` |
+| Real Forme Twin read-only probe | pass; zero source-body bytes |
+| Production browser path | pass; deleted/terminal Interaction remains controlled `404 not_found`, never `503` |
+
+Structured Gate A evidence is
+`docs/evidence/r4-gate-a-evidence.json` at
+`sha256:b2e79265eb92c46c8bb2e6c8fb3f6d0fa334a3eef4c1044a95a5243a646cfe4f`.
+The independent implementation/browser audit is
+`docs/evidence/r4-gate-a-independent-audit.md` at
+`sha256:c0b4284786608904cf6cd576edab773dda89d45648ce2fdabda99b4bd9e3eb3d`.
+
+These results mean Gate A is Green for **Gate B review**, not that R4 is
+Owner-accepted, Done, deployed, or ready for a real Guest.
+
+## 3. Frozen Gate B proposal artifacts
+
+| Artifact | SHA-256 | Purpose |
+|---|---|---|
+| `schemas/r4/gate-b/README.md` | `sha256:e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b` | status and non-execution boundary |
+| `schemas/r4/gate-b/codex-zero-call-contract.json` | `sha256:45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845` | official Codex zero-call contract |
+| `schemas/r4/gate-b/local-formats.md` | `sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995` | local roots, records, protection, cleanup |
+| `schemas/r4/gate-b/macos/build-recipe.json` | `sha256:93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de` | temporary launcher/signing/Keychain probe |
+| `schemas/r4/gate-b/macos/forme-fresh-response.sb` | `sha256:5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab` | proposed deny-first Fresh child profile |
+| `schemas/r4/gate-b/operations.md` | `sha256:b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4` | exact 45-action API/auth/schema map |
+| `schemas/r4/gate-b/postgres-contract.md` | `sha256:73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc` | exact SQL/function/role/encryption contract |
+| `schemas/r4/gate-b/runtime-boundary.json` | `sha256:ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450` | complete runner workset/effects/lane order |
+
+| Index binding | Exact value |
+|---|---|
+| Artifact index | `schemas/r4/gate-b/artifact-index.json` |
+| Artifact index SHA-256 | `sha256:2fc4f5ec2554f43a8c9a0d93950a5ce1198b91555f361af53d80c7664c5b6a9f` |
+| Artifact count | `8` |
+| Artifact aggregate | `sha256:f290ba035efa2eb84d899bf67d4ffb03c523d88556ce96b66f4f3a2862159310` |
+
+These are static contracts, not executable Gate B implementation. There is no
+SQL migration, runner, native app, signed artifact, Keychain item, Codex
+adapter, Docker resource, or provider session in this proposal commit.
+
+## 4. Exact Gate B construction and local validation
+
+### 4.1 Lane order and repository workset
+
+The authoritative workset and command names are in the indexed
+`runtime-boundary.json`. Unlisted file creation is Red. Existing
+`package-lock.json` must remain byte-identical. `package.json`, `tsconfig.json`,
+and `scripts/r4-doc-audit.mjs` may change only to connect the listed files and
+commands without adding dependencies. This Manifest and its Owner Review are
+immutable.
+
+Execution order is fixed:
+
+```text
+preflight
+→ Gate A regression and protocol replay
+→ API and local-format schema construction
+→ PostgreSQL migration, roles, functions, races, and rollback
+→ encrypted-field adapter
+→ fake budget and synthetic event fence
+→ official Codex zero-call probe
+→ macOS physical-boundary probe
+→ cleanup, body-free evidence, STOP
+```
+
+### 4.2 Disposable PostgreSQL and encrypted fields
+
+| Binding | Exact value |
+|---|---|
+| Image | `postgres:16.10-bookworm` |
 | OCI index digest | `sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74` |
-| Linux arm64/v8 manifest digest | `sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf` |
-| Required in-container version assertion | `postgres (PostgreSQL) 16.10` |
-| Network | disposable Docker bridge only; no host port and no public listener |
-| Authentication | synthetic trust inside that isolated disposable network only |
+| Linux arm64 manifest | `sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf` |
+| In-container version | `postgres (PostgreSQL) 16.10` |
+| Temporary root | `/private/tmp/forme-r4-gb-e417836bd67b` |
+| Container | `forme-r4-gb-e417836bd67b-pg` |
+| Volume | `forme-r4-gb-e417836bd67b-pgdata` |
+| Database | `forme_r4_gate_b` |
+| Container network | `--network none`; no Docker network and no host port |
 
-The registry digest lookup performed while preparing this Manifest was
-read-only. The image was not pulled or run. Approval permits the pinned image
-download and local ephemeral run; digest/version mismatch stops before SQL.
+The indexed PostgreSQL contract fixes 37 tables, named text domains plus
+`CHECK` constraints instead of PostgreSQL enum types, exact indexes/functions/
+roles/grants, transaction and lock order, preflight, verification, disposable
+rollback, and required race tests.
 
-#### Exact files Gate B may add
+Projection capsule content, Room labels, Interaction/Guest bodies, Response
+bodies, notification addresses, and sensitive idempotency recovery results are
+application-encrypted before storage. AES-256-GCM uses unique 96-bit nonces,
+canonical AAD, a global nonce registry, and a synthetic 32-byte Gate B key
+passed by inherited descriptor. No production KMS or production key is
+selected.
 
-```text
-schemas/r4/sql/0001_r4_presence.sql
-schemas/r4/sql/0001_r4_presence.verify.sql
-packages/r4-persistence/package.json
-packages/r4-persistence/src/encrypted-field.ts
-packages/r4-persistence/src/index.ts
-scripts/r4-gate-b-postgres.mjs
-test/r4-gate-b/postgres-schema.test.ts
-test/r4-gate-b/encrypted-field.test.ts
-```
+Downloading the exact public image is the sole network exception. The running
+container itself has no network. Digest/version/resource drift aborts before
+SQL. Cleanup must prove container, volume, and temporary root absence.
 
-No other database package, ORM, migration framework, or networked database
-service is authorized. `r4-persistence` uses Node built-ins; SQL is executed by
-the pinned container's `psql`.
+### 4.3 Official Codex 0.145.0 zero-call probe
 
-#### Exact schema namespace and table set
-
-Schema: `forme_r4`. Migration ledger: `forme_r4.schema_migrations`.
-
-```text
-actor_subjects, actor_roles,
-third_places, third_place_events,
-entities, rooms, room_lifecycle_events,
-projections, projection_lifecycle_events, curation_events,
-room_bindings, pairing_challenges,
-public_encounters,
-grants, grant_offers, direct_grant_invites, agent_derivatives,
-capability_events,
-interactions, interaction_lifecycle_events,
-fresh_cycle_reservations, dispatch_permits,
-responses, response_lifecycle_events,
-notification_endpoints, notification_challenges,
-notification_outbox, notification_attempts,
-room_event_stream, operation_receipts, idempotency_records,
-rate_buckets, retention_jobs, purge_watermarks, operator_incidents
-```
-
-Every protocol-bearing row stores its `schema_version`, opaque ID, canonical
-payload hash, lifecycle/version columns, and timestamps. Private plaintext is
-forbidden. Exact encrypted columns are:
-
-```text
-interactions.request_ciphertext
-interactions.guest_capsule_ciphertext
-responses.body_ciphertext
-notification_endpoints.address_ciphertext
-notification_outbox.target_ciphertext
-```
-
-The SQL must enforce, with constraints/indexes/functions and two-order race
-tests rather than comments:
-
-- immutable Room kind and allowed mode/status combinations;
-- one current Projection per Room and monotonic curation/owner lifecycle;
-- one unresolved Interaction per capability/re-entry chain;
-- accepted-only shared 1/2/3/10 quota and rolling public 20/24h pool;
-- one live continuation Grant per exact Room/Projection/re-entry chain;
-- replacement revokes prior and transfers no quota;
-- one live GrantOffer per Interaction; invite/offer one-use and fixed expiry;
-- one Fresh cycle and one current Response per Interaction;
-- exact idempotency replay, different-hash `409`, terminal precedence, and no
-  body readability after a destructive terminal;
-- contiguous per-Room sequence/high-water and exact ACK identity;
-- one semantic ready notice, lease/reconciliation/no-future-retry monotonicity;
-- 30-day Interaction, 7-day Response, 37-day body-free receipt/tombstone, and
-  Room-life high-water constraints without retaining body/address/secret.
-
-Global transactional lock order is:
-
-```text
-Room advisory key
-→ Room row
-→ Projection row
-→ capability / Grant / re-entry row (opaque ID byte order)
-→ Interaction row
-→ Fresh-cycle / dispatch-permit row
-→ Response row
-→ notification endpoint / outbox row
-→ idempotency row
-→ Room event high-water row
-→ retention / purge row
-```
-
-Janitor first takes one dedicated advisory lock, then uses the same per-Room
-order in deterministic bounded batches. A transaction may skip an absent class
-but never invert the order.
-
-#### Exact roles and grant intent
-
-All are `NOINHERIT`; only disposable synthetic login wrappers may assume them.
-
-| Role | Allowed | Explicitly denied |
-|---|---|---|
-| `forme_r4_migrate` | create/alter/drop only `forme_r4`; own migration ledger during one-shot apply | other DB/schema, server role/config, network, application run |
-| `forme_r4_app` | execute semantic transaction functions; select body-free/status views; no direct DDL | role/DDL, raw key, cross-purpose audit/janitor/notify |
-| `forme_r4_janitor` | execute `purge_due` and write body-free purge receipts/watermark/incidents | decrypt/read plaintext, actor/capability issuance, notify |
-| `forme_r4_notify` | claim/reconcile notification outbox and attempts through exact functions | Room/Projection/Interaction body tables except one encrypted target returned by claim function |
-| `forme_r4_audit` | select body-free audit views only | ciphertext columns, mutation, secrets, roles/DDL |
-
-The application-layer encrypted envelope is `a256gcm.v1`: AES-256-GCM, random
-96-bit nonce, 128-bit tag, key ID
-`r4.hosted.gate-b.synthetic.v1`, and canonical AAD:
-
-```json
-{"schemaVersion":"encrypted_field_aad.v1","table":"<exact table>","rowId":"<opaque id>","column":"<exact column>","roomId":"<room id>","objectVersion":1}
-```
-
-The 32-byte synthetic key enters through a dedicated inherited file descriptor,
-never argv, source, stdout, or evidence. Tests cover round trip, wrong key,
-tamper, truncation, nonce duplication detection, cross-row/column/Room swap,
-error redaction, terminal unreadability, and a full disk/JSON/error canary scan.
-The key and container/volume/network are destroyed at the end. This does not
-select a production KMS or production key.
-
-Exact commands to add and then run:
-
-```text
-npm run r4:gate-b:postgres
-npm run r4:gate-b:encrypted-field
-```
-
-Both commands fail if the Docker target is not the exact pinned digest/version,
-if any host port is published, or if teardown leaves the named Gate B resources.
-
-### 5.2 Official Codex zero-call adapter proof
-
-#### Exact preparation-time runtime identity
-
-| Item | Exact value |
+| Binding | Exact value |
 |---|---|
-| Distribution | official npm `@openai/codex@0.145.0` / `codex-cli 0.145.0` |
+| Distribution | official `@openai/codex@0.145.0`; `codex-cli 0.145.0` |
 | JS launcher SHA-256 | `134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477` |
 | Darwin arm64 binary SHA-256 | `1da3f4e0e96028b8a771814293c3033dafd1971f943f6c7e79b0897fe705f590` |
-| Code-mode host SHA-256 | `c75e27ea296ede4025959e4f66772c283261f28d95b1f27be4d8ef07aabe9bce` |
-| Adapter candidate | `codex app-server --listen stdio://` and generated official JSON Schema |
-| Session/thread/turn count | zero |
-| Model ID | none selected; a model is forbidden in this Manifest |
-| Account/auth regime | isolated empty `CODEX_HOME`; Owner auth is not mounted or read |
-| Transport | OS-denied; no OpenAI or other network endpoint reachable |
+| Staged binary | `${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex` |
+| Generated stable schema | 273 files; aggregate `sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62` |
+| Real auth / real Codex home | absent / not mounted |
+| Allowed wire requests | `initialize` then `initialized`, then close stdin |
+| Authorized thread / turn starts | `0 / 0` |
+| Network / provider bytes / spend | denied / `0` / `US$0` |
 
-Exact files Gate B may add:
+The probe may run only version, help, official stable schema generation, and
+app-server initialize in an empty environment and neutral non-Git directory.
+It denies every thread, turn, model, account, config, tool, MCP, plugin, Skill,
+hook, browser, web, file, command, process, and remote-listener request.
 
-```text
-packages/r4-codex-adapter/package.json
-packages/r4-codex-adapter/src/app-server-probe.ts
-packages/r4-codex-adapter/src/event-fence.ts
-packages/r4-codex-adapter/src/index.ts
-scripts/r4-gate-b-codex-probe.mjs
-test/r4-gate-b/codex-adapter.test.ts
-fixtures/r4-gate-b/codex-app-server-0.145.0-schema.sha256
-```
+Even a clean zero-call probe is **Yellow / manual-owner-only** for the AI lane:
+initialize-only evidence cannot prove a future model-visible tool inventory or
+place a future provider request behind `ResponseTransportGateV1`. It does not
+permit Guest bytes to enter Codex. A future actual Fresh Response requires a
+new exact grant and stronger evidence; no private Codex fork is silently
+authorized.
 
-Exact command:
+### 4.4 macOS physical-boundary probe
 
-```text
-npm run r4:gate-b:codex-probe
-```
+The pinned host is macOS 26.5.2 build 25F84, arm64, Darwin 25.5.0, Xcode 26.6
+build 17F113, Swift 6.3.3. Gate B may create one temporary self-signed test
+identity, one custom temporary test Keychain, and one signed/hardened
+`FormeLocal.app` inside a fresh 0700 run root. It may show one local
+user-presence test window.
 
-The command may run only version/help, official schema generation, app-server
-`initialize`, effective-config/tool inventory, and hostile no-network/no-file
-capability probes. Its launcher guard rejects every `thread/start`,
-`turn/start`, `exec`, model request, auth lookup, remote listener, websocket,
-MCP/plugin/Skill/hook/browser/web/image/subagent surface, and any non-stdio
-transport. It runs from a neutral non-Git temporary root with `env -i`, empty
-`HOME`/`CODEX_HOME`, isolated `TMPDIR`, analytics off, no inherited secrets,
-and outer network denial.
+The Fresh child reads the staged signed app/Codex bytes and its declared
+isolated roots only; it has no network entitlement, listener, generic tool,
+descendant exec/fork, live repo, real home, connector secret, candidate key,
+or real Guest bytes. Seatbelt is host-specific test evidence, not a universal
+production containment claim.
 
-Pass requires proof that the official surface can expose only
-`SnapshotQueryBrokerV1` (plus an inventoried effectless coordination primitive,
-if unavoidable), can keep generic shell/exec and every other tool absent, and
-can place every future provider transport behind
-`ResponseTransportGateV1`. Schema/help output alone is not a pass.
+Unsupported custom-Keychain/Secure-Enclave composition, user-presence
+cancellation, capture uncertainty, or an unenforceable hard resource ceiling is
+Yellow and leaves the AI lane manual-only. Unexpected access, data persistence,
+hash drift, or cleanup failure is Red.
 
-If official 0.145.0 cannot do that, result is Yellow
-`manual_owner_only_available`. The command must not launch a turn to “see if it
-works,” weaken the boundary, use MCP as an unreviewed escape hatch, or fork
-Codex. A different Codex version/adapter/hash requires a new Manifest.
+### 4.5 Fake budget and synthetic event fence
 
-### 5.3 macOS physical-boundary proof
+The budget replay uses an in-process fake upstream with sockets and DNS denied.
+It uses fixture-only thread/turn identifiers and starts no real Codex thread or
+turn. It tests every boundary and `limit + 1`: 3 dispatches, 128,000 aggregate
+input tokens, 8,000 output tokens, 60 minutes, US$1 synthetic incremental
+spend, 30-second permits, no retry, and no fallback. A pass still means zero
+provider bytes and zero actual spend.
 
-Preparation host identity:
+### 4.6 Evidence and cleanup
 
-| Item | Exact value |
-|---|---|
-| macOS | `26.5.2` build `25F84`, arm64 |
-| Kernel | Darwin `25.5.0` |
-| Xcode | `26.6` build `17F113` |
-| Swift | Apple Swift `6.3.3` targeting `arm64-apple-macosx26.0` |
-| Seatbelt probe binary | `/usr/bin/sandbox-exec` |
-| Keychain CLI | `/usr/bin/security` |
+Final evidence may contain only tool/build hashes, counts, boolean denials,
+status/error codes, resource observations, SQL object names, and body-free
+cleanup receipts. It may not contain request/response/source text or path,
+environment values, credentials, capabilities, prompt/transcript, raw runtime
+events, machine identifiers, tool arguments/output, or provider payload.
 
-Exact files Gate B may add:
+The exact final repository reports are
+`docs/evidence/r4-gate-b-execution.json` and
+`docs/R4-GATE-B-EXECUTION-REPORT.md`. Transient evidence is staged only under
+the run root and copied to the Git-ignored `.forme/gate-b-evidence/${RUN_ID}`
+root after filtering. The approved Manifest and Owner Review are never edited.
 
-```text
-native/macos/Package.swift
-native/macos/Sources/FormeLocal/Launcher.swift
-native/macos/Sources/FormeLocal/CodexAdapter.swift
-native/macos/Sources/FormeLocal/KeychainProtector.swift
-native/macos/Sources/FormeLocal/ReviewWindow.swift
-native/macos/Sources/FormeLocal/SandboxProfile.swift
-native/macos/Resources/forme-fresh-response.sb
-native/macos/Resources/FormeLocal.entitlements
-native/macos/Tests/FormeLocalTests/BoundaryTests.swift
-scripts/r4-gate-b-macos-probe.sh
-test/r4-gate-b/macos-boundary.test.ts
-```
+## 5. Verdict rules and return gate
 
-Exact command:
+- **Green** means one named local/disposable lane passed its exact contract.
+  It never means provider-ready or production-ready.
+- **Yellow** means a physical capability is unsupported or cannot be proven.
+  Independent local lanes may finish, but the Fresh AI lane remains
+  `manual_owner_only_available`.
+- **Red** means contract drift, forbidden effect, sensitive leak, unexpected
+  access, test failure, or cleanup uncertainty. Remaining lanes stop.
 
-```text
-npm run r4:gate-b:macos-probe
-```
+After Gate B, the agent must return the body-free execution report, exact
+result hashes, Green/Yellow/Red by lane, cleanup proof, and remaining gaps.
+It must not start a provider call or Gate C because a local check passed.
 
-The test build uses a temporary local test code-signing identity and temporary
-test Keychain only. It may create a synthetic user-presence item and show one
-native local confirmation window. It may not touch the login credential used
-by Codex, create a production certificate/access group, read any real Room or
-Guest bytes, register a daemon/agent/MCP/app/browser tool, or open a listener.
-All artifacts live below the command's temporary root and are deleted after
-the body-free result is committed.
+## 6. Explicitly deferred to later approval
 
-Pass requires one composed result, not separate optimistic checks:
+Gate C still owns real identity and Cloudflare Access binding, Caddy/edge
+configuration, production PostgreSQL, backup/restore/log retention, real email
+provider, production credentials, deployment, public traffic, real Guest data,
+real Room/Projection IDs, public demo activation, and rollback. Any provider
+call—before or during Gate C—also needs a separately labeled, hash-bound First
+Provider-Call Test Grant.
 
-- signed hash-checked launcher, hardened runtime, library validation, and
-  debugger/dynamic-library-injection denial;
-- Keychain/Secure-Enclave-backed non-exportable test key with local user
-  presence for candidate decrypt and no silent approval path;
-- one-shot request/start and candidate-review windows, 15-minute expiry,
-  no pasteboard/export/listener/history/external asset, and capture exclusion
-  where the platform actually supports it;
-- disjoint Workspace, connector, candidate, runtime, and isolated auth roots;
-- locked memory/anonymous bounded pipes for Guest/orientation/event bytes and
-  no body-bearing prompt/history/telemetry/crash/core file;
-- outer sandbox denial of live repo, sibling/home/vault, writes, local socket,
-  command/generic network, connector, browser/MCP/tool surface, parent Git/
-  config, Keychain export, attach, injection, replacement, symlink escape,
-  fork bomb, and huge output;
-- 60 wall minutes, 30 CPU minutes, 2 GiB RSS, 32 processes, 128 FDs, and
-  32 MiB event+stderr ceilings;
-- normal/cancel/timeout/budget/schema/process-kill/fork/huge-output/machine-
-  crash cleanup, with deny before deletion and read-only startup doing no write.
+This Manifest intentionally does not contain its own SHA-256. The low-load
+Owner Review binds its final external hash after these bytes freeze.
 
-Any failed, unavailable, or ambiguous component produces only
-`manual_owner_only_available`; Guest bytes do not enter Codex. A local test
-identity proves the mechanism, not a future production signing identity. Gate C
-must pin the installed production identity without weakening these results.
+## Appendix A — exact source and proposal inventory
 
-### 5.4 Fake hard-budget and event-fence replay
-
-Exact files Gate B may add:
-
-```text
-packages/r4-codex-adapter/src/fake-transport.ts
-test/r4-gate-b/fake-transport-budget.test.ts
-test/r4-gate-b/event-fence.test.ts
-```
-
-Exact command:
-
-```text
-npm run r4:gate-b:fake-budget
-```
-
-The fake upstream is an in-process function with a call counter; sockets and
-DNS are denied. Tests must prove: maximum 3 dispatches, 128,000 aggregate input
-tokens, 8,000 aggregate output tokens, 60-minute authority, US$1 incremental
-worst-case spend, exact provider/model/payload/ordinal/start/session binding,
-30-second one-use permits, journal-before-call, destructive-first zero calls,
-permit-first one disclosed in-flight call, unknown outcome burns the cycle,
-no reroute/fallback/retry, and candidate extraction only from the exact
-completed authorized turn. Every boundary value and `limit + 1` must run.
-
-Because this is a fake upstream, a passing count is still **0 provider bytes
-and US$0**.
-
-### 5.5 Aggregate command and allowed artifacts
-
-After the four commands exist, the only aggregate entry point is:
-
-```text
-npm run r4:gate-b
-```
-
-It must run, in order: final Gate A regression, schema/golden replay,
-PostgreSQL migration+roles+encryption, fake budget/event fence, Codex zero-call
-probe, and macOS boundary probe. It stops on first failure and never converts a
-Yellow physical result into Green.
-
-Body-free evidence may be written only below the Git-ignored local root
-`.forme/gate-b-evidence/<run-id>/`; it may contain tool/build hashes, object
-counts, boolean denials, test counts, status/error codes, timing/resource
-aggregates, SQL object/constraint/role names, container digest, and cleanup
-receipts. It may not contain bodies, source paths, environment values, secrets,
-addresses, prompts, transcripts, tool arguments/output, Codex auth, or raw
-provider events. The final review commit may copy only a body-free summary and
-artifact hashes into `docs/`.
-
-## 6. Evidence classification and expected outcomes
-
-| Lane | Current fact | Gate B result required |
-|---|---|---|
-| Protocol / state machines | Gate A synthetic implementation; exact 38-object bundle and golden hash above | repeat exact bytes; no semantic drift |
-| Hosted persistence | in-memory `SyntheticPresenceStore`; no SQL/migration executed | disposable SQL constraints, roles, encryption, races pass |
-| Local stores / recovery | file-backed synthetic analogues | keep exact formats; prove physical adapter or fail manual-only |
-| Codex | exact 0.145.0 binary observed; no session started | zero-call capability proof; unsupported means manual-only |
-| macOS protection | only fake probe/runtime currently | composed test proof; failure means manual-only |
-| Provider transport | fake counter only | hard-budget fake replay; still zero provider bytes |
-| Production | absent by design | remains Gate C; no production claim |
-
-The only acceptable audit colors after Gate B execution are:
-
-- **Green:** exact local/disposable evidence passed;
-- **Yellow:** official Codex or macOS physical composition is unavailable or
-  ambiguous, with the AI lane hard-disabled and manual Owner response retained;
-- **Red:** protocol/authority drift, privacy leak, unexpected effect, or failed
-  fail-closed behavior. Red stops all R4 progress and is not approvable.
-
-Known Yellow facts at approval time:
-
-1. Official Codex 0.145.0 has not yet proved the required broker-only and
-   transport-gated surface.
-2. The signed/hardened macOS launcher, native user presence, Keychain/Secure
-   Enclave, sandbox, reverse isolation, cleanup, and canaries have not yet
-   passed as one installed test system.
-3. Production origin/auth/log/backup/OpenAI-account/email/deploy facts are
-   intentionally absent and remain Gate C.
-
-## 7. First Provider-Call Test Grant — NOT REQUESTED
-
-```text
-Status: NOT REQUESTED
-Authorized sessions: 0
-Authorized provider bytes: 0
-Authorized spend: US$0
-Authorized model ID: none
-Authorized Guest/source body: none
-```
-
-No model is selected because no model is called. A later first-call grant must
-be a separate hashable approval object that pins the exact model/account/
-transport, one Owner-authored synthetic request hash, explicitly previewed
-Forme snapshot/orientation hashes, complete budgets, session count, and
-aggregate spend. Nothing in this Manifest implies that future grant.
-
-## 8. Gate C facts deliberately absent
-
-Still forbidden and unknown: production commit/image, domain/origins,
-Cloudflare Access audiences/subjects/MFA, Caddy trust chain, production DB
-roles/secrets/migration, installed production signing identity/access group,
-real OpenAI account/retention/consent, email provider/region/recipient logs,
-backup/log horizons, production WAF/rates, deploy/restore/rollback/health/
-janitor commands, real actors/data/Room IDs, public activation window, and the
-intake-disable command.
-
-Gate B success therefore does not mean deployed, usable by a real Guest, or
-Owner-accepted.
-
-## 9. Approval object
-
-Approval is valid only when the external decision card names:
-
-- this Manifest's final SHA-256;
-- its containing Git commit and tree;
-- the final Gate A evidence file SHA-256 and `GREEN_FOR_GATE_B_REVIEW` result;
-- independent audit result `Red = none`;
-- the exact authorization/non-authorization boundary above; and
-- `First Provider-Call Test Grant: NOT REQUESTED`.
-
-Exact recommended phrase:
-
-```text
-批准 R4 Gate B Schema, Runtime, and Migration Manifest v0.1 sha256:<external-final-file-sha256>；First Provider-Call Test Grant NOT REQUESTED
-```
-
-After approval, run only Section 5, return with body-free evidence, and stop.
-Do not call a model, use real Guest/email data, send a message, mutate hosted or
-production state, execute a production migration, deploy, expose public
-traffic, issue a production secret, merge, or spend.
-
-## Appendix A — exact Gate A path/SHA-256 inventory
-
-The final inventory is regenerated after the Gate A implementation bytes stop
-changing. The external approval card must reject the Manifest if this appendix
-does not match the containing Git tree.
+Inventory order and hashes are mechanically checked by
+`npm run r4:docs:audit -- --final`.
 
 <!-- FILE_INVENTORY_BEGIN -->
+`README.md`  `sha256:770ef931d95c02f0e7f2380abbd58c68fb3808b281e4fde0dbd46cd441c6b5df`
 `apps/room/README.md`  `sha256:7ca578a9a633b7838a982b6a7f2afddd745b43749b9dae729f17a3f45806e305`
 `apps/room/app/api/v1/[...segments]/route.ts`  `sha256:4cc64bed96b1430d9f2db2f1f76c74282a7e0eace1aab65cc831f0de946fd75e`
 `apps/room/app/g/[interactionId]/page.tsx`  `sha256:428bd6c260ef0fe2881379c82a59a8e21175f72cf0cd7039c7800dc06b3e960c`
-`apps/room/app/globals.css`  `sha256:917864b3e135318a313245526c8ae4c3f994de070cfd40a3b9a488fd72c5b344`
+`apps/room/app/globals.css`  `sha256:3b0b3521343b66a591dfcddf039d8170df1907e0b03b87d21c695d44fb8360ec`
 `apps/room/app/layout.tsx`  `sha256:407a7112b3cbee09ed6739169c7bef1c2f59697b47935999568767b845bb098d`
 `apps/room/app/owner/interactions/[interactionId]/page.tsx`  `sha256:b5b513c222cbbeee8df9d7f8bb935b996493c597a6177c3c56d6465ba98cd7a0`
 `apps/room/app/owner/page.tsx`  `sha256:568e240aee23349f772e9d19091b14ed55b143a751bfcef9e597549f761c4cdd`
-`apps/room/app/p/[projectionId]/page.tsx`  `sha256:ad97823931e0e9638291a587350bfec0c31ddabf41cbe86df3e3633b8746e3f8`
+`apps/room/app/p/[projectionId]/page.tsx`  `sha256:2b9f51740237428a8767b0fdd70086b5383b39410e2e9906e447bbf81e32ab7d`
 `apps/room/app/page.tsx`  `sha256:a1f3abbe91af6782e9ad0cdad23c32d61c5ee309bc32c9ca9484a2446fb03358`
 `apps/room/app/private/[projectionId]/page.tsx`  `sha256:0dcbeb575940de421e7cfce43ec0d350ef46679dc02c8c6a014f8303f544ebe6`
 `apps/room/next-env.d.ts`  `sha256:1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b`
 `apps/room/next.config.ts`  `sha256:59660b264fc5923e4db388aab58240bbf1481bb620856f017b06fb46ce96f60d`
 `apps/room/package.json`  `sha256:2921d981fd2668a9eacc97e6492c81d1cc12093279d963011bc439a65c5df575`
 `apps/room/scripts/assert-no-ai.mjs`  `sha256:fd681cbdf1fc6c7e2c341a502aaad1b7240d0f748bbc3290a7ac1a288b6a151c`
-`apps/room/src/application.ts`  `sha256:9f136cbcab6f954917f0f5476d30c0dba99ebd7455a3a49f77cf3d76ea6271df`
-`apps/room/src/components/GuestAsk.tsx`  `sha256:dc4048bef8dd42fa72b492021c7127bd28ab7e81b1ed59d9e90a736a39d149ec`
-`apps/room/src/components/GuestStatus.tsx`  `sha256:8b796b3ba7d14261285f157673015a80c1f2e79cac3ab7ef3c14697e97867c52`
-`apps/room/src/components/OwnerControls.tsx`  `sha256:540121eb7f668e46581077303ed06ccd3646c1673581081baecb8b4612950997`
-`apps/room/src/components/PrivateProjection.tsx`  `sha256:88e213b5c1ae2a87f5618956cc84337f7ffb5039300bf34bac9bf7265e07402f`
-`apps/room/src/domain.ts`  `sha256:72ff67492eb7652c299a2a14befa02b0bd093c71013309c4cb0e41855f75ef29`
-`apps/room/src/http.ts`  `sha256:2bf5368349685b330f9efef234df90eadf1ad67a4dc5da2894cb48b997269668`
-`apps/room/src/offline-control/notification.ts`  `sha256:086245645751592e868ade455c11763c1c56228734f8075c031f8579d86f8893`
-`apps/room/src/offline-control/retention.ts`  `sha256:3413d3fe3fd145e4a6329fab7958ea5253afb12093e395b3a6365187e5217328`
-`apps/room/src/operation-inventory.ts`  `sha256:5482345bbd5569d2639e3e801697ae908cd37b849c29e62251e38beb905028cb`
+`apps/room/src/application.ts`  `sha256:b5ee42622bbd3e635b967ca5e9c3744ac88f0d5a5a0a98457f71b2949e3b3cdf`
+`apps/room/src/components/GuestAsk.tsx`  `sha256:b961b0aecfd98a389fbaf22ae34c1f3e9b819dd681369487b0a30cdcd09ba270`
+`apps/room/src/components/GuestStatus.tsx`  `sha256:81ffa566e96c85db1da26600d9f218b2afaeeda0e18c384466af6b60326d420c`
+`apps/room/src/components/OwnerControls.tsx`  `sha256:34056b344583af9241774588be28251ffdfc1de41f8b6a21170737122d197bd4`
+`apps/room/src/components/PrivateProjection.tsx`  `sha256:2583fd2e34bbd038ec340a883974ca77f2dc39dba0da286f3b91a913c5e3ffd1`
+`apps/room/src/components/client-api.ts`  `sha256:e837f7201e42c9b9eaf574e3975f9cf66c58edf425333e88eb12565d22f7e1a6`
+`apps/room/src/consent.ts`  `sha256:b628146a5a73483cc506314cf5557bc57c3231a6a1d6636d81c2bcec4b03d785`
+`apps/room/src/domain.ts`  `sha256:59a8ccb3d352299f176529482e1878a75bc4a6e5b9309de4d71d0d99ef89df39`
+`apps/room/src/http.ts`  `sha256:266417a7dd60f637e65dc291833028898ebf5dc59cfbe4ec1c1ae182d74c781e`
+`apps/room/src/offline-control/notification.ts`  `sha256:e635f4bf7f4568f70de1f72d20640204e54942b8725cc7cecd197b87a5daa571`
+`apps/room/src/offline-control/public-rate.ts`  `sha256:64157ff93034eaa432a1cd9d9df5ac814a71a418845f124e9289a91cc29597d8`
+`apps/room/src/offline-control/retention.ts`  `sha256:823388fdb120cefe521f5e598a423367ebc3fe6f2b9ba56a26937cf92e7e15b1`
+`apps/room/src/operation-inventory.ts`  `sha256:d1808495ed8f171415918a91dcd1b4974cda2b3eb32de2aad0a5aecb3da899f9`
+`apps/room/src/projection-page.ts`  `sha256:4ea54a1c16016af1add4e10df57670d747b832ea2aaeb9ebfb2fcc67dfc4700d`
+`apps/room/src/publication-verifier.ts`  `sha256:417b1544b14201efbedb156aab8783bd3cb8ef671d988a2d1194019d1c16a7e5`
+`apps/room/src/redaction.ts`  `sha256:218c18e29482237ec8acfc48bcad94928186c54588a49b124f13e3b9804608b8`
 `apps/room/src/runtime.ts`  `sha256:91db00da5d215519e97a39678fcc58c15334f7d0d295268bd389eb3dcae80bab`
-`apps/room/src/store.ts`  `sha256:de557e2ca574a9caa299029c7be0dad10f6295abe25e632b493099bbb71d60ea`
+`apps/room/src/store.ts`  `sha256:55e6928194e6a98a9c5adb8d11102b7ed20737f6132858e0d44cc854428be36a`
+`apps/room/src/synthetic-fixtures.ts`  `sha256:f8822943b349ca0a6a534ea5089897e9d96e334528d956e0d0385a7df2f45e81`
 `apps/room/tsconfig.json`  `sha256:9934e924fa14a53615f52764e4291afcc98c73f178724e3c6d573e54edb81028`
+`bin/forme.js`  `sha256:f20505d226172e2d2c45b9dbc518fb5fbb93ba900632e9e6e02599c4c7a35170`
 `package-lock.json`  `sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812`
-`package.json`  `sha256:ef5e5817ea510d0fc808676e62bff874b618c2fd88b602846891290015052374`
+`package.json`  `sha256:d6d2912fe2ca48cb082ad95993795285f5b0ee39a040c43216434ff27586097f`
 `packages/r4-local/package.json`  `sha256:30eaeffec7e27d91b482aa26dad8512c8cf60bcf4b925d6ad8c8c90221c83fbe`
-`packages/r4-local/src/body-free.ts`  `sha256:ab22b08828fc66a493c86059d226c1a03f266bd9a23ff7c9326ca2913b0f9ad1`
-`packages/r4-local/src/broker.ts`  `sha256:7248dc0d740dcd6dc9123678da0ed4208e857558354540237f458635f38bb1a6`
-`packages/r4-local/src/candidate-event-lifecycle.ts`  `sha256:bdf94e2bb464200cc1a25a944b63fb42bc40458516334bf594ded1e18b21a217`
-`packages/r4-local/src/candidate-store.ts`  `sha256:e7ba83b10e9d13ce34226804d0446b49f8441b71fc033019980b62f32b9b8b07`
-`packages/r4-local/src/capability-probe.ts`  `sha256:b0534a8262e6fbd6d27a0837464bae889bd8cb925bb21c234bff067a6d6a6cae`
-`packages/r4-local/src/cli.ts`  `sha256:302cce5f62f46b582e240c13be31f764b3bbf98fcb9481bcf97460fe4670fd14`
-`packages/r4-local/src/fresh-session.ts`  `sha256:663894e0493d25fc27c77fc6a66b7fea5065ec341ad0828928571f9244977209`
-`packages/r4-local/src/index.ts`  `sha256:b59ac30638e845a8fe49d86ae0a6157c9296490ee7d7b82128a2ecca623aa702`
-`packages/r4-local/src/ledger.ts`  `sha256:bcf48ab6f0e1c6f917247d84cb0fa348de27668e7dd62143df8a27143864f087`
-`packages/r4-local/src/lock.ts`  `sha256:17c31dcbf0412fd6840dbf7f6f4af1b00278cf6c45865a2b81db49d51e99aa19`
-`packages/r4-local/src/projection.ts`  `sha256:0e30b52ed866f898c084c88b4a4df935215dc62fb1cff5adf8132947fbae7cd1`
+`packages/r4-local/src/body-free.ts`  `sha256:a8fd4e9cf0ef034e30cc210a9a20657cb4e8476efa1a6d3471b79fe24a312f3d`
+`packages/r4-local/src/broker.ts`  `sha256:da11c80e4f805055d0e410f5b1b6916ed9663d24b5909cba06d921a42f071234`
+`packages/r4-local/src/candidate-event-lifecycle.ts`  `sha256:fdf1beb05e35b9cc35b7afdd0228cd3de30a068d6bbc8bf4fb7b50393f334b3e`
+`packages/r4-local/src/candidate-store.ts`  `sha256:7539652642058ca2329edd295313bcb5c7d81a3943c8d4a0a204f7afdf1b6016`
+`packages/r4-local/src/capability-probe.ts`  `sha256:76a0df8445df372daf9b3d43c64d92e05de29dd09ecbb1853e92da9e964b5c19`
+`packages/r4-local/src/cli.ts`  `sha256:c16fb5ae3903946048f2b93c9b4898b0a6faf2ca19afc8d9aa64357b20c1e313`
+`packages/r4-local/src/coordinator.ts`  `sha256:9571016637fe700304e878e7053be529018e3653c4d1d2852425c47a49720bad`
+`packages/r4-local/src/fault-injection.ts`  `sha256:98e4d2ed21ef4ad82a711ccafbe0833efcc763748de7e5f8b6328709ed66beb7`
+`packages/r4-local/src/fresh-session.ts`  `sha256:5e933deadb1bfc2d529c20fbd379e1f873e923136c225ccfcd4a8f2760e686ce`
+`packages/r4-local/src/index.ts`  `sha256:e17136d819d48ae55dd208ac1999cb10eb64c797f012a0547628d5792d9c8a22`
+`packages/r4-local/src/ledger.ts`  `sha256:22180b03bb8e728b2910491ef812efa2c1edb8f98efbff431a1be75a98824e4c`
+`packages/r4-local/src/lock.ts`  `sha256:a1a8780c6840a5363ca0624a4e768327b503a57f5135d96a4e1465000d729724`
+`packages/r4-local/src/persisted-record.ts`  `sha256:9f02bb2ddc4d79f6b4ada97c98e273d951e7674e2e367823a150b6f74827ce64`
+`packages/r4-local/src/projection.ts`  `sha256:8198075455603cc74afd01fde0790a2f243fbf04e4bfcb354d10aaef29e073a5`
+`packages/r4-local/src/protected-root.ts`  `sha256:631c155cb88062e2f29e241fbfb9817ba4280ab52a6acbe62b6696110f666d3a`
+`packages/r4-local/src/publication-operation.ts`  `sha256:641e21dabd1b39ea9f6c9d210f06f32215c76581ed87269ff4f89ca116ef1c2f`
+`packages/r4-local/src/publication.ts`  `sha256:7f19759c114e4e6d384847b55f6c3f4ddeb0eba0da2ab98774bed469b80ad34d`
 `packages/r4-local/src/real-basis-probe-cli.ts`  `sha256:7c5981f61016b2bf2f9f3c721f9426d47aab8b7b6b0da421ed7f62c07b0c342e`
 `packages/r4-local/src/real-basis-probe.ts`  `sha256:c72aa06beb238feace2b5e9f316c4ef1b08a70b2fd0ef41eecf400e3ab33541d`
 `packages/r4-local/src/response-session.ts`  `sha256:543a7245e68d411db35a1470fd4f801eaf11f5ed59ee7ed638ec3ac4253f9b80`
-`packages/r4-local/src/runtime-cleanup.ts`  `sha256:39c26c55ffad9dacd615a20e5827ff145c5a2026820ebc130e8003ad053a805a`
-`packages/r4-local/src/snapshot.ts`  `sha256:57dc3df6615429ed1c9fddc2d217945337b9172d804cc88b469e031ad8ad7d4a`
-`packages/r4-local/src/sync.ts`  `sha256:05a9a56a6cd788b56ca23eac850b2c4864f491b8059c4d6c5d704b8b2172a5e4`
-`packages/r4-local/src/types.ts`  `sha256:6997b04ede01d5e77a3da5110e267687e0f1d082fd25c338c2060f340548d053`
-`packages/r4-local/src/walkthrough.ts`  `sha256:3829ab24be051aa2a02b35309e75a3c9fc145d387add34daacb388689e8537cd`
+`packages/r4-local/src/restricted-runtime-adapter.ts`  `sha256:4b1e86789e4a9282a47908359c20f6e9d5e0dd13c8a4347a1be1ac5b06215af1`
+`packages/r4-local/src/runtime-cleanup.ts`  `sha256:ca5b3529fe9e771f9e202b1cfb85bbb75e9fc01cc23af9ca9c86a0cad3407795`
+`packages/r4-local/src/runtime-policy.ts`  `sha256:0e4b088f754ae5ddd3ee980323085e8041fb59fbcee0dcfc0250752b10923228`
+`packages/r4-local/src/snapshot.ts`  `sha256:fd94617f57e21bdb415f52666c656128f348feea9b43d93473376e52fbc5cc1f`
+`packages/r4-local/src/sync.ts`  `sha256:7a187ef66d3dd7b4dd746b1b5890c0903dcdcfa1225a4199ccafbb40c8af440f`
+`packages/r4-local/src/types.ts`  `sha256:a27a1567a5760540c3040be4c5fae49d555ff500fd5ffe89e00dc296991551a6`
+`packages/r4-local/src/walkthrough.ts`  `sha256:5bad1615920c315f1b6a5bb9dabd8f4613a5d8dd60b56ba7f27ace4e239f2824`
 `packages/r4-protocol/README.md`  `sha256:d0678a31638c3741d198d6f7a9b12bd057c9c08107f92378d76463510086463c`
 `packages/r4-protocol/src/canonical.ts`  `sha256:e57c5735df2fdcff1121b8159b18aa76c979334072d5205d7e5ffa449e88d3e3`
 `packages/r4-protocol/src/constructors.ts`  `sha256:121b6ca8984823300600100cf9fb0c5ae8cf5643112a5a9d4d3dc6b55a55910c`
-`packages/r4-protocol/src/golden.ts`  `sha256:abdb4aadc7997c4b27d37c7749964a4ea46cd42ec9b66af21dc9ea9aa87f8ebf`
+`packages/r4-protocol/src/golden.ts`  `sha256:e8122aef463601d5081c068a37753e31cb1be02223c9afada1b3794a23c52ffd`
 `packages/r4-protocol/src/guards.ts`  `sha256:49766b2817a441fca9b3f48544843d84698adfa507dc4be34719784ee66b5c5d`
 `packages/r4-protocol/src/index.ts`  `sha256:e54c0d0129bfd311241dc4ec4b327430755c350a8c39d86657fc156e3d92a635`
 `packages/r4-protocol/src/object-validation.ts`  `sha256:c71043c0c4dc1eb8ed0c82035b86c76f6b5f721ac4ee64bd72eab95c8466e950`
-`packages/r4-protocol/src/registry.ts`  `sha256:b027c504445226fe233c05da513da0a16b1bb5c3c8800aadef7d958a335c080f`
-`packages/r4-protocol/src/state.ts`  `sha256:0cc62b3917f955751fb61d43b2abff13beeb15c40abf4a9dc49df424b841539c`
-`packages/r4-protocol/src/types.ts`  `sha256:c2a84ee7cdbaadf42d2684ac88a6ab31f2ec834af08f5667019c0d3e6c0f4b4d`
-`packages/r4-protocol/src/validation.ts`  `sha256:d7d3055def94cdf086f064c56377ca6269114127733abce9f86660d179f2256d`
-`schemas/r4/protocol.schema.json`  `sha256:da8653dbabd435f8e6be012a988ee1343c39e8c0c354e060ffec2591f4004011`
-`schemas/r4/schema-index.json`  `sha256:6112c872203950ba12a09d3f44a9eb453a73fe5b8552d7e6cdc6657e63fda51c`
+`packages/r4-protocol/src/registry.ts`  `sha256:26281eacc03544b45724617004f4bf92772bff392240c8d346dfbbcdcc22b924`
+`packages/r4-protocol/src/state.ts`  `sha256:e077eda9b690a1eedc937dc982375629fb518008c546d3f06c99b6a312220b21`
+`packages/r4-protocol/src/types.ts`  `sha256:d68d7a30c38c45025465fda0588f990206b1075a5784287a8e2d81cd8e89317b`
+`packages/r4-protocol/src/validation.ts`  `sha256:7e48d46b59ac8d3c18f66fb11ca5953c11a828ba28a31e3c3a1691470deddb27`
+`schemas/r4/gate-b/README.md`  `sha256:e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b`
+`schemas/r4/gate-b/artifact-index.json`  `sha256:2fc4f5ec2554f43a8c9a0d93950a5ce1198b91555f361af53d80c7664c5b6a9f`
+`schemas/r4/gate-b/codex-zero-call-contract.json`  `sha256:45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845`
+`schemas/r4/gate-b/local-formats.md`  `sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995`
+`schemas/r4/gate-b/macos/build-recipe.json`  `sha256:93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de`
+`schemas/r4/gate-b/macos/forme-fresh-response.sb`  `sha256:5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab`
+`schemas/r4/gate-b/operations.md`  `sha256:b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4`
+`schemas/r4/gate-b/postgres-contract.md`  `sha256:73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc`
+`schemas/r4/gate-b/runtime-boundary.json`  `sha256:ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450`
+`schemas/r4/protocol.schema.json`  `sha256:e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af`
+`schemas/r4/schema-index.json`  `sha256:8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea`
 `scripts/deny-external-network.mjs`  `sha256:3f7408486e62a307d32607e13020992e12b0b671afcedce347303113a12fdf7f`
-`scripts/r4-gate-a-static-audit.mjs`  `sha256:eb9552e44bf9b7607f550fabc43de79edcd8e5fd961e8ca2c11b3ea5ba3612fc`
+`scripts/r4-doc-audit.mjs`  `sha256:6c3b665b2c9fde0a6ed12f16764be41fbfbe6aef5b8b975266039b1a4b955857`
+`scripts/r4-gate-a-static-audit.mjs`  `sha256:ff519e46f69152298b2799f77b9d309aa66559f5f10517096319c0de4ec5cf15`
+`scripts/r4-room-build-audit.mjs`  `sha256:686fbbf6ba9d1e704847c5cfb436111426897ce8028224c63d0e55d3a0c8e78e`
+`scripts/r4-room-standalone-prepare.mjs`  `sha256:0f6b7d5b5642343f2fab42356f52e96e225a135d565f10da3c680d0680d5acdb`
+`scripts/r4-source-inventory.mjs`  `sha256:685a651b1fbd8ad412bc2401999eee64ea498223970bd45249219db1016a640b`
+`src/action-context.ts`  `sha256:3df2da75d90cd98a74b7c8aa64297c41412cd05226a3bd4c154335687f903c0d`
+`src/action.ts`  `sha256:0b748c818abfc0dbafbd3245ff9d3ad09952b34b95cefc553513086942a914b7`
+`src/agency.ts`  `sha256:e9a554538bb7dd57cd184fcb2b918ad067d542e2dbdbd4e9f188410047a5c160`
+`src/boundary.ts`  `sha256:aedf1998ce9d6cc13618b9e40d6f582479e5bfc0c500b1cba9c39f77a3268bc3`
 `src/cli.ts`  `sha256:65805d95a85f8f9643a1983c8fe21ec35b82d1651966b0dcf82b025cb76010c8`
-`test/r4/helpers.ts`  `sha256:d5dd1e49f4493b92b90c99e929248a70afd3bfd9ff97816af1a9ececa64eafc1`
-`test/r4/hosted-application.test.ts`  `sha256:c5ec1372da2e7252b629022a89a72307cf6634d1abb97e8f3e2eff5100b345e4`
-`test/r4/hosted-capabilities.test.ts`  `sha256:3d63a0b77b4f193a9dca09f703a65119e160feb5d8b3278ffae886e9ea6e0a49`
-`test/r4/hosted-control-races.test.ts`  `sha256:37fa03d47d6a5b4d3bbae3cb2a66224556e234e08953662a811e84d14846d1c7`
-`test/r4/hosted-http.test.ts`  `sha256:660c2afc63c8d32b6f33f52a7cf9895aaaf72e7c1262dcc3aaaa8469a42920de`
-`test/r4/hosted-lost-response-recovery.test.ts`  `sha256:1053dd1425370e32ba7dbd7ce244c4a873e743655d4fd424f43ba49604890c5d`
-`test/r4/hosted-notification-control.test.ts`  `sha256:8135bd1ee9680c6deeb32cf55a6c4500aaee0066e50b728df0368f1c777be387`
-`test/r4/hosted-response-terminal.test.ts`  `sha256:bece3a8774b8972a6946a8e00fb339d5ff4a512a825bf5f2410175fcaf799ab1`
+`src/cognition.ts`  `sha256:be33f494222ab4bc6c53f69b3e05811301a1d979f08ff4b6bc163f782a077711`
+`src/context.ts`  `sha256:bc06fa2321cccad26f6b9538bd8dc9a5344d6356ebe5ee557bfb23c5a5f09e42`
+`src/contracts.ts`  `sha256:9db3fa4860e7d54bd3af1a7aa9013918b4d8568fc17d1b54a9f71902a455dea6`
+`src/reflection.ts`  `sha256:165e54aa5a1bd51b98f1359ca56c416fce80c6a9bdfa1aac562ce6c43b6b99fb`
+`src/render.ts`  `sha256:08b52ed6f06e8ee7be90d3d612f32311536a81e78ca48f46d54c741fc7ccee9a`
+`src/runtime.ts`  `sha256:d58d022f609be35da7b55a50c766949804df9eb0d6911397eeb05307a1791fcf`
+`src/store.ts`  `sha256:12458b82e754281e48b3c620986e611b7612fda4563737699f60fe1ca5f1a1f6`
+`src/types.ts`  `sha256:8b5ddfe6477ddd46f8eedbdeb1bc7fccd2b59f0d383e3ec0de877b79f2757aab`
+`test/agency.test.ts`  `sha256:a439cbaf744da063871761df1765b094ff69666228a7d8cc7a3c259bfc74f394`
+`test/boundary.test.ts`  `sha256:3840870c9e8f9449e9ab1d7f478ba194135b89d7b4394c49b447a8a14582ba31`
+`test/cli.test.ts`  `sha256:425703463e6d47d45b09513b2a6608c60d757f305aa391796ab53ec656dbaedb`
+`test/cognition.test.ts`  `sha256:fe8e0c6818313dd64f6eaf6e39c3057e6d55de13e9c84552fa18625a700334e5`
+`test/continuity.test.ts`  `sha256:9011e377c13fb7cfd22b6abeef87448effa4f7ee9a74f027caeca6fc7a36c29e`
+`test/helpers.ts`  `sha256:b7857bb05936745f018de0bd3a04310926910e933faccf558d89470e915b4944`
+`test/r4/helpers.ts`  `sha256:e28bc06e57f62783367e305e7ef3d98c7805a0a5674802fe2274be928633a5ce`
+`test/r4/hosted-application.test.ts`  `sha256:448e347f805792f7929c61c274929c42aa919b75f44b2f044dcbb0d2a1401ed2`
+`test/r4/hosted-capabilities.test.ts`  `sha256:daf3a119230995c7a8ab187e34f01126e48c01a7a116cb5b75569d0d7d270ee3`
+`test/r4/hosted-control-races.test.ts`  `sha256:c2ef8f0b0e8e1d36bc88c242469d82381562e7ecb78abbc90c2238bca3a4d81b`
+`test/r4/hosted-event-compaction.test.ts`  `sha256:de9e2c41adba99743d10b47f585ef9460256e26c74eb325d6c34b2f91f37d3d8`
+`test/r4/hosted-gate-a-hardening.test.ts`  `sha256:d0918de5c5015730de775b55da0b52c6715ce18c7c1895d6cca30dd4bb292924`
+`test/r4/hosted-http.test.ts`  `sha256:99cb151250bdf5caf6bdc70bd7acf34e289066959de81c8346e5956d26dcd234`
+`test/r4/hosted-lost-response-recovery.test.ts`  `sha256:e46f394662b3157228e8fe9f4fd026703cf8ac9c72577779daa8d9cca718bac8`
+`test/r4/hosted-notification-control.test.ts`  `sha256:7cb89e04624bdb1afa14b7881bca523b43744a06408c98163a9db6bd7904149c`
+`test/r4/hosted-publication-boundary.test.ts`  `sha256:ba30e7297b0bcf8b13e4d170f6737c137203fdf061583164a89647e69fcb3626`
+`test/r4/hosted-publication-helpers.ts`  `sha256:29f94ab163103e466bb9c0797b731f03dd2a8f1a6ed86bac7fa4c70018dd5bbb`
+`test/r4/hosted-redaction.test.ts`  `sha256:accfc9cba065818ae5542dfbbccb175d45099137af0fa06a31d0e191e140d46f`
+`test/r4/hosted-response-terminal.test.ts`  `sha256:c252af197e2bdda222bd4e288d8a31d63123a06cfca382c14bf6d6164cfe52ee`
 `test/r4/hosted-retention-janitor.test.ts`  `sha256:fc7a8a8384f2f9e8510c43f170ade7a63d3e30c60b733453bc2a28dba9aeefb6`
-`test/r4/local-cli.test.ts`  `sha256:330da89f3eaa09e6774e8d07d0c52e84ee0e0c7771f92f503fc6abdef172c100`
-`test/r4/local-fresh-session.test.ts`  `sha256:ede2bd565eac03fe5b8c93159d696b37de9731c3f61426cb9da955ce349be61d`
-`test/r4/local-ledger-sync.test.ts`  `sha256:8ae1dc1832b6d8fe794e2869fac89183a794615b4cc09b0e0e877bb9d051c484`
-`test/r4/local-lock-candidate.test.ts`  `sha256:b4f9afb2353e77a45c3d093591fd4f9bca1e72da7ae201a65890208769e2235a`
+`test/r4/hosted-room-operator-binding.test.ts`  `sha256:c5fe4b585d7f46aa36fd0e982648faf5c05ea99afad303c90321e802c035b994`
+`test/r4/hosted-web-agent-parity.test.ts`  `sha256:b74f5d8adbe4fd678549a801f698d78b0adb5ebf6ba24a7182e9c84ccfa04cc6`
+`test/r4/local-canary-matrix.test.ts`  `sha256:2574ef780542cb5d5c9c3debef21a558c98d1e9e1339e467dec85c8326c99766`
+`test/r4/local-cli.test.ts`  `sha256:1d7d68093c82b403e1f723481c2fd49480d3a016896afb542b8b49af3ba12d98`
+`test/r4/local-fresh-session.test.ts`  `sha256:886ef087891728b8e99b3498ab5c5a3a3afbf7fbe25676db6837469e8695a169`
+`test/r4/local-gate-a-hardening.test.ts`  `sha256:acfe5e4b00db9ef30a25a0a87252508a3511c26e8ad70d617cf33502d384c3ef`
+`test/r4/local-ledger-sync.test.ts`  `sha256:5e01f22741808b69dd8ceac094ded0d7891f73a07343ed4bbc0ae628a3a4b9c3`
+`test/r4/local-lock-candidate.test.ts`  `sha256:78af4048f65755cc4d71b280301d999887fa99872a7319cc7c8b64c5e4068f73`
 `test/r4/local-projection.test.ts`  `sha256:7748f7e8bb58fb9f4e8db5a6b807daae569be5cc23d6ba7bb96085a7831905f9`
-`test/r4/local-response-session.test.ts`  `sha256:7a59b6d1d8e3944a38f1efd3ad5f10f69360e6158b88d93120f3e7c8a93d2cad`
-`test/r4/local-runtime-cleanup.test.ts`  `sha256:fd3f8756dc4a571b83abd0fc90466766e99813500ccb495e1359081a51473ac3`
-`test/r4/local-snapshot-broker.test.ts`  `sha256:ef493119f0e47d3582337f7edb423c6319006a54fb9b2b261a6a184740a8b456`
-`test/r4/local-terminal-event-sync.test.ts`  `sha256:8a255d8e7b373e0f9bb87043839ac0e905efd45ac958dd20422942bef1b27122`
-`test/r4/protocol-contract.test.ts`  `sha256:2d02b129d148b55b4b68d03d009e8c99ee5d24e7b791e40a5b37cd6911ae423b`
+`test/r4/local-publication-operation.test.ts`  `sha256:bdc521f08e3131ab49144f392d45d843e5f9db4b158b223c1b8a5b2e052f5193`
+`test/r4/local-response-session.test.ts`  `sha256:7101054a78f3cf3540b58e79d21dd1c3d063d8b140dedbbf7a1fc8b4ac105af0`
+`test/r4/local-runtime-cleanup.test.ts`  `sha256:6b81ddc73bcf3294ebc041cab66e711c8e0498340fd436d888cf2fd7102fdef2`
+`test/r4/local-snapshot-broker.test.ts`  `sha256:daa671aa8f4b982250b628db26f0c4a726ad3aced315e70a4b51910e5b6b255c`
+`test/r4/local-terminal-event-sync.test.ts`  `sha256:da3c3d764acf0b0c8fb088debc4e0df923c6d1ec7b0e615bb04c346c31a8eeb1`
+`test/r4/package-surface.test.ts`  `sha256:4b5775a822437aca8119a9a3e9dc85f2d7ce5e5f252ba5cd6a484e2efd6c38d0`
+`test/r4/protocol-contract.test.ts`  `sha256:b4664bdff8c142ae738d08356d9b31e42641e5f37b92831702ecdaf25b4be442`
 `test/r4/protocol-event-contract.test.ts`  `sha256:5b178ffcb3917d86928eddba1220abb4407db4975c4786e0e33542343ad481d9`
-`test/r4/protocol-matrix.test.ts`  `sha256:42e9f058a65583c0b9a2e299ec720146fa8af757a1248bdf483195835d2a2c4a`
+`test/r4/protocol-matrix.test.ts`  `sha256:6ef23cd871b6ed3ef06a3da89d0458882391ed809176eb5343c18e7c36fc90a4`
 `test/r4/protocol-successor-scope.test.ts`  `sha256:eb138962ba6476f553e515c4a35b5d8c25eb2e7d234bc8fdb4555022c96c1264`
 `test/r4/protocol-time-window.test.ts`  `sha256:37189ccd3bf15a0af5f2766983fa47a6229204e154a900302c48f7d4811ca764`
-`test/r4/walkthrough.test.ts`  `sha256:85883f3184f539f550b5e5eec11c878dfa30741e0f367a9b7179390b64547a47`
-`tsconfig.json`  `sha256:b43fe6c8df013674a7f323bcdcf59f1bb7c54f44a4f1d407f4d85148fcec2dfe`
+`test/r4/publication-boundary.test.ts`  `sha256:c5472a303b6418eba4d99acad453a136c44700bd961eafcd258f025056ece6d3`
+`test/r4/ui-client-api.test.ts`  `sha256:a1bd49a08bdca29bfdce9731af0aad2cc8357737de36a6ab83408a9759c558c8`
+`test/r4/ui-static-safety.test.ts`  `sha256:d220ddd1adfb1e23201d6f026bfd03242ba7ba84865e5b8a3b9fd99e695798c1`
+`test/r4/walkthrough.test.ts`  `sha256:eb664535f81ee0814bbec37f0b7194a22a9e36899a0f1bb600eaf50fddc603ac`
+`test/recovery.test.ts`  `sha256:6d090371c0f8cf5b38e7ffeeea5f56177a398e1029a3106d734f48dacc4bdc83`
+`test/runtime.test.ts`  `sha256:f4101c76ace7db26f641fbce560ddc60195fb5859bf19cf37a395a98b3f1c300`
+`tsconfig.json`  `sha256:bff9e14538a2828bed482bf431f9db6683505abfe89d74c305541bff3b0e2d19`
 <!-- FILE_INVENTORY_END -->

@@ -1,0 +1,72 @@
+;; R4 Gate B proposed Fresh child profile.
+;; Status: PROPOSED_NOT_EXECUTED
+;; Authority: R4 Technical Control Packet v0.2
+;; Approved Packet SHA-256:
+;; sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
+;; First Provider-Call Test Grant: NOT_REQUESTED
+;;
+;; This profile applies to the untrusted Fresh child, not to the signed Owner
+;; review/controller process. The controller owns Keychain user presence,
+;; candidate encryption, Room credentials, and the bounded anonymous pipes.
+;; Seatbelt is an undocumented host-specific Gate B evidence source, not a
+;; production portability or universal containment claim.
+
+(version 1)
+(deny default)
+(import "system.sb")
+
+(define forme-app-root       (param "FORME_APP_ROOT"))
+(define forme-runtime-root   (param "FORME_RUNTIME_ROOT"))
+(define forme-tmp-root       (param "FORME_TMP_ROOT"))
+(define forme-home-root      (param "FORME_HOME_ROOT"))
+(define forme-codex-root     (param "FORME_CODEX_HOME_ROOT"))
+(define forme-workspace-root (param "FORME_WORKSPACE_ROOT"))
+(define forme-connector-root (param "FORME_CONNECTOR_ROOT"))
+(define forme-candidate-root (param "FORME_CANDIDATE_ROOT"))
+
+;; No provider, DNS, loopback, Unix-domain listener, or inherited network.
+(deny network*)
+
+;; The Fresh child is one already-executed image. It cannot launch a shell,
+;; helper, browser, plugin host, MCP server, code-mode host, or descendant.
+(deny process-exec)
+(deny process-fork)
+(deny signal (target others))
+(allow signal (target self))
+(allow process-info*)
+(allow sysctl-read)
+
+;; Minimum executable/runtime reads. The installed app and staged exact Codex
+;; binary are under forme-app-root. System libraries remain host-pinned by the
+;; build recipe and are re-observed at execution.
+(allow file-read*
+  (subpath forme-app-root)
+  (subpath "/System/Library")
+  (subpath "/usr/lib")
+  (subpath "/private/var/db/dyld")
+  (literal "/dev/null")
+  (literal "/dev/random")
+  (literal "/dev/urandom"))
+
+;; The child receives Guest/orientation/event bytes only on inherited bounded
+;; anonymous pipes. Its only writable filesystem is the isolated runtime,
+;; empty HOME/CODEX_HOME, and one-run tmp root. These roots may contain no
+;; request, capsule, prompt, source text, orientation text, candidate plaintext,
+;; credential, or raw provider event.
+(allow file-read* file-read-metadata file-write*
+  (subpath forme-runtime-root)
+  (subpath forme-tmp-root)
+  (subpath forme-home-root)
+  (subpath forme-codex-root))
+
+;; Explicit reverse isolation. The child cannot inspect or mutate the normal
+;; Workspace, connector authority, encrypted candidate store, or their names.
+(deny file-read* file-read-metadata file-write*
+  (subpath forme-workspace-root)
+  (subpath forme-connector-root)
+  (subpath forme-candidate-root))
+
+;; No global temporary path, pasteboard, credential store, camera, microphone,
+;; automation, accessibility, screen-capture service, debugger, or attach
+;; surface is intentionally granted here. Any additional allow discovered at
+;; execution is authority drift and requires a new reviewed profile.

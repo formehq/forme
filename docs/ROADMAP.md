@@ -1,6 +1,6 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-03
+- Updated: 2026-08-04
 - MVP complete and repeatable: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
 - Scope model: P0 committed, P1 conditional, P2 post-demo
@@ -14,9 +14,12 @@
   Control Packet v0.1 is superseded; reconciled v0.2 passed independent audits
   at `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
   The Owner approved those exact bytes on 2026-08-03. Gate A repository-only
-  implementation is ready; OpenAI/provider calls, real Guest data, schema
-  migration, deployment, spend, production Room mutation, email, secret
-  issuance, and public traffic remain unauthorized
+  implementation and Technical Review are complete. The exact Gate B Manifest
+  at `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`
+  is the next Owner stop and remains proposed/not executed; provider calls,
+  real Guest data, production migration, deployment, spend, production Room
+  mutation, external email, production secrets, and public traffic remain
+  unauthorized
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -30,9 +33,9 @@
 | R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved; Packet reconciliation/audit/hash and exact Owner approval are complete, and Gate A repository-only implementation is ready.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is now technically implemented and verified; R4 still needs later Owner Acceptance, and Gate B is awaiting exact Owner approval.
 
-## R4 owner-approved product target — Packet approved, Gate A next
+## R4 owner-approved product target — Gate A Technical Review complete
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -162,8 +165,8 @@ Native Harness role clarification
   → T4 public lifecycle [closed]
   → T5 async / deletion / retention / P0 cut [closed]
   → reconciled Technical Control Packet v0.2 audit/hash ✓ → Owner approval ✓
-  → Gate A repository implementation [current]
-  → Gate B exact Manifest [next stop]
+  → Gate A repository implementation + Technical Review ✓
+  → Gate B exact Manifest [current Owner stop]
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,
@@ -172,12 +175,12 @@ approved R4 product target admits only one curated Third Place, one Forme
 Project Room as the required public resident, one bounded Private Room access
 path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
 exchange, one optional lightweight Guest Capsule, and typed external signals.
-Only Gate A repository code/docs, synthetic/local tests, content-safe read-only
-probes, and next-manifest preparation may now be implemented. Gate B may later
-authorize only its exact local/ephemeral schema/runtime/migration validation;
-any provider call also needs its named test grant. Production durable writes,
-public actions, and spend wait for the Production Deployment & Provisioning
-Grant.
+Gate A repository code/docs, synthetic/local tests, content-safe read-only
+probes, and next-manifest preparation are complete. Gate B remains a proposal
+until its exact Manifest hash is approved; even approval would authorize only
+the named local/ephemeral schema/runtime/migration validation because the First
+Provider-Call Test Grant is not requested. Production durable writes, public
+actions, and spend wait for the Production Deployment & Provisioning Grant.
 
 ## Progress rule
 

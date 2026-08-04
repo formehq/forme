@@ -1,30 +1,25 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-03
-- Active gate: **R4 — privacy-first/minimum-friction P human-boundary model,
-  product target, T1 public/private Room correction, and T2 Room control
-  contract owner-approved; NH1/NH2 and the exact Fresh Native Response Session
-  T3 contract Owner-approved; the recommended T4 public/admission/lifecycle
-  contract and full T5 async/deletion/retention/P0-cut contract Owner-approved;
-  Technical Control Packet v0.2 is now reconciled and independently audited at
-  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
-  the Owner approved those exact bytes on 2026-08-03; Gate A repository-only
-  implementation is ready**
+- Updated: 2026-08-04
+- Active gate: **R4 Gate A Technical Review is Green for Gate B review. The
+  repository-only implementation, 47-row evidence crosswalk, five synthetic
+  journeys, real-Twin body-free probe, and production browser check are
+  complete. The next Owner stop is the Gate B Manifest at
+  `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`;
+  it is proposed, not approved or executed, and requests no provider call.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
-- P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
-  regression suite plus the real bounded control and independent Career
-  validation pass; R4 product target and P/T1/T2/T3/T4/T5/NH1/NH2 are closed
-  as design; exact Packet approval is recorded, and R4 Gate A implementation
-  has not started**
+- P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
+  Gate A is technically implemented and verified but R4 is not yet Owner-
+  accepted or Done. Gate B and Gate C remain unexecuted.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: merge the approved Packet record, start a dedicated Gate A
-  branch, and implement only repository code/docs, synthetic fixtures,
-  local/ephemeral tests, read-only probes that expose no real Guest/source
-  content, and the next exact Gate B Manifest.
-  Stop before any provider call, real Guest data, schema migration, email,
-  hosted mutation, deployment, production traffic, secret, or spend
+- Next action: review and decide the exact Gate B Manifest through
+  [`R4-GATE-B-OWNER-REVIEW.md`](./R4-GATE-B-OWNER-REVIEW.md). Until that exact
+  hash is approved, do not construct or execute Gate B. Stop before every
+  provider call, real Guest data, external email, production migration,
+  hosted mutation, deployment, public traffic, production secret, merge, or
+  spend.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -47,7 +42,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · PACKET APPROVED · GATE A READY
+R4 Controlled Presence    ← GATE A TECHNICAL REVIEW ✓ · GATE B APPROVAL NEXT
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -789,8 +784,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   and explicitly Owner-selected trusted 7d/10; Technical Control Packet v0.2
   is reconciled and independently audited at exact SHA-256
   `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`,
-  was Owner-approved on 2026-08-03, and remains unimplemented; Gate A is
-  ready**
+  was Owner-approved on 2026-08-03; Gate A is now implemented and Green for
+  Gate B review. R4 remains outside Owner Acceptance/Done; the exact Gate B
+  Manifest is pending Owner approval and remains unexecuted**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.

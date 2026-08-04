@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "r4.gate-b.codex-zero-call-contract.v1",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "authority": {
+    "document": "R4 Technical Control Packet v0.2",
+    "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "authorizedThreadStarts": 0,
+    "authorizedTurnStarts": 0,
+    "authorizedProviderSessions": 0,
+    "authorizedProviderBytes": 0,
+    "authorizedSpendUsd": 0,
+    "authorizedModelId": null
+  },
+  "distribution": {
+    "npmPackage": "@openai/codex",
+    "npmVersion": "0.145.0",
+    "reportedCliVersion": "codex-cli 0.145.0",
+    "javascriptLauncherSha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "darwinArm64BinarySha256": "1da3f4e0e96028b8a771814293c3033dafd1971f943f6c7e79b0897fe705f590",
+    "darwinArm64CodeModeHostSha256": "c75e27ea296ede4025959e4f66772c283261f28d95b1f27be4d8ef07aabe9bce",
+    "stagedNativeBinary": "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+    "stagedBinaryModeOctal": "0500",
+    "sourceAndStagedHashesMustMatch": true,
+    "differentVersionOrHash": "RED_STOP_NEW_MANIFEST_REQUIRED"
+  },
+  "officialGeneratedStableSchema": {
+    "experimentalIncluded": false,
+    "fileCount": 273,
+    "aggregateSha256": "313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62",
+    "aggregateCommand": "(cd ${SCHEMA_ROOT} && find . -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256) | shasum -a 256",
+    "selectedFileHashes": {
+      "codex_app_server_protocol.schemas.json": "b6ec47c51bef8a6857dd9435f9919a43ba6616a5a9e3ab25087451cbc93d9f06",
+      "codex_app_server_protocol.v2.schemas.json": "bf840d4cb1f74ed64badfaba37bd44999f1ccf6c721f03c2d196ad7f0991dab0",
+      "ClientRequest.json": "cc9f6e191a032bdfdc96d768f4ddaba4ced75408017af3ac0dbcc4d00c1faaa8",
+      "ClientNotification.json": "a30b3041578845b11add3d07d5a63cd3a12d5d126e87b8c591862b4aeb68d97c",
+      "ServerRequest.json": "177f8b7de9dd8ce2055c56a5fd22dbc6ec24e2a4d706d08fef9f5ad4effe71f6",
+      "ServerNotification.json": "7f9f9ac791c067e3e9840a9a6543a3a0d3de86e64b2d764ede4c2f3b01bcba64"
+    },
+    "methodFixture": "fixtures/r4-gate-b/codex-app-server-0.145.0-methods.json",
+    "schemaHashFixture": "fixtures/r4-gate-b/codex-app-server-0.145.0-schema.sha256",
+    "schemaOrMethodDrift": "RED_STOP_NEW_MANIFEST_REQUIRED"
+  },
+  "roots": {
+    "runRoot": "${RUN_ROOT}",
+    "schemaRoot": "${RUN_ROOT}/build/codex-app-server-schema",
+    "neutralCwd": "${RUN_ROOT}/tmp/codex-neutral-cwd",
+    "home": "${RUN_ROOT}/auth/home",
+    "codexHome": "${RUN_ROOT}/auth/codex-home",
+    "tmpdir": "${RUN_ROOT}/tmp/codex",
+    "evidence": "${RUN_ROOT}/staging-evidence/codex-zero-call.json"
+  },
+  "environment": {
+    "construction": "env -i",
+    "allowedVariables": {
+      "HOME": "${RUN_ROOT}/auth/home",
+      "CODEX_HOME": "${RUN_ROOT}/auth/codex-home",
+      "TMPDIR": "${RUN_ROOT}/tmp/codex",
+      "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+      "NO_COLOR": "1",
+      "CODEX_DISABLE_ANALYTICS": "1"
+    },
+    "inheritedVariablesAllowed": [],
+    "realCodexHomeMounted": false,
+    "realOpenAiAuthMounted": false,
+    "gitRepositoryCwdAllowed": false,
+    "network": "OS_OUTER_DENY",
+    "dns": "DENY",
+    "remoteListener": "DENY"
+  },
+  "allowedCliInvocations": [
+    [
+      "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+      "--version"
+    ],
+    [
+      "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+      "app-server",
+      "--help"
+    ],
+    [
+      "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+      "app-server",
+      "generate-json-schema",
+      "--out",
+      "${RUN_ROOT}/build/codex-app-server-schema"
+    ],
+    [
+      "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+      "app-server",
+      "--listen",
+      "stdio://"
+    ]
+  ],
+  "allOtherCliInvocations": "DENY_BEFORE_SPAWN",
+  "clientWire": {
+    "transport": "JSONL_OVER_STDIO_ONLY",
+    "maximumLineBytes": 1048576,
+    "allowedRequests": [
+      "initialize"
+    ],
+    "allowedNotifications": [
+      "initialized"
+    ],
+    "initializeMessage": {
+      "method": "initialize",
+      "id": 0,
+      "params": {
+        "clientInfo": {
+          "name": "forme_gate_b_probe",
+          "title": "Forme Gate B Probe",
+          "version": "0.1.0"
+        }
+      }
+    },
+    "initializedMessage": {
+      "method": "initialized",
+      "params": {}
+    },
+    "experimentalApiCapabilityPresent": false,
+    "deniedRequestSet": "ALL_METHODS_IN_PINNED_ClientRequest.json_EXCEPT_initialize",
+    "deniedNotificationSet": "ALL_METHODS_IN_PINNED_ClientNotification.json_EXCEPT_initialized",
+    "guardTiming": "DENY_BEFORE_WRITE_TO_CODEX_STDIN",
+    "explicitDeniedFamilies": [
+      "thread/* including thread/start thread/resume thread/fork thread/read thread/list thread/shellCommand and thread/inject_items",
+      "turn/* including turn/start turn/steer and turn/interrupt",
+      "review/*",
+      "command/*",
+      "process/*",
+      "fs/*",
+      "model/* and modelProvider/*",
+      "account/* and authentication methods",
+      "config/* configRequirements/* and externalAgentConfig/*",
+      "mcpServer/* and mcpServerStatus/*",
+      "plugin/* marketplace/* app/* and skills/*",
+      "hooks/*",
+      "browser web image and connector surfaces",
+      "feedback/*",
+      "windowsSandbox/*",
+      "tool/requestUserInput",
+      "attestation responses"
+    ]
+  },
+  "serverWire": {
+    "requiredInitializeResponseId": 0,
+    "initializeResultMustValidatePinnedSchema": true,
+    "serverRequestsAllowed": [],
+    "serverNotificationsAllowed": [
+      {
+        "method": "remoteControl/status/changed",
+        "condition": "status is exactly disabled",
+        "rawPersistenceAllowed": false,
+        "stripFields": [
+          "machineName",
+          "installationId"
+        ],
+        "bodyFreeEvidenceFields": [
+          "method",
+          "status",
+          "sanitizedPayloadHash"
+        ]
+      }
+    ],
+    "allOtherServerRequestsOrNotifications": "RED_STOP",
+    "promptTranscriptOrPathOnWireAllowed": false
+  },
+  "allowedWrites": {
+    "schemaGenerationRoot": [
+      "the exact 273 generated schema files"
+    ],
+    "isolatedCodexHomeExactTopLevelNames": [
+      ".tmp",
+      "goals_1.sqlite",
+      "installation_id",
+      "logs_2.sqlite",
+      "memories_1.sqlite",
+      "skills",
+      "state_5.sqlite",
+      "state_5.sqlite-shm",
+      "state_5.sqlite-wal",
+      "tmp"
+    ],
+    "isolatedTmpdir": [
+      "implementation-owned temporary files that are absent after cleanup"
+    ],
+    "outsideDeclaredRoots": "RED_STOP",
+    "sessionOrRolloutFile": "RED_STOP",
+    "promptBodyOrCredential": "RED_STOP"
+  },
+  "probeSequence": [
+    "Create fresh pairwise-disjoint 0700 roots and record body-free preflight hashes.",
+    "Copy the already-installed official 0.145.0 native binary into the staged path and require the pinned source and staged SHA-256.",
+    "Run only --version and require the exact reported version.",
+    "Run only app-server --help and reject any invocation drift; help text is hashed but not copied to final evidence.",
+    "Generate stable non-experimental JSON Schema into the empty schema root and require all pinned counts and hashes.",
+    "Build the exact allowed and denied method sets from the pinned generated schemas before spawning app-server.",
+    "Spawn app-server stdio from the neutral non-Git cwd with the exact empty environment and outer network denial.",
+    "Send initialize id 0, validate the exact response, then send initialized.",
+    "Do not start or inspect any thread, turn, model, account, config, tool, MCP, plugin, skill, hook, browser, file, command, or process surface.",
+    "Close stdin immediately after the handshake result and allowed disabled remote-control notification have been reconciled.",
+    "Require clean exit and exact write-set cleanup, then persist only sanitized body-free evidence."
+  ],
+  "exitContract": {
+    "stdinClosedAfterHandshake": true,
+    "maximumExitLatencyMilliseconds": 2000,
+    "requiredExitCode": 0,
+    "requiredStderrBytes": 0,
+    "openChildProcessAllowed": false,
+    "openSocketOrListenerAllowed": false,
+    "filesRemainingOutsideFinalBodyFreeEvidence": false,
+    "timeoutNonzeroExitExtraMethodOrExtraWrite": "FAIL_CLOSED"
+  },
+  "classification": {
+    "cleanZeroCallProbe": "YELLOW_MANUAL_OWNER_ONLY_AVAILABLE",
+    "reasonCleanProbeCannotBeGreen": "initialize-only cannot prove the future model-visible tool inventory or place a future provider call behind ResponseTransportGateV1",
+    "unsupportedOrAmbiguousOfficialSurface": "YELLOW_MANUAL_OWNER_ONLY_AVAILABLE",
+    "hashDriftUnexpectedNetworkUnexpectedEffectOrSensitiveLeak": "RED_STOP",
+    "guestBytesMayEnterCodexAfterThisProbe": false,
+    "firstProviderCallGrantStillRequiredLater": true
+  },
+  "preparationObservationsNotPostExecutionProof": {
+    "initializeOnlyObservedExitCode": 0,
+    "initializeOnlyObservedProviderBytes": 0,
+    "initializeOnlyObservedCodexHomeWritesAreListedAsAllowedWrites": true,
+    "theseObservationsMustBeReproducedAtExecution": true
+  }
+}

@@ -1,0 +1,467 @@
+{
+  "schemaVersion": "r4.gate-b.runtime-boundary.v1",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "authority": {
+    "document": "R4 Technical Control Packet v0.2",
+    "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "authorizedProviderSessions": 0,
+    "authorizedProviderBytes": 0,
+    "authorizedSpendUsd": 0,
+    "authorizedModelId": null,
+    "authorizedRealGuestOrSourceBody": false
+  },
+  "implementationBinding": {
+    "apiPrefix": "/api/v1",
+    "operationCount": 45,
+    "mutationCount": 39,
+    "readCount": 6,
+    "expectedVersionRequiredCount": 31,
+    "canonicalProtocolObjectCount": 39,
+    "operationMap": "schemas/r4/gate-b/operations.md",
+    "localFormatMap": "schemas/r4/gate-b/local-formats.md",
+    "protocolSchema": "schemas/r4/protocol.schema.json",
+    "operationInventory": "apps/room/src/operation-inventory.ts"
+  },
+  "runIdentity": {
+    "runIdPattern": "^gb_[a-f0-9]{32}$",
+    "cycleIdPattern": "^[A-Za-z0-9_-]{16,128}$",
+    "runParentFormula": "realpath(TMPDIR)/forme-r4-gate-b",
+    "runRootFormula": "realpath(TMPDIR)/forme-r4-gate-b/${RUN_ID}",
+    "existingRunRootAllowed": false,
+    "symlinkComponentAllowed": false,
+    "hardLinkedRegularFileAllowed": false,
+    "directoryModeOctal": "0700",
+    "regularFileModeOctal": "0600",
+    "installedExecutableModeOctal": "0500"
+  },
+  "roots": {
+    "build": "${RUN_ROOT}/build",
+    "installedApp": "${RUN_ROOT}/install/FormeLocal.app",
+    "workspace": "${RUN_ROOT}/workspace",
+    "connectorProtection": "${RUN_ROOT}/connector-protection",
+    "candidateProtection": "${RUN_ROOT}/candidate-protection",
+    "runtime": "${RUN_ROOT}/runtime",
+    "isolatedHome": "${RUN_ROOT}/auth/home",
+    "isolatedCodexHome": "${RUN_ROOT}/auth/codex-home",
+    "temporary": "${RUN_ROOT}/tmp",
+    "keychains": "${RUN_ROOT}/keychains",
+    "signing": "${RUN_ROOT}/signing",
+    "stagingEvidence": "${RUN_ROOT}/staging-evidence",
+    "fakeTransport": "${RUN_ROOT}/fake-transport",
+    "finalEvidence": ".forme/gate-b-evidence/${RUN_ID}"
+  },
+  "rootRules": {
+    "pairwiseRealpathDisjoint": true,
+    "workspaceMayContainOnlyBodyFreeRoomLedger": true,
+    "freshBodyBytesOnFilesystemAllowed": false,
+    "credentialOrSecretInEvidenceAllowed": false,
+    "absoluteSourcePathInEvidenceAllowed": false,
+    "readOnlyInspectionMayWrite": false,
+    "fallbackToHomeOrLoginKeychainAllowed": false
+  },
+  "externalEffects": {
+    "networkDefault": "DENY",
+    "allowedNetworkException": {
+      "lane": "postgres",
+      "caller": "local Docker engine",
+      "purpose": "download the exact public PostgreSQL image if absent",
+      "image": "postgres:16.10-bookworm",
+      "ociIndexDigest": "sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "linuxArm64ManifestDigest": "sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf",
+      "hostPortPublicationAllowed": false
+    },
+    "forbidden": [
+      "provider request",
+      "Codex thread/start",
+      "Codex turn/start",
+      "model selection or discovery",
+      "real Guest or email address",
+      "external email or message",
+      "hosted or production mutation",
+      "production database migration",
+      "deployment or public traffic",
+      "production credential or secret",
+      "merge",
+      "spend"
+    ]
+  },
+  "postgresResources": {
+    "contract": "schemas/r4/gate-b/postgres-contract.md",
+    "temporaryRoot": "/private/tmp/forme-r4-gb-e417836bd67b",
+    "dockerNetworkMode": "none",
+    "dockerNetworkName": null,
+    "dockerContainerName": "forme-r4-gb-e417836bd67b-pg",
+    "dockerVolumeName": "forme-r4-gb-e417836bd67b-pgdata",
+    "databaseName": "forme_r4_gate_b",
+    "hostPorts": [],
+    "requiredInContainerVersion": "postgres (PostgreSQL) 16.10",
+    "schema": "forme_r4",
+    "roles": [
+      "forme_r4_migrate",
+      "forme_r4_app",
+      "forme_r4_janitor",
+      "forme_r4_notify",
+      "forme_r4_audit"
+    ],
+    "productionMigrationAuthorized": false,
+    "cleanupRequiresNoContainerVolumeOrTemporaryRoot": true
+  },
+  "fakeTransportBudget": {
+    "fixtureModelId": "forme-gate-b-no-provider-model.v1",
+    "fixtureModelMayBePassedToCodexOrAProvider": false,
+    "wallClockSeconds": 3600,
+    "providerDispatches": 3,
+    "aggregateInputTokens": 128000,
+    "aggregateOutputTokens": 8000,
+    "incrementalMaximumUsd": 1,
+    "permitTtlSeconds": 30,
+    "automaticRetry": false,
+    "providerFallback": false,
+    "modelFallback": false,
+    "unknownUsageOrSpend": "ABORT_WITHOUT_CANDIDATE",
+    "providerBytesAfterPass": 0,
+    "actualSpendAfterPassUsd": 0,
+    "tokenAndSpendValuesAreFixtureOracles": true,
+    "realTokenizerPricingOrModelIdentityClaimed": false
+  },
+  "fakeTransportReplay": {
+    "implementation": "in-process fake upstream with an authority-owned call counter; sockets and DNS are denied",
+    "syntheticEventFixtureOnly": true,
+    "actualCodexThreadStarts": 0,
+    "actualCodexTurnStarts": 0,
+    "journalPath": "${RUN_ROOT}/fake-transport/${CYCLE_ID}.journal.json",
+    "journalBeforeCall": true,
+    "candidateSource": "only a fully synthetic completed-event fixture carrying fixture-only thread and turn identifiers selected by the event fence; no Codex thread or turn exists or starts",
+    "requiredCases": [
+      {
+        "name": "dispatch-boundary",
+        "allowed": "three sequential ordinals 1,2,3",
+        "denied": "ordinal 4 or any gap duplicate or reorder",
+        "expectedFakeCallsAfterDeniedCase": 3
+      },
+      {
+        "name": "aggregate-input-boundary",
+        "allowed": 128000,
+        "denied": 128001
+      },
+      {
+        "name": "aggregate-output-reservation-boundary",
+        "allowed": 8000,
+        "denied": 8001
+      },
+      {
+        "name": "incremental-spend-reservation-boundary",
+        "allowedUsd": 1,
+        "deniedUsd": 1.000001
+      },
+      {
+        "name": "wall-clock-boundary",
+        "allowedElapsedMilliseconds": 3599999,
+        "deniedElapsedMilliseconds": 3600000
+      },
+      {
+        "name": "permit-ttl-boundary",
+        "allowedAgeMilliseconds": 29999,
+        "deniedAgeMilliseconds": 30000
+      },
+      {
+        "name": "unknown-accounting",
+        "deniedInputs": [
+          "usageKnown=false",
+          "spendKnown=false",
+          "NaN negative or non-safe-integer token values",
+          "NaN infinite or negative spend"
+        ],
+        "expectedFakeCalls": 0
+      },
+      {
+        "name": "exact-binding",
+        "mustBind": [
+          "interactionId",
+          "reservationId",
+          "sessionEnvelopeId",
+          "sessionEnvelopeHash",
+          "startAuthorizationHash",
+          "provider",
+          "modelId",
+          "payloadHash",
+          "dispatchOrdinal",
+          "idempotencyKey"
+        ],
+        "eachSingleFieldMismatch": "DENY_BEFORE_CALL"
+      },
+      {
+        "name": "no-retry-or-fallback",
+        "denied": [
+          "automaticRetryAttempt=true",
+          "fallbackRequested=true",
+          "provider switch",
+          "model switch",
+          "endpoint switch",
+          "priorTerminalFailure=true"
+        ],
+        "expectedAdditionalFakeCalls": 0
+      },
+      {
+        "name": "destructive-first",
+        "sequence": "terminal authority is committed before fake upstream handoff",
+        "expectedFakeCalls": 0
+      },
+      {
+        "name": "permit-first-disclosed-in-flight",
+        "sequence": "permit and durable journal commit before the one fake handoff",
+        "expectedFakeCalls": 1,
+        "laterAutomaticRetryAllowed": false
+      },
+      {
+        "name": "idempotent-replay",
+        "sameKeySameCanonicalBytes": "returns the same reservation without another fake call",
+        "sameKeyDifferentCanonicalBytes": "conflict before fake call"
+      },
+      {
+        "name": "unknown-outcome-burns-cycle",
+        "expectedCandidate": false,
+        "expectedRetryOrReplacementDispatch": false
+      },
+      {
+        "name": "event-fence",
+        "allowed": "synthetic candidate extraction from the exact completed fixture turn after clean fixture exit schema validation complete accounting and fully consumed fake journal",
+        "denied": "other fixture thread or turn partial output tool event late event duplicate terminal unknown usage schema drift or nonzero fixture exit"
+      },
+      {
+        "name": "broker-line-read",
+        "allowedMaxLines": 200,
+        "allowedMaxResultBytes": 32768,
+        "deniedLines": 201,
+        "deniedResultBytes": 32769
+      },
+      {
+        "name": "broker-literal-search",
+        "allowedMaxPatternBytes": 256,
+        "allowedMaxMatches": 100,
+        "allowedMaxResultBytes": 65536,
+        "allowedElapsedMillisecondsMaximumExclusive": 500,
+        "deniedPatternBytes": 257,
+        "timeoutAtElapsedMilliseconds": 500
+      },
+      {
+        "name": "broker-aggregate",
+        "allowedMaxQueryAttempts": 256,
+        "allowedMaxResultBytes": 131072,
+        "deniedQueryAttempt": 257,
+        "deniedResultBytes": 131073,
+        "rejectedAndTimeoutAttemptsConsumeQueryBudget": true
+      },
+      {
+        "name": "broker-regex",
+        "re2EnginePresentInThisManifest": false,
+        "javascriptRegExpFallbackAllowed": false,
+        "expected": "all re2 requests denied"
+      }
+    ],
+    "passStillMeansProviderBytes": 0,
+    "passStillMeansActualSpendUsd": 0
+  },
+  "freshSupervisorCeilings": {
+    "wallMilliseconds": 3600000,
+    "cpuMilliseconds": 1800000,
+    "residentBytes": 2147483648,
+    "processCount": 32,
+    "fileDescriptors": 128,
+    "combinedEventAndStderrBytes": 33554432,
+    "unknownOrUnenforceableCeilingResult": "YELLOW_MANUAL_OWNER_ONLY"
+  },
+  "commands": {
+    "aggregate": "npm run r4:gate-b -- --packet-sha sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "preflight": "npm run r4:gate-b:preflight",
+    "contracts": "npm run r4:gate-b:contracts",
+    "postgres": "npm run r4:gate-b:postgres",
+    "encryptedField": "npm run r4:gate-b:encrypted-field",
+    "fakeBudget": "npm run r4:gate-b:fake-budget",
+    "codexProbe": "npm run r4:gate-b:codex-probe",
+    "macosProbe": "npm run r4:gate-b:macos-probe",
+    "cleanup": "npm run r4:gate-b:cleanup"
+  },
+  "repositoryWorkset": {
+    "frozenInputs": [
+      "schemas/r4/gate-b/README.md",
+      "schemas/r4/gate-b/artifact-index.json",
+      "schemas/r4/gate-b/operations.md",
+      "schemas/r4/gate-b/local-formats.md",
+      "schemas/r4/gate-b/runtime-boundary.json",
+      "schemas/r4/gate-b/codex-zero-call-contract.json",
+      "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+      "schemas/r4/gate-b/macos/build-recipe.json",
+      "schemas/r4/gate-b/postgres-contract.md"
+    ],
+    "generatedSchemas": [
+      "schemas/r4/api-v1.schema.json",
+      "schemas/r4/api-v1-index.json",
+      "schemas/r4/local-formats.schema.json",
+      "schemas/r4/local-formats-index.json",
+      "schemas/r4/gate-b-evidence.schema.json"
+    ],
+    "sql": [
+      "schemas/r4/sql/0000_r4_gate_b_bootstrap.sql",
+      "schemas/r4/sql/0001_r4_presence.sql",
+      "schemas/r4/sql/0001_r4_presence.verify.sql",
+      "schemas/r4/sql/0001_r4_presence.rollback.sql"
+    ],
+    "persistence": [
+      "packages/r4-persistence/src/encrypted-field.ts",
+      "packages/r4-persistence/src/index.ts"
+    ],
+    "codexAdapter": [
+      "packages/r4-codex-adapter/src/app-server-probe.ts",
+      "packages/r4-codex-adapter/src/event-fence.ts",
+      "packages/r4-codex-adapter/src/fake-transport.ts",
+      "packages/r4-codex-adapter/src/index.ts",
+      "fixtures/r4-gate-b/codex-app-server-0.145.0-schema.sha256",
+      "fixtures/r4-gate-b/codex-app-server-0.145.0-methods.json"
+    ],
+    "macos": [
+      "native/macos/Package.swift",
+      "native/macos/Sources/FormeLocal/Launcher.swift",
+      "native/macos/Sources/FormeLocal/CodexAdapter.swift",
+      "native/macos/Sources/FormeLocal/KeychainProtector.swift",
+      "native/macos/Sources/FormeLocal/ReviewWindow.swift",
+      "native/macos/Sources/FormeLocal/SandboxProfile.swift",
+      "native/macos/Sources/FormeLocal/GateBProbe.swift",
+      "native/macos/Sources/FormeLocal/ResourceLimits.swift",
+      "native/macos/Sources/FormeLocal/MemoryPipe.swift",
+      "native/macos/Resources/Info.plist",
+      "native/macos/Resources/FormeLocal.entitlements",
+      "native/macos/Tests/FormeLocalTests/BoundaryTests.swift"
+    ],
+    "runnerScripts": [
+      "scripts/r4-gate-b-runner.mjs",
+      "scripts/r4-gate-b-preflight.mjs",
+      "scripts/r4-gate-b-api-contract.mjs",
+      "scripts/r4-gate-b-postgres.mjs",
+      "scripts/r4-gate-b-encrypted-field.mjs",
+      "scripts/r4-gate-b-fake-budget.mjs",
+      "scripts/r4-gate-b-codex-probe.mjs",
+      "scripts/r4-gate-b-macos-probe.sh",
+      "scripts/r4-gate-b-cleanup.mjs"
+    ],
+    "tests": [
+      "test/r4-gate-b/api-contract.test.ts",
+      "test/r4-gate-b/local-formats.test.ts",
+      "test/r4-gate-b/postgres-schema.test.ts",
+      "test/r4-gate-b/encrypted-field.test.ts",
+      "test/r4-gate-b/fake-transport-budget.test.ts",
+      "test/r4-gate-b/event-fence.test.ts",
+      "test/r4-gate-b/codex-adapter.test.ts",
+      "test/r4-gate-b/macos-boundary.test.ts"
+    ],
+    "reportArtifacts": [
+      "docs/evidence/r4-gate-b-execution.json",
+      "docs/R4-GATE-B-EXECUTION-REPORT.md"
+    ],
+    "modifiableExistingFiles": [
+      "package.json",
+      "tsconfig.json",
+      "scripts/r4-doc-audit.mjs"
+    ],
+    "immutableApprovalFiles": [
+      "docs/R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md",
+      "docs/R4-GATE-B-OWNER-REVIEW.md"
+    ],
+    "packageLockMustRemainSha256": "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812",
+    "newDependencyAllowed": false,
+    "unlistedRepositoryFileCreation": "RED_STOP_NEW_MANIFEST_REQUIRED"
+  },
+  "aggregateLaneOrder": [
+    "preflight",
+    "gate-a-regression-and-protocol",
+    "api-and-local-format-contracts",
+    "postgres-migration-roles-races",
+    "encrypted-field-adapter",
+    "fake-budget-and-event-fence",
+    "codex-zero-call",
+    "macos-physical-boundary",
+    "cleanup-and-artifact-index"
+  ],
+  "runnerInputRules": {
+    "requiredPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "providerArgumentAccepted": false,
+    "modelArgumentAccepted": false,
+    "credentialArgumentAccepted": false,
+    "realDataArgumentAccepted": false,
+    "dirtyOrUnboundSourceTree": "FAIL_CLOSED",
+    "artifactHashDrift": "FAIL_CLOSED"
+  },
+  "evidenceFiles": [
+    "preflight.json",
+    "contracts.json",
+    "postgres.json",
+    "encrypted-field.json",
+    "fake-budget.json",
+    "codex-zero-call.json",
+    "macos-boundary.json",
+    "cleanup.json",
+    "run-summary.json",
+    "artifact-index.json"
+  ],
+  "evidenceAllowedClasses": [
+    "tool and build hashes",
+    "schema and object counts",
+    "boolean denials",
+    "test counts",
+    "status and controlled error codes",
+    "timing and aggregate resource observations",
+    "SQL object constraint index function and role names",
+    "container digest",
+    "body-free cleanup receipts"
+  ],
+  "evidenceForbiddenClasses": [
+    "request or response body",
+    "source text or source path",
+    "environment value",
+    "secret capability token or address",
+    "prompt transcript or orientation text",
+    "tool argument or raw output",
+    "machine name or installation id",
+    "Codex authentication material",
+    "provider event or payload"
+  ],
+  "classification": {
+    "redStopsRemainingLanes": true,
+    "yellowMayContinueIndependentLocalLanes": true,
+    "anyYellowForCodexOrMacosDisablesAiLane": true,
+    "manualOwnerOnlyFallback": true,
+    "greenRequiresPostExecutionEvidence": true
+  },
+  "preparationFacts": {
+    "hostMacos": "26.5.2",
+    "hostBuild": "25F84",
+    "hostArchitecture": "arm64",
+    "darwin": "25.5.0",
+    "xcode": "26.6 (17F113)",
+    "swift": "6.3.3 arm64-apple-macosx26.0",
+    "dockerClientObserved": "29.3.1",
+    "dockerServerObserved": "29.3.1",
+    "platformFactsAreRecheckedAtExecution": true
+  },
+  "postExecutionClaims": {
+    "gateBExecuted": false,
+    "postgresPassed": false,
+    "encryptedFieldPassed": false,
+    "fakeBudgetPassed": false,
+    "codexZeroCallPassed": false,
+    "macosBoundaryPassed": false,
+    "cleanupPassed": false,
+    "providerWasCalled": false,
+    "productionReady": false
+  },
+  "knownUnpinnableOrHostSpecificFacts": [
+    "Docker registry routing and CDN endpoints are not stable authority; only the image digests are pinned.",
+    "sandbox-exec and Seatbelt profile behavior are undocumented host-specific evidence and are not a production portability claim.",
+    "A temporary self-signed signing identity has no precomputable fingerprint; its runtime fingerprint and designated requirement must be recorded and verified inside one run.",
+    "Secure Enclave key storage with a custom temporary file Keychain may be unsupported; no login or Data Protection Keychain fallback is authorized.",
+    "macOS window capture exclusion can prove that an exclusion property was requested, not universal prevention against privileged capture or physical observation.",
+    "A supervisor can observe and terminate for RSS and process ceilings but may not prove a race-free hard kernel ceiling; ambiguity is Yellow and keeps manual-owner-only mode.",
+    "Codex initialize-only behavior cannot prove a future model-visible tool set or provider transport interception; even a clean zero-call probe remains Yellow for Native Harness AI use."
+  ]
+}

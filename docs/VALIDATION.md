@@ -1,7 +1,7 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-03
+- Updated: 2026-08-04
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -10,8 +10,9 @@
   Owner-selected trusted 7d/10. Technical Control Packet v0.2 reconciliation,
   independent audit, and hashing are complete at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
-  the Owner approved those exact bytes on 2026-08-03; Gate A repository-only
-  implementation is authorized but all R4 behavior remains unimplemented**
+  the Owner approved those exact bytes on 2026-08-03. Gate A repository-only
+  implementation is now technically verified with synthetic/local evidence;
+  R4 is not Owner-accepted or Done, and Gate B remains proposed/unexecuted**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -914,6 +915,38 @@ The next Owner stop gate is the hash-pinned Gate B Schema, Runtime, and
 Migration Manifest. A model call remains forbidden unless that separately
 approved Manifest contains and the Owner names the exact First Provider-Call
 Test Grant. Real Guest/hosted/production work remains Gate C.
+
+## Evidence round 19 — Gate A Technical Review complete; Gate B proposed
+
+Gate A now has repository evidence rather than authorization alone. The exact
+47-row crosswalk in [`R4-GATE-A-VERIFICATION.md`](./R4-GATE-A-VERIFICATION.md)
+is `GREEN_FOR_GATE_B_REVIEW`: R1–R3 regression is 45/45, the offline R4 suite
+is 293/293, typecheck/static/no-AI/build checks pass, and two deterministic
+five-journey walkthrough runs are byte-identical at aggregate
+`sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56`.
+The read-only probe used the real Forme Twin basis with zero source-body bytes.
+The production browser path verified that a deleted/terminal Interaction is
+controlled `404 not_found`, not a readable tombstone and never `503`.
+
+This is technical evidence for the repository/synthetic R4 slice. It is not a
+real Guest encounter, a provider/Codex response, a PostgreSQL migration, a
+deployed Room, or Owner experience acceptance. R4 therefore remains outside
+Done.
+
+The exact next proposal is Gate B Manifest v0.1 at
+`sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`.
+It binds 154 source/proposal files, 39 protocol objects, 45 operations, and an
+eight-file static Gate B artifact set. An independent static audit found and
+then verified corrections for four initial inconsistencies: the repository
+file workset, the staged Codex/Seatbelt path, synthetic thread/turn wording,
+and the canonical `NOT_REQUESTED` token.
+
+Gate B remains `PROPOSED_NOT_EXECUTED`. Its best allowed Codex result is still
+Yellow/manual-owner-only because an initialize-only zero-call probe cannot
+prove the future model-visible tool or provider-transport boundary. First
+Provider-Call Test Grant is not requested; provider sessions, bytes, and spend
+remain 0 / 0 / US$0. Real Guest/email/hosted/production/deployment/public work
+remains Gate C.
 
 ## Follow-up product-learning questions — not R4 blockers
 

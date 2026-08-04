@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
+import { dirname, join, relative, resolve } from "node:path";
 import { OPERATION_INVENTORY } from "../apps/room/src/operation-inventory.ts";
 import {
   GOLDEN_FIXTURE_BUNDLE_SHA256,
@@ -19,6 +19,18 @@ const files = {
   ownerReview: "docs/R4-GATE-B-OWNER-REVIEW.md",
 };
 const expectedPacket = "e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5";
+const expectedPacketValue = `sha256:${expectedPacket}`;
+const gateBArtifactIndexPath = "schemas/r4/gate-b/artifact-index.json";
+const expectedGateBArtifactPaths = [
+  "schemas/r4/gate-b/README.md",
+  "schemas/r4/gate-b/codex-zero-call-contract.json",
+  "schemas/r4/gate-b/local-formats.md",
+  "schemas/r4/gate-b/macos/build-recipe.json",
+  "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+  "schemas/r4/gate-b/operations.md",
+  "schemas/r4/gate-b/postgres-contract.md",
+  "schemas/r4/gate-b/runtime-boundary.json",
+];
 
 function text(path) {
   return readFileSync(join(root, path), "utf8");
@@ -28,9 +40,128 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function filesBelow(relativeRoot) {
+  const absoluteRoot = join(root, relativeRoot);
+  function collect(path) {
+    const metadata = lstatSync(path);
+    if (metadata.isSymbolicLink()) throw new Error(`Gate B artifact is a symbolic link:${relative(root, path)}`);
+    if (metadata.isFile()) return [relative(root, path)];
+    if (!metadata.isDirectory()) throw new Error(`Gate B artifact is not a regular file:${relative(root, path)}`);
+    return readdirSync(path, { withFileTypes: true }).flatMap((entry) => collect(join(path, entry.name)));
+  }
+  return collect(absoluteRoot).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+}
+
 const documents = Object.fromEntries(Object.entries(files).map(([name, path]) => [name, text(path)]));
 const packetHash = sha256(documents.packet);
 if (packetHash !== expectedPacket) throw new Error(`approved Packet hash drifted:${packetHash}`);
+
+const gateBArtifactIndex = JSON.parse(text(gateBArtifactIndexPath));
+if (gateBArtifactIndex.schemaVersion !== "r4.gate-b.proposed-artifact-index.v1") {
+  throw new Error("Gate B artifact index schema version drifted");
+}
+if (gateBArtifactIndex.status !== "PROPOSED_NOT_EXECUTED") {
+  throw new Error("Gate B artifact index claims an executed state");
+}
+if (gateBArtifactIndex.approvedPacketSha256 !== expectedPacketValue) {
+  throw new Error("Gate B artifact index Packet binding drifted");
+}
+if (gateBArtifactIndex.firstProviderCallTestGrant !== "NOT_REQUESTED") {
+  throw new Error("Gate B artifact index opened the provider-call grant");
+}
+
+const actualGateBFiles = filesBelow("schemas/r4/gate-b");
+const expectedGateBFiles = [...expectedGateBArtifactPaths, gateBArtifactIndexPath].sort((left, right) =>
+  Buffer.compare(Buffer.from(left), Buffer.from(right)),
+);
+if (JSON.stringify(actualGateBFiles) !== JSON.stringify(expectedGateBFiles)) {
+  throw new Error(`Gate B proposed artifact set drifted:${actualGateBFiles.join(",")}`);
+}
+
+const indexedPaths = gateBArtifactIndex.files?.map((entry) => entry.path) ?? [];
+if (JSON.stringify(indexedPaths) !== JSON.stringify(expectedGateBArtifactPaths)) {
+  throw new Error(`Gate B artifact index path/order drifted:${indexedPaths.join(",")}`);
+}
+const gateBArtifactLines = gateBArtifactIndex.files.map((entry) => {
+  const actual = `sha256:${sha256(text(entry.path))}`;
+  if (entry.sha256 !== actual) throw new Error(`Gate B artifact hash drifted:${entry.path}:${actual}`);
+  return `${entry.sha256}  ${entry.path}\n`;
+});
+const gateBArtifactAggregate = `sha256:${sha256(gateBArtifactLines.join(""))}`;
+if (gateBArtifactIndex.fileCount !== expectedGateBArtifactPaths.length) {
+  throw new Error(`Gate B artifact count drifted:${gateBArtifactIndex.fileCount}`);
+}
+if (gateBArtifactIndex.aggregateSha256 !== gateBArtifactAggregate) {
+  throw new Error(`Gate B artifact aggregate drifted:${gateBArtifactAggregate}`);
+}
+
+const gateBJsonArtifacts = [
+  "schemas/r4/gate-b/runtime-boundary.json",
+  "schemas/r4/gate-b/codex-zero-call-contract.json",
+  "schemas/r4/gate-b/macos/build-recipe.json",
+].map((path) => [path, JSON.parse(text(path))]);
+for (const [path, artifact] of gateBJsonArtifacts) {
+  if (artifact.status !== "PROPOSED_NOT_EXECUTED") throw new Error(`Gate B JSON status drifted:${path}`);
+  if (artifact.authority?.approvedPacketSha256 !== expectedPacketValue) throw new Error(`Gate B JSON Packet drifted:${path}`);
+  if (artifact.authority?.firstProviderCallTestGrant !== "NOT_REQUESTED") {
+    throw new Error(`Gate B JSON provider-call grant drifted:${path}`);
+  }
+}
+for (const path of expectedGateBArtifactPaths.filter((path) => !path.endsWith(".json"))) {
+  const artifact = text(path);
+  if (!artifact.includes("PROPOSED_NOT_EXECUTED")) throw new Error(`Gate B text status missing:${path}`);
+  if (!artifact.includes(expectedPacketValue)) throw new Error(`Gate B text Packet missing:${path}`);
+  if (!artifact.includes("NOT_REQUESTED") && !artifact.includes("NOT REQUESTED")) {
+    throw new Error(`Gate B text provider-call grant missing:${path}`);
+  }
+  if (artifact.includes("@@") || artifact.includes("PENDING_FINAL")) throw new Error(`Gate B artifact placeholder:${path}`);
+}
+
+const operationRows = text("schemas/r4/gate-b/operations.md")
+  .split("\n")
+  .filter((line) => /^\|\s*\d+\s*\|/u.test(line))
+  .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
+if (operationRows.length !== OPERATION_INVENTORY.length) {
+  throw new Error(`Gate B operation row count drifted:${operationRows.length}`);
+}
+const authByActor = {
+  public: new Set(["PUBLIC", "PROJECTION", "PAIR_CODE"]),
+  guest_capability: new Set(["SUBMIT", "REPLY", "DELETE", "PARENT_CAP", "INVITE"]),
+  controller: new Set(["CONTROLLER"]),
+  curator: new Set(["CURATOR"]),
+  room_operator: new Set(["ROOM_OPERATOR"]),
+};
+for (const [index, definition] of OPERATION_INVENTORY.entries()) {
+  const row = operationRows[index];
+  const action = row[1]?.replaceAll("`", "");
+  const methodAndPath = /^`(GET|POST|PUT|DELETE) ([^`]+)`$/u.exec(row[2] ?? "");
+  const auth = /`([^`]+)`/u.exec(row[3] ?? "")?.[1];
+  if (
+    row[0] !== String(index + 1) ||
+    action !== definition.name ||
+    methodAndPath?.[1] !== definition.method ||
+    methodAndPath?.[2] !== definition.path ||
+    !authByActor[definition.actor]?.has(auth) ||
+    row[6] !== (definition.mutating ? "yes" : "no") ||
+    row[7] !== (definition.expectedVersion ? "required" : "not-required")
+  ) {
+    throw new Error(`Gate B operation map drifted at row ${index + 1}:${definition.name}`);
+  }
+}
+
+const runtimeBoundary = gateBJsonArtifacts[0][1];
+const postgresContract = text("schemas/r4/gate-b/postgres-contract.md");
+for (const value of [
+  runtimeBoundary.postgresResources.temporaryRoot,
+  runtimeBoundary.postgresResources.dockerContainerName,
+  runtimeBoundary.postgresResources.dockerVolumeName,
+  runtimeBoundary.postgresResources.databaseName,
+]) {
+  if (!postgresContract.includes(value)) throw new Error(`PostgreSQL resource contract drifted:${value}`);
+}
+if (runtimeBoundary.postgresResources.dockerNetworkMode !== "none" || !postgresContract.includes("--network none")) {
+  throw new Error("PostgreSQL network isolation contract drifted");
+}
 
 const expectedRows = [
   ...Array.from({ length: 7 }, (_, index) => `S${String(index + 1).padStart(2, "0")}`),
@@ -80,6 +211,7 @@ if (finalMode) {
   const registryOrderHash = canonicalSha256(PROTOCOL_SCHEMA_VERSIONS);
   verifyGoldenVectors();
   const manifestHash = `sha256:${sha256(documents.manifest)}`;
+  const gateBArtifactIndexHash = `sha256:${sha256(text(gateBArtifactIndexPath))}`;
   const familyCounts = Object.fromEntries(
     ["public_guest", "controller", "curator", "room_operator"].map((family) => [
       family,
@@ -88,7 +220,7 @@ if (finalMode) {
   );
   const mutationCount = OPERATION_INVENTORY.filter((operation) => operation.mutating).length;
   const expectedInventoryMarkdown = sourceInventory.entries
-    .map((entry) => `\`${entry.path}\`  \`sha256:${entry.sha256}\`  `)
+    .map((entry) => `\`${entry.path}\`  \`sha256:${entry.sha256}\``)
     .join("\n");
   const inventoryMatch = /<!-- FILE_INVENTORY_BEGIN -->\n([\s\S]*?)\n<!-- FILE_INVENTORY_END -->/u.exec(documents.manifest);
 
@@ -111,6 +243,8 @@ if (finalMode) {
     [documents.manifest.includes(`### Controller (${familyCounts.controller})`), "manifest:controller-count"],
     [documents.manifest.includes(`### Curator (${familyCounts.curator})`), "manifest:curator-count"],
     [documents.manifest.includes(`### \`room_operator.v1\` (${familyCounts.room_operator})`), "manifest:room-operator-count"],
+    [documents.manifest.includes(`Artifact index SHA-256 | \`${gateBArtifactIndexHash}\``), "manifest:gate-b-artifact-index-hash"],
+    [documents.manifest.includes(`Artifact aggregate | \`${gateBArtifactAggregate}\``), "manifest:gate-b-artifact-aggregate"],
     [documents.ownerReview.includes(manifestHash), "owner-review:manifest-hash"],
     [documents.ownerReview.includes(`${PROTOCOL_SCHEMA_VERSIONS.length} 个对象`), "owner-review:protocol-object-count"],
     [documents.ownerReview.includes(`${OPERATION_INVENTORY.length} 个固定动作`), "owner-review:operation-count"],

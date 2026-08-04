@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "r4.gate-b.proposed-artifact-index.v1",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+  "firstProviderCallTestGrant": "NOT_REQUESTED",
+  "fileCount": 8,
+  "files": [
+    {
+      "path": "schemas/r4/gate-b/README.md",
+      "sha256": "sha256:e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b"
+    },
+    {
+      "path": "schemas/r4/gate-b/codex-zero-call-contract.json",
+      "sha256": "sha256:45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845"
+    },
+    {
+      "path": "schemas/r4/gate-b/local-formats.md",
+      "sha256": "sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995"
+    },
+    {
+      "path": "schemas/r4/gate-b/macos/build-recipe.json",
+      "sha256": "sha256:93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de"
+    },
+    {
+      "path": "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+      "sha256": "sha256:5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab"
+    },
+    {
+      "path": "schemas/r4/gate-b/operations.md",
+      "sha256": "sha256:b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4"
+    },
+    {
+      "path": "schemas/r4/gate-b/postgres-contract.md",
+      "sha256": "sha256:73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc"
+    },
+    {
+      "path": "schemas/r4/gate-b/runtime-boundary.json",
+      "sha256": "sha256:ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450"
+    }
+  ],
+  "aggregateSha256": "sha256:f290ba035efa2eb84d899bf67d4ffb03c523d88556ce96b66f4f3a2862159310"
+}

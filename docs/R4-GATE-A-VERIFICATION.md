@@ -1,332 +1,207 @@
 # R4 Gate A verification and evidence register
 
-- Status: **working evidence register; Gate A is not yet claimed complete**
+- Status: **GREEN_FOR_GATE_B_REVIEW**
 - Authority: R4 Technical Control Packet v0.2
 - Approved Packet SHA-256:
-  `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
 - Implementation branch: `codex/r4-gate-a-build`
-- Gate A implementation commit: `@@GATE_A_COMMIT@@`
-- Gate A implementation tree: `@@GATE_A_TREE@@`
-- Evidence generated at: `@@EVIDENCE_GENERATED_AT_UTC@@`
-- Verification bundle SHA-256: `@@GATE_A_VERIFICATION_SHA256@@`
-- Full technical contract:
-  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
+- Gate A implementation commit:
+  `c23988e2c626a92d6d1a2dfacdce5ad089cdb4f7`
+- Gate A implementation tree:
+  `fe1071da80310956c11fa0930ec63e710ee1d6e0`
+- Evidence generated: `2026-08-04T10:29:12.000Z`
+- Structured evidence:
+  [`r4-gate-a-evidence.json`](./evidence/r4-gate-a-evidence.json)
+- Evidence SHA-256:
+  `sha256:b2e79265eb92c46c8bb2e6c8fb3f6d0fa334a3eef4c1044a95a5243a646cfe4f`
 - Next proposed gate:
-  [`R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md`](./R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md)
+  [Gate B Schema, Runtime, and Migration Manifest](./R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md)
 
-> `@@UPPER_SNAKE_CASE@@` values are deliberate machine-replaceable
-> placeholders. A placeholder is missing evidence, never implied success.
-> This file is not approval-ready while any completion-critical placeholder
-> remains.
+Gate A proves the repository-only system with synthetic data, fake
+provider/connector/email adapters, local ephemeral files, a content-safe real
+Twin probe, and a local production browser. It does not claim a real model
+call, real Guest encounter, database migration, hosted mutation, external
+message, deployment, production secret, public traffic, or spend.
 
-## What this register may and may not prove
+## One-screen result
 
-Gate A may prove repository behavior with synthetic data, fake
-provider/connector/email adapters, local or ephemeral resources, and
-content-safe read-only probes. It may prepare exact later-gate artifacts.
-
-Gate A does **not** authorize or prove:
-
-- a real OpenAI/Codex provider call or spend;
-- handling a real third-party Guest request or capsule;
-- external email or another external message;
-- a hosted or production mutation;
-- execution of a schema migration;
-- deployment, public traffic, a production secret, or production resource;
-- the signed/hardened macOS launcher and official Codex adapter as one proven
-  physical boundary;
-- a real Guest/hosted end-to-end encounter or Owner product acceptance.
-
-The strict evidence labels used below are:
-
-| Label | Meaning |
+| Check | Result |
 |---|---|
-| `A-OFFLINE` | Must be implemented and proved in Gate A with synthetic/local evidence. |
-| `A-PROBE` | May use a content-safe local read-only probe; evidence must stay body/path-free. |
-| `B-REPEAT` | Gate A proves a fake/offline analogue; Gate B must repeat against the exact schema/runtime. |
-| `B-PHYSICAL` | Cannot be claimed from Gate A; requires the exact Gate B runtime/physical proof. |
-| `C-PRODUCTION` | Cannot be claimed before the exact Gate C production grant and evidence. |
+| R1–R3 spine | **45/45** |
+| R4 offline suite | **293/293** under external-network denial |
+| Typecheck | **pass** |
+| Production Room build | **8 routes; 18 chunks and 9 traces audited** |
+| Five-journey walkthrough | **byte-identical twice** |
+| Real Forme Twin probe | **revision 27; body/path-free; reported source bytes 0** |
+| Production standalone browser | **pass; no console/error; deleted read is controlled 404, never 503** |
+| Independent implementation audit | **Red none; no unresolved Gate A implementation Yellow** |
+| Overall | **GREEN_FOR_GATE_B_REVIEW** |
 
-Every row begins as `NOT_PROVEN`. A test name, command, log, or hash may replace
-its placeholder only after the named evidence has actually run against the
-Gate A commit above.
+## Zero-external-effects attestation
 
-## Zero external effects attestation
+| Prohibited effect | Gate A observed result | Evidence |
+|---|---:|---|
+| Real model/provider request | 0 | Static AST/build audit + walkthrough counters |
+| Incremental provider spend | US$0 | No provider transport; walkthrough/static audit |
+| Real third-party Guest body/capsule | 0 bytes | Synthetic-only fixtures and offline harness |
+| External email/message | 0 | Fake notification provider; walkthrough counter |
+| Hosted/production mutation | 0 | In-memory/local synthetic store only |
+| Schema migration execution | 0 | No executable migration run |
+| Deployment/public traffic | 0 | Local `127.0.0.1` browser only |
+| Production secret issuance/use | 0 | Synthetic canonical secrets only |
+| Real source body in evidence | 0 bytes | Body/path-free Twin probe |
 
-The completed Gate A evidence bundle must bind all of these checks to the
-implementation commit and record how each was verified.
-
-| Prohibited effect | Required Gate A result | Evidence |
-|---|---|---|
-| Real model/provider request | zero | `@@ZERO_PROVIDER_CALL_EVIDENCE@@` |
-| Incremental provider spend | zero | `@@ZERO_SPEND_EVIDENCE@@` |
-| Real third-party Guest body/capsule | zero bytes | `@@ZERO_REAL_GUEST_DATA_EVIDENCE@@` |
-| External email/message | zero | `@@ZERO_EXTERNAL_MESSAGE_EVIDENCE@@` |
-| Hosted/production mutation | zero | `@@ZERO_HOSTED_MUTATION_EVIDENCE@@` |
-| Schema migration execution | zero | `@@ZERO_SCHEMA_MIGRATION_EVIDENCE@@` |
-| Deployment/public traffic | zero | `@@ZERO_DEPLOY_PUBLIC_TRAFFIC_EVIDENCE@@` |
-| Production secret issuance/use | zero | `@@ZERO_PRODUCTION_SECRET_EVIDENCE@@` |
-| Real source content in logs/reports | zero bytes | `@@ZERO_REAL_SOURCE_DISCLOSURE_EVIDENCE@@` |
-
-Overall attestation status: `@@ZERO_EXTERNAL_EFFECTS_STATUS@@`.
+This attestation is scoped to the work recorded in the structured evidence. It
+does not infer facts about unobserved production infrastructure.
 
 ## Requirement-to-evidence crosswalk — 47 Packet checks
 
-### S — Existing R1–R3 spine regression (7)
+Labels:
 
-| ID | Packet requirement | Gate | Required evidence | Result |
+- `GREEN_A`: the Gate A analogue is implemented and proved.
+- `B_REPEAT_PENDING`: Gate B must repeat the same invariant against the exact
+  disposable persistence/runtime.
+- `B_PHYSICAL_PENDING`: only an installed official runtime/OS composition can
+  prove the physical boundary.
+- `C_PRODUCTION_PENDING`: only a separately approved production target can
+  prove the fact.
+- `DEFERRED_BY_DESIGN_B_REPEAT`: the Packet deliberately forbids this
+  execution in Gate A; a complete exact proposal exists for the next stop gate.
+
+| ID | Packet requirement | Gate | Evidence | Result |
 |---|---|---|---|---|
-| S01 | Existing R1–R3 suite remains 45/45. | A-OFFLINE | Exact command and complete result: `@@TEST_S01@@` | `NOT_PROVEN` |
-| S02 | R4 weakens none of correction propagation, exact approval, restart, retry, receipt, or rollback guarantees. | A-OFFLINE | Named regression tests and before/after comparison: `@@TEST_S02@@` | `NOT_PROVEN` |
-| S03 | One freshly observed real Forme Twin supplies an exact R1 Owner Frame fact, eligible active R2 corrected meaning, and truthful R3 effect/receipt fact to local Projection basis. | A-PROBE | Content-safe local probe with only IDs/hashes/classes in the report: `@@TEST_S03@@` | `NOT_PROVEN` |
-| S04 | Superseded/invalidated meaning, proposed or merely approved effects, rolled-back effects presented as current, and invalidated/indeterminate effects are rejected; exact labeled rollback history alone is allowed. | A-OFFLINE | Eligibility-table positive/negative vectors: `@@TEST_S04@@` | `NOT_PROVEN` |
-| S05 | A changed Twin revision invalidates an approved candidate; a no-op creates neither revision nor false staleness. | A-OFFLINE | Revision-change and no-op paired tests: `@@TEST_S05@@` | `NOT_PROVEN` |
-| S06 | Importing or processing a Guest Interaction creates no Twin revision and admits no Guest content as Twin truth. | A-OFFLINE | Synthetic Interaction/Twin before-after hashes: `@@TEST_S06@@` | `NOT_PROVEN` |
-| S07 | A normal Codex Workbench can invoke one minimum Forme CLI/Skill surface and receive durable Twin orientation or body-free Room status without a Forme-built chat shell. | A-OFFLINE + B-PHYSICAL | Gate A CLI contract test: `@@TEST_S07_OFFLINE@@`; later actual Workbench evidence: `@@TEST_S07_GATE_B@@` | `NOT_PROVEN` |
+| S01 | R1–R3 regression remains 45/45. | A-OFFLINE | `npm run test:spine` → 45/45. | GREEN_A |
+| S02 | R4 weakens none of correction, approval, restart, retry, receipt, or rollback. | A-OFFLINE | R1–R3 recovery suites plus R4 recovery/race suites. | GREEN_A |
+| S03 | A fresh real Forme Twin supplies eligible R1, corrected R2, and truthful R3 history. | A-PROBE | `r4.real-twin-basis-probe.v1`; revision 27; reported source body bytes 0. | GREEN_A_PROBE |
+| S04 | Ineligible current meaning/effects reject; labeled rollback history alone may project. | A-OFFLINE | Protocol eligibility and local Projection positive/negative vectors. | GREEN_A |
+| S05 | Twin revision change invalidates a candidate; no-op creates no false staleness. | A-OFFLINE | Local Projection/publication revision and identical-payload vectors. | GREEN_A |
+| S06 | Guest processing creates no Twin revision or Twin truth. | A-OFFLINE | `S06` response-orientation test and J2 before/after Twin hash. | GREEN_A |
+| S07 | A normal Workbench can use the minimum Forme CLI without a Forme chat shell. | A-OFFLINE + B-PHYSICAL | CLI/package-surface contract is green; actual official Workbench repeat is explicitly Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| D01 | Basis/lineage/eligibility/recheck/no-op/privacy rules hold. | A-OFFLINE | Publication boundary, hosted publication boundary, and canary scans. | GREEN_A |
+| D02 | Read/submit matrix covers Room, Projection, time, capability, and retirement. | A-OFFLINE + B-REPEAT | Generated exhaustive protocol matrix. | GREEN_A · B_REPEAT_PENDING |
+| D03 | Browser HTML and Agent JSON agree and are no-store. | A-OFFLINE + B-REPEAT | D03 renderer/API parity plus production standalone browser acceptance. | GREEN_A · B_REPEAT_PENDING |
+| D04 | All four presets enforce exact expiry, quota, charging, retry, and unresolved rules. | A-OFFLINE + B-REPEAT | Protocol preset properties and J4. | GREEN_A · B_REPEAT_PENDING |
+| D05 | Agent derivatives consume parent authority and cannot recover/delegate/reply/delete. | A-OFFLINE + B-REPEAT | Capability and lost-response authority matrices. | GREEN_A · B_REPEAT_PENDING |
+| D06 | Trusted 7d/10 accepts ten, rejects eleven, and opens no Private Room. | A-OFFLINE + B-REPEAT | J4 trusted trace. | GREEN_A · B_REPEAT_PENDING |
+| D07 | Grant replacement revokes atomically and transfers no unused quota. | A-OFFLINE + B-REPEAT | Concurrent replacement test. | GREEN_A · B_REPEAT_PENDING |
+| D08 | GrantOffer accept/revoke/expiry/successor races pass in both orders. | A-OFFLINE + B-REPEAT | Two-order capability race suite. | GREEN_A · B_REPEAT_PENDING |
+| D09 | One live offer, one-use invite, and fixed expiry hold. | A-OFFLINE + B-REPEAT | Offer/invite/deadline constraints. | GREEN_A · B_REPEAT_PENDING |
+| D10 | Publish vs delete/revoke/retire/expiry has one winner and terminal precedence. | A-OFFLINE + B-REPEAT | Hosted control two-order transaction traces. | GREEN_A · B_REPEAT_PENDING |
+| D11 | Close-without-response vs publish has one winner and correct dependent outcomes. | A-OFFLINE + B-REPEAT | Cross-object close/publish traces. | GREEN_A · B_REPEAT_PENDING |
+| D12 | Unlist preserves valid continuation, kills unused public encounter, and cannot re-admit. | A-OFFLINE + B-REPEAT | D12 admission/unlist lifecycle vectors. | GREEN_A · B_REPEAT_PENDING |
+| D13 | Stale/superseded/expired disclose truth; revoked rejects a new Response. | A-OFFLINE + B-REPEAT | Origin matrix and response terminal suite. | GREEN_A · B_REPEAT_PENDING |
+| F01 | Synthetic probe denies every protected root/effect/cross-Room surface. | A-OFFLINE + B-PHYSICAL | Capability denial inventory; installed proof remains Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| F02 | Only bounded SnapshotQueryBroker data operations are model-callable. | A-OFFLINE + B-PHYSICAL | Broker-only adapter negative probes; official inventory remains Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| F03 | Exact snapshot/secret policy rejects every widening and escape. | A-OFFLINE + B-REPEAT | Snapshot adversarial vectors and policy-hash mutation. | GREEN_A · B_REPEAT_PENDING |
+| F04 | Session Envelope is a strict Consent subset and orientation is exact. | A-OFFLINE + B-REPEAT | Schema/property and orientation vectors. | GREEN_A · B_REPEAT_PENDING |
+| F05 | Session is fresh, non-resumed, ephemeral, and ambient-free. | A-OFFLINE + B-PHYSICAL | Fake runtime policy negatives; official runtime remains Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| F06 | Cycle reservation/retry/crash rules allow at most one automatic draft cycle. | A-OFFLINE + B-REPEAT | Fresh cycle recovery and race suite. | GREEN_A · B_REPEAT_PENDING |
+| F07 | Dispatch permits are exact, 30-second, one-use, and race-safe. | A-OFFLINE + B-REPEAT | Permit and destructive-first/permit-first vectors. | GREEN_A · B_REPEAT_PENDING |
+| F08 | Candidate extraction accepts only one fully reconciled authorized final. | A-OFFLINE + B-REPEAT | 17 event-fence subcases. | GREEN_A · B_REPEAT_PENDING |
+| F09 | Manual-only sends zero provider bytes. | A-OFFLINE + B-REPEAT | Transport spy and receipt test. | GREEN_A · B_REPEAT_PENDING |
+| F10 | Dispatch/input/output/time/spend ceilings fail before fake transport. | A-OFFLINE + B-PHYSICAL | Hard-budget boundary vectors; official transport proof remains Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| F11 | All terminal/crash analogues leave no body-bearing runtime bytes after recovery. | A-OFFLINE + B-PHYSICAL | Runtime cleanup and supervisor matrix. | GREEN_A · B_PHYSICAL_PENDING |
+| F12 | Workbench cannot read candidate; deny precedes cleanup. | A-OFFLINE + B-PHYSICAL | Candidate reverse-isolation analogue; physical proof remains Gate B. | GREEN_A · B_PHYSICAL_PENDING |
+| F13 | Receipt binds exact envelope and only body/path-free aggregate evidence. | A-OFFLINE + B-REPEAT | Session receipt schema and canary scan. | GREEN_A · B_REPEAT_PENDING |
+| E01 | Every persist/ACK/cursor/publication/cleanup fault point converges. | A-OFFLINE + B-REPEAT | 20 named before/after fault points. | GREEN_A · B_REPEAT_PENDING |
+| E02 | Required Room operations serialize; leases and stale-lock recovery fail closed. | A-OFFLINE + B-REPEAT | Four concurrency pairings plus lock/lease/replay suite. | GREEN_A · B_REPEAT_PENDING |
+| E03 | All capability classes recover lost responses; changed bytes reject. | A-OFFLINE + B-REPEAT | Encounter, Interaction, Grant/offer, derivative, invite, and pairing vectors. | GREEN_A · B_REPEAT_PENDING |
+| E04 | Stream gaps/corruption/410/compaction/binding expiry follow fail-closed rules. | A-OFFLINE + B-REPEAT | Ledger reconciliation and hosted compaction. | GREEN_A · B_REPEAT_PENDING |
+| E05 | Read-only status performs no hidden network or write. | A-OFFLINE + B-REPEAT | Network/write spies and filesystem hash. | GREEN_A · B_REPEAT_PENDING |
+| E06 | Janitor handles concurrency, batches, recovery, 24h target, and 36h incident. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Controlled-clock suite including exact batch 100. | GREEN_A · B_REPEAT/C_PRODUCTION_PENDING |
+| E07 | Known expiry blocks read; remote terminal purges on explicit sync. | A-OFFLINE + B-REPEAT | Expiry and terminal-event sync sequences. | GREEN_A · B_REPEAT_PENDING |
+| E08 | Verification/endpoint/notice cross-product is one-use, bounded, and race-safe. | A-OFFLINE + B-REPEAT | Notification-control cross-product. | GREEN_A · B_REPEAT_PENDING |
+| E09 | Destructive and provider terminal paths purge and remain body-free. | A-OFFLINE + B-REPEAT | Notification and response-terminal suites. | GREEN_A · B_REPEAT_PENDING |
+| E10 | Worker crashes reconcile stable idempotency and never blindly resend. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Fake-provider crash suite. | GREEN_A · B_REPEAT/C_PRODUCTION_PENDING |
+| E11 | Post-handoff replace/remove races prevent unsafe retry and only refine body-free state. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Both race orders and late-result test. | GREEN_A · B_REPEAT/C_PRODUCTION_PENDING |
+| P01 | PostgreSQL constraints/functions/roles/encryption must replace fake-only authority. | B-REPEAT | Gate A prepared an exact proposed contract; SQL execution remains forbidden until Gate B approval. | DEFERRED_BY_DESIGN_B_REPEAT |
+| P02 | Server source/build has no model/provider/source-reader path. | A-OFFLINE | AST source audit, dependency audit, and 18-chunk/9-trace build audit. | GREEN_A |
+| P03 | Named secret/body canaries stay on their allowed surfaces. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Hosted and local surface×canary matrices. | GREEN_A · B_REPEAT/C_PRODUCTION_PENDING |
 
-### D — Domain and lifecycle race verification (13)
+Crosswalk accounting: `S 7 + D 13 + F 13 + E 11 + P 3 = 47`.
 
-| ID | Packet requirement | Gate | Required evidence | Result |
-|---|---|---|---|---|
-| D01 | Validate full per-claim basis/lineage, eligibility, correction/invalidation, effect status, prepublication recheck, identical-payload no-op, and absence of internal Twin/workspace/evidence/policy/source identifiers in hosted Projection/Response. | A-OFFLINE | Golden vectors plus privacy scan: `@@TEST_D01@@` | `NOT_PROVEN` |
-| D02 | Exhaustive read/submit matrix spans Room kind/mode, Projection owner and curation state, time, Grant/encounter, and retirement. | A-OFFLINE + B-REPEAT | Generated matrix and coverage count: `@@TEST_D02@@` | `NOT_PROVEN` |
-| D03 | Browser HTML and Agent JSON agree on state, bytes, warning, and `Cache-Control: no-store`. | A-OFFLINE + B-REPEAT | Same-decision renderer/API vectors: `@@TEST_D03@@` | `NOT_PROVEN` |
-| D04 | All four presets enforce exact expiry/quota, accepted-only charging, retry-free idempotency, one unresolved request, Manual/Agent sharing, and quota+1 rejection. | A-OFFLINE + B-REPEAT | Time/quota property tests: `@@TEST_D04@@` | `NOT_PROVEN` |
-| D05 | Agent derivative from public encounter consumes the one use/public pool; derivative from Grant consumes shared quota; Manual holder retains reply/delete and Agent cannot recover or delegate. | A-OFFLINE + B-REPEAT | Parent/derivative authority matrix: `@@TEST_D05@@` | `NOT_PROVEN` |
-| D06 | Trusted 7-day/10 preset accepts ten sequential Interactions, rejects the eleventh, and never opens a Private Room. | A-OFFLINE + B-REPEAT | Trusted fixture trace: `@@TEST_D06@@` | `NOT_PROVEN` |
-| D07 | Replacement Grant atomically revokes the prior Grant and transfers no unused quota. | A-OFFLINE + B-REPEAT | Both pre/post-state and concurrent vectors: `@@TEST_D07@@` | `NOT_PROVEN` |
-| D08 | GrantOffer accept/revoke/expiry/target-successor races pass in both commit orders. | A-OFFLINE + B-REPEAT | Deterministic two-order race suite: `@@TEST_D08@@` | `NOT_PROVEN` |
-| D09 | At most one live GrantOffer exists per Interaction; direct invite is one-use; redemption delay never extends fixed offered expiry. | A-OFFLINE + B-REPEAT | Constraint and clock vectors: `@@TEST_D09@@` | `NOT_PROVEN` |
-| D10 | Publish versus delete/revoke/retire/expiry passes in both commit orders, with one Response and terminal precedence. | A-OFFLINE + B-REPEAT | Two-order transaction traces: `@@TEST_D10@@` | `NOT_PROVEN` |
-| D11 | `close_without_response` versus publish passes in both orders, including quota, candidate, endpoint, and notification outcomes. | A-OFFLINE + B-REPEAT | Cross-object race traces: `@@TEST_D11@@` | `NOT_PROVEN` |
-| D12 | Unlist preserves valid Grant/GrantOffer, invalidates unused public encounter, and the same Projection version cannot be re-admitted. | A-OFFLINE + B-REPEAT | Lifecycle transition vectors: `@@TEST_D12@@` | `NOT_PROVEN` |
-| D13 | Stale/superseded/expired origins require truthful disclosure; revoked origin rejects a new Response. | A-OFFLINE + B-REPEAT | Origin-state response matrix: `@@TEST_D13@@` | `NOT_PROVEN` |
+## Repeatable five-journey walkthrough
 
-### F — Local physical boundary and Fresh Session verification (13)
+Command:
 
-| ID | Packet requirement | Gate | Required evidence | Result |
-|---|---|---|---|---|
-| F01 | Probe denies Guest store, candidate store, credential, auth home, live repo, sibling/home/vault, socket, write, generic network, cross-Room, connector, and publish. | A-OFFLINE + B-PHYSICAL | Fake-boundary adversarial suite: `@@TEST_F01_OFFLINE@@`; installed-system proof: `@@TEST_F01_GATE_B@@` | `NOT_PROVEN` |
-| F02 | The only model-callable data/filesystem tool is bounded `SnapshotQueryBrokerV1`; unavoidable inert coordination tools are inventoried and effectless; shell/interpreter/repo execution/browser/MCP/app/env/Git/config/connector are unavailable. | A-OFFLINE + B-PHYSICAL | Tool inventory and negative probes: `@@TEST_F02@@` | `NOT_PROVEN` |
-| F03 | Exact source-policy and secret-policy hashes reject dirty/untracked, symlink, submodule, alternate/worktree escape, binary, generated, unclassifiable, secret/canary, and size overflow; any widening invalidates current authority. | A-OFFLINE + B-REPEAT | One vector per rejection plus policy-hash mutation test: `@@TEST_F03@@` | `NOT_PROVEN` |
-| F04 | `SessionEnvelopeV1` is a strict `ConsentEnvelopeV1` subset; provider/account/source/budget/retention widening rejects or becomes manual-only; orientation admits only exact eligible fields and approved preview hash. | A-OFFLINE + B-REPEAT | Schema/property vectors: `@@TEST_F04@@` | `NOT_PROVEN` |
-| F05 | Session is new, non-resumed, ephemeral, with no ambient config/instruction/MCP/plugin/hook/Skill/subagent. | A-OFFLINE + B-PHYSICAL | Fake runtime trace: `@@TEST_F05_OFFLINE@@`; official runtime trace: `@@TEST_F05_GATE_B@@` | `NOT_PROVEN` |
-| F06 | Double-start, same-key retry, different-envelope conflict, pre-dispatch crash/release, first-dispatch unknown, and post-dispatch crash prove one hosted cycle reservation and at most one automatic draft cycle. | A-OFFLINE + B-REPEAT | State-machine/race suite: `@@TEST_F06@@` | `NOT_PROVEN` |
-| F07 | Every dispatch permit is exact payload/session/provider/model/ordinal-bound, 30-second, and one-use; destructive-first sends zero bytes, while permit-first records one disclosed in-flight dispatch and cannot create later send/publish. | A-OFFLINE + B-REPEAT | Both commit orders with fake transport journal: `@@TEST_F07@@` | `NOT_PROVEN` |
-| F08 | Candidate extraction accepts only the start-authorized completed turn with exactly one final-answer item and reconciled transport; wrong/partial/duplicate/rerouted/mismatched/nonzero outcomes create no candidate. | A-OFFLINE + B-REPEAT | Complete event-fence vector set: `@@TEST_F08@@` | `NOT_PROVEN` |
-| F09 | Manual-only path sends zero provider bytes. | A-OFFLINE + B-REPEAT | Transport spy evidence: `@@TEST_F09@@` | `NOT_PROVEN` |
-| F10 | Dispatch/input/output/time/applicable-spend ceilings stop with no provider/model fallback. | A-OFFLINE + B-PHYSICAL | Fake hard-gate boundary vectors: `@@TEST_F10_OFFLINE@@`; official transport proof: `@@TEST_F10_GATE_B@@` | `NOT_PROVEN` |
-| F11 | Normal, cancel, timeout, budget, schema failure, process kill, fork/huge output, and machine-crash simulations leave no body-bearing runtime bytes after explicit recovery; read-only startup performs zero cleanup write. | A-OFFLINE + B-PHYSICAL | Cleanup matrix and filesystem diff: `@@TEST_F11@@` | `NOT_PROVEN` |
-| F12 | Ordinary Workbench cannot read candidate; terminal/basis invalidation makes it unavailable before cleanup. | A-OFFLINE + B-PHYSICAL | Reverse-isolation and deny-first tests: `@@TEST_F12@@` | `NOT_PROVEN` |
-| F13 | Durable receipt binds Session Envelope ID/hash and only body/path-free best-effort aggregates/digest; it never claims a complete byte/file-read manifest. | A-OFFLINE + B-REPEAT | Receipt schema vectors and canary scan: `@@TEST_F13@@` | `NOT_PROVEN` |
-
-### E — Sync, retention, and email verification (11)
-
-| ID | Packet requirement | Gate | Required evidence | Result |
-|---|---|---|---|---|
-| E01 | Fault injection runs before/after every persist, ACK, cursor, publication, and cleanup step. | A-OFFLINE + B-REPEAT | Enumerated failure-point suite: `@@TEST_E01@@` | `NOT_PROVEN` |
-| E02 | Concurrent sync/sync, sync/reconcile, prepare/cleanup, and publish/cleanup serialize under the exact per-Room writer lock; same-Interaction preparation respects its lease; verified stale lock replays once and live/ambiguous owner fails closed. | A-OFFLINE + B-REPEAT | Concurrency and stale-owner suite: `@@TEST_E02@@` | `NOT_PROVEN` |
-| E03 | Client-secret and sealed-envelope lost-response recovery works for Interaction, encounter, Grant/offer, derivative, and pairing; same-key/different-hash rejects. | A-OFFLINE + B-REPEAT | One lost-response vector per capability class: `@@TEST_E03@@` | `NOT_PROVEN` |
-| E04 | Gap, malformed, wrong-Room, corruption, cursor-410 reconciliation, and 37-day compaction obey the fail-closed/high-water contract; expired/revoked binding has zero network authority. | A-OFFLINE + B-REPEAT | Ordered-stream/reconciliation vectors: `@@TEST_E04@@` | `NOT_PROVEN` |
-| E05 | Read-only `status`/`inspect` performs zero event fetch, ACK, receipt write, cursor movement, or hidden reconciliation. | A-OFFLINE + B-REPEAT | Network/write spies and filesystem hash: `@@TEST_E05@@` | `NOT_PROVEN` |
-| E06 | Hourly janitor supports duplicate/concurrent/partial/manual recovery, targets under 24 hours, and raises incident beyond 36 hours. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Controlled-clock janitor suite: `@@TEST_E06_OFFLINE@@`; production scheduler proof later: `@@TEST_E06_GATE_C@@` | `NOT_PROVEN` |
-| E07 | Offline known expiry blocks startup read; remote early delete purges at next explicit sync. | A-OFFLINE + B-REPEAT | Offline/startup/sync sequence: `@@TEST_E07@@` | `NOT_PROVEN` |
-| E08 | Verification code is one-use/expiring/no-authority/no-log; endpoint replacement and confirmation before/after Response create one atomic notice row; replace/remove before handoff and after handoff never creates a second notice. | A-OFFLINE + B-REPEAT | Endpoint/outbox cross-product: `@@TEST_E08@@` | `NOT_PROVEN` |
-| E09 | Every destructive terminal around pending/submitting, provider timeout/proven non-acceptance, generic-content scan, post-notice revoke, endpoint/target purge, and honest body-free delivery evidence behaves exactly as specified. | A-OFFLINE + B-REPEAT | Fake-provider state/race suite: `@@TEST_E09@@` | `NOT_PROVEN` |
-| E10 | Worker fault after lease/attempt commit but before network and after network but before outcome always reconciles the stable idempotency key and never blindly resends. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Fake-provider crash suite: `@@TEST_E10_OFFLINE@@`; approved provider proof later: `@@TEST_E10_GATE_C@@` | `NOT_PROVEN` |
-| E11 | Post-handoff endpoint remove/replace racing definitive non-acceptance sets `no_future_retry`, sends nothing to old/new address, and a late authenticated result refines only body-free state. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Both race orders with fake provider: `@@TEST_E11_OFFLINE@@`; provider proof later: `@@TEST_E11_GATE_C@@` | `NOT_PROVEN` |
-
-### P — Persistence and privacy verification (3)
-
-| ID | Packet requirement | Gate | Required evidence | Result |
-|---|---|---|---|---|
-| P01 | PostgreSQL constraints, functions, roles, encryption adapter, and authorization matrix are verified rather than relying only on in-memory fakes. | B-REPEAT | Gate A may prepare disposable-store tests; exact SQL/migration/role validation waits for Manifest approval: `@@TEST_P01_GATE_B@@` | `NOT_PROVEN` |
-| P02 | Server bundle has no model SDK, provider-call, or source-reader import path. | A-OFFLINE | Dependency graph, bundle scan, and negative source scan: `@@TEST_P02@@` | `NOT_PROVEN` |
-| P03 | Private source/Twin, Guest body, credential, reply/verification secret, cross-Room, candidate, and transcript canaries are checked across local files, wire, database, JSON, HTML, errors, and every named log. | A-OFFLINE + B-REPEAT + C-PRODUCTION | Synthetic canary matrix: `@@TEST_P03_OFFLINE@@`; exact runtime/DB and production-log repeats later | `NOT_PROVEN` |
-
-Canaries are tripwires, not proof of semantic privacy.
-
-Crosswalk accounting:
-
-```text
-S 7 + D 13 + F 13 + E 11 + P 3 = 47 requirements
+```sh
+npm run --silent r4:walkthrough
 ```
 
-Automated crosswalk count check: `@@CROSSWALK_COUNT_CHECK@@`.
+The command ran twice with byte-identical JSON.
 
-## Five synthetic user journeys
+- deterministic clock: `2026-08-03T12:00:00.000Z`
+- aggregate:
+  `sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56`
+- raw JSON without final newline:
+  `sha256:684c2fa3644329c57b270ebfd6cc0de1d94e5418f426009d3fbaef79a86b7e75`
+- effects: network 0, provider 0, synthetic transport 1, external email 0,
+  real Guest records 0.
 
-All journeys use synthetic identities/content, fake external adapters, a local
-test server or in-process transport, and no public route. Each journey must
-produce a deterministic transcript containing only synthetic bodies and
-body-free receipts.
+| Journey | User-visible story | Steps | Transcript SHA-256 |
+|---|---|---:|---|
+| J1 | Manual public Guest | 5 | `sha256:686065a03214c4b184697fc659789d71d6f5367c7bab5a6afdfeab1d2cc401d6` |
+| J2 | Owner-local deterministic response path | 16 | `sha256:42e00a0bd706d3c09a2e4798b380df14548850746bec78df81c9bddc87a21696` |
+| J3 | Agent Guest derivative | 3 | `sha256:494a5741b9f248acbdeb8bcdb94abb18503c105d14cf37ec1cb0fdf9aed1a2f7` |
+| J4 | Familiar/trusted continuation | 5 | `sha256:32ff4d6a01f25e3126ba7c73b100b6986ab5637e3f8ae642e715b02a787f536c` |
+| J5 | Exact-Grant Private Room | 2 | `sha256:57a1c5569ce3e23be6b668491a637133fc7d98792f14c2d53dc9f6df5231d76f` |
 
-### J1 — Manual public Guest
+## Real R1 → R4 causal-chain probe
 
-1. Open synthetic curated Third Place without an account.
-2. Read a current/fresh/admitted shallow Forme Project Projection.
-3. Obtain and consume one public encounter for a private synthetic request
-   and optional small synthetic Guest Capsule.
-4. Retain the private reply capability and optionally complete fake email
-   confirmation.
-5. Poll or receive a fake generic ready notice and read one Response.
+`npm run r4:probe-basis` reconstructed the current real Forme Twin without
+reporting source bodies or paths:
 
-Command: `@@JOURNEY_J1_COMMAND@@`
+- Twin revision 27:
+  `sha256:05852a820a60a207296330b4981c0d4ad3f593d26574fef5b335adfc8f5505d3`
+- Owner Frame fact:
+  `sha256:e7e89c669c7e13c201f6ee3f264ab6345e48703b22c82aa1943e7556523c02f2`
+- active corrected Reflection:
+  `ref_705992a7ae63e403b601af34d16c5a54`
+- truthful R3 proposal/receipt history:
+  `act_107c8748243c6ef3981e245ca7b0da3a`,
+  `eff_7a5ff5588d87b626eb0f8435c601c4c9`,
+  `eff_4e73ebd064cf44233685ca34a087b107`
+- Projection basis:
+  `sha256:f14317fc4f9ed08a2d5bbb0cb80d12eb32e330539468ad7b674dfb1e3e5ebbae`
+- eligible classes: `owner_frame`, `owner_corrected_reflection`,
+  `rolled_back_history`
+- reported source body bytes: **0**
 
-Result/transcript hash: `@@JOURNEY_J1_RESULT@@`
+This is the continuity proof from the already owner-accepted R1–R3 spine into
+R4 Projection compilation. It is not a real Guest or provider run.
 
-### J2 — Owner local response workflow with fake Fresh runtime
+## Production-browser acceptance
 
-1. Explicit `forme room sync` imports body-free pending status only.
-2. One-shot fake protected review receives the exact synthetic request without
-   exposing it to the ordinary Workbench surface.
-3. Owner start authorization binds consent, origin, orientation, source policy,
-   snapshot, fake runtime, and budgets.
-4. Fake Fresh runtime uses only bounded broker calls and stores an encrypted
-   typed candidate plus body-free receipt.
-5. A separate fake one-shot review edits/approves exact outgoing bytes.
-6. Fake connector delivers idempotently and cleanup removes candidate bytes.
+The final focused run used:
 
-Command: `@@JOURNEY_J2_COMMAND@@`
-
-Result/transcript hash: `@@JOURNEY_J2_RESULT@@`
-
-This journey proves the repository state machine only. It is not evidence of a
-real Codex call or macOS physical containment.
-
-### J3 — Agent Guest derivative
-
-1. Manual capability holder mints a 15-minute one-use derivative.
-2. Synthetic Guest-owned Agent reads only the exact Projection JSON.
-3. It submits once and consumes the correct parent quota.
-4. It cannot read reply, delete, accept offer, delegate, recover, or cross Room.
-
-Command: `@@JOURNEY_J3_COMMAND@@`
-
-Result/transcript hash: `@@JOURNEY_J3_RESULT@@`
-
-### J4 — Familiar and trusted continuation
-
-1. Owner offers each of the four exact presets.
-2. Guest accepts a new exact Grant whose fixed expiry does not reset on delay.
-3. Independent synthetic questions share quota and allow only one unresolved.
-4. Every fake AI-assisted reply uses a new cycle; manual-only uses no fake
-   provider dispatch and neither loads a prior request as conversation history.
-5. The trusted path accepts ten, rejects eleven, and grants no Private access.
-
-Command: `@@JOURNEY_J4_COMMAND@@`
-
-Result/transcript hash: `@@JOURNEY_J4_RESULT@@`
-
-### J5 — Private Room
-
-1. Direct URL without exact Grant returns no Projection body.
-2. Owner separately issues a Private Room Grant.
-3. Guest reads/submits only inside the exact Room and Projection.
-4. A public familiar/trusted label grants no Private access.
-
-Command: `@@JOURNEY_J5_COMMAND@@`
-
-Result/transcript hash: `@@JOURNEY_J5_RESULT@@`
-
-### Journey aggregate
-
-- Aggregate command: `@@SYNTHETIC_WALKTHROUGH_COMMAND@@`
-- Aggregate result: `@@SYNTHETIC_WALKTHROUGH_RESULT@@`
-- Deterministic fixture seed/clock: `@@SYNTHETIC_FIXTURE_SEED_CLOCK@@`
-- Transcript bundle SHA-256: `@@SYNTHETIC_WALKTHROUGH_SHA256@@`
-
-## R1 → R4 causal-chain evidence
-
-The synthetic walkthrough and content-safe real-Twin probe together must show:
-
-```text
-eligible local evidence/correction
-  → current Twin revision
-  → per-claim Projection basis
-  → exact Owner publication approval
-  → hosted Projection + optional Curator admission
-  → one private Guest Interaction
-  → local orientation + fake Fresh/manual judgment
-  → exact Owner Response approval + hosted receipt
+```sh
+NEXT_TELEMETRY_DISABLED=1 npm run room:build
+FORME_R4_SYNTHETIC=1 HOSTNAME=127.0.0.1 PORT=32149 npm run room:start
+npm exec --offline --yes agent-browser
 ```
 
-Required evidence:
-
-| Claim | Evidence |
-|---|---|
-| Real Forme Twin basis is freshly reconstructed without exposing body/path | `@@REAL_TWIN_BODY_FREE_PROBE@@` |
-| R1/R2/R3 basis classes are all present and eligible | `@@R1_R2_R3_BASIS_EVIDENCE@@` |
-| Invalid/superseded/rolled-back-current claims are rejected | `@@INELIGIBLE_BASIS_EVIDENCE@@` |
-| Identical observation/publication is a no-op | `@@NO_OP_EVIDENCE@@` |
-| Guest import creates no Twin revision | `@@NO_GUEST_TWIN_REVISION_EVIDENCE@@` |
-| Ordinary Workbench surface stays body-free | `@@WORKBENCH_BODY_FREE_EVIDENCE@@` |
-| Fake Fresh receipt binds exact envelope and no body/path | `@@FAKE_SESSION_RECEIPT_EVIDENCE@@` |
-
-Gate A does not satisfy the final Packet requirement for one **physically
-bounded real Fresh Session**. That remains `B-PHYSICAL` and must stay Yellow
-until the exact Manifest-approved proof runs.
-
-## Gate A evidence summary
-
-| Evidence family | Command | Result | Artifact/hash |
-|---|---|---|---|
-| Typecheck/build/lint | `@@BUILD_CHECK_COMMAND@@` | `@@BUILD_CHECK_RESULT@@` | `@@BUILD_CHECK_ARTIFACT@@` |
-| Existing R1–R3 suite | `@@R1_R3_TEST_COMMAND@@` | `@@R1_R3_TEST_RESULT@@` | `@@R1_R3_TEST_ARTIFACT@@` |
-| R4 unit/property | `@@R4_UNIT_PROPERTY_COMMAND@@` | `@@R4_UNIT_PROPERTY_RESULT@@` | `@@R4_UNIT_PROPERTY_ARTIFACT@@` |
-| R4 lifecycle/race/recovery | `@@R4_RACE_COMMAND@@` | `@@R4_RACE_RESULT@@` | `@@R4_RACE_ARTIFACT@@` |
-| R4 privacy/canary | `@@R4_PRIVACY_COMMAND@@` | `@@R4_PRIVACY_RESULT@@` | `@@R4_PRIVACY_ARTIFACT@@` |
-| Disposable PostgreSQL preparation tests | `@@EPHEMERAL_PG_COMMAND@@` | `@@EPHEMERAL_PG_RESULT@@` | `@@EPHEMERAL_PG_ARTIFACT@@` |
-| Five synthetic journeys | `@@SYNTHETIC_WALKTHROUGH_COMMAND@@` | `@@SYNTHETIC_WALKTHROUGH_RESULT@@` | `@@SYNTHETIC_WALKTHROUGH_SHA256@@` |
-| Markdown/link/diff checks | `@@DOC_CHECK_COMMAND@@` | `@@DOC_CHECK_RESULT@@` | `@@DOC_CHECK_ARTIFACT@@` |
-
-Overall Gate A verification verdict: `@@GATE_A_VERDICT_NOT_SET@@`.
-
-Allowed final values are:
-
-- `GREEN_FOR_GATE_B_REVIEW`: every Gate A item is proved and only declared
-  Gate B/C conditions remain;
-- `YELLOW_GATE_A_INCOMPLETE`: implementation/evidence gaps remain but no
-  contract violation is known;
-- `RED_CONTRACT_MISMATCH`: implementation contradicts the approved Packet.
+It confirmed Third Place, public Projection/Guest, Owner control/review,
+Private Grant/Projection/Guest, deletion, and terminal unreadability. Unknown
+or deleted Interaction reads return `404 not_found`, never internal `503`.
+The standalone server emitted no startup warning; browser console/errors were
+empty. Focused screenshot:
+`sha256:2f756f400579cb98bda02a43e3cf48b85a444ed690f3b91e816a36a81a9b8b14`.
 
 ## Deliberate later-gate conditions
 
-### Gate B Yellow — exact local schema/runtime proof
+Gate B still must prove:
 
-- Official Codex adapter must expose the bounded query tool and hard transport,
-  model, token, output, time, and cost gate. Failure leaves AI manual-only; it
-  does not permit a private fork or prompt-only substitute.
-- Signed/hardened macOS launcher, native user-presence review, Keychain/Secure
-  Enclave, reverse isolation, outer sandbox, cleanup, and canaries must work as
-  one installed system.
-- Exact SQL migration, constraints, functions, roles, grants, encryption, lock
-  order, preflight, and compatible image rollback must be validated only after
-  the Manifest is approved.
+- exact disposable PostgreSQL schema, roles, constraints, functions,
+  encryption, migrations, preflight, verification, and cleanup;
+- official Codex zero-thread/zero-turn capability facts and whether the desired
+  broker-only/provider-gated lane is physically possible;
+- the signed/hardened macOS launcher, user-presence, Keychain, reverse
+  isolation, sandbox, cleanup, and canaries as one installed composition;
+- every `B-REPEAT` row against the exact adapters.
 
-### Gate C production facts
+Gate C still owns identity/edge/origin, backup/log retention, real email,
+deployment/restore, production database, real Guest data, public traffic, and
+any real provider call.
 
-- exact origin and Cloudflare/Caddy trust chain;
-- actual backup and Cloudflare/Caddy/app/PostgreSQL log horizons;
-- exact OpenAI account/consent regime;
-- exact email provider, region, recipient/delivery-log retention,
-  reconciliation, credential, and spend;
-- production migration/deploy/restore/rollback/health/janitor commands;
-- real actors/data classes, activation window, public traffic, and disable
-  command.
-
-## Completion rule
-
-This register becomes Gate A completion evidence only when:
-
-1. all 47 rows have real evidence and no `NOT_PROVEN` result;
-2. all five synthetic journeys pass reproducibly;
-3. zero-external-effects attestation is proved;
-4. the real Forme Twin probe remains content-safe and body/path-free;
-5. every test/evidence artifact binds the same implementation commit/tree;
-6. remaining gaps are assigned honestly to Gate B or Gate C;
-7. the Gate B Manifest and low-load Owner Review are complete, hash-pinned,
-   and contain no unresolved completion-critical placeholder.
-
-Passing Gate A is Technical Review readiness for the next exact stop gate. It
-is not R4 Owner Acceptance or R4 Done.
+Passing Gate A means **Technical Review readiness**. It is not R4 Owner
+Acceptance, R4 Done, Gate B execution authority, or a production grant.
