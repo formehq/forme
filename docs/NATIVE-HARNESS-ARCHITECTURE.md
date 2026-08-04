@@ -3,9 +3,10 @@
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
   R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; T4 public lifecycle Owner-approved on 2026-08-03; T5 is the
-  current unapproved gate; no new runtime, provider, file, shell, tool, Room,
-  or implementation authority**
+  2026-08-03; T4 public lifecycle Owner-approved on 2026-08-03; T5
+  notification-only email and continuation presets are fixed, while its
+  remaining terms are the current unapproved gate; no new runtime, provider,
+  file, shell, tool, Room, or implementation authority**
 - Updated: 2026-08-03
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
@@ -35,7 +36,8 @@ budget、physical isolation 和 session lifecycle。同日批准的 T4 又固定
 public / unlist / stale / revoke 对 Projection、Interaction、Response 与
 session authority 的影响。它们仍不是批准某个 Codex session 现在读取
 文件、运行 shell、使用 tools、看到 Guest 内容、操作 Room、调用 provider
-或开始实现。下一张需要判断的是 T5 async / deletion / retention / P0 cut；
+或开始实现。T5 的 notification / continuation 输入已经固定，下一步需要
+判断的是其余 async / deletion / retention / P0 cut；
 重写后的 Control Packet 仍在后面。
 
 ## Why this clarification exists

@@ -1,10 +1,11 @@
-# R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.3
+# R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.4
 
 - Status: **owner-approved product target, public/private Room correction, P
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
   Harness architecture; Fresh Native Response Session (Option 2B) exact T3
-  contract and T4 public lifecycle Owner-approved; T5 is the current
-  unapproved gate; no
+  contract and T4 public lifecycle Owner-approved; T5 notification-only email
+  and three Guest continuation presets Owner-directed, while the remaining T5
+  contract is the current unapproved gate; no
   implementation authority**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
@@ -19,6 +20,8 @@
   Session contract; documentation and later Packet reconciliation only**
 - T4 approval: **2026-08-03 — complete recommended public / unlist / stale /
   revoke lifecycle contract; documentation and later Packet reconciliation only**
+- T5 partial direction: **2026-08-03 — optional notification-only email and
+  24h/1, 3d/2, 7d/3 continuation presets fixed; remaining T5 terms open**
 - Active gate: [#52](https://github.com/formehq/forme/issues/52)
 - Companion: [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
 - Technical Owner review:
@@ -224,6 +227,14 @@ The Owner may also offer a bounded continuation. An anonymous Guest receives
 that offer through the existing private reply capability; accepting it creates
 a new short pass. The offer may continue against the same public Projection or
 target a separately approved Private Room. It never silently upgrades access.
+The Owner chooses one of three P0 capability presets: one visit (24 hours / 1
+Interaction), short exchange (3 days / 2), or familiar collaborator (7 days /
+3). The label does not prove personhood or unlock Private Room content.
+
+The Guest may optionally bind a confirmed email to this exact Interaction for
+one generic response-ready notice. That notice contains no request/response
+body, Private Room name, reply URL, token, or secret and cannot restore access;
+the retained private reply capability remains canonical.
 
 ## Forme Third Place
 
@@ -350,6 +361,7 @@ jobs:
 | **Projection identity** | Which exact allowed disclosed state was visible? | Immutable capsule ID, version, hash, Projection-scoped disclosure basis ID, freshness, and revocation state | Access to the private Twin or its internal revision |
 | **Agent identity** | Which client acted, for whom, and with what scope? | A scoped credential delegated by an authenticated account or guest session, with `acting_for` attribution | That the agent is the human or may use all account authority |
 | **Guest identity** | Who sent this signal and how may a response return? | Public browse without login; one anonymous public encounter or an Owner-issued Grant; public pseudonym remains optional | Verified real-world identity, a reusable account, or a Person Twin |
+| **Guest contact (not identity)** | Where may one exact Interaction send a readiness notice? | One optional confirmed email endpoint that expires/deletes with its parent | Login, reply authority, personhood, trust, cross-Room tracking, or capability recovery |
 | **Curator identity** | Who admitted or removed a Room from the Third Place? | The authenticated curator account plus a durable admission/unlisting receipt | Authority to edit the resident's capsule |
 
 The central rule is:
@@ -365,7 +377,7 @@ The central rule is:
 | Browse the Third Place or public Room | No account |
 | Fetch a public capsule | No account, with basic rate limits |
 | Submit the first public knock | One server-issued, exact Room + Projection public encounter capability; no account, with Room-level rate/cap controls |
-| Continue in a public Room | Owner-issued short pass or accepted Grant Offer through the prior private reply capability |
+| Continue in a public Room | Owner-issued 24h/1, 3d/2, or 7d/3 capability preset, or accepted Grant Offer through the prior private reply capability |
 | Read or interact with a Private Room | Owner-issued exact Room + Projection Grant; a direct URL is insufficient |
 | Submit through an Agent Guest | A short-lived, one-submission token derived from the relevant public encounter or Owner Grant |
 | Publish an exact Room capsule | Authenticated publisher account plus an explicitly paired local Forme workspace; the connector transports only the exact Owner-approved artifact |
@@ -482,6 +494,11 @@ public encounter capabilities but does not itself revoke an otherwise-valid
 exact Owner Grant or GrantOffer. Stale, revoke, retirement, successor, and
 accepted-request behavior now follow the contract summarized above.
 
+Later on 2026-08-03 the Owner fixed two inputs to the still-open T5 card: the
+three exact continuation presets described above and an optional
+notification-only response-ready email endpoint. Neither creates a Guest
+account, verified identity, reply recovery, or automatic Private Room access.
+
 This correction creates no Guest account, reusable identity, public comments,
 open mailbox, additional Twin, or server AI.
 
@@ -495,7 +512,7 @@ approval closes the Room Operator authority contract. P, T1, and T2 are
 closed. NH1/NH2 and the exact T3 Fresh Native Response Session contract are
 also Owner-approved in
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T4 is
-Owner-approved as well. The Owner now reviews T5 in
+Owner-approved as well. The Owner now reviews the remaining T5 terms in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). After it
 closes, agents will reconcile all approved contracts into the detailed
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md), which

@@ -1,11 +1,12 @@
-# R4 Technical Owner Review Brief v0.11
+# R4 Technical Owner Review Brief v0.12
 
 - 状态：**P privacy-first human-boundary interpretation、T1
   public/private Room correction、T2 Room control contract、NH1/NH2
   Native Harness architecture、Fresh Native Response Session exact T3
   contract，以及 T4 public / unlist / stale / revoke lifecycle 均已批准；
-  T5 async / deletion / retention / P0 cut 是当前 Owner 决策；不是最终
-  Packet 批准记录**
+  T5 的 notification-only email 与三档 Guest continuation 已固定，其余
+  async / deletion / retention / P0 cut 是当前 Owner 决策；不是最终 Packet
+  批准记录**
 - 更新：2026-08-03
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -26,8 +27,9 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. P、T1、T2、NH1、NH2、T3 与 T4 已经关闭；
-3. 现在只判断下面这张低负担的
+2. P、T1、T2、NH1、NH2、T3 与 T4 已经关闭；T5 的 email / continuation
+   两项输入也已固定；
+3. 现在只判断下面这张低负担的其余
    [T5 async / retention card](#current-t5)；
 4. 用五个具体场景检查系统行为，只看 Agent 报告的 red/yellow
    exception。
@@ -46,6 +48,11 @@ Fresh Native Response Session exact T3 contract。同日，Owner 又按推荐正
 批准了 T4 public / unlist / stale / revoke lifecycle。T5 关闭后，Agent
 才会重写长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash
 已经失效，不应再被批准。
+
+同日稍后，Owner 又固定了 T5 的两项产品输入：可选的 notification-only
+email，以及 24 小时 / 1 次、3 天 / 2 次、7 天 / 3 次三档 exact
+continuation capability。它们不是 Guest account/trust level，email 也不是
+reply authority；其余 T5 仍待批准。
 
 2026-07-27 的 agency-first 方向修正了 T2 推荐；Owner 已在 2026-07-28
 批准该推荐。它也继续澄清之后各 technical gate 的 framing：
@@ -91,6 +98,10 @@ Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替�
   unlist 不替 Owner 撤销仍有效的 Grant 或 GrantOffer。
 - Third Place Room 允许任何人阅读 current admitted Projection，并默认
   允许一次 bounded public knock；继续互动必须由 Owner 发 short pass。
+- Owner-facing continuation 使用 24 小时 / 1 次、3 天 / 2 次、7 天 /
+  3 次三档 exact capability preset；“熟悉”不自动提供 Private Room access。
+- Guest 可以为 exact Interaction 选择只发通用 response-ready 提醒的 email；
+  它不携带正文或 reply secret，也不是 Guest identity / login / recovery。
 - P0 仍然是一个 curated Third Place、一个必须完成的 Forme Project
   Room、Manual-first、minimum Agent interoperability、Owner publish 与
   Curator admit 分离、layered identity、server no AI。
@@ -330,11 +341,23 @@ capability。Private Room 只允许 `invite_only` 或 `closed`，永远不能设
 
 - Private Room 不出现在 Third Place，Projection body 与新 Interaction
   都要求 Owner-issued Guest Grant。
-- `single_encounter`：24 小时或 Projection 到期，取更早者；最多一次
-  accepted Interaction。
-- `short_pass`：Owner 选择 24 小时、3 天或 7 天，且不超过 Projection
-  到期；最多三次 accepted Interaction，同时最多一个未结 request。
-- UI 对熟悉 Guest 推荐 7 天 / 3 次，但 Owner 仍可选择更短。
+- P0 把 continuation 呈现为 capability preset，而不是 Guest account、
+  personhood 或系统推断的“信任等级”：
+
+  | Owner-facing preset | 底层 primitive | 最长有效期 | accepted Interaction quota |
+  |---|---|---:|---:|
+  | 一次来访 | Private Room 为 `single_encounter`；Public continuation 为 quota=1 `short_pass` | 24 小时 | 1 次 |
+  | 短期交流 | `short_pass` | 3 天 | 2 次 |
+  | 熟悉协作者 | `short_pass` | 7 天 | 3 次 |
+
+  所有有效期都不能超过 exact Projection 到期时间，同时最多一个未结
+  request；Owner 可以选择更低档、随时 revoke，但 P0 不提供任意 quota /
+  expiry matrix。Public Room 的首次匿名 `public_encounter` 仍是另一种
+  server-issued capability，不属于这三档 Owner-issued continuation。
+- “熟悉协作者”只表达 Owner 选择的 bounded continuation envelope。它不
+  证明 Guest 的真实身份，也不自动解锁 Private Room。Public Room 上的
+  同名 preset 只增加互动额度；Private content 仍需对 exact Private Room +
+  Projection 单独发 Grant。
 - P0 Grant 绑定 exact Room + Projection。successor 不继承；“自动跟随
   Room 未来 Projection”的 relationship pass 留到 P1。
 - Invite 只能兑换一次；兑换后得到的 bearer Grant 不是账号，也不能证明
@@ -1411,17 +1434,37 @@ Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
 - Guest 保存 private reply URL；Agent 的标准 Room workflow 显式先调用
   typed `room sync`，不再向 Owner 逐次请示。Owner 也可手工运行同一命令
   做恢复与诊断；read-only CLI command 不隐式 pull 或 durable write。
-- P0 没有 email notification、daemon、live chat、WebSocket 或 remote
-  local tunnel。
-- 一个 public encounter 最多一个 Interaction；一个 Owner-issued
-  short pass 最多三个独立 Interaction。每个 Interaction 最多一个
-  Response，不形成 conversation thread。
+  Reply URL / capability 仍是读取 reply/status 的 canonical authority；
+  polling 仍是可靠 fallback。
+- P0 增加一个可选、只负责提醒的 `response_ready_email`
+  `NotificationEndpoint`。Guest 在 exact Interaction 的 private reply/status
+  surface 自愿绑定并确认自己控制该邮箱；地址只进入 mutable hosted
+  notification envelope，不进入 immutable Interaction、Guest Capsule 或
+  Response Capsule，也不成为 Guest account/person identity。
+- `response_ready` notice 只在 exact Response ready 后发送通用提醒，不含 Guest request、
+  Response 摘要、Private Room 名称、reply secret 或其他 hosted body。它
+  不能 mint、恢复或替代 private reply capability，不能用于 identity、
+  deduplication、rate limit、relationship inference 或跨 Room tracking；
+  endpoint 随所属 Interaction 的更早删除/到期一起失效和清除，尚未 dispatch
+  的 notice 必须取消。Email provider 已接受或收件箱已经收到的通用提醒
+  无法召回；这也是 notice 不携带 body/secret 的原因。
+- Endpoint confirmation 可以发送一个 single-purpose、short-lived、one-use
+  address-verification code。它只允许把该地址绑定到 exact Interaction，
+  不能读取 Room/reply body、恢复 reply capability 或取得其他 authority；
+  使用/到期后删除，并且不得进入应用或 provider delivery log。
+- P0 仍没有 Owner-device notification daemon、live chat、WebSocket 或
+  remote local tunnel。Email 是 server-side outbound notice，不改变
+  no-server-AI topology。
+- 一个 public encounter 最多一个 Interaction。Owner-facing continuation
+  使用 T1 已澄清的三档：一次来访为 24 小时 / 1 次，短期交流为 3 天 /
+  2 次，熟悉协作者为 7 天 / 3 次。每个 Interaction 最多一个 Response，
+  同时最多一个未结 request，不形成 conversation thread。
 - Interaction 和 inline Guest Capsule 最长保存 30 天。
 - Response 保存 7 天，并且绝不超过所属 Interaction 的寿命。
 - 上述 30 天和 7 天都是最大上限，不是保证可读的最短时间。更早的
   Interaction expiry、Guest deletion、origin revoke、Room retirement 或
   其他已批准 T4 terminal lifecycle 会立即缩短可见性并触发相应 purge
-  obligation。仅有 Projection stale、supersede 或 expiry 时，已经 accepted
+  obligation。仅有 Projection stale、supersession 或 expiry 时，已经 accepted
   的 Interaction 仍遵守已批准 T4 的 origin-disclosed Response 规则，不会
   被本条提前删除。
 - P0 不把 body-bearing Fresh Native Response Session transcript、model/tool
@@ -1451,8 +1494,13 @@ Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
   仍在该周期内的 backup copy。
 - Production Deployment & Provisioning Grant 同样必须列出会接触
   transport metadata 的
-  Cloudflare/Caddy/app/PostgreSQL log retention；应用日志不得记录
-  Guest/Response body、cookie、token 或 secret。
+  Cloudflare/Caddy/app/PostgreSQL log retention，以及 exact outbound email
+  provider、region、recipient/log retention、secret handling、delivery
+  metadata 和 incremental spend；应用与 response-ready email 不得记录或
+  携带 Guest/Response body、cookie、token、reply URL 或 secret。唯一例外是
+  上述 confirmation message 可携带不授予内容访问权的 scoped one-use
+  verification code，但 provider/application log 仍不得记录它。在这些
+  实际值尚未批准前，production email notification 不得启用。
 - Offline local copy 在已知 expiry/deletion 时拒绝读取；更早发生的
   remote deletion 要在下一次 Agent workflow 的显式 typed sync 或 Owner
   手工 `room sync` 才能收到并 purge。
@@ -1477,12 +1525,15 @@ Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
 Guest 不登录就能阅读 current admitted Projection，并在
 `public_single` 模式下发送一个 bounded request。这个 capability 只能
 accepted 一次，请求和回复仍然是 private。Owner 不升级关系时，Guest
-不能继续发第二条。
+不能继续发第二条。Guest 可以选择留下经确认的 notification email；它只
+在回复准备好时收到不含正文的提醒，真正读取仍依赖原 private reply URL。
 
 ### B. 熟悉的 collaborator 回来三次
 
-Owner 发一个 `short_pass`。Guest 在同一个 exact Projection 有效期内，
-最多提交三个相互独立的 Interaction，不需要每次重新找 Owner。
+Owner 选择“熟悉协作者” preset，发一个 7 天 / 3 次的 `short_pass`。
+Guest 在同一个 exact Projection 有效期内，最多提交三个相互独立的
+Interaction，不需要每次重新找 Owner；较轻关系可以改用 24 小时 / 1 次
+或 3 天 / 2 次 preset。
 每条回复仍然等待 local Owner review。Guest 不会因此得到 profile、
 thread、Twin 或 reusable Agent identity。若 Room 是 private，Grant
 同时控制 Projection read；没有 Grant 时同一个 URL 返回 no body，拿到
@@ -1529,7 +1580,7 @@ Guest deletion 立即移除 hosted access，offline local copy 在下一次
 Agent workflow 的显式 typed sync（或 Owner 手工 `room sync`）时收到。
 30 天和 7 天只设最晚上限；Guest deletion、Interaction/candidate expiry、
 origin revoke 或 Room retirement 可以更早结束可见性和 retention。仅有
-Projection stale、supersede 或 expiry 时，已经 accepted 的 Interaction
+Projection stale、supersession 或 expiry 时，已经 accepted 的 Interaction
 仍可按 T4 得到披露 origin state 的新 Response。丢失 HTTP response 时，
 用原 idempotency key 恢复结果，不重复动作。
 
@@ -1554,8 +1605,9 @@ Agent 最终只向 Owner 返回：
 
 ## 你怎么回复最省力
 
-P、T1、T2、NH1、NH2、T3 与 T4 已关闭。现在只需判断上面的 T5 async /
-deletion / retention / P0 cut contract；最省力的形式是：
+P、T1、T2、NH1、NH2、T3 与 T4 已关闭，T5 的 email / continuation 两项
+输入也已固定。现在只需判断上面的其余 async / deletion / retention / P0
+cut contract；最省力的形式是：
 
 ```text
 T5 按推荐批准

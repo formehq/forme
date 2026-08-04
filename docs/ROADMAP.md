@@ -9,8 +9,10 @@
   T2 Room control contract, and NH1/NH2 architecture contract are
   owner-approved; the Fresh Native Response Session exact T3 contract and T4
   public lifecycle contract are also owner-approved; T5 async / deletion /
-  retention / P0 cut is the current unapproved
-  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md) gate, and the first
+  retention / P0 cut is the current unapproved gate, with optional
+  notification-only email and three bounded Guest continuation presets already
+  fixed by the Owner; the remaining T5 terms are in the
+  [Technical Owner Review](./R4-TECHNICAL-OWNER-REVIEW.md), and the first
   Control Packet is unreconciled; no R4 implementation,
   OpenAI/provider call, real Guest data, schema, deployment, spend, Room
   mutation, projection, hosting, identity, messaging, synchronization, or
@@ -25,7 +27,7 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → response → bounded Grant lifecycle passes owner acceptance |
+| R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
 R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, and T4 public lifecycle contract are owner-approved; implementation remains stopped at T5 and later packet reconciliation.
@@ -44,6 +46,15 @@ While the Owner selects `public_single`, a visitor may use one anonymous
 requires a new Owner short pass. A true Private Room has a different Room ID
 and separately approved Projection, never enters Third Place, and requires an
 exact Owner Grant for reading and interaction.
+
+The Owner has fixed the P0 continuation presentation as capability—not
+identity or inferred trust—presets: one visit (24 hours / 1 Interaction), short
+exchange (3 days / 2), and familiar collaborator (7 days / 3). Familiarity
+does not grant private access; a Private Room still needs its own exact Grant.
+An exact Interaction may also carry an optional confirmed email endpoint for
+one generic response-ready notice. The notice contains no body, Room name,
+reply URL, token, or secret and cannot create or recover authority; the private
+reply URL and polling remain canonical.
 
 Owner publication and curator admission are separate decisions even when the
 same human performs both in P0. Accounts prove control and attribution, not

@@ -5,7 +5,8 @@
   roles plus NH1/NH2 Owner-approved on 2026-07-29; Fresh Native Response
   Session (Option 2B) selected as the R4 P0 direction on 2026-08-01 and its
   exact T3 contract Owner-approved on 2026-08-03; T4 public lifecycle contract
-  Owner-approved on 2026-08-03; T5 is current and implementation remains
+  Owner-approved on 2026-08-03; T5 notification-only email and continuation
+  presets are fixed while its remaining terms and implementation remain
   unapproved**
 - Updated: 2026-08-03
 - Purpose: distinguish the authority Forme should grant now from useful
@@ -32,11 +33,11 @@ Owner defines exact boundary
 
 | R4 area | Earlier center of gravity | Agency-first correction | August P0 |
 |---|---|---|---|
-| T1 Guest continuity | short exact capabilities and no successor inheritance | keep the clear public/private perimeter; later allow owner-defined relationship envelopes across compatible successors | **Keep approved T1 unchanged.** One public knock; owner-issued 24h/3d/7d short pass; exact Projection binding |
+| T1 Guest continuity | short exact capabilities and no successor inheritance | keep the clear public/private perimeter; later allow owner-defined relationship envelopes across compatible successors | **Approved topology, clarified P0 surface.** One public knock; Owner-facing continuation presets of 24h/1, 3d/2, or 7d/3; exact Projection binding; familiarity is not Private Room authority |
 | T2 Room control | paired Agent handles sync; most management requires a 15-minute one-use action approval | use a fixed standing exact per-Room `room_operator.v1` scope bundle for routine transport and deterministic lifecycle enforcement; Web is a supervisory cockpit | **Owner-approved.** Fixed 30-day, non-renewing, independently revocable binding; no dynamic policy/grant object |
 | T3 response drafting | every draft requires Guest choice, Owner start, and exact manifest | approve one source/provider/capability perimeter, then let one fresh session dynamically find useful project context inside it | **Owner-approved exact contract.** One new/non-resumed session per Interaction, sanitized read-only clean-HEAD Forme snapshot + previewed typed body/path-free Twin orientation, bounded disclosed Codex → OpenAI transport, no other Guest/Room, writer, generic network, credential, mutation or publish authority, and exact Owner approval before T2 delivery; Managed exact-manifest mode moves to P1/future. This is design authority only, not implementation authority. |
 | T4 lifecycle | every new Projection/Response is separately approved; successor never inherits | deterministic safety enforcement can run automatically; later allow policy-compatible content and successor publication | **Owner-approved exact contract.** Discovery, direct public reading, Grants, freshness, and emergency removal remain separate: unlist stops discovery/public knock but not valid exact Grants or Offers; stale is warning-only with no new Interaction; revoke/retire remove bodies and require tombstone-driven local purge; no successor inherits a Grant and every public successor needs new admission. This is design authority only, not implementation authority. |
-| T5 async operation | Owner explicitly runs sync; no daemon | the Agent's standard Room workflow invokes typed sync without asking the Owner; background continuity can come later | **Agent-triggered explicit sync plus manual recovery.** Read-only CLI commands do not hide writes |
+| T5 async operation | Owner explicitly runs sync; no daemon or notification | the Agent's standard Room workflow invokes typed sync without asking the Owner; add one low-friction Guest notice without creating account/auth continuity | **Agent-triggered explicit sync plus manual recovery; optional exact-Interaction generic response-ready email.** Read-only CLI commands do not hide writes; email carries no body/reply secret and cannot recover authority |
 
 This audit does not reopen T1 by implication. Any future successor-following
 Grant, longer Agent Guest delegation, or standing Response policy requires an
@@ -171,8 +172,9 @@ This document:
   durable production write, or spend.
 
 The approved Native Harness decisions are recorded in
-[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T5 is now
-the current Owner decision surface in
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md). T5's
+notification/contact and continuation-preset inputs are fixed; its remaining
+terms are now the current Owner decision surface in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Once T5
 closes, the detailed Technical Control Packet must encode all approved
 boundaries, be independently audited, receive a new hash, and return for

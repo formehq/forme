@@ -5,9 +5,10 @@
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
-  and T4 public lifecycle contract are Owner-approved; T5 is the current gate,
-  Packet reconciliation remains open, and all R4 behavior remains
-  unimplemented**
+  and T4 public lifecycle contract are Owner-approved; T5's notification-only
+  email and three continuation presets are fixed while its remaining terms are
+  the current gate; Packet reconciliation remains open, and all R4 behavior
+  remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -752,6 +753,40 @@ current Owner gate, the existing Technical Control Packet remains unreconciled
 and unapprovable, and no schema, implementation, provider call, Guest data,
 credential, hosted mutation, external interaction, deployment, production
 write, public behavior, or spend has been authorized or validated.
+
+## Evidence round 15 — Guest identity recap and two T5 inputs fixed
+
+On 2026-08-03 the Owner accepted the Guest identity explanation and fixed two
+product-facing inputs inside the still-open T5 review:
+
+- P0 Guest continuity remains capability-scoped rather than account-scoped.
+  Anonymous Manual Guests hold an exact public encounter and later private
+  reply capability; known collaborators and Private Room Guests hold
+  Owner-issued exact Room + Projection Grants; Agent Guests use short-lived
+  one-shot derivatives. None proves real-world personhood or creates a
+  reusable cross-Room Guest identity.
+- An exact Interaction may optionally carry a confirmed
+  `response_ready_email` endpoint. It sends a generic readiness notice with no
+  request/response body, Private Room name, reply URL, token, or secret; it is
+  contact metadata rather than identity, authorization, or capability
+  recovery. The original private reply URL remains canonical.
+- The Owner-facing continuation choices become three capability presets: one
+  visit is 24 hours / 1 accepted Interaction, short exchange is 3 days / 2,
+  and familiar collaborator is 7 days / 3. Each permits at most one unresolved
+  request, remains exact Room + Projection scoped and revocable, and never
+  grants Private Room access by familiarity alone.
+
+This is **Owner product/governance evidence, not Guest usage evidence**. No
+email was sent, identity verified, pass issued, Interaction accepted, response
+delivered, retention process run, provider selected, or user friction
+measured. It does not show whether Guests will retain the private reply URL,
+whether generic email is sufficient across devices, whether the presets match
+real collaborator rhythms, or whether three Interactions feel continuous.
+
+These inputs update the remaining T5 proposal without closing it. Email
+provider/log/retention/spend, physical deletion, the overall P0 cut, the
+reconciled Packet, schemas, implementation, deployment and production traffic
+remain separate unapproved gates.
 
 ## Follow-up product-learning questions — not R4 blockers
 

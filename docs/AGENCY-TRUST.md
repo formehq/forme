@@ -4,8 +4,9 @@
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
   2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0
   direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; T4 public lifecycle contract Owner-approved on 2026-08-03; T5 is
-  current, and implementation remains subject to separate Owner review**
+  2026-08-03; T4 public lifecycle contract Owner-approved on 2026-08-03; T5
+  notification-only email and continuation presets are fixed, while remaining
+  T5 terms and implementation stay subject to separate Owner review**
 - Updated: 2026-08-03
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -341,6 +342,7 @@ contract. None of these approvals instantiates that runtime or authorizes a
 Fresh session, file read, provider call, credential issuance, private Guest
 data, Room mutation, external message, schema, implementation, deployment, or
 spend. T3/T4 grant documentation and later Packet-reconciliation authority
-only. T5 is the current Owner gate; a new reconciled and separately approved
-Control Packet, schemas/migrations, implementation, and production grants
-remain separate gates.
+only. T5's notification-only email and continuation-preset inputs are fixed;
+its remaining terms are the current Owner gate. A new reconciled and separately
+approved Control Packet, schemas/migrations, implementation, and production
+grants remain separate gates.

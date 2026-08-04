@@ -4,9 +4,10 @@
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
   Fresh Native Response Session (Option 2B) exact T3 contract and T4 public
-  lifecycle contract owner-approved; T5 async / deletion / retention / P0 cut
-  is the current unapproved gate, and implementation-packet reconciliation
-  remains open
+  lifecycle contract owner-approved; T5 notification-only email and three
+  Guest continuation presets are Owner-directed, while the remaining T5 async /
+  deletion / retention / P0 cut is the current unapproved gate and
+  implementation-packet reconciliation remains open
 - Updated: 2026-08-03
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -496,6 +497,16 @@ request and Response remain private. Continued or Private Room access requires
 an exact Owner Grant. Curator admission controls shared-place discovery; Owner
 actions control intake mode, Grant issue/revoke, and Grant Offers.
 
+Guest identity, capability, and contact remain separate. P0 does not establish
+a reusable Guest account or verify personhood: it recognizes the holder of an
+exact Room + Projection capability. Owner-facing continuation is limited to
+three presets—24 hours / 1 Interaction, 3 days / 2, or 7 days / 3—and
+familiarity never grants Private Room access by itself. An exact Interaction
+may additionally store one confirmed `response_ready_email` endpoint in a
+mutable hosted notification envelope. The generic notice carries no hosted
+body or reply secret and cannot create or recover authority; the original
+private reply capability remains canonical.
+
 The Owner-approved T4 lifecycle keeps those authorities distinct. Third Place
 discovers only a current, fresh, admitted Projection. A current public
 Projection that is never admitted or later unlisted remains direct-readable,
@@ -512,7 +523,7 @@ timings; T5 still owns those decisions.
 
 The product boundary, T2 Room authority contract, NH1/NH2 architecture
 contract, exact Fresh Native Response Session T3 contract, and T4 lifecycle
-contract are approved. The Owner now reviews T5 in
+contract are approved. The Owner now reviews the remaining T5 terms in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
 implementation remains blocked until T5 and the approved T3/T4 contracts are
 reconciled into a new exact

@@ -1,7 +1,8 @@
 # R4 Technical Control Packet v0.1
 
-- Status: **unreconciled implementation appendix after Owner-approved T4; T5
-  is current; not an approval target; no implementation authority**
+- Status: **unreconciled implementation appendix after Owner-approved T4 and
+  partial T5 direction; remaining T5 terms are current; not an approval target;
+  no implementation authority**
 - Updated: 2026-08-03
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
@@ -61,6 +62,12 @@
 > design inputs only. The exact schemas, routes, transactions, cache controls,
 > persistence, and synchronization mechanisms in this historical body remain
 > unreconciled and unapproved.
+> Later on 2026-08-03 the Owner fixed two T5 inputs that additionally supersede
+> this body: P0 now includes an optional exact-Interaction, notification-only
+> response-ready email endpoint, and Owner-facing continuation uses 24h/1,
+> 3d/2, and 7d/3 capability presets. Email is not identity or reply authority;
+> familiarity is not Private Room access. The historical no-email and free
+> 24h/3d/7d-up-to-three descriptions below must not be implemented.
 > Its `.forme/presence/` proposal is also historical: after local import,
 > body-bearing Guest input, exact context previews/manifests, and drafts must
 > not sit inside the ordinary Native Workspace read surface or appear in
@@ -70,7 +77,8 @@
 > only to its new T3 Fresh Native Response Session after explicit Owner start.
 > The
 > hosted original Guest submission still follows T1/T2/T4/T5.
-> T1, T2, NH1, NH2, exact T3, and T4 are closed; T5 is the current Owner gate
+> T1, T2, NH1, NH2, exact T3, and T4 are closed; the remaining T5 terms are the
+> current Owner gate
 > in
 > [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Only after
 > T5 closes may this appendix be replaced by a reconciled Packet, audited,

@@ -5,8 +5,9 @@
   product target, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1/NH2 and the exact Fresh Native Response Session
   T3 contract Owner-approved; the recommended T4 public/admission/lifecycle
-  contract Owner-approved; T5 is the active unapproved decision, and the
-  detailed Control Packet requires reconciliation before exact
+  contract Owner-approved; T5 is the active unapproved decision, with optional
+  notification-only email and three Guest continuation presets already fixed
+  by the Owner; the detailed Control Packet requires reconciliation before exact
   approval; no R4 implementation**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
@@ -16,7 +17,7 @@
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: Owner reviews T5 in
+- Next action: Owner reviews the remaining T5 retention/deletion/P0-cut terms in
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents
   reconcile the detailed Control Packet only after that decision,
   before
@@ -135,6 +136,17 @@ Current truth:
   revoked origin cannot. This approval does not expand `room_operator.v1` or
   authorize implementation, physical purge timing, Guest data, provider calls,
   schema, deployment, spend, or Room mutation;
+- later on 2026-08-03 the Owner fixed two product-facing parts of the still-open
+  T5 proposal. Guest continuation is presented as exact capability presets—
+  24 hours / 1 Interaction, 3 days / 2, or 7 days / 3—rather than an account or
+  inferred trust level; private access remains a separate exact Room +
+  Projection Grant. An exact Interaction may optionally retain a confirmed
+  email endpoint for one generic `response_ready` notice. Email carries no
+  body, private Room name, reply capability, identity, or authority-recovery
+  meaning and is cleared with its parent. Polling the retained private reply
+  URL remains canonical. This fixes those T5 inputs only; retention, deletion,
+  the full P0 cut, Packet, implementation, provider, schema and production
+  authority remain open;
 - the R1–R3 continuity audit found one real additive Twin chain and one
   cross-version defect: a V3 Twin previously dropped active Owner Corrections
   from a later R2 Context Packet. The defect is repaired with a V3 regression.
@@ -756,8 +768,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   owner-approved as recommended on 2026-07-29; Fresh Native Response Session
   direction selected on 2026-08-01 and its exact T3 contract Owner-approved on
   2026-08-03; the recommended T4 public/admission/lifecycle contract was also
-  Owner-approved on 2026-08-03; T5 is the current unapproved decision, and the
-  detailed packet is unreconciled and unimplemented**
+  Owner-approved on 2026-08-03; the Owner has fixed T5's notification-only
+  email and 1/2/3-Interaction continuation-preset inputs, while the rest of T5
+  remains unapproved; the detailed packet is unreconciled and unimplemented**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -768,7 +781,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   and Projection and requires a Grant for read/write. An Agent Guest may fetch
   the public capsule, reason at its own edge, and optionally submit a
   guest-approved capsule. A deeper request returns asynchronously to the local
-  Forme Agent and owner for reviewed response.
+  Forme Agent and owner for reviewed response. The Guest may optionally receive
+  one body-free `response_ready` email notice, but the private reply URL remains
+  the only reply/status authority and polling fallback.
 - Approved map delta to specify: confirmed Twin revision → locally prepared
   candidate → owner publication gate → immutable Projection Capsule →
   owner-controlled Room → either separate curator admission into Third Place
@@ -833,7 +848,12 @@ candidate-only output, deletion split and T3-owned lifecycle terms are the
 approved T3 result. The former Managed Privacy response lane is P1/future, not
 a P0 selector. The approved T4 contract covers public/admission/unlist/stale/
 revoke/retirement and successor behavior; T5 still covers the asynchronous
-retention/purge/P0 boundary. Agents must then
+retention/purge/P0 boundary. Within that still-open card, the Owner has fixed
+three exact continuation presets—one visit (24 hours / 1 Interaction), short
+exchange (3 days / 2), and familiar collaborator (7 days / 3)—and one optional
+exact-Interaction, generic response-ready email endpoint. These are capability
+and contact choices, not Guest identity, trust scoring, reply recovery, or
+Private Room authority. Agents must then
 reconcile the implementation packet to the supplied deployment target and
 those answers. Exact schemas/migrations and production deployment remain
 separate later gates. R3 acceptance and the R4 product decisions grant no R4
@@ -842,8 +862,9 @@ or publishing authority.
 
 The privacy-first/minimum-friction P human-boundary model, T2 Room authority
 contract, NH1/NH2 architecture choices, exact Fresh Native Response Session T3
-contract, and recommended T4 lifecycle contract are Owner-approved for R4. T5
-and every implementation mechanism remain gated. Stewardship remains an
+contract, and recommended T4 lifecycle contract are Owner-approved for R4.
+Only the two stated T5 product inputs are fixed; the remaining T5 contract and
+every implementation mechanism remain gated. Stewardship remains an
 architecture proposal.
 Confidence or shadow agreement cannot grant permission; external R4
 interactions remain untrusted signals until separately admitted.

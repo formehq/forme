@@ -4,7 +4,9 @@
   interpretation, R4 public/private Room correction, and T2 Room control
   contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
   approved; the recommended T4 public/admission/lifecycle contract approved;
-  T5 is the current unapproved technical Owner gate
+  T5 is the current unapproved technical Owner gate, with its optional
+  notification-only email and three Guest continuation presets now
+  Owner-directed
 - Updated: 2026-08-03
 - MVP complete: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
@@ -109,6 +111,14 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - one public 24-hour/one-interaction Guest knock, one grant-gated Private Room
   path over the same Twin, one minimal Agent Guest capsule/request path, and
   one owner-reviewed Response or Resonance;
+- three Owner-selected, exact Room + Projection continuation presets—one visit
+  (24 hours / 1 Interaction), short exchange (3 days / 2), and familiar
+  collaborator (7 days / 3)—without a reusable Guest account, trust score, or
+  automatic Private Room access;
+- one optional, exact-Interaction response-ready email notice that carries no
+  request/response body, private Room name, reply capability, or identity/
+  authority meaning; polling through the retained private reply URL remains
+  the canonical fallback;
 - invite-only durable controller identity with public reading that requires no
   account;
 - one minimum Codex-first Native Workbench → Forme integration proof: from a
@@ -172,7 +182,10 @@ interaction requires a new Owner short pass. A true Private Room is a different
 Room with a separately approved Projection; it never enters Third Place and
 requires an Owner Grant for both reading and interaction. Public
 request/response bodies do not become comments, and unlisted public content
-does not become private.
+does not become private. On 2026-08-03 the Owner clarified the P0 continuation
+surface as three capability presets rather than person/trust levels: 24 hours /
+1 Interaction, 3 days / 2, or 7 days / 3. Familiarity does not confer private
+access; a Private Room still needs its own exact Grant.
 
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
@@ -196,9 +209,14 @@ no successor inherits a Grant.
 Accepted requests tied to stale, superseded, or expired origin may receive a
 newly compiled, newly approved Response with that state disclosed; revoked
 origin may not. T4 does not expand `room_operator.v1` or approve a physical
-purge schedule. Implementation, OpenAI calls, Guest data handling, schema,
+purge schedule. For the still-open T5, the Owner has already directed one
+optional notification-only `response_ready_email`: it is exact-Interaction
+contact metadata, not a Guest account or reply authority; it carries no body
+or secret, expires with its parent, and leaves reply-URL polling as fallback.
+The remaining T5 retention/deletion/P0-cut contract is not yet approved.
+Implementation, OpenAI calls, Guest data handling, schema,
 deployment, spend, and Room mutation remain unauthorized. The Owner next
-reviews T5 in
+reviews the remaining T5 terms in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
 reconcile those decisions into a new exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).

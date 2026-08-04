@@ -1,10 +1,11 @@
-# R4 Forme Room experience and protocol brief v0.7
+# R4 Forme Room experience and protocol brief v0.8
 
 - Status: **owner-approved product foundation, public/private Room correction,
   P human-boundary interpretation, T2 Room control contract, and NH1/NH2
   Native Harness architecture; Fresh Native Response Session (Option 2B) exact
-  T3 contract and T4 public lifecycle Owner-approved; T5 is the current
-  unapproved gate; no R4
+  T3 contract and T4 public lifecycle Owner-approved; T5 notification-only
+  email and three Guest continuation presets Owner-directed, while the
+  remaining T5 contract is the current unapproved gate; no R4
   implementation authority**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
@@ -19,6 +20,8 @@
   Session contract; documentation and later Packet reconciliation only**
 - T4 approval: **2026-08-03 — complete recommended public / unlist / stale /
   revoke lifecycle contract; documentation and later Packet reconciliation only**
+- T5 partial direction: **2026-08-03 — optional notification-only email and
+  24h/1, 3d/2, 7d/3 continuation presets fixed; remaining T5 terms open**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -65,7 +68,8 @@ not change approved T1 or grant implementation authority. T2 was separately
 approved later. NH1/NH2 closed on 2026-07-29. The Option 2B direction was
 selected on 2026-08-01 and its exact T3 contract was Owner-approved on
 2026-08-03. The recommended T4 public lifecycle contract was also
-Owner-approved on 2026-08-03; T5 is current.
+Owner-approved on 2026-08-03. T5's notification and continuation inputs are
+fixed; its remaining contract is current.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
@@ -77,7 +81,8 @@ required live P0 path, plus the two-class boundary between ordinary native
 Workspace work and typed Forme authority. On 2026-08-01 the Owner selected one
 Fresh Native Response Session per Interaction as the R4 P0 direction; its exact
 T3 contract and the separate T4 public lifecycle contract were approved on
-2026-08-03, while T5 remains open.
+2026-08-03. T5 notification/continuation inputs are now fixed while its
+remaining retention/deletion/P0-cut terms stay open.
 
 ## Revised user outcome
 
@@ -236,9 +241,23 @@ reply capability, which idempotently creates a new short pass without placing
 a raw invite in the Response body. A richer Relationship Capsule remains later
 scope. There is no permanent live tunnel into the private repo.
 
+At the exact Interaction reply/status surface, the Guest may opt into a
+confirmed `response_ready_email` endpoint. It sends only a generic readiness
+notice and never the request, response, private Room name, reply URL, or other
+secret. The endpoint is a short-lived contact route, not an account, identity,
+or authority-recovery channel; the Guest still needs the original private
+reply capability. Polling remains the canonical fallback.
+
 ## Guest depth
 
 Guest identity and interaction payload are separate contracts.
+
+P0 also keeps **identity, capability, and contact** separate: a Guest account
+would claim who a person is; an exact bearer capability says only which Room,
+Projection, action, quota, and lifetime its holder may use; an optional email
+endpoint says only where one exact Interaction may send a generic readiness
+notice. Public and invited Guests have no reusable P0 Guest account or
+cross-Room person profile.
 
 Room access is a third, independent contract:
 
@@ -335,10 +354,19 @@ expiry, and target mode without extending that expiry.
 A `private_grant_only` Room has its own stable Room ID and separately
 Owner-approved bounded Projection. It never enters Third Place. Both reading
 and submitting require an active exact Room + Projection Grant; a direct URL
-alone returns no body. `single_encounter` permits one accepted Interaction
-within 24 hours, while `short_pass` permits at most three within an
-Owner-selected 24 hours, three days, or seven days. All are capped by the
-Projection lifecycle and permit at most one unresolved request at a time.
+alone returns no body. P0 exposes three Owner-selected capability presets:
+
+| Preset | Primitive | Maximum lifetime | Accepted Interaction quota |
+|---|---|---:|---:|
+| One visit | Private `single_encounter`; public continuation quota-1 `short_pass` | 24 hours | 1 |
+| Short exchange | `short_pass` | 3 days | 2 |
+| Familiar collaborator | `short_pass` | 7 days | 3 |
+
+All are capped by the exact Projection lifecycle and permit at most one
+unresolved request at a time. These labels do not verify personhood or imply
+private access: on a public Room they extend private interaction only; a
+Private Room always requires its own exact Grant. The anonymous, server-issued
+first `public_encounter` is separate from these Owner-issued presets.
 
 An Agent path requires `manual_plus_one_shot_agent`. Its 15-minute,
 one-use derivative token binds the exact Room + Projection and permits only one
@@ -537,7 +565,8 @@ These decisions establish the product target only. The active
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
 the approved NH1/NH2 choices. The active
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) now presents
-approved exact T3/T4 followed by the current T5. Agents must then rewrite the
+approved exact T3/T4 followed by the remaining T5 terms; the notification and
+continuation inputs are already fixed. Agents must then rewrite the
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
 confirmed deployment target and Guest decision, re-audit it, and present a new
 exact hash. Schema/migration and production deployment remain separate later
@@ -553,6 +582,7 @@ gates. No current document grants implementation authority.
 P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
 exposure, and local Room Operator authority. Approved NH1/NH2 close the local
 carrier and ordinary-work/Forme-authority boundary. The 2B direction and exact
-T3 contract plus T4 lifecycle are approved; T5 still closes the remaining
+T3 contract plus T4 lifecycle are approved; T5's notification and continuation
+inputs are fixed, while T5 still closes the remaining
 retention, hosting-integration, and P0 Resonance answers. Product-expression questions may
 continue without weakening those gates.

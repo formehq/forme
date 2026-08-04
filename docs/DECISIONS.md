@@ -458,6 +458,44 @@ implementation, runtime/provider calls, Guest-data handling, credentials,
 hosted mutation, external messaging, deployment, production writes, public
 behavior, and spend remain unauthorized.
 
+## 2026-08-03 — T5 Guest notification and continuation inputs fixed
+
+**Decision:** while T5 remains open as a whole, fix two of its product-facing
+inputs. First, P0 may offer an optional, confirmed
+`response_ready_email` endpoint bound to one exact Interaction. It sends only
+a generic response-ready notice, lives in a mutable hosted notification
+envelope, expires/deletes with its parent, and carries no request/response
+body, Private Room name, reply URL, reply token, or secret. A separate
+single-purpose, short-lived, one-use address-verification code may bind the
+endpoint but grants no Room/body/reply authority and is deleted after use or
+expiry. Email is contact—not a
+Guest account, person identity, authorization, capability recovery,
+deduplication key, trust signal, or cross-Room relationship record. The
+original private reply capability remains the only reply/status authority and
+polling fallback.
+
+Second, present Owner-issued continuation as three exact capability presets:
+one visit is 24 hours / 1 accepted Interaction, short exchange is 3 days / 2,
+and familiar collaborator is 7 days / 3. All remain bound to one exact Room +
+Projection, permit at most one unresolved request, are revocable, and never
+follow a successor. The labels are not inferred trust levels. Familiarity does
+not grant Private Room access; private reading and interaction still require a
+separate exact Private Room Grant. Manual and one-shot Agent carriers share the
+same quota.
+
+**Reason:** response-ready email removes unnecessary polling without creating
+a Guest account system or exposing hosted content through email. Fixed presets
+make relationship continuity legible to the Owner while staying inside T1's
+approved maximum seven-day/three-Interaction envelope.
+
+**Effect:** these two inputs are authoritative for the remaining T5 review and
+later Control Packet reconciliation. They do not close T5, select an email
+provider, approve provider logs/retention/spend, or authorize implementation,
+external messaging, Guest-data handling, schema, deployment, public behavior,
+or production traffic. A reusable email login/magic link, more than three
+Interactions, longer duration, successor-following access, conversation
+thread, or persistent/cross-Room Guest identity requires a new Owner decision.
+
 ## 2026-08-03 — Demo schedule extended seven days
 
 **Decision:** internal feature freeze moves to 2026-08-16, the MVP must be
