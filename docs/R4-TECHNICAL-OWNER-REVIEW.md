@@ -1402,7 +1402,9 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 
 ### 你要判断什么
 
-这个有意保持异步和有限的 MVP，是否已经足够真实、诚实和有用？
+这个有意保持异步和有限的 MVP，是否已经足够真实、诚实和有用？一条
+Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
+可以留下、留下多久，以及删除承诺是否足够诚实？
 
 ### 推荐答案
 
@@ -1416,6 +1418,29 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
   Response，不形成 conversation thread。
 - Interaction 和 inline Guest Capsule 最长保存 30 天。
 - Response 保存 7 天，并且绝不超过所属 Interaction 的寿命。
+- 上述 30 天和 7 天都是最大上限，不是保证可读的最短时间。更早的
+  Interaction expiry、Guest deletion、origin revoke、Room retirement 或
+  其他已批准 T4 terminal lifecycle 会立即缩短可见性并触发相应 purge
+  obligation。仅有 Projection stale、supersede 或 expiry 时，已经 accepted
+  的 Interaction 仍遵守已批准 T4 的 origin-disclosed Response 规则，不会
+  被本条提前删除。
+- P0 不把 body-bearing Fresh Native Response Session transcript、model/tool
+  log、crash artifact 或 runtime root 当作 durable Forme state。正常结束时，
+  trusted launcher 在提交可用的 typed candidate（如果有）与 body-free
+  receipt 后清理 body-bearing session root；异常中断留下的 root 必须在
+  下一次启动恢复时，先于任何新 session 被识别并清理。只有 typed、尚未
+  发布的 Response candidate 可以进入 ordinary Native Workbench/model
+  不可读的隔离 local candidate store，最长保存 7 天且绝不超过所属
+  Interaction；任何更早的 delete、expiry、revoke、retirement 或 basis
+  invalidation 都使它立即不可用。一旦 terminal、expiry 或
+  invalidity 已被本地知道，candidate body 必须在同一个 local cleanup
+  transaction 中删除；若 cleanup crash，下一次启动先 fail-closed cleanup，
+  再允许任何 read 或新 session。Owner device 离线时不承诺 wall-clock
+  local purge，但本地重新启动后必须先检查 expiry，过期 body 不得返回。
+  Durable Session Receipt 只保留 body-free ID、hash、时间、Session Envelope
+  ID/hash、policy/version ID、status，以及 typed allowlisted、body/path-free
+  error/access summary；不保留 raw Guest/Response body、Workspace source
+  bytes 或 path、transcript、raw exception 或 tool arguments/output。
 - Guest deletion 立即让 hosted content 不可读；physical purge 在
   下一次成功的 scheduled retention run 完成，目标延迟小于 24 小时；
   `lastSuccessfulPurgeAt` 超过 36 小时就进入 operator incident。
@@ -1481,7 +1506,10 @@ Response Session，才会向那一个新 session 释放 exact request。approved
 NH1/NH2 本身不授予这些内容。它不能看见
 另一个 Room，不能因为 Controller 在 Web 上有更大权限就继承那些权限，
 也不能自行增加 scope。Web 和 CLI 对同一 mutation 返回相同语义的
-receipt。
+receipt。Fresh Session 产生 typed candidate 和 body-free receipt 后，
+body-bearing transcript/log/crash root 被清理；Owner review 的是隔离保存、
+受 Interaction/T4 lifecycle 约束的 typed candidate，而不是一份永久聊天
+记录。
 
 ### D. Guest 带着自己的 notes
 
@@ -1499,7 +1527,11 @@ Unlist 移除 discovery 和 public knock，但不删除 Owner 已发 private
 continuation；revoke 移除 body；Room retirement 结束整个 surface。
 Guest deletion 立即移除 hosted access，offline local copy 在下一次
 Agent workflow 的显式 typed sync（或 Owner 手工 `room sync`）时收到。
-丢失 HTTP response 时，用原 idempotency key 恢复结果，不重复动作。
+30 天和 7 天只设最晚上限；Guest deletion、Interaction/candidate expiry、
+origin revoke 或 Room retirement 可以更早结束可见性和 retention。仅有
+Projection stale、supersede 或 expiry 时，已经 accepted 的 Interaction
+仍可按 T4 得到披露 origin state 的新 Response。丢失 HTTP response 时，
+用原 idempotency key 恢复结果，不重复动作。
 
 ## 哪些部分完全交给 Agent 审计
 
