@@ -1,13 +1,24 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-07-23
-- Current verdict: **R3 is owner-accepted for the MVP: bounded control is demonstrated, and independent CASE-02 found the correction-aware Forme output useful and effectively tied with the rich manual baseline at current owner resolution**
+- Updated: 2026-08-03
+- Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
+  human-boundary model, R4 T1 public/private Room behavior, T2 Room control
+  contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
+  and T4 public lifecycle contract plus full T5 are Owner-approved; four
+  continuation presets are fixed—24h/1, 3d/2, familiar 7d/3, and explicitly
+  Owner-selected trusted 7d/10. Technical Control Packet v0.2 reconciliation,
+  independent audit, and hashing are complete at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
+  the Owner approved those exact bytes on 2026-08-03; Gate A repository-only
+  implementation is authorized but all R4 behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
 - [`PRODUCT.md`](./PRODUCT.md), which states the product claim and scope;
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md), which states durable system boundaries;
+- [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md), which
+  states the approved Harness/Forme role and two-class authority contract;
 - [`CONTROL.md`](./CONTROL.md), which states the current gate and next decision;
 - [`DECISIONS.md`](./DECISIONS.md), which records owner-confirmed decisions only.
 
@@ -437,13 +448,14 @@ the notes or claiming a Guest Twin. Deeper questions and Resonance Requests
 return to the local Forme Agent and owner for reviewed response.
 
 The owner also approved two independent social gates and a layered identity
-model:
+model. In the then-current pre-T1 brief:
 
 - the entity owner approves the exact immutable Projection Capsule;
 - the Third Place curator separately admits or removes the Room;
 - invite-only accounts prove durable controller authority, not personhood;
 - public readers need no account;
-- signals use an invite or verified reply session;
+- signals used an invite or verified reply session; T1 later superseded this
+  only for one bounded public first knock;
 - agents receive narrow delegated credentials;
 - account, entity, Room, capsule, agent, guest, and curator identity remain
   distinct.
@@ -459,6 +471,449 @@ that the hosted topology fits the schedule. It authorizes only preparation of a
 technical Control Packet. No R4 schema, account, Room, public deployment,
 message, persistence, note access, local synchronization, or implementation is
 authorized yet.
+
+## Evidence round 7 — Public knock and true Private Room correction
+
+On 2026-07-26 the Owner noticed that the first Technical Owner Review applied
+one Guest-duration model to both a public Third Place Room and an assumed
+Private Forme Room. Reviewing the actual product contract exposed two gaps:
+there was no first-class Private Room at all, and the public venue still
+required an Owner invite before every signal. The nearest existing
+`unlisted/direct URL` behavior was publicly readable by possession of the URL
+and therefore was not privacy.
+
+The Owner approved a clearer relationship model:
+
+- a current, fresh, curator-admitted Third Place Room is publicly readable and
+  may accept one private public knock within 24 hours per anonymous bearer
+  capability/session;
+- the system does not claim that anonymous capabilities enforce one request per
+  real human, so a bounded Room-level public pool remains necessary;
+- public requests and Owner Responses remain private rather than becoming
+  comments;
+- after review, the Owner may offer a new short pass through the Guest's
+  existing private reply capability;
+- a true Private Room uses a different Room ID and separately approved
+  Projection under the same Forme entity, never enters Third Place, and
+  requires an exact Owner Grant to read or interact;
+- Curator admission/unlisting controls public discovery, while Owner actions
+  control intake mode, Grant issue/revoke, and continuation offers;
+- `unlisted` cannot be used as a privacy state; at that round exact unlist
+  effects on active Grants and Grant Offers remained a pending T4 decision.
+  T4 later closed in Evidence round 14 below.
+
+The useful mental model is **public square plus one doorbell; invited meeting
+room for continued private access**. This correction makes the Third Place
+approachable without turning it into open chat or a generalized mailbox, and
+keeps private content behind a separate positive authorization.
+
+This discussion did not test a real visitor, measure spam or Owner workload,
+validate the 20-per-Room rolling-24-hour public pool, or prove that a
+three-interaction short pass feels sufficient. It also did not authorize
+implementation. At that point T1 closed at the product-contract level while
+T2–T5 remained stop gates. T2, T3, and T4 have since closed separately; T5,
+the reconciled Technical Control Packet, exact schema/migration manifest, and
+production deployment grant remain stop gates. A later Native Harness
+architecture clarification inserted NH1/NH2 before T3 without changing this
+historical evidence.
+
+## Evidence round 8 — Privacy-first agency direction and proposed formalization
+
+On 2026-07-27 the Owner identified a more fundamental preference behind the
+Room/API discussion: Forme should protect the human privacy boundary and
+otherwise minimize friction while allowing Twin/Agent agency to become
+substantial. A whole-system audit found the direction sound. The Agent also
+identified two companion risks for the Owner to judge: an Agent could
+impersonate or commit the human, or cause an irreversible/materially
+high-impact effect without exposing new private data.
+
+At that point the Owner-stated part was the
+privacy-first/minimum-friction direction. The **proposed formalization** taken
+into the next Owner review was:
+
+- define the primary perimeter around source/provider/audience domains not
+  already covered by an admitted envelope;
+- add companion identity/commitment and irreversible-consequence guards plus a
+  no-self-expansion rule;
+- grant useful persistent, observable, revocable authority inside it;
+- use receipts, verification, exception reporting, stop/revoke, and undo where
+  feasible instead of repeated ceremonial approval;
+- treat confidence and owner-history similarity as calibration, never
+  permission;
+- interpret “narrow delegation” as an exact perimeter, not a deliberately weak
+  set of one-use verbs.
+
+Applied to R4, this changes the pending T2 recommendation from operational sync
+plus one-use approval for nearly every management action to one fixed,
+exact per-Room `room_operator.v1` scope bundle for routine transport and
+deterministic lifecycle enforcement.
+It also clarifies that T3's exact context manifest and T5's no-daemon design are
+August bootstrap choices, not Forme's long-term agency ceiling. T1 remains
+unchanged.
+
+This round records product judgment, not usage evidence. It does not prove that
+the proposed Room Operator scope feels safe, that exception-based supervision
+is understandable, or that Agent-triggered explicit sync removes enough
+friction. At that point those required the exact T2–T5 decisions,
+implementation, and owner demo. T2, T3, and T4 have since closed as
+governance, but the usage proof remains absent. No R4 implementation was
+granted.
+
+## Evidence round 9 — P approval and R1–R4 continuity audit
+
+On 2026-07-28 the Owner approved P for the R4 authority contract:
+
+- privacy is the primary source/provider/audience perimeter;
+- representation/commitment and irreversible/material consequence are
+  companion guards;
+- existing authority cannot expand itself;
+- covered work inside an explicit, inspectable, revocable envelope proceeds
+  review-by-exception.
+
+This is governance evidence, not usage evidence. The P approval by itself
+closes the human-boundary interpretation only; it does not validate the
+proposed Room Operator experience or approve T2–T5, schemas, implementation,
+provider visibility, hosted mutation, external interaction, deployment, or
+spend. T2 was approved separately afterward.
+
+The same round audited whether R1–R3 actually support R4. The state chain is
+genuinely additive: V3 retains V2 cognition, R3 action requires an active
+Owner-corrected Reflection, and execution/rollback return receipts and source
+state to the same Twin. The audit also found one concrete regression gap:
+`ContextPacketV1` forwarded active corrections only when the current Twin was
+exactly V2, so a later cognition run after V3 promotion silently lost them.
+The fix now forwards corrections from every non-V1 Twin and a real
+V2-correction → V3-promotion → next-Context-Packet regression raises the suite
+from 44 to 45 passing checks.
+
+Architectural continuity does not yet prove the R4 experience. The required
+acceptance bridge now demands a real, freshly observed Forme Twin, claim-level
+local basis, truthful correction/effect eligibility, stale/no-op behavior, no
+automatic Signal-to-Twin admission, and one real
+Twin → Projection → Guest Signal → local judgment → Response path. Until that
+path runs, R4 product value and interaction quality remain unproven.
+
+## Evidence round 10 — T2 Room control contract approval
+
+On 2026-07-28 the Owner approved the full recommended T2 branch after a
+low-cognitive-load review. The accepted mental model is one independently
+revocable Room work permit per exact Room—not one credential for an entire
+account or workspace:
+
+- hosted Forme is the no-AI GitHub-like Web/API control plane, and private
+  reasoning remains local;
+- every approved P0 Room semantic operation has one versioned API; P0 CLI
+  covers applicable public/Guest operations and `room_operator.v1`, while
+  Controller/Curator CLI delegation remains P1;
+- one workspace may hold multiple Room bindings, but each binding and
+  credential covers one exact Room for 30 days, never auto-renews, and may be
+  revoked earlier;
+- the connector—not the model—holds the credential;
+- the operator may inspect, explicitly sync/pull, ACK/recover, deterministically
+  attest stale, and transport only still-current exactly Owner-approved
+  Projection/Response artifacts;
+- it may not create/discover Rooms, widen scope/audience, issue Grants, change
+  intake or Interaction disposition, author Owner content, curate, revoke
+  content, retire/delete, or invoke arbitrary tools;
+- authenticated Owner Web may see and control content already hosted on the
+  server, but never the private Twin or local draft context.
+
+This is governance evidence, not a successful Room usage result. No binding,
+credential, API, Room, Projection, hosted record, model run, deployment, or
+external interaction was created or exercised. At that round T3–T5 remained
+unapproved; T3 and T4 have since closed, while T5, the reconciled Packet, wire
+schemas, implementation, and production authority remain unapproved. The old
+packet's broader paired-local revoke and `signal:disposition` scopes are
+explicitly excluded from T2.
+
+## Evidence round 11 — NH1/NH2 Native Harness architecture approval
+
+On 2026-07-29 the Owner approved NH1 option 1 and NH2 option 1 as recommended:
+
+- the Native Harness Workbench is the default local carrier, with Codex as the
+  P0 workbench and OpenCode retained as a first-class architectural
+  compatibility target whose live path remains P1;
+- Forme integrates through CLI/API/MCP/Skill/Plugin/adapter surfaces rather
+  than building a competing local chat shell for the MVP;
+- those are architecture-level integration forms, not simultaneous P0
+  deliverables; August requires only the minimum Codex-facing path for the
+  walking slice and no live OpenCode path;
+- ordinary Owner/Harness Workspace activity may use native capabilities only
+  inside a separately approved runtime envelope; its results may be offered
+  and admitted as evidence only through a separately approved
+  source/observation contract, never automatically ingested as Twin meaning or
+  a Forme-authoritative effect;
+- canonical meaning, correction, authority, Projection/Response scope,
+  human-attributed publication or commitment, and claimed Forme
+  receipt/rollback guarantees continue through typed Forme contracts;
+- P0 Forme-authoritative effects remain narrow and deterministic; later
+  Harness-native physical execution requires a separately approved Forme
+  envelope, verification, and receipts.
+
+This is architecture-governance evidence, not a successful Native Workbench or
+R4 usage result. The exact T3 runtime/source/capability design is now approved,
+but no concrete runtime capability, file access, provider call, Guest data,
+Room mutation, credential, schema, implementation, deployment, external
+action, or spend was exercised or authorized. NH1/NH2 and T3 are closed; T4 is
+now also closed separately, while T5 is the active Owner card and
+reconciliation of the detailed Technical Control Packet remains open.
+
+## Evidence round 12 — Fresh Native Response Session direction selected
+
+On 2026-08-01 the Owner selected Option 2B as the direction for R4 P0 after
+revisiting how Native Harness Mode was expected in the Highest and MVP Vision:
+
+- do not reuse the Owner's current/saved Codex conversation for Guest work;
+- start one brand-new, disposable session for one exact Interaction;
+- let that session dynamically read/search a sanitized read-only snapshot of
+  current eligible Forme files plus typed body/path-free Twin orientation
+  instead of asking the Owner to choose an
+  exact 32 KiB private-context manifest;
+- keep Guest inbox browsing, other Interactions/Rooms, writers, Web/network
+  tools, environment secrets, connector credentials, Room mutation, and
+  publication outside the session;
+- keep the output as a candidate requiring exact Owner publication approval;
+- move the Managed Privacy response lane and trust-tier selector to P1/future,
+  while preserving accepted R2/R3 Managed Privacy evidence.
+
+The product judgment is that this direction better demonstrates mature
+Harness agency and Forme's distinct continuity/authority/presence layer with
+less MVP friction. The explicit scope assumption is the Forme project repo,
+not a personal Knowledge Vault or highly sensitive source zone.
+
+This round was **direction/architecture evidence only**. No session was run and
+no product usefulness, containment, privacy, consent, provider behavior,
+deletion, or response quality was validated. At the close of this round on
+2026-08-01, full T3 consent, exact source/provider/capability envelope, session
+budget, physical boundary and lifecycle still awaited Owner approval; that
+contract closed separately on 2026-08-03 in Evidence round 13 below.
+
+## Evidence round 13 — exact Fresh Native Response Session T3 approved
+
+On 2026-08-03 the Owner approved the full recommended T3 contract, not merely
+the earlier Option 2B direction. The approved R4 P0 boundary fixes one new,
+non-resumed session per exact Interaction; a 60-minute, one-automatic-draft
+budget of at most three internal provider dispatches, 128k input tokens, 8k
+output tokens, and an applicable US$1 incremental-spend cap; dynamic
+read/search only inside a deterministic sanitized read-only snapshot generated
+from clean Forme repo HEAD plus a previewed body/path-free Twin orientation;
+disclosed Owner-local Codex → OpenAI transport with no provider/model fallback;
+physical separation from ambient conversations/config, Git history, other
+Rooms and Guest bodies, writers, generic network/tools, connector credentials,
+mutation, and publication; explicit Guest consent with a
+`manual_owner_only` fallback; and exact Owner approval before separate T2
+connector delivery of any outgoing Response.
+
+This is **Owner decision evidence, not runtime or product evidence**. The
+approval permits documentation and later Packet reconciliation only. No Fresh
+session, source read, provider call, Guest data, Room mutation, schema,
+implementation, deployment, external action, production write, or spend was
+authorized or exercised, and no containment, response quality, deletion, or
+retention claim was validated. T4 subsequently closed through Evidence round
+14 below; T5 is now the current Owner gate, and the old Technical Control
+Packet remains unreconciled and unapprovable. Repository implementation and
+fixture/local tests still wait for a new audited, hashed, separately
+Owner-approved Packet; schema/migration and production authority remain later
+independent gates.
+
+## Evidence round 14 — R4 T4 public lifecycle contract approved
+
+On 2026-08-03 the Owner approved the full recommended T4 lifecycle contract:
+
+- Owner publication and Curator admission are independent;
+- Third Place shows only current, fresh, admitted Projections;
+- an unrevoked, unexpired public Projection remains direct-readable when never
+  admitted or unlisted, while unlist stops discovery and public knocks;
+- unlist invalidates unused public encounter capabilities but does not by
+  itself revoke a still-valid exact Owner Grant or `GrantOffer`;
+- `GrantOffer` acceptance atomically rechecks source, target, private reply
+  authority, expiry, and Room mode and never extends expiry;
+- Private Room bodies always require an exact Owner Grant, and P0 never changes
+  a Room from public to private in place;
+- `invite_only` stops unused public encounters, while `closed` pauses all new
+  submissions; neither unlist nor a mode change deletes accepted Interactions;
+- stale content is warning-only and read-only until hard expiry, with no new
+  public or private Interaction;
+- revoke immediately removes the Projection body, hides linked Responses, and
+  terminates new response authority for requests bound to that origin;
+- retirement ends the entire Room surface and all new writes;
+- revoke and retirement leave only body-free Guest status/delete and require
+  local purge after the corresponding tombstone is received;
+- public successors require fresh Curator admission, no successor inherits a
+  Grant, and old stale, superseded, or expired requests may receive only an
+  origin-disclosed reviewed Response.
+
+This is **Owner governance evidence, not runtime, safety, or product
+evidence**. No lifecycle route, database transaction, expiry clock,
+direct-read surface, Grant/GrantOffer recheck, tombstone delivery, local purge,
+race recovery, or Guest experience was exercised. It therefore does not prove
+that unlisted direct-read is understandable, that stale warnings are noticed,
+that revoke propagates promptly, or that accepted requests and Responses
+behave correctly under concurrent lifecycle changes.
+
+T4 permits documentation and later Packet reconciliation only. T5 is the
+current Owner gate, the existing Technical Control Packet remains unreconciled
+and unapprovable, and no schema, implementation, provider call, Guest data,
+credential, hosted mutation, external interaction, deployment, production
+write, public behavior, or spend has been authorized or validated.
+
+## Evidence round 15 — Guest identity recap and two T5 inputs fixed
+
+On 2026-08-03 the Owner accepted the Guest identity explanation and fixed two
+product-facing inputs inside the still-open T5 review:
+
+- P0 Guest continuity remains capability-scoped rather than account-scoped.
+  Anonymous Manual Guests hold an exact public encounter and later private
+  reply capability; known collaborators and Private Room Guests hold
+  Owner-issued exact Room + Projection Grants; Agent Guests use short-lived
+  one-shot derivatives. None proves real-world personhood or creates a
+  reusable cross-Room Guest identity.
+- An exact Interaction may optionally carry a confirmed
+  `response_ready_email` endpoint. It sends a generic readiness notice with no
+  request/response body, Private Room name, reply URL, token, or secret; it is
+  contact metadata rather than identity, authorization, or capability
+  recovery. The original private reply URL remains canonical.
+- The Owner-facing continuation choices become three capability presets: one
+  visit is 24 hours / 1 accepted Interaction, short exchange is 3 days / 2,
+  and familiar collaborator is 7 days / 3. Each permits at most one unresolved
+  request, remains exact Room + Projection scoped and revocable, and never
+  grants Private Room access by familiarity alone.
+
+This is **Owner product/governance evidence, not Guest usage evidence**. No
+email was sent, identity verified, pass issued, Interaction accepted, response
+delivered, retention process run, provider selected, or user friction
+measured. It does not show whether Guests will retain the private reply URL,
+whether generic email is sufficient across devices, whether the presets match
+real collaborator rhythms, or whether three Interactions feel continuous.
+
+These inputs update the remaining T5 proposal without closing it. Email
+provider/log/retention/spend, physical deletion, the overall P0 cut, the
+reconciled Packet, schemas, implementation, deployment and production traffic
+remain separate unapproved gates.
+
+## Evidence round 16 — Full T5 approved and fourth continuation tier added
+
+Later on 2026-08-03 the Owner approved the complete recommended T5 contract
+and made one additive change to the earlier continuation surface:
+
+- familiar collaborator remains 7 days / 3 accepted Interactions;
+- trusted collaborator is added as a fourth, explicitly Owner-selected preset
+  at 7 days / 10 independent accepted Interactions;
+- both remain exact Room + Projection scoped, revocable, limited to one
+  unresolved request, shared by Manual and one-shot Agent carriers, and unable
+  to follow a successor or unlock a Private Room by label alone. The system may
+  not infer the trusted tier from email, identity, history, behavior, or model
+  judgment;
+- explicit Agent-triggered `room sync` plus manual recovery, reply-URL polling,
+  optional notification-only exact-Interaction email, and no Owner-device
+  daemon/live-chat/server-AI topology are now closed T5 requirements;
+- Interaction and inline Guest Capsule bodies have a 30-day maximum; Response
+  and isolated unpublished candidate bodies have a 7-day maximum capped by
+  the Interaction. Earlier deletion, expiry, origin revoke, Room retirement,
+  or candidate-basis invalidation shortens availability and triggers the
+  approved cleanup/purge obligations;
+- hosted deletion becomes immediately unreadable, scheduled physical purge
+  targets less than 24 hours, and more than 36 hours without a successful purge
+  is an operator incident. Fresh-session body artifacts are disposable and
+  durable Session Receipts remain body-free/path-free; and
+- actual backup, infrastructure-log, and outbound-email provider retention,
+  region, secret, delivery-metadata, and spend values must be disclosed in a
+  later Production Deployment & Provisioning Grant before real interaction or
+  production email. Notes ingestion, Person Twin, open signup, multiple
+  required residents, public search/feed, server AI, rich attachments, and
+  cross-Room reusable Agent identity stay outside R4 P0.
+
+This is **Owner product/governance evidence, not runtime or usability
+evidence**. No email was sent, endpoint verified, pass issued, Interaction
+accepted, sync run, Response delivered, body deleted, purge job or incident
+monitor exercised, provider called, schema written, application implemented,
+or production resource changed. It does not establish that 10 independent
+Interactions feel coherent, that the generic notice is sufficient, that local
+cleanup is enforceable, or that deletion and offline synchronization races are
+correct.
+
+T5 is now closed as design authority. The current stop gate is a newly
+reconciled Technical Control Packet compiled from P/T1/T2/T3/T4/T5/NH1/NH2,
+independently audited, assigned a new SHA-256, and separately approved by the
+Owner. Full T5 approval authorizes documentation and Packet reconciliation
+only; implementation, schema/migration, provider calls, real Guest-data
+handling, external messaging, deployment, production writes/traffic, public
+behavior, and spend remain unauthorized and unvalidated.
+
+## Evidence round 17 — Technical Control Packet v0.2 reconciled and audited
+
+Later on 2026-08-03 the approved P/T1/T2/T3/T4/T5/NH1/NH2 contracts were
+compiled into a clean Technical Control Packet v0.2. The exact approval object
+is 1,981 lines / 107,235 bytes with SHA-256
+`e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+
+Three independent read-only audits returned Green on those exact bytes:
+
+- authority and causal-chain compatibility, including one-use dispatch
+  linearization and post-email-handoff `no_future_retry` behavior;
+- lifecycle, retention/deletion, email recovery, local locking, Fresh-session
+  concurrency, close/offline behavior, and required race tests; and
+- physical containment, Codex feasibility, source/origin boundaries,
+  transport/budget accounting, candidate extraction, Git snapshot behavior,
+  Cloudflare origin expectations, and recovery scope.
+
+The repository verification for this documentation state passes all 45
+deterministic tests, Markdown structure and relative-link checks across 22
+files, and `git diff --check`.
+
+This is **control-design and audit evidence, not runtime or product
+evidence**. No R4 code, schema, migration, provider/model call, real Guest
+body, hosted mutation, email, deployment, public traffic, production write, or
+spend was created or exercised. The Green audits therefore do not prove
+containment on a real Codex invocation, macOS launcher hardening, response
+quality, hosted race behavior, email delivery, deletion, restore, or the
+three-minute encounter.
+
+The remaining Yellow conditions are deliberately later evidence gates rather
+than Packet-approval blockers:
+
+- Gate B must prove that the official Codex adapter can enforce the bounded
+  Snapshot Query Broker plus exact transport, model, output, token, and cost
+  boundary; otherwise the AI lane remains manual-only;
+- Gate B must prove the signed/hardened macOS launcher, native review,
+  Keychain, reverse isolation, sandbox, and cleanup as one physical system;
+  and
+- Gate C must bind the actual production origin, backup/log retention, OpenAI
+  account, email provider, real actors/data, and spend before real traffic.
+
+At Evidence round 17, the stop gate was separate Owner approval of the exact
+Packet hash. That approval could permit only the bounded Gate A repository
+implementation and synthetic/local tests described by the Packet, not Gate B
+provider work or Gate C production work. Evidence round 18 records its later
+closure.
+
+## Evidence round 18 — Exact Packet approved; Gate A opened
+
+Later on 2026-08-03 the Owner replied “嗯嗯，那我批准” directly to the one
+immediately preceding approval object for Technical Control Packet v0.2. The
+approval record binds that actual utterance to the only presented object:
+
+```text
+批准 R4 Technical Control Packet v0.2 sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
+```
+
+The Packet file itself remains byte-frozen at 1,981 lines / 107,235 bytes and
+the same audited SHA-256. The approval therefore opens exactly Gate A:
+repository code/docs, synthetic fixtures, local unit/property/integration
+tests, ephemeral local PostgreSQL, content-safe read-only capability probes,
+and preparation of the next exact Gate B Manifest.
+
+This is **Owner authorization evidence, not implementation or product
+evidence**. At the moment of approval no R4 code, schema/migration, provider
+call, real Guest data, hosted mutation, email, deployment, production traffic,
+secret, or spend had been created or exercised. Gate A completion must produce
+new technical evidence and a synthetic/local walkthrough; it cannot claim a
+real Room encounter.
+
+The next Owner stop gate is the hash-pinned Gate B Schema, Runtime, and
+Migration Manifest. A model call remains forbidden unless that separately
+approved Manifest contains and the Owner names the exact First Provider-Call
+Test Grant. Real Guest/hosted/production work remains Gate C.
 
 ## Follow-up product-learning questions — not R4 blockers
 

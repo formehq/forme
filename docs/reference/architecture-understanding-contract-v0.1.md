@@ -29,8 +29,6 @@ This contract is intentionally smaller than the White Paper and more semantic th
 
 ## 1. Architecture map
 
-![Forme MVP Architecture Map](Forme_MVP_Architecture_Map_v0.1.png)
-
 ```mermaid
 flowchart BT
     subgraph S0[Signals & Environment]

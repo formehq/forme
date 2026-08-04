@@ -1,10 +1,14 @@
 # Knowledge Vault entropy investigation
 
 > **Research status:** owner-supplied read-only investigation captured on 2026-07-22. This is evidence for Stewardship and long-running knowledge-system design, not current Forme product or implementation authority.
+>
+> Source coordinates below are intentionally recorded as non-clickable,
+> vault-relative paths. The source vault is owner-local and is not part of this
+> repository, so these coordinates are provenance rather than portable links.
 
 ## Prompt
 
-调查这个repo(/Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB), 然后就Second Brain/Long Running Knowledge Vault/maintaining low entropy来讲，这个repo是怎么组织的？
+调查 owner-local `Zayn-Knowledge-DB` vault，然后就 Second Brain / Long Running Knowledge Vault / maintaining low entropy 来讲，这个 repo 是怎么组织的？
 
 ## Answer
 结论：这个 repo 不是一个传统的“分类式 Second Brain”，而是一个 AI 可操作的长期认知系统原型。它的组织核心是：
@@ -48,7 +52,7 @@ Capture
 Raw Input → Selection → Compression → Concept → Output → Feedback → Better Input
 ```
 
-见 [Compounding Knowledge System](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/02_Wiki/Concepts/Compounding Knowledge System.md:20>)。
+见 Compounding Knowledge System（`02_Wiki/Concepts/Compounding Knowledge System.md:20`）。
 
 关键点是“Raw 与 synthesis 分层”：AI 可以改写 Wiki，但不应破坏 Raw 的来源真实性。这让系统可以不断重新解释过去，而不必相信某次 AI 总结就是最终版本。
 
@@ -64,7 +68,7 @@ Raw Input → Selection → Compression → Concept → Output → Feedback → 
 
 概念再通过 `role: hub | support | seed | reference`、`maturity`、`priority` 表达重要度，而不是让每篇笔记看起来都同样重要。
 
-它允许多个中心并存，不强迫所有内容归入一个总理论。[AI Operating Spec](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/AI Operating Spec.md:31>) 明确规定这些只是不同入口。
+它允许多个中心并存，不强迫所有内容归入一个总理论。AI Operating Spec（`AI Operating Spec.md:31`）明确规定这些只是不同入口。
 
 ### 3. 它有两条独立导航线
 
@@ -83,11 +87,11 @@ Home → Action Index → Active Work Hub → Operating Plan
 
 这是很重要的设计：**“我想理解什么”与“我现在该做什么”不再使用同一套导航。**
 
-[Home](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/Home.md:3>) 是意图路由器；`Topic Map`、Canvas、Bases 负责知识浏览；`Action Index` 和 `Forme Console` 负责当前工作。全局 Graph 被主动降级，因为它容易把链接数量误当成知识结构。
+Home（`04_Index/Home.md:3`）是意图路由器；`Topic Map`、Canvas、Bases 负责知识浏览；`Action Index` 和 `Forme Console` 负责当前工作。全局 Graph 被主动降级，因为它容易把链接数量误当成知识结构。
 
 ### 4. 重复维护被外部化成可执行协议
 
-`04_Index/Workflows.md` 描述一般流程；[AI Work Contracts](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/AI Work Contracts.md:24>) 则把重复任务写成：
+`04_Index/Workflows.md` 描述一般流程；AI Work Contracts（`04_Index/AI Work Contracts.md:24`）则把重复任务写成：
 
 ```text
 Trigger
@@ -100,7 +104,7 @@ Trigger
 
 目前有 13 个 contract，覆盖 Inbox、Flomo、行动整理、报告回填、People signal、公开安全提炼和 layer drift 等。
 
-其中 C13 很关键：它专门检查“下层材料已经变了，上层概念、项目、行动页和公共叙事是否还停在旧状态”，见 [C13 Vision Drift / Layer Synchronization](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/AI Work Contracts.md:465>)。
+其中 C13 很关键：它专门检查“下层材料已经变了，上层概念、项目、行动页和公共叙事是否还停在旧状态”，见 C13 Vision Drift / Layer Synchronization（`04_Index/AI Work Contracts.md:465`）。
 
 ### 5. `98_Forme/` 是第二代低熵运行时
 
@@ -114,7 +118,7 @@ Trigger
 → 执行并留下 Git receipt
 ```
 
-例如 [这张 dangling-task card](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/98_Forme/cards/card_3b4f11c6b765df0b.md:15>) 发现“Post Log 的汇总数字和真实 pipeline 不一致”，然后给出两处最小修改。
+例如这张 dangling-task card（`98_Forme/cards/card_3b4f11c6b765df0b.md:15`）发现“Post Log 的汇总数字和真实 pipeline 不一致”，然后给出两处最小修改。
 
 这让低熵维护从“AI 写一篇建议报告”变成了“人做一个小判断，机器完成可逆修改”。它还保留 fingerprint、decision log、run metrics 和 Taste Rules，试图逐渐学会哪些低风险修复可以自主执行。
 
@@ -142,9 +146,9 @@ Trigger
 - Daily Briefing / State Diff 恢复“上次之后发生了什么”。
 - Work Contracts 让未来 agent 不依赖聊天记忆。
 
-它甚至记录了一个失败：旧 Daily Briefing 要求人每天填写状态和晚间回顾，7 天内死亡；后来被重写成只读、五分钟以内的 AI briefing，见 [Daily Briefing Workflow](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/Daily Briefing Workflow.md:12>)。
+它甚至记录了一个失败：旧 Daily Briefing 要求人每天填写状态和晚间回顾，7 天内死亡；后来被重写成只读、五分钟以内的 AI briefing，见 Daily Briefing Workflow（`04_Index/Daily Briefing Workflow.md:12`）。
 
-但长期运行目前仍不稳定：[Scheduled Agent Maintenance](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/Scheduled Agent Maintenance.md:18>) 已明确承认定时自动化没有持续运行，真实状态仍是 local on-demand。
+但长期运行目前仍不稳定：Scheduled Agent Maintenance（`04_Index/Scheduled Agent Maintenance.md:18`）已明确承认定时自动化没有持续运行，真实状态仍是 local on-demand。
 
 ### Maintaining Low Entropy
 
@@ -180,7 +184,7 @@ Trigger
 - Reports 88 vs Posts 6：明显存在 meta-work 吸引子。
 - 49 篇 concept 仍全部处于 `seed` 或 `draft`，没有 `developed` / `evergreen`。
 
-而且 [Action Index](</Users/zaynw/Documents/Obsidian/Zayn-Knowledge-DB/04_Index/Action Index.md:117>) 仍写着“07-13（今天）”和已经过去的 07-14 任务，说明一旦 agent 停跑，live surface 很快产生时间漂移。
+而且 Action Index（`04_Index/Action Index.md:117`）仍写着“07-13（今天）”和已经过去的 07-14 任务，说明一旦 agent 停跑，live surface 很快产生时间漂移。
 
 所以最准确的总结是：
 

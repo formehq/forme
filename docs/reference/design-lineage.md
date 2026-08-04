@@ -1,7 +1,7 @@
 # Forme design lineage
 
 - Status: reference only; not an implementation contract
-- Updated: 2026-07-24
+- Updated: 2026-07-29
 - Historical source: [`harness-first` design archive](https://github.com/formehq/forme/tree/harness-first)
 
 This document preserves the important ideas that led to the current Living
@@ -45,6 +45,26 @@ Codex or OpenCode can perform sophisticated work without Forme. Forme becomes
 distinct where temporary runtime activity is admitted into a durable model of
 what the entity currently means, what the owner has corrected, and what the
 system is allowed to do or show.
+
+The early Harness was imagined as a complete operational body, including
+sessions, files, shell, tools, Skills, MCP, plugins, subagents, permissions,
+and ongoing runtime interaction. During the rebuild, R2/R3 deliberately
+narrowed the first proof to an exact packet, zero-tool pass and a deterministic
+Forme effect. That narrowing proved visibility, admission, correction, and
+receipts; it did not reject the Native Harness shape from the Highest Vision.
+
+The Owner confirmed this lineage clarification on 2026-07-28. The current
+authority is
+[`../NATIVE-HARNESS-ARCHITECTURE.md`](../NATIVE-HARNESS-ARCHITECTURE.md):
+Native Harness Workbench, Forme Semantic Spine, and Managed Privacy Run are
+distinct roles. On 2026-07-29 the Owner approved NH1 option 1 and NH2 option 1:
+Codex is the P0 default Native Workbench, OpenCode remains a first-class
+compatible target, and ordinary native Workspace work remains outside Forme
+unless its results are separately offered and admitted as evidence, while
+canonical meaning and claimed Forme authority continue through typed Forme
+contracts. This records architecture classification only; no concrete runtime
+envelope, file, shell, tool, provider, Guest, Room, implementation, or
+deployment authority was granted.
 
 ## Specialized agents were cognitive organs
 

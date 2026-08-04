@@ -5,6 +5,8 @@ This repository is being rebuilt to keep implementation speed and owner understa
 ## Before changing anything
 
 1. Read `docs/PRODUCT.md`, `docs/CONTROL.md`, and the active GitHub issue.
+   Before runtime, context, file/tool authority, or R4 T3 work, also read
+   `docs/NATIVE-HARNESS-ARCHITECTURE.md`.
 2. Name the user-visible outcome and current roadmap gate.
 3. Identify whether the change touches an owner stop gate.
 4. Keep one pull request to one demonstrable outcome.
@@ -26,7 +28,34 @@ Do not implement past the proposal stage without explicit owner confirmation whe
 - The owner retains final authority over meaning and authorship.
 - Runtime sessions are disposable computation, never canonical truth.
 - Agent inference remains evidence-backed, uncertain, revisable, and invalidatable.
-- Canonical writes are deterministic, authorized, inspectable, and reversible where feasible.
+- Under the Owner-approved NH2 two-class boundary, implemented
+  Forme-authoritative writes remain deterministic, authorized, inspectable,
+  and reversible where feasible.
+- Ordinary Native Workbench activity may use harness-native capabilities only
+  inside a separately approved runtime envelope. Its results may be offered
+  and admitted as evidence only through a separate typed Forme contract; they
+  are never auto-ingested as canonical meaning or a Forme-authoritative effect.
+- The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
+  tool, network, provider, credential, Guest, or Room authority.
+- The 2026-08-03 R4 T3 approval fixes the exact Fresh Native Response Session
+  contract. The 2026-08-03 T4 approval fixes the recommended public/admission,
+  unlist, stale, revoke, retirement, and successor lifecycle contract without
+  expanding `room_operator.v1`. The 2026-08-03 full T5 approval fixes explicit
+  sync/manual recovery, optional notification-only email, four exact
+  continuation presets (24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted
+  7d/10), body-retention ceilings, deletion/purge honesty, and the P0 cut.
+  These approvals authorized only authority-document and reconciled Control
+  Packet preparation. Packet v0.2 is independently audited at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+  The Owner approved those exact bytes on 2026-08-03. Gate A authorizes only
+  repository code/docs, synthetic fixtures, local/ephemeral tests, read-only
+  probes that expose no real content, and preparation of the next exact
+  manifest. A Fresh Native Response provider call, real Guest-data handling,
+  schema migration, deployment, spend, production Room mutation, external
+  message, secret, or public response capability remains unauthorized.
+  Schema/runtime/migration validation and any first provider call require the
+  separately approved Gate B Manifest and named test grant; production/public
+  action requires Gate C.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

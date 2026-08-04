@@ -1,6 +1,8 @@
 # Agent runtime strategy — curated 2026-07-15 research
 
-- Status: dated research plus durable architecture guidance
+- Status: dated research plus durable architecture guidance; Native
+  Workbench/Managed Privacy dual-mode clarification added 2026-07-28;
+  NH1/NH2 architecture choices Owner-approved 2026-07-29
 - Curated: 2026-07-24
 - Original: [`harness-first/design/agent-runtime-strategy.md`](https://github.com/formehq/forme/blob/harness-first/design/agent-runtime-strategy.md)
 
@@ -24,6 +26,18 @@ before implementing or upgrading an adapter.
 This avoids two bad outcomes: rebuilding commodity harness machinery inside
 Forme, or reducing mature runtimes to a lowest-common-denominator interface.
 
+The Owner-confirmed 2026-07-28 clarification and 2026-07-29 NH1/NH2 approvals
+are authoritative in
+[`../NATIVE-HARNESS-ARCHITECTURE.md`](../NATIVE-HARNESS-ARCHITECTURE.md):
+Codex/OpenCode may act as the mature Native Harness Workbench; Forme is the
+durable Semantic Spine; an exact packet/no-tools invocation is a Managed
+Privacy Run, not the definition of every runtime session. Codex is the P0
+default Workbench and OpenCode remains a first-class architectural
+compatibility target whose live path is P1. Ordinary native work stays outside
+Forme unless its results are separately offered/admitted as evidence;
+canonical meaning and claimed Forme authority continue through typed Forme
+contracts. These decisions grant no concrete runtime capability.
+
 ## Responsibility split
 
 | Mature runtime | Forme |
@@ -33,7 +47,7 @@ Forme, or reducing mature runtimes to a lowest-common-denominator interface.
 | supported tools, MCP, skills, plugins, and subagents | deciding which capabilities a pass may receive |
 | runtime permission prompts and available sandbox mechanisms | product policy and the hard semantic/write boundary |
 | low-level messages, diffs, snapshots, and usage events | durable evidence, corrections, approvals, receipts, and recovery |
-| generic file or shell capability | deterministic typed effects admitted by Forme |
+| generic file or shell capability inside a native Owner envelope | classify resulting evidence versus Forme-authoritative meaning/effect; protect canonical Forme state and external authority |
 
 Neither Codex nor OpenCode is expected to provide Forme's domain guarantees:
 
@@ -49,20 +63,20 @@ Neither Codex nor OpenCode is expected to provide Forme's domain guarantees:
 
 ```mermaid
 flowchart LR
-    Twin["Living Project Twin"] --> Context["Scoped Context Packet"]
-    Context --> Adapter["Runtime-native adapter"]
-    Adapter --> Runtime["Codex or OpenCode"]
-    Runtime --> Proposal["Typed proposal"]
-    Proposal --> Gate["Forme validation and judgment gate"]
-    Gate --> Twin
-    Gate --> Effect["Deterministic effect"]
-    Effect --> Receipt["Receipt and recovery"]
-    Receipt --> Twin
+    Workbench["Native Harness Workbench<br/>Codex or OpenCode"] <--> Core["Forme Semantic Spine<br/>Twin · correction · authority · receipts"]
+    Workbench <--> Workspace["Owner-admitted Workspace"]
+    Core -->|"exact Forme-content manifest needed"| Managed["Managed Privacy Run<br/>exact packet · no ambient tools"]
+    Managed -->|"typed proposal"| Gate["Forme validation and judgment gate"]
+    Gate --> Core
 ```
 
-Invariant: a runtime may receive a scoped projection and return a proposal. It
-may not admit canonical meaning, manufacture owner approval, or bypass Forme's
-deterministic writer.
+Invariant: every run has an explicit context/capability contract. A Native
+Workspace Session may dynamically read only its Owner-admitted envelope and
+cannot claim an exact manifest of dynamically selected content. A Managed
+Privacy Run receives only its exact Forme-selected content packet and returns a
+typed proposal; runtime-owned instructions/schema/metadata remain separately
+disclosed. Neither may admit canonical Forme meaning, manufacture Owner
+approval, expand authority, or bypass a Forme-authoritative gate.
 
 ## Integration ladder
 
@@ -79,44 +93,51 @@ Prefer the shallowest upstream-supported boundary that satisfies the product:
 A fork requires a demonstrated blocker in a core Forme experience and an
 explicit maintenance budget. Convenience alone is not enough.
 
-## Small shared port, explicit capabilities
+## Two adapter surfaces, explicit capabilities
 
-The shared contract should normalize only what Forme needs to control a run:
+The architecture should expose two deliberately different surfaces:
 
-- inspect runtime identity and capabilities;
-- start and cancel one bounded pass;
-- receive lifecycle, output, tool, permission, usage, and diff events;
-- close disposable runtime resources.
+1. **Native Workbench integration:** CLI/API/MCP/Skill/Plugin surfaces let an
+   interactive Harness read restart context, Twin state, corrections, policy,
+   typed Forme operations, and receipts while retaining its runtime-native
+   workspace/session/tool behavior.
+2. **Managed Privacy Run:** a runtime-native adapter starts and cancels one
+   isolated exact-packet pass, receives lifecycle/output/audit events, and
+   closes disposable resources.
 
-Capabilities must be declared instead of assumed. Examples include structured
-output, application permissions, OS containment, session resume, workspace
-diff/revert, plugins, skills, MCP, and subagents.
+The shared port should normalize only required identity, capability, lifecycle,
+proposal, and audit semantics. Capabilities must be declared instead of
+assumed. Examples include structured output, application permissions, OS
+containment, session resume, workspace diff/revert, plugins, skills, MCP, and
+subagents.
 
 Adapter-native features may remain available behind those declarations. They
 must not leak into the canonical Twin contract or silently broaden authority.
 
 ## Runtime gate
 
-Both adapters should eventually face the same contract-level questions:
+Both adapters should eventually face the same high-level questions, with
+mode-specific pass conditions:
 
 | Gate | Pass condition |
 | --- | --- |
 | Discovery | Forme identifies the actual runtime/version and can diagnose failure |
-| Scoped context | only the approved packet is visible |
+| Context contract | Native Session stays within its disclosed Owner envelope; Managed Run exposes only the approved packet |
 | Structured proposal | invalid output cannot enter the Twin |
-| Tool boundary | only explicitly admitted tools are callable |
-| Unauthorized write | generic write and external paths fail closed |
-| Permission lifecycle | runtime prompts map to stable Forme events |
-| Cancellation | cancellation cannot leave a hanging or half-admitted effect |
+| Tool boundary | Native tools stay inside the Owner envelope; a Managed Run receives only its exact declared capability set |
+| Unauthorized write | Native writes outside the Owner envelope fail closed; a Managed Run has no generic writer; neither path may write Forme canonical state directly |
+| Permission lifecycle | native runtime prompts remain observable; any Forme authority transition maps to stable Forme events |
+| Cancellation | cancellation cannot leave a hanging or half-admitted Forme-authoritative effect; ordinary native Workspace recovery follows the Harness contract |
 | Crash equivalence | runtime loss cannot create half-written canonical state |
-| Receipt correlation | proposal, approval, effect, verification, and diff remain linked |
+| Receipt correlation | every Forme-authoritative proposal, approval, effect, verification, and relevant runtime evidence remain linked |
 | Restart | a new session resumes from Twin state, not transcript truth |
 | Upgrade contract | upstream changes fail clearly under pinned adapter tests |
 
-The current Codex R2/R3 path already proves a deliberately narrower version of
-this boundary: isolated packet visibility, schema-constrained output, zero
-model-generated tools, local admission, exact approval, and deterministic
-effects. It does not prove a general-purpose Codex adapter or OpenCode parity.
+The current Codex R2/R3 path already proves the deliberately narrower Managed
+Privacy side of this boundary: isolated packet visibility,
+schema-constrained output, zero model-generated tools, local admission, exact
+approval, and deterministic effects. It does not prove a Native Workbench
+integration, a general-purpose Codex adapter, or OpenCode parity.
 
 ## Dated findings retained from the investigation
 
