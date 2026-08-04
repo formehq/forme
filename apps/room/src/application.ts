@@ -130,9 +130,30 @@ export class SemanticError extends Error {
 
   constructor(status: number, code: string, message: string) {
     super(message);
+    this.name = "SemanticError";
     this.status = status;
     this.code = code;
   }
+}
+
+/**
+ * Next's production bundler can materialize the application and route modules
+ * as separate copies.  An Error created by one copy then fails an
+ * `instanceof` check against the other copy even though it is the same typed
+ * semantic failure.  Keep the wire mapping structural and deliberately
+ * narrow so expected 4xx results never degrade into an internal 503.
+ */
+export function isSemanticError(error: unknown): error is SemanticError {
+  if (error instanceof SemanticError) return true;
+  if (error === null || typeof error !== "object") return false;
+  const candidate = error as Partial<SemanticError>;
+  return candidate.name === "SemanticError"
+    && Number.isInteger(candidate.status)
+    && Number(candidate.status) >= 400
+    && Number(candidate.status) <= 599
+    && typeof candidate.code === "string"
+    && /^[a-z][a-z0-9_]{0,95}$/u.test(candidate.code)
+    && typeof candidate.message === "string";
 }
 
 export interface ExactRoomOperatorScope {

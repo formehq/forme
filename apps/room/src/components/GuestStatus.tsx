@@ -102,6 +102,13 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
   const [offerRecovery, setOfferRecovery] = useState<GrantOfferRecoveryV1 | null>(null);
 
   const replySecret = useCallback(() => window.location.hash.slice(1), []);
+  const terminal = interaction !== null && [
+    "closed_without_response",
+    "interaction_expired",
+    "interaction_deleted",
+    "origin_revoked",
+    "room_retired",
+  ].includes(interaction.state);
 
   const refresh = useCallback(async () => {
     const capability = replySecret();
@@ -298,7 +305,7 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
           Optional response-ready email
           <input name="email" type="email" required placeholder="you@example.com" />
         </label>
-        <button disabled={busy} type="submit">Set notification</button>
+        <button disabled={busy || terminal} type="submit">Set notification</button>
       </form>
       <button className="buttonQuiet" disabled={busy || interaction.state === "interaction_deleted"} onClick={() => void deleteInteraction()} type="button">Delete this Interaction</button>
       {notice ? <p className="success" role="status">{notice}</p> : null}

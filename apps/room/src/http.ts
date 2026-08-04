@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { parseStrictJson } from "../../../packages/r4-protocol/src/index.ts";
 import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
 import { matchOperation } from "./operation-inventory.ts";
-import { SemanticError } from "./application.ts";
+import { isSemanticError, SemanticError } from "./application.ts";
 
 const RESPONSE_HEADERS = {
   "Cache-Control": "no-store",
@@ -70,7 +70,7 @@ export async function dispatchApi(request: Request, segments: string[]): Promise
     });
     return json(result.status, result.body);
   } catch (error) {
-    if (error instanceof SemanticError) {
+    if (isSemanticError(error)) {
       return json(error.status, { error: { code: error.code, message: error.message, correlationId } });
     }
     if (error instanceof HostedRuntimeUnavailable) {
