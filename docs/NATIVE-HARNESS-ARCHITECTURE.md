@@ -6,8 +6,9 @@
   2026-08-03; T4 public lifecycle and the complete T5 async, notification,
   deletion, retention, and P0-cut contract Owner-approved on 2026-08-03;
   Packet v0.2 is reconciled and independently audited at
-  `sha256:e417836b…adfff5`; separate exact Owner approval is current; no new runtime, provider, file, shell, tool,
-  Room, or implementation authority**
+  `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; Gate A permits
+  repository-only implementation but no provider, real Guest, migration,
+  hosted, production, or spend authority**
 - Updated: 2026-08-03
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
@@ -40,9 +41,9 @@ session authority 的影响。它们仍不是批准某个 Codex session 现在�
 或开始实现。完整 T5 也已批准：standard Agent workflow 显式 sync、可选
 notification-only email、四档 Owner-selected continuation、30-day
 Interaction / 7-day Response / 7-day isolated candidate ceilings，以及
-session-root cleanup、删除与 offline reconciliation 规则都已固定。当前不再
-等待新的 T5 语义判断；下一步是重写 Control Packet、独立审计、生成 exact
-hash，再由 Owner 批准那个准确对象。
+session-root cleanup、删除与 offline reconciliation 规则都已固定。随后
+Control Packet v0.2 已完成重写、独立审计、exact hash 与 Owner 批准；当前是
+只允许 repository-only synthetic/local 工作的 Gate A。
 
 ## Why this clarification exists
 
@@ -239,7 +240,9 @@ and session termination rules are now authoritative constraints on a future
 implementation. The subsequently Owner-approved T5 contract supplies the
 durable retention, purge, cleanup, notification, and offline-reconciliation
 constraints to the reconciled Packet. No operational capability or
-implementation authority is granted yet.
+implementation authority was granted by T3/T5 alone. The later exact Packet
+approval grants only Gate A repository interfaces and offline validation; a
+real provider-backed Fresh Session remains behind Gate B.
 
 ### Managed Privacy Run
 

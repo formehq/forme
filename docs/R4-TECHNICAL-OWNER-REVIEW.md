@@ -1,4 +1,4 @@
-# R4 Technical Owner Review Brief v0.14
+# R4 Technical Owner Review Brief v0.15
 
 - 状态：**P privacy-first human-boundary interpretation、T1
   public/private Room correction、T2 Room control contract、NH1/NH2
@@ -7,7 +7,8 @@
   async / notification / deletion / retention / P0 cut contract 均已批准；
   Technical Control Packet v0.2 已完成 reconciliation 与三路独立审计，exact
   hash 是 `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`；
-  当前只等 Owner 批准这组准确字节；这份 Brief 不是最终 Packet 批准记录**
+  Owner 已在 2026-08-03 批准这组准确字节；Gate A repository-only
+  implementation 已授权但尚未开始**
 - 更新：2026-08-03
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -31,8 +32,8 @@ Owner 的判断界面。你只需要：
 2. P、T1、T2、NH1、NH2、T3、T4 与 T5 都已经关闭；
 3. 下面的 [T5 record](#current-t5) 是已批准的低负担回顾，不再等待你
    继续作答；
-4. Agent 已完成 Packet 重写、独立审计和 exact hash；你现在只需要看
-   red/yellow exception，并决定是否批准那个准确的新对象。
+4. Agent 已完成 Packet 重写、独立审计和 exact hash；Owner 随后批准了
+   那个准确对象，现在进入只允许 synthetic/local repository work 的 Gate A。
 
 T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正，P 与 T2 已在
 2026-07-28 按推荐解释批准。2026-07-28 也确认了一次重要架构纠正：
@@ -48,7 +49,8 @@ Fresh Native Response Session exact T3 contract。同日，Owner 又按推荐正
 批准了 T4 public / unlist / stale / revoke lifecycle。完整 T5 随后也按
 推荐批准，并增加第四档 Owner-selected trusted collaborator 7 天 / 10 次
 preset。Agent 随后重写了长 Packet；当前 v0.2 已审计并产生上面的 exact
-hash。之前 v0.1 的 hash 已经失效，不应再被批准。
+hash。Owner 随后批准了这组准确字节；之前 v0.1 的 hash 已经失效，不应
+再被使用。
 
 同日稍早，Owner 先固定了 T5 的两项产品输入：可选的 notification-only
 email，以及 24 小时 / 1 次、3 天 / 2 次、熟悉协作者 7 天 / 3 次三档
@@ -126,9 +128,9 @@ Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替�
 - Private Twin、repo、notes、local runtime credential 和未选择的本地
   evidence 不进入 hosted Presence。
 
-## 以后批准 revised Packet 代表什么
+## 本次 Packet 批准代表什么
 
-它会批准：
+它已经批准：
 
 - R4 应用边界；
 - 对 Guest 作出的公开承诺；
@@ -609,7 +611,8 @@ one local workspace (local-only identity)
   Owner 当前会话。Future implementation 必须遵守已批准的 exact roots、
   consent、provider、session budget、physical isolation 与 session lifecycle。
   详细 Packet 仍必须隔离 credential，并用 canary 验证没有未授权的跨界；
-  T5 已经关闭，reconciled Packet approval 仍是 stop gate。
+  T5 与 reconciled Packet approval 都已关闭；Gate A 当前，Gate B Manifest
+  是下一次 stop gate。
 
 Agency-first 修正后批准的 P0 contract，不再是“sync 可以站立授权、其余每一步
 都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
@@ -1058,7 +1061,7 @@ mutation 或 production action。
 
 ### 本卡已关闭
 
-本卡批准时，Owner 决策移到 T5；T5 现已关闭，当前 gate 是新的 Packet。
+本卡批准时，Owner 决策移到 T5；T5 与后续 Packet 均已关闭，当前是 Gate A。
 
 <details>
 <summary>历史记录：2026-07-29 的 Managed Privacy T3 提案（已被 2B 方向取代，不再批准）</summary>
@@ -1365,7 +1368,7 @@ connector；`room_operator.v1` 只负责验证和运送，不能替 Owner 写内
 
 - 以下旧回复格式已失效：`T3 按推荐批准`、`T3 希望改写为 Option 2`、
   `T3 选 Option 3`。此历史卡不再接收回复；下面保留已批准 T5 record，
-  当前 gate 是新的 Packet。
+  Packet 随后已批准，当前是 Gate A。
 
 </details>
 
@@ -1439,7 +1442,7 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 
 ### 本卡已关闭
 
-本卡批准时，Owner 决策移到 T5；T5 现已关闭，当前 gate 是新的 Packet。
+本卡批准时，Owner 决策移到 T5；T5 与后续 Packet 均已关闭，当前是 Gate A。
 
 <a id="current-t5"></a>
 
@@ -1645,7 +1648,7 @@ Agent 最终只向 Owner 返回：
 - **Yellow**：存在需要 Owner 知情的 tradeoff 或运行条件；
 - **Red**：实现会违反某张已批准决策卡。
 
-## 当前 handoff：只等 Packet v0.2 exact approval
+## 当前 handoff：Packet v0.2 已批准，Gate A ready
 
 P、T1、T2、NH1、NH2、T3、T4 与 T5 已全部关闭。Agent 已经完成：
 
@@ -1666,11 +1669,17 @@ P、T1、T2、NH1、NH2、T3、T4 与 T5 已全部关闭。Agent 已经完成：
 - Gate C 才固定 production origin、backup/log、OpenAI account 与 email
   provider 事实；在那之前没有真实 Guest、email、部署或生产流量。
 
-如果这些符合你的理解，准确批准语句是：
+Owner 紧接唯一的 exact approval object 回复“嗯嗯，那我批准”，并要求执行
+批准后的 merge、Roadmap 修正和 Gate A branch 准备。该上下文被规范化记录
+为下面的 approval receipt；它不是对另一个 hash 的泛化批准：
 
 ```text
 批准 R4 Technical Control Packet v0.2 sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
 ```
 
-在这句被记录前，仍不授权任何 R4 code、schema、provider call、真实 Guest
-data、hosted mutation、email、deployment、public traffic 或 spend。
+该批准只开启 Gate A：repository code/docs、synthetic fixtures、local 或
+ephemeral tests、不暴露真实内容的只读 probes，以及下一份 Gate B Manifest。
+它没有批准 provider/model call、真实 Guest data、external email、hosted
+mutation、schema migration、deployment、public traffic、production secret
+或 spend。Agent 应在交付 hash-pinned Gate B Manifest 和新的低负担 Owner
+Review 后停止。

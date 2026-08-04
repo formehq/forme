@@ -7,8 +7,8 @@
   2026-08-03; T4 public lifecycle and the complete T5 async, notification,
   deletion, retention, and P0-cut contract Owner-approved on 2026-08-03;
   Packet v0.2 is reconciled and independently audited at
-  `sha256:e417836b…adfff5`; implementation stays subject to separate exact
-  Owner approval**
+  `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; Gate A
+  repository-only implementation is authorized**
 - Updated: 2026-08-03
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -369,6 +369,7 @@ session/candidate cleanup, and the final P0 cut. None of these approvals instant
 Fresh session, file read, provider call, credential issuance, private Guest
 data, Room mutation, external message, schema, implementation, deployment, or
 spend. T3/T4/T5 grant documentation and later Packet-reconciliation authority
-  only. Reconciled Control Packet v0.2 passed independent audit at
-  `sha256:e417836b…adfff5`; separate Owner approval is current, while schemas/migrations, implementation,
-and production grants remain later separate gates.
+only. The later reconciled Control Packet v0.2 passed independent audit at
+`sha256:e417836b…adfff5` and was separately Owner-approved, opening only Gate A
+repository work. Runtime/schema/migration validation, provider calls, real
+Guest data, and production grants remain later separate gates.

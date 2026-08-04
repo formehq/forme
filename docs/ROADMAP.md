@@ -13,10 +13,10 @@
   fixed—24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted 7d/10. The first
   Control Packet v0.1 is superseded; reconciled v0.2 passed independent audits
   at `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  Separate Owner approval of those exact bytes is current. No R4
-  implementation, OpenAI/provider call, real Guest data, schema, deployment,
-  spend, Room mutation, projection, hosting, identity, messaging,
-  synchronization, or persistence is authorized
+  The Owner approved those exact bytes on 2026-08-03. Gate A repository-only
+  implementation is ready; OpenAI/provider calls, real Guest data, schema
+  migration, deployment, spend, production Room mutation, email, secret
+  issuance, and public traffic remain unauthorized
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -30,9 +30,9 @@
 | R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved; Packet reconciliation/audit/hash are complete, and implementation remains stopped only at separate Owner approval of exact v0.2.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved; Packet reconciliation/audit/hash and exact Owner approval are complete, and Gate A repository-only implementation is ready.
 
-## R4 owner-approved product target — T5 approved, exact Packet next
+## R4 owner-approved product target — Packet approved, Gate A next
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -102,12 +102,12 @@ The approved Harness/Forme role and NH1/NH2 boundary are in
 are recorded in
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). That brief also
 records the approved exact T3 Fresh Native Response Session, T4 lifecycle, and
-full T5 contracts. The first detailed
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) must then
-be rewritten for the confirmed existing deployment path, independently
-audited, hashed, and separately Owner-approved.
-Exact schemas/migrations and production deployment remain separate later
-gates. No current document grants implementation authority.
+full T5 contracts. The detailed
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2 was
+rewritten for the confirmed existing deployment path, independently audited,
+fixed at `sha256:e417836b…adfff5`, and Owner-approved on 2026-08-03. It grants
+only Gate A repository work. Exact runtime/schema/migration validation and
+production deployment remain separate later gates.
 
 The cut order is:
 
@@ -161,7 +161,9 @@ Native Harness role clarification
   → exact T3 consent/session/source/capability contract [closed]
   → T4 public lifecycle [closed]
   → T5 async / deletion / retention / P0 cut [closed]
-  → reconciled Technical Control Packet v0.2 audit/hash ✓ → Owner approval [current]
+  → reconciled Technical Control Packet v0.2 audit/hash ✓ → Owner approval ✓
+  → Gate A repository implementation [current]
+  → Gate B exact Manifest [next stop]
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,
@@ -170,10 +172,12 @@ approved R4 product target admits only one curated Third Place, one Forme
 Project Room as the required public resident, one bounded Private Room access
 path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
 exchange, one optional lightweight Guest Capsule, and typed external signals.
-None may be
-implemented until the technical Control Packet is approved; real durable writes
-then wait for the Schema & Migration Manifest, and production/public/spend
-actions wait for the Production Deployment & Provisioning Grant.
+Only Gate A repository code/docs, synthetic/local tests, content-safe read-only
+probes, and next-manifest preparation may now be implemented. Gate B may later
+authorize only its exact local/ephemeral schema/runtime/migration validation;
+any provider call also needs its named test grant. Production durable writes,
+public actions, and spend wait for the Production Deployment & Provisioning
+Grant.
 
 ## Progress rule
 

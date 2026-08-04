@@ -14,9 +14,9 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   T1 public/private Room correction, and T2 Room control contract approved;
   NH1/NH2 and the exact Fresh Native Response Session T3 contract approved;
   the recommended T4 public/admission/lifecycle contract and full T5 async /
-  deletion / retention / P0-cut contract approved; the current stop gate is a
-  reconciled Technical Control Packet, independently audited, hashed, and
-  separately approved by the Owner**
+  deletion / retention / P0-cut contract approved; reconciled Technical
+  Control Packet v0.2 was independently audited and Owner-approved on
+  2026-08-03; Gate A repository-only implementation is now ready**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
   public-knock/private-Grant correction, P boundary model, and T2 Room control
   contract are approved; NH1 option 1 and NH2 option 1 were Owner-approved on
@@ -28,9 +28,12 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   reconciliation; Technical Control Packet v0.2 is now reconciled and
   independently audited at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`,
-  and separate Owner approval of those exact bytes is the current gate;
-  no R4 implementation, schema, provider call, deployment, spend, production
-  action, or real Guest-data handling is authorized**
+  and the Owner approved those exact bytes on 2026-08-03; Gate A now
+  authorizes repository code/docs, synthetic fixtures, local/ephemeral tests,
+  read-only probes that expose no real Guest/source content, and preparation
+  of the Gate B Manifest; no provider call, real Guest data, schema migration,
+  deployment, email, production mutation, secret, public traffic, or spend is
+  authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -153,7 +156,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — T5 approved, exact Packet next
+## R4 Controlled Presence — Packet approved, Gate A next
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -196,8 +199,8 @@ Owner-selected trusted collaborator preset at 7 days / 10 independent
 Interactions. The label is never inferred and grants no identity, successor,
 cross-Room, or automatic Private Room authority. These approvals permit
 authority-document and Technical Control Packet reconciliation only. Packet
-v0.2 has now passed independent audit and hashing; the current stop gate is
-separate Owner approval of those exact bytes.
+v0.2 then passed independent audit and hashing, and the Owner approved those
+exact bytes on 2026-08-03. That approval opens only Gate A repository work.
 
 P0 needs only the minimum Codex integration required by the walking slice. It
 does not require every CLI/API/MCP/Skill/Plugin adapter surface or a live
@@ -209,9 +212,10 @@ The historical v0.1 Packet is superseded. The current
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
 is the reconciled, independently audited v0.2 approval object at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-It remains a proposal until the Owner approves that exact hash. No R4
-repository implementation, schema, provider call, deployment, spend,
-production action, or real Guest-data handling is currently authorized.
+The Owner approved that exact hash on 2026-08-03. Gate A repository-only work
+may now begin. Provider/model calls, real Guest-data handling, schema
+migration, email, deployment, spend, production action, secrets, and public
+traffic remain unauthorized behind Gate B or Gate C.
 
 ## Forme R3 managed action
 

@@ -6,8 +6,8 @@
   approved; the recommended T4 public/admission/lifecycle contract approved;
   the full recommended T5 async/deletion/retention/P0-cut contract
   Owner-approved, with four Guest continuation presets; reconciled Technical
-  Control Packet v0.2 is independently audited and hashed, and separate exact
-  Owner approval is the current gate
+  Control Packet v0.2 is independently audited, hashed, and Owner-approved;
+  Gate A repository-only implementation is current
 - Updated: 2026-08-03
 - MVP complete: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
@@ -74,9 +74,9 @@ meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
 approved. The R4 P0 T3 direction is one Fresh Native Response Session per
 Interaction, not a Managed-vs-Native trust selector. The Owner approved its
 exact contract on 2026-08-03, followed by the recommended T4 lifecycle contract
-on the same date. The Owner then approved full T5 on 2026-08-03. A newly
-reconciled, independently audited and hashed Technical Control Packet remains
-the stop gate before implementation.
+on the same date. The Owner then approved full T5 on 2026-08-03. The later
+reconciled, independently audited and hashed Technical Control Packet v0.2 was
+also Owner-approved; Gate A repository-only implementation is current.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -159,7 +159,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T5 approved, exact Packet next
+## Owner-approved R4 product target — Packet approved, Gate A next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -241,10 +241,11 @@ The resulting exact
 [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2
 passed independent audits at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-It still requires separate Owner approval before implementation.
-Exact machine schemas and migrations remain a separately hashed pre-write
-manifest; production deployment, external writes, and spend remain a separate
-Production Deployment & Provisioning Grant.
+The Owner approved those exact bytes on 2026-08-03, authorizing Gate A
+repository-only work. Exact machine schemas/runtime/migrations remain a
+separately hashed Gate B manifest; production deployment, real external
+writes, and spend remain a separate Production Deployment & Provisioning
+Grant.
 The versioned static projection remains the schedule fallback floor.
 
 The agency-first recalibration and approved T2 contract are recorded

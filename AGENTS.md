@@ -47,12 +47,15 @@ Do not implement past the proposal stage without explicit owner confirmation whe
   These approvals authorized only authority-document and reconciled Control
   Packet preparation. Packet v0.2 is independently audited at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  Until those exact bytes are separately Owner-approved, no Fresh Native Response Session
-  implementation, real Guest-data handling or release, dynamic
-  response-snapshot read, OpenAI/provider call, schema, deployment, spend,
-  Room mutation, external message, or response capability is authorized.
-  Schema/migration and production deployment/public action still require their
-  own later manifest/grant even after a reconciled packet is approved.
+  The Owner approved those exact bytes on 2026-08-03. Gate A authorizes only
+  repository code/docs, synthetic fixtures, local/ephemeral tests, read-only
+  probes that expose no real content, and preparation of the next exact
+  manifest. A Fresh Native Response provider call, real Guest-data handling,
+  schema migration, deployment, spend, production Room mutation, external
+  message, secret, or public response capability remains unauthorized.
+  Schema/runtime/migration validation and any first provider call require the
+  separately approved Gate B Manifest and named test grant; production/public
+  action requires Gate C.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 

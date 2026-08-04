@@ -4,9 +4,9 @@
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
   Harness architecture; Fresh Native Response Session (Option 2B) exact T3
   contract, T4 public lifecycle, and complete T5 async, notification, deletion,
-  retention, and P0-cut contract Owner-approved; the current gate is a newly
-  reconciled Packet, independent audit, exact hash, and separate Owner
-  approval; no implementation authority**
+  retention, and P0-cut contract Owner-approved; reconciled Packet v0.2 passed
+  independent audit and was Owner-approved on 2026-08-03; Gate A
+  repository-only implementation is current**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised product decisions; 2026-07-26 —
   public encounter + Private Room correction**
@@ -548,12 +548,12 @@ which provides:
 
 That Packet passed three independent audits and is fixed at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-Separate Owner approval of those exact bytes is the current gate; this brief
-no longer waits on another T5 semantic choice.
+The Owner approved those exact bytes on 2026-08-03; this brief no longer waits
+on another T5 or Packet choice.
 
-This product brief and the active Owner review do not authorize
-implementation. Only separate approval of the reconciled exact Packet may
-authorize its bounded Gate A repository/fixture work; its hashed Schema & Migration Manifest
+This product brief alone did not authorize implementation. The later exact
+Packet approval now authorizes its bounded Gate A repository/fixture work; its
+hashed Schema & Migration Manifest
 remains required before a real durable write, and its Production Deployment &
 Provisioning Grant remains required before external messages, deployment,
 public visibility, or spend.

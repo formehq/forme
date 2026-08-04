@@ -7,8 +7,8 @@
   lifecycle contract owner-approved; the complete T5 async, notification,
   deletion, retention, and P0-cut contract owner-approved, including four
   Owner-selected Guest continuation presets; reconciled Packet v0.2 passed
-  independent audit at `sha256:e417836b…adfff5`, and separate exact Owner
-  approval is the current gate
+  independent audit at `sha256:e417836b…adfff5` and was Owner-approved on
+  2026-08-03; Gate A repository-only implementation is current
 - Updated: 2026-08-03
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -547,8 +547,8 @@ contract, and complete T5 async/notification/deletion/retention/P0-cut
   contract are approved. They are reconciled in independently audited
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2 at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  Repository implementation remains blocked until the Owner separately
-  approves that exact object. The confirmed production target is the supplied
+  The Owner approved that exact object on 2026-08-03, opening only Gate A
+  repository work. The confirmed production target is the supplied
 Cloudflare → Caddy → Hetzner → PostgreSQL path; this architecture governs only
 how Forme integrates with it. Real durable writes additionally require the
 Schema & Migration Manifest, and production deployment/public behavior require

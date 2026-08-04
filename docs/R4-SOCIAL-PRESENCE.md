@@ -5,8 +5,9 @@
   Native Harness architecture; Fresh Native Response Session (Option 2B) exact
   T3 contract, T4 public lifecycle, and complete T5 async, notification,
   deletion, retention, and P0-cut contract Owner-approved; Packet v0.2 is
-  reconciled and independently audited at `sha256:e417836b…adfff5`; separate
-  exact Owner approval is current; no R4 implementation authority**
+  reconciled and independently audited at `sha256:e417836b…adfff5` and was
+  Owner-approved on 2026-08-03; Gate A repository-only implementation is
+  current**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
@@ -73,8 +74,8 @@ selected on 2026-08-01 and its exact T3 contract was Owner-approved on
 Owner-approved on 2026-08-03. Earlier that day the Owner fixed T5's
 notification and first three continuation inputs; the Owner then approved the
 complete T5 recommendation and added a fourth Owner-selected trusted
-collaborator 7d/10 preset. The current gate is the reconciled Packet rather
-than another T5 product decision.
+collaborator 7d/10 preset. The reconciled Packet was later approved; Gate A
+repository implementation is current rather than another product decision.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
@@ -584,9 +585,9 @@ the approved NH1/NH2 choices. The active
   independently audited
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2 at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  Separate Owner approval remains current. Schema/migration and production
-  deployment remain later gates. No current document grants implementation
-  authority.
+  The Owner approved those exact bytes on 2026-08-03, opening Gate A
+  repository-only authority. Runtime/schema/migration and production
+  deployment remain later gates.
 
 ## Product-expression questions that remain during technical review
 
@@ -599,6 +600,6 @@ P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
 exposure, and local Room Operator authority. Approved NH1/NH2 close the local
 carrier and ordinary-work/Forme-authority boundary. The 2B direction and exact
   T3 contract plus T4 lifecycle and complete T5 contract are approved. Packet
-  reconciliation, audit, and hashing are complete; separate exact Owner
-  approval is current. Product-expression questions may continue without
+  reconciliation, audit, hashing, and exact Owner approval are complete; Gate
+  A repository-only implementation is current. Product-expression questions may continue without
 weakening those gates.

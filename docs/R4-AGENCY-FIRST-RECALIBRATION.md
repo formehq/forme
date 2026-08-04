@@ -7,8 +7,8 @@
   exact T3 contract Owner-approved on 2026-08-03; T4 public lifecycle contract
   and the complete T5 async, notification, deletion, retention, and P0-cut
   contract Owner-approved on 2026-08-03; Packet v0.2 is reconciled and
-  independently audited at `sha256:e417836b…adfff5`; implementation remains
-  gated on separate exact Owner approval**
+  independently audited at `sha256:e417836b…adfff5` and was Owner-approved on
+  2026-08-03; Gate A repository-only implementation is authorized**
 - Updated: 2026-08-03
 - Purpose: distinguish the authority Forme should grant now from useful
   long-term agency, without turning the August MVP into a policy-engine project
@@ -215,5 +215,5 @@ T5 record is maintained in
 Control Packet v0.2 now encodes every approved boundary and passed independent
 audit at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-Separate Owner approval of those exact bytes is the current gate before
-implementation.
+The Owner approved those exact bytes on 2026-08-03. Gate A repository-only
+work is current; the Gate B Manifest is the next Owner stop gate.

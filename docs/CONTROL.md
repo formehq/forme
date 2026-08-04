@@ -8,23 +8,23 @@
   contract and full T5 async/deletion/retention/P0-cut contract Owner-approved;
   Technical Control Packet v0.2 is now reconciled and independently audited at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
-  separate Owner approval of those exact bytes is current; no R4 implementation**
+  the Owner approved those exact bytes on 2026-08-03; Gate A repository-only
+  implementation is ready**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted; the current 45-check
   regression suite plus the real bounded control and independent Career
   validation pass; R4 product target and P/T1/T2/T3/T4/T5/NH1/NH2 are closed
-  as design; exact Packet approval is current, and R4–R5 implementation has
-  not started**
+  as design; exact Packet approval is recorded, and R4 Gate A implementation
+  has not started**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: the Owner reviews the short exception brief and either approves
-  exact Technical Control Packet v0.2 hash
-  `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
-  or requests a correction before any
-  projection, Third Place, identity, hosting, messaging, real Guest-data
-  handling, local synchronization, schema, provider call, persistence, spend,
-  deployment, or public behavior is implemented
+- Next action: merge the approved Packet record, start a dedicated Gate A
+  branch, and implement only repository code/docs, synthetic fixtures,
+  local/ephemeral tests, read-only probes that expose no real Guest/source
+  content, and the next exact Gate B Manifest.
+  Stop before any provider call, real Guest data, schema migration, email,
+  hosted mutation, deployment, production traffic, secret, or spend
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -47,7 +47,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← YOU ARE HERE · T5 APPROVED · PACKET REVIEW
+R4 Controlled Presence    ← YOU ARE HERE · PACKET APPROVED · GATE A READY
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -175,13 +175,13 @@ Current truth:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) later closed
   in full. It is superseded by the newly reconciled and independently audited
   v0.2 at `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  Those exact bytes are the current Owner approval surface; the prior packet
-  hash is not approvable, and no R4 implementation or external resource is
-  authorized;
+  The Owner approved those exact bytes on 2026-08-03; the prior packet hash is
+  not approvable. Gate A repository-only work is authorized, while every
+  external, hosted, or production resource and later gate remains unauthorized;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
-- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. At that point, the next R3-V gate was the owner-facing output contract rather than another effect; R3 and T5 have since closed, and exact R4 Packet approval is current.
+- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. At that point, the next R3-V gate was the owner-facing output contract rather than another effect; R3, T5, and exact R4 Packet approval have since closed, and Gate A is current.
 - CASE-02 local extraction was owner-approved with manifest `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. The two immutable Career blobs became 4,607- and 12,108-byte redacted snapshots under one stable mapping; 139 replacement operations, exact hashes, provenance, and residual re-identification risk are recorded. The original source-vault path remains unmodified.
 - The existing CASE-01 Twin cannot safely admit Career because its immutable source contract allowlists CCS only. Rather than rewrite historical contract hashes or contaminate CASE-02, the lab prepared a fresh local Career workspace gate `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. That gate creates no model authority; after approval, a separately owner-approved exact ContextPacket hash is still required.
 - The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` contains a no-remote Twin with only `README.md` and the redacted Career path allowlisted. Exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` produced one zero-tool inferred Reflection at revision 2. The owner corrected its causal over-weighting without a model call: revision 3 preserves the original as `superseded`, admits owner-authored Reflection `ref_711fd70d727e4ecf74f19005590eda09`, records correction `cor_e48ac14130ab657777b006908a16719b`, and invalidates one dependent output. Under approved comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`, one A0, one A1, and one B call completed with zero tool events. The owner found all three useful, leaned slightly toward A1, and least preferred A0's no-correction closure-only recommendation, then clarified that A1 and B are too close to separate confidently because the real ship/closure balance remains unresolved. B carried the combined corrected direction automatically with zero source bodies and no manual reconstruction. The R3 closeout advanced the Career Twin to revision 5 and invalidated B through `ainv_6c8069a54d2bba64d6f21c4ca5031283`; approvals, effects, source changes, and additional model calls remained zero.
@@ -235,8 +235,9 @@ flowchart LR
   read-only snapshot of current eligible Forme files plus typed body/path-free
   Twin orientation, and has no writer, network tool, other
   Guest body, connector credential, Room or publish authority. T3 approval
-  fixes this boundary but does not authorize any such session to exist before
-  the newly reconciled Packet is separately Owner-approved.
+  fixes this boundary. Exact Packet approval now permits only Gate A
+  repository interfaces and offline proof; a real provider-backed session
+  remains behind Gate B.
 - **Ordinary Workspace truth and Forme-authoritative state/effect are distinct.**
   Under approved NH2, native results remain outside Forme until separately
   offered/admitted as evidence. A runtime never admits Twin meaning or expands
@@ -775,7 +776,7 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Active stop gate — reconciled R4 Technical Control Packet after T5 approval
+## Approved R4 Technical Control Packet — Gate A boundary
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; P human-boundary interpretation
@@ -788,7 +789,8 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   and explicitly Owner-selected trusted 7d/10; Technical Control Packet v0.2
   is reconciled and independently audited at exact SHA-256
   `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`,
-  remains unimplemented, and now awaits separate Owner approval**
+  was Owner-approved on 2026-08-03, and remains unimplemented; Gate A is
+  ready**
 - Schedule fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
@@ -876,18 +878,18 @@ inferred trust, reply recovery, successor inheritance, or Private Room
   authority. Agents have reconciled the implementation packet to the supplied
   deployment target and all closed decisions, and independent authority,
   lifecycle/race, and physical/Codex audits are green on the exact hash above.
-  Separate Owner approval remains required. Exact schemas/migrations and
-production deployment remain separate later gates. R3 acceptance and the R4
-product/design decisions grant no R4 implementation, provider call, real
-Guest-data handling, schema, visibility, identity, hosting, messaging,
-persistence, deployment, spend, or publishing authority.
+  The Owner's exact Packet approval now grants only Gate A repository code,
+  documentation, synthetic fixtures, local/ephemeral tests, content-safe
+  read-only probes, and Gate B Manifest preparation. Exact runtime/schema/
+migration validation, provider calls, real Guest data, email, production
+deployment, secrets, public traffic, and spend remain separate later gates.
 
 The privacy-first/minimum-friction P human-boundary model, T1/T2 Room
 contracts, NH1/NH2 architecture choices, exact Fresh Native Response Session
 T3 contract, recommended T4 lifecycle contract, and full T5 contract are
-Owner-approved for R4. Every implementation mechanism remains gated on a newly
-reconciled, independently audited, hashed, and separately Owner-approved
-Technical Control Packet. Stewardship remains an architecture proposal.
+Owner-approved for R4. Their Gate A implementation mechanism is bounded by the
+independently audited and Owner-approved exact Technical Control Packet above.
+Stewardship remains an architecture proposal.
 Confidence or shadow agreement cannot grant permission; external R4
 interactions remain untrusted signals until separately admitted.
 

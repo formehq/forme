@@ -579,3 +579,38 @@ complete and repeatable on 2026-08-18, and Demo Day moves to Wednesday,
 **Reason:** the presentation moved by one week. The added time protects R4
 implementation and R5 rehearsal; it does not silently admit P1 work or weaken
 any Owner stop gate.
+
+## 2026-08-03 — R4 Technical Control Packet v0.2 approved; Gate A opened
+
+**Decision:** approve the exact independently audited R4 Technical Control
+Packet v0.2 at
+`sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`
+(1,981 lines / 107,235 bytes at commit
+`074833edf7db7629455ff620654bfde0aed454c6`, tree
+`b8f59e464072c689ee3b76617070e6f048fc0952`). The Owner's actual reply was
+“嗯嗯，那我批准,” sent directly after the one approval request that named
+this exact object and its authorization boundary. The normalized receipt is:
+
+```text
+批准 R4 Technical Control Packet v0.2 sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
+```
+
+The Packet file remains byte-frozen; this external decision record preserves
+the approved hash rather than modifying the approval object after approval.
+
+**Reason:** P/T1/T2/T3/T4/T5/NH1/NH2 are closed, all three independent Packet
+audit lanes are Green, no Red condition remains, and the three Yellow
+conditions are deliberately assigned to Gate B physical/runtime proof or Gate
+C production facts rather than hidden inside Gate A.
+
+**Effect:** Gate A is authorized. Agents may create repository code/docs,
+synthetic fixtures, local unit/property/integration tests, an ephemeral local
+PostgreSQL test instance, content-safe read-only capability probes, and the
+next exact Gate B Manifest. They may commit and push that work on a dedicated
+branch and maintain a Draft PR, but may not merge the implementation without
+later review. This approval authorizes no provider/model call, real Guest data,
+external email, hosted mutation, schema migration, deployment, public traffic,
+production secret, or spend. The next Owner stop gate is the hash-pinned Gate
+B Schema, Runtime, and Migration Manifest; any first provider call additionally
+requires the separately named First Provider-Call Test Grant, and real
+Guest/production work remains Gate C.

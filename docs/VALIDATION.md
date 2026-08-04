@@ -10,8 +10,8 @@
   Owner-selected trusted 7d/10. Technical Control Packet v0.2 reconciliation,
   independent audit, and hashing are complete at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
-  separate approval of those exact bytes is the current gate, and all R4
-  behavior remains unimplemented**
+  the Owner approved those exact bytes on 2026-08-03; Gate A repository-only
+  implementation is authorized but all R4 behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -881,10 +881,39 @@ than Packet-approval blockers:
 - Gate C must bind the actual production origin, backup/log retention, OpenAI
   account, email provider, real actors/data, and spend before real traffic.
 
-The current stop gate is separate Owner approval of the exact Packet hash.
-That approval permits only the bounded Gate A repository implementation and
-synthetic/local tests described by the Packet. It does not authorize Gate B
-provider work or Gate C production work.
+At Evidence round 17, the stop gate was separate Owner approval of the exact
+Packet hash. That approval could permit only the bounded Gate A repository
+implementation and synthetic/local tests described by the Packet, not Gate B
+provider work or Gate C production work. Evidence round 18 records its later
+closure.
+
+## Evidence round 18 — Exact Packet approved; Gate A opened
+
+Later on 2026-08-03 the Owner replied “嗯嗯，那我批准” directly to the one
+immediately preceding approval object for Technical Control Packet v0.2. The
+approval record binds that actual utterance to the only presented object:
+
+```text
+批准 R4 Technical Control Packet v0.2 sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
+```
+
+The Packet file itself remains byte-frozen at 1,981 lines / 107,235 bytes and
+the same audited SHA-256. The approval therefore opens exactly Gate A:
+repository code/docs, synthetic fixtures, local unit/property/integration
+tests, ephemeral local PostgreSQL, content-safe read-only capability probes,
+and preparation of the next exact Gate B Manifest.
+
+This is **Owner authorization evidence, not implementation or product
+evidence**. At the moment of approval no R4 code, schema/migration, provider
+call, real Guest data, hosted mutation, email, deployment, production traffic,
+secret, or spend had been created or exercised. Gate A completion must produce
+new technical evidence and a synthetic/local walkthrough; it cannot claim a
+real Room encounter.
+
+The next Owner stop gate is the hash-pinned Gate B Schema, Runtime, and
+Migration Manifest. A model call remains forbidden unless that separately
+approved Manifest contains and the Owner names the exact First Provider-Call
+Test Grant. Real Guest/hosted/production work remains Gate C.
 
 ## Follow-up product-learning questions — not R4 blockers
 
