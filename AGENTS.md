@@ -40,12 +40,17 @@ Do not implement past the proposal stage without explicit owner confirmation whe
 - The 2026-08-03 R4 T3 approval fixes the exact Fresh Native Response Session
   contract. The 2026-08-03 T4 approval fixes the recommended public/admission,
   unlist, stale, revoke, retirement, and successor lifecycle contract without
-  expanding `room_operator.v1`. Both approvals authorize only
-  authority-document and later Control Packet reconciliation. Until T5 and a
-  reconciled packet are separately Owner-approved, no Fresh Native Response
-  Session implementation, Guest-body release, dynamic response-snapshot read,
-  OpenAI call, schema, deployment, spend, Room mutation, or response capability
-  is authorized.
+  expanding `room_operator.v1`. The 2026-08-03 full T5 approval fixes explicit
+  sync/manual recovery, optional notification-only email, four exact
+  continuation presets (24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted
+  7d/10), body-retention ceilings, deletion/purge honesty, and the P0 cut.
+  These approvals authorized only authority-document and reconciled Control
+  Packet preparation. Packet v0.2 is independently audited at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+  Until those exact bytes are separately Owner-approved, no Fresh Native Response Session
+  implementation, real Guest-data handling or release, dynamic
+  response-snapshot read, OpenAI/provider call, schema, deployment, spend,
+  Room mutation, external message, or response capability is authorized.
   Schema/migration and production deployment/public action still require their
   own later manifest/grant even after a reconciled packet is approved.
 - Private source existence never implies projection permission.

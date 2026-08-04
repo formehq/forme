@@ -496,6 +496,80 @@ or production traffic. A reusable email login/magic link, more than three
 Interactions, longer duration, successor-following access, conversation
 thread, or persistent/cross-Room Guest identity requires a new Owner decision.
 
+## 2026-08-03 — Full T5 approved; trusted-collaborator preset added
+
+**Decision:** approve the complete recommended T5 async, notification,
+deletion, retention, production-disclosure, and P0-cut contract, with one
+additive continuation amendment. The earlier familiar-collaborator preset
+remains 7 days / 3 accepted Interactions. Add a fourth
+`trusted_collaborator` preset at 7 days / 10 independent accepted
+Interactions. It is selected explicitly by the Owner rather than inferred from
+an email address, name, history, behavior, model judgment, or account state.
+Like the other presets, it is bound to one exact Room + Projection, permits at
+most one unresolved request, is revocable, shares quota between Manual and
+one-shot Agent carriers, never follows a successor, and grants no identity,
+cross-Room authority, or automatic Private Room access. Each Interaction keeps
+its own private reply capability, deletion right, and at most one Response; the
+larger quota does not create a conversation thread.
+
+The full T5 contract also fixes these requirements:
+
+- the Agent's standard Room workflow explicitly invokes typed `room sync`,
+  with the same command available for Owner recovery; read-only commands do
+  not hide a pull or durable write, and the retained private reply URL remains
+  canonical;
+- an optional confirmed exact-Interaction `response_ready_email` endpoint may
+  send one generic response-ready notice, but it carries no hosted body,
+  Private Room name, reply URL/token/secret, identity, trust, deduplication,
+  recovery, or cross-Room authority. A short-lived, one-use, single-purpose
+  verification code may bind the address but grants no content/reply access;
+- P0 adds no Owner-device daemon, live chat, WebSocket, remote local tunnel, or
+  server AI;
+- Interaction and inline Guest Capsule bodies have a 30-day maximum;
+  Response bodies have a 7-day maximum and never outlive the Interaction.
+  Only an isolated typed unpublished candidate may persist locally for at most
+  7 days and never beyond its Interaction. Earlier deletion, expiry, origin
+  revoke, Room retirement, or candidate-basis invalidation shortens those
+  maxima immediately;
+- Fresh Native Response Session transcript/model-tool log/crash/runtime bodies
+  are disposable computation, not durable Forme state. Normal completion and
+  startup recovery clean them before further use; durable Session Receipts are
+  body-free and path-free;
+- hosted deletion makes content immediately unreadable. Scheduled physical
+  purge targets less than 24 hours; more than 36 hours since a successful
+  purge is an operator incident. Offline local state learns earlier remote
+  deletion at the next explicit sync and must fail closed on known expiry;
+- before any production interaction, the Production Deployment & Provisioning
+  Grant must disclose the actual backup horizon, Cloudflare/Caddy/app/
+  PostgreSQL log retention, and exact outbound email provider, region,
+  recipient/log retention, secret handling, delivery metadata, and incremental
+  spend. Production email stays disabled until those values are approved;
+- deletion cannot recall content already read or copied by the Owner or other
+  people, provider-accepted/in-flight bytes, received email, or a backup still
+  inside its disclosed retention horizon; and
+- R4 P0 does not add notes ingestion, Person Twin, open signup, multiple
+  required residents, public search/feed, server AI, rich attachments, or a
+  reusable cross-Room Agent identity.
+
+**Reason:** this completes the bounded asynchronous encounter honestly while
+allowing a real collaborator relationship to continue with less repeated
+approval friction. The fourth preset answers the later Owner judgment that a
+trusted collaborator may need substantially more independent exchanges inside
+the same narrow, revocable boundary; it does not convert familiarity into
+system-inferred trust or broader access.
+
+**Effect:** T5 is closed as Owner-approved design authority. This entry
+supersedes only the earlier partial entry's statements that T5 remained open
+and that more than three Interactions still required a future Owner decision;
+the historical entry and its 7-day/3-Interaction familiar tier remain valid
+evidence. The current stop gate is a newly reconciled Technical Control Packet
+that compiles P/T1/T2/T3/T4/T5/NH1/NH2, passes independent audit, receives a
+new SHA-256, and is separately approved by the Owner. This decision authorizes
+documentation and Packet reconciliation only. It authorizes no repository
+implementation, schema or migration, provider call, real Guest-data handling,
+credential, hosted mutation, external email/message, deployment, production
+traffic or write, public behavior, or spend.
+
 ## 2026-08-03 — Demo schedule extended seven days
 
 **Decision:** internal feature freeze moves to 2026-08-16, the MVP must be

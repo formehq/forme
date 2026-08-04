@@ -4,10 +4,11 @@
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;
   Fresh Native Response Session (Option 2B) exact T3 contract and T4 public
-  lifecycle contract owner-approved; T5 notification-only email and three
-  Guest continuation presets are Owner-directed, while the remaining T5 async /
-  deletion / retention / P0 cut is the current unapproved gate and
-  implementation-packet reconciliation remains open
+  lifecycle contract owner-approved; the complete T5 async, notification,
+  deletion, retention, and P0-cut contract owner-approved, including four
+  Owner-selected Guest continuation presets; reconciled Packet v0.2 passed
+  independent audit at `sha256:e417836b…adfff5`, and separate exact Owner
+  approval is the current gate
 - Updated: 2026-08-03
 
 The rebuild begins from product behavior and contracts. It does not copy the archive's directory structure or implementation by default.
@@ -225,9 +226,9 @@ current validated TwinRevisionV3
   → hosted and local receipts
 ```
 
-The reconciled R4 Control Packet must encode these continuity requirements. The
-final schema names remain part of that later packet and its separate Schema &
-Migration Manifest.
+The reconciled R4 Control Packet v0.2 encodes these continuity requirements.
+Final machine-schema names remain part of its later, separately hashed Schema
+& Migration Manifest.
 
 ### Local Projection basis
 
@@ -500,12 +501,30 @@ actions control intake mode, Grant issue/revoke, and Grant Offers.
 Guest identity, capability, and contact remain separate. P0 does not establish
 a reusable Guest account or verify personhood: it recognizes the holder of an
 exact Room + Projection capability. Owner-facing continuation is limited to
-three presets—24 hours / 1 Interaction, 3 days / 2, or 7 days / 3—and
-familiarity never grants Private Room access by itself. An exact Interaction
-may additionally store one confirmed `response_ready_email` endpoint in a
-mutable hosted notification envelope. The generic notice carries no hosted
-body or reply secret and cannot create or recover authority; the original
-private reply capability remains canonical.
+four presets—24 hours / 1 Interaction, 3 days / 2, familiar collaborator at 7
+days / 3, or trusted collaborator at 7 days / 10. Both relationship labels are
+explicit Owner selections rather than system-inferred trust; neither label
+grants Private Room access by itself. An exact Interaction may additionally
+store one confirmed `response_ready_email` endpoint in a mutable hosted
+notification envelope. The generic notice carries no hosted body or reply
+secret and cannot create or recover authority; the original private reply
+capability remains canonical.
+
+The Owner-approved T5 contract makes asynchronous operation explicit rather
+than ambient. An Agent's standard Room workflow may explicitly call typed
+`room sync` without another per-call Owner approval, and the Owner may run the
+same command manually for recovery; read-only commands never hide a pull or
+durable write, and P0 adds no local daemon, live chat, WebSocket, or remote
+tunnel. Hosted Interaction/inline Guest Capsule bodies have a 30-day maximum;
+published Response bodies have a seven-day maximum and never outlive their
+Interaction. A typed unpublished local Response candidate may remain for at
+most seven days behind the approved Workbench/model-deny boundary, while the
+body-bearing Fresh Session runtime root is cleaned after normal completion or
+before any later session following crash recovery. Earlier T4 terminal state,
+deletion, expiry, or invalidation shortens those ceilings immediately.
+Production interaction remains blocked until the later Production Grant names
+the actual backup, Cloudflare/Caddy/app/PostgreSQL log, and outbound-email
+provider retention and disclosure values.
 
 The Owner-approved T4 lifecycle keeps those authorities distinct. Third Place
 discovers only a current, fresh, admitted Projection. A current public
@@ -516,19 +535,20 @@ seven days of warning-only direct-read and no new Interaction. Projection
 revoke immediately hides its body and linked published Response bodies; Room
 retirement does the same for the whole Room and stops all new writes. A public
 successor requires new Curator admission, and no public or private successor
-inherits a Guest Grant. These are lifecycle semantics, not retention or purge
-timings; T5 still owns those decisions.
+inherits a Guest Grant. These are lifecycle semantics rather than retention or
+purge timings. The separately Owner-approved T5 contract now governs those
+timings, local cleanup, notification, and offline-sync behavior.
 
 “Signal Box” names two connected boundaries: server-side transport and lifecycle state, then local private-context judgment and owner review. Deeper interaction exchanges reviewed capsules; it does not create a permanent server-to-local tunnel.
 
 The product boundary, T2 Room authority contract, NH1/NH2 architecture
-contract, exact Fresh Native Response Session T3 contract, and T4 lifecycle
-contract are approved. The Owner now reviews the remaining T5 terms in
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Repository
-implementation remains blocked until T5 and the approved T3/T4 contracts are
-reconciled into a new exact
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and the
-Owner approves it. The confirmed production target is the supplied
+contract, exact Fresh Native Response Session T3 contract, T4 lifecycle
+contract, and complete T5 async/notification/deletion/retention/P0-cut
+  contract are approved. They are reconciled in independently audited
+  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2 at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+  Repository implementation remains blocked until the Owner separately
+  approves that exact object. The confirmed production target is the supplied
 Cloudflare → Caddy → Hetzner → PostgreSQL path; this architecture governs only
 how Forme integrates with it. Real durable writes additionally require the
 Schema & Migration Manifest, and production deployment/public behavior require

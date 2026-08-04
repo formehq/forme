@@ -5,10 +5,13 @@
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
-  and T4 public lifecycle contract are Owner-approved; T5's notification-only
-  email and three continuation presets are fixed while its remaining terms are
-  the current gate; Packet reconciliation remains open, and all R4 behavior
-  remains unimplemented**
+  and T4 public lifecycle contract plus full T5 are Owner-approved; four
+  continuation presets are fixed—24h/1, 3d/2, familiar 7d/3, and explicitly
+  Owner-selected trusted 7d/10. Technical Control Packet v0.2 reconciliation,
+  independent audit, and hashing are complete at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
+  separate approval of those exact bytes is the current gate, and all R4
+  behavior remains unimplemented**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -787,6 +790,101 @@ These inputs update the remaining T5 proposal without closing it. Email
 provider/log/retention/spend, physical deletion, the overall P0 cut, the
 reconciled Packet, schemas, implementation, deployment and production traffic
 remain separate unapproved gates.
+
+## Evidence round 16 — Full T5 approved and fourth continuation tier added
+
+Later on 2026-08-03 the Owner approved the complete recommended T5 contract
+and made one additive change to the earlier continuation surface:
+
+- familiar collaborator remains 7 days / 3 accepted Interactions;
+- trusted collaborator is added as a fourth, explicitly Owner-selected preset
+  at 7 days / 10 independent accepted Interactions;
+- both remain exact Room + Projection scoped, revocable, limited to one
+  unresolved request, shared by Manual and one-shot Agent carriers, and unable
+  to follow a successor or unlock a Private Room by label alone. The system may
+  not infer the trusted tier from email, identity, history, behavior, or model
+  judgment;
+- explicit Agent-triggered `room sync` plus manual recovery, reply-URL polling,
+  optional notification-only exact-Interaction email, and no Owner-device
+  daemon/live-chat/server-AI topology are now closed T5 requirements;
+- Interaction and inline Guest Capsule bodies have a 30-day maximum; Response
+  and isolated unpublished candidate bodies have a 7-day maximum capped by
+  the Interaction. Earlier deletion, expiry, origin revoke, Room retirement,
+  or candidate-basis invalidation shortens availability and triggers the
+  approved cleanup/purge obligations;
+- hosted deletion becomes immediately unreadable, scheduled physical purge
+  targets less than 24 hours, and more than 36 hours without a successful purge
+  is an operator incident. Fresh-session body artifacts are disposable and
+  durable Session Receipts remain body-free/path-free; and
+- actual backup, infrastructure-log, and outbound-email provider retention,
+  region, secret, delivery-metadata, and spend values must be disclosed in a
+  later Production Deployment & Provisioning Grant before real interaction or
+  production email. Notes ingestion, Person Twin, open signup, multiple
+  required residents, public search/feed, server AI, rich attachments, and
+  cross-Room reusable Agent identity stay outside R4 P0.
+
+This is **Owner product/governance evidence, not runtime or usability
+evidence**. No email was sent, endpoint verified, pass issued, Interaction
+accepted, sync run, Response delivered, body deleted, purge job or incident
+monitor exercised, provider called, schema written, application implemented,
+or production resource changed. It does not establish that 10 independent
+Interactions feel coherent, that the generic notice is sufficient, that local
+cleanup is enforceable, or that deletion and offline synchronization races are
+correct.
+
+T5 is now closed as design authority. The current stop gate is a newly
+reconciled Technical Control Packet compiled from P/T1/T2/T3/T4/T5/NH1/NH2,
+independently audited, assigned a new SHA-256, and separately approved by the
+Owner. Full T5 approval authorizes documentation and Packet reconciliation
+only; implementation, schema/migration, provider calls, real Guest-data
+handling, external messaging, deployment, production writes/traffic, public
+behavior, and spend remain unauthorized and unvalidated.
+
+## Evidence round 17 — Technical Control Packet v0.2 reconciled and audited
+
+Later on 2026-08-03 the approved P/T1/T2/T3/T4/T5/NH1/NH2 contracts were
+compiled into a clean Technical Control Packet v0.2. The exact approval object
+is 1,981 lines / 107,235 bytes with SHA-256
+`e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+
+Three independent read-only audits returned Green on those exact bytes:
+
+- authority and causal-chain compatibility, including one-use dispatch
+  linearization and post-email-handoff `no_future_retry` behavior;
+- lifecycle, retention/deletion, email recovery, local locking, Fresh-session
+  concurrency, close/offline behavior, and required race tests; and
+- physical containment, Codex feasibility, source/origin boundaries,
+  transport/budget accounting, candidate extraction, Git snapshot behavior,
+  Cloudflare origin expectations, and recovery scope.
+
+The repository verification for this documentation state passes all 45
+deterministic tests, Markdown structure and relative-link checks across 22
+files, and `git diff --check`.
+
+This is **control-design and audit evidence, not runtime or product
+evidence**. No R4 code, schema, migration, provider/model call, real Guest
+body, hosted mutation, email, deployment, public traffic, production write, or
+spend was created or exercised. The Green audits therefore do not prove
+containment on a real Codex invocation, macOS launcher hardening, response
+quality, hosted race behavior, email delivery, deletion, restore, or the
+three-minute encounter.
+
+The remaining Yellow conditions are deliberately later evidence gates rather
+than Packet-approval blockers:
+
+- Gate B must prove that the official Codex adapter can enforce the bounded
+  Snapshot Query Broker plus exact transport, model, output, token, and cost
+  boundary; otherwise the AI lane remains manual-only;
+- Gate B must prove the signed/hardened macOS launcher, native review,
+  Keychain, reverse isolation, sandbox, and cleanup as one physical system;
+  and
+- Gate C must bind the actual production origin, backup/log retention, OpenAI
+  account, email provider, real actors/data, and spend before real traffic.
+
+The current stop gate is separate Owner approval of the exact Packet hash.
+That approval permits only the bounded Gate A repository implementation and
+synthetic/local tests described by the Packet. It does not authorize Gate B
+provider work or Gate C production work.
 
 ## Follow-up product-learning questions — not R4 blockers
 

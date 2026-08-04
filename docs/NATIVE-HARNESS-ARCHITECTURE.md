@@ -1,12 +1,13 @@
-# Native Harness architecture contract v0.3
+# Native Harness architecture contract v0.4
 
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
   R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; T4 public lifecycle Owner-approved on 2026-08-03; T5
-  notification-only email and continuation presets are fixed, while its
-  remaining terms are the current unapproved gate; no new runtime, provider,
-  file, shell, tool, Room, or implementation authority**
+  2026-08-03; T4 public lifecycle and the complete T5 async, notification,
+  deletion, retention, and P0-cut contract Owner-approved on 2026-08-03;
+  Packet v0.2 is reconciled and independently audited at
+  `sha256:e417836b…adfff5`; separate exact Owner approval is current; no new runtime, provider, file, shell, tool,
+  Room, or implementation authority**
 - Updated: 2026-08-03
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
@@ -36,9 +37,12 @@ budget、physical isolation 和 session lifecycle。同日批准的 T4 又固定
 public / unlist / stale / revoke 对 Projection、Interaction、Response 与
 session authority 的影响。它们仍不是批准某个 Codex session 现在读取
 文件、运行 shell、使用 tools、看到 Guest 内容、操作 Room、调用 provider
-或开始实现。T5 的 notification / continuation 输入已经固定，下一步需要
-判断的是其余 async / deletion / retention / P0 cut；
-重写后的 Control Packet 仍在后面。
+或开始实现。完整 T5 也已批准：standard Agent workflow 显式 sync、可选
+notification-only email、四档 Owner-selected continuation、30-day
+Interaction / 7-day Response / 7-day isolated candidate ceilings，以及
+session-root cleanup、删除与 offline reconciliation 规则都已固定。当前不再
+等待新的 T5 语义判断；下一步是重写 Control Packet、独立审计、生成 exact
+hash，再由 Owner 批准那个准确对象。
 
 ## Why this clarification exists
 
@@ -232,8 +236,10 @@ The Owner selected this direction on 2026-08-01 and approved the complete
 recommended T3 contract on 2026-08-03. Its consent, clean-HEAD sanitized source
 snapshot, OpenAI provider transport exception, budget, isolation, output gate,
 and session termination rules are now authoritative constraints on a future
-implementation. T5 still owns durable retention and purge. No operational
-capability or implementation authority is granted yet.
+implementation. The subsequently Owner-approved T5 contract supplies the
+durable retention, purge, cleanup, notification, and offline-reconciliation
+constraints to the reconciled Packet. No operational capability or
+implementation authority is granted yet.
 
 ### Managed Privacy Run
 
@@ -425,13 +431,43 @@ Response Session without giving the session Room authority:
 - Projection revoke or Room retirement terminates computational authority and
   invalidates any unpublished candidate; linked published Response bodies are
   hidden by the hosted lifecycle contract;
-- T4 says when content becomes unavailable, while T5 still decides durable
-  retention, physical purge, and asynchronous reconciliation timing.
+- T4 says when content becomes unavailable. The separately approved T5
+  contract now fixes durable retention ceilings, physical-purge obligations,
+  session/candidate cleanup, notification, and asynchronous reconciliation.
 
 These are authoritative constraints for a future implementation. They do not
 grant the Harness direct lifecycle inspection, mutation, connector, or publish
 capability; those paths still require the separately approved T2 gateway and
 the remaining gates.
+
+## Relationship to approved T5
+
+T5 closes the lifecycle questions that T3 and T4 deliberately left open:
+
+- an Agent's standard Room workflow may explicitly invoke typed `room sync`;
+  Owner-run sync remains the recovery/diagnostic path, and read-only commands
+  never hide a pull or durable write;
+- P0 adds no daemon, WebSocket, live chat, or remote local tunnel;
+- one exact Interaction may hold a confirmed notification-only email endpoint,
+  but email carries no body or reply secret and grants no identity, recovery,
+  or Room authority;
+- the continuation presets are 24h/1, 3d/2, familiar collaborator 7d/3, and
+  Owner-selected trusted collaborator 7d/10. `trusted` is not system-inferred
+  and grants no Private Room access by label;
+- hosted Interaction/inline Guest Capsule bodies have a 30-day maximum and
+  Response bodies a seven-day maximum; an isolated unpublished candidate has
+  a seven-day maximum, while body-bearing Fresh Session runtime roots are
+  cleaned after normal completion or before a later session after crash;
+- known terminal state, deletion, expiry, or invalidation ends visibility and
+  cleanup eligibility earlier; offline local copies reconcile on the next
+  explicit typed sync;
+- actual backup, infrastructure-log, and outbound-email-provider retention
+  must be disclosed and approved in the Production Grant before production
+  interaction or email is enabled.
+
+T5 therefore governs the Fresh Session's artifact lifecycle without making a
+runtime transcript durable Forme meaning and without granting the Workbench,
+Fresh Session, or connector any additional capability.
 
 ## What this document does not authorize
 
@@ -445,6 +481,6 @@ This clarification authorizes no:
   Projection publication;
 - schema, migration, implementation, deployment, or public behavior.
 
-Those remain governed by the owner-approved T3/T4 contracts, pending T5, the
+Those remain governed by the owner-approved T3/T4/T5 contracts, the
 reconciled Technical Control Packet, Schema &
 Migration Manifest, and Production Deployment & Provisioning Grant.

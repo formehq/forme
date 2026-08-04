@@ -1,1956 +1,1981 @@
-# R4 Technical Control Packet v0.1
+# R4 Technical Control Packet v0.2
 
-- Status: **unreconciled implementation appendix after Owner-approved T4 and
-  partial T5 direction; remaining T5 terms are current; not an approval target;
-  no implementation authority**
+- Status: **reconciled proposal awaiting exact Owner approval; no R4
+  implementation authority**
 - Updated: 2026-08-03
+- Active issue: [#52](https://github.com/formehq/forme/issues/52)
+- Draft review: [#64](https://github.com/formehq/forme/pull/64)
 - Product authority:
   [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
-- Product/protocol foundation:
-  [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md)
-- Owner review surface:
+- Human review surface:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
-- Active gate: [#52](https://github.com/formehq/forme/issues/52)
+- Supersedes: v0.1 in Git history; v0.1 is not an implementation source
 
-> Review notice, updated 2026-08-03: the Owner has confirmed the existing
-> Cloudflare → Caddy → Hetzner → PostgreSQL deployment target and anywhere Web
-> login for Owner Control. On 2026-07-28 the Owner approved T2: an API-first
-> Web control plane, thin P0 public/Guest and Room Operator CLI, independent
-> exact per-Room 30-day non-renewing bindings, connector-held credentials, and
-> the fixed `room_operator.v1` semantic bundle. The body below has **not** been
-> reconciled to that approval. In particular, its paired-local
-> `projection:revoke`, `response:revoke`, and `signal:disposition` scopes are
-> broader than approved T2 and must not be implemented or treated as approved;
-> content revoke and Interaction disposition remain Owner Web control actions.
-> The Owner also superseded the invite-only Guest
-> ingress with a public one-knock + Owner short-pass model and added a real
-> grant-gated Private Room with a different Room ID and Projection.
-> This implementation appendix has not yet been reconciled to those inputs or
-> to the Owner-approved Native Harness / Forme contract. On 2026-07-29 the
-> Owner approved NH1 option 1 and NH2 option 1: Native Harness Workbench is the
-> default local carrier, while ordinary native Workspace work remains distinct
-> from typed Forme-authoritative meaning/effects. This approval grants no
-> concrete capability or implementation. The historical `local Forme Agent`
-> actor and runtime topology must be split into Native Harness Workbench,
-> Forme Semantic Spine, Fresh Native Response Session, optional Managed
-> Privacy Run, and deterministic connector. On 2026-08-01 the Owner selected
-> Fresh Native Response Session (Option 2B) as the R4 P0 direction. Therefore
-> this packet's response-context picker, exact manifest, 32 KiB response
-> context ceiling, one-dispatch authorization, zero-tool drafting profile, and
-> `.forme/presence` body layout are superseded for R4 P0. Managed Privacy
-> remains an R2/R3 proof and P1/future sensitive lane. On 2026-08-03 the Owner
-> approved the full recommended exact T3 contract: one new/non-resumed session
-> per exact Interaction; a clean-HEAD sanitized read-only Forme snapshot plus
-> previewed body/path-free Twin orientation; the disclosed Owner-local Codex →
-> OpenAI transport; fixed session/dispatch/token/applicable spend ceilings;
-> Guest consent with a manual-only fallback; physical Guest-store, credential,
-> writer, generic-network, cross-Room, mutation, and publication separation;
-> and exact Owner approval before separate T2 delivery. This closes T3 as a
-> design input only and does not authorize implementation or any capability.
-> On 2026-08-03 the Owner also approved the full recommended T4 lifecycle
-> contract. Owner publication and Curator admission remain independent;
-> Third Place shows only current/fresh/admitted Projections; an unrevoked,
-> unexpired public Projection remains direct-readable when never admitted or
-> unlisted; and unlist stops discovery/public knocks and invalidates unused
-> public encounter capabilities without silently revoking still-valid exact
-> Owner Grants or `GrantOffer` objects. Stale content is warning-only with no new
-> Interaction; Projection revoke and Room retirement hide hosted bodies and
-> require tombstone-driven local purge; old stale/superseded/expired requests
-> may receive only an origin-disclosed reviewed Response, while revoked-origin
-> requests may not receive a new Response; and no successor inherits a Grant,
-> with public successors also requiring new admission. These are behavioral
-> design inputs only. The exact schemas, routes, transactions, cache controls,
-> persistence, and synchronization mechanisms in this historical body remain
-> unreconciled and unapproved.
-> Later on 2026-08-03 the Owner fixed two T5 inputs that additionally supersede
-> this body: P0 now includes an optional exact-Interaction, notification-only
-> response-ready email endpoint, and Owner-facing continuation uses 24h/1,
-> 3d/2, and 7d/3 capability presets. Email is not identity or reply authority;
-> familiarity is not Private Room access. The historical no-email and free
-> 24h/3d/7d-up-to-three descriptions below must not be implemented.
-> Its `.forme/presence/` proposal is also historical: after local import,
-> body-bearing Guest input, exact context previews/manifests, and drafts must
-> not sit inside the ordinary Native Workspace read surface or appear in
-> Agent-callable tool output. The reconciled Packet must choose a local privacy
-> store or equivalent enforceable deny boundary and give ordinary Workbench
-> sessions only opaque IDs/body-free status. One exact request may be released
-> only to its new T3 Fresh Native Response Session after explicit Owner start.
-> The
-> hosted original Guest submission still follows T1/T2/T4/T5.
-> T1, T2, NH1, NH2, exact T3, and T4 are closed; the remaining T5 terms are the
-> current Owner gate
-> in
-> [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md). Only after
-> T5 closes may this appendix be replaced by a reconciled Packet, audited,
-> hashed, and returned for separate Owner approval. The prior packet hash is
-> not an approval target, and this v0.1 body still grants no implementation,
-> provider call, Guest-data, Room-mutation, schema, deployment, or spend
-> authority.
+This document compiles the Owner-approved P, T1–T5, NH1, and NH2 decisions
+into one proposed R4 implementation boundary. It deliberately removes the old
+Vercel/Supabase, invite-only ingress, 32 KiB response packet, no-email, broad
+connector, and body-bearing `.forme/presence` designs.
 
-## Historical v0.1 decision summary
+Approving this exact Packet would authorize only repository implementation,
+fixtures, local test resources, and non-production verification inside the
+boundaries below. It would **not** authorize real Guest data, a model/provider
+call, schema migration, hosted write, email, deployment, public traffic,
+production secret, or spend. Those remain behind the later gates named in
+[Implementation gates](#implementation-gates).
 
-The v0.1 proposal recommended a small Presence system around the existing local
-Living Project Twin. It is retained for reconciliation only:
+## Three-minute Owner brief
+
+### What we are building
 
 ```text
-Owner local
-  existing Forme CLI + private Twin + local Codex runtime
-  new .forme/presence/ ledger, inbox, and outbox
-                 │
-                 │ exact capsules, scoped credentials, hashes, receipts
-                 ▼
-Hosted edge
-  one Next.js Third Place app on Vercel
-  one Supabase Auth + Postgres project
-  no model, no source repo, no private Twin, no notes, no generic agent
-                 │
-                 ▼
-Guest edge
-  public browser, or the guest's own agent
+Guest sees one shallow Projection
+  → asks one private question
+  → Owner explicitly starts one fresh Codex response session
+  → Codex may inspect a sanitized read-only snapshot of the Forme repo
+  → Codex returns a private candidate, not a published answer
+  → Owner approves the exact outgoing answer
+  → a deterministic connector delivers it
+  → Guest reads it through the retained private reply capability
 ```
 
-The important architectural decision is that R4 has **three state owners**, not
-one giant cloud Twin:
+The public server remains a **Room control and relay plane**, not a hosted
+Twin and not an AI chat service. The deep context stays local. If the shallow
+Projection is insufficient, the Guest sends a Signal; the Owner decides
+whether the local Twin and one bounded Fresh Session should answer it.
 
-1. the local **Twin** owns what the project currently means;
-2. the local **Presence ledger** owns what the Owner prepared, approved,
-   imported, and sent;
-3. the hosted **Presence store** owns what is currently public, curated,
-   queued, delivered, expired, or revoked on the server.
+### The four continuation choices
 
-They reconcile through immutable IDs, canonical payload hashes, idempotency
-keys, and receipts. An external signal does not become Twin truth merely
-because it reaches the server or local inbox.
+| Owner label | Exact capability | What it does not mean |
+|---|---:|---|
+| One visit | 24 hours / 1 accepted Interaction | no account or identity |
+| Short exchange | 3 days / 2 accepted Interactions | no thread |
+| Familiar collaborator | 7 days / 3 accepted Interactions | no inferred trust |
+| Trusted collaborator | 7 days / 10 accepted Interactions | no Private Room access |
 
-The proposed P0 uses:
+All four are Owner-selected bearer capabilities bound to one exact Room and
+Projection. Manual and Agent use shares one quota. At most one Interaction is
+unresolved. A successor Projection inherits nothing.
 
-- the existing root TypeScript/Node 24 package for Owner-local work;
-- one pure `packages/presence-protocol` package for shared wire contracts;
-- one `apps/third-place` Next.js application for the public UI and HTTP API;
-- Vercel Pro for the application and daily retention job;
-- Supabase Pro for one passwordless Controller account and one transactional
-  Postgres store;
-- explicit local polling rather than a daemon, webhook, tunnel, or queue
-  product;
-- one Owner/Curator, one Third Place, one Forme Project Room, one live
-  Projection Capsule, one invited interaction, and one reviewed response.
+### Eight implementation choices this Packet makes explicit
 
-At prices verified on 2026-07-25, the recommended production base is about
-**$45/month**: Vercel Pro at $20/month and Supabase Pro at $25/month, before any
-domain or usage overage. No cloud resource or spend is authorized by this
-proposal.
+These are the only material technical choices added while compiling the
+already-approved product decisions:
 
-For Owner review, the minimum reading path is this section, the five-question
-checksum, the recommended-decision table, and the Approval boundary. The
-remaining sections are the implementation and audit contract for agents and
-future maintainers; the Owner should not need to memorize them.
+1. **No durable local Guest-body inbox.** Ordinary `room sync` stores only
+   body-free metadata. The trusted local launcher pulls one exact request into
+   memory only after the Owner starts `Prepare response`.
+2. **Codex is physically bounded, not merely prompted.** A trusted launcher
+   supplies an outer OS sandbox and local provider-transport gate; a separate
+   deny-by-default Codex permission profile is defense in depth for spawned
+   commands, not the security attestation. A startup adversarial probe must
+   prove that private roots, sibling paths, writes, sockets, browser/MCP/tool
+   surfaces, command network, and the dispatch budget are denied; otherwise
+   the AI lane fails closed to `manual_owner_only`.
+3. **The local review surface uses one-shot signed native windows.** One
+   ceremony shows the Guest request and starts the Fresh cycle; a later separate
+   ceremony shows the encrypted candidate for exact approval. Neither prints a
+   body into an ordinary Workbench transcript or exposes a loopback HTTP
+   surface. They are not a daemon, chat service, browser tool, tunnel, or
+   remotely reachable endpoint.
+4. **An unlisted Projection version is not re-admitted in P0.** Re-entry to the
+   Third Place requires a new Owner-approved successor and a new Curator
+   admission. This keeps curation history monotonic.
+5. **Continuation capabilities do not stack.** One re-entry chain may have at
+   most one live continuation Grant for an exact Room and Projection. A wider
+   preset is a new explicit Grant that atomically revokes the prior one; unused
+   quota never transfers.
+6. **The Owner may explicitly close without replying.** This is a hosted Web
+   boundary action, not a connector or Agent decision. It releases the
+   one-unresolved lock and returns only a generic `closed_without_response`
+   status to the Guest.
+7. **Email is best-effort notification.** Verification lasts 15 minutes and is
+   one-use; Forme commits at most one semantic ready notice, while provider
+   timeout may still produce a duplicate. Polling remains canonical.
+8. **Body-free recovery evidence has an exact horizon.** Interaction
+   tombstones and ordinary operation receipts remain 37 days; per-Room
+   sequence/high-water and release evidence remains body-free for the Room's
+   life. None is a Guest identity or content record.
 
-## User-visible outcome
+If the Owner disagrees with one of these eight choices, the Packet should be
+corrected before approval. Everything else below is the engineering expansion
+of already-approved behavior.
 
-A guest can enter the public Forme Third Place, encounter the current Forme
-Project Room, bring a small bounded part of their context, and submit one
-invited question, Seed, or Resonance Request.
+### Current Yellow conditions
 
-The local Owner later runs one explicit sync. The request enters a quarantined
-local Signal Box. The local Forme Agent may prepare a draft from a separately
-bounded Context Packet. The Owner edits, declines, parks, or approves the exact
-outgoing response. The guest returns to a private reply URL and sees the
-reviewed result.
+- **Codex adapter proof:** the stock `codex exec --json` surface does not by
+  itself expose a pre-dispatch budget gate or remove generic exec. Gate B must
+  prove an official Codex app-server/noninteractive adapter can use
+  `SnapshotQueryBrokerV1` and `ResponseTransportGateV1`. Failure keeps the AI
+  lane off and returns to the Owner; it does not authorize a private Codex fork
+  or weaker prompt-only boundary.
+- **macOS local protection proof:** signed/hardened launcher identity,
+  Keychain/Secure Enclave access control, native user-presence review, outer
+  sandbox, cleanup, and canaries must work as one system. Any failed component
+  keeps Guest bytes out of Codex and leaves manual-only available.
+- **Production facts:** origin protection, backup/log horizons, OpenAI account
+  regime, and email provider facts remain deliberately unknown until Gate C;
+  real Guest interaction/email stays disabled before approval.
 
-At no point does the hosted service:
+## Owner checksum
 
-- run a model;
-- read the Forme repo, notes, private Twin, or source evidence;
-- decide what the Owner thinks;
-- admit an external message into Twin meaning;
-- create a commitment or perform a third-party effect.
-
-## Owner architecture checksum
-
-> **Historical v0.1 proposal only.** This checksum predates the approved
-> self-host target, T1/T2 corrections, and Native Harness clarification. It is
-> retained for reconciliation work and is not a current recommendation or
-> approval surface.
-
-| Question | Historical v0.1 proposed answer |
+| Question | R4 answer |
 |---|---|
-| **Input — what enters Forme?** | Locally: the exact public Projection frame, one invited Interaction Request, an optional bounded Guest Capsule, and any Owner-selected response context. Hosted: only approved public capsule bytes, minimum account/control metadata, guest payload, lifecycle state, and reviewed response bytes. |
-| **Durability — what survives, and where?** | The Twin remains local canonical project meaning. `.forme/presence/` durably stores local candidates, exact approvals, inbox/outbox objects, cursors, and receipts. Supabase Postgres durably stores current public/curation state, capability hashes, interactions, responses, and server receipts. |
-| **Visibility — who can see what?** | Third Place shows only `thirdPlaceEligible` admitted Rooms. A visitor with a direct Room URL may also see the exact `directRoomReadable` capsule with an explicit unlisted/stale lifecycle state; a never-admitted current capsule may be direct-readable but is never discoverable. The server sees only hosted payloads, never private sources. The local Codex adapter sees only an explicit response packet after the Owner initiates drafting. Incoming guest text is marked untrusted and gives the runtime no tools. |
-| **Authority — who may change what?** | A paired local credential may publish/revoke the exact Owner-approved capsule, pull/ack signals, and publish an exact Owner-approved response for one Room. Only the authenticated Curator account may admit/unlist. Guest capabilities may create one bounded request. None may write Twin meaning. |
-| **Recovery — what happens after failure?** | Local outbox/inbox persistence happens before network acknowledgement. Every mutation is idempotent and transactional on the server. Unknown network outcomes are resolved by querying the idempotency key. Sync advances its cursor only after local validation, atomic persistence, and acknowledgement. |
+| What enters Forme? | An approved Projection, one private Guest request/capsule, body-free Room events, one sanitized repo snapshot, one body-free Twin orientation, and one typed response candidate. |
+| What is durable? | Twin truth locally; body-free local Presence metadata and receipts; hosted Projection/Interaction/Response lifecycle; encrypted hosted private bodies until their ceilings. Fresh-session transcript and raw local Guest body are not durable. |
+| What can Codex see? | Ordinary Workbench sees the admitted repo but not Guest bodies, Room credentials, or candidates. A Fresh Session sees one request, optional inline Guest Capsule, one orientation, and one sanitized snapshot only. |
+| What can an Agent change? | Ordinary Workbench may call the fixed `room_operator.v1` connector. Fresh Session can only return a candidate. Owner/Curator Web performs boundary actions; exact Owner approval is required before outgoing content. |
+| How does recovery work? | Immutable hashes, idempotency keys, ordered per-Room events, persist-before-ACK, tombstones, a cleanup journal, submitted-unknown reconciliation, and body-free receipts. |
 
-This table is already superseded in several places and must not govern
-implementation. It is retained only so the next Packet can reconcile each
-historical proposal explicitly.
+## Authority ledger
 
-## Historical v0.1 technical proposals — not an approval surface
+| Gate | Compiled invariant |
+|---|---|
+| P | Privacy is the primary source/provider/audience boundary. Human representation/commitment and irreversible/material consequence are companion guards. Authority never expands itself. Inside an exact inspectable revocable envelope, use review-by-exception. |
+| T1 | Public and Private are different immutable Room kinds. Public gets one short anonymous knock; continued or Private access uses exact Owner Grants. Four presets are fixed. Agent derivative authority is short and narrower. |
+| T2 | Hosted Forme is a GitHub-like Web/API control plane with no AI. API semantics are canonical; Web and CLI are clients. Each local binding is one exact Room, 30 days, non-renewing, revocable, and fixed to `room_operator.v1`. |
+| NH1 | Codex is the P0 Native Harness Workbench. OpenCode remains a first-class architectural target with no live P0 path. Forme does not rebuild a general chat/workbench runtime. |
+| NH2 | Ordinary Workspace work is not automatically Twin meaning or a Forme-authoritative effect. Admission, correction, publication, commitments, and claimed receipts remain typed Forme operations. |
+| T3 | One Interaction gets one new, non-resumed, bounded Fresh Native Response Session after explicit Owner start. It uses the sanitized snapshot and body-free orientation, returns only a candidate, and cannot publish. |
+| T4 | Owner publication and Curator admission are independent. Unlist is not revoke. Stale is warning-only/no-new-write. Revoke/retire hides bodies. Successors inherit no Grant. Existing non-revoked origins may be answered only with disclosed state. |
+| T5 | Explicit sync and polling are canonical. Optional email is notice-only. Retention ceilings, purge targets, non-durable session artifacts, four presets, and the P0 cut are fixed. |
 
-> Do not approve the table below. In particular, its provider topology,
-> identity, Guest, credential, and local-model rows are superseded or paused.
-> The approved NH1/NH2 and exact T3 contracts must
-> replace the local runtime/context recommendation in the next packet.
-
-| Decision | Historical v0.1 answer | Consequence |
-|---|---|---|
-| Hosted topology | One Vercel-hosted Next.js UI/API and one Supabase Auth/Postgres project | Two managed control planes; no custom server fleet, broker, cache, object store, or server model |
-| Repository shape | Keep the existing root package in place; add `packages/presence-protocol`, `apps/third-place`, and local `src/presence` | R1–R3 are not moved or rewritten; only shared wire contracts cross the local/server boundary |
-| Durable state | Add `.forme/presence/`; do **not** create `TwinRevisionV4` merely to mirror transport | Presence history is durable and inspectable without letting guest messages silently become project meaning |
-| Controller identity | Pre-provision one confirmed Supabase email user, disable sign-up, and use email OTP with `shouldCreateUser: false` | Passwordless and invite-only; Supabase authenticates only durable operators, not guests or agents |
-| Local pairing | One 10-minute, single-use 256-bit challenge produces one 30-day Room-bound opaque credential after local confirmation | The CLI never receives the Controller's Supabase session; the Curator scope is never delegated |
-| Guest identity | Public read; one Curator-issued, one-use invite creates a capability session; Agent Guest receives a 15-minute one-signal derivative token | No guest account, profile, email, reusable Agent identity, or verified real-world identity in P0 |
-| Synchronization | Manual `presence sync` polling with persist-before-ack and an opaque cursor | No daemon, push, WebSocket, webhook, notification worker, or permanent local tunnel |
-| Local model visibility | **Superseded historical proposal:** before one response draft, show a manifest and send selected request/capsule/Twin content in a maximum 32 KiB isolated packet through existing Codex authentication | The Owner selected this direction on 2026-08-01 and approved its full exact T3 contract on 2026-08-03: a new/non-resumed Fresh Native Response Session may dynamically read only a sanitized read-only clean-HEAD snapshot of eligible Forme files plus previewed typed body/path-free Twin orientation, inside the approved provider/session/capability envelope. This historical row and unreconciled packet still authorize no implementation. |
-| Freshness | Any new local Twin revision conservatively marks the current Projection stale; every Projection hard-expires after seven days | P0 may ask for more Owner re-publication than a later dependency-aware system; an offline server cannot claim freshness forever |
-| Listing and direct access | Curator unlisting removes the Room from Third Place but leaves an unexpired Owner-published direct Room readable; interaction is disabled until admitted | **T4-approved supersession note:** the direct-read/discovery split is approved, but the historical blanket interaction-disabled claim is superseded: unlist invalidates public knocks while still-valid exact Owner Grants and `GrantOffer` objects survive under the T4 conditions; exact implementation remains subject to the reconciled Packet |
-| Existing requests after change | A stale, superseded, or expired origin may receive an Owner-reviewed response that discloses the origin state; a revoked origin may not | **T4-approved behavior:** a legitimate waiting guest is not silently abandoned, while explicit revocation remains a hard stop; exact implementation remains subject to the reconciled Packet |
-| Retention | Guest/interaction payloads become unreadable at 30 days or immediately on guest deletion; the next successful daily janitor physically purges them, with a target lag under 24 hours; responses are available for seven days and never beyond the interaction cap; backups may retain purged bytes for seven additional days | Logical deletion is synchronous while physical deletion and backup expiry are honest, separately observable phases; deletion cannot claw back text already read or an offline local copy before its next Presence run |
-| Notification | The guest keeps a private reply URL and refreshes it; the Owner runs manual sync; no guest or Owner email notification | One fewer provider and no background messaging, at the cost of an intentionally asynchronous/manual P0 |
-| Production plans | Vercel Pro + Supabase Pro, currently about $45/month, with Spend Management alerts and the opt-in pause action | Avoids Vercel Hobby's non-commercial restriction and Supabase Free pausing/no-backup risk; the budget/pause is not a strict real-time cost cap |
-
-In v0.1, approval would have approved these answers as one bounded R4 technical
-direction. That statement is now superseded: this packet cannot be approved and
-authorizes no repository/fixture implementation. A new reconciled packet must
-follow approved NH1/NH2, exact T3, and T4 plus the eventually approved T5, then
-return to the
-Owner with a new exact hash.
-
-## System topology
+## System topology and state ownership
 
 ```mermaid
 flowchart LR
-    subgraph Local["Owner local — trusted private edge"]
-        Source["Forme repo"]
-        Twin["Living Project Twin"]
-        LocalAgent["Local Forme Agent / Codex adapter"]
-        Presence[".forme/presence ledger"]
-        Credential["Room credential outside repo"]
-        Source --> Twin
-        Twin --> LocalAgent
-        LocalAgent --> Presence
-        Credential --> Presence
+    subgraph Local["Owner local"]
+        W["Native Harness Workbench\nCodex P0"]
+        S["Forme Semantic Spine\nTwin · correction · authority"]
+        L["Trusted one-shot launcher\nreview UI · snapshot · Fresh Session"]
+        C["Deterministic connector\nroom_operator.v1"]
+        P["Protected local state\ncredential · candidate · cleanup journal"]
+        W <--> S
+        W -->|"body-free typed command"| C
+        S --> L
+        L --> P
+        C --> P
     end
 
-    subgraph Hosted["Hosted presence — no AI and no private source"]
-        App["Next.js Third Place UI + Route Handlers"]
-        Auth["Supabase Auth — one Controller"]
-        DB["Supabase Postgres — capsules, curation, queue, receipts"]
-        Cron["Daily retention janitor"]
-        App --> Auth
-        App --> DB
-        Cron --> DB
+    subgraph Hosted["Hosted control and relay plane — no AI"]
+        CF["Cloudflare\nTLS · Access · edge controls"]
+        CA["Caddy\nonly HTTP entry"]
+        A["Self-hosted Forme app\nWeb + versioned API"]
+        D["PostgreSQL 16\nonly hosted authority"]
+        CF --> CA --> A --> D
     end
 
     subgraph Guest["Guest edge"]
-        Browser["Manual Guest browser"]
-        GuestAgent["Guest-owned Agent"]
+        M["Manual Guest\nbrowser + retained reply URL"]
+        G["Guest-owned Agent\nshort derivative token"]
     end
 
-    Presence -->|"approved capsule / poll / reviewed response"| App
-    App -->|"public capsule / invite / reply"| Browser
-    App -->|"public JSON / scoped signal API"| GuestAgent
-    Browser -->|"bounded signal"| App
-    GuestAgent -->|"bounded signal + optional Guest Capsule"| App
+    C <-->|"exact Room API"| CF
+    M <-->|"public read · private request/reply"| CF
+    G <-->|"read + one request"| CF
+    L -->|"OpenAI transport only"| O["OpenAI via Owner-local Codex"]
 ```
 
-### Trust-boundary consequences
-
-- TLS and scoped bearer credentials authenticate transport. P0 does not add
-  asymmetric capsule signing, DIDs, hardware keys, or legal identity proof.
-- The production Next.js server has a named Supabase `sb_secret_*` key for
-  fixed public, guest, pairing, janitor, and transactional RPC paths. It
-  bypasses RLS and can use Auth Admin. Its compromise could read or change all
-  hosted domain/Auth data and administer the sole Controller account—not only
-  public capsules.
-- That compromise still cannot reveal private Twin evidence, repo sources,
-  local notes, Codex authentication, or local credentials because they never
-  enter the hosted system.
-- Controller routes use the caller's verified Supabase session and RLS-aware
-  functions. The bypass secret is never sent to a browser, preview deployment,
-  log, or local workspace.
-- GitHub deploy authority, Vercel project ownership, and Supabase
-  organization/project ownership sit above every in-app role. The same human
-  may hold them in P0, but each account uses MFA and minimum membership. A
-  production deployer can ship code that reads runtime secrets even when the
-  dashboard does not reveal their value.
-- Vercel and Supabase are replaceable infrastructure. Forme owns the JSON
-  protocol, SQL migrations, local state, and all domain IDs.
-
-## Repository boundary
-
-```text
-forme/
-├── src/                              existing Owner-local R1–R3 core
-│   ├── runtime.ts                    local Codex adapter; server import forbidden
-│   └── presence/                     new local compile/approve/sync/respond code
-├── schemas/                          existing R1–R3 schemas stay in place
-├── test/                             existing regression suite
-├── packages/
-│   └── presence-protocol/
-│       ├── schemas/                  wire JSON Schemas
-│       └── src/
-│           ├── canonical.ts          canonical bytes and hashes
-│           ├── contracts.ts          schema + semantic validation
-│           └── types.ts              provider-neutral DTOs
-├── apps/
-│   └── third-place/
-│       ├── app/                      public, reply, and minimal control routes
-│       ├── src/server/               auth, store, rate, and RPC adapters
-│       └── test/                     API, renderer, auth, and browser tests
-└── supabase/
-    └── migrations/                   portable SQL schema, policies, and RPCs
-```
-
-The root package becomes an npm workspace coordinator without moving the
-existing root package into `packages/core`. No Turborepo or additional build
-orchestrator is proposed.
-
-### Shared-code rules
-
-`packages/presence-protocol` may contain only:
-
-- provider-neutral types;
-- JSON Schemas with `additionalProperties: false`;
-- semantic validators;
-- canonical JSON and SHA-256 helpers;
-- golden protocol fixtures.
-
-It may not import:
-
-- filesystem or process APIs;
-- the Twin store;
-- `src/runtime.ts`;
-- Codex, OpenCode, or another model SDK;
-- Supabase, Next.js, Vercel, cookies, or account logic.
-
-The hosted dependency graph must fail CI if it imports the local runtime,
-source readers, Twin store, or a model SDK.
-
-### Proposed pinned production dependencies
-
-Versions were resolved from the package registry on 2026-07-25:
-
-| Package | Proposed version | Scope |
-|---|---:|---|
-| Node.js | `24.x` | local and hosted runtime |
-| `next` | `16.2.12` | Third Place UI and Route Handlers |
-| `react`, `react-dom` | `19.2.8` | Third Place UI |
-| `@supabase/supabase-js` | `2.110.8` | Auth and Data API client |
-| `@supabase/ssr` | `0.12.3` | Controller cookie session |
-| `ajv` | existing `8.20.0` | local and wire validation |
-| `ajv-formats` | existing `3.0.1` | format validation |
-| `@playwright/test` | `1.62.0` | pinned browser acceptance tests |
-| `supabase` CLI | `2.109.1` | pinned local migration and RLS/RPC tests |
-
-`@supabase/ssr` is still published as beta. It must be pinned, integration
-tested, and isolated behind a small adapter. Supabase clients are created per
-request, never at module scope. A provider or version change is not a silent
-lockfile refresh; it receives normal dependency review.
-
-### Workspace build contract
-
-`packages/presence-protocol` is not executed as raw TypeScript from
-`node_modules`. It has its own TypeScript configuration and compiles to
-`dist/*.js` plus declarations. Its `package.json` exports only `dist` entry
-points.
-
-The root package and `apps/third-place` depend on the same private workspace
-package version. The root keeps its current direct TypeScript execution for
-existing source, but all R4 imports resolve to compiled protocol JavaScript.
-
-The ordered root scripts become:
-
-```text
-build:protocol
-check:protocol   protocol typecheck + schema + golden vectors
-check:root       existing typecheck + 44 tests
-check:app        Third Place typecheck + unit/API tests
-check:db         real local Postgres migrations + policy/RPC tests
-check:e2e        browser + local sync walking slice
-check            build:protocol → check:protocol → check:root → check:app → check:db
-```
-
-The Vercel build runs `build:protocol` before the Next.js build. CI starts from
-`npm ci` and the single root lockfile, so a stale or missing protocol build
-cannot be hidden by a developer's local `dist`. `check:e2e` is a separate,
-required protected CI job before merge or production promotion; it stays out
-of the ordinary `check` loop because it starts a local Supabase/Postgres stack
-and a real browser. The local database and browser jobs require Docker plus
-the pinned tools above.
-
-## Exact local Presence store
-
-R4 adds one new durable state family without changing an existing Twin
-revision schema:
-
-```text
-.forme/
-└── presence/
-    ├── FORMAT
-    ├── config.json
-    ├── projections/
-    │   ├── capsules/<capsuleId>.json
-    │   ├── approvals/<approvalId>.json
-    │   └── outbox/<operationId>.json
-    ├── signals/
-    │   ├── inbox/<interactionId>.json
-    │   ├── tombstones/<interactionId>.json
-    │   ├── imports/<receiptId>.json
-    │   └── outbox/<operationId>.json
-    ├── responses/
-    │   ├── drafts/<responseId>.json
-    │   ├── capsules/<responseId>.json
-    │   ├── approvals/<approvalId>.json
-    │   └── outbox/<operationId>.json
-    ├── server-receipts/<receiptId>.json
-    ├── sync/
-    │   ├── cursor.json
-    │   └── health.json
-    └── pending/<operationId>.json
-```
-
-The paired raw credential is deliberately absent. It lives at
-`$XDG_CONFIG_HOME/forme/credentials.v1.json`, defaulting to
-`~/.config/forme/credentials.v1.json`, outside the workspace. The parent
-directory must be an Owner-owned regular directory with mode `0700`; the
-credential file must be an Owner-owned regular non-symlink with mode `0600`.
-Each secret entry binds exact normalized service origin, pairing ID, Room,
-scope, and expiry. Expiry or revocation deletes the matching entry on the next
-Presence command or explicit Presence maintenance run. `config.json` stores
-only:
-
-- schema version;
-- normalized HTTPS service origin;
-- `thirdPlaceId`, `entityId`, and `roomId`;
-- local workspace ID;
-- pairing ID, random Room-scoped `hostBindingId`, safe fingerprint, scopes, and
-  expiry;
-- approved Schema & Migration Manifest hash;
-- no bearer value, account email, session, or private source.
-
-The same Owner-only XDG file may contain a short-lived `PendingPairingV1`
-record before first pairing. It contains:
-
-- normalized service origin, safe challenge ID/binding metadata, and the raw
-  challenge needed only for same-attempt recovery;
-- Room/entity/scopes/expiry, stable `hostBindingId`, raw locally generated Room
-  credential and its digest;
-- action, idempotency key, canonical request hash, and phase `prepared`,
-  `submitted_unknown`, `active`, `rejected`, or `expired`;
-- optional body-free pairing receipt.
-
-Before the first consume-request byte, the record transitions and fsyncs to
-`submitted_unknown`. Restart uses the same challenge, digest, key, and request
-hash to query/retry the exact outcome. A committed consume becomes `active`
-and removes the raw challenge; a terminal rejection retains only its body-free
-receipt and removes both raw secrets; a proved-uncommitted expired challenge
-becomes `expired` and also removes both. It never generates a replacement key
-for an unknown outcome.
-
-Each immutable artifact filename must equal the validated ID inside it. The
-local file is an envelope `{schemaVersion, payload, contentHash}`; the hash
-covers only the canonical UTF-8 bytes of `payload`, never the hash field or
-envelope itself. Semantic validation recomputes it before use. Directory
-entries, symlinks, files with loose mode, wrong ownership, unknown schema
-versions, duplicate IDs with different bytes, and paths outside the fixed
-layout fail closed.
-
-### Local control envelopes
-
-`PresenceOutboxEntryV1` is a discriminated union:
-
-- Projection/Response **publish** entries contain the exact immutable payload
-  ID/hash, local approval receipt ID/hash, and derived privacy-safe publication
-  attestation ID/hash;
-- **stale/revoke** safety entries contain only the existing subject ID/hash,
-  expected lifecycle/version, and a bounded reason enum; they require no new
-  content payload or content-approval receipt;
-- signal **ack/park/decline** entries contain the interaction/event reference,
-  exact `signalSequence`, LocalImportReceipt reference when applicable,
-  expected interaction state/version, and no guest body.
-
-Every variant also contains:
-
-- operation ID and discriminating kind;
-- pairing ID, never secret;
-- idempotency key and request hash;
-- expected server `stateVersion` or predecessor;
-- creation time and, only for publish, requested payload expiry;
-- phase `prepared`, `submitted_unknown`, `receipted`, `invalidated`, or
-  `rejected`;
-- optional exact server receipt or body-free terminal reason.
-
-`invalidated` means an uncommitted operation failed a later local
-basis/manifest check. `rejected` records a terminal typed server rejection.
-Neither is silently deleted. A prepared/submitted stale or revoke safety
-operation does not age out merely because its subject's requested content
-expiry passes; it reconciles to a receipt, typed already-terminal outcome, or
-explicit invalidation.
-
-`prepared` is strictly local and may not send. Immediately before the first
-network byte of **every** Owner-local mutation—including publish, stale,
-revoke, ACK, park, and decline—Forme atomically writes/fsyncs the full action,
-expected state, idempotency key, and request hash, then moves the outbox to
-`submitted_unknown`. Initial pairing uses the equivalent XDG
-`PendingPairingV1` barrier because no pairing ID exists yet. From either barrier
-the server may have received zero or more bytes; only a keyed outcome lookup or
-retry with the same key can resolve it.
-
-`PresenceCursorV1` contains:
-
-- Room ID;
-- opaque server cursor;
-- last contiguous per-Room `signalSequence`;
-- last successful sync time;
-- last import receipt;
-- optional durable gap warning.
-
-`PresencePendingOperationV1` contains:
-
-- operation and journal schema version;
-- exact before phase and intended after phase;
-- immutable local subject paths and hashes;
-- idempotency key;
-- no remote secret or response body beyond the validated receipt.
-
-### Local write and recovery rules
-
-- Implementation may extract the existing private workspace-lock, strict-path,
-  and atomic-write algorithms into one internal local-state utility without
-  changing R1–R3 paths, schemas, or public APIs. Twin and Presence mutations
-  acquire that one workspace lock once; nested lock acquisition is forbidden.
-  The original 44 regression tests plus new cross-lane lock tests must remain
-  green.
-- Every local write uses same-directory temporary file, `fsync` where the
-  existing store requires it, atomic rename, then parent-directory `fsync`.
-- An approved upload is written to outbox before network submission.
-- No local mutation sends a first network byte while its durable outbox is
-  `prepared`. The fsynced `submitted_unknown` transition is the send barrier.
-- A received signal is validated and persisted before acknowledgement.
-- A response or process failure leaves the already-fsynced outbox
-  `submitted_unknown`; it never invents success or sends a new idempotency key.
-- Restart first reconciles every `pending` journal, then queries every
-  `submitted_unknown` idempotency record before a new mutation.
-- Same ID + same hash is a no-op. Same ID + different hash is corruption and
-  halts the affected Presence lane.
-- Derived views may be deleted and rebuilt; immutable capsules, approvals,
-  inbox items, and receipts are never reconstructed from a view.
-- Local reads always compare the stored server-authoritative expiry and refuse
-  the body once it passes. A received deletion, origin-revocation, or
-  Room-retirement tombstone makes the local body and every linked local
-  Response draft, proposal, capsule, and unsent outbox payload unreadable
-  immediately. The next
-  `forme presence ...`, sync, or explicit Presence-maintenance run physically
-  purges those bodies and leaves only body-free local receipts/tombstones.
-  R1–R3 commands do not mutate or depend on Presence state.
-- Presence files remain under the existing Git-ignored `.forme/` boundary and
-  are excluded from source observation and Context discovery.
-
-This store is canonical for local approval/import history only. It cannot
-claim that a remote mutation succeeded without a validated server receipt or
-fresh reconciliation.
-
-## Identity and capability model
-
-Identity proves control over an operation. It does not prove that a projection
-is a complete person, that a self-description is true, or that an Agent is the
-human.
-
-| Principal | Credential | Allowed P0 actions |
-|---|---|---|
-| Public reader | None | Read Third Place-eligible listings; with a direct URL, read an exact `directRoomReadable` capsule plus explicit lifecycle state |
-| Controller/Curator | Supabase email OTP session | Pair/revoke local host, issue/revoke invite, admit/unlist, retire Room, emergency-revoke Projection/Response, delete abusive interaction |
-| Paired local Forme | Forme opaque Room credential | Publish/revoke/stale exact projection, pull/ack signals, park/decline through a separate disposition scope, publish/revoke exact reviewed response |
-| Manual Guest | One-use invite-derived secure session | Submit bounded interaction, inspect/delete that interaction, retrieve its response |
-| Agent Guest | 15-minute derivative Forme token | Read fixed public capsule and create one bounded interaction acting for the guest session |
-| Retention janitor | Vercel `CRON_SECRET` as caller credential | Run only the idempotent expiry/purge route; that route internally uses its normal server-only DB client |
-| Infrastructure operator | MFA-protected GitHub/Vercel/Supabase ownership | Deploy code, configure secrets, migrate/restore data, and rotate providers; no product action is implied |
-
-### Controller account
-
-P0 provisions exactly one Supabase user:
-
-1. the operator creates the user server-side with email already confirmed and
-   no password;
-2. Supabase project configuration disables new user sign-up;
-3. the sign-in form sends an email OTP, not a password or social OAuth;
-4. the request sets `shouldCreateUser: false`;
-5. `account_roles` in Forme's database, not editable Auth metadata, grants the
-   same account separate `owner/publisher` and `curator` roles;
-6. publication and curation still produce separate receipts and cannot be
-   collapsed into one action.
-
-These are two semantic decisions and two receipts, not separation of duties:
-the same OTP-authenticated human holds both roles in P0.
-
-Every authenticated Route Handler creates a fresh SSR client, calls
-`auth.getUser()` to verify the Controller with the Auth server, then executes
-the authorized RLS-aware RPC. It does not trust an unverified cookie session or
-reuse a module-scoped client. A completely separate server client holds the
-named Supabase secret with `persistSession: false`, `autoRefreshToken: false`,
-and `detectSessionInUrl: false`; it never inherits request cookies.
-
-The application limits a Controller session to 12 hours and requires a fresh
-OTP within the prior 15 minutes for pairing, invite issue/revoke, curation,
-Room retirement, emergency Projection/Response revoke, and Owner deletion of
-an interaction.
-
-Supabase's default SMTP is acceptable only for this one pre-authorized
-Owner/demo account. It is best-effort, currently limited to roughly two
-messages/hour, sends only to pre-authorized project-team addresses, and has no
-SLA. The email template must render the numeric OTP token rather than the
-default magic link. P0 Guest flow does not depend on email.
-
-Before the release candidate, the Owner signs in and verifies a retained
-Controller session so fresh email is not on the live-demo critical path. Two
-fresh OTP rehearsals must pass before freeze; any availability concern forces
-a custom-SMTP decision before RC, never an auth bypass.
-
-### Local pairing ceremony
-
-1. The authenticated Owner selects the fixed Forme Room. The browser generates
-   a random 256-bit one-use challenge locally. Its creation transaction binds
-   the digest to the canonical service origin, Room, entity, requested scopes,
-   and expiry before the browser constructs the displayed value.
-2. The raw challenge is displayed once. It expires in ten minutes and is never
-   stored server-side in raw form.
-3. The Owner runs `forme presence pair`; the CLI reads the challenge through a
-   hidden prompt or stdin. The service origin comes separately from existing
-   Presence config or an explicit HTTPS prompt—never an HTTP `Host` or
-   forwarded-host header.
-4. The CLI performs a rate-limited, challenge-authenticated preflight against
-   that exact origin. The server returns the safe challenge ID, already-bound
-   Room, entity, requested scopes, and expiry. The CLI displays them with the
-   local workspace label without transmitting that local ID.
-5. The Owner confirms locally. Before the consuming request, the CLI generates
-   its own 256-bit Room credential plus a random Room-scoped `hostBindingId`,
-   atomically stores the `PendingPairingV1` `0600` record, then fsyncs its
-   `submitted_unknown` send barrier. It sends only the credential digest and
-   opaque host binding with the pairing request.
-6. The server atomically consumes the challenge and binds that digest to the
-   account, Room, opaque host binding, exact scopes, expiry, and revocation
-   state. It never receives the local workspace ID. The response contains only
-   the pairing ID and receipt—never the raw Room credential.
-7. If the response is lost, the CLI retries the same idempotency key and
-   credential digest from the XDG pending record and receives the original
-   receipt. The server retains the consumed challenge digest and keyed,
-   body-free outcome for recovery but never needs to persist or replay a raw
-   secret.
-8. The local secret lives outside the repo in an Owner-only `0600` credential
-   file. It never enters `.forme/`, a Twin revision, a receipt body, Git, or a
-   command-line argument.
-
-The first pairing creates `hostBindingId`; later credential rotation or
-drain-only re-pairing reuses it from local config and a Controller-authorized
-challenge. It is stable only for this Room/local Presence relationship and is
-never public.
-
-P0 does not use the operating-system keychain. Theft of that Owner-local
-credential file permits only its Room-bound scopes until expiry or revocation;
-moving the secret into a platform credential store is a post-P0 hardening
-option.
-
-The P0 credential expires in 30 days and grants only:
-
-```text
-projection:publish
-projection:stale
-projection:revoke
-signal:pull
-signal:ack
-signal:disposition
-response:publish
-response:revoke
-```
-
-It never grants `curation:*`, account management, Room creation, schema
-migration, arbitrary server read, or access to another workspace. Revocation
-and re-pairing are explicit.
-
-`signal:ack` records import/delivery evidence only and can never park, decline,
-or otherwise change interaction disposition. Those actions require the
-separate `signal:disposition` scope, which retirement drain credentials never
-receive.
-
-### Guest invite and Agent delegation
-
-P0 exercises the already approved **invite** option; verified email reply is
-deferred.
-
-- The Curator's browser generates a 256-bit invite, submits only its digest,
-  and constructs the invite URL locally. The server binds the digest to one
-  Room, exact Projection version/hash, expiry, one guest session, one accepted
-  interaction, and payload limits.
-- The raw invite appears in the URL fragment rather than the query string, so
-  browsers and HTTP logs do not automatically send it as a URL.
-- Before exchange, the browser generates a 256-bit guest-session secret. The
-  page sends the raw invite and session secret only in the redacted `POST`
-  body, retains the fragment until success, and receives that session secret
-  as a `Secure`, `HttpOnly`, `SameSite=Lax`, 24-hour cookie.
-- If the response is lost, the page retries the same invite, session secret,
-  and idempotency key. The consumed-invite transaction recognizes the same
-  session digest and sets the cookie again; no raw cookie is stored in an
-  operation receipt.
-- The fragment is cleared only after successful exchange.
-- The database stores only capability hashes and binding metadata.
-- The same guest session owns the private reply page and deletion action.
-- The guest may locally generate and register the digest of one 15-minute,
-  one-interaction Agent token with only `capsule:read` and `signal:create`,
-  bound to the same Room and Projection.
-- The Agent token carries `acting_for = guest_session_id`; it is a Forme opaque
-  token, not a Supabase JWT, account, API key, or reusable Agent identity.
-
-Before submitting an interaction, the guest browser also generates a separate
-256-bit reply secret and includes only its digest in the idempotent request.
-The accepted response returns the interaction ID; the browser constructs the
-private reply URL with the raw secret in its fragment and presents a one-time
-copy/bookmark step. It stores the raw value in neither the server nor
-`localStorage`. If the HTTP response is lost, the same interaction idempotency
-key and reply digest return the original interaction ID without requiring the
-server to replay a raw secret.
-
-The reply secret may be re-exchanged into a new 24-hour secure guest cookie for
-up to the interaction's 30-day limit. On each visit the page removes the
-fragment from the visible address bar only after a successful exchange; the
-guest's separately copied/bookmarked private URL remains the re-entry
-credential. The server stores only its digest. If the guest loses both the
-reply URL and cookie, P0 cannot recover the reply; sharing the reply URL grants
-bearer access to that one interaction and response.
-
-Unsubmitted browser drafts are never transmitted or stored.
-
-## Canonical protocol rules
-
-Every canonical payload:
-
-- has an explicit `schemaVersion`;
-- uses an opaque type-prefixed ID with 32 lowercase hexadecimal characters;
-- uses UTC RFC 3339 timestamps;
-- rejects unknown properties;
-- has strict count, string, and byte ceilings;
-- renders all guest and Owner content as escaped plain text;
-- rejects HTML, Markdown rendering, attachments, files, and embedded URLs in
-  P0;
-- is serialized through the versioned shared canonical JSON function;
-- is identified by `sha256:` plus the digest of those exact UTF-8 bytes;
-- keeps lifecycle state outside the immutable payload.
-
-No client-supplied `actor`, `ownerReviewed`, account ID, or authority field is
-trusted. Attribution comes from the credential and server receipt.
-
-Server time is authoritative for every hosted lifecycle:
-
-- the server records `acceptedAt` for each admitted object;
-- a first submission rejects `issuedAt` outside ±5 minutes of server time, so
-  an old local artifact must be recompiled and reapproved rather than
-  future-dated;
-- effective expiry is the earlier of the requested payload expiry and
-  `acceptedAt +` the policy TTL;
-- retention, invite/session use, stale/expiry display, and rate windows use
-  server time, never a client clock;
-- an operation already in `submitted_unknown` first performs a keyed lookup. If
-  the server finds a committed receipt, its original `acceptedAt` governs. If
-  lookup proves no commit and the artifact is now outside timestamp, basis, or
-  manifest policy, the local outbox becomes `invalidated`; it is never
-  submitted as an old object.
-
-### `ProjectionCapsuleV1`
-
-The immutable public payload contains:
-
-- `capsuleId`, `roomId`, `entityId`, `schemaVersion`;
-- exact `predecessorRef` or `null`;
-- `basis`:
-  - projection-specific opaque `publicBasisId`;
-- `issuedAt` and `expiresAt`, with a maximum seven-day interval;
-- public presentation: title, short description, and one closed-enum visual
-  theme token;
-- up to 16 claims, each containing:
-  - `claimId`;
-  - slot: `becoming`, `now`, `next_move`, `tension`, or `open_to`;
-  - plain-text claim;
-  - class: `owner_confirmed`, `inferred_allowed`, or
-    `unresolved_allowed`;
-  - `freshnessAsOf`;
-  - coarse `provenanceClass`, never a private evidence body or path;
-- boundaries:
-  - up to five allowed topic labels;
-  - up to five unavailable topics;
-  - agency statement;
-  - non-commitment statement;
-- interaction policy:
-  - accepted types from `ask`, `seed`, and `resonance`;
-  - expected response latency.
-
-The canonical payload is at most 32 KiB. It has at most three `tension` and
-three `open_to` claims; any single claim is at most 2,000 characters and each
-topic label is at most 120 characters.
-
-Each `claimId` and `publicBasisId` is generated for this Projection and cannot
-be an internal Reflection, correction, evidence, workspace, or policy ID.
-`twinRevision`, `workspaceContractHash`, and `projectionPolicyHash` remain only
-in local compiler/approval receipts. They are never transmitted to or stored
-by the hosted service.
-
-The public payload never contains those internal hashes, workspace paths,
-source excerpts, private evidence, owner correction bodies, credentials,
-account email, runtime transcript, notes, or a server instruction.
-
-### `RoomV1` and public Room DTO
-
-The server's stable Room record contains:
-
-- `roomId`, `entityId`, stable slug, Controller account reference;
-- monotonic `stateVersion`;
-- lifecycle `active` or `retired`;
-- current Projection reference.
-
-The public DTO omits Controller account, pairing, credential, internal state,
-and private lifecycle details. P0 has one pre-seeded Third Place, entity, and
-Room; there is no public `create room` endpoint.
-
-### `GuestCapsuleV1`
-
-A Guest Capsule is inline-only inside one interaction. P0 does not create a
-reusable guest profile or capsule library.
-
-It may contain:
-
-- `guestCapsuleId`, `preparedBy` as `manual` or `external_agent`;
-- optional pseudonym;
-- current focus, one relevant thread, offer, seek, and one open question;
-- coarse `sourceScopeLabel` and `freshnessAsOf`;
-- explicit consent and retention choice;
-- AI-processing choice `allow_owner_local_ai` or `manual_owner_only`;
-- issue and expiry times.
-
-It is at most 8 KiB; each semantic field is at most 1,000 characters. It may
-not contain notes, source paths, attachments, raw exports, credentials, or a
-claim that it is a Person Twin.
-
-### `InteractionRequestV1`
-
-The immutable request contains:
-
-- `interactionId`, `roomId`;
-- exact host `capsuleId` and capsule hash;
-- type `ask`, `seed`, or `resonance`;
-- plain-text body of at most 2,000 characters;
-- guest level `G0`, `G1`, or `G2`;
-- optional inline exact Guest Capsule, required for `resonance`;
-- fixed desired response `owner_reviewed`;
-- disclosed retention policy and the same explicit AI-processing choice;
-- creation and expiry times.
-
-The complete request, including Guest Capsule, is at most 12 KiB. Reply
-capabilities, network metadata, and account/session data live in the server
-envelope, never the immutable request.
-
-### `ResponseCapsuleV1`
-
-The immutable Owner-reviewed response contains:
-
-- `responseId`;
-- exact interaction, host Projection, and optional Guest Capsule references
-  and hashes;
-- `originProjectionStateObservedAtDraft`;
-- source Projection `publicBasisId`, never a private Twin revision;
-- kind `response` or `resonance`;
-- reviewed plain-text sections:
-  - main message;
-  - optional shared thread;
-  - optional productive difference;
-  - optional possible next step;
-  - optional uncertainties;
-- draft attribution `owner` or `local_forme_agent`;
-- non-commitment statement;
-- issue and expiry times.
-
-The immutable payload does not contain a trusted `ownerReviewed` boolean. On
-publish, the server validates the paired Room credential, exact
-privacy-safe `PublicationApprovalAttestationV1`, Response hash, and idempotent
-operation, then derives the public DTO label
-`owner_approved_via_paired_local` from its own operation receipt. The same DTO
-includes server-derived
-`originProjectionStateAtPublish`; it cannot be overridden by the client. This
-is system attribution, not independent proof that a human read every word.
-
-It is at most 12 KiB. The main message is at most 4,000 characters; each
-optional section is at most 2,000. P0 permits one response per interaction and
-no public response history or editing. Correction requires revocation and a
-separately approved successor only after a new Owner decision; it is not in
-the first walking slice.
-
-### Curation and receipts
-
-`CurationDecisionV1` binds:
-
-- one decision ID and Third Place;
-- exact Room, Projection ID, and Projection hash;
-- `admit` or `unlist`;
-- authenticated Curator account;
-- prior decision or `null`;
-- decision time.
-
-Every successor Projection begins `not_admitted`. Admission never silently
-inherits.
-
-Four receipt families plus one privacy-safe wire attestation preserve different
-facts:
-
-1. `CompilerReceiptV1` records input policy, base Twin revision, output hash,
-   byte counts, and privacy-canary result.
-2. `LocalApprovalReceiptV1` records that the Owner approved one exact
-   Projection or Response hash against one base Twin revision and policy.
-3. `PublicationApprovalAttestationV1` is the only approval object sent to the
-   server. It contains its own opaque attestation ID, discriminated subject kind
-   `projection` or `response`, Room, exact public payload ID/hash, approval
-   time, and schema version—never a local receipt ID/hash, Twin revision,
-   workspace/policy hash, private path, or evidence ID.
-4. `ServerOperationReceiptV1` records action, subject and request hashes,
-   authenticated actor/credential, idempotency-key hash, before/after
-   `stateVersion`, `auditSequence`, time, and outcome.
-5. `LocalImportReceiptV1` records either one validated live Interaction hash or
-   one body-free unavailable/tombstone event hash, per-Room `signalSequence`,
-   persistence time, and local result.
-
-Receipts prove system attribution and reconciliation. They are not
-cryptographic signatures, legal identity, or evidence that every published
-claim is true.
-
-## Projection lifecycle
-
-Projection owner state and curation state are independent:
-
-```text
-owner state:
-  published → superseded | stale | revoked
-  stale     → superseded | revoked
-  superseded or expired-but-retained → revoked
-  expiry is an independent computation from expiresAt
-
-curation state:
-  not_admitted → admitted → unlisted
-```
-
-A Room appears in Third Place only when:
-
-```text
-Room active
-AND exact Projection is the current owner-published version
-AND not stale, revoked, or expired
-AND exact Projection is curator-admitted
-```
-
-The implementation names that predicate `thirdPlaceEligible`. A separate
-`directRoomReadable` predicate is true for an Owner-published, unrevoked,
-unexpired current Projection even when it is unlisted or stale. These
-predicates must not be collapsed.
-
-Behavior:
-
-- publishing a successor atomically advances the Room's current pointer. A
-  prior `published` or `stale` current Projection becomes `superseded`; a
-  terminally `revoked` predecessor remains `revoked` and auditable while the
-  active Room may recover by pointing to the new successor;
-- the successor starts `not_admitted` and requires a new Curator action;
-- `unlist` removes Third Place discovery but leaves the unexpired direct Room
-  readable with a clear “not listed” state; new interaction is disabled;
-- `stale` removes the listing and disables new interaction; the direct Room may
-  show the old capsule with a dominant stale warning until hard expiry;
-- `expired` no longer serves the capsule body publicly and shows a tombstone;
-- `revoked` immediately stops serving the body, blocks interaction and
-  response publication, and shows only a tombstone;
-- emergency revoke may move a published, stale, superseded, or
-  expired-but-retained Projection to `revoked`; domain state, not merely the
-  idempotency key, ensures a later revoke under a new key returns
-  `already_revoked` without appending a second semantic revoke event;
-- superseded versions are not a public history. The server retains a private
-  copy only while a linked live interaction requires its origin, within the
-  retention ceiling.
-
-The direct stale Room HTML and Agent JSON both return the same capsule bytes
-and explicit `projectionState: stale`; neither may label it current or accept a
-signal. Expired, revoked, and superseded public JSON returns `410` with a
-body-free tombstone, while the human Room route renders the equivalent
-tombstone page. This prevents the Agent and manual surfaces from disagreeing
-about visibility.
-
-Any new local Twin revision conservatively marks the current Projection stale
-at the next local sync. The server cannot know about a local revision while
-the Owner's machine is offline. Seven-day hard expiry is therefore the
-independent maximum period during which an unrefreshed snapshot can still
-present itself as current.
-
-All public/current routes use `Cache-Control: no-store`; revocation must not be
-defeated by application caching. If the database is unavailable, the dynamic
-Room fails closed to an availability page and accepts no signal. A separately
-built static Projection remains the schedule fallback before interactive R4
-launch, not an automatic outage fallback that could accidentally serve
-revoked content.
-
-## Interaction lifecycle
-
-```text
-workflow:
-  queued → imported → parked
-  imported | parked → responded | declined
-
-each state in queued | imported | parked | responded | declined
-  → expired | origin_revoked | room_retired
-
-origin_revoked → room_retired when the containing Room is later retired
-
-each state in queued | imported | parked | responded | declined |
-              origin_revoked | room_retired
-  → interaction_deleted before the original interaction expiry
-```
-
-- Server receipt and lifecycle event are append-only; mutable status is not
-  embedded inside the request.
-- Local import never triggers a model call, Twin write, or response.
-- `parked` is an Owner action. The guest sees the neutral status “under
-  review,” not an internal judgment label.
-- A request bound to a now-stale, superseded, or expired Projection may still
-  receive one reviewed response; the Response must disclose the origin state.
-- A request bound to a revoked Projection cannot receive a new response.
-- Guest deletion removes live server access immediately. It cannot undo text
-  already read by the Owner or delete an offline local copy until Forme next
-  runs a Presence sync/maintenance command and processes expiry/deletion.
-
-### Response lifecycle
-
-```text
-available → revoked
-          → expired
-          → origin_revoked
-          → room_retired
-          → interaction_deleted
-```
-
-At any moment exactly one visibility state applies to the immutable Response;
-P0 never edits it in place. `expired` may later move to `revoked` through an
-emergency revoke. Any retained Response state, including `origin_revoked` or
-`room_retired`, may later move to `interaction_deleted` through the guest's
-retained delete authority before the interaction's original expiry. A repeat
-revoke, including one using a different idempotency key, returns
-`already_revoked` without a second lifecycle event. The cross-cascade
-precedence is `interaction_deleted` > `room_retired` > `origin_revoked` /
-standalone Response `revoked`, as defined below. `origin_revoked` and
-`room_retired` hide hosted response content but retain only the body-free
-status/delete path until that original expiry.
-
-### Transactional race and cascade rules
-
-Every publish, consume, revoke, unlist, response, retirement, and deletion
-function locks the same relevant Room, Projection, capability, interaction,
-and response rows and rechecks lifecycle, scope, version, use count, and expiry
-inside one Postgres transaction. Authorization checked before the transaction
-is checked again in the function; a concurrent loser fails closed.
-
-- Publishing a successor advances the current pointer and revokes the former
-  current Projection's unused invites and Agent tokens. A former `published`
-  or `stale` Projection becomes `superseded`, and its existing requests remain
-  reviewable under the superseded-origin rule. A former `revoked` Projection
-  remains terminally `revoked`; the successor cannot reactivate its requests,
-  responses, or capabilities.
-- Curator unlisting revokes unused invite/Agent capabilities for that listing
-  and blocks new requests. Existing requests remain reviewable.
-- Standalone Projection revocation while the Room is active does not rewrite
-  its `CurationDecisionV1`. The Owner state makes `thirdPlaceEligible` and
-  `directRoomReadable` false without forging an `unlist` action by the
-  Curator. It revokes unused invites and every new-submission scope on Manual
-  Guest sessions and Agent tokens, while transforming already-accepted
-  interaction reply authority to body-free status/delete-only. It moves every
-  retained non-deleted interaction to `origin_revoked`, hides linked Responses
-  as `origin_revoked`, and emits per-Room signal tombstone events.
-- Response revocation immediately hides that response. The same reply
-  capability may still read the body-free revoked status and delete the
-  interaction until interaction expiry; it cannot retrieve the Response body.
-  Local and Controller revokes both emit one `response_revoked` per-Room signal
-  event so the local Presence ledger converges. If guest deletion commits
-  first, a racing revoke returns `subject_deleted` and creates no revoke event
-  or successful revoke receipt; if revoke commits first, later deletion still
-  purges the whole interaction.
-- Guest or Owner interaction deletion makes the request, inline Guest Capsule,
-  linked Response, general guest/Agent capabilities, and live content hashes
-  inaccessible in the same transaction. It transforms the reply secret digest
-  into a body-free status/delete-recovery capability and retains the successful
-  delete idempotency tuple only until the interaction's original 30-day
-  ceiling. A lost DELETE response can therefore retry with the same secret/key
-  and receive the original terminal receipt; another key sees only terminal
-  `already_deleted`. The transaction also emits a signal deletion tombstone
-  for local purge.
-- Room retirement is a distinct fresh-auth composite transaction. It does not
-  rewrite any `CurationDecisionV1`; the retired Room state makes the Room
-  ineligible for Third Place discovery and direct reading without recording a
-  false Curator `unlist`. It marks the current Projection `revoked` with cause
-  `room_retirement` without invoking the standalone origin-revoke cascade,
-  revokes invite/Agent/new-write capabilities, moves every retained
-  non-deleted interaction and Response to `room_retired`, and leaves one
-  body-free retirement receipt/event. Existing reply secrets become
-  status/delete-only until their original interaction expiry. The paired local
-  credential becomes
-  `signal:pull`/`signal:ack` drain-only—with no `signal:disposition`—until its
-  expiry; a fresh-auth
-  Controller may pair a replacement drain-only credential for the retired Room
-  until the last retained event expires. This is how local Presence receives
-  retirement/deletion tombstones without regaining publication authority. P0
-  has no Room hard-delete action.
-
-All competing actions take the same row locks. Terminal visibility precedence
-is `interaction_deleted` > `room_retired` > standalone
-`origin_revoked`/Response `revoked`: retirement deliberately becomes the one
-outer Room cause while append-only events retain any earlier cause. If
-retirement commits first, a later standalone revoke receives an
-already-terminal outcome; if revoke commits first, retirement performs the one
-documented rewrite to `room_retired`. A later guest/Owner delete may still move
-any retained pre-expiry state—including `responded`, `declined`,
-`origin_revoked`, or `room_retired`—to `interaction_deleted`.
-
-A drain-only pull is terminal metadata only. For every unimported creation it
-returns the original body-free event sequence with
-  `payloadState: room_retired`/`unavailable`, never the request, Guest Capsule,
-  content hash, or Response. A creation that became `origin_revoked` before
-  first import is likewise body-free with `payloadState: origin_revoked`. The
-  drain may return only ACK state, terminal revoke/delete/expiry/retirement
-  events, and the high-water cursor.
-
-Every terminal revoke/delete is guarded by domain state as well as
-idempotency. A different key cannot create a second semantic terminal event.
-
-## Local Projection and response boundaries
-
-### Projection preparation
-
-The required P0 path is deterministic and Owner-editable:
-
-1. The Owner creates `ProjectionFrameV1` with exact base Twin revision, exact
-   selected/edited public claims and classes, freshness, boundaries,
-   interaction policy, expected latency, and requested expiry.
-2. Forme verifies that every selected basis exists in the current validated
-   Twin and that the frame itself contains the exact text to publish. The
-   compiler only validates, normalizes, serializes, and hashes; it does not
-   invent or rewrite a claim.
-3. The Owner sees exact content, private-canary check, basis, expiry, and hash.
-4. The Owner approves that exact hash.
-5. The approved object enters the local outbox before any network request.
-
-A local Codex-assisted wording proposal may reuse the existing isolated,
-no-tools adapter if it fits the schedule. Its
-`ProjectionWordingCandidateV1` is non-canonical; the Owner must explicitly
-copy/edit any accepted text into `ProjectionFrameV1`. It cannot publish or
-alter the deterministic approval path.
-
-Immediately before the first upload, Forme rechecks current Twin `HEAD`,
-workspace-contract hash, and Projection-policy hash against the exact local
-approval. A mismatch invalidates an unsubmitted outbox item and requires a new
-frame and approval. If the outbox is already `submitted_unknown`, Forme first
-reconciles the original idempotency key: a committed remote Projection is
-receipted and immediately marked stale; an uncommitted operation is invalidated
-locally.
-
-### Response drafting
-
-The first real response does use the local Forme Agent:
-
-1. The imported request remains an untrusted inbox object.
-2. The Owner explicitly starts draft preparation.
-3. The Owner first approves a body-free `ResponseFrameV1` manifest naming the
-   exact request, Projection, selected Owner Frame fields, selected active
-   corrected Reflection IDs, and any selected allowlisted evidence coordinates.
-   Nothing is included merely because it is active in the Twin.
-4. Forme builds a bounded `ResponseContextPacketV1` containing:
-   - the exact request and optional Guest Capsule, labeled untrusted;
-   - the exact public host Projection that governed the encounter;
-   - only the Owner Frame fields, corrected Reflections, and allowlisted local
-     evidence named by the frame, with a 32 KiB packet ceiling;
-   - explicit instruction that guest content is data, not runtime authority.
-5. Immediately before transmitting guest bytes to OpenAI, Forme performs a
-   fresh sync/status check with the paired credential. The exact interaction
-   must still be live, not deleted/origin-revoked/room-retired, and still carry
-   `allow_owner_local_ai`; an unavailable server fails closed.
-6. The existing isolated Codex adapter receives only that packet, has no tools,
-   filesystem outside the packet, MCP, web, server credential, or canonical
-   writer, and returns a schema-only `ResponseProposalV1`.
-7. Forme validates structure, origin hashes, current Twin revision, runtime
-   audit, size, and privacy.
-8. The Owner may edit, decline, or park. Only an exact
-   `LocalApprovalReceiptV1` compiles a publishable Response Capsule.
-
-The manifest must make the external visibility explicit: these exact packet
-bytes, including the guest request and any selected private evidence, are sent
-to OpenAI through the Owner's existing Codex authentication. They are not sent
-to the Forme hosted server. Canceling at the manifest sends nothing.
-
-The model path is available only when the interaction recorded
-`allow_owner_local_ai`. With `manual_owner_only`, Forme never sends the request
-or Guest Capsule to OpenAI; the Owner may still write, approve, and publish a
-fully manual Response Capsule through the same deterministic path. The guest
-surface explains this choice before submission. Use of a Guest-owned Agent is
-separate: that guest decides whether its own provider receives public capsule
-or local guest context.
-
-There is an unavoidable narrow race after the fresh status check: deletion
-cannot recall a request already in flight to OpenAI. Guest consent states this
-plainly. Any deletion learned before transmission blocks the call; one learned
-afterward purges Forme's copies but cannot claw back provider processing that
-already began.
-
-Immediately before Response publish, Forme rechecks its exact Twin revision,
-Response frame/policy, origin lifecycle, and local approval. A changed basis
-requires a new draft/approval. As with Projection publication, an unknown
-prior submission is reconciled before any invalidation or retry.
-
-Neither the raw runtime transcript nor private source bodies enter the local
-Presence ledger, hosted store, or public response.
-
-## Hosted data and authorization
-
-Postgres is the only hosted durable store. P0 does not use Supabase Storage,
-Realtime, Edge Functions, a separate queue, Redis, Blob, search, or a model
-database.
-
-Domain tables live in a portable `forme` Postgres schema. Only a narrow
-`forme_api` schema is exposed through the Supabase Data API.
-
-All IDs and hashes have database checks matching the wire rules. Immutable
-payload columns store the exact canonical JSON UTF-8 string as Postgres `text`,
-not reserialized `jsonb`; duplicate indexed metadata exists only for
-authorization and lookup. Payload/hash columns are protected by an immutability
-trigger.
-
-### Proposed table contract
-
-| Table | Required key and columns | Critical constraints |
-|---|---|---|
-| `account_roles` | `(account_id uuid, role owner_publisher\|curator, created_at)` | PK `(account_id, role)`; account references `auth.users` |
-| `third_places` | `third_place_id`, unique `slug`, lifecycle, `state_version`, timestamps | One seeded row in P0; no public insert |
-| `entities` | `entity_id`, kind `project`, display name, timestamps | One seeded Forme entity; no source or Twin body |
-| `rooms` | `room_id`, `entity_id`, `controller_account_id`, unique slug, lifecycle, `current_projection_id`, `state_version`, timestamps | Entity and Controller FKs; monotonic state version; one seeded Room |
-| `projection_capsules` | `capsule_id`, `room_id`, version, predecessor, canonical payload text + hash + byte count, public basis ID, publication-attestation ID/hash, owner state, `accepted_at`, effective expiry, stale/revoke/supersede times | PK ID; unique `(room_id, version)` and payload hash; immutable payload; predecessor same Room; no Twin/workspace/policy handle |
-| `projection_events` | monotonic audit sequence, capsule, action, actor kind/ID, operation receipt, time | Append-only; unique receipt; supplies lifecycle audit |
-| `curation_decisions` | decision ID, Third Place, Room, exact capsule/hash, action, Curator account, predecessor decision, time | Append-only; exact Projection FK/hash; no update |
-| `capabilities` | capability ID/type, HMAC digest, safe fingerprint, optional account/Room/Projection/interaction/opaque-host bindings, scopes, use limit/count, expiry/revocation, created time | Unique digest; raw secret and local workspace ID absent; scope/type checks; transactional consume |
-| `interactions` | interaction ID, Room, exact Projection ID/hash, canonical request text + hash + byte count, reply capability, lifecycle snapshot, creation `signal_sequence`, `accepted_at`, effective expiry/delete time | Immutable request; unique `(room_id, creation_signal_sequence)`; one invite/session acceptance; origin exact |
-| `interaction_events` | monotonic sequence, interaction, event, actor kind/ID, operation receipt, time | Append-only; state transition check |
-| `room_signal_events` | `room_id`, contiguous `signal_sequence`, body-free event type, interaction/tombstone reference, canonical event hash, created time | PK `(room_id, signal_sequence)`; immutable event hash never includes guest text; create delivery carries an optional separately validated live payload; includes create/delete/expiry/revoke/response/retirement events; ACK never deletes or filters it |
-| `responses` | response ID, unique interaction, exact Projection ID/hash, canonical response text + hash + byte count, publication-attestation ID/hash, origin state at publish, `accepted_at`, effective expiry/revoke | One P0 response per interaction; immutable payload; origin exact; no private local receipt fields |
-| `operation_receipts` | receipt ID, actor key, action, idempotency digest, request hash, body-free canonical result, before/after state version, audit sequence, outcome, time | Unique `(actor_key, action, idempotency_digest)`; same key/different body rejected |
-| `rate_buckets` | key digest, route class, window start/end, count | PK `(key_digest, route_class, window_start)`; short TTL |
-| `retention_runs` | run date/ID, start/finish, status, purge counts, error class | Unique run date; one daily semantic run; no payload/error body |
-
-Foreign keys use `RESTRICT` for live control records. Retention first replaces
-payloads with tombstones and only deletes rows after dependent live objects
-close. Database functions perform state transitions; application code does not
-issue free-form table updates.
-
-This table and the payload sections define the required semantics and
-invariants. They are deliberately not represented as already-final machine
-schemas: exact JSON Schema files, every envelope/receipt field, SQL types,
-indexes, grants, policies, and per-operation RLS tests still need to be
-generated and reviewed together.
-
-### Required Schema & Migration Manifest subgate
-
-After this packet is approved, the first implementation slice produces one
-short, hashed manifest that names:
-
-- every canonical/wire schema and hash: `ProjectionFrameV1`,
-  `ProjectionCapsuleV1`, `RoomV1` and public DTOs, `GuestCapsuleV1`,
-  `InteractionRequestV1`, `ResponseFrameV1`, `ResponseContextPacketV1`,
-  `ResponseProposalV1`, `ResponseCapsuleV1`, `CurationDecisionV1`,
-  `PublicationApprovalAttestationV1`, and all compiler/local-approval/
-  server-operation/local-import receipt families;
-- every local control schema and hash: Presence config and format, credential
-  binding, XDG `PendingPairingV1`, discriminated outbox entries, pending
-  journals, cursor/health, inbox delivery envelopes, imports, and local
-  tombstones;
-- every authority/transport schema and hash: pairing
-  challenge/preflight/consume, invite/session/reply/Agent capabilities,
-  lifecycle action requests, idempotency outcomes, signal event/page/
-  reconciliation DTOs, deletion/revoke/retirement tombstones, and typed error
-  envelopes;
-- the exact migration files, enum/type choices, constraints, indexes, grants,
-  and the per-operation RLS/RPC authorization matrix;
-- the API action-to-schema map, canonical golden-vector hashes, tool/runtime
-  pins, and rollback compatibility level;
-- the local fixture-only test evidence that those artifacts agree.
-
-The manifest binds the overall hash to one Git commit/tree plus every named
-file hash. Presence config and hosted deployment metadata record that approved
-manifest hash. CLI durable-write/network preflight and deployment preflight
-recompute it; any schema, migration, API-map, or canonical-vector byte drift
-blocks the operation and returns to an Owner gate.
-
-The Owner approves that exact manifest hash before any command writes a real
-`.forme/presence/` store, applies a hosted migration, provisions a cloud
-resource, pairs a workspace, or sends a Presence network request. Packet
-approval may authorize repository scaffolding, pure protocol/local code, and
-temporary fixture tests; it does not skip this first-durable-write gate.
-
-Manifest approval still does **not** authorize a cloud account, production
-resource, external write, or spend. Those require the separate Production
-Provisioning Grant defined in the implementation sequence.
-
-Security rules:
-
-- revoke default table and function grants;
-- enable RLS on every `forme` table, including tables not directly exposed;
-- expose no `forme` table or view through the Data API;
-- place only narrow `SECURITY INVOKER` RPC entry points in the exposed
-  `forme_api` schema;
-- use no `SECURITY DEFINER` domain function in P0;
-- grant `authenticated` explicit least-privilege `USAGE`, table, and sequence
-  privileges required by Controller invoker RPCs; RLS still restricts rows
-  through `(select auth.uid())`, `account_roles`, Controller binding, and
-  explicit role;
-- grant each Controller RPC only to `authenticated`;
-- grant service-path RPC execution and required underlying table/sequence
-  privileges only to `service_role`; those invoker calls bypass RLS because
-  the named secret assumes that role, so strict Route validation and fixed
-  transactional RPC bodies are the trust boundary;
-- grant `anon` and `public` no domain table, schema, or RPC access;
-- public and capability Route Handlers call fixed invoker RPCs through a
-  separate server-only secret client; browser code never calls the domain Data
-  API directly;
-- never put the Supabase secret in client JavaScript, preview environments,
-  local Forme state, logs, or public responses;
-- never rely on Next.js proxy/middleware as the only authorization gate;
-  every Route Handler verifies the user or Forme capability again;
-- require an allowed same-origin `Origin` plus a CSRF token for every
-  cookie-authenticated mutation; bearer-token API routes do not use cookies;
-- register client-generated digests as
-  `HMAC-SHA-256(server_pepper, SHA-256(raw_secret))`, compare the stored value
-  in constant time, and rotate the pepper through explicit credential
-  invalidation;
-- send a restrictive Content Security Policy, `frame-ancestors 'none'`,
-  `X-Content-Type-Options: nosniff`, and a conservative Referrer Policy;
-- all Controller state is `private, no-store` and force-dynamic.
-
-The browser never directly reads or mutates domain tables. Public, guest,
-local, and Controller actions enter through typed Next.js Route Handlers.
-
-## Minimal HTTP surface
-
-The exact path naming may change during implementation, but no endpoint may
-gain broader semantics than this table.
-
-| Surface | Method and semantic action | Credential |
-|---|---|---|
-| Public | Read Third Place listing | None |
-| Public | Read direct Room when `directRoomReadable`, with explicit lifecycle state | None |
-| Public/Agent | Read the same exact direct-readable Projection JSON with hash/ETag and explicit lifecycle state | None |
-| Guest | Redeem one invite into a secure session | Invite secret |
-| Guest | Mint one short Agent token | Guest session |
-| Guest/Agent | Create one interaction with optional inline Guest Capsule | Guest session or Agent token |
-| Guest | Read status/response; delete own interaction | Guest/reply session |
-| Pairing | Create/revoke challenge | Controller session |
-| Pairing | Register one locally generated Room credential digest | One-use challenge plus local confirmation |
-| Controller | Revoke a paired Room credential; pair a drain-only credential for a retired Room | Fresh Controller session |
-| Controller | Issue or revoke one client-generated guest invite digest | Controller session with Curator role |
-| Controller | Retire Room; emergency-revoke Projection or Response; delete interaction | Fresh Controller session with Owner role |
-| Local host | Publish/stale/revoke exact Projection | Paired local credential |
-| Local host | Poll signals after opaque cursor | Paired local credential |
-| Local host | Acknowledge import | Paired local or retired-Room drain credential with `signal:ack` |
-| Local host | Park or decline an interaction | Paired local credential with `signal:disposition`; drain credential forbidden |
-| Local host | Publish or revoke exact reviewed Response | Paired local credential |
-| Pairing/Local/Controller | Read prior outcome for one action + idempotency key | Same original pairing challenge for its keyed consume, or any current credential for the same stable authority principal |
-| Curator | Admit/unlist exact Room + Projection hash | Controller session with Curator role |
-| Internal | Run idempotent retention purge | `CRON_SECRET`; DB secret remains internal to the route |
-
-Every external mutation requires an `Idempotency-Key`. The Cron route has no
-client-supplied header, so the server derives
-`retention:<UTC YYYY-MM-DD>` and acquires a database advisory lock before its
-one daily semantic run.
-
-The server stores, in the same transaction as the domain mutation:
-
-```text
-(actor, action, idempotency-key hash)
-  → request hash
-  → exact response and operation receipt
-```
-
-The `actor` key is stable across credential rotation:
-
-- Controller action: Controller account ID;
-- initial pairing: Controller account + Room + server-issued challenge ID;
-- local action: Controller account + Room + opaque `hostBindingId`;
-- Guest or Agent action: guest session ID, with Agent `acting_for` that same
-  session;
-- retention: UTC run date.
-
-It is never the individual bearer credential ID. Keys are client-generated
-with at least 128 bits of entropy. Domain-unique object IDs remain a second
-constraint, so re-pairing or token rotation cannot duplicate an unknown prior
-mutation.
-
-The stored idempotent response is body-free: object/receipt IDs, keyed hashes,
-state versions, sequence, timestamps, and outcome only. It never retains
-guest/response text, raw cookie headers, or a bearer value after deletion.
-
-Idempotency retention follows the subject:
-
-- ordinary guest create/response receipts, replay IDs, and keyed request hashes
-  expire with the interaction's 30-day window or earlier guest deletion;
-- successful deletion retains one body-free keyed deletion receipt plus the
-  HMAC of the transformed status/delete-recovery capability until the original
-  30-day ceiling. The same capability/action/key returns the original terminal
-  receipt after a lost response; another key can learn only
-  `already_deleted`;
-- the other exception is the body-free per-Room deletion signal event: it
-  retains only interaction ID, signal sequence, deletion kind/time, and event
-  hash until the interaction's original 30-day expiry so an offline Owner can
-  still learn that the local body must be purged;
-- Room, Projection, curation, pairing, and retirement control receipts remain
-  while the Room is active and for 30 days after Room retirement;
-- every request digest is an HMAC over the random object ID plus canonical
-  request bytes, so a retained digest is not a useful dictionary of short guest
-  text;
-- while the relevant receipt remains, the same actor/action/key and same
-  request hash returns the original receipt;
-- the same key with a different request hash returns `409`;
-- expected `stateVersion` and exact predecessor references prevent concurrent
-  successor races.
-
-Expected domain errors are:
-
-- `400` invalid shape;
-- `401` missing or invalid credential;
-- `403` valid credential with insufficient scope;
-- `404` unknown public object or non-disclosing lookup;
-- `409` state/version/idempotency conflict;
-- `410` expired, revoked, deleted, or unrecoverable cursor;
-- `413` payload too large;
-- `429` application rate limit with `Retry-After`;
-- `503` dependency unavailable.
-
-Unexpected failures return a sanitized `500`, `502`, or `504` with only a
-correlation ID; they never become an untyped stack/body echo.
-
-For a terminal safety mutation, the same idempotency key returns its original
-receipt. A different key against an already terminal subject returns body-free
-`410 already_revoked`, `already_deleted`, or `subject_deleted` and appends no
-new operation receipt or lifecycle event.
-
-Errors and logs never echo payload bodies, invite values, bearer tokens,
-cookies, source content, or private paths.
-
-## Local Signal Box synchronization
-
-P0 sync is an explicit CLI action:
-
-```text
-GET per-Room signal events after opaque cursor, limit 25
-  → include already ACKed events still inside retention
-  → validate schema, Room, exact origin, hashes, and contiguous signalSequence
-  → for a live creation event, atomically persist its separately validated payload
-  → for a creation whose payload was deleted, persist an unavailable tombstone
-  → atomically persist LocalImportReceipt
-  → fsync ACK outbox as submitted_unknown with key/request hash
-  → POST idempotent import acknowledgement
-  → atomically persist the ACK server receipt
-  → atomically advance local cursor
-```
-
-Failure behavior:
-
-- crash before local persistence: the item is fetched again;
-- crash after persistence but before acknowledgement: same ID + same hash is a
-  no-op, then the durable ACK attempt queries/retries the same key;
-- crash after server ACK commit but before local receipt/cursor: restart finds
-  the `submitted_unknown` ACK, resolves the same receipt, persists it, then
-  advances the cursor;
-- ACK records delivery evidence but never removes an event from cursor replay;
-  otherwise a crash after ACK and before cursor persistence could lose it;
-- the immutable creation event is body-free and keeps its original sequence.
-  If its request body was deleted before first import, the delivery envelope
-  returns `payloadState: deleted` with no request/hash and the later
-  `interaction_deleted` event remains at its own sequence. Local sync records
-  both sequences but imports only a tombstone, so contiguity never requires
-  resurrecting deleted content;
-- if standalone Projection revocation made the interaction
-  `origin_revoked` before first import, the creation envelope likewise returns
-  no body/hash and local sync imports only the origin-revocation tombstone;
-- under a retirement drain credential, the same rule returns
-  `payloadState: room_retired` for every not-yet-imported creation and only
-  body-free terminal events;
-- same ID + different hash: quarantine, halt sync, and surface corruption;
-- malformed page, sequence gap, wrong Room, bad hash, or oversized item:
-  persist nothing, acknowledge nothing, and do not advance the cursor;
-- lost HTTP response after a mutation: query the idempotency record before
-  retrying;
-- retry only `GET` or keyed mutations after network failure, `5xx`, or `429`,
-  using bounded jitter and honoring `Retry-After` when present;
-- other `4xx` errors fail closed;
-- a `410` cursor after retention invokes a reconciliation endpoint that lists
-  all still-unexpired items/tombstones plus a server high-water cursor. Forme
-  validates, persists, and ACKs each item before advancing to that cursor and
-  permanently records a durable gap warning. It cannot claim complete
-  historical import.
-
-There is no background local poll, launch agent, webhook, public local port,
-or server-to-local tunnel.
-
-## Retention, deletion, rate, and abuse floor
-
-### Proposed retention
-
-| Data | Live retention |
+There are three durable state owners:
+
+1. **Local Twin** owns what the project currently means.
+2. **Local Presence** owns body-free Room convergence, exact Owner approvals,
+   candidate reconciliation, and local cleanup evidence.
+3. **Hosted Presence** owns public visibility, private Guest bodies, capability
+   state, Interaction/Response lifecycle, curation, and delivery state.
+
+An incoming Interaction is not Twin truth. A candidate is not an Owner answer.
+A file edit is not automatically a Forme effect. Every crossing has an exact
+typed operation and receipt.
+
+## Actors and authority
+
+| Actor | May read | May mutate | Must never receive |
+|---|---|---|---|
+| Public reader | current eligible public Projection, including stale direct-URL warning read until hard expiry; body-free status | none | private request/Response, Twin, Grant secret |
+| Manual Guest | exact capability-scoped Projection, own Interaction/Response/status | create own Interaction; delete own Interaction; manage own notification; accept exact offer | Twin, other Guest data, Owner identity secrets |
+| Guest Agent | exact Projection plus one request submission | create one accepted Interaction | reply body, delete, offer acceptance, delegation, recovery, cross-Room state |
+| Controller | hosted Room/Projection/Interaction/Response/status/control data | explicit Owner boundary actions | private Twin, local repo, local candidate store, connector secret |
+| Curator | public candidate Projection and curation history | admit/unlist only | private Room/body, Owner Grant, response preparation |
+| Native Workbench | Owner-admitted Workspace and body-free Forme status | ordinary Workspace work; fixed connector calls | Guest body, candidate body, binding secret, reply token |
+| Fresh Session | one exact request/capsule, orientation, sanitized snapshot | typed candidate only | live repo, history, writes, connector, other Guest/Room, publish authority |
+| Connector | exact Room wire payload needed by fixed verb | fixed `room_operator.v1` verbs | Controller/Curator authority, arbitrary HTTP/tool surface |
+| Hosted app | hosted Presence and encrypted body columns | validated API transactions | local Twin/source repo; model/provider runtime |
+| Janitor | terminal/expired rows and encrypted payload locations | lifecycle/purge transitions only | plaintext bodies in logs or reports |
+
+## Room and Projection contract
+
+### Room
+
+`roomKind` is immutable:
+
+- `third_place_public`
+- `private_grant_only`
+
+A public Room has `interactionMode`:
+
+- `public_single`: eligible public Projection can issue and consume a public
+  encounter;
+- `invite_only`: public read may continue, but unused public encounters are
+  invalid and only exact Grants may submit;
+- `closed`: every new submission is paused. Existing Grants retain only their
+  remaining expiry/quota and become usable again only if reopened before
+  expiry.
+
+A Private Room supports `invite_only` and `closed` only. A Room moves from
+`active` to terminal `retired`; it never changes kind. Retirement immediately
+hides Room, Projection, and Response bodies, rejects writes, and leaves only
+body-free status/delete plus tombstone drain.
+
+### Projection owner lifecycle
+
+An immutable Projection body is at most 32 KiB UTF-8 plain text, with a title
+of at most 120 Unicode scalar values and a Third Place summary of at most 512
+UTF-8 bytes. It is a deliberately shallow snapshot compiled from an eligible
+Twin revision. Publication requires an exact local Owner approval record; the
+server never constructs or expands Projection prose.
+
+`ProjectionCapsuleV1` carries Owner-approved `becoming`, `now`, `nextMove`,
+`tensions`, and `openTo` claims; each claim has one evidence class of
+`owner_confirmed`, `inferred_allowed`, or `unresolved_allowed`. It also carries
+privacy-safe provenance/freshness class, supported interactions, allowed and
+explicitly unavailable topic labels, expected response latency, visual theme
+token, and an agency/non-commitment statement. It never carries private
+evidence bodies, local paths, internal policy/evidence IDs, or a credential.
+
+Every hosted Projection binds a Projection-scoped opaque
+`disclosureBasisId`, payload hash, privacy-safe publication-attestation ID,
+`publishedAt`, `freshUntil`, and hard `expiresAt`. It never receives an
+internal Twin revision, Workspace/source path, evidence ID/body, or local
+policy hash. Local Presence separately maps the disclosure basis to the exact
+Twin revision, eligible-basis hash, and projection-policy hash.
+`expiresAt` is no later than seven days after `publishedAt`. Any later validated
+Twin revision conservatively makes the current Projection stale at the next
+explicit sync; no dependency-aware claim freshness is attempted in P0.
+`room_operator.v1` may attest stale only by comparing the private local mapping
+with current validated Twin state, then sending a body-free deterministic
+attestation. It cannot author a successor or infer a new public claim.
+
+### Twin-to-Projection basis
+
+Local `ProjectionBasisV1` keeps one record per public claim. Each record binds:
+
+- exact current Twin revision number and revision hash;
+- workspace-contract hash plus projection-policy generation and hash;
+- exact claim text, public slot, attribution class, disclosure class, and
+  transformation/Owner-edit classification;
+- exact local source kind, internal source reference, source-content hash, and
+  current semantic/effect status; and
+- exact publication payload hash, Owner decision ID/hash, and local/hosted
+  receipt lineage.
+
+`owner_confirmed`, `inferred_allowed`, and `unresolved_allowed` are disclosure
+decisions, not proof that an inference is true. An Owner edit that introduces a
+new claim is recorded as a separately hashed Owner-authored basis entry before
+approval. Private evidence bodies and all internal basis fields remain local;
+only the Projection-scoped opaque `disclosureBasisId` leaves the edge.
+
+P0 applies this exact eligibility floor:
+
+| Local Twin basis | Projection eligibility |
 |---|---|
-| Unconsumed pairing challenge | Ten minutes, one use |
-| Consumed pairing digest + body-free keyed outcome | While the Room is active, then 30 days after retirement; raw challenge absent |
-| Guest invite | 24 hours, one use; redemption creates one guest session |
-| Guest/reply cookie | 24 hours per exchange |
-| Reply capability | Until guest deletion or the interaction's 30-day maximum; re-exchangeable into the short cookie |
-| Agent Guest token | 15 minutes, one accepted interaction |
-| Paired local credential | 30 days maximum, revocable |
-| Public Projection | Seven days maximum; immediate revoke and conservative stale behavior |
-| Interaction + inline Guest Capsule | Earlier of guest deletion or 30 days from creation |
-| Response | Seven days after publication and never beyond 30 days from interaction creation |
-| Ordinary guest operation metadata | Same interaction window; purge earlier on guest deletion |
-| Body-free deletion recovery capability + keyed deletion receipt | Until the interaction's original 30-day expiry; permits only terminal status/same-key receipt recovery and repeat delete |
-| Body-free per-Room signal events | Through the referenced interaction's original 30-day expiry; Room retirement events remain 30 days after retirement, so an offline local sync can account for every sequence and purge instruction |
-| Daily application IP-rate pseudonym | At most 24 hours |
-| Local imported guest payload and linked Response draft/capsule bodies | Same 30-day expiry; all become unreadable immediately at known expiry/delete and are purged on a `forme presence ...`, sync, or explicit Presence-maintenance run |
-| Body-free Room, curation, publication, pairing, and retirement receipts | While the Room is active, then 30 days after Room retirement; local Owner receipts remain with the workspace until Owner removal |
+| Current Owner Frame field or unresolved item | exact current Owner-authored claim allowed |
+| Active Owner-corrected Reflection | allowed as `owner_confirmed` only when explicitly selected |
+| Active inferred Reflection | allowed only when explicitly selected, visibly labeled `inferred_allowed`, and carrying uncertainty |
+| Superseded or invalidated Reflection | prohibited |
+| Proposed or merely approved R3 action | prohibited as a completed/current accomplishment |
+| Successfully executed and still-current R3 effect | may support an exact current fact |
+| Rolled-back R3 effect | may support only an exact historical “tested and rolled back” claim, never a current accomplishment |
+| Invalidated or indeterminate R3 effect | prohibited as a positive current claim |
+| New Projection-only Owner wording | allowed only as separately hashed Owner-authored text in the exact publication input manifest; it may not masquerade as Twin-derived cognition |
 
-Expiry or deletion makes a server payload unavailable synchronously. Physical
-purge occurs on the next successful daily janitor, targets at most 24 hours of
-lag, and raises an operator health incident if `lastSuccessfulPurgeAt` is more
-than 36 hours old. The seven-day backup lag starts after physical purge, not
-after logical expiry. The guest consent surface must say that:
+Preparation starts from the current reconstructed Twin, not a hand-authored
+social page. Immediately before connector delivery, Forme revalidates Twin
+HEAD, every active correction/invalidation, the complete per-claim basis,
+policy hash, payload hash, target Room, and approval. Any intervening change
+invalidates the publication approval. Publishing bytes identical to the exact
+current Projection is a receipted no-op; it does not create a successor,
+freshness lease, or Curator admission.
 
-- the Owner may already have read the submission;
-- an offline local reader refuses a known expiry at its stored effective
-  timestamp, but can learn an earlier remote deletion only on its next sync;
-  that Presence run then physically purges the body;
-- physical server purge may wait for the next successful daily janitor;
-- provider backups may retain physically purged bytes for seven additional
-  days.
+Ordinary Workbench text and an R3 proposal/effect do not automatically become
+Projection evidence or public meaning. They must first enter the validated
+Twin/evidence path and then pass the exact eligibility table, Projection basis,
+and Owner approval gates. The R4 acceptance demo must show one causal chain:
 
-A deterministic daily Vercel Cron route runs the idempotent server janitor. It
-uses `CRON_SECRET`, a server-derived daily idempotency key, a unique run-date
-constraint, and a database advisory lock so duplicate or concurrent
-invocations converge. It emits a purge receipt and exposes
-`lastSuccessfulPurgeAt`. Vercel does not automatically retry a failed Cron
-invocation; the next daily run and a manual operator rerun must be safe.
+```text
+eligible local evidence/correction
+  → current Twin revision
+  → per-claim Projection basis
+  → exact Owner publication approval
+  → hosted Projection + optional Curator admission
+  → one private Guest Interaction
+  → local orientation/Fresh or manual judgment
+  → exact Owner Response approval + hosted receipt
+```
 
-Application logs never record request/response bodies, raw IP addresses,
-cookies, secrets, or full user agents. Database rate limiting uses a
-day-scoped HMAC of the IP and purges it within 24 hours. Provider
-edge/security logs may still retain transport metadata under the active plan;
-their configured window must be recorded in the release inventory and set to
-the shortest available value.
+```text
+published_fresh ──stale──> stale
+       │                     │
+       ├──successor──────────┴──> superseded
+       └──revoke────────────────> revoked
 
-### Proposed size and rate defaults
+fresh/stale ──server clock──> expired
+```
 
-- Projection: 32 KiB, 16 claims;
-- Guest Capsule: 8 KiB;
-- interaction body: 2,000 characters and total request 12 KiB;
-- Response: 12 KiB;
-- all `/api/v1/**` requests: 60/minute/IP through one Vercel WAF path rule;
-- authenticated mutations: 10/minute/credential;
-- interaction validation attempts: 5/day/guest session, with retries of the
-  same idempotency key not counted;
-- accepted interactions: exactly one/guest session and 20/day/Room, enforced
-  by transactional unique constraints;
-- application-enforced limits return `429` with `Retry-After`; a Vercel WAF
-  block may return its platform response without that header.
+- A successor atomically supersedes the old current Projection.
+- A successor starts `not_admitted`, requires fresh Curator admission for
+  Third Place discovery, and inherits no encounter, Grant, or GrantOffer.
+- Stale remains direct-readable with a dominant warning for no more than seven
+  days and accepts no new Interaction.
+- Superseded, expired, revoked, or retired content returns a body-free
+  tombstone, except that a still-valid accepted Interaction follows the T4
+  response rule below.
+- Revoke immediately hides the Projection and all linked published Responses.
 
-Vercel WAF is defense in depth, not authorization. One-use invitations,
-database constraints, byte ceilings, token scope, and transactional rate
-checks remain authoritative. P0 abuse operations are limited to revoke invite,
-delete interaction, retire Room, revoke Projection/Response, and Curator
-unlist; there is no moderation organization or safety platform.
+### Independent curation lifecycle
 
-## Privacy-canary and output rules
+```text
+not_admitted → admitted → unlisted
+```
 
-The R4 acceptance run seeds:
+The P0 graph is monotonic: an exact unlisted version cannot be re-admitted.
+The Owner publishes a successor and the Curator admits that successor.
 
-1. a random private source/Twin canary outside the Projection allowlist;
-2. a credential/token canary that must never appear in logs or errors.
+Third Place discovery requires all of:
 
-The test scans:
+- public Room active;
+- exact current Projection;
+- fresh, unrevoked, unexpired;
+- `admitted`.
 
-- compiled local payload;
-- upload envelope;
-- exported server rows;
-- public JSON;
-- rendered HTML;
-- Agent Guest API;
-- error fixtures and captured application logs;
-- Response Capsule;
-- local and server receipts.
+A new anonymous public knock additionally requires Room mode `public_single`.
+Changing the mode to `invite_only` or `closed` stops new knocks but does not by
+itself remove an otherwise-eligible admitted Projection from Third Place.
 
-The canary value itself remains local. The compiler receipt stores only its
-hash, checked surfaces, result, and byte counts. A match in the local compiled
-payload or envelope fails before a network request. A match discovered on an
-already hosted surface triggers immediate revoke and purge, credential rotation
-when relevant, and a failed release/incident gate.
+A current, fresh, unrevoked, unexpired public Projection remains direct-URL
+readable when never admitted or unlisted. Unlist ends discovery, ends new
+public knocks, and invalidates unused public encounter capabilities. It does
+not revoke an otherwise-valid Owner Grant, GrantOffer, or accepted
+Interaction. A stale current public Projection remains direct-readable only
+with the dominant stale warning until hard expiry. Private Rooms are never
+discoverable and never return a body without a valid exact Grant; a valid
+Grant may read a stale Private Projection only with the same warning and may
+not submit.
 
-Canaries are tripwires, not proof that every semantic privacy leak is absent.
-The exact Owner preview, field allowlist, Context manifest, and no-ambient-read
-architecture remain the authority.
+All public and private Projection/body responses use `Cache-Control: no-store`.
+HTML and Agent JSON must derive from the same server decision.
 
-The Owner must also understand a non-technical limit: any genuinely public
-Projection can be copied by visitors. Revocation stops Forme from serving it
-again; it cannot erase copies already made elsewhere. Therefore nothing
-published should depend on later secrecy.
+## Guest capability contract
 
-## Deployment and operations
+All bearer secrets contain at least 256 random bits. URLs use a public opaque
+ID plus a secret in the URL fragment; the fragment is exchanged by POST and is
+never sent in a query, path, Referer, analytics event, or log. API Agents use
+`Authorization: Bearer`. The database stores only a keyed digest, never the
+raw secret.
 
-### Recommended production resources
+Capability creation is lost-response safe. The initiating client generates and
+retains every bearer secret before its mutation: public-encounter and
+reply/delete secrets on the Guest client; a direct-invite secret on the Owner
+client; the resulting Grant secret on the accepting Guest client; and an
+Agent-derivative secret on the Manual holder's client. The server receives a
+secret only in the protected request body, stores a keyed digest, and returns
+the opaque object ID/receipt. A same-key retry reuses the same secret, so a
+committed create with a lost HTTP response never strands an unrecoverable
+capability. For an Agent derivative, the parent Manual holder retains the
+reply/delete authority; the Agent receives only its derivative secret.
 
-- Vercel Pro project linked to the GitHub organization repository;
-- Supabase Pro project in the closest compatible region;
-- Vercel Functions configured in the same region where possible;
-- Node `24.x`;
-- production-only sensitive Supabase secret and `CRON_SECRET`;
-- Vercel Spend Management budget, alerts, and opt-in pause action. This may
-  overshoot briefly, excludes seats/add-ons, and can pause every project in the
-  team; it is not a hard cap;
-- Supabase new-user sign-up disabled;
-- one pre-provisioned Owner account;
-- one WAF rate rule for all `/api/v1/**` paths;
-- no custom domain required for P0.
+Room pairing uses a different recovery pattern: the connector persists an
+ephemeral key pair before exchange, and the server's exact idempotent response
+contains the Room credential sealed to that public key. A same-key retry
+returns the identical sealed envelope until pairing expiry. No server-generated
+bearer credential exists only in a lost response. The Manifest must include
+lost-response vectors for encounter/create, offer acceptance, direct-invite
+issuance and redemption, derivative minting, and pairing.
 
-Preview deployments receive no production Supabase secret and no production
-write access. A preview may render fixtures or connect to local/staging state,
-but it cannot mutate the real Room.
+### Public encounter
 
-Supabase SQL migrations remain in the repo. Routine R4/R5 restore tests use
-checked-in schema migrations plus synthetic or irreversibly masked fixtures,
-not a production-data logical dump. Before the release candidate:
+`public_encounter.v1` is server-issued for one exact public Room and Projection:
 
-- restore schema plus synthetic fixtures into a non-production database;
-- verify Room/capsule/interaction receipts and global capability invalidation;
-- verify that service outage fails closed and deployment rollback does not
-  roll back database migrations blindly;
-- verify the active Cron configuration after every Vercel Instant Rollback,
-  because application rollback does not roll back or disable the scheduled
-  Cron configuration.
+- maximum 24 hours;
+- one accepted Interaction;
+- one unresolved Interaction;
+- valid only while the Projection remains current/fresh/admitted/unrevoked/
+  unexpired and the Room remains active `public_single`;
+- invalidated unused by unlist, mode exit, stale, successor, expiry, revoke, or
+  retirement;
+- accepted-only accounting; an idempotent retry consumes no second unit.
 
-If an incident ever requires a real-data clone, it must be encrypted,
-access-isolated, inventoried, deleted within 24 hours, and use a distinct
-non-production pepper with no production credentials or outbound email.
-Capability and Auth artifacts are invalidated before that environment can be
-opened.
+The public Room pool permits at most 20 accepted anonymous public Interactions
+in a rolling 24-hour window. Owner-issued Grants do not consume that pool.
 
-A disaster restore stays in maintenance mode while the operator restores,
-runs overdue retention purge, rotates the capability epoch/pepper and server
-secret, revokes Controller Auth sessions, reconciles public state against
-Owner-local receipts, and then requires re-pairing/re-inviting before public
-service resumes.
+### Owner continuation and Private Grant
 
-### Portability and exit
+`grant.v1` binds one exact Room, Projection, re-entry chain, preset, expiry,
+remaining quota, and Agent-derivation flag.
 
-The proposed stack is not a permanent platform commitment:
+| `presetId` | TTL | Accepted quota |
+|---|---:|---:|
+| `one_visit` | 24 hours | 1 |
+| `short_exchange` | 3 days | 2 |
+| `familiar_collaborator` | 7 days | 3 |
+| `trusted_collaborator` | 7 days | 10 |
 
-- domain payload tables use ordinary Postgres and checked-in SQL;
-- `auth.users` links, `auth.uid()`, RLS policies, Data API RPC exposure, and
-  `service_role` behavior are a Supabase-specific adapter and migration layer;
-- protocol objects are provider-neutral JSON;
-- no Supabase Storage, Realtime, proprietary queue, or Edge Function owns
-  product semantics;
-- moving to Neon or another Postgres means adapting Auth/RLS/RPC migrations in
-  addition to moving data, re-provisioning the Controller, revoking all old
-  sessions/capabilities, and re-pairing the local Room;
-- the Next.js app can move or self-host without changing capsule contracts.
+- Server UTC time is authoritative.
+- Direct Grant expiry begins at atomic issuance.
+- A GrantOffer or direct one-time invite fixes `offeredGrantExpiresAt` when the
+  Owner issues it. Acceptance/redemption creates a Grant with that exact
+  expiry; waiting consumes the window and never resets or extends the preset.
+- Effective expiry is the earliest of preset expiry, exact Projection expiry,
+  Owner revoke, successor, Projection revoke, or Room retirement.
+- Stale blocks new submissions without extending expiry.
+- `closed` pauses submissions without extending expiry.
+- Grant revoke/expiry stops later submission and, for a Private Room, later
+  Projection reads. It does not delete or hide an already accepted
+  Interaction/Response governed by its own reply capability and lifecycle,
+  and it never refunds accepted quota.
+- Manual and Agent-derived submissions share the accepted quota.
+- A public first knock and a later Grant have independent quota; therefore an
+  Owner may intentionally permit one public knock plus ten later trusted
+  Interactions.
+- The labels are display language only. They do not establish a person,
+  account, relationship, verified identity, Private access, or cross-Room
+  authority.
+- Private reading and interaction always require a separate Grant for the
+  exact Private Room and Projection.
 
-Clerk + Neon was considered. It offers polished restricted sign-in and a
-portable database, but creates three control planes and still requires a
-custom guest/pairing protocol. For one Controller before August 11, Supabase's
-single project and integrated Auth/RLS boundary is smaller. Auth verification
-and the subsequent domain RPC are still two failure boundaries, not one atomic
-transaction; idempotency and reconciliation cover a failure between them.
+One re-entry chain may have at most one live continuation Grant for a Room and
+Projection. P0 has no in-place widening. Issuing a replacement requires
+explicit Owner confirmation, atomically revokes the earlier Grant, starts a
+new expiry/quota, and transfers no unused quota.
 
-## Failure and recovery matrix
+### Grant offer
+
+`grant_offer.v1` is a private proposal visible through one exact reply
+capability. It moves:
+
+```text
+issued → accepted | owner_revoked | expired | invalidated
+```
+
+Acceptance is one transaction. It rechecks:
+
+- the source reply capability;
+- offer expiry;
+- source Interaction not deleted or origin-revoked;
+- source Room not retired;
+- target Projection current/fresh/unrevoked/unexpired;
+- target Room active and not `closed`.
+
+Each Interaction has at most one live GrantOffer. Acceptance uses the fixed
+`offeredGrantExpiresAt` and never extends either the acceptance deadline or
+offered Grant expiry. Unlist alone does not invalidate an offer. Target
+successor, expiry, revoke, or retirement does.
+
+For a collaborator reached through an existing external channel, the Owner may
+instead issue `direct_grant_invite.v1`: a one-use fragment URL bound to the
+same exact Room, Projection, preset, and fixed `offeredGrantExpiresAt`.
+Redemption performs the same target/mode/lifecycle checks, accepts a
+Guest-generated Grant secret, and consumes the invite atomically. It is not an
+account, reusable invite, or cross-Room identity.
+
+### Agent derivative
+
+The Manual holder of either `public_encounter.v1` or an Agent-enabled
+`grant.v1` may mint one `agent_derivative.v1`:
+
+- maximum 15 minutes;
+- one use;
+- exact Room and Projection;
+- read exact Projection and create one Interaction only;
+- shares the exact parent capability's quota and one-unresolved lock. A public
+  parent consumes its single encounter use and the public rolling Room pool;
+  a Grant parent consumes that Grant's accepted quota.
+
+It cannot read a reply, delete, accept an offer, mint another token, recover a
+capability, identify a person, or cross a Room. It never outlives the parent.
+
+## Interaction and Response contract
+
+### Interaction
+
+One Interaction contains immutable request bytes, optional inline Guest
+Capsule, a Guest-selected `interactionType` of `ask`, `seed`, or `resonance`,
+exact origin IDs/hashes, consent, accepted timestamp, and reply/delete
+capability digests. The server never infers resonance or changes the selected
+type. Lifecycle is separate from payload.
+
+Before submission, the Guest sees plain disclosure that the Owner may actively
+hand the request to a local Codex Fresh Session and that eligible Forme
+workspace bytes then leave the Owner device for OpenAI processing. The text
+states that any snapshot content the Agent judges relevant may be sent, names
+the admitted source classes (current sanitized Forme snapshot plus
+body/path-free Twin orientation), links the applicable OpenAI data/retention
+policy, names the session ceilings and the Owner's ability to read/copy, and
+shows the hosted/backup terms and manual-only alternative. It must not describe
+the path as on-device or server AI and must not promise an exact byte list, a
+complete file-read list, or that OpenAI sees only the broker-returned bytes.
+It also explains the dispatch race honestly: delete/revoke/retire committed
+before a dispatch permit prevents that provider call, while a permit committed
+first makes that exact dispatch in-flight and it cannot be recalled even if a
+destructive action commits immediately afterward.
+Consent is one exact enum:
+`allow_owner_local_ai` or `manual_owner_only`; it is immutable for that
+Interaction and cannot be widened after acceptance.
+
+`ConsentEnvelopeV1` binds provider `OpenAI`, Owner account/data-control regime,
+source class `sanitized_current_forme_snapshot`, orientation class, optional
+Guest Capsule scope, maximum session/dispatch/token/applicable-spend budget,
+provider-policy URL and provider/backup retention-disclosure versions/hashes,
+consent-copy version/hash, consent time, and reply capability ID/digest, never
+the raw secret. The actual `SessionEnvelopeV1` must be an exact subset of those
+terms. Any provider, account regime, source class, budget, Guest Capsule scope,
+or retention-term change requires new Guest consent for a new Interaction or
+uses `manual_owner_only`; the Owner cannot widen an accepted envelope.
+
+Limits:
+
+- request: 12 KiB UTF-8 plain text;
+- inline `GuestCapsuleV1`: optional, 4 KiB canonical JSON;
+- no HTML, Markdown execution, file, image, rich attachment, or remote URL
+  fetch;
+- Interaction plus capsule retained at most 30 days from hosted `acceptedAt`;
+- one Response maximum;
+- one unresolved Interaction per active encounter/Grant chain;
+- no conversation thread or implicit history.
+
+`guestCapsuleLevel` is explicit:
+
+- `g0_manual`: no reusable capsule; request only;
+- `g1_lightweight`: optional pseudonym, current focus, offer, seek, and one
+  open question;
+- `g2_agent_projection`: the G1 fields plus Guest-declared source class, scope
+  label, freshness time, schema version, and consent. It may be produced by any
+  Guest-owned Agent and does not imply Forme continuity or a Guest Twin.
+
+The capsule contains no raw note attachment, local path, secret, account
+credential, reusable identity assertion, or instruction authority. All fields
+are Guest claims shown with provenance; the server does not verify personhood
+or infer resonance. P0 response depth is fixed to `owner_reviewed`.
+
+Hosted states are:
+
+```text
+accepted → seen_locally → preparing → response_ready
+    │            │            │
+    ├────────────┴────────────┴→ closed_without_response
+    └──────────────────────────→ interaction_expired
+
+any retained state → interaction_deleted | origin_revoked | room_retired
+```
+
+Only `accepted`, `seen_locally`, and `preparing` count unresolved. The
+Controller may use the stepped-up Web surface to `close_without_response`
+from any of them. The connector cannot close, park, decline, or infer intent.
+The Guest receives a generic status only.
+
+If the origin becomes stale, superseded, or expired after acceptance, the
+Owner may still prepare and publish one newly compiled and newly approved
+Response with that exact origin state disclosed. A revoked origin cannot
+receive a new Response.
+
+### Response
+
+A Response is immutable Owner-approved content bound to exactly one
+Interaction, candidate hash, origin state, privacy-safe source-disclosure
+class, approval attestation, and server publication receipt. The exact Twin
+basis and source-policy hashes remain in protected Local Presence; hosted and
+Guest views receive only an opaque local-basis attestation ID and the approved
+source/provider disclosure, never an internal Twin revision or source path.
+
+- body: maximum 16 KiB UTF-8 plain text;
+- retention: at most seven days from publication and never beyond the parent
+  Interaction;
+- publication is one idempotent transaction and one semantic Response;
+- server attribution is derived from verified approval, never from a
+  client-supplied display name;
+- exact publication requires current status and approval/basis hashes.
+
+Lifecycle:
+
+```text
+available → response_expired | response_revoked
+available → origin_revoked | interaction_deleted | room_retired
+```
+
+Terminal precedence is Interaction delete, Room retirement, origin revoke,
+standalone Response revoke, then expiry. Publish racing a terminal action has
+only two valid results: terminal commits first and publish fails body-free, or
+publish commits once and the later terminal cascade hides it.
+
+`close_without_response` racing publication also has one winner. Close-first
+atomically removes hosted response authority, cancels a notice that has not
+begun provider handoff, does not refund the already consumed accepted quota,
+and makes publish fail body-free. An offline local candidate is denied and
+cleaned only after the connector learns the close through an explicit
+status/sync/reconcile or preparation check; until then it remains encrypted,
+cannot pass the mandatory publish-status recheck, and is still bounded by its
+normal seven-day/Interaction ceiling.
+Publish-first moves the Interaction to `response_ready`; close is then rejected
+and the Owner must use the separately receipted Response revoke or Interaction
+delete if removal is intended.
+
+### Exact local approval record
+
+The local Owner review surface creates `ArtifactApprovalV1` only after showing
+the complete current bytes, target Room/Projection/Interaction, relevant
+origin warning, and content hash. The Owner may edit first; any edit changes
+the hash and requires a new confirmation. The record contains the artifact
+hash, target IDs, basis/policy hashes, approval time, expiry, and a random
+operation ID, then is authenticated through the exact Room binding during
+delivery. The connector derives a privacy-safe publication attestation and
+does not transmit the private basis/policy fields. Hosted attribution is
+derived from that verified binding and attestation.
+
+The connector accepts only a candidate held by the protected store whose hash
+matches the approval record. It cannot turn arbitrary Workspace/stdin text
+into approved content, and the Workbench cannot mint an approval record by
+calling a generic CLI flag. The same mechanism applies to Projection and
+Response publication.
+
+## Optional response-ready email
+
+`notification_endpoint.v1` belongs to one exact Interaction. It is mutable
+hosted notification metadata, not part of the immutable request and not an
+account, identity, login, capability, recovery channel, trust signal,
+deduplication key, or cross-Room relationship record.
+
+Endpoint and delivery are two separate state dimensions:
+
+```text
+endpoint: absent → verification_pending → confirmed → cleared
+
+notice:   absent → ready_pending → submitting
+                     │                 ├→ provider_accepted
+                     └→ canceled       ├→ delivery_unknown
+                                       └→ failed
+
+delivery_unknown ──provider proves not accepted──> submitting
+delivery_unknown ──provider proves accepted──────> provider_accepted
+canceled(no handoff) ──new confirmed endpoint + available Response──> ready_pending
+```
+
+Exact mechanics:
+
+`destructive_terminal` means exactly `closed_without_response`,
+`interaction_deleted`, `interaction_expired`, `origin_revoked`,
+`room_retired`, `response_revoked`, or `response_expired`. The successful
+`response_ready` state is not destructive and never clears its own notice.
+
+- Only the exact private reply capability may add, replace, or remove the
+  endpoint.
+- Every address change requires confirmation.
+- Verification code TTL is 15 minutes, one use, maximum five attempts, and at
+  most three sends per Interaction per hour.
+- The address is encrypted at rest and is not indexed as a person. Owner Web
+  and durable receipts see only confirmed/pending/cleared plus a redacted
+  domain-neutral marker, never the raw address.
+- The single-purpose code can confirm the endpoint only. It cannot read a
+  Room/body, recover a reply URL, create an Interaction, or mint authority.
+- Code and plaintext message are never logged; the code is deleted after use
+  or expiry.
+- There is at most one semantic ready-notice row per Interaction. If a
+  confirmed endpoint already exists, the exact Response publication transaction
+  creates `ready_pending` and its encrypted delivery-target snapshot. If the
+  Response is already available when endpoint confirmation commits, that
+  confirmation transaction creates the same row only if the Response is still
+  available and no handoff has ever begun. The unique Interaction key prevents
+  both paths from creating two notices.
+- Before provider handoff, endpoint removal cancels `ready_pending` and deletes
+  its target. Starting replacement does the same for the old target; successful
+  confirmation may repopulate the same never-handed-off semantic row for the
+  new address. These races lock the endpoint, Response, and outbox row together.
+  Once handoff has begun, replacement/removal creates no second ready notice.
+- The notice says only that a Forme response is ready and instructs the Guest
+  to use the previously saved private reply link. It contains no request or
+  response summary, Room name, reply URL, token, secret, or private body.
+- Polling the saved reply capability remains canonical and works when email
+  fails.
+- The outbox—not the endpoint row—owns one encrypted delivery-target snapshot
+  while delivery is pending or safely reconcilable. A dispatch transaction
+  moves `ready_pending` to `submitting` and durably creates a stable attempt ID,
+  provider idempotency key, attempt number, and lease before any provider byte
+  is sent. Verification sends use the same attempt/lease recovery class but do
+  not count as the one ready notice.
+- A lease expiry or worker crash after that commit, whether before or after the
+  network call, never resets directly to `ready_pending` and never blindly
+  sends. A reclaiming worker first asks the approved provider for the stable
+  attempt/idempotency result: accepted becomes `provider_accepted`; definitive
+  non-acceptance may re-enter `submitting` with the same semantic item and key;
+  any ambiguous result becomes `delivery_unknown`. Provider timeout follows
+  the same path.
+- A `destructive_terminal` may cancel only `ready_pending`. After handoff has
+  begun it clears the endpoint and encrypted delivery target, disables retry,
+  and moves an unresolved `submitting` attempt to body-free
+  `delivery_unknown/no_retry`; otherwise it preserves only body-free
+  `provider_accepted`, `delivery_unknown`, or `failed` evidence. It never claims
+  recall or cancellation. Ordinary endpoint replacement/removal after handoff
+  likewise cannot recall the attempt; it atomically marks that semantic notice
+  `no_future_retry` and clears the endpoint. The old encrypted target may remain
+  only for the bounded window needed to classify the already-started attempt.
+  A replacement address is not accepted for this already-handed-off
+  Interaction and receives no verification or second notice; the Guest relies
+  on the saved reply capability and polling.
+- A provider-accepted or possibly accepted message cannot be recalled.
+- Forme guarantees one semantic outbox item, not network exactly-once. On a
+  `delivery_unknown` outcome, one reconciled retry is allowed only when the
+  provider contract proves the first attempt was not accepted. Otherwise Forme
+  stops, purges the raw target, and polling carries the result.
+- `provider_accepted`, definitive `failed`, or final
+  `delivery_unknown/no_retry` clears both raw endpoint and delivery target;
+  only the body-free delivery state/attempt identifiers remain for their
+  approved receipt horizon.
+- A later authenticated provider result may monotonically refine body-free
+  `delivery_unknown/no_retry` to `provider_accepted` or `failed`. It never
+  restores a raw target, endpoint, or retry path; definitive non-acceptance
+  after removal/replacement becomes `failed/no_retry`, not `submitting`.
+
+The exact provider, region, recipient/delivery-metadata retention, secret
+handling, spend ceiling, stable idempotency/status API, lease, and reconciliation
+deadline are Production Grant values. The reconciliation deadline is at most
+24 hours from first handoff and never beyond the Response or Interaction. A
+provider that cannot distinguish accepted from definitively not accepted keeps
+ambiguous attempts terminally `delivery_unknown`; it does not enable a retry.
+Production email remains disabled until these facts are approved and crash
+probes pass.
+
+## Canonical protocol
+
+`packages/r4-protocol` is a pure TypeScript package with no filesystem,
+database, network, runtime, or model import. It owns:
+
+- JSON Schemas and TypeScript types;
+- strict validators;
+- canonical JSON encoding and SHA-256 hashing;
+- state derivation helpers;
+- redaction and body-free receipt types;
+- golden vectors shared by hosted and local code.
+
+Every externally persisted object includes `schemaVersion`. IDs are opaque,
+type-prefixed, and non-semantic. Timestamps are UTC RFC 3339 with millisecond
+precision. JSON rejects unknown fields, duplicate keys, non-finite numbers,
+non-NFC text, invalid Unicode, and over-limit arrays/strings. Hashing uses
+canonical UTF-8 JSON bytes. Payload and lifecycle metadata are separate.
+
+An API mutation carries:
+
+- exact actor/capability class;
+- action name;
+- at least 128-bit idempotency key;
+- canonical request hash;
+- expected object version or predecessor hash where relevant.
+
+The same actor/action/key and request hash returns the exact original body-free
+receipt. The same key with different bytes returns `409`. A new key cannot
+repeat a terminal semantic effect.
+
+The later Schema & Migration Manifest fixes exact field names, schema hashes,
+SQL enums/tables/indexes/functions/roles, and local store formats. It may not
+change any semantic invariant in this Packet.
+
+## Versioned API and clients
+
+The canonical prefix is `/api/v1`. Web, CLI, and connector call the same
+semantic operations; no UI-only hidden mutation exists.
+
+### Public and Guest lane
+
+| Operation family | Credential | Result |
+|---|---|---|
+| Third Place list | none | current/fresh/admitted public Projection summaries |
+| Projection read | none or exact Grant | public body or Grant-scoped Private body |
+| Public encounter issue | anti-abuse cookie | one exact encounter capability |
+| Interaction create | encounter/Grant/Agent derivative | accepted Interaction opaque ID + receipt; Manual client assembles the reply URL from its pre-retained secret |
+| Interaction status/Response | exact reply capability | own body/status/Response only |
+| Interaction delete | exact reply/delete capability | immediate hosted unreadability + purge obligation |
+| Notification manage/verify | exact reply capability or verification code | exact endpoint only |
+| GrantOffer accept | exact reply capability | one new exact Grant |
+| Direct invite redeem | one-use direct invite + Guest-generated Grant secret | one fixed-expiry exact Grant |
+| Agent derivative mint | exact allowed Manual capability | one 15-minute one-use token |
+
+### Controller and Curator lane
+
+Controller/Curator API access is invite-only. P0 uses Cloudflare Access signed
+assertions mapped to pre-registered stable provider subject IDs. The app
+validates signature, issuer, route-specific audience, subject, expiry,
+not-before, and issued-at on every request.
+
+- `control` origin: maximum 12-hour Access session for inspect/status and
+  reversible ordinary control.
+- `approve` origin: distinct audience; assertion issued no more than 15 minutes
+  earlier for Room create/pair, Projection publication boundary, Grant/offer,
+  mode, close-without-response, curation, revoke, retire, or delete. Final
+  Response content approval remains only in the protected local UI.
+- emergency Projection revoke: authenticated `control` origin plus explicit
+  typed confirmation; it does not wait for normal step-up but is fully
+  receipted.
+- browser mutations require exact Origin, SameSite cookies, CSRF nonce,
+  idempotency key, and current object version.
+
+Exact domains, Access applications/audiences, IdP, MFA, Controller/Curator
+subjects, and session configuration are Production Grant values.
+
+The hosted Web may display the exact Guest request and published Response to
+the authenticated Owner, but P0 does not author or AI-draft an outgoing body
+there. Outgoing Projection/Response bytes still originate in the protected
+local review path and carry the exact local approval record. Web remains the
+anywhere management/control/status surface; it cannot invoke the local Agent
+or silently convert hosted private content into a candidate.
+
+### `room_operator.v1`
+
+A local Workspace may hold multiple independent Room bindings. Each binding is
+exactly one Room, begins at pairing, lasts at most 30 days, never auto-renews,
+and is revocable. A Room credential cannot discover or act on siblings.
+
+The fixed bundle permits only:
+
+- inspect exact Room/Projection/status/health/body-free receipts;
+- explicit typed `room sync` for accepted Interaction metadata and terminal
+  events;
+- just-in-time pull of one exact request by the trusted Prepare launcher;
+- atomic reserve/recover/abandon of the one Owner-started Fresh draft-cycle
+  slot for an exact Interaction, bound to its start-authorization and Session
+  Envelope hashes; abandonment requires a trusted zero-dispatch attestation;
+- atomic issue/recover of one 30-second, one-use, exact-payload-bound provider
+  dispatch permit for each authorized dispatch ordinal under that cycle;
+- deterministic ACK and recovery;
+- delivery of one still-current exact Owner-approved Projection or Response;
+- deterministic stale attestation;
+- a local-purge receipt only after the connector verifies local bytes are
+  absent.
+
+It cannot pair itself, create/discover a Room, widen scope, issue a Grant,
+accept an offer, change intake/disposition/mode beyond the fixed T3 cycle
+reservation, author Owner content, curate, revoke content, retire/delete, call
+arbitrary APIs, expose the raw credential, or hand a token to the model. Cycle
+reservation is deterministic budget/lifecycle enforcement, not permission to
+start Codex, call a provider, author content, close a request, or publish.
+Likewise, a dispatch permit is only the fixed race boundary for one already
+Owner-started cycle; the model never receives it and cannot request one.
+
+Pairing is an Owner Web boundary action. It produces a short-lived one-use
+pairing code. The installed connector exchanges it outside model-visible
+stdout and stores the resulting secret in the platform protection adapter.
+
+### P0 CLI
+
+The thin CLI exposes:
+
+```text
+forme room pair
+forme room status
+forme room sync
+forme room prepare-response <interaction-id>
+forme room reconcile
+
+forme guest inspect
+forme guest ask
+forme guest status
+forme guest delete
+forme guest agent-token
+```
+
+Read-only commands never pull a body, write state, advance a cursor, refresh a
+Grant, or perform a hidden sync. Secret input comes from an interactive secure
+channel or stdin descriptor, never a command argument or printed output.
+Controller/Curator CLI is P1; the P0 Owner boundary surface is Web.
+
+## Local architecture and physical boundary
+
+### Four local zones
+
+| Zone | Contents | Workbench access |
+|---|---|---|
+| Workspace | repo, Twin, body-free `.forme/room` metadata | normal approved Workspace access |
+| Connector protection | Room binding credential and pairing state | denied; typed connector only |
+| Candidate protection | encrypted typed unpublished candidate + cleanup journal | denied; one-shot review UI only |
+| Session runtime | sanitized snapshot/non-secret config on disk; exact request/capsule/orientation and event/output streams only in protected process memory/anonymous pipes | snapshot duplicates admitted Workspace bytes; Guest-derived plaintext is absent from the readable filesystem and protected from attach/injection |
+
+`.forme/room` may contain only Room/Projection/Interaction IDs and hashes,
+state versions, cursors, ordered-event receipts, cleanup/purge receipts,
+policy/schema versions, and body-free errors. It may not contain request,
+Guest Capsule, Response/candidate text, email, capability, credential,
+verification code, transcript, tool log, source path, or provider token.
+
+### P0 macOS protection adapter
+
+The P0 adapter uses:
+
+- a trusted installed `forme-local` launcher outside the writable Workspace;
+- macOS Keychain/Secure Enclave-backed protection for Room credential and
+  non-exportable candidate-encryption key material, restricted to the
+  hash-checked signed connector/launcher designated requirement and access
+  group; candidate decrypt requires explicit local user presence, and a
+  missing/changed signature or unattended prompt fails closed;
+- an encrypted candidate file outside the Workspace;
+- one-shot runtime directories with mode `0700` containing only the sanitized
+  snapshot, output schema, and non-secret config—never request, Guest Capsule,
+  Twin orientation, event/output stream, candidate, or provider credential;
+- anonymous bounded pipes and locked launcher memory for request/capsule/
+  orientation input and structured event/stderr output; the validated final
+  candidate is encrypted before it becomes a file. If the selected official
+  Codex build writes prompt/session/history/body-bearing telemetry to disk, the
+  AI lane fails closed;
+- a launcher-owned outer macOS Seatbelt/container-equivalent policy that
+  encloses the entire Fresh Codex process and admits only its runtime roots and
+  controlled OpenAI transport;
+- a `forme-fresh-response` deny-by-default Codex permission profile
+  that reads only minimal runtime dependencies and the exact sanitized
+  snapshot, with command network and every other filesystem root denied;
+- separate one-shot signed native request/start and candidate-approval windows
+  with no listening socket, Web history, extension surface, external asset,
+  pasteboard export, or persistence. Local user-presence authorization is
+  required before body display/decrypt and exact approval. Each UI ceremony
+  exits after 15 minutes or its terminal action; the Fresh worker may continue
+  independently only inside the original 60-minute authority ceiling, and any
+  later candidate remains encrypted until a new user-presence approval window.
+
+Same-user `0600`, `0700`, `.gitignore`, an alternate folder, or a prompt saying
+“do not read” is not accepted as isolation. Runtime-directory permissions are
+hygiene for non-secret files, not the reverse-isolation claim. Before any
+request byte is pulled, an
+adversarial capability probe must prove that the exact installed Codex build
+cannot read the protected roots or live repo, write the session root, reach a
+local socket from a model-generated command, use command network, invoke
+connector verbs, access a browser/MCP/connector surface, or escape through a
+symlink. Codex core receives only one launcher-owned transport endpoint; the
+inner command sandbox cannot reach it. The probe attests the outer
+sandbox and actual tool inventory; a profile name or environment variable is
+never accepted as proof. A failed, unavailable, or ambiguous probe records the
+local derived flag `manual_owner_only_available`; it does not add or mutate a
+hosted Interaction lifecycle state, and no request is sent to Codex.
+
+The ordinary Native Workbench may retain its useful Owner-approved Workspace
+agency, including an intentionally broad repo permission profile. Privacy does
+not depend on trusting that profile: no Guest plaintext or raw Room secret is
+placed in its readable filesystem, and the installed connector exports only
+typed body-free verbs. The native review window is not registered as an Agent,
+browser, MCP, app, or automation tool; the user-presence gate and signed client
+boundary are probed directly. A same-user process may trigger an authorization
+prompt but cannot silently approve it, export the key, receive plaintext, or
+attach to/inject into the hardened launcher/Fresh process. Core dumps are
+disabled; child crash diagnostics are disabled or scrubbed before Guest bytes
+are admitted. If those controls cannot be proven for the selected build, the AI
+lane remains manual-only.
+
+The window requests the platform's capture/sharing exclusion where supported
+and the Fresh Session has no screen/computer tool. Forme cannot protect a body
+from a separate process to which the Owner simultaneously grants screen
+recording, accessibility control, debugger/root authority, or physical
+observation; that is a new external source boundary and the review UI warns and
+fails closed when the selected Fresh runtime exposes such a capability. No
+background Workbench/Agent is part of the ceremony. Forme does not claim to
+defeat kernel/root compromise, Owner-authorized debugger/accessibility/screen
+capture, physical observation, or operating-system diagnostics outside the
+tested suppression boundary; that residual is disclosed before start.
+
+The installed launcher and connector must be immutable/hash-checked, signed
+with the approved designated requirement, and run with hardened runtime,
+library validation, and debugger/dynamic-injection denial. Their exact code
+identity and Keychain access group are Manifest values and capability probes.
+They start from a sanitized environment and cannot be replaced or dynamically
+loaded from a Workspace path. Workspace source code is never executed as the
+trusted boundary. The adversarial suite explicitly attempts `/usr/bin/security`
+and Keychain API export, process attach, debugger/dynamic-library injection,
+binary replacement, protection-socket access, UI capture, and stale approval
+reuse from both ordinary Workbench and Fresh profiles; confidentiality claims
+fail closed on any success.
+
+### No durable raw local inbox
+
+`room sync` stores body-free event metadata only. The exact request/capsule is
+pulled over the connector after the Owner opens the native review window and
+chooses `Prepare response`. The launcher keeps it in locked process memory and
+injects it into the Fresh Session as typed untrusted data. It is never written
+to the Workspace, candidate store, shell history, stdout, JSONL audit receipt,
+or Forme-owned disk log. Core-dump/crash-log suppression and the residual OS
+diagnostic boundary above are tested and disclosed rather than claimed
+perfect. Offline AI preparation is therefore unavailable in P0.
+
+### Candidate store
+
+Only a schema-valid unpublished Response candidate may persist locally. It is
+encrypted, bound to Interaction/origin/Twin/snapshot/policy hashes, and expires
+at the earliest of:
+
+- seven days after candidate admission;
+- parent Interaction expiry/delete;
+- `closed_without_response`, origin revoke, or Room retirement;
+- any origin transition to stale, superseded, or expired after compilation;
+- Twin/source basis invalidation;
+- successful hosted publication/reconciliation;
+- explicit Owner discard.
+
+Each candidate uses a random data-encryption key. The signed launcher wraps
+that key with the non-exportable local protection key under a user-presence
+policy, zeroizes plaintext key material after the operation, and stores only
+ciphertext plus the wrapped key. Cleanup destroys both. The Room binding is a
+separate Keychain item available only to the signed connector's fixed typed
+verbs; it is never reused as a candidate key and has no export operation.
+
+Known terminal state makes the candidate unreadable before physical cleanup.
+Cleanup is journaled and idempotent; Forme does not claim impossible atomic
+deletion across Keychain, filesystem, and database. The transaction is:
+
+1. durably record a body-free deny/tombstone;
+2. make every read/publish path reject;
+3. delete encrypted bytes and transient key reference;
+4. fsync the parent directory;
+5. record a body-free cleanup receipt.
+
+If cleanup crashes, a later read-only startup detects the journal and fails
+closed without writing. The next explicit `forme room reconcile` or
+response-preparation recovery acquires the protected mutating lock and finishes
+cleanup before sync, body access, preparation, or publication. A
+`publication_submitted_unknown` candidate remains encrypted only until
+idempotent server reconciliation resolves publication or the normal ceiling
+wins.
+
+An origin/basis change invalidates the old candidate even when T4 still permits
+a newly disclosed reply. The automatic AI cycle is considered spent when the
+first provider dispatch commits. After that point, an invalidated candidate may
+be replaced only by Owner-authored `manual_owner_only` content; Forme does not
+silently start a second Fresh AI cycle. A preflight failure before any provider
+dispatch may be corrected and retried because no cycle or provider budget was
+consumed.
+
+## Fresh Native Response Session
+
+### Start condition
+
+`Prepare response` and `Start Fresh Session` are two distinct Owner actions:
+
+1. `Prepare response` opens the protected one-shot UI and pulls the exact body
+   into launcher memory. Its trusted `preparedAt` starts the absolute 60-minute
+   response-authority ceiling; later review/start/recovery never resets it.
+2. The UI shows the complete request/capsule, consent, origin state,
+   orientation preview, source-policy/snapshot summary, OpenAI/account regime,
+   model, retention disclosure, and all budgets.
+3. Only after that review may the Owner select `Start Fresh Session`, creating
+   an exact start-authorization hash.
+4. Before any provider byte, the protected connector atomically reserves the
+   Interaction's single Fresh draft-cycle slot under the hosted Interaction
+   lock, bound to that start-authorization, exact `SessionEnvelopeV1`, and one
+   idempotency key. No second start hash can reserve or dispatch for the same
+   Interaction.
+
+The body-free reservation moves `unreserved → reserved → dispatch_committed`
+or `released_zero_dispatch`. A same-key retry returns the same reservation. A
+crash before first dispatch may resume only the same reservation/envelope; it
+may release and permit a newly reviewed start only after the trusted transport
+journal proves zero provider dispatch. Unknown dispatch state burns the cycle
+and fails to manual-only. Once the transport gate durably commits the first
+dispatch, the cycle is spent even if no candidate returns. Reservation never
+grants provider or publication authority by itself.
+
+Preflight immediately before start atomically verifies:
+
+- Interaction still response-eligible;
+- consent is `allow_owner_local_ai` rather than `manual_owner_only`;
+- Room/Projection/origin lifecycle;
+- no earlier Response, committed automatic draft cycle, or conflicting live
+  cycle reservation;
+- binding current and not revoked;
+- clean Forme repo `HEAD` and source policy;
+- physical-isolation capability probe;
+- cleanup/reconciliation journals empty;
+- exact Codex runtime policy available.
+
+After the exact outbound provider payload exists and passes local budget
+preflight, every dispatch acquires a server-issued `dispatch_permit.v1`. In one
+Interaction-row transaction the server rechecks consent, Room/Projection/
+origin lifecycle, response eligibility, cycle reservation/envelope/start hash,
+exact provider/model, payload hash, dispatch ordinal, prior permits, and the
+30-second expiry, then returns one use tied to one idempotency key. Same-key/
+same-payload recovery returns the same permit; any mismatch fails.
+
+This transaction is the privacy race boundary. If delete, revoke, expiry,
+retirement, or another destructive terminal commits first, no permit is
+issued and no provider byte leaves. If the permit commits first, that exact
+payload is disclosed and treated as already in-flight even if the destructive
+action commits before the local network write; it cannot authorize a later
+ordinal, payload, session, or retry. Expiry before transport blocks the send.
+The trusted gate consumes at most one upstream attempt through its dispatch
+journal. Final publication still performs the separate fresh server-status and
+basis check. If the server is unavailable, both paths fail closed rather than
+assuming old authority.
+
+When consent is `manual_owner_only`, the same protected UI lets the Owner read
+the exact request and author the outgoing body directly. It performs no Codex
+launch or provider call, but still requires schema validation, exact approval,
+current-status recheck, and deterministic connector delivery.
+
+### Input envelope
+
+The only inputs are:
+
+1. exact Interaction request and optional inline Guest Capsule, labeled
+   `untrusted_guest_data`;
+2. exact origin Room/Projection IDs and hashes;
+3. `ResponseOrientationV1`, previewed by the Owner, body/path-free, at most
+   8 KiB;
+4. a versioned response instruction and output schema;
+5. a deterministic `ResponseSourceSnapshotV1` from clean Forme repo `HEAD`.
+
+`ResponseOrientationV1` has an exact field allowlist: entity name; Owner Frame
+intent, current state, and next move; public claim summary; and active
+correction summaries or unresolved items only when each local record is
+explicitly marked `response_ai_eligible`. It ends with local revision and
+content hashes for binding, but contains no raw evidence/source body, absolute
+or relative source path, Guest data, credential, private Room content, or
+unmarked semantic state. The Owner sees the exact rendered preview before
+`Start Fresh Session`, and the start authorization binds its schema/version/
+content hash.
+
+Versioned and hashed `ResponseSourcePolicyV1` binds the exact path/extension/
+size rules below and an exact secret-pattern-policy version/hash. The snapshot
+permits only whole regular text files under:
+
+- root `README.md`, root `package*.json` files, and `tsconfig.json`;
+- `docs/`, `src/`, `schemas/`, `test/`, `apps/`, `packages/`.
+
+Allowed extensions are `.md`, `.txt`, `.json`, `.jsonl`, `.ts`, `.tsx`,
+`.js`, `.mjs`, `.cjs`, `.css`, `.scss`, `.html`, `.sql`, `.yaml`, `.yml`,
+and `.toml`.
+Limits are 512 KiB per file and 8 MiB total.
+
+The builder enumerates Git tree entries from the resolved clean `HEAD`, sorts
+canonical repo-relative paths bytewise, verifies each entry against the
+allowlist/exclusions and current filesystem identity, then copies bytes from
+the Git object rather than following a working-tree path. It always excludes
+`node_modules`, `.next`, `dist`, `build`, `coverage`, caches, vendored
+dependencies, generated code directories, lock artifacts outside the named
+root lockfile, and files carrying the repository's generated marker. The
+protected transient snapshot manifest binds every canonical relative path to
+its content hash and records aggregate counts/bytes, policy hash, and tree
+hash. Its own manifest ID/hash—but no path—enters the durable Session Receipt;
+the path-bearing manifest is removed with the runtime.
+
+Reject the whole snapshot on dirty/untracked eligible files, binary content,
+generated artifacts, secret-pattern/canary match, unclassifiable content,
+symlink, submodule, Git alternate/worktree escape, or an allowlisted path
+resolving outside the repo. Always exclude Git history, `.git`, `AGENTS.md`,
+`.codex`, `.env*`, `.forme`, secrets, home/vault/siblings, other Rooms, other
+Interactions/Guest bodies, and connector/candidate stores. The later Manifest
+may narrow this policy or choose its deterministic implementation. Any new
+path or extension, larger size ceiling, or widening/weakening of the secret
+policy returns to an Owner stop gate and cannot be treated as an implementation
+detail.
+
+### Runtime envelope
+
+P0 targets an exact tested official Codex local build; the initial
+certification target is `codex-cli 0.145.0`, using a supported noninteractive
+or app-server adapter. A version/adapter change requires a new capability probe
+and runtime evidence but does not change this semantic Packet.
+
+The trusted launcher starts one new non-resumed session with the semantic
+equivalent of:
+
+- `--ephemeral`;
+- `--ignore-user-config`;
+- `--ignore-rules`;
+- `--strict-config` and `--skip-git-repo-check` for the neutral non-Git root;
+- `approval_policy=never`, so a denied capability fails rather than surfacing
+  an escalation path;
+- strict launcher-supplied `-c` overrides containing the full deny-by-default
+  permission policy; no named `-p` profile or ignored user config is trusted;
+- a neutral sanitized cwd containing only the snapshot and output schema;
+- an isolated auth/runtime home denied to model-generated commands;
+- `shell_environment_policy.inherit="none"`, shell profiles disabled, and an
+  explicit minimal environment containing only launcher-owned `PATH`,
+  locale, isolated `HOME`, and isolated `TMPDIR`; provider auth and Forme
+  secrets are never child environment variables;
+- no MCP server, plugin, Skill, hook, memory, AGENTS instruction, web search,
+  browser, image, subagent, or additional writable root;
+- command network denied; OpenAI model transport available only to the Codex
+  core through the launcher-owned `ResponseTransportGateV1`;
+- no generic shell/exec tool. The only model-callable data/filesystem
+  capability is `SnapshotQueryBrokerV1`, with two strict operations: bounded
+  UTF-8 line read of one manifest path and bounded literal/regular-expression
+  search over manifest paths. An unavoidable official-runtime coordination
+  tool such as `update_plan` may remain only if the exact probe proves it has no
+  file, environment, command, network, credential, connector, or publication
+  capability; its transient events are discarded and it cannot contribute
+  candidate fields;
+- structured event capture inside the protected transient runtime.
+
+When the adapter is `codex exec`, `--ephemeral`, `--ignore-user-config`, and
+`--ignore-rules` are mandatory. `--ignore-user-config` excludes the Owner's
+normal config. The trusted launcher
+injects the complete fresh permission policy through its isolated, read-only
+runtime and explicit `-c` overrides, disables hooks/multi-agent/web search and
+all optional tool surfaces, and verifies the effective policy in preflight.
+The inner Codex profile governs sandboxed local commands only; it
+does not claim to constrain Codex core, browser, MCP, connector, or app tools.
+Those surfaces are absent by construction and the outer sandbox/transport
+gate is the enforcing boundary.
+
+`SnapshotQueryBrokerV1` canonicalizes every requested path against the
+snapshot manifest, returns text only, and has no filesystem write, command,
+interpreter, environment, socket, or network primitive. Snapshot files are
+non-executable and no JS/TS/shell/Python or package lifecycle code can run.
+One line-read returns at most 200 contiguous lines and 32 KiB. One search uses
+a pattern of at most 256 UTF-8 bytes with RE2-compatible, proven linear-time
+semantics—no backreference, lookaround, recursion, or runtime-native
+catastrophic regex—and scans at most the 8 MiB manifest. It returns at most 100
+matches and 64 KiB, aborts after 500 ms wall time, and counts all returned bytes
+against the transport input budget. A timeout or uncertain engine fails the
+query body-free rather than falling back. If
+the chosen official Codex surface cannot disable generic shell/exec while
+exposing this bounded read/search interface, the Fresh AI lane is unavailable;
+the implementation may not approximate the boundary with a prompt or command
+allowlist that can execute repository code.
+
+The outer supervisor owns one process group and enforces the 60-minute wall
+clock plus 30 CPU minutes, 2 GiB resident-memory ceiling, 32-process ceiling,
+128 file descriptors, and 32 MiB combined structured-event/stderr ceiling.
+Limit or signal failure terminates the whole group and enters cleanup. The
+capability suite includes environment-secret, parent-Git/config discovery,
+fork-bomb, huge-output, process-orphan, and signal/timeout probes.
+
+The session may dynamically read/search the snapshot and return one typed
+candidate. It may not write, execute a Forme connector, access generic network,
+read environment secrets, inspect another root/Room/Guest, mutate Twin/Room,
+or publish.
+
+Codex/OpenAI runtime-owned system and safety instructions still exist; Forme
+does not claim otherwise. The runtime policy records their disclosed version
+or policy identifier. “No ambient instruction” means no Owner history,
+Workspace `AGENTS.md`, personal config, plugin/Skill/hook/MCP content, or
+another Room/Guest instruction is admitted.
+
+### Budget and stop behavior
+
+- 60 wall-clock minutes from `Prepare response`;
+- one automatic draft cycle;
+- at most three provider dispatches;
+- at most 128k aggregate input tokens;
+- at most 8k output tokens;
+- at most US$1 incremental billed spend when the transport exposes incremental
+  spend; a subscription/credit transport may record `not_applicable` only when
+  the exact approved account regime proves the session is not incrementally
+  metered—unknown billing state fails closed;
+- no retry, model/provider switch, or fallback;
+- unknown dispatch/usage/spend state aborts and produces no candidate.
+
+`ResponseTransportGateV1` holds provider authentication outside the Fresh
+process, admits only the exact OpenAI endpoint/model fixed by policy, and
+parses the final complete outbound provider request after Codex constructs it.
+Any runtime `model/rerouted` event or request/response provider/model mismatch
+terminates the cycle with no candidate; if the approved account regime cannot
+prevent or detect a reroute before its pricing could violate the reservation,
+the AI lane stays off.
+Before every dispatch it uses the exact pinned model tokenizer—or a documented
+strictly conservative byte upper bound when that is larger—to count all wire
+input, tools, schema, and runtime instructions plus the Manifest's conservative
+provider-overhead allowance. It rejects before upstream if aggregate input or
+dispatch budget would be exceeded. It sets provider `max_output_tokens` to the
+smallest of requested output, remaining 8k aggregate output, and the output
+affordable under remaining applicable spend.
+
+Using the exact versioned non-discounted price table, the gate durably reserves
+worst-case cost for counted input plus that maximum output before dispatch.
+Unknown tokenizer behavior, price, provider overhead, max-output enforcement,
+or remaining usage fails closed. Trusted provider usage may release only the
+unused portion after a known result; an unknown result keeps the full
+reservation and aborts the cycle. Thus no later reconciliation is required to
+prevent a cap overrun.
+
+For every dispatch the gate fsyncs the protected local intent, payload hash,
+ordinal, and budget reservation before asking for its hosted permit. The first
+permit transaction also atomically marks the hosted cycle reservation
+`dispatch_committed`. The gate never writes provider bytes until it has
+recovered the exact valid permit response; an unknown permit outcome is
+reconciled with the same key and never releases the slot. Concurrent or
+mismatched reservation/envelope/hash attempts are rejected before transport.
+Codex CLI JSONL final usage is secondary evidence, not the enforcement source,
+because it does not expose every upstream dispatch.
+If a supported Codex endpoint/app-server adapter cannot be routed through this
+gate with hard ceilings, the AI lane is disabled; a private fork is not
+silently authorized by this Packet. Exact model ID, account regime, adapter,
+transport policy hash, price source, and applicable provider retention
+disclosure are fixed in the Schema & Runtime Manifest before the first model
+call.
+
+### Output and cleanup
+
+The launcher binds the start authorization to one newly created exact Codex
+thread ID and turn ID. The adapter ignores deltas and cannot accept an
+`item/completed` event by itself. It may produce a candidate only after all of
+these are true:
+
+1. the matching thread/turn stream has no gap, model/provider reroute or
+   mismatch, failed tool, or
+   unresolved transport/usage journal;
+2. one matching `turn/completed` arrives with `turn.status=completed`, never
+   `failed` or `interrupted`;
+3. that completed turn contains exactly one authoritative completed
+   `agentMessage` with phase `final_answer` (or the Manifest-proven exact
+   `codex exec --json` equivalent), and no second final item; and
+4. its complete text validates against `ResponseCandidateV1` and the expected
+   output-schema hash.
+
+Wrong thread/turn, missing completion, duplicate final, plain stdout, partial
+item, process non-zero exit, schema failure, or a later failed/interrupted turn
+produces no candidate and no retry. Every other JSONL/app-server event is
+discarded inside the protected runtime after the body-free access/usage receipt
+is reconciled. The candidate remains untrusted and unpublished.
+
+On success, abandon, timeout, budget stop, destructive terminal state, or failure, the
+launcher persists at most the encrypted typed candidate and body-free Session
+Receipt. It zeroizes the in-memory request, capsule, orientation, event/stderr
+buffers, and candidate plaintext, then removes the snapshot copy, isolated
+non-secret config, and runtime root. It never creates a durable JSONL stream,
+transcript, reasoning, command/tool-output, or Forme crash-body file. On
+abnormal termination, later read-only commands only detect and deny. The next
+explicitly mutating `forme room reconcile` or
+`prepare-response` invocation starts `forme-local` under the protected lock and
+performs recovery before any other mutating/body-bearing operation.
+
+The broker records best-effort access events inside the protected transient
+runtime. The durable Session Receipt binds the exact `SessionEnvelopeV1` ID and
+hash and may contain only IDs/hashes, timestamps, resolved model/account class,
+budget totals, policy/schema/runtime versions, terminal status,
+source-summary/query/result counts and bytes, a keyed aggregate access-evidence
+digest, and allowlisted body/path-free error codes. It explicitly labels this
+as best-effort evidence, not a complete file-read manifest or exact account of
+bytes seen by OpenAI/Codex runtime instructions. It expires with the parent
+Interaction and never contains raw body, source path, transcript, exception,
+tool arguments/output, or candidate text. Transient path-bearing access events
+are removed with the runtime.
+
+### Protected local concurrency
+
+Every body-free ledger/cursor, ACK/publication outbox, cleanup journal,
+candidate index, binding state, and dispatch-reservation mutation is protected
+by one per-Room single-writer lock held outside the Workspace. Each short
+mutation phase acquires the Room lock, revalidates current Interaction and
+journal versions, atomically persists/fsyncs, and releases it. A Fresh Session
+also holds a distinct per-Interaction protected lease/reservation across its
+body-bearing lifetime; this prevents preparation or cleanup for that same
+Interaction from overlapping while allowing short Room-sync phases to observe
+a new terminal event and make the next session status check abort.
+
+The lock record contains only Room binding ID, operation class, process/boot
+identity, start time, and random nonce. Ambiguous ownership fails closed. An
+explicit `forme room reconcile` may recover a stale lock only after the
+installed launcher proves the recorded process/boot is no longer live and then
+replays the relevant journal idempotently. Read-only commands neither acquire a
+write lock nor recover one; they return body-free `busy` or
+`recovery_required`. Different Rooms never share a credential or lock.
+
+## Synchronization and recovery
+
+There is no local daemon, webhook, WebSocket, SSE stream, public tunnel, or
+background agent. The standard Agent workflow explicitly calls `forme room
+sync`; the Owner can run the same command as recovery.
+
+Hosted Presence exposes a per-Room contiguous ordered event stream. Local sync:
+
+1. acquires the exact Room's protected local writer lock and rechecks journals;
+2. requests events after the last committed cursor;
+3. validates schema, Room, sequence, IDs, and hashes;
+4. persists body-free metadata or a body-free unavailable tombstone;
+5. fsyncs an ACK outbox entry;
+6. returns the idempotent ACK;
+7. stores the server receipt;
+8. advances the cursor and releases the lock.
+
+An ACK never deletes the replayable hosted event. Crash outcomes are:
+
+- before persist: refetch;
+- after persist/before ACK: same ID/hash no-op and same idempotency key;
+- ACK committed/response lost: reconcile the same key, then advance;
+- same ID/different hash, gap, wrong Room, or malformed event: quarantine and
+  do not ACK/advance.
+
+If the server returns cursor `410`, the connector reconciles all still-live
+objects, tombstones, and a high-water mark, then records a permanent body-free
+gap warning. It never claims complete historical import.
+
+Replayable per-Room event rows remain 37 days from commit. The hourly janitor
+may compact older rows only after preserving the Room high-water mark and the
+still-live/terminal body-free reconciliation view. A cursor older than the
+earliest replayable sequence always returns `410`; compaction never silently
+advances a client. Exact batch/lock/index mechanics remain in the Schema &
+Migration Manifest.
+
+Every local command first gates on local recovery state:
+
+1. inspect cleanup journals and already-known expiry/tombstone state without
+   mutating durable state;
+2. if cleanup is pending, a read-only command fails closed with a body-free
+   instruction to run the explicit `forme room reconcile` recovery workflow;
+3. an explicitly mutating recovery or response-preparation workflow completes
+   and receipts cleanup journals before proceeding;
+4. reconcile a locally recorded `publication_submitted_unknown` operation only
+   when that explicit workflow authorizes the network action.
+
+Only the explicit `forme room sync` workflow then requests and persists new
+events, sends ACKs, or advances a cursor. `status`, `inspect`, and other
+read-only commands never complete cleanup, reconcile over the network, fetch a
+new event, write a receipt, or move a cursor; known expiry may deny a local
+read in memory without persisting a transition. `Prepare response` requires a
+prior explicit sync, completes any required local cleanup as a disclosed
+mutating workflow, and then performs only the separately disclosed
+exact-status/body fetch after Owner action.
+
+Normal binding expiry ends every `room_operator.v1` network operation. There
+is no hidden post-expiry drain credential. If the Room remains active, further
+sync/reconciliation requires a new explicit Owner pairing. Room retirement may
+leave an already-valid binding able to fetch/ACK body-free terminal events only
+until that binding's original 30-day expiry; it never extends the credential.
+Explicit security revocation ends all use immediately. Because P0 persists no
+raw local Guest inbox and candidates expire within seven days, missed later
+tombstones cannot preserve readable private bytes; a new Owner pairing is
+required if body-free historical convergence is still desired.
+
+## Hosted application and persistence
+
+The approved deployment shape is:
+
+```text
+Git commit
+  → test
+  → OCI image
+  → immutable registry digest
+  → manually approved server deploy
+  → Cloudflare
+  → Caddy
+  → self-hosted Next.js Node app
+  → PostgreSQL 16
+```
+
+- Node.js 24 and TypeScript.
+- One self-hostable Next.js Node application; no Vercel runtime dependency.
+- Caddy is the only direct HTTP entry.
+- The app joins the existing application network and an R4 database network;
+  PostgreSQL exposes no public host port and browsers never reach it directly.
+- PostgreSQL is the sole hosted authority; no Redis in R4 P0.
+- The same immutable image exposes `app`, one-shot `migrate`, and one-shot
+  `janitor` commands plus a one-shot `notify-once` outbox consumer, with
+  separate PostgreSQL roles. The production scheduler may run `notify-once`
+  frequently, but it is not an AI or Owner-device daemon.
+- Migration never runs during app startup.
+- Merge to `main` never means deploy.
+- Application rollback selects a compatible earlier image; it never blindly
+  reverses a database migration.
+
+Logical hosted table families are:
+
+- controller/curator subjects and roles;
+- Third Place and curation events;
+- entities, Rooms, Room lifecycle/mode events;
+- Projections and owner lifecycle events;
+- Room bindings and pairing challenges;
+- public encounter capabilities;
+- Grants, GrantOffers, Agent derivatives, and capability events;
+- Interactions, consent, Fresh draft-cycle reservations, lifecycle events, and
+  private reply/delete digests;
+- Responses and publication/lifecycle events;
+- notification endpoints, verification challenges, and outbox;
+- per-Room event stream, operation receipts, rate buckets;
+- retention jobs, purge watermark, and operator incidents.
+
+Private body/address columns use application-layer authenticated encryption;
+search, analytics, and identity joins over plaintext are absent. Keys and exact
+algorithms are fixed in the Schema & Migration Manifest and Production Grant.
+
+Every semantic mutation is a PostgreSQL transaction that locks and rechecks
+the relevant Room, Projection, capability/Grant, Interaction, Response,
+notification, and idempotency rows in one documented order. Quota and the
+one-unresolved rule are database-enforced, including trusted 10 and shared
+Manual/Agent use.
+
+External email delivery is a transactional-outbox handoff. Forme claims one
+semantic database result; it does not claim exactly-once provider delivery.
+The one-shot worker must claim by lease, persist its stable attempt/provider
+idempotency record before network, and reconcile every expired `submitting`
+lease before any resend. A provider without the required reconciliation
+semantics cannot be enabled in Gate C.
+
+Production must also prove that the public app cannot bypass the intended edge
+chain. Gate C selects and verifies one account/zone/hostname-bound origin
+protection mechanism: a Cloudflare Tunnel; Cloudflare-only source allowlisting
+plus zone-level or per-hostname AOP with an Owner-controlled custom client
+certificate; or an equivalent mutually authenticated route. Cloudflare's
+shared global AOP certificate alone is insufficient because it proves only the
+Cloudflare network, not this account/zone/hostname. Caddy strips the exact
+Gate-C-enumerated client-supplied proxy-derived `CF-*`, Access assertion,
+forwarding, and identity headers before accepting only the verified proxy's
+replacements; the app trusts no direct-origin identity header. It preserves the
+end-to-end Guest API `Authorization: Bearer` capability solely for application
+validation, never interprets it as proxy/Controller identity, and suppresses it
+from every access/error log. Direct-origin, another-Cloudflare-customer,
+wrong-SNI/Host, and forged-client-bucket tests must fail before traffic is
+enabled.
+
+## Retention, deletion, and logging
+
+### Hosted ceilings
+
+| Data | Maximum live retention |
+|---|---:|
+| Interaction + inline Guest Capsule | 30 days from hosted acceptance |
+| Published Response | 7 days from publication, capped by parent Interaction |
+| Verification challenge | 15 minutes or first successful/terminal attempt |
+| Notification endpoint | parent Interaction lifetime, cleared earlier on `destructive_terminal` or Guest removal |
+| Encrypted ready-notice delivery target | while `ready_pending`; after first handoff, only through the approved reconciliation deadline of at most 24 hours; always capped by Response/Interaction and cleared earlier on destructive terminal, terminal delivery, or no-safe-retry outcome |
+| Body-free Interaction tombstone/recovery receipt | through original 30-day Interaction ceiling plus 7 days |
+| Other body-free operation receipt | 37 days |
+| Per-Room sequence/high-water and release evidence | durable while Room exists; body-free |
+
+The receipt horizons are implementation/audit records, not Guest identity or
+content retention. They contain no body, address, raw IP/full user agent,
+raw capability, secret, or source path. A non-reversible keyed verifier for the
+exact reply/delete capability may remain in the protected authorization table
+through the tombstone horizon solely to authenticate body-free status/delete
+and idempotent recovery; it is never returned, logged, correlated, or reused.
+
+### Earlier terminal causes
+
+The ceilings never guarantee minimum availability. Guest/Owner delete,
+Interaction expiry, origin revoke, Room retirement, Response expiry/revoke, or
+other approved terminal state immediately makes affected hosted bodies
+unreadable and creates a purge obligation. Projection stale, supersession, or
+Projection expiry alone does not delete an accepted Interaction; the T4
+origin-disclosed Response rule remains.
+
+### Physical purge
+
+- Hosted terminal bytes are physically purged by the next successful
+  scheduled janitor, target under 24 hours.
+- Janitor runs at least hourly in production, uses a database advisory lock,
+  batches deterministically, and is idempotent under duplicate/concurrent
+  invocation.
+- `lastSuccessfulPurgeAt` older than 36 hours is an operator incident and makes
+  production write/email health fail closed.
+- Manual rerun uses the same command and receipts.
+- Local known terminal data is denied first and then removed through the
+  cleanup journal before any further access.
+- When the Owner device is offline, Forme cannot promise wall-clock local
+  purge. At startup it checks expiry before read; a remote early deletion is
+  learned and purged at the next explicit sync.
+
+### Honest deletion limits
+
+Deletion cannot make an Owner forget something already read or remove their
+independent copy. It cannot recall public copies, provider-accepted/in-flight
+OpenAI bytes—including one exact payload whose dispatch permit committed first
+in the disclosed race—an already accepted email, or bytes still inside a
+disclosed backup horizon. The actual PostgreSQL backup horizon must be declared
+in the Production Grant before any real Guest submission; it is never guessed
+here.
+
+### Logs
+
+Cloudflare, Caddy, app, PostgreSQL, email, and OpenAI retention/regime must be
+inventoried in the Production Grant. Forme app/outbox logs may not contain
+bodies, addresses, raw IP/full user agent, cookies, bearer/reply URLs,
+verification codes, credentials, secrets, source paths, prompts, or
+candidates. They use correlation IDs and body-free error codes. An outbound
+provider necessarily receives the confirmed recipient; its exact recipient
+and delivery-metadata retention is the disclosed Production Grant exception,
+not an application log field. Cloudflare/Caddy/PostgreSQL must
+suppress query strings, sensitive headers, and body content; any unavoidable
+edge IP/user-agent metadata, field set, access audience, and retention must be
+minimized, disclosed, and explicitly approved rather than silently claimed
+absent.
+
+## Abuse and Web security floor
+
+- Public accepted pool: 20 per Room per rolling 24 hours.
+- Public encounter issuance: at most 10 per coarse edge client bucket per Room
+  per hour and 50 per day.
+- Public accepted submissions: at most 3 per coarse edge client bucket per
+  Room per 24 hours, still subject to Room pool.
+- Verification: maximum 3 sends/hour/Interaction and 5 code attempts.
+- Request, Projection, Response, and capsule size limits are enforced before
+  database work.
+- Capability comparison is constant-time after keyed digest lookup.
+- Browser bodies render as escaped plain text with a strict CSP and no remote
+  content, tracking pixel, third-party analytics, or user HTML.
+- All sensitive responses are `no-store`; capability-bearing pages set strict
+  Referrer Policy and Permissions Policy.
+- Controller mutation uses CSRF, exact Origin, expected version, idempotency,
+  and route-specific Access assertion.
+- Guest text is untrusted data at every boundary. It cannot select tools,
+  instructions, source roots, provider, model, policy, or publication.
+
+Rate buckets are abuse controls, not identity. P0 does not build fingerprinting
+or cross-Room tracking.
+
+## Failure contract
 
 | Failure | Required behavior |
 |---|---|
-| Local process stops before publish | Approved outbox object survives; no server state is claimed |
-| Server commits but response is lost | Client queries/retries same idempotency key and receives the original receipt |
-| Guest DELETE commits but response is lost | The transformed delete-only capability and keyed body-free receipt authenticate the retry until original expiry; no guest content returns |
-| Duplicate publish, request, ack, or response | Same key + same body is one semantic result; different body is `409` |
-| Concurrent Projection successors | Expected `stateVersion` and predecessor allow one winner |
-| Local sync crashes at any boundary | Persist-before-ack and hash equality resume without a duplicate semantic item |
-| Server returns malformed or wrong-Room signal | Quarantine and halt; no cursor advancement |
-| Local Twin advances | Current Projection becomes conservatively stale at next sync; seven-day expiry bounds offline ignorance |
-| Capsule expires or is unlisted | It cannot appear as current in Third Place or accept a new interaction |
-| Capsule is revoked | Body and new response publication fail closed immediately |
-| Room is retired while either side is offline | New writes stop; guest reply becomes status/delete-only and local pairing becomes signal-drain-only, allowing terminal receipts/tombstones to converge without reopening the Room |
-| Supabase unavailable | No mutation; dynamic Room shows availability state rather than cached possibly revoked content |
-| Auth unavailable | Public reading may continue if database reads work; Controller operations fail closed |
-| Retention Cron fails or runs twice | Unique run date, advisory lock, and derived idempotency converge; health becomes stale after failure and the next daily/manual run retries |
-| Credential leaks | Revoke by credential ID; all subsequent operations fail; re-pair with new secret |
-| Supabase server secret or pepper leaks | Enter maintenance mode, freeze public/current writes, rotate both, revoke all hosted capabilities and Controller sessions, purge overdue data, reconcile from local receipts, then re-pair/re-invite |
-| Database restore | Keep public service closed; rotate the global capability epoch and sessions, run retention, reconcile exact public hashes from local receipts, then explicitly reopen |
-| Deployment rollback | Application rollback does not reverse committed DB receipts or active Cron configuration; schema compatibility and Cron runbook are verified before promotion |
+| Server unavailable before prepare/publish | fail closed; no old authority assumption |
+| Codex capability probe fails | manual-only; no request byte enters Codex |
+| Dirty/untracked/unsafe snapshot | reject whole snapshot; no partial run |
+| Codex timeout/budget/schema failure | no retry/fallback; cleanup; manual-only remains |
+| Concurrent or recovered Fresh start | one exact hosted cycle reservation; same key resumes, conflicting start fails before provider transport |
+| Candidate origin/basis changes | candidate unusable and cleaned; if the first provider dispatch already committed, only manual Owner authorship remains |
+| Publish response lost | keep encrypted candidate; same-key reconcile; never duplicate |
+| Sync gap/corruption | quarantine; cursor does not move; body-free warning |
+| Local cleanup crash | read-only startup detects and denies without writing; explicit `room reconcile` or preparation recovery finishes under lock before later mutation/body access |
+| Email provider timeout | `delivery_unknown`; retry only after proof of non-acceptance, otherwise stop and rely on polling |
+| Janitor partial failure | keep terminal rows unreadable; retry idempotently; incident after 36h watermark |
+| Close/delete/revoke/retire races publish | one transactional winner; no body after terminal cascade; close never refunds quota |
+| Binding expires offline | all binding network use fails; explicit Owner re-pair is required |
 
-Forme does not claim network-level exactly-once delivery. It provides
-**exactly-one semantic result** for a keyed mutation and explicit reconciliation
-when the client does not know whether the server committed.
+HTTP errors are limited to `400`, `401`, `403`, `404`, `409`, `410`, `413`,
+`429`, and sanitized `503`. `404` is preferred where revealing existence would
+cross a Room/capability boundary. A `5xx` exposes only a correlation ID.
 
-## Test and acceptance contract
+## Verification contract
 
-The current 44 R1–R3 checks must remain green. R4 adds:
+Packet implementation is not technically complete until all of the following
+pass.
 
-### Protocol and local tests
+### Existing spine regression
 
-- golden canonical bytes and identical hashes in local and hosted consumers;
-- strict schema, semantic, size, unknown-field, and text-escaping rejection;
-- independent Owner publication and Curator admission receipts;
-- deterministic Projection compiler and exact-hash approval;
-- outbox/inbox journal failure injection at every boundary;
-- publish versus lifecycle-control outbox variants, all five terminal phases,
-  and submitted-unknown reconciliation;
-- crash after server commit but before local receipt resolves the exact
-  fsynced key rather than invalidating or duplicating the mutation;
-- initial pairing commit followed by local crash recovers through the fsynced
-  XDG pending record and same challenge/key, activates the original Room
-  credential exactly once, and removes the raw challenge;
-- stale Twin revision, expired policy, revoked credential, and wrong origin
-  fail closed;
-- response packet isolation, untrusted-input labeling, zero tool events, and
-  exact Owner approval;
-- any schema/migration/API-map/golden-vector byte drift after manifest approval
-  blocks a durable write, Presence network request, and deploy preflight.
+- Current R1–R3 suite remains 45/45.
+- R4 code cannot weaken R1 correction propagation, exact approval, restart,
+  retry, receipt, or rollback guarantees.
+- One real freshly observed Forme Twin supplies at least one exact R1 Owner
+  Frame fact, one eligible active R2 corrected meaning, and one truthful R3
+  receipt/effect fact to the local Projection basis.
+- Superseded/invalidated meaning, merely proposed/approved effects, rolled-back
+  effects presented as current, and invalidated/indeterminate effects are
+  rejected. A rolled-back effect may appear only as exact labeled history.
+- A changed Twin revision invalidates an approved candidate before publication;
+  a no-op observation creates no revision and no false staleness.
+- Importing or processing a Guest Interaction creates no Twin revision and does
+  not admit Guest content as Twin truth.
+- A normal Codex Workbench session invokes one minimum Forme CLI/Skill surface
+  and receives durable Twin orientation or body-free typed Room status without
+  a Forme-built chat shell.
 
-### Hosted database/API tests
+### Domain and race tests
 
-- real Postgres constraints, functions, transactions, grants, and RLS—not only
-  a fake store;
-- complete authorization matrix for public, guest, Agent token, paired local,
-  Controller, Curator, janitor, and wrong-scope credentials;
-- duplicate and concurrent mutations, lost responses, state-version conflict,
-  retention purge, and cursor reconciliation;
-- DELETE commits/response is lost/same credential and key recover the exact
-  terminal receipt, while a different key cannot recreate or reveal content;
-- deletion before first host sync preserves every contiguous sequence and
-  imports only body-free unavailable/deletion tombstones;
-- ACK commit before local ACK receipt/cursor persistence resumes from the
-  fsynced signal outbox with the same key and advances only after recovery;
-- local/Controller Response revoke, response-lost retry, repeat revoke under a
-  different key, Controller-vs-local race, revoke-vs-delete race, and
-  `response_revoked` convergence into local Presence;
-- successor publication after a revoked current Projection advances the Room
-  pointer while the predecessor remains `revoked`, the successor starts
-  `not_admitted`, and no prior request/capability is reactivated;
-- Room retirement racing standalone Projection/Response emergency revoke in
-  both commit orders converges to the documented terminal precedence with one
-  event per committed semantic transition and no duplicate terminal receipt;
-- Room retirement racing guest/Owner deletion in both commit orders converges
-  to `interaction_deleted`, purges the linked request/Guest Capsule/Response,
-  and preserves only body-free recovery evidence;
-- Response publication racing guest/Owner deletion, Projection revoke, or Room
-  retirement either loses closed before publication or is immediately hidden
-  or purged by the later committed cascade. A terminal action that commits
-  first yields no successful publish receipt; publication that commits first
-  yields exactly one, so the race produces at most one semantic publish
-  receipt and one event per committed lifecycle action;
-- Room retirement leaves only guest status/delete recovery and local
-  signal-drain authority through their stated horizons;
-- retirement before first local sync returns only body-free unavailable/
-  retirement events and never imports guest or Response content;
-- Projection revocation before first local sync returns only body-free
-  `origin_revoked` events and never imports the request;
-- `signal:ack` and a retired-Room drain credential fail closed on
-  park/decline; only `signal:disposition` may perform those transitions;
-- secret client cannot enter browser or preview bundles;
-- public/current responses are `no-store`;
-- no server dependency on Codex, OpenCode, an AI SDK, Twin store, or source
-  reader.
+- Full per-claim basis field/lineage validation, exact eligibility table,
+  correction/invalidation and effect-status checks, prepublish recheck,
+  identical-payload no-op, and proof that hosted Projection/Response contains
+  no internal Twin/workspace/evidence/policy/source identifier.
+- Exhaustive visibility/submit matrix across Room kind/mode, Projection owner
+  and curation state, time, Grant/encounter, and retirement.
+- Browser HTML and Agent JSON agree on state, bytes, warning, and `no-store`.
+- All four presets: exact expiry/quota, accepted-only count, retry free,
+  one-unresolved, Manual/Agent sharing, `quota + 1` rejection.
+- Agent derivative from public encounter consumes that one use/public pool;
+  derivative from Grant consumes its shared quota. In both lanes the Manual
+  holder retains reply/delete and the Agent cannot recover or delegate.
+- Trusted fixture: ten sequential accepted Interactions work; the eleventh
+  fails; it never opens a Private Room.
+- Replacement Grant atomically revokes prior and does not transfer quota.
+- GrantOffer accept/revoke/expiry/target-successor races in both commit orders.
+- At most one live GrantOffer per Interaction; direct invite is one-use;
+  redemption delay never extends the fixed offered Grant expiry.
+- Publish against delete/revoke/retire/expiry in both commit orders, with one
+  Response and terminal precedence.
+- `close_without_response` against publish in both commit orders, including
+  quota, candidate, endpoint, and notification outcomes.
+- Unlist preserves valid Grant/GrantOffer but invalidates unused public
+  encounter; same version cannot re-admit.
+- Stale/superseded/expired origin disclosure and revoked-origin rejection.
 
-### Privacy and product tests
+### Local boundary and Fresh Session tests
 
-- private and credential canaries across local, DB, JSON, HTML, error, log, and
-  response surfaces;
-- manual browser encounter on desktop and mobile;
-- Agent Guest fetch plus one scoped submission;
-- guest delete, Owner revoke, Curator unlist, expiry, and stale states;
-- deletion discovered by the mandatory fresh status check prevents a new
-  OpenAI transmission; the consent copy covers the already-in-flight race;
-- full real request → manual sync → local Agent draft → Owner review → response
-  retrieval;
-- one local/synthetic database restore and one local/synthetic rollback drill.
+- Capability probe denies Guest store, candidate store, credential, auth home,
+  live repo, sibling/home/vault, socket, write, generic network, cross-Room,
+  connector, and publish.
+- The only model-callable data/filesystem tool is bounded
+  `SnapshotQueryBrokerV1`; any unavoidable inert coordination tool is inventoried
+  and proven effectless. Generic shell, interpreter, repository-code execution,
+  browser/MCP/app, inherited env, parent Git/config discovery, and connector
+  transport are unavailable.
+- Source policy binds its exact version/hash and secret-pattern-policy
+  version/hash, and rejects dirty/untracked, symlink, submodule, alternate,
+  worktree escape, binary, generated, unclassifiable, secret/canary match, and
+  size overflow. Widening paths/types/size or weakening secret policy fails the
+  current authority hash.
+- Session Envelope is a strict Consent Envelope subset; provider/account/
+  source/budget/retention widening rejects or uses manual-only. Orientation
+  admits only exact `response_ai_eligible` fields and the approved preview
+  hash.
+- Session is new/non-resumed/ephemeral with no ambient config/instruction/MCP/
+  plugin/hook/Skill/subagent.
+- Concurrent double-start, same-key retry, different-envelope conflict,
+  pre-dispatch crash/release, first-dispatch unknown, and post-dispatch crash
+  prove one hosted cycle reservation and at most one automatic draft cycle.
+- Each dispatch permit is exact payload/session/provider/model/ordinal bound,
+  30-second and one-use. Permit-versus-delete/revoke/expiry/retire races pass in
+  both commit orders: destructive-first sends zero bytes; permit-first is
+  receipted as disclosed in-flight and cannot create a later send or publish.
+- Candidate extraction accepts only the start-authorized thread/turn after
+  `turn/completed.status=completed` with exactly one final-answer item and a
+  reconciled transport journal; wrong turn, duplicate/missing final,
+  interrupted/failed turn, any `model/rerouted` or response-model/provider
+  mismatch, non-zero exit, and item-before-turn completion all produce no
+  candidate.
+- Manual-only sends zero provider bytes.
+- Dispatch/token/output/time/applicable-spend ceilings stop; no fallback.
+- Normal, cancel, timeout, budget, schema-fail, process-kill, fork/huge-output,
+  and machine-crash simulations leave no request/transcript/tool/runtime bytes
+  after the required explicit reconcile/preparation recovery; a read-only
+  startup performs zero cleanup write.
+- Ordinary Workbench cannot read a candidate. Terminal/basis invalidation makes
+  it unavailable before cleanup.
+- Durable receipt binds the Session Envelope ID/hash and body/path-free
+  best-effort access aggregates/digest, contains no body or path, and never
+  claims a complete byte/file-read manifest.
 
-Passing these tests moves R4 only to Technical Review. Owner experience remains
-part of Done. The production-environment restore/rollback rehearsal belongs to
-R5 hardening, after resources exist; R4 must make it scripted and prove it
-against synthetic state.
+### Sync, retention, and email tests
 
-## Demo path
+- Fault injection before/after every persist, ACK, cursor, publication, and
+  cleanup step.
+- Concurrent sync/sync, sync/reconcile, prepare/cleanup, and publish/cleanup
+  serialize under the exact per-Room writer lock; same-Interaction preparation
+  also respects its protected lease. Verified stale-lock recovery replays once,
+  while a live or ambiguous owner fails closed.
+- Client-secret and sealed-envelope lost-response recovery for Interaction,
+  encounter, Grant/offer, derivative, and pairing; same-key/different-hash
+  rejection.
+- Gap, malformed, wrong-Room, corruption, cursor-410 reconciliation, and
+  37-day compaction. Expired/revoked binding has zero network authority and
+  requires explicit re-pair where allowed.
+- Read-only `status`/`inspect` performs zero event fetch, ACK, receipt write,
+  cursor movement, or hidden reconciliation; only explicit sync mutates local
+  convergence state.
+- Hourly janitor duplicate/concurrent/partial failure/manual recovery; target
+  under 24 hours and incident over 36 hours.
+- Offline known expiry blocks startup read; remote early delete purges at next
+  sync.
+- Verification code one-use/expiry/no-authority/no-log, endpoint replacement,
+  confirmation both before and after Response publication, atomic one-row
+  enqueue, replace/remove while `ready_pending`, and replace/remove after
+  handoff without a second notice.
+- Every `destructive_terminal` before pending dispatch and racing/after
+  `submitting`, provider-timeout/proven-non-acceptance behavior, generic-content
+  scan, post-notice revoke, endpoint/target purge, and preservation of honest
+  body-free delivery evidence.
+- Email worker fault injection after lease/attempt commit but before provider
+  network, and after provider network but before outcome commit; lease reclaim
+  always reconciles the stable idempotency key and never blindly resends.
+- Post-handoff endpoint remove/replace racing a definitive non-acceptance sets
+  `no_future_retry` and sends nothing further to the old or new address; a late
+  authenticated accepted/failed result refines only body-free state.
 
-### Three-minute guest encounter
+### Persistence and privacy tests
 
-1. Open the public Third Place without an account.
-2. Enter the only resident, the Forme Project Room.
-3. Understand Becoming, Now, one tension, Open To, freshness, and boundary.
-4. Redeem one Owner-issued invite.
-5. Add a small Guest Capsule or manual context and submit one Resonance
-   Request.
-6. Receive the private reply URL and an honest “waiting for Owner review”
-   state.
+- Real PostgreSQL constraints, functions, roles, encryption adapter, and
+  authorization matrix—not only in-memory fakes.
+- Server bundle has no model SDK/provider call/source-reader import path.
+- Private-source/Twin, Guest-body, credential, reply/verification secret,
+  cross-Room, candidate, and transcript canaries across local files, wire,
+  database, JSON, HTML, errors, and all named logs.
+- Any canary hit is a release failure and, in production, an incident requiring
+  immediate hide/purge and credential rotation where relevant.
 
-### Owner-reviewed continuation
+Canaries are tripwires, not proof of semantic privacy.
 
-1. Run explicit `forme presence sync`.
-2. Inspect the exact request, origin Projection, guest consent, and local
-   import receipt.
-3. Preview the response Context Packet manifest.
-4. Let the isolated local Forme Agent prepare a proposal.
-5. Edit and approve the exact Response Capsule hash.
-6. Publish idempotently and inspect the local/server receipts.
-7. Refresh the guest reply URL and see the reviewed response with exact origin,
-   attribution, uncertainty, and non-commitment.
-8. Exercise one revoke or stale path and prove it cannot masquerade as current.
+The final Owner demo must establish the complete R1–R4 causal chain printed in
+[Twin-to-Projection basis](#twin-to-projection-basis) using the real Forme Twin,
+including the R1/R2/R3 bases, no-op behavior, no Guest-created Twin revision,
+the ordinary Workbench CLI/Skill call, one physically bounded Fresh Session,
+and its Session Envelope/access-evidence receipt. A hand-authored page plus
+mailbox is not R4 acceptance.
 
-The product acceptance question is:
+## P0 user walkthroughs
 
-> Did this feel like encountering a bounded living project and earning deeper
-> Owner-reviewed context, rather than reading a project page, sending decorated
-> email, or chatting with a generic server bot?
+### Manual public Guest
 
-## Exact P0 cut
+1. Opens the curated Third Place without an account.
+2. Reads the shallow Forme Project Projection.
+3. Uses one public encounter to send a private question and optional small
+   Guest Capsule.
+4. Saves a private reply URL and optionally confirms an email.
+5. Later polls or receives a generic ready notice, then reads one Response.
 
-### Must ship
+### Owner with Codex
 
-- one pure shared Presence protocol;
-- one local `.forme/presence/` ledger, outbox, inbox, cursor, and receipts;
-- one paired host credential;
-- one public Third Place and one Forme Project Room;
-- one deterministic, immutable Projection and separate publication/curation
-  receipts;
-- one invite Guest session and one short Agent token;
-- one optional inline Guest Capsule;
-- one ask/seed/resonance transport path;
-- one manual sync and quarantined local import;
-- one bounded local Forme Agent response proposal;
-- one exact Owner-reviewed Response;
-- expiry, stale, revoke, unlist, delete, retention, idempotency, and recovery;
-- one responsive, clean, creative public surface;
-- canary, real local database, browser, crash/retry, and synthetic
-  restore/rollback evidence.
+1. `forme room sync` reports one body-free pending Interaction.
+2. Owner opens the one-shot `Prepare response` window; ordinary Workbench never
+   sees the body.
+3. Owner reviews the question, consent, orientation, source policy, provider,
+   and budget.
+4. Owner separately selects `Start Fresh Session`; the request/start window
+   exits and one Fresh Session searches the sanitized Forme snapshot and stores
+   only an encrypted candidate.
+5. Owner later opens the separate one-shot candidate window, edits if needed,
+   and approves the exact outgoing text.
+6. Connector delivers idempotently and then cleans the candidate.
 
-### Cut from P0
+### Agent Guest
 
-- reusable Guest profile or Guest Capsule library;
-- Person Twin or notes ingestion;
-- Relationship Capsule, thread, follow-up, or multi-response conversation;
-- `disclosure_request`;
-- email notification, live chat, SSE, WebSocket, webhook, or local background
-  polling;
-- reusable/federated Agent identity;
-- server matching, recommendation, ranking, inference, or AI;
-- more than one required resident, open Room creation, public sign-up, search,
-  discovery feed, follows, comments, or DMs;
-- attachments, URLs, files, or rich Markdown;
-- public history or response editing;
-- dependency-aware claim staleness;
-- cryptographic signing, DID, real-world identity verification, hardware key,
-  or general key-management platform;
-- separate queue, Redis, Blob, cache, search, worker, or admin application;
-- moderation organization or security platform;
-- `TwinRevisionV4` and automatic admission of any signal into Twin meaning;
-- OpenCode live parity.
+1. Manual capability holder mints a 15-minute one-use derivative.
+2. Guest-owned Agent reads the exact Projection JSON and submits once.
+3. The Agent cannot fetch the reply; the Manual holder retains that capability.
 
-## Proposed implementation sequence
+### Familiar/trusted collaborator
 
-Each step is one demonstrable outcome and stays blocked until this packet is
-approved:
+1. Owner offers one of four explicit presets.
+2. Guest accepts; a new exact Grant begins.
+3. Repeated independent questions share quota and keep only one unresolved.
+4. Every AI-assisted response uses a new Fresh Session; a manual-only response
+   uses none. Neither path loads a prior request body as conversation history.
 
-1. **Protocol + local Presence ledger:** shared contracts, canonical vectors,
-   local compile/approve/outbox/inbox, the Schema & Migration Manifest
-   visibility gate, and no cloud resource.
-2. **Fixture-only Presence surface:** local/CI Postgres and local Next.js,
-   deterministic Third Place/Room rendering, no cloud account or interaction.
-3. **Controller + pairing + two gates:** only after the separate Production
-   Provisioning Grant, provision Auth/production resources, publish exact
-   Projection, then separately admit it.
-4. **Invited signal + manual sync:** guest session, Agent token, one request,
-   persist-before-ack import, and lifecycle status.
-5. **Reviewed response:** bounded local Codex packet, Owner approval, response
-   relay, deletion/retention, privacy canary, and full demo.
-6. **R5 hardening:** production plans, restore/rollback, outage/revoke
-   rehearsal, responsive polish, release candidate, and freeze.
+### Private Room
 
-### Separate Production Provisioning Grant
+1. Direct URL without an exact Grant returns no Projection body.
+2. Owner separately issues a Private Room Grant.
+3. Guest reads and interacts only inside that exact Room/Projection.
+4. Public familiarity/trusted label provides no access.
 
-After the Schema & Migration Manifest and local/CI evidence exist, a short
-hashed grant must name:
+## P0 cut
 
-- exact Vercel/Supabase organizations, project names, regions, Controller and
-  infrastructure owners, and MFA check;
-- exact paid plans, current base estimate, alerts/pause settings, and the
-  Owner-authorized monthly spend amount, acknowledging that provider controls
-  are not a hard real-time cap;
-- exact resources, production environment-variable names, log-retention
-  inventory, OTP recipient/SMTP choice, migration hash, initial seed, and
-  deployment target;
-- the permitted create/link/migrate/deploy/seed actions plus deprovision and
-  secret-rotation runbooks.
+Included:
 
-Only Owner approval of that exact grant authorizes those external actions and
-spend. Neither this packet nor the Schema & Migration Manifest grants them.
+- one curated Third Place;
+- the Forme Project Room as the first and only public resident in P0;
+- public Manual and minimal Agent Guest paths;
+- one real `private_grant_only` Room path;
+- four continuation presets;
+- one Fresh Codex Response path and manual-only fallback;
+- optional notification-only email contract;
+- anywhere hosted Owner control plus local exact response approval;
+- explicit sync, recovery, revoke, delete, retire, and retention mechanics.
 
-If the interactive lifecycle is not green by the R4 cut date, the fallback is
-the last separately built, owner-approved static Projection. It does not
-silently pretend that queueing, pairing, or response relay works.
+Excluded:
 
-## Historical v0.1 approval boundary — superseded
+- notes ingestion or Person Twin;
+- open signup or reusable Guest account;
+- any additional Third Place resident before the required P0 is green;
+- public search/feed/recommendation;
+- server AI or hosted chat;
+- rich attachments or remote content fetch;
+- reusable cross-Room Agent identity;
+- live thread, daemon, push socket, tunnel, or background local Agent;
+- OpenCode live parity;
+- Managed Privacy Run selector;
+- Controller/Curator CLI;
+- social graph, trust inference, analytics, fingerprinting, or ranking.
 
-> **Not a current approval surface.** The requests below belonged to the
-> unreconciled v0.1 proposal. No present authority derives from this section;
-> T5 and a newly reconciled exact packet remain required.
+## Repository implementation shape
 
-This proposal requested Owner approval for:
+After exact Packet approval, repository-only work may add:
 
-- the three-state-owner model and separate `.forme/presence/` store;
-- the repository/package shape and proposed dependencies;
-- Vercel Pro + Supabase Pro and the stated monthly base cost;
-- the one-user OTP identity, pairing, capability, and secret-key trust model;
-- the capsule/receipt semantic requirements, limits, lifecycle, and API
-  authority, with exact machine schemas and SQL held to the separate manifest
-  subgate;
-- manual polling and no-notification behavior;
-- seven-day Projection expiry and conservative whole-revision staleness;
-- 30-day interaction retention and seven-day backup deletion lag;
-- unlisted direct-read behavior and stale/expired response behavior;
-- the tests, cuts, and implementation sequence.
+```text
+packages/r4-protocol/     pure contracts, canonicalization, fixtures
+packages/r4-local/        body-free ledger, connector, launcher interfaces
+apps/room/                self-hosted Next.js Web/API app
+schemas/r4/               proposed JSON Schemas; no production migration
+test/r4/                  unit, property, race, recovery, privacy tests
+```
 
-Approval of this packet would have authorized only repository implementation
-and fixture tests inside these boundaries. It would not itself have approved
-the later Schema & Migration Manifest, Production Provisioning Grant, cloud
-provisioning, external writes, or spend.
+The trusted installed launcher, macOS protection adapter, real Postgres
+migration, real auth/email/provider adapters, OCI publication, and server
+resources remain gated as described below. Tests use fake connector/provider,
+ephemeral local PostgreSQL, and synthetic Guest data only.
 
-Because the Owner did not approve this exact historical packet, it granted no
-authority to:
+## Implementation gates
 
-- add R4 code, packages, schemas, SQL, or dependencies;
-- create Vercel, Supabase, SMTP, DNS, database, Auth, or account resources;
-- spend money;
-- access or transmit a note, repo source, Twin body, or guest submission;
-- pair a local workspace;
-- publish a Room or capsule;
-- create a public endpoint, credential, invite, signal, or response;
-- deploy or message anyone.
+### Gate A — this Technical Control Packet
 
-## Primary technical references
+Exact Owner approval authorizes:
 
-- [Vercel Node.js runtime](https://vercel.com/docs/functions/runtimes/node-js)
-  and [supported Node.js versions](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)
-- [Vercel Hobby restriction](https://vercel.com/docs/plans/hobby) and
-  [Vercel pricing](https://vercel.com/pricing)
-- [Vercel Cron security and retry behavior](https://vercel.com/docs/cron-jobs/manage-cron-jobs)
-- [Vercel WAF rate limiting](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting)
-- [Supabase passwordless email and `shouldCreateUser`](https://supabase.com/docs/guides/auth/auth-email-passwordless)
-- [Supabase user administration](https://supabase.com/docs/guides/auth/users)
-- [Supabase SSR guidance](https://supabase.com/docs/guides/auth/server-side/advanced-guide)
-- [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security)
-  and [API security](https://supabase.com/docs/guides/api/securing-your-api)
-- [Supabase database functions and definer guidance](https://supabase.com/docs/guides/database/functions)
-- [Supabase SMTP limits](https://supabase.com/docs/guides/auth/auth-smtp)
-- [Supabase backups](https://supabase.com/docs/guides/platform/backups) and
-  [free-project pausing](https://supabase.com/docs/guides/platform/free-project-pausing)
+- repository code and documentation;
+- synthetic fixtures;
+- local unit/property/integration tests;
+- an ephemeral local PostgreSQL test instance;
+- read-only capability probes that do not expose real Guest/source content;
+- preparation of the next exact manifest.
+
+It does not authorize model calls, real Guest data, external email, hosted
+mutation, schema migration, deployment, production traffic, secret issuance,
+or spend.
+
+### Gate B — Schema, Runtime, and Migration Manifest
+
+Must bind exact:
+
+- package/file inventory and dependency lock;
+- every JSON Schema hash and golden vector;
+- exact SQL tables, enums, indexes, functions, lock order, roles, grants, and
+  migration/preflight/rollback compatibility;
+- endpoint-to-action/schema map;
+- local body-free store, candidate encryption, cleanup journal, and Keychain
+  adapter formats;
+- Codex model ID, version, account/transport regime, permission profile,
+  invocation, capability-probe evidence, OpenAI data-retention disclosure, and
+  budget enforcement;
+- exact test evidence and remaining proof gaps.
+
+Approval authorizes the exact local/ephemeral schema and runtime validation
+named there. A model call and spend remain forbidden unless that exact Manifest
+also contains a separately labeled **First Provider-Call Test Grant** and the
+Owner approval names it. That grant must bind the exact number of sessions,
+model/account/transport, request and capsule hashes, source-policy/snapshot and
+Twin-orientation hashes, dispatch/token/output/time ceilings, the per-session
+US$1 ceiling, and an exact aggregate ceiling no greater than the authorized
+session count multiplied by US$1. It may use only an
+Owner-authored synthetic/non-Guest request plus the explicitly previewed,
+sanitized real Forme repo/Twin sources named by the grant. It authorizes no
+third-party Guest data, email, public traffic, production database/resource,
+or hosted mutation.
+
+Gate B may therefore prove the real Forme Twin → basis → Projection and bounded
+local response mechanics without pretending a fixture is the project. The
+first end-to-end encounter using a real Guest request, a real hosted Room, or
+production infrastructure belongs to Gate C and requires its exact separate
+approval. If the Manifest does not include the labeled test grant, Gate B is
+schema/runtime construction and offline validation only, with zero provider
+calls and zero spend.
+
+### Gate C — Production Deployment and Provisioning Grant
+
+Must bind exact:
+
+- commit, Packet/Manifest hashes, OCI registry/image digest;
+- domain/origins, Cloudflare Access apps/audiences/subjects/MFA, Caddy route;
+- exact account/zone/hostname-bound origin-only mechanism, Cloudflare/Caddy
+  trust chain, Tunnel or custom zone/per-hostname AOP configuration (never
+  shared global AOP alone), source allowlist, proxy-header stripping, and
+  direct-origin/other-customer/forged-header negative evidence;
+- Compose service/network names, PostgreSQL roles/secrets and migration command;
+- deploy, health, janitor, restore, and compatible image rollback commands;
+- `notify-once` schedule, role, provider reconciliation, and failure command;
+- real backup horizon and restore evidence;
+- Cloudflare/Caddy/app/PostgreSQL log fields and retention;
+- exact OpenAI account/provider regime and consent copy;
+- email provider, region, recipient/delivery-log retention, idempotency,
+  credentials, and spend ceiling;
+- production rate/WAF values, traffic enablement, secret rotation, and incident
+  contacts;
+- exact real-demo actors/data classes, activation window, Room/Projection IDs,
+  model/session count and aggregate spend ceiling, and the command that disables
+  real Guest intake again.
+
+No production Interaction or email is enabled until all applicable values are
+known and approved. The existing server baseline itself remains out of scope.
+
+## Approval object
+
+The approval request must present:
+
+- exact Packet file SHA-256;
+- Git commit and tree containing it;
+- audit/test results;
+- the eight explicit implementation choices near the top;
+- the authorization and non-authorization boundary.
+
+The hash is external rather than embedded, so hashing the file has no
+self-reference. Any byte change requires a new hash and approval. The exact
+approval phrase is:
+
+```text
+批准 R4 Technical Control Packet v0.2 sha256:<exact-file-hash>
+```
+
+Until that phrase is recorded against the audited bytes, stop before R4 code,
+schema, provider, Guest-data, hosted, email, deployment, public, or spend work.

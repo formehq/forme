@@ -1,12 +1,12 @@
-# R4 Forme Room experience and protocol brief v0.8
+# R4 Forme Room experience and protocol brief v0.9
 
 - Status: **owner-approved product foundation, public/private Room correction,
   P human-boundary interpretation, T2 Room control contract, and NH1/NH2
   Native Harness architecture; Fresh Native Response Session (Option 2B) exact
-  T3 contract and T4 public lifecycle Owner-approved; T5 notification-only
-  email and three Guest continuation presets Owner-directed, while the
-  remaining T5 contract is the current unapproved gate; no R4
-  implementation authority**
+  T3 contract, T4 public lifecycle, and complete T5 async, notification,
+  deletion, retention, and P0-cut contract Owner-approved; Packet v0.2 is
+  reconciled and independently audited at `sha256:e417836b…adfff5`; separate
+  exact Owner approval is current; no R4 implementation authority**
 - Updated: 2026-08-03
 - Owner approval: **2026-07-25 — five revised R4 product decisions; 2026-07-26 —
   public encounter + Private Room correction**
@@ -20,8 +20,10 @@
   Session contract; documentation and later Packet reconciliation only**
 - T4 approval: **2026-08-03 — complete recommended public / unlist / stale /
   revoke lifecycle contract; documentation and later Packet reconciliation only**
-- T5 partial direction: **2026-08-03 — optional notification-only email and
-  24h/1, 3d/2, 7d/3 continuation presets fixed; remaining T5 terms open**
+- T5 approval: **2026-08-03 — complete recommended async, notification,
+  deletion, retention, and P0-cut contract, with the original 24h/1, 3d/2,
+  familiar 7d/3 presets retained and an Owner-selected trusted 7d/10 preset
+  added; documentation and Packet reconciliation only**
 - Working experience names: **Forme Room**, **Projection Capsule**, **Signal Box**, **Resonance**
 - Active issue: [#52](https://github.com/formehq/forme/issues/52)
 - Owner-approved companion decision brief:
@@ -68,8 +70,11 @@ not change approved T1 or grant implementation authority. T2 was separately
 approved later. NH1/NH2 closed on 2026-07-29. The Option 2B direction was
 selected on 2026-08-01 and its exact T3 contract was Owner-approved on
 2026-08-03. The recommended T4 public lifecycle contract was also
-Owner-approved on 2026-08-03. T5's notification and continuation inputs are
-fixed; its remaining contract is current.
+Owner-approved on 2026-08-03. Earlier that day the Owner fixed T5's
+notification and first three continuation inputs; the Owner then approved the
+complete T5 recommendation and added a fourth Owner-selected trusted
+collaborator 7d/10 preset. The current gate is the reconciled Packet rather
+than another T5 product decision.
 
 On 2026-07-28 the Owner also confirmed that Native Harness Workbench, Forme
 Semantic Spine, and Managed Privacy Run are distinct roles. This preserves the
@@ -81,8 +86,8 @@ required live P0 path, plus the two-class boundary between ordinary native
 Workspace work and typed Forme authority. On 2026-08-01 the Owner selected one
 Fresh Native Response Session per Interaction as the R4 P0 direction; its exact
 T3 contract and the separate T4 public lifecycle contract were approved on
-2026-08-03. T5 notification/continuation inputs are now fixed while its
-remaining retention/deletion/P0-cut terms stay open.
+2026-08-03. The complete T5 async, notification, deletion, retention, local
+artifact lifecycle, and P0-cut contract is now approved as well.
 
 ## Revised user outcome
 
@@ -450,7 +455,7 @@ immediately; Room retirement ends the whole surface. Successors inherit neither
 Grant nor, for public successors, Curator admission; a revoked-origin request
 cannot receive a new Response.
 
-## Owner-approved P0 product walking slice — exact T3/T4 approved, T5 next
+## Owner-approved P0 product walking slice — exact T3/T4/T5 approved
 
 - one curated, publicly viewable Forme Third Place with the real Forme Project
   Room as its first and only required resident;
@@ -459,6 +464,9 @@ cannot receive a new Response.
 - one separately identified `private_grant_only` Room path over the same Forme
   Twin, with its own approved Projection and Owner Grant;
 - one accepted `GrantOffer` continuation or direct Owner invite fixture;
+- four exact Owner-facing continuation presets: 24h/1, 3d/2, familiar 7d/3,
+  and Owner-selected trusted 7d/10; neither relationship label is inferred or
+  grants Private Room access by itself;
 - one deterministic, versioned Projection Capsule compiled locally;
 - one owner publication gate and separate curator admission gate;
 - one deterministic registry, curation listing, and visual renderer with no
@@ -468,7 +476,11 @@ cannot receive a new Response.
 - one Manual Guest public-knock path and one grant-gated private path;
 - one Agent Guest API path for fetching a capsule and submitting a request;
 - one durable server Signal Queue and local Signal Box import;
+- Agent-workflow explicit typed sync plus Owner manual recovery, with no hidden
+  write in read-only commands and no P0 daemon/live tunnel;
 - one owner-reviewed Response Capsule returned through the relay;
+- one optional exact-Interaction notification-only response-ready email path
+  that carries no body, reply URL, token, or authority;
 - one brand-new per-Interaction Codex response session that dynamically
   searches only a sanitized read-only snapshot of current eligible Forme
   files plus typed body/path-free Twin orientation and cannot
@@ -476,6 +488,9 @@ cannot receive a new Response.
   publish;
 - one small Guest Capsule path;
 - at most one approved Resonance path;
+- 30-day maximum Interaction/inline Guest Capsule retention, seven-day maximum
+  Response and isolated-candidate retention, and Fresh Session runtime-root
+  cleanup under the approved deletion/offline-reconciliation contract;
 - Projection revocation, Room retirement, capsule expiry, stale-version
   behavior, and privacy-canary verification;
 - one clean, creative responsive visual surface;
@@ -565,12 +580,13 @@ These decisions establish the product target only. The active
 [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
 the approved NH1/NH2 choices. The active
 [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) now presents
-approved exact T3/T4 followed by the remaining T5 terms; the notification and
-continuation inputs are already fixed. Agents must then rewrite the
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) for the
-confirmed deployment target and Guest decision, re-audit it, and present a new
-exact hash. Schema/migration and production deployment remain separate later
-gates. No current document grants implementation authority.
+  the approved exact T3/T4/T5 contracts. They are now compiled into the
+  independently audited
+  [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2 at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+  Separate Owner approval remains current. Schema/migration and production
+  deployment remain later gates. No current document grants implementation
+  authority.
 
 ## Product-expression questions that remain during technical review
 
@@ -582,7 +598,7 @@ gates. No current document grants implementation authority.
 P, T1, and T2 close the human-boundary interpretation, Guest ingress, Room
 exposure, and local Room Operator authority. Approved NH1/NH2 close the local
 carrier and ordinary-work/Forme-authority boundary. The 2B direction and exact
-T3 contract plus T4 lifecycle are approved; T5's notification and continuation
-inputs are fixed, while T5 still closes the remaining
-retention, hosting-integration, and P0 Resonance answers. Product-expression questions may
-continue without weakening those gates.
+  T3 contract plus T4 lifecycle and complete T5 contract are approved. Packet
+  reconciliation, audit, and hashing are complete; separate exact Owner
+  approval is current. Product-expression questions may continue without
+weakening those gates.

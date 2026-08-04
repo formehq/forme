@@ -13,19 +13,24 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Current gate: **R4 — privacy-first/minimum-friction P human-boundary model,
   T1 public/private Room correction, and T2 Room control contract approved;
   NH1/NH2 and the exact Fresh Native Response Session T3 contract approved;
-  the recommended T4 public/admission/lifecycle contract approved; T5 is the
-  current unapproved Technical Owner Review gate, with packet reconciliation
-  still open**
+  the recommended T4 public/admission/lifecycle contract and full T5 async /
+  deletion / retention / P0-cut contract approved; the current stop gate is a
+  reconciled Technical Control Packet, independently audited, hashed, and
+  separately approved by the Owner**
 - Product implementation: **R1–R3 owner-accepted; the R4 product target,
   public-knock/private-Grant correction, P boundary model, and T2 Room control
   contract are approved; NH1 option 1 and NH2 option 1 were Owner-approved on
   2026-07-29, but grant no concrete runtime, file, shell, tool, provider,
   credential, Guest, or Room authority; the exact T3 contract was
-  Owner-approved on 2026-08-03; the recommended T4 contract was also
-  Owner-approved on 2026-08-03, but both authorize only authority-document and
-  later packet reconciliation; T5 and the first technical packet still require
-  Owner review and reconciliation to the confirmed self-host target;
-  no R4 implementation or production action is authorized**
+  Owner-approved on 2026-08-03; the recommended T4 contract and full T5
+  contract were also Owner-approved on 2026-08-03, but these approvals
+  authorize only authority-document and Technical Control Packet
+  reconciliation; Technical Control Packet v0.2 is now reconciled and
+  independently audited at
+  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`,
+  and separate Owner approval of those exact bytes is the current gate;
+  no R4 implementation, schema, provider call, deployment, spend, production
+  action, or real Guest-data handling is authorized**
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -148,7 +153,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — T3/T4 approved, T5 next
+## R4 Controlled Presence — T5 approved, exact Packet next
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -184,9 +189,15 @@ separate; never-admitted or unlisted public content remains direct-readable but
 loses discovery and new public knocks; stale content is visibly bounded and
 cannot receive new Interaction; revoke and retirement fail closed; and
 public successors require new Curator admission, while no successor inherits a
-Grant. These approvals permit
-authority-document and later packet reconciliation only; T5 is now the current
-unapproved gate.
+Grant. The Owner then approved the full recommended T5 async, notification,
+retention, deletion, and P0-cut contract, while preserving familiar
+collaborator at 7 days / 3 Interactions and adding a fourth, explicitly
+Owner-selected trusted collaborator preset at 7 days / 10 independent
+Interactions. The label is never inferred and grants no identity, successor,
+cross-Room, or automatic Private Room authority. These approvals permit
+authority-document and Technical Control Packet reconciliation only. Packet
+v0.2 has now passed independent audit and hashing; the current stop gate is
+separate Owner approval of those exact bytes.
 
 P0 needs only the minimum Codex integration required by the walking slice. It
 does not require every CLI/API/MCP/Skill/Plugin adapter surface or a live
@@ -194,11 +205,13 @@ OpenCode path.
 The confirmed deployment target is the existing Cloudflare → Caddy → Hetzner
 → PostgreSQL path.
 
-The first
+The historical v0.1 Packet is superseded. The current
 [`docs/R4-TECHNICAL-CONTROL-PACKET.md`](./docs/R4-TECHNICAL-CONTROL-PACKET.md)
-is now an unreconciled implementation appendix, not an approvable exact object.
-After T5 closes, agents will rewrite and re-audit it. No R4
-repository implementation or production action is currently authorized.
+is the reconciled, independently audited v0.2 approval object at
+`sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+It remains a proposal until the Owner approves that exact hash. No R4
+repository implementation, schema, provider call, deployment, spend,
+production action, or real Guest-data handling is currently authorized.
 
 ## Forme R3 managed action
 

@@ -4,9 +4,10 @@
   interpretation, R4 public/private Room correction, and T2 Room control
   contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
   approved; the recommended T4 public/admission/lifecycle contract approved;
-  T5 is the current unapproved technical Owner gate, with its optional
-  notification-only email and three Guest continuation presets now
-  Owner-directed
+  the full recommended T5 async/deletion/retention/P0-cut contract
+  Owner-approved, with four Guest continuation presets; reconciled Technical
+  Control Packet v0.2 is independently audited and hashed, and separate exact
+  Owner approval is the current gate
 - Updated: 2026-08-03
 - MVP complete: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
@@ -73,8 +74,9 @@ meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
 approved. The R4 P0 T3 direction is one Fresh Native Response Session per
 Interaction, not a Managed-vs-Native trust selector. The Owner approved its
 exact contract on 2026-08-03, followed by the recommended T4 lifecycle contract
-on the same date; T5 and a reconciled Control Packet remain stop gates before
-implementation.
+on the same date. The Owner then approved full T5 on 2026-08-03. A newly
+reconciled, independently audited and hashed Technical Control Packet remains
+the stop gate before implementation.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
 
@@ -111,10 +113,12 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - one public 24-hour/one-interaction Guest knock, one grant-gated Private Room
   path over the same Twin, one minimal Agent Guest capsule/request path, and
   one owner-reviewed Response or Resonance;
-- three Owner-selected, exact Room + Projection continuation presets—one visit
-  (24 hours / 1 Interaction), short exchange (3 days / 2), and familiar
-  collaborator (7 days / 3)—without a reusable Guest account, trust score, or
-  automatic Private Room access;
+- four Owner-selected, exact Room + Projection continuation presets—one visit
+  (24 hours / 1 Interaction), short exchange (3 days / 2), familiar
+  collaborator (7 days / 3), and trusted collaborator (7 days / 10 independent
+  Interactions)—without a reusable Guest account, inferred trust score,
+  successor inheritance, or automatic Private Room access; every preset is
+  revocable and permits at most one unresolved request;
 - one optional, exact-Interaction response-ready email notice that carries no
   request/response body, private Room name, reply capability, or identity/
   authority meaning; polling through the retained private reply URL remains
@@ -155,7 +159,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — T3/T4 approved, T5 next
+## Owner-approved R4 product target — T5 approved, exact Packet next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -182,10 +186,13 @@ interaction requires a new Owner short pass. A true Private Room is a different
 Room with a separately approved Projection; it never enters Third Place and
 requires an Owner Grant for both reading and interaction. Public
 request/response bodies do not become comments, and unlisted public content
-does not become private. On 2026-08-03 the Owner clarified the P0 continuation
-surface as three capability presets rather than person/trust levels: 24 hours /
-1 Interaction, 3 days / 2, or 7 days / 3. Familiarity does not confer private
-access; a Private Room still needs its own exact Grant.
+does not become private. On 2026-08-03 the Owner clarified and then completed
+the P0 continuation surface as four explicit capability presets rather than
+person/trust levels: 24 hours / 1 Interaction, 3 days / 2, familiar
+collaborator at 7 days / 3, and trusted collaborator at 7 days / 10 independent
+Interactions. Both labels are chosen by the Owner rather than inferred;
+neither confers identity, successor inheritance, or private access. A Private
+Room still needs its own exact Grant.
 
 The server target is identity/control, registry, curation listing,
 deterministic rendering, signal queueing, and response relay—not AI
@@ -209,17 +216,32 @@ no successor inherits a Grant.
 Accepted requests tied to stale, superseded, or expired origin may receive a
 newly compiled, newly approved Response with that state disclosed; revoked
 origin may not. T4 does not expand `room_operator.v1` or approve a physical
-purge schedule. For the still-open T5, the Owner has already directed one
-optional notification-only `response_ready_email`: it is exact-Interaction
-contact metadata, not a Guest account or reply authority; it carries no body
-or secret, expires with its parent, and leaves reply-URL polling as fallback.
-The remaining T5 retention/deletion/P0-cut contract is not yet approved.
-Implementation, OpenAI calls, Guest data handling, schema,
-deployment, spend, and Room mutation remain unauthorized. The Owner next
-reviews the remaining T5 terms in
-[`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md); agents then
-reconcile those decisions into a new exact
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md).
+purge schedule. The Owner-approved full T5 contract now requires explicit
+Agent-triggered sync plus manual recovery and keeps reply-URL polling
+canonical. It permits one optional notification-only
+`response_ready_email`: exact-Interaction contact metadata, not a Guest
+account, identity, trust signal, or reply authority; it carries no hosted body
+or secret and expires with its parent. Interaction and inline Guest Capsule
+bodies have a 30-day maximum, Responses and isolated unpublished candidates a
+7-day maximum capped by their parent, while earlier deletion, expiry, revoke,
+retirement, or basis invalidation shortens availability and triggers purge.
+Hosted deletion is immediately unreadable with a scheduled physical-purge
+target under 24 hours and an operator incident after 36 hours without a
+successful purge. Fresh-session body artifacts are disposable, durable
+receipts are body-free, and production backup/log/email-provider retention
+must be disclosed and approved before real interaction. T5 also keeps notes
+ingestion, Person Twin, open signup, multiple required residents, search/feed,
+server AI, rich attachments, and cross-Room reusable Agent identity outside
+P0.
+
+Full T5 approval authorized documentation and Packet reconciliation only.
+Implementation, OpenAI/provider calls, real Guest-data handling, schema,
+deployment, spend, external messaging, and Room mutation remain unauthorized.
+The resulting exact
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2
+passed independent audits at
+`sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
+It still requires separate Owner approval before implementation.
 Exact machine schemas and migrations remain a separately hashed pre-write
 manifest; production deployment, external writes, and spend remain a separate
 Production Deployment & Provisioning Grant.

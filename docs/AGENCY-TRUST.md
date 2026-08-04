@@ -1,12 +1,14 @@
-# Agency and human-boundary model v0.3
+# Agency and human-boundary model v0.4
 
 - Status: **privacy-first P human-boundary interpretation and T2 Room control
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
   2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0
   direction on 2026-08-01 and its exact T3 contract Owner-approved on
-  2026-08-03; T4 public lifecycle contract Owner-approved on 2026-08-03; T5
-  notification-only email and continuation presets are fixed, while remaining
-  T5 terms and implementation stay subject to separate Owner review**
+  2026-08-03; T4 public lifecycle and the complete T5 async, notification,
+  deletion, retention, and P0-cut contract Owner-approved on 2026-08-03;
+  Packet v0.2 is reconciled and independently audited at
+  `sha256:e417836b…adfff5`; implementation stays subject to separate exact
+  Owner approval**
 - Updated: 2026-08-03
 - Purpose: maximize useful Twin/Agent agency inside human-defined boundaries
   while keeping privacy, authorship, consequence, and revocation under human
@@ -25,9 +27,11 @@ The **Privacy-first human boundary** section below is the Owner-approved P
 formalization of that direction for R4. The exact R4 Room Operator envelope
 identified below is separately Owner-approved T2; the Fresh Native Response
 Session is Owner-approved T3; and the public lifecycle split is Owner-approved
-T4. Other cognitive-mode, delegation, and long-term application guidance
-remains proposed unless an exact mechanism is separately approved. None of
-P/T2/T3/T4 silently creates a credential or authorizes implementation.
+T4. The async/notification/deletion/retention/P0-cut boundary is
+Owner-approved T5. Other cognitive-mode, delegation, and long-term application
+guidance remains proposed unless an exact mechanism is separately approved.
+None of P/T2/T3/T4/T5 silently creates a credential or authorizes
+implementation.
 
 This is neither “ask before everything” nor “let the Agent do anything.”
 Forme's job is to make the boundary real: exact scope, audience, attribution,
@@ -296,6 +300,28 @@ also requires new Curator admission. These are
 lifecycle requirements for the later reconciled Packet, not authority for the
 current connector, model, or repository to perform them.
 
+The Owner-approved T5 contract makes low-friction asynchronous operation part
+of that same bounded agency model. The Agent's standard Room workflow may
+explicitly invoke typed `room sync` without another per-call approval; Owner
+manual sync remains the recovery path, and read-only commands never hide a
+pull or durable write. P0 has no daemon, live chat, WebSocket, or remote local
+tunnel. One exact Interaction may use a confirmed notification-only email,
+but the endpoint carries no body/reply authority and never becomes identity or
+cross-Room relationship evidence.
+
+Continuation is a fixed Owner-issued envelope, not an inferred trust score:
+24h/1, 3d/2, familiar collaborator 7d/3, or Owner-selected trusted
+collaborator 7d/10. `trusted` neither proves personhood nor unlocks a Private
+Room; that still requires an exact Room + Projection Grant. Hosted
+Interaction/inline Guest Capsule bodies have a 30-day maximum, published
+Response bodies a seven-day maximum, and an isolated unpublished local
+candidate a seven-day maximum. Fresh Session body-bearing runtime roots are
+cleaned after normal completion or before a later session following crash.
+Earlier terminal state, deletion, expiry, or invalidation shortens these
+ceilings. The actual backup, infrastructure-log, and email-provider retention
+regimes remain production facts that must be disclosed and approved before
+production interaction or email is enabled.
+
 The exact P0/future split is maintained in
 [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
 
@@ -338,11 +364,11 @@ exact Room authority envelope; NH1/NH2 close the default local carrier and
 ordinary-work/Forme-authority classification; exact T3 now closes the R4 P0
 response session/source/provider/capability/consent boundary as design
 authority; and T4 closes the public/unlist/stale/revoke/retire lifecycle
-contract. None of these approvals instantiates that runtime or authorizes a
+contract; T5 closes async operation, notification, deletion, retention, local
+session/candidate cleanup, and the final P0 cut. None of these approvals instantiates that runtime or authorizes a
 Fresh session, file read, provider call, credential issuance, private Guest
 data, Room mutation, external message, schema, implementation, deployment, or
-spend. T3/T4 grant documentation and later Packet-reconciliation authority
-only. T5's notification-only email and continuation-preset inputs are fixed;
-its remaining terms are the current Owner gate. A new reconciled and separately
-approved Control Packet, schemas/migrations, implementation, and production
-grants remain separate gates.
+spend. T3/T4/T5 grant documentation and later Packet-reconciliation authority
+  only. Reconciled Control Packet v0.2 passed independent audit at
+  `sha256:e417836b…adfff5`; separate Owner approval is current, while schemas/migrations, implementation,
+and production grants remain later separate gates.

@@ -1,12 +1,13 @@
-# R4 Technical Owner Review Brief v0.12
+# R4 Technical Owner Review Brief v0.14
 
 - 状态：**P privacy-first human-boundary interpretation、T1
   public/private Room correction、T2 Room control contract、NH1/NH2
   Native Harness architecture、Fresh Native Response Session exact T3
-  contract，以及 T4 public / unlist / stale / revoke lifecycle 均已批准；
-  T5 的 notification-only email 与三档 Guest continuation 已固定，其余
-  async / deletion / retention / P0 cut 是当前 Owner 决策；不是最终 Packet
-  批准记录**
+  contract、T4 public / unlist / stale / revoke lifecycle，以及完整 T5
+  async / notification / deletion / retention / P0 cut contract 均已批准；
+  Technical Control Packet v0.2 已完成 reconciliation 与三路独立审计，exact
+  hash 是 `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`；
+  当前只等 Owner 批准这组准确字节；这份 Brief 不是最终 Packet 批准记录**
 - 更新：2026-08-03
 - 实现与审计附件：
   [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md)
@@ -27,12 +28,11 @@
 Owner 的判断界面。你只需要：
 
 1. 先理解一张总地图；
-2. P、T1、T2、NH1、NH2、T3 与 T4 已经关闭；T5 的 email / continuation
-   两项输入也已固定；
-3. 现在只判断下面这张低负担的其余
-   [T5 async / retention card](#current-t5)；
-4. 用五个具体场景检查系统行为，只看 Agent 报告的 red/yellow
-   exception。
+2. P、T1、T2、NH1、NH2、T3、T4 与 T5 都已经关闭；
+3. 下面的 [T5 record](#current-t5) 是已批准的低负担回顾，不再等待你
+   继续作答；
+4. Agent 已完成 Packet 重写、独立审计和 exact hash；你现在只需要看
+   red/yellow exception，并决定是否批准那个准确的新对象。
 
 T1 已在 2026-07-26 按“公共一敲门 + 私密短通行证”修正，P 与 T2 已在
 2026-07-28 按推荐解释批准。2026-07-28 也确认了一次重要架构纠正：
@@ -45,14 +45,17 @@ Interaction 新开一次 Fresh Native Response Session。原来的 Managed
 Privacy Response Lane 仍是 R2/R3 已证明的能力，并留作 P1/未来敏感模式，
 不进入本次 MVP 的信任分层。2026-08-03，Owner 按推荐正式批准了下面的
 Fresh Native Response Session exact T3 contract。同日，Owner 又按推荐正式
-批准了 T4 public / unlist / stale / revoke lifecycle。T5 关闭后，Agent
-才会重写长 Packet、重新审计并计算新的 hash。之前那份 Packet 的 hash
-已经失效，不应再被批准。
+批准了 T4 public / unlist / stale / revoke lifecycle。完整 T5 随后也按
+推荐批准，并增加第四档 Owner-selected trusted collaborator 7 天 / 10 次
+preset。Agent 随后重写了长 Packet；当前 v0.2 已审计并产生上面的 exact
+hash。之前 v0.1 的 hash 已经失效，不应再被批准。
 
-同日稍后，Owner 又固定了 T5 的两项产品输入：可选的 notification-only
-email，以及 24 小时 / 1 次、3 天 / 2 次、7 天 / 3 次三档 exact
-continuation capability。它们不是 Guest account/trust level，email 也不是
-reply authority；其余 T5 仍待批准。
+同日稍早，Owner 先固定了 T5 的两项产品输入：可选的 notification-only
+email，以及 24 小时 / 1 次、3 天 / 2 次、熟悉协作者 7 天 / 3 次三档
+exact continuation capability。随后对完整推荐的批准保留这三档，并新增
+第四档 trusted collaborator 7 天 / 10 次。`trusted` 必须由 Owner 明确
+选择，不是系统推断的 trust level，也不因标签自动获得 Private Room；
+email 同样不是 reply authority。
 
 2026-07-27 的 agency-first 方向修正了 T2 推荐；Owner 已在 2026-07-28
 批准该推荐。它也继续澄清之后各 technical gate 的 framing：
@@ -98,10 +101,25 @@ Agent 应能在边界内完成有用的日常工作。新的受众/隐私、替�
   unlist 不替 Owner 撤销仍有效的 Grant 或 GrantOffer。
 - Third Place Room 允许任何人阅读 current admitted Projection，并默认
   允许一次 bounded public knock；继续互动必须由 Owner 发 short pass。
-- Owner-facing continuation 使用 24 小时 / 1 次、3 天 / 2 次、7 天 /
-  3 次三档 exact capability preset；“熟悉”不自动提供 Private Room access。
+- Owner-facing continuation 使用四档 exact capability preset：24 小时 / 1
+  次、3 天 / 2 次、熟悉协作者 7 天 / 3 次、trusted collaborator 7 天 /
+  10 次。后两者都是 Owner 明确选择的产品标签，不是系统推断的 trust；
+  标签本身不提供 Private Room access。
 - Guest 可以为 exact Interaction 选择只发通用 response-ready 提醒的 email；
   它不携带正文或 reply secret，也不是 Guest identity / login / recovery。
+- Owner 已批准 T5 的完整推荐：Agent standard Room workflow 显式 typed
+  sync，Owner manual sync 作为 recovery；read-only command 不隐藏 pull /
+  durable write，P0 没有 daemon、live chat、WebSocket 或 remote tunnel。
+- Hosted Interaction / inline Guest Capsule 最长 30 天，published Response
+  最长 7 天且不超过 Interaction；隔离的 unpublished typed candidate 最长
+  7 天。body-bearing Fresh Session runtime root 在正常结束后清除，crash 后
+  下一次启动必须先 fail-closed cleanup。更早的 delete、expiry、T4
+  terminal lifecycle 或 invalidation 会立即缩短这些 ceiling。
+- Guest deletion 立即停止 hosted body read；下一次成功 scheduled retention
+  run 的 physical-purge 目标延迟小于 24 小时，36 小时没有成功 purge 即
+  operator incident。实际 backup、Cloudflare/Caddy/app/PostgreSQL log 与
+  outbound-email provider retention 必须在 Production Grant 披露和批准后，
+  才能启用 production interaction / email。
 - P0 仍然是一个 curated Third Place、一个必须完成的 Forme Project
   Room、Manual-first、minimum Agent interoperability、Owner publish 与
   Curator admit 分离、layered identity、server no AI。
@@ -591,7 +609,7 @@ one local workspace (local-only identity)
   Owner 当前会话。Future implementation 必须遵守已批准的 exact roots、
   consent、provider、session budget、physical isolation 与 session lifecycle。
   详细 Packet 仍必须隔离 credential，并用 canary 验证没有未授权的跨界；
-  T5 与 Packet approval 仍是 stop gates。
+  T5 已经关闭，reconciled Packet approval 仍是 stop gate。
 
 Agency-first 修正后批准的 P0 contract，不再是“sync 可以站立授权、其余每一步
 都签 15 分钟票”，而是在 exact `RoomBinding` 上编码一个固定、versioned
@@ -799,7 +817,7 @@ Harness；Forme 负责把它放进正确的 Twin、Interaction、权限和人类
 | Provider | 只用披露的 Owner-local Codex → OpenAI；Guest 可选 manual-only |
 | Freedom | 边界内动态 read/search；无 write、其他 network、secret、cross-Room、connector 或 publish |
 | Budget | 60 分钟；一次自动 draft 最多 3 个内部 provider dispatches、128k input / 8k output；适用时 US$1 |
-| Human boundary | 输出只是 candidate；exact Owner approval 后 connector 才发送；public lifecycle 遵守 T4，retention 等待 T5 |
+| Human boundary | 输出只是 candidate；exact Owner approval 后 connector 才发送；public lifecycle 遵守 T4，artifact retention / cleanup 遵守已批准 T5 |
 
 <details>
 <summary>展开：完整 T3 contract 与 Agent 实现 / 审计义务</summary>
@@ -999,8 +1017,9 @@ environment、prompt、transcript 或 tool output。
   transcript/log/crash artifact 或 OpenAI copy 已删除。Local artifact 的
   retention/purge 由 T5 固定；provider-side retention 只能按披露的 OpenAI
   regime 诚实说明，Forme 不冒充可以删除；
-- 已批准 T4 决定 stale/unlist/revoke 等 public lifecycle；T5 仍决定 durable
-  retention 和 purge。T3 不偷着替它们下结论。
+- 已批准 T4 决定 stale/unlist/revoke 等 public lifecycle；随后批准的 T5
+  决定 durable retention、session/candidate cleanup、notification 和 purge。
+  T3 不偷着替它们下结论。
 
 </details>
 
@@ -1032,13 +1051,14 @@ publication approval 和 deletion honesty。
 >
 > Managed Privacy Response Lane 与 trust-tier selector 移到 P1/未来。
 
-T3 与 T4 的批准只允许 Agent 将它们编译进新的 Control Packet；在 T5 和
-新 Packet 都关闭前，仍不允许实现、OpenAI/provider call、Guest data、schema、
-部署、spend、Room mutation 或 production action。
+T3 与 T4 的批准当时只允许 Agent 将它们编译进新的 Control Packet；T5
+现在也已关闭，但在新 Packet 审计、hash 与 Owner approval 完成前，仍不
+允许实现、OpenAI/provider call、Guest data、schema、部署、spend、Room
+mutation 或 production action。
 
 ### 本卡已关闭
 
-当前 Owner 决策已移到 T5；本卡不再等待回复。
+本卡批准时，Owner 决策移到 T5；T5 现已关闭，当前 gate 是新的 Packet。
 
 <details>
 <summary>历史记录：2026-07-29 的 Managed Privacy T3 提案（已被 2B 方向取代，不再批准）</summary>
@@ -1344,7 +1364,8 @@ connector；`room_operator.v1` 只负责验证和运送，不能替 Owner 写内
 ### 历史回复格式
 
 - 以下旧回复格式已失效：`T3 按推荐批准`、`T3 希望改写为 Option 2`、
-  `T3 选 Option 3`。此历史卡不再接收回复；当前 Owner 决策见下面的 T5。
+  `T3 选 Option 3`。此历史卡不再接收回复；下面保留已批准 T5 record，
+  当前 gate 是新的 Packet。
 
 </details>
 
@@ -1355,9 +1376,10 @@ connector；`room_operator.v1` 只负责验证和运送，不能替 Owner 写内
 - 状态：**Owner 已在 2026-08-03 按推荐正式批准以下完整 lifecycle
   contract**
 - 该批准固定 public discovery、direct-read、stale、revoke、Grant 与 Room
-  retirement 的语义；不批准 T5 retention/deletion/async/P0 cut，也不授权
-  实现、provider call、Guest data、schema、deployment、spend 或 Room
-  mutation。
+  retirement 的语义；这次 T4 批准本身不批准当时仍开放的 T5
+  retention/deletion/async/P0 cut，也不授权实现、provider call、Guest
+  data、schema、deployment、spend 或 Room mutation。T5 后来已经单独
+  批准。
 
 ### 你批准了什么
 
@@ -1417,19 +1439,26 @@ Owner publish、Curator unlist、Twin change 和 emergency revoke 之后，
 
 ### 本卡已关闭
 
-当前 Owner 决策已移到 T5；本卡不再等待回复。
+本卡批准时，Owner 决策移到 T5；T5 现已关闭，当前 gate 是新的 Packet。
 
 <a id="current-t5"></a>
 
-## T5 — 异步体验、删除、保留和 P0 cut（当前待批准）
+## T5 — 异步体验、删除、保留和 P0 cut（Owner-approved — 2026-08-03）
 
-### 你要判断什么
+- 状态：**Owner 已批准完整推荐，并在原三档 continuation 之外新增第四档
+  Owner-selected trusted collaborator 7 天 / 10 次**
+- 本卡固定 async、notification、retention、deletion、local artifact
+  lifecycle、offline reconciliation 与最终 P0 cut；不批准实现、provider
+  call、Guest data、schema、deployment、public traffic、spend 或 Room
+  mutation。
 
-这个有意保持异步和有限的 MVP，是否已经足够真实、诚实和有用？一条
-Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
-可以留下、留下多久，以及删除承诺是否足够诚实？
+### 你批准了什么
 
-### 推荐答案
+这个有意保持异步和有限的 MVP 已被确认为足够真实、诚实和有用；同时，
+本卡固定一条 Fresh Native Response Session 结束后哪些 body-bearing local
+artifacts 可以留下、留下多久，以及 Forme 对删除能诚实承诺什么。
+
+### Owner 已批准的答案
 
 - Guest 保存 private reply URL；Agent 的标准 Room workflow 显式先调用
   typed `room sync`，不再向 Owner 逐次请示。Owner 也可手工运行同一命令
@@ -1456,9 +1485,11 @@ Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
   remote local tunnel。Email 是 server-side outbound notice，不改变
   no-server-AI topology。
 - 一个 public encounter 最多一个 Interaction。Owner-facing continuation
-  使用 T1 已澄清的三档：一次来访为 24 小时 / 1 次，短期交流为 3 天 /
-  2 次，熟悉协作者为 7 天 / 3 次。每个 Interaction 最多一个 Response，
-  同时最多一个未结 request，不形成 conversation thread。
+  使用四档：一次来访为 24 小时 / 1 次，短期交流为 3 天 / 2 次，熟悉
+  协作者为 7 天 / 3 次，trusted collaborator 为 7 天 / 10 次。后两者
+  都是 Owner 明确选择的产品标签，不是系统推断的 trust level；标签本身
+  不证明身份、不自动解锁 Private Room。每个 Interaction 最多一个
+  Response，同时最多一个未结 request，不形成 conversation thread。
 - Interaction 和 inline Guest Capsule 最长保存 30 天。
 - Response 保存 7 天，并且绝不超过所属 Interaction 的寿命。
 - 上述 30 天和 7 天都是最大上限，不是保证可读的最短时间。更早的
@@ -1512,13 +1543,22 @@ Fresh Native Response Session 结束后，哪些 body-bearing local artifacts
   resident、public search/feed、server AI、rich attachment 或跨 Room
   reusable Agent identity。
 
-### 你可以这样回复
+### 批准结果
 
-- `T5 按推荐批准`
-- `T5 带条件批准：...`
-- 指出你要求改变的 notification、retention 或 scope。
+- async 是显式、可恢复的 workflow，不是假装实时：Agent standard Room
+  workflow 调 typed sync，Owner 保留同命令的 manual recovery。
+- private reply capability 仍是 reply/status authority；email 只是 exact
+  Interaction 的 body-free 提醒。
+- 30-day Interaction、7-day Response、7-day isolated candidate 是 maximum
+  ceiling；T4 terminal lifecycle、delete、expiry 与 invalidation 可以更早
+  结束它们。
+- Fresh Session transcript/log/crash root 不是 durable Forme state；正常
+  结束清除，crash 后下一次启动先 cleanup。
+- production backup/log/email-provider 的真实 retention 尚不是可猜的产品
+  数字，必须在 Production Grant 披露后才能开启真实 interaction/email。
+- 这次批准允许更新权威文档并重写 Packet；它没有授权实现或运行系统。
 
-## 用五个故事检查自己的判断
+## 用五个故事回顾已批准行为
 
 ### A. 陌生访客在 Third Place 敲一次门
 
@@ -1528,16 +1568,18 @@ accepted 一次，请求和回复仍然是 private。Owner 不升级关系时，
 不能继续发第二条。Guest 可以选择留下经确认的 notification email；它只
 在回复准备好时收到不含正文的提醒，真正读取仍依赖原 private reply URL。
 
-### B. 熟悉的 collaborator 回来三次
+### B. 熟悉或 trusted collaborator 回来
 
 Owner 选择“熟悉协作者” preset，发一个 7 天 / 3 次的 `short_pass`。
 Guest 在同一个 exact Projection 有效期内，最多提交三个相互独立的
 Interaction，不需要每次重新找 Owner；较轻关系可以改用 24 小时 / 1 次
-或 3 天 / 2 次 preset。
+或 3 天 / 2 次 preset。Owner 也可以明确选择 trusted collaborator 7 天 /
+10 次；这只是更大的 exact quota，不是系统推断的信任等级、Person
+identity 或 Private Room 权限。
 每条回复仍然等待 local Owner review。Guest 不会因此得到 profile、
 thread、Twin 或 reusable Agent identity。若 Room 是 private，Grant
 同时控制 Projection read；没有 Grant 时同一个 URL 返回 no body，拿到
-exact Grant 后可以读取并成功提交一次 bounded request。若 Room 是
+exact Grant 后可以读取并在所选 quota 内提交 bounded request。若 Room 是
 public，Grant 只延长互动权。
 
 ### C. Owner 不在本地电脑旁
@@ -1603,22 +1645,32 @@ Agent 最终只向 Owner 返回：
 - **Yellow**：存在需要 Owner 知情的 tradeoff 或运行条件；
 - **Red**：实现会违反某张已批准决策卡。
 
-## 你怎么回复最省力
+## 当前 handoff：只等 Packet v0.2 exact approval
 
-P、T1、T2、NH1、NH2、T3 与 T4 已关闭，T5 的 email / continuation 两项
-输入也已固定。现在只需判断上面的其余 async / deletion / retention / P0
-cut contract；最省力的形式是：
+P、T1、T2、NH1、NH2、T3、T4 与 T5 已全部关闭。Agent 已经完成：
+
+1. 从干净结构重写 1,981 行 Technical Control Packet v0.2；
+2. 删除旧的 Vercel/Supabase、invite-only Guest、单一 Room、32 KiB
+   response-packet、无 email 与过宽 connector 设计；
+3. 分别完成 authority/因果链、lifecycle/email/concurrency、以及
+   physical/Codex/origin 三路独立审计；三路均为 **Green**；
+4. 固定 exact file hash：
+   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`。
+
+没有 Red。需要 Owner 知道的 Yellow 只有三类后续运行证明：
+
+- Gate B 必须证明官方 Codex adapter 真能接入 bounded read/search 与硬预算
+  transport gate；证明不了就保持 manual-only，不私自 fork 或退成 prompt；
+- Gate B 必须证明 macOS signed/hardened launcher、Keychain、native review、
+  reverse isolation 与 sandbox 组合真的成立；
+- Gate C 才固定 production origin、backup/log、OpenAI account 与 email
+  provider 事实；在那之前没有真实 Guest、email、部署或生产流量。
+
+如果这些符合你的理解，准确批准语句是：
 
 ```text
-T5 按推荐批准
+批准 R4 Technical Control Packet v0.2 sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5
 ```
 
-也可以用 T5 卡片列出的替代回复，或附上条件。T5 关闭后：
-
-1. Agent 按答案重写详细 Technical Control Packet；
-2. 删除或替换旧的 Vercel/Supabase、invite-only Guest 与单一 Room 内容；
-3. 完成技术复核，只报告会改变决策卡的 exception；
-4. 生成新的 packet version、commit 与 SHA-256；
-5. Owner 最后批准那个准确的新对象。
-
-当前未对齐的旧 Packet 不应被批准。
+在这句被记录前，仍不授权任何 R4 code、schema、provider call、真实 Guest
+data、hosted mutation、email、deployment、public traffic 或 spend。
