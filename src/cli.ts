@@ -11,6 +11,7 @@ import {
   type ContextSelection,
 } from "./context.ts";
 import { CodexExecRuntime } from "./runtime.ts";
+import { processIo, runR4Cli, unavailableR4Environment } from "../packages/r4-local/src/cli.ts";
 import {
   approveAction,
   correctReflection,
@@ -86,7 +87,7 @@ function contextSelection(options: ParsedOptions): ContextSelection {
 
 function help(): string {
   return [
-    "Forme Living Project Twin — R1 Continuity + R2 Cognition + R3 Bounded Agency",
+    "Forme Living Project Twin — R1 Continuity + R2 Cognition + R3 Bounded Agency + R4 Gate A",
     "",
     "Commands:",
     "  init     connect one bounded workspace and create revision 1",
@@ -100,6 +101,8 @@ function help(): string {
     "  action-approve  owner-approve one exact proposal/effect-plan hash pair",
     "  action-execute  consume one approval through the fixed-marker executor",
     "  action-rollback explicitly restore the approved pre-effect marker body",
+    "  room     pair/status/sync/prepare-response/reconcile (adapter-gated)",
+    "  guest    inspect/ask/status/delete/agent-token (adapter-gated)",
     "",
     "Init options:",
     "  --workspace <path>       defaults to the current directory",
@@ -144,6 +147,8 @@ try {
   const [, , command, ...args] = process.argv;
   if (!command || command === "help" || command === "--help") {
     console.log(help());
+  } else if (command === "room" || command === "guest") {
+    await runR4Cli([command, ...args], unavailableR4Environment(), processIo());
   } else {
     const options = parseOptions(command, args);
     const workspaceRoot = resolve(option(options, "--workspace") ?? process.cwd());

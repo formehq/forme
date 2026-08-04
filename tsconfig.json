@@ -8,10 +8,16 @@
     "moduleResolution": "NodeNext",
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
     "strict": true,
     "target": "ES2024",
     "types": ["node"],
     "verbatimModuleSyntax": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "packages/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": ["apps/room"]
 }

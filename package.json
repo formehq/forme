@@ -5,11 +5,17 @@
   "description": "Owner-controlled Living Project Twin",
   "license": "Apache-2.0",
   "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "bin": {
     "forme": "./bin/forme.js"
   },
   "files": [
     "bin",
+    "packages/r4-local",
+    "packages/r4-protocol",
     "schemas",
     "src",
     "README.md"
@@ -19,16 +25,36 @@
   },
   "scripts": {
     "forme": "node src/cli.ts",
-    "test": "node --test test/*.test.ts",
-    "typecheck": "tsc --noEmit",
+    "room:dev": "next dev apps/room",
+    "room:compile": "next build apps/room",
+    "room:build": "npm run room:compile && npm run r4:room-build:audit",
+    "room:start": "next start apps/room",
+    "r4:walkthrough": "node packages/r4-local/src/walkthrough.ts",
+    "r4:probe-basis": "node packages/r4-local/src/real-basis-probe-cli.ts",
+    "r4:audit": "node scripts/r4-gate-a-static-audit.mjs",
+    "r4:room-build:audit": "node scripts/r4-room-build-audit.mjs",
+    "r4:docs:audit": "node scripts/r4-doc-audit.mjs",
+    "r4:inventory": "node scripts/r4-source-inventory.mjs",
+    "test:spine": "node --test test/*.test.ts",
+    "test:r4": "node --test 'test/r4/**/*.test.ts'",
+    "test:r4:offline": "node --import ./scripts/deny-external-network.mjs --test 'test/r4/**/*.test.ts'",
+    "test": "npm run test:spine && npm run test:r4",
+    "typecheck:spine": "tsc --noEmit",
+    "typecheck:room": "tsc --project apps/room/tsconfig.json --noEmit",
+    "typecheck": "npm run typecheck:spine && npm run typecheck:room",
     "check": "npm run typecheck && npm test"
   },
   "dependencies": {
     "ajv": "8.20.0",
-    "ajv-formats": "3.0.1"
+    "ajv-formats": "3.0.1",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@types/node": "24.13.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
     "typescript": "7.0.2"
   }
 }
