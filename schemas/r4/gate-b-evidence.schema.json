@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/gate-b-retry-construction-evidence.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "verdict",
+    "authority",
+    "commencement",
+    "immutableBindings",
+    "toolchain",
+    "preflightControls",
+    "checkpoints",
+    "lanes",
+    "effectCounts",
+    "constructedFiles"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4_gate_b_retry_construction.v1"
+    },
+    "status": {
+      "enum": [
+        "IN_PROGRESS",
+        "COMPLETE"
+      ]
+    },
+    "verdict": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        }
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retryConstructionPacketSha256",
+        "retryExecutionGrant",
+        "firstProviderCallTestGrant",
+        "authorizedProviderSessions",
+        "authorizedProviderBytes",
+        "authorizedSpendUsd"
+      ],
+      "properties": {
+        "retryConstructionPacketSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "retryExecutionGrant": {
+          "const": "NOT_REQUESTED"
+        },
+        "firstProviderCallTestGrant": {
+          "const": "NOT_REQUESTED"
+        },
+        "authorizedProviderSessions": {
+          "const": 0
+        },
+        "authorizedProviderBytes": {
+          "const": 0
+        },
+        "authorizedSpendUsd": {
+          "const": 0
+        }
+      }
+    },
+    "commencement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branch",
+        "commit",
+        "tree",
+        "implementationBaselineCommit",
+        "implementationBaselineTree",
+        "implementationBaselineIsAncestor",
+        "interveningPathsApprovalOrGovernanceOnly",
+        "worktreeClean",
+        "localRemoteTrackingRefMatched"
+      ],
+      "properties": {
+        "branch": {
+          "const": "codex/r4-gate-a-build"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "tree": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "implementationBaselineCommit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "implementationBaselineTree": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "implementationBaselineIsAncestor": {
+          "const": true
+        },
+        "interveningPathsApprovalOrGovernanceOnly": {
+          "const": true
+        },
+        "worktreeClean": {
+          "const": true
+        },
+        "localRemoteTrackingRefMatched": {
+          "const": true
+        }
+      }
+    },
+    "immutableBindings": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Sha256"
+      }
+    },
+    "toolchain": {
+      "type": "object"
+    },
+    "preflightControls": {
+      "type": "object"
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "lane",
+          "status"
+        ],
+        "properties": {
+          "lane": {
+            "enum": [
+              "preflight",
+              "gate-a-regression-and-protocol-replay",
+              "path-fence",
+              "api-and-local-format-schemas",
+              "static-sql-and-role-function-contracts",
+              "encrypted-field",
+              "fake-budget-and-event-fence",
+              "fake-only-codex-adapter",
+              "native-source-compile-and-unit-tests",
+              "aggregate-runner-synthetic-dry-run",
+              "static-package-workset-audit",
+              "construction-report-and-execution-manifest",
+              "cleanup"
+            ]
+          },
+          "status": {
+            "enum": [
+              "NOT_RUN",
+              "GREEN",
+              "YELLOW",
+              "RED"
+            ]
+          },
+          "assertions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]+$"
+            }
+          },
+          "controlledObservations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Z0-9_-]+$"
+            }
+          },
+          "protocolReplay": {
+            "type": "object"
+          },
+          "staticAudit": {
+            "type": "object"
+          },
+          "testCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "developmentIterations": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "fallbackUsed": {
+            "type": "boolean"
+          },
+          "metrics": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "lanes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preflight",
+        "gate-a-regression-and-protocol-replay",
+        "path-fence",
+        "api-and-local-format-schemas",
+        "static-sql-and-role-function-contracts",
+        "encrypted-field",
+        "fake-budget-and-event-fence",
+        "fake-only-codex-adapter",
+        "native-source-compile-and-unit-tests",
+        "aggregate-runner-synthetic-dry-run",
+        "static-package-workset-audit",
+        "construction-report-and-execution-manifest",
+        "cleanup"
+      ],
+      "properties": {
+        "preflight": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "gate-a-regression-and-protocol-replay": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "path-fence": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "api-and-local-format-schemas": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "static-sql-and-role-function-contracts": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "encrypted-field": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "fake-budget-and-event-fence": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "fake-only-codex-adapter": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "native-source-compile-and-unit-tests": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "aggregate-runner-synthetic-dry-run": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "static-package-workset-audit": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "construction-report-and-execution-manifest": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        },
+        "cleanup": {
+          "enum": [
+            "NOT_RUN",
+            "GREEN",
+            "YELLOW",
+            "RED"
+          ]
+        }
+      }
+    },
+    "effectCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "providerSessions",
+        "providerBytes",
+        "spendUsd",
+        "codexThreadStarts",
+        "codexTurnStarts",
+        "realGuestBytes",
+        "externalMessages",
+        "productionWrites",
+        "deploys",
+        "merges",
+        "dockerCommands",
+        "postgresProcesses",
+        "keychainOperations",
+        "userPresencePrompts"
+      ],
+      "properties": {
+        "providerSessions": {
+          "const": 0
+        },
+        "providerBytes": {
+          "const": 0
+        },
+        "spendUsd": {
+          "const": 0
+        },
+        "codexThreadStarts": {
+          "const": 0
+        },
+        "codexTurnStarts": {
+          "const": 0
+        },
+        "realGuestBytes": {
+          "const": 0
+        },
+        "externalMessages": {
+          "const": 0
+        },
+        "productionWrites": {
+          "const": 0
+        },
+        "deploys": {
+          "const": 0
+        },
+        "merges": {
+          "const": 0
+        },
+        "dockerCommands": {
+          "const": 0
+        },
+        "postgresProcesses": {
+          "const": 0
+        },
+        "keychainOperations": {
+          "const": 0
+        },
+        "userPresencePrompts": {
+          "const": 0
+        }
+      }
+    },
+    "constructedFiles": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Sha256"
+      }
+    },
+    "cleanup": {
+      "type": "object"
+    },
+    "executionProposal": {
+      "type": "object"
+    },
+    "physicalBoundary": {
+      "enum": [
+        "CONTROLLING_AGENT_NOT_KERNEL_SANDBOXED"
+      ]
+    }
+  },
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    }
+  }
+}

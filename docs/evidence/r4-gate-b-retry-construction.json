@@ -150,13 +150,53 @@
         "INITIAL_FIXTURE_ALLOWLIST_CONFLICT_CORRECTED",
         "INITIAL_TYPESCRIPT_UNKNOWN_NARROWING_CORRECTED"
       ]
+    },
+    {
+      "lane": "api-and-local-format-schemas",
+      "status": "GREEN",
+      "testCount": 10,
+      "developmentIterations": 5,
+      "fallbackUsed": false,
+      "assertions": [
+        "API_OPERATION_MAP_BIJECTIVE",
+        "API_COUNTS_45_39_6_31_MATCHED",
+        "REQUEST_AND_RESULT_REFS_RESOLVED",
+        "REQUEST_OBJECTS_CLOSED",
+        "CONDITIONAL_REQUEST_CEILINGS_PRESERVED",
+        "RECOVERY_ARMS_EXACT",
+        "LOCAL_FORMAT_ROWS_25_BOUND",
+        "ONLY_ROOM_LEDGER_WORKSPACE_PERSISTENT",
+        "LOCAL_RECORD_OBJECTS_CLOSED",
+        "CANONICAL_WRITE_0700_0600_EXCLUSIVE_AND_FSYNCED",
+        "CANDIDATE_CLEANUP_DENY_FIRST_AND_RECONCILABLE",
+        "CONSTRUCTION_EVIDENCE_SCHEMA_VALIDATED",
+        "GENERATION_DETERMINISTIC",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_REGEX_LITERAL_CORRECTED",
+        "LOCAL_FORMAT_ROW_COUNT_CORRECTED_TO_FROZEN_25",
+        "BACKTICK_PIPE_TABLE_PARSER_CORRECTED",
+        "MULTILINE_MJS_IMPORT_TYPECHECK_CORRECTED"
+      ],
+      "metrics": {
+        "generatedSchemaFileCount": 5,
+        "generatedSchemaByteCount": 110451,
+        "operationCount": 45,
+        "mutationCount": 39,
+        "readCount": 6,
+        "expectedVersionRequiredCount": 31,
+        "canonicalProtocolObjectCount": 39,
+        "localFormatRowCount": 25,
+        "workspacePersistentFormatCount": 1
+      }
     }
   ],
   "lanes": {
     "preflight": "GREEN",
     "gate-a-regression-and-protocol-replay": "GREEN",
     "path-fence": "GREEN",
-    "api-and-local-format-schemas": "NOT_RUN",
+    "api-and-local-format-schemas": "GREEN",
     "static-sql-and-role-function-contracts": "NOT_RUN",
     "encrypted-field": "NOT_RUN",
     "fake-budget-and-event-fence": "NOT_RUN",
@@ -185,6 +225,14 @@
   },
   "constructedFiles": {
     "scripts/r4-gate-b-path-fence.mjs": "sha256:c4e31663cdee762705f35ff47541a09ebf9c7a9aaade36d61751c17e190bbc99",
-    "test/r4-gate-b/path-fence.test.ts": "sha256:5cd60eb3ea35728954e5b69b292b10c723d433c87700deb1afc3af61fb7ea558"
+    "test/r4-gate-b/path-fence.test.ts": "sha256:5cd60eb3ea35728954e5b69b292b10c723d433c87700deb1afc3af61fb7ea558",
+    "scripts/r4-gate-b-api-contract.mjs": "sha256:d95d52e95cb26250a2c36dbfacbfee9b20cd449b5f8cd42a668308485c7b0447",
+    "schemas/r4/api-v1.schema.json": "sha256:8541775a52ab541db08526b743621e817c920a7ac3b30ad416df65e073d3d0c1",
+    "schemas/r4/api-v1-index.json": "sha256:021cff86b2fc0cabebc63d85ca14f1fad41f7978b205594f90328872c5e7d3bf",
+    "schemas/r4/local-formats.schema.json": "sha256:e1d35cec21e321273214ca232d5975cade1133f27b96098815185d091f16b088",
+    "schemas/r4/local-formats-index.json": "sha256:ae8821c359de868ae9e8b51414db334c73fbdb7b8b59aa25b89c912f9681dbcd",
+    "schemas/r4/gate-b-evidence.schema.json": "sha256:3513c9d6e597868e6eb499b2cfdae90c22fc786457f024ef36a34c580cf2e81b",
+    "test/r4-gate-b/api-contract.test.ts": "sha256:289276290fc59f663a4bb103bbaba3fc37917ea8ee362ed679ce372fd686dcbe",
+    "test/r4-gate-b/local-formats.test.ts": "sha256:441014892b5c89492b9109d462327ff1888259a412372c7b7458eda6fc2d4314"
   }
 }

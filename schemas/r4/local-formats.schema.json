@@ -1,0 +1,1264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/local-formats.v1.schema.json",
+  "title": "Forme R4 closed local record formats",
+  "$comment": "Generated offline from the frozen Gate B local map under Packet sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5.",
+  "$defs": {
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*_[A-Za-z0-9_-]{16,128}$",
+      "maxLength": 160
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "Capability32": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "IdempotencyKey": {
+      "type": "string",
+      "pattern": "^(?:[A-Fa-f0-9]{32,}|[A-Za-z0-9_-]{22,})$"
+    },
+    "R4LocalRoomLedgerV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "bindingId",
+        "cursor",
+        "highWater",
+        "bindingExpiresAt",
+        "bindingRevokedAt",
+        "events",
+        "ackOutbox",
+        "receipts",
+        "tombstoneIds",
+        "gapWarning",
+        "quarantine",
+        "cleanupRequired",
+        "version"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.local-room-ledger.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "bindingId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "cursor": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "highWater": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bindingExpiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "bindingRevokedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "events": {
+          "type": "array",
+          "items": true
+        },
+        "ackOutbox": {
+          "type": "array",
+          "items": true
+        },
+        "receipts": {
+          "type": "array",
+          "items": true
+        },
+        "tombstoneIds": {
+          "type": "array",
+          "items": true
+        },
+        "gapWarning": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "quarantine": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ]
+        },
+        "cleanupRequired": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "LocalRoomEventAckOutboxV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "ack",
+        "serverReceiptId"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_room_event_ack_outbox.v1"
+        },
+        "ack": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomEventAckV1"
+        },
+        "serverReceiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      }
+    },
+    "R4BodyFreeReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "roomId",
+        "operation",
+        "objectId",
+        "requestHash",
+        "outcome",
+        "errorCode",
+        "committedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.body-free-receipt.v1"
+        },
+        "receiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "objectId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "requestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "outcome": {
+          "enum": [
+            "accepted",
+            "no_op",
+            "rejected",
+            "unavailable",
+            "recovered"
+          ]
+        },
+        "errorCode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "committedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "R4LocalLockV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "operationClass",
+        "processId",
+        "bootId",
+        "startedAt",
+        "nonce"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.local-lock.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "operationClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "processId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bootId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        }
+      }
+    },
+    "R4LocalLockRecoveryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.local-lock-recovery.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      }
+    },
+    "LocalInteractionLeaseV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "interactionId",
+        "operationClass",
+        "processId",
+        "bootId",
+        "startedAt",
+        "nonce"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_interaction_lease.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "operationClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "processId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bootId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "nonce": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        }
+      }
+    },
+    "LocalStaleReplayJournalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "journalId",
+        "journalHash",
+        "replayIdempotencyKey",
+        "recoveredOperationClass",
+        "recoveredLockNonceHash",
+        "startedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_stale_replay_journal.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "journalId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "journalHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "replayIdempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "recoveredOperationClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "recoveredLockNonceHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalStaleReplayReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "journalId",
+        "journalHash",
+        "replayIdempotencyKey",
+        "recoveredOperationClass",
+        "recoveredLockNonceHash",
+        "replayReceiptId",
+        "completedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_stale_replay_receipt.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "journalId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "journalHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "replayIdempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "recoveredOperationClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "recoveredLockNonceHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "replayReceiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "completedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalCandidateAdmissionIntentV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "candidateHash",
+        "roomId",
+        "interactionId",
+        "wrappedKeyRef",
+        "phase",
+        "startedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_candidate_admission_intent.v1"
+        },
+        "candidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidateHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "wrappedKeyRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "phase": {
+          "enum": [
+            "planned",
+            "key_wrapped",
+            "candidate_persisted"
+          ]
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalCandidateAdmissionAuthorityV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "candidateHash",
+        "roomId",
+        "interactionId",
+        "wrappedKeyRef",
+        "admittedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_candidate_admission_authority.v1"
+        },
+        "candidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidateHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "wrappedKeyRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "admittedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalEncryptedResponseCandidateV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "sessionEnvelopeId",
+        "roomId",
+        "projectionId",
+        "interactionId",
+        "basisHash",
+        "snapshotManifestHash",
+        "sessionReceiptHash",
+        "sourceDisclosureClass",
+        "policyHash",
+        "candidateHash",
+        "aadHash",
+        "ciphertext",
+        "iv",
+        "authTag",
+        "wrappedKey",
+        "admittedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_encrypted_response_candidate.v1"
+        },
+        "candidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "projectionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "basisHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "snapshotManifestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "sessionReceiptHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "sourceDisclosureClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "policyHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "candidateHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "aadHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "ciphertext": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "iv": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "authTag": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "wrappedKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "admittedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalCandidateReplacementJournalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "oldCandidateId",
+        "oldCandidateHash",
+        "newCandidateId",
+        "newCandidateHash",
+        "roomId",
+        "interactionId",
+        "wrappedKeyRef",
+        "phase",
+        "startedAt",
+        "admittedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_candidate_replacement_journal.v1"
+        },
+        "oldCandidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "oldCandidateHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "newCandidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "newCandidateHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "wrappedKeyRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "phase": {
+          "enum": [
+            "planned",
+            "key_wrapped",
+            "staged",
+            "old_denied",
+            "successor_active"
+          ]
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "admittedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "R4CandidateCleanupJournalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "roomId",
+        "interactionId",
+        "wrappedKeyRef",
+        "reason",
+        "phase",
+        "startedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.candidate-cleanup-journal.v1"
+        },
+        "candidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "wrappedKeyRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "reason": {
+          "enum": [
+            "owner_denied",
+            "owner_replaced",
+            "basis_invalidated",
+            "interaction_terminal",
+            "projection_terminal",
+            "response_terminal",
+            "room_terminal",
+            "cursor_tombstone",
+            "published",
+            "candidate_expired"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "denied",
+            "ciphertext_removed"
+          ]
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "R4CandidateCleanupReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "candidateId",
+        "roomId",
+        "interactionId",
+        "reason",
+        "completedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "r4.candidate-cleanup-receipt.v1"
+        },
+        "receiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidateId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "reason": {
+          "enum": [
+            "owner_denied",
+            "owner_replaced",
+            "basis_invalidated",
+            "interaction_terminal",
+            "projection_terminal",
+            "response_terminal",
+            "room_terminal",
+            "cursor_tombstone",
+            "published",
+            "candidate_expired"
+          ]
+        },
+        "completedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalFreshStartAuthorizationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "interactionId",
+        "sessionEnvelopeHash",
+        "orientationHash",
+        "snapshotManifestHash",
+        "capabilityProbeHash",
+        "runtimePolicyHash",
+        "reviewedAt",
+        "authorityExpiresAt",
+        "startAuthorizationHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_fresh_start_authorization.v1"
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "orientationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "snapshotManifestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "capabilityProbeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "runtimePolicyHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "reviewedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "authorityExpiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      }
+    },
+    "LocalFreshRunMarkerV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "runId",
+        "roomId",
+        "interactionId",
+        "sessionEnvelopeHash",
+        "interactionLeaseNonceHash",
+        "ownerBootId",
+        "ownerProcessId",
+        "phase",
+        "startedAt",
+        "terminal"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_fresh_run_marker.v1"
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "interactionLeaseNonceHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "ownerBootId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "ownerProcessId": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "active",
+            "cleanup_required"
+          ]
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "terminal": {
+          "enum": [
+            "normal",
+            "cancel",
+            "timeout",
+            "budget",
+            "schema_failure",
+            "process_kill",
+            "fork_attempt",
+            "huge_output",
+            "machine_crash"
+          ]
+        }
+      }
+    },
+    "LocalFreshRunCleanupReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "runId",
+        "roomId",
+        "interactionId",
+        "sessionEnvelopeHash",
+        "interactionLeaseNonceHash",
+        "terminal",
+        "outcome",
+        "completedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_fresh_run_cleanup_receipt.v1"
+        },
+        "receiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "runId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "interactionLeaseNonceHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "terminal": {
+          "enum": [
+            "normal",
+            "cancel",
+            "timeout",
+            "budget",
+            "schema_failure",
+            "process_kill",
+            "fork_attempt",
+            "huge_output",
+            "machine_crash"
+          ]
+        },
+        "outcome": {
+          "const": "runtime_bytes_absent"
+        },
+        "completedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalPublicationIntentV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "requestHash",
+        "idempotencyKey",
+        "startedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_publication_intent.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "requestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "startedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalPublicationReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "roomId",
+        "requestHash",
+        "idempotencyKey",
+        "hostedReceiptId",
+        "completedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_publication_receipt.v1"
+        },
+        "roomId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "requestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "hostedReceiptId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "completedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "SyntheticHardTransportJournalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "cycleId",
+        "modelId",
+        "preparedAt",
+        "interactionId",
+        "sessionEnvelopeId",
+        "sessionEnvelopeHash",
+        "startAuthorizationHash",
+        "policyHash",
+        "outputSchemaHash",
+        "snapshotManifestHash",
+        "budget",
+        "reservations"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_hard_transport_journal.v1"
+        },
+        "cycleId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "modelId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "preparedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "interactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "policyHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "outputSchemaHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "snapshotManifestHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "budget": {
+          "type": "object"
+        },
+        "reservations": {
+          "type": "array",
+          "items": true
+        }
+      }
+    },
+    "GuestCapabilityInputV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "capabilityId",
+        "capabilitySecret"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "guest_capability_input.v1"
+        },
+        "capabilityId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capabilitySecret": {
+          "$ref": "#/$defs/Capability32"
+        }
+      }
+    },
+    "GuestAskRecoveryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "idempotencyKey",
+        "replySecret",
+        "deleteSecret"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "guest_ask_recovery.v1"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "replySecret": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "deleteSecret": {
+          "$ref": "#/$defs/Capability32"
+        }
+      }
+    },
+    "GuestAgentTokenRecoveryV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "idempotencyKey",
+        "derivativeSecret",
+        "replySecret",
+        "deleteSecret"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "guest_agent_token_recovery.v1"
+        },
+        "idempotencyKey": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 131072
+        },
+        "derivativeSecret": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "replySecret": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "deleteSecret": {
+          "$ref": "#/$defs/Capability32"
+        }
+      }
+    },
+    "GuestAgentTokenSecretBundleV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "manualRecovery",
+        "agentShare"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "guest_agent_token_secret_bundle.v1"
+        },
+        "manualRecovery": {
+          "type": "object"
+        },
+        "agentShare": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "derivativeSecret"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "const": "guest_agent_token_share.v1"
+            },
+            "derivativeSecret": {
+              "$ref": "#/$defs/Capability32"
+            }
+          }
+        }
+      }
+    }
+  }
+}

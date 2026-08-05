@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "r4.gate-b.local-format-index.v1",
+  "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+  "sourceSha256": "sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995",
+  "formatCount": 25,
+  "formats": [
+    {
+      "schemaVersion": "r4.local-room-ledger.v1",
+      "locationPattern": "^workspace/\\.forme/room/ledgers/room_[A-Za-z0-9_-]{16,128}\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": true,
+      "cleanup": "workspace_durable_body_free"
+    },
+    {
+      "schemaVersion": "local_room_event_ack_outbox.v1",
+      "locationPattern": null,
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "r4.body-free-receipt.v1",
+      "locationPattern": null,
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "r4.local-lock.v1",
+      "locationPattern": "^connector-protection/room-locks/room_[A-Za-z0-9_-]{16,128}\\.lock\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_reconcile_then_remove"
+    },
+    {
+      "schemaVersion": "r4.local-lock-recovery.v1",
+      "locationPattern": "^connector-protection/room-locks/room_[A-Za-z0-9_-]{16,128}\\.lock\\.json\\.recovery$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_reconcile_then_remove"
+    },
+    {
+      "schemaVersion": "local_interaction_lease.v1",
+      "locationPattern": "^connector-protection/interaction-leases/room_[A-Za-z0-9_-]{16,128}--interaction_[A-Za-z0-9_-]{16,128}\\.lease\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_reconcile_then_remove"
+    },
+    {
+      "schemaVersion": "local_stale_replay_journal.v1",
+      "locationPattern": "^connector-protection/room-replay/room_[A-Za-z0-9_-]{16,128}--journal_[A-Za-z0-9_-]{16,128}\\.json\\.pending$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_reconcile_then_remove"
+    },
+    {
+      "schemaVersion": "local_stale_replay_receipt.v1",
+      "locationPattern": "^connector-protection/room-replay/room_[A-Za-z0-9_-]{16,128}--journal_[A-Za-z0-9_-]{16,128}\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "retained_body_free_receipt"
+    },
+    {
+      "schemaVersion": "local_candidate_admission_intent.v1",
+      "locationPattern": "^candidate-protection/candidate_[A-Za-z0-9_-]{16,128}\\.admission\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_candidate_admission_authority.v1",
+      "locationPattern": "^candidate-protection/candidate_[A-Za-z0-9_-]{16,128}\\.admission-authority\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_encrypted_response_candidate.v1",
+      "locationPattern": "^candidate-protection/candidate_[A-Za-z0-9_-]{16,128}\\.candidate\\.json$",
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "deny_key_destroy_ciphertext_remove"
+    },
+    {
+      "schemaVersion": "local_candidate_replacement_journal.v1",
+      "locationPattern": "^candidate-protection/OLD_candidate_[A-Za-z0-9_-]{16,128}\\.replacement\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_encrypted_response_candidate.v1",
+      "locationPattern": "^candidate-protection/NEW_candidate_[A-Za-z0-9_-]{16,128}\\.candidate\\.staged\\.json$",
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "replacement_transition"
+    },
+    {
+      "schemaVersion": "r4.candidate-cleanup-journal.v1",
+      "locationPattern": "^candidate-protection/candidate_[A-Za-z0-9_-]{16,128}\\.cleanup\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "r4.candidate-cleanup-receipt.v1",
+      "locationPattern": "^candidate-protection/cleanup-receipts\\.jsonl$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "retained_body_free_receipt"
+    },
+    {
+      "schemaVersion": "local_fresh_start_authorization.v1",
+      "locationPattern": null,
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_fresh_run_marker.v1",
+      "locationPattern": "^runtime/run_[A-Za-z0-9_-]{16,128}\\.marker\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_fresh_run_cleanup_receipt.v1",
+      "locationPattern": "^runtime/run_[A-Za-z0-9_-]{16,128}\\.cleanup-receipt\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_publication_intent.v1",
+      "locationPattern": "^connector-protection/publication/(?:[A-Fa-f0-9]{32,}|[A-Za-z0-9_-]{22,})\\.intent\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "local_publication_receipt.v1",
+      "locationPattern": "^connector-protection/publication/(?:[A-Fa-f0-9]{32,}|[A-Za-z0-9_-]{22,})\\.receipt\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "synthetic_hard_transport_journal.v1",
+      "locationPattern": "^fake-transport/[A-Za-z0-9_-]{16,128}\\.journal\\.json$",
+      "bodyFree": true,
+      "workspaceAllowed": false,
+      "cleanup": "destroy_after_body_free_commit"
+    },
+    {
+      "schemaVersion": "guest_capability_input.v1",
+      "locationPattern": null,
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "guest_ask_recovery.v1",
+      "locationPattern": null,
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "guest_agent_token_recovery.v1",
+      "locationPattern": null,
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    },
+    {
+      "schemaVersion": "guest_agent_token_secret_bundle.v1",
+      "locationPattern": null,
+      "bodyFree": false,
+      "workspaceAllowed": false,
+      "cleanup": "explicit_lifecycle"
+    }
+  ],
+  "bundleSha256": "sha256:e1d35cec21e321273214ca232d5975cade1133f27b96098815185d091f16b088",
+  "canonicalProtocolRegistrySha256": "sha256:8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea"
+}
