@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "r4_gate_b_retry_construction.v1",
+  "status": "IN_PROGRESS",
+  "verdict": null,
+  "authority": {
+    "retryConstructionPacketSha256": "sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "authorizedProviderSessions": 0,
+    "authorizedProviderBytes": 0,
+    "authorizedSpendUsd": 0
+  },
+  "commencement": {
+    "branch": "codex/r4-gate-a-build",
+    "commit": "6e8bf486cdc76deeb702f176a72bd8af981567e6",
+    "tree": "aded81af711db529305d261d98dc4e36139c95c2",
+    "implementationBaselineCommit": "3d3139798ae15e0f9ba267d157d6a84d2e8d0a98",
+    "implementationBaselineTree": "8fab1cab971b70939414b15f2836284d06860bbd",
+    "implementationBaselineIsAncestor": true,
+    "interveningPathsApprovalOrGovernanceOnly": true,
+    "worktreeClean": true,
+    "localRemoteTrackingRefMatched": true
+  },
+  "immutableBindings": {
+    "docs/R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md": "sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7",
+    "docs/R4-GATE-B-RETRY-OWNER-REVIEW.md": "sha256:ecae36867e36b17c021dc87ae4e5c6106a3cd8729184dcf0d90a04890a9b891a",
+    "docs/R4-TECHNICAL-CONTROL-PACKET.md": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "docs/R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md": "sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa",
+    "docs/R4-GATE-B-OWNER-REVIEW.md": "sha256:a297970032436ee3c05eddafacb8fad9ad5ee13a11cac6ef366808c50135228c",
+    "docs/R4-GATE-B-EXECUTION-REPORT.md": "sha256:01469865af1cb851ec0167d7493ca16eab827f6be53f8a15659221fd64796e18",
+    "docs/evidence/r4-gate-b-execution.json": "sha256:647a87ee00597f8cf3fdf9e8a7ea7b4d3f803a1f562197ed757e61423e894f48",
+    "schemas/r4/gate-b/README.md": "sha256:e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b",
+    "schemas/r4/gate-b/artifact-index.json": "sha256:2fc4f5ec2554f43a8c9a0d93950a5ce1198b91555f361af53d80c7664c5b6a9f",
+    "schemas/r4/gate-b/operations.md": "sha256:b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4",
+    "schemas/r4/gate-b/local-formats.md": "sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995",
+    "schemas/r4/gate-b/runtime-boundary.json": "sha256:ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450",
+    "schemas/r4/gate-b/codex-zero-call-contract.json": "sha256:45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845",
+    "schemas/r4/gate-b/macos/forme-fresh-response.sb": "sha256:5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab",
+    "schemas/r4/gate-b/macos/build-recipe.json": "sha256:93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de",
+    "schemas/r4/gate-b/postgres-contract.md": "sha256:73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc",
+    "package-lock.json": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812"
+  },
+  "toolchain": {
+    "node": {
+      "version": "24.14.1",
+      "sha256": "sha256:35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff"
+    },
+    "npm": {
+      "version": "11.11.0",
+      "launcherSha256": "sha256:8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+    },
+    "typescript": {
+      "version": "7.0.2",
+      "launcherSha256": "sha256:2219f428a7e55aaf1f7ad85b9b0f0cf5078aeb76ccc9a7c6036c92d48f492ffd"
+    },
+    "git": {
+      "sha256": "sha256:179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818"
+    },
+    "swift": {
+      "version": "6.3.3",
+      "target": "arm64-apple-macosx26.0",
+      "launcherSha256": "sha256:179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818"
+    },
+    "xcode": {
+      "version": "26.6",
+      "build": "17F113",
+      "xcrunSha256": "sha256:a439970aea2b4e435eac6518ff62c97fd1c57d8c731974027ad211b515c7a7b8"
+    }
+  },
+  "preflightControls": {
+    "isolatedHome": true,
+    "isolatedTmpdir": true,
+    "globalGitConfigDisabled": true,
+    "systemGitConfigDisabled": true,
+    "repositoryDependenciesAlreadyPresent": true,
+    "dependencyResolutionOrDownloadAttempted": false,
+    "externalNetworkAttempted": false,
+    "realCodexReadOrInvocationAttempted": false,
+    "systemRealpathExecutablePresent": false,
+    "canonicalizer": "node:fs.realpathSync",
+    "canonicalPathsResolvedExactly": true
+  },
+  "checkpoints": [
+    {
+      "lane": "preflight",
+      "status": "GREEN",
+      "assertions": [
+        "BRANCH_MATCHED",
+        "WORKTREE_CLEAN",
+        "LOCAL_REMOTE_TRACKING_REF_MATCHED",
+        "COMMENCEMENT_COMMIT_MATCHED",
+        "COMMENCEMENT_TREE_MATCHED",
+        "IMPLEMENTATION_BASELINE_COMMIT_AND_TREE_MATCHED",
+        "IMPLEMENTATION_BASELINE_IS_ANCESTOR",
+        "INTERVENING_PATHS_ARE_APPROVAL_OR_GOVERNANCE_ONLY",
+        "IMMUTABLE_HASHES_MATCHED",
+        "PACKAGE_LOCK_HASH_MATCHED",
+        "OFFLINE_DEPENDENCIES_PRESENT",
+        "TOOLCHAIN_VERSIONS_AND_EXECUTABLE_HASHES_RECORDED"
+      ],
+      "controlledObservations": [
+        "SYSTEM_REALPATH_EXECUTABLE_ABSENT_NODE_CANONICALIZER_USED"
+      ]
+    }
+  ],
+  "lanes": {
+    "preflight": "GREEN",
+    "gate-a-regression-and-protocol-replay": "NOT_RUN",
+    "path-fence": "NOT_RUN",
+    "api-and-local-format-schemas": "NOT_RUN",
+    "static-sql-and-role-function-contracts": "NOT_RUN",
+    "encrypted-field": "NOT_RUN",
+    "fake-budget-and-event-fence": "NOT_RUN",
+    "fake-only-codex-adapter": "NOT_RUN",
+    "native-source-compile-and-unit-tests": "NOT_RUN",
+    "aggregate-runner-synthetic-dry-run": "NOT_RUN",
+    "static-package-workset-audit": "NOT_RUN",
+    "construction-report-and-execution-manifest": "NOT_RUN",
+    "cleanup": "NOT_RUN"
+  },
+  "effectCounts": {
+    "providerSessions": 0,
+    "providerBytes": 0,
+    "spendUsd": 0,
+    "codexThreadStarts": 0,
+    "codexTurnStarts": 0,
+    "realGuestBytes": 0,
+    "externalMessages": 0,
+    "productionWrites": 0,
+    "deploys": 0,
+    "merges": 0,
+    "dockerCommands": 0,
+    "postgresProcesses": 0,
+    "keychainOperations": 0,
+    "userPresencePrompts": 0
+  },
+  "constructedFiles": {}
+}
