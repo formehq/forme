@@ -18,11 +18,11 @@
   Gate B Manifest
   `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`,
   but its first attempt stopped
-  Red/cleaned after a real Codex-home read-scope violation. The current Owner
-  stop is construction-only Retry Packet
+  Red/cleaned after a real Codex-home read-scope violation. The Owner then
+  approved the construction-only Retry Packet
   `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
-  Retry
-  Execution is not requested. Provider calls,
+  construction is ready but has not started. Retry Execution is not requested.
+  Provider calls,
   real Guest data, production migration, deployment, spend, production Room
   mutation, external email, production secrets, and public traffic remain
   unauthorized
@@ -39,7 +39,7 @@
 | R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. Gate B remains incomplete after one Red/cleaned attempt; the current decision is whether to approve runner construction separately from execution.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. Gate B remains incomplete after one Red/cleaned attempt; the narrower runner Construction boundary is now Owner-approved and ready to start, while real Retry Execution remains a separate future decision.
 
 ## R4 owner-approved product target — Gate A Technical Review complete
 
@@ -173,7 +173,7 @@ Native Harness role clarification
   → reconciled Technical Control Packet v0.2 audit/hash ✓ → Owner approval ✓
   → Gate A repository implementation + Technical Review ✓
   → Gate B v0.1 approval ✓ → first execution RED/CLEAN
-  → Retry Construction Packet [current Owner stop]
+  → Retry Construction Packet ✓ [approved; ready, not started]
   → separately hash-pinned Retry Execution [not requested]
 ```
 
@@ -185,8 +185,9 @@ path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
 exchange, one optional lightweight Guest Capsule, and typed external signals.
 Gate A repository code/docs, synthetic/local tests, and evidence remain
 complete. The first approved Gate B attempt is preserved as Red/cleaned
-evidence; none of its runtime lanes is proven. Retry Construction would build
-only an offline reviewed runner and return a second exact Execution Manifest.
+evidence; none of its runtime lanes is proven. Approved Retry Construction may
+build only an offline reviewed runner and must return a second exact Execution
+Manifest before stopping.
 Real execution, First Provider-Call Test Grant, production durable writes,
 public actions, and spend remain separate later decisions.
 

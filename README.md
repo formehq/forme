@@ -10,22 +10,23 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-18**
 - Demo Day: **2026-08-19 (Wednesday)**
-- Current gate: **R4 Gate B Retry Construction review.** Gate A remains
-  technically complete. The Owner approved the first Gate B Manifest, but its
-  execution stopped Red after a real Codex-home read-scope violation; no
-  provider/thread/turn started and cleanup is Green. The current review object
-  splits repo-only runner construction from any later real execution; R4 is
-  not Owner-accepted or Done.
+- Current gate: **R4 Gate B Retry Construction ready.** Gate A remains
+  technically complete. The first Gate B attempt stopped Red after a real
+  Codex-home read-scope violation, started no provider/thread/turn, and cleaned
+  Green. The Owner has now approved the narrower construction-only Packet;
+  construction has not started, and R4 is not Owner-accepted or Done.
 - Product implementation: **R1–R3 Owner-accepted; R4 Gate A technically
   implemented under the exact Owner-approved Packet**
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
   The Gate A build remains synthetic/local: no provider call, real Guest data,
   external email, production migration, hosted/production mutation,
   deployment, production secret, public traffic, or spend occurred. The first
-  Gate B attempt is preserved as Red/cleaned evidence. The next stop is Owner
-  review of Retry Construction Packet
+  Gate B attempt is preserved as Red/cleaned evidence. The Owner approved the
+  exact Retry Construction Packet
   `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
-  Retry Execution and the first provider-call grant are not requested.
+  the next action is deciding whether to begin its bounded single-Agent
+  construction task. Retry Execution and the first provider-call grant remain
+  not requested.
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -43,7 +44,7 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
    exact repository evidence, five synthetic journeys, and honest later-gate
    conditions
 6. [`docs/R4-GATE-B-RETRY-OWNER-REVIEW.md`](./docs/R4-GATE-B-RETRY-OWNER-REVIEW.md) —
-   low-load explanation of the current exact Retry Construction stop gate
+   immutable low-load review for the approved Retry Construction boundary
 7. [`docs/R4-GATE-B-EXECUTION-REPORT.md`](./docs/R4-GATE-B-EXECUTION-REPORT.md) —
    why the first Gate B attempt stopped Red and what cleanup proved
 8. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
@@ -213,11 +214,12 @@ The Owner approved that exact hash on 2026-08-03. The resulting Gate A
 implementation and evidence remain technically complete; see
 [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md). The next
 Manifest was approved, but the first attempt stopped Red and cleaned; see the
-[`Gate B Execution Report`](./docs/R4-GATE-B-EXECUTION-REPORT.md). The current
-proposal is the construction-only
+[`Gate B Execution Report`](./docs/R4-GATE-B-EXECUTION-REPORT.md). The Owner
+has now approved the construction-only
 [`Retry Packet`](./docs/R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md) with its
-low-load [`Owner Review`](./docs/R4-GATE-B-RETRY-OWNER-REVIEW.md). It requests
-neither Retry Execution nor a first provider call. Provider/model calls, real
+low-load [`Owner Review`](./docs/R4-GATE-B-RETRY-OWNER-REVIEW.md), but no
+construction has started. That approval grants neither Retry Execution nor a
+first provider call. Provider/model calls, real
 Guest-data handling, external email, schema migration, deployment, spend,
 production action, secrets, and public traffic remain unauthorized unless a
 later exact gate explicitly grants them.

@@ -6,11 +6,11 @@
   `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`,
   but the first attempt stopped Red
   after a real Codex-home read-scope violation and cleaned with zero
-  provider/thread/turn effects. The next Owner stop is the construction-only
-  Retry Packet at
+  provider/thread/turn effects. The Owner has now approved the
+  construction-only Retry Packet at
   `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
-  Retry Execution and the First
-  Provider-Call Test Grant are not requested.**
+  construction is ready but has not started. Retry Execution and the First
+  Provider-Call Test Grant remain not requested.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
   Gate A is technically implemented and verified but R4 is not yet Owner-
@@ -19,9 +19,10 @@
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: review and decide the exact construction-only retry through
-  [`R4-GATE-B-RETRY-OWNER-REVIEW.md`](./R4-GATE-B-RETRY-OWNER-REVIEW.md).
-  Approval would build and review the runner only. Do not execute Docker,
+- Next action: decide whether to start one bounded, single-primary-Agent
+  construction task under the now-approved
+  [`R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md`](./R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md).
+  That task may build and review the runner only. Do not execute Docker,
   PostgreSQL, real Codex, signing/Keychain, user presence, Gate C, or any
   provider call; do not touch real Guest data, external email, production,
   deployment, public traffic, secret, merge, or spend.
@@ -47,7 +48,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A ✓ · GATE B RED/CLEAN · RETRY CONSTRUCTION REVIEW
+R4 Controlled Presence    ← GATE A ✓ · GATE B RED/CLEAN · RETRY CONSTRUCTION READY
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -186,9 +187,15 @@ Current truth:
   files. It emitted paths but no file contents or credentials and started zero
   Codex threads, turns, models, accounts, or provider requests. All remaining
   lanes stopped, four unvalidated partial files were removed, cleanup is Green,
-  and the report commit passed standard CI. The current proposal splits
-  repo-only Retry Construction from a later separately hash-pinned Execution
-  Grant; neither retry construction nor execution is yet approved;
+  and the report commit passed standard CI. The correction splits repo-only
+  Retry Construction from a later separately hash-pinned Execution Grant;
+- on 2026-08-04 the Owner approved the exact Retry Construction Packet at
+  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`
+  while explicitly keeping Retry Execution Grant and First Provider-Call Test
+  Grant `NOT_REQUESTED`. The Packet and low-load Owner Review are now
+  byte-frozen. Construction is authorized but has not started; it must use one
+  primary Agent, strict serial checkpoints, repository/synthetic reads only,
+  and return a separately hash-pinned Execution Manifest before stopping;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;

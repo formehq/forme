@@ -13,9 +13,12 @@
   the Owner approved those exact bytes on 2026-08-03. Gate A repository-only
   implementation is technically verified with synthetic/local evidence. The
   Owner approved Gate B v0.1 without a provider-call grant, but its first
-  attempt stopped Red and cleaned after a real Codex-home read-scope violation;
-  R4 is not Owner-accepted or Done, and Retry Construction is the current
-  unapproved proposal**
+  attempt stopped Red and cleaned after a real Codex-home read-scope violation.
+  The Owner then approved exact Retry Construction Packet
+  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`
+  while keeping Retry Execution and First Provider-Call Test Grant
+  `NOT_REQUESTED`; construction has not started, and R4 is not Owner-accepted
+  or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -986,6 +989,30 @@ Agent that already has broad filesystem permission.
 Until a new exact approval, no retry construction or execution is authorized.
 Native Harness AI remains `manual_owner_only_available`, and preparing a First
 Provider-Call Test Grant is still premature.
+
+## Evidence round 21 — Retry Construction exact approval; execution remains closed
+
+On 2026-08-04 the Owner approved Retry Construction Packet v0.1 at
+`sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`
+with the exact receipt:
+
+```text
+批准 R4 Gate B Retry Construction Packet v0.1 sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7；Retry Execution Grant NOT REQUESTED；First Provider-Call Test Grant NOT REQUESTED
+```
+
+This approval opens only repository construction, offline/synthetic tests,
+aggregate-runner dry run, body-free Construction evidence, and preparation of
+a separately hash-pinned Retry Execution Manifest. The approved Packet and its
+low-load Owner Review are now byte-frozen. Construction has not started.
+Construction outputs and runtime probes therefore remain zero at this receipt
+boundary. Provider sessions / bytes / spend remain `0 / 0 / US$0`; real Guest
+bytes, production writes, deploys, and merges also remain zero.
+
+Retry Execution, Docker, a real Codex executable, PostgreSQL execution,
+signing/Keychain, user presence, Gate C, a provider call, real Guest/email,
+deployment, production mutation, merge, and spend remain unauthorized. The
+next operational choice is whether to start the bounded, single-primary-Agent
+Construction task; its result must return to the Owner even if Green.
 
 ## Follow-up product-learning questions — not R4 blockers
 

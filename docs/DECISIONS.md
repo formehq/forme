@@ -649,3 +649,34 @@ construction, execution, Gate C, or a provider call. The next Owner decision
 is a separately hash-pinned Retry Construction Packet that splits runner
 construction from later execution and keeps both Retry Execution and First
 Provider-Call Test Grant closed.
+
+## 2026-08-04 — Gate B Retry Construction v0.1 approved; execution remains closed
+
+**Decision:** approve exact R4 Gate B Retry Construction Packet v0.1 at
+`sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`,
+while explicitly keeping both Retry Execution Grant and First Provider-Call
+Test Grant `NOT_REQUESTED`. The exact Owner receipt was:
+
+```text
+批准 R4 Gate B Retry Construction Packet v0.1 sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7；Retry Execution Grant NOT REQUESTED；First Provider-Call Test Grant NOT REQUESTED
+```
+
+**Reason:** the first Gate B attempt showed that constructing the integration
+and exercising real runtimes under one authority made investigation scope too
+wide. The replacement boundary first builds and audits one deterministic
+runner without touching those runtimes, then returns a separate exact
+Execution Manifest for another Owner decision.
+
+**Effect:** one primary Agent may work serially inside the exact repository
+workset to build schemas, static SQL, in-memory encrypted-field and fake-budget
+logic, a fixture-only Codex adapter, unsigned native source/unit tests, an
+adversarial path fence, and an aggregate runner dry run. It may publish the
+body-free Construction Report and next Execution proposal without merge.
+
+This approval starts no construction by itself. It authorizes no Docker, real
+Codex executable, PostgreSQL execution, signing/Keychain, user presence, test
+network, additional Agent task during Construction, provider call, real Guest
+or email, Gate C, deployment, production mutation, merge, or spend. After
+Construction, Green/Yellow/Red all return to the Owner; none opens Retry
+Execution automatically. The Packet and low-load Owner Review remain
+byte-frozen at their approved bytes.
