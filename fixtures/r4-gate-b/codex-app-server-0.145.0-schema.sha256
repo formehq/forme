@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "r4.gate-b.codex-schema-pins.v1",
+  "npmVersion": "0.145.0",
+  "reportedCliVersion": "codex-cli 0.145.0",
+  "experimentalIncluded": false,
+  "fileCount": 273,
+  "aggregateSha256": "313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62",
+  "selectedFileHashes": {
+    "ClientNotification.json": "a30b3041578845b11add3d07d5a63cd3a12d5d126e87b8c591862b4aeb68d97c",
+    "ClientRequest.json": "cc9f6e191a032bdfdc96d768f4ddaba4ced75408017af3ac0dbcc4d00c1faaa8",
+    "ServerNotification.json": "7f9f9ac791c067e3e9840a9a6543a3a0d3de86e64b2d764ede4c2f3b01bcba64",
+    "ServerRequest.json": "177f8b7de9dd8ce2055c56a5fd22dbc6ec24e2a4d706d08fef9f5ad4effe71f6",
+    "codex_app_server_protocol.schemas.json": "b6ec47c51bef8a6857dd9435f9919a43ba6616a5a9e3ab25087451cbc93d9f06",
+    "codex_app_server_protocol.v2.schemas.json": "bf840d4cb1f74ed64badfaba37bd44999f1ccf6c721f03c2d196ad7f0991dab0"
+  }
+}
