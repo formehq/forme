@@ -133,7 +133,7 @@
       "lane": "path-fence",
       "status": "GREEN",
       "testCount": 5,
-      "developmentIterations": 3,
+      "developmentIterations": 4,
       "fallbackUsed": false,
       "assertions": [
         "EXACT_ROOT_AND_LITERAL_ALLOWLIST_ALLOWED",
@@ -190,6 +190,50 @@
         "localFormatRowCount": 25,
         "workspacePersistentFormatCount": 1
       }
+    },
+    {
+      "lane": "static-sql-and-role-function-contracts",
+      "status": "GREEN",
+      "testCount": 6,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "STATIC_SQL_LEXER_AND_STATEMENT_BOUNDARIES_PASSED",
+        "EXACT_37_TABLE_INVENTORY_BOUND",
+        "EXACT_44_DOMAIN_AND_3_COMPOSITE_INVENTORY_BOUND",
+        "ZERO_ENUM_AND_ZERO_EXTENSION_CONSTRUCTION_BOUND",
+        "EXACT_5_ROLE_FLAGS_BOUND",
+        "53_SURFACE_FUNCTIONS_AND_11_AUDIT_VIEWS_BOUND",
+        "SECURITY_DEFINER_SEARCH_PATH_AND_PUBLIC_REVOKE_BOUND",
+        "NO_RUNTIME_RAW_TABLE_GRANT_BOUND",
+        "BOOTSTRAP_VERIFY_ROLLBACK_HASH_GUARDS_CONSTRUCTED",
+        "GLOBAL_LOCK_ORDER_AND_8_RACE_FIXTURES_REPLAYED",
+        "RUNTIME_EXECUTION_EXPLICITLY_DEFERRED",
+        "POSTGRES_DOCKER_AND_NETWORK_EFFECT_COUNTS_ZERO",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_INTERNAL_FUNCTION_SECURITY_DEFINER_ASSERTION_CORRECTED",
+        "PUBLIC_FUNCTION_ACL_ASSERTION_CORRECTED_TO_CATALOG_ACL_EXPANSION",
+        "CONTRACT_RECHECK_TEMP_ROOT_ENVIRONMENT_BINDING_CORRECTED"
+      ],
+      "metrics": {
+        "runtimeExecuted": false,
+        "sqlFileCount": 4,
+        "constructedByteCount": 124831,
+        "tableCount": 37,
+        "domainCount": 44,
+        "compositeCount": 3,
+        "functionCount": 60,
+        "surfaceFunctionCount": 53,
+        "auditViewCount": 11,
+        "triggerCount": 7,
+        "explicitIndexCount": 48,
+        "roleCount": 5,
+        "enumCount": 0,
+        "raceFixtureCount": 8,
+        "deferredExecutionAssertionCount": 5
+      }
     }
   ],
   "lanes": {
@@ -197,7 +241,7 @@
     "gate-a-regression-and-protocol-replay": "GREEN",
     "path-fence": "GREEN",
     "api-and-local-format-schemas": "GREEN",
-    "static-sql-and-role-function-contracts": "NOT_RUN",
+    "static-sql-and-role-function-contracts": "GREEN",
     "encrypted-field": "NOT_RUN",
     "fake-budget-and-event-fence": "NOT_RUN",
     "fake-only-codex-adapter": "NOT_RUN",
@@ -233,6 +277,12 @@
     "schemas/r4/local-formats-index.json": "sha256:ae8821c359de868ae9e8b51414db334c73fbdb7b8b59aa25b89c912f9681dbcd",
     "schemas/r4/gate-b-evidence.schema.json": "sha256:3513c9d6e597868e6eb499b2cfdae90c22fc786457f024ef36a34c580cf2e81b",
     "test/r4-gate-b/api-contract.test.ts": "sha256:289276290fc59f663a4bb103bbaba3fc37917ea8ee362ed679ce372fd686dcbe",
-    "test/r4-gate-b/local-formats.test.ts": "sha256:441014892b5c89492b9109d462327ff1888259a412372c7b7458eda6fc2d4314"
+    "test/r4-gate-b/local-formats.test.ts": "sha256:441014892b5c89492b9109d462327ff1888259a412372c7b7458eda6fc2d4314",
+    "schemas/r4/sql/0000_r4_gate_b_bootstrap.sql": "sha256:bdf76cf9d5e5dfb4f357d8d2fe230071cbbe344fbb599abca093005c915c0a71",
+    "schemas/r4/sql/0001_r4_presence.sql": "sha256:294fabfaabf7ed04d2c711ea8d1185f475ccd288d8db078ecc3fb0813e3ee4b3",
+    "schemas/r4/sql/0001_r4_presence.verify.sql": "sha256:beacf7fbd65745a9d2591482c602307e81c5c778cb0d896c1dc2501f0e19211d",
+    "schemas/r4/sql/0001_r4_presence.rollback.sql": "sha256:94104673383c07365f352d68cc36f55a8eaf9b9c756f02c90ffeb7c8eae2f6dc",
+    "scripts/r4-gate-b-postgres.mjs": "sha256:4fde21a2a63d57af1011cd885002260c338bf6970794fe47a287ccc688891422",
+    "test/r4-gate-b/postgres-schema.test.ts": "sha256:355026d53fb9435438aa41cd4d768464a4a41af86d6f5a785269ceb5d40a4735"
   }
 }
