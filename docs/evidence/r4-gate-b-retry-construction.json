@@ -101,11 +101,38 @@
       "controlledObservations": [
         "SYSTEM_REALPATH_EXECUTABLE_ABSENT_NODE_CANONICALIZER_USED"
       ]
+    },
+    {
+      "lane": "gate-a-regression-and-protocol-replay",
+      "status": "GREEN",
+      "assertions": [
+        "SPINE_AND_ROOM_TYPECHECK_PASSED",
+        "SPINE_TESTS_45_OF_45_PASSED",
+        "R4_OFFLINE_TESTS_293_OF_293_PASSED",
+        "FIVE_JOURNEY_PROTOCOL_REPLAY_PASSED",
+        "GATE_A_STATIC_REPOSITORY_AUDIT_PASSED",
+        "DOCUMENT_AUDIT_47_ROWS_PASSED"
+      ],
+      "protocolReplay": {
+        "journeyCount": 5,
+        "aggregateSha256": "sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56",
+        "networkCalls": 0,
+        "providerCalls": 0,
+        "externalEmailSends": 0,
+        "realGuestRecords": 0
+      },
+      "staticAudit": {
+        "protocolFileCount": 10,
+        "protocolAggregateSha256": "sha256:066d03e1cec744b3418c61c899d524430b4085478b4f130044eeb57ecc40e835",
+        "hostedFileCount": 28,
+        "hostedAggregateSha256": "sha256:1ee9fbc02716e1f0f9a408e077d2b14d4fc7148dacbd463dee66786ae55bb32a",
+        "migrationFileCount": 0
+      }
     }
   ],
   "lanes": {
     "preflight": "GREEN",
-    "gate-a-regression-and-protocol-replay": "NOT_RUN",
+    "gate-a-regression-and-protocol-replay": "GREEN",
     "path-fence": "NOT_RUN",
     "api-and-local-format-schemas": "NOT_RUN",
     "static-sql-and-role-function-contracts": "NOT_RUN",
