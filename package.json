@@ -40,6 +40,7 @@
     "r4:gate-b:encrypted-field": "node scripts/r4-gate-b-encrypted-field.mjs check",
     "r4:gate-b:fake-budget": "node scripts/r4-gate-b-fake-budget.mjs check",
     "r4:gate-b:codex-probe": "node scripts/r4-gate-b-codex-probe.mjs check",
+    "r4:gate-b:macos": "sh scripts/r4-gate-b-macos-probe.sh check",
     "test:spine": "node --test test/*.test.ts",
     "test:r4": "node --test 'test/r4/**/*.test.ts'",
     "test:r4:offline": "node --import ./scripts/deny-external-network.mjs --test 'test/r4/**/*.test.ts'",

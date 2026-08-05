@@ -357,6 +357,57 @@
         "stderrBytes": 0,
         "constructedByteCount": 39722
       }
+    },
+    {
+      "lane": "native-source-compile-and-unit-tests",
+      "status": "GREEN",
+      "testCount": 12,
+      "developmentIterations": 5,
+      "fallbackUsed": false,
+      "assertions": [
+        "SWIFT_PACKAGE_DECLARED_ZERO_EXTERNAL_DEPENDENCIES",
+        "PINNED_SWIFT_6_RELEASE_COMPILE_PASSED",
+        "SWIFT_BOUNDARY_UNIT_TESTS_8_OF_8_PASSED",
+        "TYPESCRIPT_STATIC_NATIVE_TESTS_4_OF_4_PASSED",
+        "EXACT_BUNDLE_IDENTIFIER_MINIMUM_OS_AND_EMPTY_ENTITLEMENTS_BOUND",
+        "OWNER_ONE_SHOT_REVIEW_AND_15_MINUTE_AUTHORITY_BOUND",
+        "SECURE_ENCLAVE_USER_PRESENCE_AND_CUSTOM_KEYCHAIN_SOURCE_CONSTRUCTED",
+        "LOGIN_AND_DATA_PROTECTION_KEYCHAIN_FALLBACKS_DENIED",
+        "USER_PRESENCE_CANCELLATION_CLASSIFIES_YELLOW_WITHOUT_FALLBACK",
+        "SIGNATURE_VERIFICATION_REMAINS_AGGREGATE_RUNNER_AUTHORITY",
+        "MEMORY_PIPE_BODY_AND_EVENT_CEILINGS_BOUND",
+        "CPU_FD_RSS_PROCESS_AND_WALL_RESOURCE_CEILINGS_BOUND",
+        "PINNED_SEATBELT_PARAMETERS_NETWORK_AND_DESCENDANT_DENIAL_BOUND",
+        "CODEX_NATIVE_PLAN_REMAINS_INITIALIZE_ONLY_WITH_ZERO_THREAD_TURN_PROVIDER_AUTHORITY",
+        "CLEANUP_REQUIRED_BEFORE_TERMINAL_STATE",
+        "NO_SIGNED_APP_CERTIFICATE_KEYCHAIN_SECURE_ENCLAVE_PROMPT_OR_SEATBELT_CHILD_CREATED",
+        "CONSTRUCTION_SCRATCH_REMOVED_AFTER_EVERY_BUILD_ATTEMPT",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_EXPLICIT_BZERO_IMPORT_FAILURE_CORRECTED",
+        "RESERVED_MEMSET_S_BRIDGE_WARNING_REMOVED_WITH_EXTERNAL_PATTERN_OVERWRITE",
+        "CUSTOM_FILE_KEYCHAIN_API_DEPRECATION_RECORDED_AS_FROZEN_HOST_SPECIFIC_EXECUTION_RISK",
+        "CONSTRUCTION_TEST_EXECUTABLE_PATH_CORRECTED_FROM_USR_BIN_TO_BIN",
+        "NATIVE_SIGNATURE_OVERCLAIM_REMOVED_AND_USER_CANCELLATION_CLASSIFICATION_CORRECTED"
+      ],
+      "metrics": {
+        "swiftSourceFileCount": 8,
+        "swiftUnitTestCount": 8,
+        "typescriptStaticTestCount": 4,
+        "constructedFileCount": 14,
+        "constructedByteCount": 43677,
+        "signedAppCreated": false,
+        "certificateCreated": false,
+        "keychainOperations": 0,
+        "secureEnclaveOperations": 0,
+        "userPresencePrompts": 0,
+        "seatbeltChildren": 0,
+        "providerCalls": 0,
+        "expectedDeprecatedCustomKeychainApiWarning": true,
+        "cleanupPassed": true
+      }
     }
   ],
   "lanes": {
@@ -368,7 +419,7 @@
     "encrypted-field": "GREEN",
     "fake-budget-and-event-fence": "GREEN",
     "fake-only-codex-adapter": "GREEN",
-    "native-source-compile-and-unit-tests": "NOT_RUN",
+    "native-source-compile-and-unit-tests": "GREEN",
     "aggregate-runner-synthetic-dry-run": "NOT_RUN",
     "static-package-workset-audit": "NOT_RUN",
     "construction-report-and-execution-manifest": "NOT_RUN",
@@ -411,7 +462,7 @@
     "packages/r4-persistence/src/index.ts": "sha256:f9b3a31fca1ffbdc7dff3f37924a321d90ac7aafc5a2b1188ec6a0671a3a62d6",
     "scripts/r4-gate-b-encrypted-field.mjs": "sha256:8ff56dfc73f17b49373cf908e50b4c6d40baa553a660fd6ca66f1a5901058111",
     "test/r4-gate-b/encrypted-field.test.ts": "sha256:9982af051908e118c698a46b0466345960ad42919eca084422d7723edf4e311e",
-    "package.json": "sha256:2bc9366b331cc15c545480bc3aacbcf6086ffb82a8c45eb52f3eea25b81cb1f7",
+    "package.json": "sha256:b345886860b308a1f3bfbaf8a91945fd20ef4848d14f4ed80602118d37ebbb0e",
     "packages/r4-codex-adapter/src/fake-transport.ts": "sha256:d7061b90fe3dcd565314e96a560a753d9c2e8cf0392de9bb66d822ab64057b7e",
     "packages/r4-codex-adapter/src/event-fence.ts": "sha256:282a19a078b52bf8506b6cf6b7dca35fcb1a1d0b25aceffde78c930d66673ac6",
     "scripts/r4-gate-b-fake-budget.mjs": "sha256:39b576000c6d38b8741bbdd6a12ab73c787b9c8dd2d880757b738342d31fa902",
@@ -422,6 +473,20 @@
     "packages/r4-codex-adapter/src/app-server-probe.ts": "sha256:8fd286f7398a63d3e073d4b165fdaa6086045ecdb3939028a6169c2ea2afbdf4",
     "packages/r4-codex-adapter/src/index.ts": "sha256:d35a3179198bb90c8ea1c5cab3500e109fbfff09c657f60f3fed506056cdcb1c",
     "scripts/r4-gate-b-codex-probe.mjs": "sha256:4870a3d4adcf944e6df8d786ea852ef5afbd9f991ec0db044d1148467b3ec657",
-    "test/r4-gate-b/codex-adapter.test.ts": "sha256:02be41f09727a883f734f7cf1278ee90e9e43a5b84ceeaf758cf2bf3ba63e6a7"
+    "test/r4-gate-b/codex-adapter.test.ts": "sha256:02be41f09727a883f734f7cf1278ee90e9e43a5b84ceeaf758cf2bf3ba63e6a7",
+    "native/macos/Package.swift": "sha256:57169aedae8d67190d4e087b8ebe65033490acab41adfb1bea28fe652b335503",
+    "native/macos/Sources/FormeLocal/Launcher.swift": "sha256:e0219082ffe309c591d3ab9c2b0365acfcf10c45da8d07e4101202ea6ad4046c",
+    "native/macos/Sources/FormeLocal/CodexAdapter.swift": "sha256:3f0102f7def8d4a6859e6217c09997ae7ddbe0315cc55930309c75f5256f5f35",
+    "native/macos/Sources/FormeLocal/KeychainProtector.swift": "sha256:3d2e12a008c91217a200a42517a1096277e8c31db44497854e56046d58b68e73",
+    "native/macos/Sources/FormeLocal/ReviewWindow.swift": "sha256:a2354b30435357bef8a4e2944bacd2a2941b6c39194127e936d58d73c720a379",
+    "native/macos/Sources/FormeLocal/SandboxProfile.swift": "sha256:a353b30eea419e5f90385c62c79716032504f79fddf2ce5a5a8ad1d11fcb22af",
+    "native/macos/Sources/FormeLocal/GateBProbe.swift": "sha256:52fdbb8a5111c898b693d158436e0254a8fbfb4aea086eac786f86bf1fe2e950",
+    "native/macos/Sources/FormeLocal/ResourceLimits.swift": "sha256:cd8b9fac6b79896fac1c150f9ec06de7d13a6578194c1661c438751cbd611fab",
+    "native/macos/Sources/FormeLocal/MemoryPipe.swift": "sha256:b19350e8513e8a5b1a27e59526158d49315c08ec679a4f60e993e45d7a908af3",
+    "native/macos/Resources/Info.plist": "sha256:4d943fe6e1cb55abbe547de1f1654bcef829705e6dd5ed3448f473cf19994b92",
+    "native/macos/Resources/FormeLocal.entitlements": "sha256:97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+    "native/macos/Tests/FormeLocalTests/BoundaryTests.swift": "sha256:f5678f7790c6ab303ff55fadad1727b3e03165d7cc7b109c204bab5793052fad",
+    "scripts/r4-gate-b-macos-probe.sh": "sha256:0c5b2fd1d950c1ea6cb8bf40a6d94fd425953987fb4fb0efb1eaa1824b6f7f5e",
+    "test/r4-gate-b/macos-boundary.test.ts": "sha256:d99a89e531258a28a811af3ac1f89517f48589586bc6df01f608ffda04d76c87"
   }
 }
