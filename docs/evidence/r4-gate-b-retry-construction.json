@@ -452,6 +452,43 @@
         "providerCalls": 0,
         "cleanupPassed": true
       }
+    },
+    {
+      "lane": "static-package-workset-audit",
+      "status": "GREEN",
+      "testCount": 56,
+      "developmentIterations": 2,
+      "fallbackUsed": false,
+      "assertions": [
+        "CHANGED_PATHS_51_ALL_WITHIN_EXACT_CONSTRUCTION_WORKSET",
+        "CONSTRUCTED_HASHES_50_MATCH_CURRENT_BYTES",
+        "IMMUTABLE_HASHES_17_MATCHED",
+        "PACKAGE_LOCK_BYTE_HASH_UNCHANGED",
+        "CHECKPOINT_COMMITS_10_BODY_FREE_AND_EXACTLY_ORDERED",
+        "UNLISTED_PATH_COUNT_ZERO",
+        "GENERATED_BUILD_OUTPUT_REMAINING_COUNT_ZERO",
+        "GATE_B_OFFLINE_TESTS_56_OF_56_PASSED_SERIAL",
+        "GATE_A_STATIC_REPOSITORY_AUDIT_REPLAY_PASSED",
+        "DOCUMENT_CROSSWALK_47_ROWS_PASSED",
+        "FIRST_PROVIDER_CALL_GRANT_REMAINS_NOT_REQUESTED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "AUDIT_REQUIRES_EVERY_CHANGED_PATH_EXCEPT_SELF_EVIDENCE_TO_HAVE_AN_EXACT_HASH",
+        "STATIC_RACE_FIXTURES_REMAIN_EXPLICITLY_DISTINCT_FROM_POSTGRES_RUNTIME_RACES"
+      ],
+      "metrics": {
+        "changedPathCount": 51,
+        "constructedHashCount": 50,
+        "immutableHashCount": 17,
+        "checkpointCommitCount": 10,
+        "gateBOfflineTestCount": 56,
+        "documentCrosswalkRowCount": 47,
+        "unlistedPathCount": 0,
+        "generatedOutputRemainingCount": 0,
+        "constructedByteCount": 19688,
+        "packageLockUnchanged": true
+      }
     }
   ],
   "lanes": {
@@ -465,7 +502,7 @@
     "fake-only-codex-adapter": "GREEN",
     "native-source-compile-and-unit-tests": "GREEN",
     "aggregate-runner-synthetic-dry-run": "GREEN",
-    "static-package-workset-audit": "NOT_RUN",
+    "static-package-workset-audit": "GREEN",
     "construction-report-and-execution-manifest": "NOT_RUN",
     "cleanup": "NOT_RUN"
   },
@@ -534,6 +571,7 @@
     "test/r4-gate-b/macos-boundary.test.ts": "sha256:d99a89e531258a28a811af3ac1f89517f48589586bc6df01f608ffda04d76c87",
     "scripts/r4-gate-b-runner.mjs": "sha256:fbdc73c7d59adb4eb10e8a939060ce9066b4ede16f7382351afe65a401201cd1",
     "scripts/r4-gate-b-preflight.mjs": "sha256:afa1c4546750bfbe23d83cc280df65f2f6135cb30f056f242abffed590229a0d",
-    "scripts/r4-gate-b-cleanup.mjs": "sha256:bd08acfa059fa95ce98007cd000fe85ab102f621970756c4fcb837a299404581"
+    "scripts/r4-gate-b-cleanup.mjs": "sha256:bd08acfa059fa95ce98007cd000fe85ab102f621970756c4fcb837a299404581",
+    "scripts/r4-doc-audit.mjs": "sha256:02d08ec0ba87dc1240bbb023f453ba126c9e9ab1853847a4066f39a4b8e20a65"
   }
 }

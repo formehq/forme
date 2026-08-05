@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { OPERATION_INVENTORY } from "../apps/room/src/operation-inventory.ts";
@@ -12,6 +13,7 @@ import { buildSourceInventory } from "./r4-source-inventory.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const finalMode = process.argv.includes("--final");
+const retryConstructionMode = process.argv.includes("--retry-construction");
 const files = {
   packet: "docs/R4-TECHNICAL-CONTROL-PACKET.md",
   verification: "docs/R4-GATE-A-VERIFICATION.md",
@@ -253,6 +255,108 @@ if (finalMode) {
   if (drift.length > 0) throw new Error(`final documentation binding drift:${drift.join(",")}`);
 }
 
+let retryConstruction = null;
+if (retryConstructionMode) {
+  const commencementCommit = "6e8bf486cdc76deeb702f176a72bd8af981567e6";
+  const constructionPacketPath = "docs/R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md";
+  const constructionEvidencePath = "docs/evidence/r4-gate-b-retry-construction.json";
+  const constructionEvidence = JSON.parse(text(constructionEvidencePath));
+  const allowed = new Set([
+    ...runtimeBoundary.repositoryWorkset.generatedSchemas,
+    ...runtimeBoundary.repositoryWorkset.sql,
+    ...runtimeBoundary.repositoryWorkset.persistence,
+    ...runtimeBoundary.repositoryWorkset.codexAdapter,
+    ...runtimeBoundary.repositoryWorkset.macos,
+    ...runtimeBoundary.repositoryWorkset.runnerScripts,
+    ...runtimeBoundary.repositoryWorkset.tests,
+    ...runtimeBoundary.repositoryWorkset.modifiableExistingFiles,
+    "scripts/r4-gate-b-path-fence.mjs",
+    "test/r4-gate-b/path-fence.test.ts",
+    constructionEvidencePath,
+    "docs/R4-GATE-B-RETRY-CONSTRUCTION-REPORT.md",
+    "docs/R4-GATE-B-RETRY-EXECUTION-MANIFEST.md",
+    "docs/R4-GATE-B-RETRY-EXECUTION-OWNER-REVIEW.md",
+  ]);
+  const gitEnvironment = {
+    ...process.env,
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_CONFIG_NOSYSTEM: "1",
+  };
+  const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, {
+    cwd: root,
+    env: gitEnvironment,
+    encoding: "utf8",
+    maxBuffer: 4_194_304,
+  });
+  const committed = git(["diff", "--name-only", `${commencementCommit}..HEAD`, "--"])
+    .split("\n").filter(Boolean);
+  const unstaged = git(["diff", "--name-only", "--"])
+    .split("\n").filter(Boolean);
+  const staged = git(["diff", "--cached", "--name-only", "--"])
+    .split("\n").filter(Boolean);
+  const untracked = git(["ls-files", "--others", "--exclude-standard", "--"])
+    .split("\n").filter(Boolean);
+  const changedPaths = [...new Set([...committed, ...unstaged, ...staged, ...untracked])]
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  const unlisted = changedPaths.filter((path) => !allowed.has(path));
+  if (unlisted.length > 0) throw new Error(`Retry Construction unlisted workset:${unlisted.join(",")}`);
+  const unhashed = changedPaths.filter((path) =>
+    path !== constructionEvidencePath
+      && !Object.prototype.hasOwnProperty.call(constructionEvidence.constructedFiles, path));
+  if (unhashed.length > 0) throw new Error(`Retry Construction changed path missing hash:${unhashed.join(",")}`);
+  if (changedPaths.includes("package-lock.json")) throw new Error("Retry Construction package-lock changed");
+  if (sha256(text("package-lock.json")) !== runtimeBoundary.repositoryWorkset.packageLockMustRemainSha256) {
+    throw new Error("Retry Construction package-lock hash drifted");
+  }
+  if (sha256(text(constructionPacketPath)) !== "4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7") {
+    throw new Error("Retry Construction Packet hash drifted");
+  }
+  for (const [path, expected] of Object.entries(constructionEvidence.immutableBindings)) {
+    const actual = `sha256:${sha256(readFileSync(join(root, path)))}`;
+    if (actual !== expected) throw new Error(`Retry Construction immutable drifted:${path}`);
+  }
+  for (const [path, expected] of Object.entries(constructionEvidence.constructedFiles)) {
+    if (!allowed.has(path)) throw new Error(`Retry Construction evidence path unlisted:${path}`);
+    const metadata = lstatSync(join(root, path));
+    if (!metadata.isFile() || metadata.isSymbolicLink() || metadata.nlink !== 1) {
+      throw new Error(`Retry Construction constructed path unsafe:${path}`);
+    }
+    const actual = `sha256:${sha256(readFileSync(join(root, path)))}`;
+    if (actual !== expected) throw new Error(`Retry Construction constructed hash drifted:${path}`);
+  }
+  for (const generatedPath of [
+    "native/macos/.build",
+    "native/macos/.swiftpm",
+    ".forme/gate-b-evidence",
+  ]) {
+    if (existsSync(join(root, generatedPath))) throw new Error(`Retry Construction generated output remains:${generatedPath}`);
+  }
+  const checkpointLog = git(["log", "--format=%s%x00%b%x00", `${commencementCommit}..HEAD`, "--"])
+    .split("\u0000");
+  const subjects = [];
+  for (let index = 0; index + 1 < checkpointLog.length; index += 2) {
+    const subject = checkpointLog[index]?.trim();
+    const body = checkpointLog[index + 1]?.trim();
+    if (!subject) continue;
+    if (!subject.startsWith("[R4 Gate B Retry] Checkpoint ") || body !== "") {
+      throw new Error(`Retry Construction checkpoint commit invalid:${subject}`);
+    }
+    subjects.push(subject);
+  }
+  if (subjects.length !== 10) throw new Error(`Retry Construction checkpoint count drifted:${subjects.length}`);
+  retryConstruction = {
+    schemaVersion: "r4_gate_b_retry_static_audit.v1",
+    changedPathCount: changedPaths.length,
+    constructedHashCount: Object.keys(constructionEvidence.constructedFiles).length,
+    immutableHashCount: Object.keys(constructionEvidence.immutableBindings).length,
+    checkpointCommitCount: subjects.length,
+    packageLockUnchanged: true,
+    unlistedPathCount: 0,
+    generatedOutputRemainingCount: 0,
+    status: "passed",
+  };
+}
+
 const report = {
   schemaVersion: "r4_gate_document_audit.v1",
   mode: finalMode ? "final" : "draft",
@@ -263,6 +367,7 @@ const report = {
     0,
   ),
   firstProviderCallGrant: "not_requested",
+  ...(retryConstruction === null ? {} : { retryConstruction }),
   status: "passed",
 };
 
