@@ -11,8 +11,11 @@
   independent audit, and hashing are complete at
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`;
   the Owner approved those exact bytes on 2026-08-03. Gate A repository-only
-  implementation is now technically verified with synthetic/local evidence;
-  R4 is not Owner-accepted or Done, and Gate B remains proposed/unexecuted**
+  implementation is technically verified with synthetic/local evidence. The
+  Owner approved Gate B v0.1 without a provider-call grant, but its first
+  attempt stopped Red and cleaned after a real Codex-home read-scope violation;
+  R4 is not Owner-accepted or Done, and Retry Construction is the current
+  unapproved proposal**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -947,6 +950,42 @@ prove the future model-visible tool or provider-transport boundary. First
 Provider-Call Test Grant is not requested; provider sessions, bytes, and spend
 remain 0 / 0 / US$0. Real Guest/email/hosted/production/deployment/public work
 remains Gate C.
+
+## Evidence round 20 — Gate B Red stop; construction/execution split proposed
+
+The Owner approved Gate B Manifest v0.1 at
+`sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`
+and explicitly kept First Provider-Call Test Grant `NOT_REQUESTED`.
+
+The attempt did not reach the fixed aggregate sequence. During delegated
+Codex-lane preconstruction investigation, a recursive hash search included
+real Codex-home session files. The command emitted paths, not contents or
+credentials, and started no Codex thread, turn, model, account, provider
+request, real Guest flow, production write, deploy, merge, or spend. The read
+scope itself violated the Manifest and therefore produced a required Red stop.
+
+All remaining lanes became `NOT_RUN`. Four unvalidated partial workset files
+were removed. No PostgreSQL image/container/volume, signed app, certificate,
+Keychain, user-presence prompt, or FormeLocal process remained or had to be
+accepted as evidence. Cleanup is Green. The body-free report and machine
+evidence are frozen at:
+
+- [`R4-GATE-B-EXECUTION-REPORT.md`](./R4-GATE-B-EXECUTION-REPORT.md),
+  `sha256:01469865af1cb851ec0167d7493ca16eab827f6be53f8a15659221fd64796e18`;
+- [`evidence/r4-gate-b-execution.json`](./evidence/r4-gate-b-execution.json),
+  `sha256:647a87ee00597f8cf3fdf9e8a7ea7b4d3f803a1f562197ed757e61423e894f48`.
+
+This is a control-system learning result, not a product/runtime result. The
+failure was caused by combining construction with executable probe authority
+and delegating lanes before the reviewed aggregate runner existed. The current
+proposal therefore splits repo-only, offline Retry Construction from a later
+separately hash-pinned Retry Execution Grant. It also records the unresolved
+physical fact that a child Seatbelt profile does not kernel-sandbox a desktop
+Agent that already has broad filesystem permission.
+
+Until a new exact approval, no retry construction or execution is authorized.
+Native Harness AI remains `manual_owner_only_available`, and preparing a First
+Provider-Call Test Grant is still premature.
 
 ## Follow-up product-learning questions — not R4 blockers
 

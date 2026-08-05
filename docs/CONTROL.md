@@ -1,25 +1,30 @@
 # Owner technical cockpit
 
 - Updated: 2026-08-04
-- Active gate: **R4 Gate A Technical Review is Green for Gate B review. The
-  repository-only implementation, 47-row evidence crosswalk, five synthetic
-  journeys, real-Twin body-free probe, and production browser check are
-  complete. The next Owner stop is the Gate B Manifest at
-  `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`;
-  it is proposed, not approved or executed, and requests no provider call.**
+- Active gate: **R4 Gate A remains technically complete. The Owner approved
+  Gate B Manifest
+  `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`,
+  but the first attempt stopped Red
+  after a real Codex-home read-scope violation and cleaned with zero
+  provider/thread/turn effects. The next Owner stop is the construction-only
+  Retry Packet at
+  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
+  Retry Execution and the First
+  Provider-Call Test Grant are not requested.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
   Gate A is technically implemented and verified but R4 is not yet Owner-
-  accepted or Done. Gate B and Gate C remain unexecuted.**
+  accepted or Done. Gate B is incomplete after one Red/cleaned attempt; Gate C
+  remains unexecuted.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: review and decide the exact Gate B Manifest through
-  [`R4-GATE-B-OWNER-REVIEW.md`](./R4-GATE-B-OWNER-REVIEW.md). Until that exact
-  hash is approved, do not construct or execute Gate B. Stop before every
-  provider call, real Guest data, external email, production migration,
-  hosted mutation, deployment, public traffic, production secret, merge, or
-  spend.
+- Next action: review and decide the exact construction-only retry through
+  [`R4-GATE-B-RETRY-OWNER-REVIEW.md`](./R4-GATE-B-RETRY-OWNER-REVIEW.md).
+  Approval would build and review the runner only. Do not execute Docker,
+  PostgreSQL, real Codex, signing/Keychain, user presence, Gate C, or any
+  provider call; do not touch real Guest data, external email, production,
+  deployment, public traffic, secret, merge, or spend.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -42,7 +47,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A TECHNICAL REVIEW ✓ · GATE B APPROVAL NEXT
+R4 Controlled Presence    ← GATE A ✓ · GATE B RED/CLEAN · RETRY CONSTRUCTION REVIEW
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -173,6 +178,17 @@ Current truth:
   The Owner approved those exact bytes on 2026-08-03; the prior packet hash is
   not approvable. Gate A repository-only work is authorized, while every
   external, hosted, or production resource and later gate remains unauthorized;
+- on 2026-08-04 the Owner approved the exact Gate B Manifest at
+  `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`
+  while explicitly keeping First Provider-Call Test Grant `NOT_REQUESTED`.
+  The first attempt then stopped Red before the fixed lane sequence completed:
+  a delegated preconstruction hash search included real Codex-home session
+  files. It emitted paths but no file contents or credentials and started zero
+  Codex threads, turns, models, accounts, or provider requests. All remaining
+  lanes stopped, four unvalidated partial files were removed, cleanup is Green,
+  and the report commit passed standard CI. The current proposal splits
+  repo-only Retry Construction from a later separately hash-pinned Execution
+  Grant; neither retry construction nor execution is yet approved;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;

@@ -614,3 +614,38 @@ production secret, or spend. The next Owner stop gate is the hash-pinned Gate
 B Schema, Runtime, and Migration Manifest; any first provider call additionally
 requires the separately named First Provider-Call Test Grant, and real
 Guest/production work remains Gate C.
+
+## 2026-08-04 — Gate B v0.1 approved without a provider-call grant; first attempt stopped Red
+
+**Decision:** approve the exact R4 Gate B Schema, Runtime, and Migration
+Manifest v0.1 at
+`sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`,
+while explicitly keeping the First Provider-Call Test Grant `NOT_REQUESTED`.
+The exact Owner receipt was:
+
+```text
+批准 R4 Gate B Schema, Runtime, and Migration Manifest v0.1 sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa；First Provider-Call Test Grant NOT REQUESTED
+```
+
+**Reason:** Gate A had made the product rules repeatable in the repository;
+Gate B was intended to test whether those rules could attach to disposable
+PostgreSQL, encrypted fields, a zero-call official Codex boundary, fake
+budgets, and a macOS physical boundary without entering a provider call or
+production.
+
+**Effect and result:** the approval opened only the exact local/disposable
+Manifest work. During delegated Codex-lane preconstruction investigation, a
+read-only hash search widened into real Codex-home session files. It emitted
+paths but no file contents or credentials and started zero Codex threads,
+turns, models, accounts, or provider requests. The read itself violated the
+approved boundary, so the attempt stopped Red before the fixed lane sequence
+completed. All remaining lanes are `NOT_RUN`; four unvalidated partial files
+were removed; cleanup is Green; standard PR CI passed. Provider sessions/
+bytes/spend, real Guest data, production writes, deploys, and merges are all
+zero.
+
+The Red report closes only that attempt. It does not authorize retry,
+construction, execution, Gate C, or a provider call. The next Owner decision
+is a separately hash-pinned Retry Construction Packet that splits runner
+construction from later execution and keeps both Retry Execution and First
+Provider-Call Test Grant closed.

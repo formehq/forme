@@ -10,19 +10,22 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-18**
 - Demo Day: **2026-08-19 (Wednesday)**
-- Current gate: **R4 Gate A Technical Review.** The repository-only
-  implementation, synthetic five-journey walkthrough, no-AI Room app, local
-  response boundary, recovery/race/privacy tests, and Gate B proposal are
-  built. The exact Gate A evidence and Gate B Manifest are the current review
-  objects; R4 is not Owner-accepted or Done.
+- Current gate: **R4 Gate B Retry Construction review.** Gate A remains
+  technically complete. The Owner approved the first Gate B Manifest, but its
+  execution stopped Red after a real Codex-home read-scope violation; no
+  provider/thread/turn started and cleanup is Green. The current review object
+  splits repo-only runner construction from any later real execution; R4 is
+  not Owner-accepted or Done.
 - Product implementation: **R1–R3 Owner-accepted; R4 Gate A technically
   implemented under the exact Owner-approved Packet**
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  The build remains synthetic/local: no provider call, real Guest data,
-  external email, schema migration, hosted/production mutation, deployment,
-  production secret, public traffic, or spend occurred. The next stop is
-  Owner review of the separately hash-pinned Gate B Manifest; it requests no
-  first provider-call grant.
+  The Gate A build remains synthetic/local: no provider call, real Guest data,
+  external email, production migration, hosted/production mutation,
+  deployment, production secret, public traffic, or spend occurred. The first
+  Gate B attempt is preserved as Red/cleaned evidence. The next stop is Owner
+  review of Retry Construction Packet
+  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
+  Retry Execution and the first provider-call grant are not requested.
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -39,13 +42,15 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 5. [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md) —
    exact repository evidence, five synthetic journeys, and honest later-gate
    conditions
-6. [`docs/R4-GATE-B-OWNER-REVIEW.md`](./docs/R4-GATE-B-OWNER-REVIEW.md) —
-   low-load explanation of the next exact stop gate
-7. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
+6. [`docs/R4-GATE-B-RETRY-OWNER-REVIEW.md`](./docs/R4-GATE-B-RETRY-OWNER-REVIEW.md) —
+   low-load explanation of the current exact Retry Construction stop gate
+7. [`docs/R4-GATE-B-EXECUTION-REPORT.md`](./docs/R4-GATE-B-EXECUTION-REPORT.md) —
+   why the first Gate B attempt stopped Red and what cleanup proved
+8. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
    approved R4 mental model, technical cards, and walkthrough contracts
-8. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
-9. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-10. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
+9. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
+10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
+11. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
@@ -205,12 +210,14 @@ The historical v0.1 Packet is superseded. The current
 is the reconciled, independently audited v0.2 approval object at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
 The Owner approved that exact hash on 2026-08-03. The resulting Gate A
-implementation and evidence are now in Technical Review; see
+implementation and evidence remain technically complete; see
 [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md). The next
-proposal is
-[`docs/R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md`](./docs/R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md)
-with its low-load
-[`Owner Review`](./docs/R4-GATE-B-OWNER-REVIEW.md). Provider/model calls, real
+Manifest was approved, but the first attempt stopped Red and cleaned; see the
+[`Gate B Execution Report`](./docs/R4-GATE-B-EXECUTION-REPORT.md). The current
+proposal is the construction-only
+[`Retry Packet`](./docs/R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md) with its
+low-load [`Owner Review`](./docs/R4-GATE-B-RETRY-OWNER-REVIEW.md). It requests
+neither Retry Execution nor a first provider call. Provider/model calls, real
 Guest-data handling, external email, schema migration, deployment, spend,
 production action, secrets, and public traffic remain unauthorized unless a
 later exact gate explicitly grants them.
