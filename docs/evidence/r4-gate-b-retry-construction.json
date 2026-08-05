@@ -128,12 +128,34 @@
         "hostedAggregateSha256": "sha256:1ee9fbc02716e1f0f9a408e077d2b14d4fc7148dacbd463dee66786ae55bb32a",
         "migrationFileCount": 0
       }
+    },
+    {
+      "lane": "path-fence",
+      "status": "GREEN",
+      "testCount": 5,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "EXACT_ROOT_AND_LITERAL_ALLOWLIST_ALLOWED",
+        "PARENT_SIBLING_ABSOLUTE_AND_ALTERNATE_ROOT_DENIED",
+        "SYMLINK_COMPONENT_DENIED",
+        "HARD_LINKED_REGULAR_FILE_DENIED",
+        "EMPTY_ROOT_OVERLAP_AND_EMPTY_ALLOWLIST_DENIED",
+        "SYNTHETIC_CODEX_COMPONENT_DENIED",
+        "COMMAND_SUBSTITUTION_GLOB_AND_DYNAMIC_ROOT_DENIED",
+        "MISSING_PATH_HAS_NO_FALLBACK_SEARCH",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_FIXTURE_ALLOWLIST_CONFLICT_CORRECTED",
+        "INITIAL_TYPESCRIPT_UNKNOWN_NARROWING_CORRECTED"
+      ]
     }
   ],
   "lanes": {
     "preflight": "GREEN",
     "gate-a-regression-and-protocol-replay": "GREEN",
-    "path-fence": "NOT_RUN",
+    "path-fence": "GREEN",
     "api-and-local-format-schemas": "NOT_RUN",
     "static-sql-and-role-function-contracts": "NOT_RUN",
     "encrypted-field": "NOT_RUN",
@@ -161,5 +183,8 @@
     "keychainOperations": 0,
     "userPresencePrompts": 0
   },
-  "constructedFiles": {}
+  "constructedFiles": {
+    "scripts/r4-gate-b-path-fence.mjs": "sha256:c4e31663cdee762705f35ff47541a09ebf9c7a9aaade36d61751c17e190bbc99",
+    "test/r4-gate-b/path-fence.test.ts": "sha256:5cd60eb3ea35728954e5b69b292b10c723d433c87700deb1afc3af61fb7ea558"
+  }
 }
