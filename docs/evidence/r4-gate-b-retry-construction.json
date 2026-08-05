@@ -408,6 +408,50 @@
         "expectedDeprecatedCustomKeychainApiWarning": true,
         "cleanupPassed": true
       }
+    },
+    {
+      "lane": "aggregate-runner-synthetic-dry-run",
+      "status": "GREEN",
+      "testCount": 10,
+      "developmentIterations": 2,
+      "fallbackUsed": false,
+      "assertions": [
+        "EXACT_9_LANE_SERIAL_ORDER_PASSED",
+        "YELLOW_CONTINUES_ONLY_INDEPENDENT_LOCAL_LANES",
+        "CODEX_OR_MACOS_YELLOW_DISABLES_AI_LANE",
+        "RED_STOPS_ALL_REMAINING_NON_CLEANUP_LANES_AS_NOT_RUN",
+        "CLEANUP_RUNS_AFTER_GREEN_YELLOW_AND_RED",
+        "CLEANUP_RED_FORCES_AGGREGATE_RED",
+        "PROVIDER_MODEL_CREDENTIAL_REAL_DATA_CWD_AND_INCOMPLETE_ARGUMENTS_DENIED",
+        "EXACT_RUN_ROOT_MARKER_0700_0600_AND_AUTHORITY_BINDING_PASSED",
+        "PARTIAL_RUN_ROOT_CREATION_CLEANUP_FAILS_CLOSED",
+        "BODY_FREE_CODES_COUNTS_BOOLEANS_AND_HASHES_ONLY",
+        "FUTURE_EXECUTION_ARGUMENT_SURFACE_BINDS_PACKET_MANIFEST_GRANT_AND_ONE_INSTALL_ROOT",
+        "CODEX_INSTALL_ROOT_USES_TWO_EXACT_RELATIVE_PATHS_AND_PINNED_HASHES_WITHOUT_SEARCH",
+        "PHYSICAL_POSTGRES_CODEX_AND_MACOS_GAPS_RETURN_YELLOW_WITHOUT_FALLBACK",
+        "DRY_RUN_EXTERNAL_NETWORK_DOCKER_POSTGRES_CODEX_KEYCHAIN_USER_PRESENCE_AND_PROVIDER_COUNTS_ZERO",
+        "DRY_RUN_TEMP_ROOT_CLEANUP_PASSED",
+        "PACKAGE_LOCK_UNCHANGED"
+      ],
+      "controlledObservations": [
+        "INITIAL_OPTIONAL_FILE_INSPECTION_MASKED_EXPECTED_ABSENCE_BEFORE_CONSTRUCTION",
+        "PHYSICAL_EXECUTION_GAPS_CLASSIFIED_YELLOW_INSTEAD_OF_BEING_HIDDEN_BY_SYNTHETIC_SUCCESS"
+      ],
+      "metrics": {
+        "scenarioCount": 4,
+        "deniedArgumentCaseCount": 6,
+        "laneCount": 9,
+        "constructedFileCount": 3,
+        "constructedByteCount": 28217,
+        "externalNetworkCalls": 0,
+        "dockerCommands": 0,
+        "postgresProcesses": 0,
+        "realCodexCalls": 0,
+        "keychainOperations": 0,
+        "userPresencePrompts": 0,
+        "providerCalls": 0,
+        "cleanupPassed": true
+      }
     }
   ],
   "lanes": {
@@ -420,7 +464,7 @@
     "fake-budget-and-event-fence": "GREEN",
     "fake-only-codex-adapter": "GREEN",
     "native-source-compile-and-unit-tests": "GREEN",
-    "aggregate-runner-synthetic-dry-run": "NOT_RUN",
+    "aggregate-runner-synthetic-dry-run": "GREEN",
     "static-package-workset-audit": "NOT_RUN",
     "construction-report-and-execution-manifest": "NOT_RUN",
     "cleanup": "NOT_RUN"
@@ -462,7 +506,7 @@
     "packages/r4-persistence/src/index.ts": "sha256:f9b3a31fca1ffbdc7dff3f37924a321d90ac7aafc5a2b1188ec6a0671a3a62d6",
     "scripts/r4-gate-b-encrypted-field.mjs": "sha256:8ff56dfc73f17b49373cf908e50b4c6d40baa553a660fd6ca66f1a5901058111",
     "test/r4-gate-b/encrypted-field.test.ts": "sha256:9982af051908e118c698a46b0466345960ad42919eca084422d7723edf4e311e",
-    "package.json": "sha256:b345886860b308a1f3bfbaf8a91945fd20ef4848d14f4ed80602118d37ebbb0e",
+    "package.json": "sha256:24b9c2c79107e64d23b953ad44a23a42dcf4ba92a04bc6d3e8917b841582c90d",
     "packages/r4-codex-adapter/src/fake-transport.ts": "sha256:d7061b90fe3dcd565314e96a560a753d9c2e8cf0392de9bb66d822ab64057b7e",
     "packages/r4-codex-adapter/src/event-fence.ts": "sha256:282a19a078b52bf8506b6cf6b7dca35fcb1a1d0b25aceffde78c930d66673ac6",
     "scripts/r4-gate-b-fake-budget.mjs": "sha256:39b576000c6d38b8741bbdd6a12ab73c787b9c8dd2d880757b738342d31fa902",
@@ -487,6 +531,9 @@
     "native/macos/Resources/FormeLocal.entitlements": "sha256:97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
     "native/macos/Tests/FormeLocalTests/BoundaryTests.swift": "sha256:f5678f7790c6ab303ff55fadad1727b3e03165d7cc7b109c204bab5793052fad",
     "scripts/r4-gate-b-macos-probe.sh": "sha256:0c5b2fd1d950c1ea6cb8bf40a6d94fd425953987fb4fb0efb1eaa1824b6f7f5e",
-    "test/r4-gate-b/macos-boundary.test.ts": "sha256:d99a89e531258a28a811af3ac1f89517f48589586bc6df01f608ffda04d76c87"
+    "test/r4-gate-b/macos-boundary.test.ts": "sha256:d99a89e531258a28a811af3ac1f89517f48589586bc6df01f608ffda04d76c87",
+    "scripts/r4-gate-b-runner.mjs": "sha256:fbdc73c7d59adb4eb10e8a939060ce9066b4ede16f7382351afe65a401201cd1",
+    "scripts/r4-gate-b-preflight.mjs": "sha256:afa1c4546750bfbe23d83cc280df65f2f6135cb30f056f242abffed590229a0d",
+    "scripts/r4-gate-b-cleanup.mjs": "sha256:bd08acfa059fa95ce98007cd000fe85ab102f621970756c4fcb837a299404581"
   }
 }
