@@ -1,7 +1,7 @@
 {
   "schemaVersion": "r4_gate_b_retry_construction.v1",
-  "status": "IN_PROGRESS",
-  "verdict": null,
+  "status": "COMPLETE",
+  "verdict": "YELLOW",
   "authority": {
     "retryConstructionPacketSha256": "sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7",
     "retryExecutionGrant": "NOT_REQUESTED",
@@ -460,11 +460,11 @@
       "developmentIterations": 2,
       "fallbackUsed": false,
       "assertions": [
-        "CHANGED_PATHS_51_ALL_WITHIN_EXACT_CONSTRUCTION_WORKSET",
-        "CONSTRUCTED_HASHES_50_MATCH_CURRENT_BYTES",
+        "CHANGED_PATHS_54_ALL_WITHIN_EXACT_CONSTRUCTION_WORKSET",
+        "CONSTRUCTED_HASHES_53_MATCH_CURRENT_BYTES",
         "IMMUTABLE_HASHES_17_MATCHED",
         "PACKAGE_LOCK_BYTE_HASH_UNCHANGED",
-        "CHECKPOINT_COMMITS_10_BODY_FREE_AND_EXACTLY_ORDERED",
+        "CHECKPOINT_COMMITS_11_BODY_FREE_AND_EXACTLY_ORDERED",
         "UNLISTED_PATH_COUNT_ZERO",
         "GENERATED_BUILD_OUTPUT_REMAINING_COUNT_ZERO",
         "GATE_B_OFFLINE_TESTS_56_OF_56_PASSED_SERIAL",
@@ -478,16 +478,57 @@
         "STATIC_RACE_FIXTURES_REMAIN_EXPLICITLY_DISTINCT_FROM_POSTGRES_RUNTIME_RACES"
       ],
       "metrics": {
-        "changedPathCount": 51,
-        "constructedHashCount": 50,
+        "changedPathCount": 54,
+        "constructedHashCount": 53,
         "immutableHashCount": 17,
-        "checkpointCommitCount": 10,
+        "checkpointCommitCount": 11,
         "gateBOfflineTestCount": 56,
         "documentCrosswalkRowCount": 47,
         "unlistedPathCount": 0,
         "generatedOutputRemainingCount": 0,
         "constructedByteCount": 19688,
         "packageLockUnchanged": true
+      }
+    },
+    {
+      "lane": "construction-report-and-execution-manifest",
+      "status": "YELLOW",
+      "assertions": [
+        "CONSTRUCTION_REPORT_COMPLETED",
+        "MACHINE_EVIDENCE_COMPLETED",
+        "EXECUTION_MANIFEST_HASH_INDEX_COMPLETE",
+        "OWNER_REVIEW_COMPLETED",
+        "THREE_PHYSICAL_ADAPTER_GAPS_EXPLICIT",
+        "RETRY_EXECUTION_NOT_RECOMMENDED",
+        "RETRY_EXECUTION_GRANT_NOT_REQUESTED",
+        "FIRST_PROVIDER_CALL_GRANT_NOT_REQUESTED"
+      ],
+      "controlledObservations": [
+        "INITIAL_HASH_INDEX_RENDER_COMMAND_QUOTING_CORRECTED_WITHOUT_FILE_NETWORK_OR_EXTERNAL_EFFECT"
+      ],
+      "metrics": {
+        "reportBytes": 6815,
+        "executionManifestBytes": 12155,
+        "ownerReviewBytes": 3021,
+        "executionBearingFileCount": 50,
+        "executionBearingAggregateSha256": "sha256:50e043df23f338e9798baa600d1cb78e245b925f5efd5958750e437a53f2f5c4",
+        "physicalAdapterGapCount": 3,
+        "recommendRetryExecution": false
+      }
+    },
+    {
+      "lane": "cleanup",
+      "status": "GREEN",
+      "assertions": [
+        "CONSTRUCTION_TEMP_ROOT_REMOVED",
+        "SWIFT_SCRATCH_ABSENT",
+        "AGGREGATE_DRY_RUN_ROOT_ABSENT",
+        "FAKE_FIXTURE_ROOTS_ABSENT",
+        "GENERATED_REPOSITORY_BUILD_OUTPUTS_ABSENT"
+      ],
+      "metrics": {
+        "constructionTempRootRemoved": true,
+        "generatedOutputRemainingCount": 0
       }
     }
   ],
@@ -503,8 +544,8 @@
     "native-source-compile-and-unit-tests": "GREEN",
     "aggregate-runner-synthetic-dry-run": "GREEN",
     "static-package-workset-audit": "GREEN",
-    "construction-report-and-execution-manifest": "NOT_RUN",
-    "cleanup": "NOT_RUN"
+    "construction-report-and-execution-manifest": "YELLOW",
+    "cleanup": "GREEN"
   },
   "effectCounts": {
     "providerSessions": 0,
@@ -572,6 +613,31 @@
     "scripts/r4-gate-b-runner.mjs": "sha256:fbdc73c7d59adb4eb10e8a939060ce9066b4ede16f7382351afe65a401201cd1",
     "scripts/r4-gate-b-preflight.mjs": "sha256:afa1c4546750bfbe23d83cc280df65f2f6135cb30f056f242abffed590229a0d",
     "scripts/r4-gate-b-cleanup.mjs": "sha256:bd08acfa059fa95ce98007cd000fe85ab102f621970756c4fcb837a299404581",
-    "scripts/r4-doc-audit.mjs": "sha256:02d08ec0ba87dc1240bbb023f453ba126c9e9ab1853847a4066f39a4b8e20a65"
-  }
+    "scripts/r4-doc-audit.mjs": "sha256:358b17e0ee024300b0540806f9a6a4a44ef9d47271c98d81641a8274bf1afcaa",
+    "docs/R4-GATE-B-RETRY-CONSTRUCTION-REPORT.md": "sha256:457e1d2257623fd1332d448a1381cde5b658dd89cad620096a66f44f05416b96",
+    "docs/R4-GATE-B-RETRY-EXECUTION-MANIFEST.md": "sha256:f2276d7dfd5716bc5f14e7853925cbc991349b525eb28e0453c9cf9b4602b976",
+    "docs/R4-GATE-B-RETRY-EXECUTION-OWNER-REVIEW.md": "sha256:126bac9434572ab22354f2d0951e5b1dac941fad0b860ff2c72eea39d9335abe"
+  },
+  "cleanup": {
+    "constructionTempRootRemoved": true,
+    "swiftScratchAbsent": true,
+    "aggregateDryRunRootAbsent": true,
+    "fakeFixtureRootsAbsent": true,
+    "generatedRepositoryBuildOutputsAbsent": true
+  },
+  "executionProposal": {
+    "manifestPath": "docs/R4-GATE-B-RETRY-EXECUTION-MANIFEST.md",
+    "manifestSha256": "sha256:f2276d7dfd5716bc5f14e7853925cbc991349b525eb28e0453c9cf9b4602b976",
+    "ownerReviewPath": "docs/R4-GATE-B-RETRY-EXECUTION-OWNER-REVIEW.md",
+    "ownerReviewSha256": "sha256:126bac9434572ab22354f2d0951e5b1dac941fad0b860ff2c72eea39d9335abe",
+    "recommendRetryExecution": false,
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "reasonCodes": [
+      "POSTGRES_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_ADAPTER",
+      "CODEX_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_SEATBELT_ADAPTER",
+      "MACOS_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_SIGNING_ADAPTER"
+    ]
+  },
+  "physicalBoundary": "CONTROLLING_AGENT_NOT_KERNEL_SANDBOXED"
 }

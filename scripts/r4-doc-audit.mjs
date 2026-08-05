@@ -343,7 +343,7 @@ if (retryConstructionMode) {
     }
     subjects.push(subject);
   }
-  if (subjects.length !== 10) throw new Error(`Retry Construction checkpoint count drifted:${subjects.length}`);
+  if (subjects.length !== 11) throw new Error(`Retry Construction checkpoint count drifted:${subjects.length}`);
   retryConstruction = {
     schemaVersion: "r4_gate_b_retry_static_audit.v1",
     changedPathCount: changedPaths.length,
