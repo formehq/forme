@@ -234,6 +234,45 @@
         "raceFixtureCount": 8,
         "deferredExecutionAssertionCount": 5
       }
+    },
+    {
+      "lane": "encrypted-field",
+      "status": "GREEN",
+      "testCount": 9,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "AES_256_GCM_ROUND_TRIP_PASSED",
+        "EXACT_CANONICAL_ENVELOPE_AND_AAD_BINDING_PASSED",
+        "WRONG_KEY_NONCE_TAG_CIPHERTEXT_KEY_ID_AND_AAD_DENIED",
+        "ROW_COLUMN_ROOM_AND_VERSION_SWAP_DENIED",
+        "TRUNCATED_NONCANONICAL_MISSING_AND_UNKNOWN_FIELDS_DENIED",
+        "KEY_PLAINTEXT_NONCE_AND_AAD_CEILINGS_DENIED",
+        "GLOBAL_SAME_AND_CROSS_TABLE_NONCE_REUSE_DENIED",
+        "TERMINAL_UNREADABILITY_DENIED_BEFORE_CRYPTO",
+        "SCOPED_DECRYPTED_BYTES_ZEROED_AND_ESCAPE_DENIED",
+        "DEDICATED_DESCRIPTOR_EXACT_32_BYTE_READ_AND_CLOSE_PASSED",
+        "SYNTHETIC_CANARIES_ABSENT_FROM_ENVELOPE_ERRORS_EVIDENCE_AND_DISK",
+        "NO_KEYCHAIN_NETWORK_OR_FILESYSTEM_WRITE_EFFECTS",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_TRUNCATION_CLASSIFICATION_EXPECTATION_CORRECTED",
+        "INHERITED_DESCRIPTOR_SHORT_READ_FIXTURE_AND_RETURN_PATH_CORRECTED",
+        "FAILED_NONCE_RESERVATION_CIPHERTEXT_BUFFER_ZEROING_HARDENED"
+      ],
+      "metrics": {
+        "algorithm": "AES-256-GCM",
+        "keyBytes": 32,
+        "nonceBytes": 12,
+        "tagBytes": 16,
+        "encryptedColumnCount": 9,
+        "constructedByteCount": 29509,
+        "filesystemWrites": 0,
+        "keychainOperations": 0,
+        "networkCalls": 0
+      }
     }
   ],
   "lanes": {
@@ -242,7 +281,7 @@
     "path-fence": "GREEN",
     "api-and-local-format-schemas": "GREEN",
     "static-sql-and-role-function-contracts": "GREEN",
-    "encrypted-field": "NOT_RUN",
+    "encrypted-field": "GREEN",
     "fake-budget-and-event-fence": "NOT_RUN",
     "fake-only-codex-adapter": "NOT_RUN",
     "native-source-compile-and-unit-tests": "NOT_RUN",
@@ -283,6 +322,11 @@
     "schemas/r4/sql/0001_r4_presence.verify.sql": "sha256:beacf7fbd65745a9d2591482c602307e81c5c778cb0d896c1dc2501f0e19211d",
     "schemas/r4/sql/0001_r4_presence.rollback.sql": "sha256:94104673383c07365f352d68cc36f55a8eaf9b9c756f02c90ffeb7c8eae2f6dc",
     "scripts/r4-gate-b-postgres.mjs": "sha256:4fde21a2a63d57af1011cd885002260c338bf6970794fe47a287ccc688891422",
-    "test/r4-gate-b/postgres-schema.test.ts": "sha256:355026d53fb9435438aa41cd4d768464a4a41af86d6f5a785269ceb5d40a4735"
+    "test/r4-gate-b/postgres-schema.test.ts": "sha256:355026d53fb9435438aa41cd4d768464a4a41af86d6f5a785269ceb5d40a4735",
+    "packages/r4-persistence/src/encrypted-field.ts": "sha256:b33abb82a06f933f1bd30dec855f14969e4b9efc326a65233b04aac87b3a0e7d",
+    "packages/r4-persistence/src/index.ts": "sha256:f9b3a31fca1ffbdc7dff3f37924a321d90ac7aafc5a2b1188ec6a0671a3a62d6",
+    "scripts/r4-gate-b-encrypted-field.mjs": "sha256:8ff56dfc73f17b49373cf908e50b4c6d40baa553a660fd6ca66f1a5901058111",
+    "test/r4-gate-b/encrypted-field.test.ts": "sha256:9982af051908e118c698a46b0466345960ad42919eca084422d7723edf4e311e",
+    "package.json": "sha256:3b9bd71ff7e6423786dbd5524311900419279f89003a56cc7e9856a031ba1423"
   }
 }

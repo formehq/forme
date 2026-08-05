@@ -15,6 +15,7 @@
   "files": [
     "bin",
     "packages/r4-local",
+    "packages/r4-persistence",
     "packages/r4-protocol",
     "schemas",
     "src",
@@ -35,6 +36,7 @@
     "r4:room-build:audit": "node scripts/r4-room-build-audit.mjs",
     "r4:docs:audit": "node scripts/r4-doc-audit.mjs",
     "r4:inventory": "node scripts/r4-source-inventory.mjs",
+    "r4:gate-b:encrypted-field": "node scripts/r4-gate-b-encrypted-field.mjs check",
     "test:spine": "node --test test/*.test.ts",
     "test:r4": "node --test 'test/r4/**/*.test.ts'",
     "test:r4:offline": "node --import ./scripts/deny-external-network.mjs --test 'test/r4/**/*.test.ts'",
