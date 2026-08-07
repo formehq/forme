@@ -720,3 +720,41 @@ exact Core Correction Construction Packet only. It authorizes no repository
 Construction, Docker/PostgreSQL execution, real Codex, sandbox-exec, signing,
 Keychain, LocalAuthentication/user presence, provider call, real Guest data,
 Gate C, deployment, merge, public traffic or spend.
+
+## 2026-08-07 — Gate B Core Correction Construction approved; physical execution remains closed
+
+**Decision:** approve exact R4 Gate B Core Correction Construction Packet v0.1
+at
+`sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6`
+and its Owner Review at
+`sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299`,
+bound to proposal HEAD/tree
+`5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e` /
+`15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f`. The Owner granted Correction
+Construction while explicitly keeping Retry Execution and First Provider-Call
+Test `NOT_REQUESTED`. The exact receipt was:
+
+```text
+批准 R4 Gate B Core Correction Construction Packet v0.1 sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6；批准 Owner Review sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299；Proposal HEAD 5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e tree 15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f；Correction Construction Grant APPROVED；Retry Execution Grant NOT REQUESTED；First Provider-Call Test Grant NOT REQUESTED
+```
+
+**Reason:** the approved scope correction needed a repository-reviewable Core
+mechanism before any new physical attempt: a Demo-critical PostgreSQL Core
+implementation, a separate Codex zero-call boundary, and a transient macOS
+candidate path, all tested behind fake effect ports. Later successor review may
+still correct the Core interpretation without rewriting this historical grant.
+
+**Effect:** the authorized Construction completed and was published at review
+HEAD/tree `0e6a1a27e43adc54a4997ae98fda54dcda25da2e` /
+`b8d3d64dec3d0d6901ae72e127f0476ac75f14db`. The final check passed 381 Node
+and 19 Swift tests. Docker/PostgreSQL runtime calls, real Codex/Seatbelt,
+thread/turn/provider/network, app signing/launch, Keychain and user-presence
+effects all remained zero. The body-free machine evidence is
+`sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09`;
+the Construction Report is
+`sha256:4369c5bf7f95e805b440c47a5d2908b091d74c14ab0b322a39d663978c570f40`.
+The returned Execution Manifest
+`sha256:f743f8f17daa3aa4d12805cc12563c94a1e3e3343ab4069e4ce351058bcc0b74`
+is intentionally non-approvable Yellow. This completed Construction does not
+open Host Binding, physical adapter Construction, Retry, Provider Call, Gate C,
+deployment, merge, public traffic or spend.

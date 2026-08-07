@@ -2,34 +2,32 @@
 
 - Updated: 2026-08-07
 - Active gate: **R4 Gate A remains technically complete. The first Gate B
-  attempt stopped Red and cleaned. The approved repo-only Retry Construction
-  then completed at `d6374ed` with 56/56 offline tests, Green cleanup and an
-  honest Yellow verdict. The Owner has now approved the five-part
-  Demo-critical Core scope correction. Exact Correction Construction Packet
-  `sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6`
-  and low-load Review
-  `sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299`
-  are ready for the next Owner gate. Correction Construction, Retry Execution
-  and the First Provider-Call Test are not yet approved.**
+  attempt stopped Red/cleaned; repo-only Retry Construction returned
+  Yellow/cleaned. The Owner then approved and authorized the narrower
+  Demo-critical Core Construction. It completed at published review HEAD
+  `0e6a1a2` with 381 Node and 19 Swift tests Green, zero real physical effects,
+  and an honest non-approvable Yellow Manifest. The proposed next Owner input
+  is the Physical Adapter + Host Binding Decision Brief. Host-Binding /
+  Adapter Construction, Retry Execution, and the First Provider-Call Test are
+  all still `NOT_REQUESTED`.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
-  Gate A is technically implemented and verified. Gate B Retry Construction is
-  Yellow/cleaned; the corrected Core implementation is proposed but not built.
-  PostgreSQL Core semantics, Codex zero-call containment and macOS transient
-  candidate protection remain incomplete. R4 is not Owner-accepted or Done,
-  and Gate C remains unexecuted.**
+  Gate A is technically implemented and verified. The current PostgreSQL Core
+  SQL/fake mechanism, Codex zero-call containment, and transient macOS helper
+  now exist, while PostgreSQL's final public-pool/race interpretation remains
+  at the next Owner gate. Host binding, one unified physical runner, executable
+  races, and real physical adapters remain incomplete. R4 is not Owner-accepted
+  or Done, and Gate C is unexecuted.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: Owner reviews the exact
-  [`R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md)
-  through its
-  [`low-load Owner Review`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md).
-  Recommended approval opens repository-only Core Construction with fake
-  physical adapters, then STOP. It does not open Docker/PostgreSQL execution,
-  real Codex or `sandbox-exec`, signing/Keychain/LocalAuthentication, Retry
-  Execution, Provider Call, real Guest data, Gate C, deployment, public
-  traffic, merge or spend.
+- Next action: Owner reviews the proposed
+  [`Physical Adapter + Host Binding Decision Brief`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md).
+  Its five recommended answers define a future read-only host-binding plus
+  repo/fake adapter Construction; approving the Brief would authorize exact
+  Packet preparation only. It opens no host read, Docker/PostgreSQL execution,
+  real Codex/Seatbelt, signing/Keychain/LocalAuthentication, Retry, Provider
+  Call, real Guest data, Gate C, deployment, public traffic, merge, or spend.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -52,7 +50,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A ✓ · CORE CORRECTION PACKET READY · OWNER GATE
+R4 Controlled Presence    ← GATE A ✓ · CORE CONSTRUCTION YELLOW · NEXT BRIEF READY
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -212,8 +210,30 @@ Current truth:
   Yellow evidence is reclassified. The Owner approved all five recommended
   Demo-critical scope corrections in
   [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md).
-  The exact Core Construction Packet and low-load Review now await separate
-  Owner approval; Construction, Retry and Provider authority remain closed;
+  The Owner later approved the exact Core Construction Packet
+  `sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6`
+  and low-load Review
+  `sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299`,
+  granting Construction while keeping Retry and Provider authority closed;
+- the authorized Core Construction returned and was published at review HEAD
+  `0e6a1a2` / tree `b8d3d64`. It passed 381 Node and 19 Swift tests, kept all
+  real Docker/PostgreSQL/Codex/sandbox/signing/Keychain/LA/provider effects at
+  zero, and published Report
+  `sha256:4369c5bf7f95e805b440c47a5d2908b091d74c14ab0b322a39d663978c570f40`
+  with machine evidence
+  `sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09`.
+  Its Manifest `sha256:f743f8f17daa3aa4d12805cc12563c94a1e3e3343ab4069e4ce351058bcc0b74`
+  is intentionally non-approvable Yellow: physical adapters, host bytes, one
+  unified runner and executable PostgreSQL races remain unclosed;
+- a successor read-only review found PostgreSQL interpretations/corrections
+  that must be explicit before more Construction: 13 conceptual race families
+  expand to 16 executable cases / 32 orders / at least 68 Core calls; the
+  recommended pool-20 definition is public-encounter-only active-unresolved
+  rather than rolling 24 hours; and public-accept 3/day needs exact issuance
+  bucket lineage. The proposed successor Brief keeps current version
+  precedence, explicitly accepts that Codex post-response finality remains
+  unproven, and discloses the transient macOS CLI-signing tradeoff. No successor
+  authority has yet been granted;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
