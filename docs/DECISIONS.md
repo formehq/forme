@@ -680,3 +680,43 @@ or email, Gate C, deployment, production mutation, merge, or spend. After
 Construction, Green/Yellow/Red all return to the Owner; none opens Retry
 Execution automatically. The Packet and low-load Owner Review remain
 byte-frozen at their approved bytes.
+
+## 2026-08-07 — Gate B Demo-critical Core scope correction approved
+
+**Decision:** approve all five recommendations in the exact R4 Gate B
+Correction Scope Decision Brief at
+`sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`:
+
+1. implement a truthful Demo-critical PostgreSQL Core before the original
+   Full-45/53-function/27-category target;
+2. use a separate zero-call diagnostic Seatbelt profile without widening the
+   real Fresh Session profile;
+3. use a transient-candidate macOS MVP exception and leave persistent
+   candidate protection/recovery post-demo;
+4. accept and disclose the controlling Desktop Agent as a procedural boundary
+   while kernel-constraining the child; and
+5. remove every owned PostgreSQL runtime resource while allowing the exact
+   pinned public image cache to remain.
+
+The exact Owner receipt was:
+
+```text
+批准 R4 Gate B Correction Scope Decision Brief 五项推荐；只授权准备 exact Correction Packet；Correction Construction、Retry Execution 与 First Provider-Call Test Grant 均 NOT REQUESTED
+```
+
+**Reason:** deeper read-only review found that the remaining Yellow lanes were
+not three simple wiring gaps. Most PostgreSQL surface functions were semantic
+stubs, the pinned-real Codex branch still inherited fixture assumptions, and
+the custom-Keychain/persistent-Secure-Enclave composition was unimplemented
+and possibly unsupported. Connecting those pieces without a scope correction
+could create a misleading physical result.
+
+**Effect:** the original Technical Control Packet and Full target remain
+immutable but incomplete. The active Demo claim becomes one public Hero
+Encounter with real Core database semantics, a separately classified Codex
+zero-call diagnostic and an explicit transient-candidate exception. Core Green
+must never be labeled Full Green. This decision authorizes preparation of one
+exact Core Correction Construction Packet only. It authorizes no repository
+Construction, Docker/PostgreSQL execution, real Codex, sandbox-exec, signing,
+Keychain, LocalAuthentication/user presence, provider call, real Guest data,
+Gate C, deployment, merge, public traffic or spend.

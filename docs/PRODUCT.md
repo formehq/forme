@@ -7,8 +7,10 @@
   the full recommended T5 async/deletion/retention/P0-cut contract
   Owner-approved, with four Guest continuation presets; reconciled Technical
   Control Packet v0.2 is independently audited, hashed, and Owner-approved;
-  Gate A repository-only implementation is current
-- Updated: 2026-08-03
+  Gate A repository-only implementation is current; the five-part Gate B
+  Demo-critical Core scope correction is Owner-approved and its exact
+  Construction Packet is the active proposal gate
+- Updated: 2026-08-07
 - MVP complete: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
 
@@ -79,6 +81,36 @@ reconciled, independently audited and hashed Technical Control Packet v0.2 was
 also Owner-approved; Gate A repository-only implementation is current.
 [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
 Entropy Reduction as the metabolism that keeps all four dimensions coherent.
+
+## Active Gate B Demo-critical Core amendment
+
+On 2026-08-07 the Owner approved all five recommendations in
+[`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
+at
+`sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
+The active August physical proof is now one truthful public Hero Encounter:
+real Demo-critical PostgreSQL semantics, a separate real-Codex zero-call
+diagnostic, and—only after later grants—a transient one-shot candidate review
+path. Unimplemented Full operations are absent from the active API/Web/CLI,
+not exposed as `503` placeholders.
+
+This is an explicit MVP proof/claim amendment. The original Full target remains
+the post-demo architecture target, but Core success does not prove its full
+45-operation surface, Private Room, notification, Agent derivative, Direct
+Invite, persistent candidate or production identity/deployment path. In Core,
+an unpublished candidate intentionally persists zero bytes and cannot survive
+process exit, cancellation, authority expiry, crash or restart. The prior
+seven-day persistent-candidate ceiling, later/offline review, candidate edit/
+replacement and submitted-unknown body recovery are unavailable rather than
+silently approximated.
+
+The controlling Desktop Agent remains a disclosed procedural boundary; child
+processes must use their exact kernel profile. A future disposable PostgreSQL
+run must remove its container, volume, workers and run root, while the exact
+public pinned image cache may remain. The Scope approval authorized preparation
+of an exact Correction Packet only; it did not authorize Construction,
+physical Retry, First Provider Call, real Guest data, Gate C, deployment,
+public traffic, merge or spend.
 
 ## MVP vision
 

@@ -6,10 +6,12 @@
   2026-08-03; T4 public lifecycle and the complete T5 async, notification,
   deletion, retention, and P0-cut contract Owner-approved on 2026-08-03;
   Packet v0.2 is reconciled and independently audited at
-  `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; Gate A permits
-  repository-only implementation but no provider, real Guest, migration,
-  hosted, production, or spend authority**
-- Updated: 2026-08-03
+  `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; the five-part
+  Gate B Demo-critical Core correction is Owner-approved, with an explicit
+  transient-candidate exception and separate zero-call diagnostic; the exact
+  Correction Construction Packet is the active proposal gate and no physical
+  Retry/provider/production authority is open**
+- Updated: 2026-08-07
 - Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
 - Related review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
@@ -77,6 +79,32 @@ than pretending it had always been settled.
 > boundary. R4 P0 uses one Fresh Native Response Session inside a disclosed,
 > read-only source/capability envelope; an exact packet-only run remains a
 > future option when stronger content minimization is required.
+
+### Active Demo-critical Core exception
+
+The Owner approved the exact 2026-08-07 Correction Scope Decision Brief at
+`sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
+It preserves the Full Native Harness architecture while narrowing the August
+physical claim:
+
+- the real Codex Retry first runs a separate zero-call diagnostic profile. A
+  clean result proves only safe staging, initialize-only wire containment and
+  cleanup; it remains Yellow/manual-only and does not prove the Fresh Session
+  provider/tool boundary;
+- the later synthetic First Provider Test, if separately approved, uses a new
+  transient candidate path. Forme intentionally persists zero candidate-body
+  bytes; process exit, cancel, expiry, crash or restart discards it. Persistent
+  candidate recovery, later/offline review, edit/replacement, Data Protection
+  Keychain/access group and production signing remain post-demo; and
+- the controlling Desktop Agent is a disclosed procedural boundary. The child
+  must be kernel constrained, but no claim is made that the current Agent
+  process itself is kernel-sandboxed.
+
+This exception supersedes the persistent-candidate part of the T3/T5 MVP proof
+only; it does not rewrite the approved Full contract or loosen the exact Owner
+publication gate, no-retry/no-fallback rule, provider budget or Room connector
+boundary. Scope approval authorized the exact Correction Packet preparation
+only, not Construction, Retry Execution or a First Provider Call.
 
 ## Confirmed role separation
 

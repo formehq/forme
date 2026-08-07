@@ -56,6 +56,17 @@ Do not implement past the proposal stage without explicit owner confirmation whe
   Schema/runtime/migration validation and any first provider call require the
   separately approved Gate B Manifest and named test grant; production/public
   action requires Gate C.
+- The Owner approved the five recommendations in the 2026-08-07 R4 Gate B
+  Correction Scope Decision Brief at
+  `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`:
+  Demo-critical PostgreSQL Core, a separate Codex zero-call diagnostic
+  profile, the transient-candidate MVP exception, a disclosed procedural
+  controlling-Agent boundary, and retained pinned public PostgreSQL image
+  cache. That approval authorizes preparation of an exact Correction Packet
+  only. Until that Packet is separately approved, Correction Construction,
+  Retry Execution and First Provider Call remain unauthorized. The original
+  Full target remains immutable and Core Green must never be called Full
+  Green.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 
