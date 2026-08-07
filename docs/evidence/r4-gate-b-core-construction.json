@@ -1,7 +1,7 @@
 {
   "schemaVersion": "r4.gate-b-core.construction-evidence.v1",
   "status": "CORE_REPOSITORY_REVIEWABLE_YELLOW",
-  "generatedAt": "2026-08-07T11:40:06.000Z",
+  "generatedAt": "2026-08-07T12:02:34.000Z",
   "authority": {
     "constructionPacketSha256": "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6",
     "ownerReviewSha256": "sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299",
@@ -156,7 +156,7 @@
     "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.verify.sql": "sha256:4bad90577693b363c86857018f29159f77c79419aa93b9ebb7afae0decd95133",
     "scripts/r4-doc-audit.mjs": "sha256:5fc553e569e0abd9e9a40caeb8fdf1091cc98c161e4d6cb76ac6d35000f20738",
     "scripts/r4-gate-b-cleanup.mjs": "sha256:1b5ea9f73b428669368a1e9dc19545f9bbc5c2ada098e7f8677c08e560717e24",
-    "scripts/r4-gate-b-codex-probe.mjs": "sha256:d60e52b47cec9d91e0c131e2b61ce908cf31b437b6995fed1aac0909f38e18d6",
+    "scripts/r4-gate-b-codex-probe.mjs": "sha256:dd4cc0ac0086b54e0b9b602a733d507a5a64311ab0260f50fff1c76875524ba8",
     "scripts/r4-gate-b-core-api-contract.mjs": "sha256:bb35ea117fb8c7b262075acba06729a1de0045202bf4f1d20637751d64264479",
     "scripts/r4-gate-b-core-postgres.mjs": "sha256:7196658e1478944b26addf68e8c394beb3c7162c95618d53b347c539e0a08d05",
     "scripts/r4-gate-b-macos-core.mjs": "sha256:9426439fbfde01df6cb1ca441ea84da8d750d6f26c6c37044973083dba98f904",
@@ -164,7 +164,7 @@
     "scripts/r4-gate-b-runner.mjs": "sha256:e9f3e701279b2b7e8458a341b43ac69f86c6876b13ca4b83e61994ba1ddf11d8",
     "src/cli.ts": "sha256:1b530588201903601466d174be5ceb06e70ae1e6ef6669d607992b1ecfb7e27d",
     "test/r4-gate-b-core/api-contract.test.ts": "sha256:c53e06f237b25ff54120757ad72553adf07c37808251ecb6515a3933f12f1250",
-    "test/r4-gate-b-core/codex-physical-adapter.test.ts": "sha256:2f4a97eef8ceb18296bdcf001f28202d9122cb8e344fa0097476086a1b8a61c6",
+    "test/r4-gate-b-core/codex-physical-adapter.test.ts": "sha256:43c29808b6b87f09aab313549c2fedae2e617352e917eeeda07474d1bac7f1fb",
     "test/r4-gate-b-core/macos-core-adapter.test.ts": "sha256:a3a513e41ef93e6a3166b759c9cde2b1caa29a3659ce96363620957196ab95ed",
     "test/r4-gate-b-core/postgres-adapter.test.ts": "sha256:9346203a8cb8ac88fa5d680b2bea00d96bc2d873a121b65a731f07ff39955821",
     "test/r4-gate-b-core/postgres-static.test.ts": "sha256:bb6b5b75c3fe7e35608e9d141d4b5aff7314f3d6dbe3c2db5c70610bbd826533",

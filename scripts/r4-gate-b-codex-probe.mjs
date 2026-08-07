@@ -465,7 +465,11 @@ export async function createCoreProcessFakeFixture(constructionTempRoot, behavio
 
 function groupExists(pid) {
   try { process.kill(-pid, 0); return true; }
-  catch (error) { if (error?.code === "ESRCH") return false; throw error; }
+  catch (error) {
+    if (error?.code === "ESRCH") return false;
+    if (error?.code === "EPERM") return true;
+    throw error;
+  }
 }
 
 async function waitForGroupAbsence(pid, milliseconds) {
@@ -506,7 +510,10 @@ export function createCoreProcessSpawnPort(fixture, timing = {}) {
   });
   const signalGroup = (pid, signal) => {
     try { process.kill(-pid, signal); return true; }
-    catch (error) { if (error?.code === "ESRCH") return false; throw error; }
+    catch (error) {
+      if (error?.code === "ESRCH" || error?.code === "EPERM") return false;
+      throw error;
+    }
   };
   return Object.freeze({
     mode: "construction_fake",

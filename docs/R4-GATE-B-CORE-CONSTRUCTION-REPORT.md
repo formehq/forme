@@ -70,8 +70,8 @@ fake executor 或静态测试升级成物理 Green。
 | Approved Construction Packet | `sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6` |
 | Approved Construction Owner Review | `sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299` |
 | Approved proposal HEAD / tree | `5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e` / `15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f` |
-| Machine evidence | `sha256:0e690d35bffd3dfe790d3a7969027c2af5351130a6e25271e2f037ba5f0fb49b` |
-| 71-file construction aggregate | `sha256:22b4cc5de31813cd029fd322062ec40606db28e73ffc5e6b90df28e040b246a6` |
+| Machine evidence | `sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09` |
+| 71-file construction aggregate | `sha256:f4bd00354f1c7cd330b421faec735efb83c4f0efbc5f18eabc39923b11d1733d` |
 | Core artifact count / aggregate | `18` / `sha256:176005479f74570d872dbfa47ea50acdf2cdf46bdace101b9bf010dfeac9bb66` |
 | Immutable Full artifact count / aggregate | `8` / `sha256:f290ba035efa2eb84d899bf67d4ffb03c523d88556ce96b66f4f3a2862159310` |
 | Execution Manifest candidate | `sha256:f743f8f17daa3aa4d12805cc12563c94a1e3e3343ab4069e4ce351058bcc0b74` |

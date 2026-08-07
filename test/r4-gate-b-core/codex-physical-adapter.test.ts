@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import test, { after } from "node:test";
 
 import { guardClientMessage } from "../../packages/r4-codex-adapter/src/app-server-probe.ts";
 import {
@@ -23,9 +23,47 @@ import {
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 import { cleanupFakeCodexFixture, coreSyntheticPublicHashes, createCoreFakeCodexLayout, createCoreMemorySpawnPort, createCoreProcessFakeFixture, createCoreProcessSpawnPort, expectedCoreFakeSchema } from "../../scripts/r4-gate-b-codex-probe.mjs";
 
+let ownedTestRoot: string | undefined;
+const repositoryRoot = fs.realpathSync(path.resolve(import.meta.dirname, "../.."));
+
+function validateTestRoot(candidate: string): string {
+  assert.ok(path.isAbsolute(candidate), "FORME_CONSTRUCTION_TEMP_ROOT must be absolute");
+  const resolved = path.resolve(candidate);
+  const metadata = fs.lstatSync(resolved);
+  assert.ok(metadata.isDirectory() && !metadata.isSymbolicLink(), "test root must be a real directory");
+  assert.equal(metadata.mode & 0o077, 0, "test root must be private");
+  const canonical = fs.realpathSync(resolved);
+  assert.equal(canonical, resolved, "test root must be canonical");
+  assert.notEqual(canonical, fs.realpathSync(os.tmpdir()), "system temp itself is not a test root");
+  const overlapsRepository = canonical === repositoryRoot
+    || canonical.startsWith(`${repositoryRoot}${path.sep}`)
+    || repositoryRoot.startsWith(`${canonical}${path.sep}`);
+  assert.equal(overlapsRepository, false, "test root must not overlap the repository");
+  return canonical;
+}
+
+function testRoot(): string {
+  const configured = process.env.FORME_CONSTRUCTION_TEMP_ROOT;
+  if (configured !== undefined) return validateTestRoot(configured);
+  const canonicalSystemTemp = fs.realpathSync(os.tmpdir());
+  if (ownedTestRoot === undefined) {
+    const created = fs.mkdtempSync(path.join(canonicalSystemTemp, "forme-r4-core-test-"));
+    fs.chmodSync(created, 0o700);
+    ownedTestRoot = fs.realpathSync(created);
+  }
+  return validateTestRoot(ownedTestRoot);
+}
+
+after(() => {
+  if (ownedTestRoot !== undefined) {
+    const target = ownedTestRoot;
+    fs.rmSync(target, { recursive: true, force: true });
+    assert.equal(fs.existsSync(target), false, "owned test root cleanup failed");
+  }
+});
+
 function constructionRoot(): string {
-  const parent = process.env.FORME_CONSTRUCTION_TEMP_ROOT;
-  assert.ok(parent && path.isAbsolute(parent), "FORME_CONSTRUCTION_TEMP_ROOT is required");
+  const parent = testRoot();
   const result = fs.mkdtempSync(path.join(parent, "codex-test-"));
   fs.chmodSync(result, 0o700);
   return result;
@@ -389,6 +427,11 @@ test("isolated write inventory allows only exact CODEX_HOME top-level and reject
   }
 });
 
-test("test temp data stays below the approved Construction root", () => {
-  assert.notEqual(process.env.FORME_CONSTRUCTION_TEMP_ROOT, os.tmpdir());
+test("test temp data stays below an explicit or fresh private test root", () => {
+  const parent = testRoot();
+  assert.ok(path.isAbsolute(parent));
+  assert.notEqual(parent, os.tmpdir());
+  const metadata = fs.lstatSync(parent);
+  assert.ok(metadata.isDirectory() && !metadata.isSymbolicLink());
+  assert.equal(metadata.mode & 0o077, 0);
 });
