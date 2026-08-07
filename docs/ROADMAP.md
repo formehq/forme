@@ -1,6 +1,6 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-04
+- Updated: 2026-08-07
 - MVP complete and repeatable: 2026-08-18
 - Demo Day: 2026-08-19 (Wednesday)
 - Scope model: P0 committed, P1 conditional, P2 post-demo
@@ -20,9 +20,15 @@
   but its first attempt stopped
   Red/cleaned after a real Codex-home read-scope violation. The Owner then
   approved the construction-only Retry Packet
-  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`;
-  construction is ready but has not started. Retry Execution is not requested.
-  Provider calls,
+  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`.
+  Retry Construction completed at `d6374ed` with Green offline/static lanes,
+  Green cleanup and a Yellow aggregate verdict. Its Retry Execution Manifest
+  is explicitly not recommended. A later read-only review found that the next
+  correction must choose a truthful Demo-critical semantic cut rather than
+  merely wire three physical adapters. The active Owner input is
+  [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
+  at `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
+  Retry Execution is not requested. Provider calls,
   real Guest data, production migration, deployment, spend, production Room
   mutation, external email, production secrets, and public traffic remain
   unauthorized
@@ -39,7 +45,7 @@
 | R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three outputs useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. Gate B remains incomplete after one Red/cleaned attempt; the narrower runner Construction boundary is now Owner-approved and ready to start, while real Retry Execution remains a separate future decision.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three proposals useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. The first Gate B attempt is Red/cleaned; Retry Construction is Yellow/cleaned and proves the repository/offline mechanism, not runtime readiness. A five-part Core-versus-Full scope decision is now pending before any exact correction Packet or Retry Execution.
 
 ## R4 owner-approved product target — Gate A Technical Review complete
 
@@ -173,8 +179,10 @@ Native Harness role clarification
   → reconciled Technical Control Packet v0.2 audit/hash ✓ → Owner approval ✓
   → Gate A repository implementation + Technical Review ✓
   → Gate B v0.1 approval ✓ → first execution RED/CLEAN
-  → Retry Construction Packet ✓ [approved; ready, not started]
-  → separately hash-pinned Retry Execution [not requested]
+  → Retry Construction Packet ✓ → Construction YELLOW/CLEAN ✓
+  → Correction Scope Decision Brief [Owner decision pending]
+  → exact Core Correction Packet [not prepared]
+  → corrected Retry Execution [not requested]
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,
@@ -184,10 +192,13 @@ Project Room as the required public resident, one bounded Private Room access
 path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
 exchange, one optional lightweight Guest Capsule, and typed external signals.
 Gate A repository code/docs, synthetic/local tests, and evidence remain
-complete. The first approved Gate B attempt is preserved as Red/cleaned
-evidence; none of its runtime lanes is proven. Approved Retry Construction may
-build only an offline reviewed runner and must return a second exact Execution
-Manifest before stopping.
+complete. The first approved Gate B attempt is preserved as Red/cleaned.
+Retry Construction is preserved as Yellow/cleaned: it built and verified the
+offline runner, but physical review found that PostgreSQL semantic completion,
+real Codex diagnostic containment and macOS candidate-protection scope require
+an Owner cut before another Packet. The recommended cut keeps one real hero
+encounter exact and hides/defers unimplemented surfaces rather than returning
+placeholders under a broad P0 claim.
 Real execution, First Provider-Call Test Grant, production durable writes,
 public actions, and spend remain separate later decisions.
 
