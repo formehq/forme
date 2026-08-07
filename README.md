@@ -10,12 +10,15 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - MVP complete and repeatable: **2026-08-18**
 - Demo Day: **2026-08-19 (Wednesday)**
-- Current gate: **R4 Gate B Core Construction returned an honest Yellow.**
+- Current gate: **R4 Gate B Core Construction returned an honest Yellow; the
+  successor direction is Owner-approved and its exact Construction Packet is
+  now proposed.**
   Gate A remains technically complete. The current Core SQL and fake mechanisms
-  are built and verified, but their final PostgreSQL interpretation remains at
-  the next Owner gate and the published Execution Manifest is deliberately
-  non-approvable: host bindings, one unified physical runner, executable races,
-  and real physical adapters remain unbuilt. R4 is not Owner-accepted or Done.
+  are built and verified; their successor PostgreSQL interpretation is now
+  Owner-approved but not yet implemented, and the published Execution Manifest
+  is deliberately non-approvable: host bindings, one unified physical runner,
+  executable races, and real physical adapters remain unbuilt. R4 is not
+  Owner-accepted or Done.
 - Product implementation: **R1–R3 Owner-accepted; R4 Gate A technically
   implemented under the exact Owner-approved Packet**
   `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
@@ -27,8 +30,9 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   19 Swift tests Green, zero real Docker/PostgreSQL/Codex/signing/Keychain/LA
   effects, and Yellow evidence
   `sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09`.
-  Host-Binding / Adapter Construction, Retry Execution, and the first
-  provider-call grant remain not requested.
+  The exact successor proposal requests Host-Binding / Adapter Construction,
+  but that grant is not yet approved. Retry Execution and the first provider-
+  call grant remain not requested.
 
 Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
 
@@ -45,19 +49,23 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 5. [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md) —
    exact repository evidence, five synthetic journeys, and honest later-gate
    conditions
-6. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md) —
-   proposed next direction and recommended answers; no new authority yet
-7. [`docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md) —
+6. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md) —
+   low-load review of the proposed exact Construction; no grant is active yet
+7. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md) —
+   exact proposed workset, host-binding, physical-adapter and evidence boundary
+8. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md) —
+   Owner-approved five-part successor direction
+9. [`docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md) —
    low-load record of the current non-approvable Yellow result
-8. [`docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md`](./docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md) —
+10. [`docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md`](./docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md) —
    exact repository/fake evidence and the remaining physical gaps
-9. [`docs/R4-GATE-B-EXECUTION-REPORT.md`](./docs/R4-GATE-B-EXECUTION-REPORT.md) —
+11. [`docs/R4-GATE-B-EXECUTION-REPORT.md`](./docs/R4-GATE-B-EXECUTION-REPORT.md) —
    why the first Gate B attempt stopped Red and what cleanup proved
-10. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
+12. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
    approved R4 mental model, technical cards, and walkthrough contracts
-11. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
-12. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-13. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
+13. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
+14. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
+15. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 

@@ -758,3 +758,32 @@ The returned Execution Manifest
 is intentionally non-approvable Yellow. This completed Construction does not
 open Host Binding, physical adapter Construction, Retry, Provider Call, Gate C,
 deployment, merge, public traffic or spend.
+
+## 2026-08-07 — Physical Adapter + Host Binding direction approved; exact Construction remains gated
+
+**Decision:** approve all five recommendations in the exact R4 Gate B Physical
+Adapter + Host Binding Decision Brief at
+`sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2`,
+bound to proposal HEAD/tree
+`8f027876af37815f110028763eda1d7cb9679679` /
+`f4903e52d0b158085810969c2173520b41082bcd`. The exact Owner receipt was:
+
+```text
+批准 R4 Gate B Physical Adapter + Host Binding Decision Brief sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2 五项推荐；Proposal HEAD 8f027876af37815f110028763eda1d7cb9679679 tree f4903e52d0b158085810969c2173520b41082bcd；只授权准备 exact Construction Packet；Host-Binding / Adapter Construction、Retry Execution 与 First Provider-Call Test Grant 均 NOT_REQUESTED
+```
+
+**Reason:** the current Core repository/fake mechanisms are not yet one safely
+executable machine. The approved direction first constructs one unified runner
+and three closed physical adapters behind fake effects, freezes its
+implementation bytes, and only then permits a separately approved bounded
+read-only binding to Owner-chosen Docker, Codex and macOS tools. It also makes
+the PostgreSQL public-pool/race corrections, Codex causal limit and transient
+macOS CLI-signing tradeoff explicit rather than overstating Yellow evidence.
+
+**Effect:** this approval authorizes preparation of the exact successor
+Construction Packet and low-load Owner Review only. It authorizes no repository
+Construction, host inspection, Docker/PostgreSQL execution, real Codex/
+Seatbelt, signing/Keychain/LocalAuthentication, Retry, provider call, real
+Guest/Room data, Gate C, deployment, merge, public traffic or spend. Those
+proposal bytes must return with exact hashes and commit/tree before the Owner
+may open the requested Host-Binding / Adapter Construction Grant.
