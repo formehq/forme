@@ -26,8 +26,9 @@ test("Guest ask renders only declared interactions and the exact consent-copy co
 });
 
 test("Guest and Owner async controls clear busy state through finally blocks", () => {
-  assert.equal((GUEST_STATUS.match(/finally \{\s+setBusy\(false\);\s+\}/gu) ?? []).length, 4);
+  assert.equal((GUEST_STATUS.match(/finally \{\s+setBusy\(false\);\s+\}/gu) ?? []).length, 3);
   assert.equal((OWNER_CONTROLS.match(/finally \{\s+setBusy\(false\);\s+\}/gu) ?? []).length, 1);
+  assert.doesNotMatch(GUEST_STATUS, /setNotification|\/notification/u);
 });
 
 test("GrantOffer acceptance pre-persists a 32-byte Grant capability and idempotency key before mutation", () => {

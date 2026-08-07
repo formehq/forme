@@ -7,6 +7,7 @@ let package = Package(
     platforms: [.macOS(.v26)],
     products: [
         .executable(name: "FormeLocal", targets: ["FormeLocal"]),
+        .executable(name: "FormeCoreLocal", targets: ["FormeCoreLocal"]),
     ],
     dependencies: [],
     targets: [
@@ -18,6 +19,15 @@ let package = Package(
             name: "FormeLocalTests",
             dependencies: ["FormeLocal"],
             path: "Tests/FormeLocalTests"
+        ),
+        .executableTarget(
+            name: "FormeCoreLocal",
+            path: "Sources/FormeCoreLocal"
+        ),
+        .testTarget(
+            name: "FormeCoreLocalTests",
+            dependencies: ["FormeCoreLocal"],
+            path: "Tests/FormeCoreLocalTests"
         ),
     ],
     swiftLanguageModes: [.v6]

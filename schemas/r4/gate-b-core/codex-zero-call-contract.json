@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "r4.gate-b-core.codex-zero-call-contract.v1",
+  "status": "CONSTRUCTED_NOT_EXECUTED",
+  "distribution": {
+    "npmVersion": "0.145.0",
+    "reportedCliVersion": "codex-cli 0.145.0",
+    "launcherRelativePath": "bin/codex.js",
+    "launcherSha256": "sha256:134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "nativeRelativePath": "vendor/aarch64-apple-darwin/codex/codex",
+    "nativeSha256": "sha256:1da3f4e0e96028b8a771814293c3033dafd1971f943f6c7e79b0897fe705f590"
+  },
+  "schemaInventory": {
+    "fileCount": 273,
+    "aggregateSha256": "sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62",
+    "selectedFiles": {
+      "./codex_app_server_protocol.schemas.json": "sha256:b6ec47c51bef8a6857dd9435f9919a43ba6616a5a9e3ab25087451cbc93d9f06",
+      "./codex_app_server_protocol.v2.schemas.json": "sha256:bf840d4cb1f74ed64badfaba37bd44999f1ccf6c721f03c2d196ad7f0991dab0",
+      "./ClientRequest.json": "sha256:cc9f6e191a032bdfdc96d768f4ddaba4ced75408017af3ac0dbcc4d00c1faaa8",
+      "./ClientNotification.json": "sha256:a30b3041578845b11add3d07d5a63cd3a12d5d126e87b8c591862b4aeb68d97c",
+      "./ServerRequest.json": "sha256:177f8b7de9dd8ce2055c56a5fd22dbc6ec24e2a4d706d08fef9f5ad4effe71f6",
+      "./ServerNotification.json": "sha256:7f9f9ac791c067e3e9840a9a6543a3a0d3de86e64b2d764ede4c2f3b01bcba64"
+    },
+    "initializeResponseFile": "./InitializeResponse.json",
+    "dialects": [
+      "http://json-schema.org/draft-07/schema#",
+      "https://json-schema.org/draft/2020-12/schema"
+    ]
+  },
+  "logicalCommands": [
+    ["STAGED_CODEX", "--version"],
+    ["STAGED_CODEX", "app-server", "--help"],
+    ["STAGED_CODEX", "app-server", "generate-json-schema", "--out", "SCHEMA_ROOT"],
+    ["STAGED_CODEX", "app-server", "--listen", "stdio://"]
+  ],
+  "environmentKeys": ["HOME", "CODEX_HOME", "TMPDIR", "PATH", "NO_COLOR", "CODEX_DISABLE_ANALYTICS"],
+  "handshakeOrdering": {
+    "schemaInventoryAndReferenceClosureValidatedBeforeInitializeSpawn": true,
+    "preResponseWireValidatedBeforeInitialized": true,
+    "preResponseInvalidWireMaximumClientWrites": 1,
+    "postResponseUnexpectedWireTerminalizesAndCleans": true,
+    "postResponseViolationMaximumClientWrites": 2,
+    "clientWritesAfterPostResponseViolation": 0,
+    "postResponseWireFinalityUnproven": true,
+    "cleanWireClientWrites": 2
+  },
+  "processSupervision": {
+    "deadlineThenSignalOrder": ["SIGTERM", "SIGKILL"],
+    "termGraceMilliseconds": 2000,
+    "killGraceMilliseconds": 2000,
+    "processGroupRemovedFromCleanupJournalOnlyAfterAbsence": true
+  },
+  "allowedCodexHomeTopLevel": [
+    ".tmp",
+    "goals_1.sqlite",
+    "installation_id",
+    "logs_2.sqlite",
+    "memories_1.sqlite",
+    "skills",
+    "state_5.sqlite",
+    "state_5.sqlite-shm",
+    "state_5.sqlite-wal",
+    "tmp"
+  ],
+  "authority": {
+    "clientRequests": ["initialize"],
+    "clientNotifications": ["initialized"],
+    "optionalServerNotification": "remoteControl/status/changed:disabled",
+    "serverRequests": 0,
+    "threadStarts": 0,
+    "turnStarts": 0,
+    "providerCalls": 0,
+    "providerBytes": 0,
+    "networkBytes": 0,
+    "aiLaneEnabled": false,
+    "aggregateVerdict": "YELLOW"
+  },
+  "claims": {
+    "proves": ["zero-call child mechanism", "pre-response guarded stdio handshake", "post-response violation terminalization and cleanup", "schema and write inventory"],
+    "doesNotProve": ["post-response wire finality before initialized", "model call", "Fresh Session", "source visibility", "candidate", "publication authority", "automatic reaping after parent death", "host-bound production process adapter"]
+  }
+}

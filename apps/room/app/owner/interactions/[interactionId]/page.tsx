@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { hostedApplication, syntheticModeEnabled } from "../../../../src/runtime.ts";
-import { operationDefinition } from "../../../../src/operation-inventory.ts";
+import { coreOperationDefinition } from "../../../../src/core-policy.ts";
 import { OwnerControls } from "../../../../src/components/OwnerControls.tsx";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +14,8 @@ export default async function OwnerInteractionPage({ params }: OwnerInteractionP
   const { interactionId } = await params;
   let interaction: Record<string, unknown>;
   try {
-    const result = await hostedApplication().run({
-      definition: operationDefinition("control.interaction.read"),
+    const result = await hostedApplication().runCore({
+      definition: coreOperationDefinition("control.interaction.read"),
       params: { interactionId },
       body: {},
       authorization: null,

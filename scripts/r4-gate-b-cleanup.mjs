@@ -21,6 +21,65 @@ export class GateBCleanupError extends Error {
   }
 }
 
+export const CORE_CLEANUP_ORDER = Object.freeze([
+  "commit-cleanup-required",
+  "close-pipes-and-reap-process-groups",
+  "terminate-helper-and-discard-transient-candidate",
+  "remove-synthetic-room-binding",
+  "remove-signing-identity-and-custom-keychain",
+  "remove-app-codex-schema-auth-and-runtime-bytes",
+  "remove-postgres-container-volume-and-workers",
+  "verify-global-metadata-and-owned-resource-absence",
+  "copy-body-free-summary-and-remove-run-root",
+]);
+
+export function validateCoreBodyFreeMarker(value) {
+  const expected = [
+    "schemaVersion", "runID", "executionManifestSha256", "phase", "cleanupState",
+    "dockerContainerOwned", "dockerVolumeOwned", "processGroupIDs", "helperOwned",
+    "customKeychainOwned", "syntheticRoomBindingOwned", "terminalCode",
+  ].sort();
+  if (value === null || typeof value !== "object" || Array.isArray(value)) fail("CORE_CLEANUP_MARKER_INVALID");
+  const keys = Object.keys(value).sort();
+  if (keys.length !== expected.length || keys.some((key, index) => key !== expected[index])) fail("CORE_CLEANUP_MARKER_INVALID");
+  if (value.schemaVersion !== "r4.gate-b-core.run-marker.v1" || !/^r4gbcore-[a-z0-9]{16}$/u.test(value.runID) || !SHA256_PATTERN.test(value.executionManifestSha256)) fail("CORE_CLEANUP_MARKER_INVALID");
+  if (!["intent", "active", "cleanup_required", "terminal"].includes(value.phase) || !["not_started", "required", "complete", "uncertain"].includes(value.cleanupState)) fail("CORE_CLEANUP_MARKER_INVALID");
+  for (const key of ["dockerContainerOwned", "dockerVolumeOwned", "helperOwned", "customKeychainOwned", "syntheticRoomBindingOwned"]) if (typeof value[key] !== "boolean") fail("CORE_CLEANUP_MARKER_INVALID");
+  if (!Array.isArray(value.processGroupIDs) || value.processGroupIDs.some((pid) => !Number.isSafeInteger(pid) || pid <= 0)) fail("CORE_CLEANUP_MARKER_INVALID");
+  if (value.terminalCode !== null && (typeof value.terminalCode !== "string" || !/^[A-Z][A-Z0-9_]{2,127}$/u.test(value.terminalCode))) fail("CORE_CLEANUP_MARKER_INVALID");
+  const serialized = JSON.stringify(value);
+  if (/(?:candidateHash|responseText|request|prompt|transcript|sourcePath|environment|password|privateKey|credential|absolutePath)/iu.test(serialized)) fail("CORE_CLEANUP_MARKER_BODY_BEARING");
+  return Object.freeze({ ...value, processGroupIDs: Object.freeze([...value.processGroupIDs]) });
+}
+
+export function buildCoreCleanupPlan(marker) {
+  const validated = validateCoreBodyFreeMarker(marker);
+  return Object.freeze({
+    schemaVersion: "r4.gate-b-core.cleanup-plan.v1",
+    runID: validated.runID,
+    order: CORE_CLEANUP_ORDER,
+    bodyFree: true,
+    idempotent: true,
+    arbitraryProcessDiscoveryAllowed: false,
+    arbitraryPathDeletionAllowed: false,
+  });
+}
+
+export async function executeCoreCleanupPlanWithInjectedExecutor(marker, executor, { faultAfter = null } = {}) {
+  if (!executor || executor.mode !== "construction_fake" || typeof executor.execute !== "function" || Object.keys(executor).some((key) => !["mode", "execute"].includes(key))) fail("CORE_CLEANUP_EXECUTOR_DENIED");
+  if (faultAfter !== null && (!Number.isInteger(faultAfter) || faultAfter < 0)) fail("CORE_CLEANUP_FAULT_INDEX_INVALID");
+  const plan = buildCoreCleanupPlan(marker);
+  let attempts = 0;
+  for (let pass = 0; pass < 2; pass += 1) {
+    for (let index = 0; index < plan.order.length; index += 1) {
+      if (pass === 0 && faultAfter === index) break;
+      await executor.execute(Object.freeze({ kind: plan.order[index], bodyFree: true, idempotencyPass: pass + 1 }));
+      attempts += 1;
+    }
+  }
+  return Object.freeze({ cleanupPassed: true, idempotencyPasses: 2, attempts, realEffects: 0 });
+}
+
 function fail(code) {
   throw new GateBCleanupError(code);
 }

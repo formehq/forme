@@ -52,6 +52,7 @@ import {
   type Sha256,
 } from "../../../packages/r4-protocol/src/index.ts";
 import type { OperationDefinition } from "./operation-inventory.ts";
+import { isCoreOperationName } from "./core-policy.ts";
 import type {
   StoredCapability,
   StoredInteraction,
@@ -560,12 +561,148 @@ export class HostedRoomApplication {
     });
   }
 
+  /**
+   * Active Demo-critical Core entry. The historical `run()` entry remains the
+   * immutable Full behavioral regression surface, while every live route and
+   * page must enter here.
+   */
+  async runCore(request: OperationRequest): Promise<OperationResponse> {
+    this.#assertCoreRequest(request);
+    if (request.definition.name === "control.status") {
+      this.#assertSyntheticActor(request);
+      this.#assertExactOperationShape(request);
+      return this.ownerStatusCore();
+    }
+    if (request.definition.name === "third_place.list") {
+      this.#assertSyntheticActor(request);
+      this.#assertExactOperationShape(request);
+      return this.publicThirdPlaceCore();
+    }
+    const result = await this.run(request);
+    if (request.definition.name === "interaction.read") {
+      const interaction = result.body.interaction;
+      if (interaction && typeof interaction === "object" && !Array.isArray(interaction)) {
+        const { notificationEndpoint: _fullOnlyNotification, ...coreInteraction } = interaction as Record<string, unknown>;
+        return { ...result, body: { ...result.body, interaction: coreInteraction } };
+      }
+    }
+    return result;
+  }
+
   async publicThirdPlace(): Promise<OperationResponse> {
     return { status: 200, body: { schemaVersion: "third_place_list.v1", residents: this.#store.listThirdPlace() } };
   }
 
+  async publicThirdPlaceCore(): Promise<OperationResponse> {
+    const result = await this.publicThirdPlace();
+    const residents = (result.body.residents as Array<Record<string, unknown>>).filter((resident) => {
+      const view = resident.view as Record<string, unknown> | undefined;
+      const projection = view?.projection as Record<string, unknown> | undefined;
+      const roomId = typeof projection?.roomId === "string" ? projection.roomId : null;
+      return roomId !== null && this.#isCorePublicRoom(roomId);
+    });
+    return { status: 200, body: { schemaVersion: "third_place_list.v1", residents } };
+  }
+
   async ownerStatus(): Promise<OperationResponse> {
     return { status: 200, body: { schemaVersion: "synthetic_owner_status.v1", ...this.#store.ownerStatus(), synthetic: true } };
+  }
+
+  async ownerStatusCore(): Promise<OperationResponse> {
+    const status = this.#store.ownerStatus();
+    const roomIds = new Set(status.rooms
+      .filter((stored) => stored.room.roomKind === "third_place_public")
+      .map((stored) => stored.room.roomId));
+    return {
+      status: 200,
+      body: {
+        schemaVersion: "synthetic_owner_status.v1",
+        rooms: status.rooms.filter((stored) => roomIds.has(stored.room.roomId)),
+        projections: status.projections.filter((stored) => roomIds.has(stored.projection.roomId)),
+        interactions: status.interactions.filter((stored) => roomIds.has(stored.interaction.roomId)),
+        events: status.events.filter((event) => roomIds.has(event.roomId)),
+        synthetic: true,
+      },
+    };
+  }
+
+  #isCorePublicRoom(roomId: string): boolean {
+    return this.#store.room(roomId)?.room.roomKind === "third_place_public";
+  }
+
+  #requireCorePublicRoom(roomId: string | null | undefined): void {
+    if (roomId !== null && roomId !== undefined && !this.#isCorePublicRoom(roomId)) {
+      throw new SemanticError(404, "not_found", "The requested operation is unavailable");
+    }
+  }
+
+  #assertCoreRequest(request: OperationRequest): void {
+    if (!isCoreOperationName(request.definition.name)) {
+      throw new SemanticError(404, "not_found", "The requested operation is unavailable");
+    }
+    if (request.definition.name === "room.create" && request.body.roomKind !== "third_place_public") {
+      throw new SemanticError(404, "not_found", "The requested operation is unavailable");
+    }
+
+    this.#requireCorePublicRoom(typeof request.params.roomId === "string" ? request.params.roomId : null);
+    this.#requireCorePublicRoom(typeof request.body.roomId === "string" ? request.body.roomId : null);
+
+    const projectionId = typeof request.params.projectionId === "string"
+      ? request.params.projectionId
+      : typeof request.body.projectionId === "string" ? request.body.projectionId : null;
+    if (projectionId !== null) this.#requireCorePublicRoom(this.#store.projection(projectionId)?.projection.roomId);
+
+    const interactionId = typeof request.params.interactionId === "string"
+      ? request.params.interactionId
+      : typeof request.body.sourceInteractionId === "string" ? request.body.sourceInteractionId : null;
+    if (interactionId !== null) this.#requireCorePublicRoom(this.#store.interaction(interactionId)?.interaction.roomId);
+
+    const bindingId = request.params.bindingId;
+    if (typeof bindingId === "string") this.#requireCorePublicRoom(this.#store.roomOperatorBinding(bindingId)?.roomId);
+    const pairingId = request.params.pairingId;
+    if (typeof pairingId === "string") this.#requireCorePublicRoom(this.#store.pairingChallenge(pairingId)?.roomId);
+
+    const grantId = request.params.grantId;
+    if (typeof grantId === "string") {
+      const capability = this.#store.capability(grantId);
+      if (capability?.kind === "agent_derivative") {
+        throw new SemanticError(404, "not_found", "The requested operation is unavailable");
+      }
+      this.#requireCorePublicRoom(capability?.value.roomId);
+    }
+
+    const offerId = request.params.offerId;
+    if (typeof offerId === "string") {
+      const offer = this.#store.auxiliary(`grant_offer:${offerId}`);
+      this.#requireCorePublicRoom(typeof offer?.roomId === "string" ? offer.roomId : null);
+    }
+
+    const responseId = request.params.responseId;
+    if (typeof responseId === "string") {
+      const owner = this.#store.ownerStatus();
+      const found = owner.interactions.find((stored) => stored.response?.responseId === responseId);
+      if (found) this.#requireCorePublicRoom(found.interaction.roomId);
+    }
+
+    const delivery = request.body.delivery;
+    if (delivery && typeof delivery === "object" && !Array.isArray(delivery)) {
+      const record = delivery as Record<string, unknown>;
+      const arm = record.artifactClass === "projection" ? record.projection : record.response;
+      if (arm && typeof arm === "object" && !Array.isArray(arm)) {
+        const roomId = (arm as Record<string, unknown>).roomId;
+        this.#requireCorePublicRoom(typeof roomId === "string" ? roomId : null);
+      }
+    }
+
+    if (request.definition.actor === "room_operator") {
+      this.#requireCorePublicRoom(this.#store.roomOperatorBindingBySecret(bearer(request.authorization))?.roomId);
+    } else if (request.definition.name === "interaction.create") {
+      const capability = this.#store.capabilityBySecret(bearer(request.authorization));
+      if (capability?.kind === "agent_derivative") {
+        throw new SemanticError(404, "not_found", "The requested operation is unavailable");
+      }
+      this.#requireCorePublicRoom(capability?.value.roomId);
+    }
   }
 
   #assertSyntheticActor(request: OperationRequest): void {

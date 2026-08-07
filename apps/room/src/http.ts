@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { parseStrictJson } from "../../../packages/r4-protocol/src/index.ts";
 import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
-import { matchOperation } from "./operation-inventory.ts";
+import { matchCoreOperation } from "./core-policy.ts";
 import { isSemanticError, SemanticError } from "./application.ts";
 
 const RESPONSE_HEADERS = {
@@ -55,10 +55,12 @@ export async function dispatchApi(request: Request, segments: string[]): Promise
   const correlationId = randomUUID();
   try {
     const path = `/${segments.map(encodeURIComponent).join("/")}`;
-    const match = matchOperation(request.method, path);
+    // Core route matching deliberately precedes query/body/header processing.
+    // Excluded Full routes therefore collapse to the same body-free 404.
+    const match = matchCoreOperation(request.method, path);
     if (!match) return json(404, { error: { code: "not_found", correlationId } });
     const body = await requestBody(request);
-    const result = await hostedApplication().run({
+    const result = await hostedApplication().runCore({
       definition: match.definition,
       params: match.params,
       body,

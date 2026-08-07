@@ -13,7 +13,7 @@ export default async function OwnerPage() {
       </section>
     );
   }
-  const result = await hostedApplication().ownerStatus();
+  const result = await hostedApplication().ownerStatusCore();
   const rooms = result.body.rooms as Array<Record<string, unknown>>;
   const interactions = result.body.interactions as Array<Record<string, unknown>>;
   const pending = interactions.filter((item) => {

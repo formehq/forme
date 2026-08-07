@@ -4,6 +4,10 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 export const RETRY_CONSTRUCTION_PACKET_SHA256 = "4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7";
+export const CORE_CORRECTION_PACKET_SHA256 = "5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6";
+export const CORE_CORRECTION_OWNER_REVIEW_SHA256 = "2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299";
+export const CORE_APPROVED_PROPOSAL_HEAD = "5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e";
+export const CORE_APPROVED_PROPOSAL_TREE = "15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f";
 export const APPROVED_TECHNICAL_PACKET_SHA256 = "e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5";
 export const PACKAGE_LOCK_SHA256 = "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812";
 export const CODEX_LAUNCHER_SHA256 = "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477";
@@ -22,6 +26,8 @@ const EXACT_REPOSITORY_READS = new Set([
   "docs/evidence/r4-gate-b-retry-construction.json",
   "package-lock.json",
   "schemas/r4/gate-b/runtime-boundary.json",
+  "docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md",
+  "docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md",
 ]);
 
 export class GateBPreflightError extends Error {
@@ -95,6 +101,25 @@ export function verifyConstructionBindings() {
     || boundary.authority.authorizedSpendUsd !== 0
   ) fail("PREFLIGHT_AUTHORITY_DRIFT");
   return Object.freeze({ immutableHashesMatched: true, authorityCeilingsMatched: true });
+}
+
+export function verifyCoreCorrectionImmutableBindings() {
+  const bindings = [
+    ["docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md", CORE_CORRECTION_PACKET_SHA256],
+    ["docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md", CORE_CORRECTION_OWNER_REVIEW_SHA256],
+    ["package-lock.json", PACKAGE_LOCK_SHA256],
+  ];
+  for (const [relativePath, expected] of bindings) {
+    const actual = sha256(fs.readFileSync(exactRepositoryFile(relativePath)));
+    if (actual !== expected) fail("CORE_PREFLIGHT_IMMUTABLE_HASH_DRIFT");
+  }
+  return Object.freeze({
+    packetSha256: `sha256:${CORE_CORRECTION_PACKET_SHA256}`,
+    ownerReviewSha256: `sha256:${CORE_CORRECTION_OWNER_REVIEW_SHA256}`,
+    approvedProposalHead: CORE_APPROVED_PROPOSAL_HEAD,
+    approvedProposalTree: CORE_APPROVED_PROPOSAL_TREE,
+    packageLockSha256: `sha256:${PACKAGE_LOCK_SHA256}`,
+  });
 }
 
 function exactCodexChild(root, relativePath, expectedSha256) {

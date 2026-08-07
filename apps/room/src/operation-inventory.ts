@@ -70,11 +70,15 @@ function pattern(path: string): RegExp {
   return new RegExp(`^${source}$`);
 }
 
-export function matchOperation(method: string, path: string): {
+export function matchOperationInInventory(
+  inventory: readonly OperationDefinition[],
+  method: string,
+  path: string,
+): {
   definition: OperationDefinition;
   params: Record<string, string>;
 } | null {
-  for (const definition of OPERATION_INVENTORY) {
+  for (const definition of inventory) {
     if (definition.method !== method) continue;
     const match = pattern(definition.path).exec(path);
     if (!match) continue;
@@ -87,6 +91,13 @@ export function matchOperation(method: string, path: string): {
     return { definition, params };
   }
   return null;
+}
+
+export function matchOperation(method: string, path: string): {
+  definition: OperationDefinition;
+  params: Record<string, string>;
+} | null {
+  return matchOperationInInventory(OPERATION_INVENTORY, method, path);
 }
 
 export function operationDefinition(name: string): OperationDefinition {

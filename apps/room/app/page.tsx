@@ -19,7 +19,7 @@ export default async function ThirdPlacePage() {
 
   let residents: Array<Record<string, unknown>> = [];
   try {
-    const result = await hostedApplication().publicThirdPlace();
+    const result = await hostedApplication().publicThirdPlaceCore();
     residents = result.body.residents as Array<Record<string, unknown>>;
   } catch (error) {
     if (!(error instanceof HostedRuntimeUnavailable)) throw error;

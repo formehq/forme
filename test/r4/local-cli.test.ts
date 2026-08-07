@@ -53,6 +53,7 @@ function environment(overrides: Partial<R4CliEnvironment["guest"]> = {}): R4CliE
       async sync() { return bodyFreeReceipt("sync"); },
       async prepareResponse() { return bodyFreeReceipt("prepare-response"); },
       async reconcile() { return bodyFreeReceipt("reconcile"); },
+      async api() { return bodyFreeReceipt("core-api"); },
     },
     guest: {
       async inspect() { return bodyFreeReceipt("inspect"); },

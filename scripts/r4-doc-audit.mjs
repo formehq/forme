@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { existsSync, lstatSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
+import Ajv2020 from "ajv/dist/2020.js";
 import { OPERATION_INVENTORY } from "../apps/room/src/operation-inventory.ts";
 import {
   GOLDEN_FIXTURE_BUNDLE_SHA256,
@@ -14,6 +15,7 @@ import { buildSourceInventory } from "./r4-source-inventory.mjs";
 const root = resolve(import.meta.dirname, "..");
 const finalMode = process.argv.includes("--final");
 const retryConstructionMode = process.argv.includes("--retry-construction");
+const coreConstructionMode = process.argv.includes("--core-construction");
 const files = {
   packet: "docs/R4-TECHNICAL-CONTROL-PACKET.md",
   verification: "docs/R4-GATE-A-VERIFICATION.md",
@@ -193,7 +195,11 @@ if (!documents.ownerReview.includes("First Provider-Call Test Grant：**NOT REQU
   throw new Error("Owner Review does not keep the provider-call grant closed");
 }
 
-if (finalMode) {
+// Historical Gate B final bindings intentionally describe the immutable Full
+// source inventory. Core Construction has its own exact workset/hash audit
+// below, so re-applying the Full inventory assertion would require mutating the
+// frozen historical Manifest merely because the additive Core overlay exists.
+if (finalMode && !coreConstructionMode) {
   const unresolved = [];
   for (const [name, document] of Object.entries(documents)) {
     if (document.includes("@@")) unresolved.push(`${name}:machine-placeholder`);
@@ -357,9 +363,147 @@ if (retryConstructionMode) {
   };
 }
 
+let coreConstruction = null;
+if (coreConstructionMode) {
+  const commencementCommit = "5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e";
+  const evidencePath = "docs/evidence/r4-gate-b-core-construction.json";
+  const reportPath = "docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md";
+  const executionManifestPath = "docs/R4-GATE-B-CORE-EXECUTION-MANIFEST.md";
+  const executionOwnerReviewPath = "docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md";
+  const newPaths = [
+    "schemas/r4/gate-b-core/README.md", "schemas/r4/gate-b-core/operations.md",
+    "schemas/r4/gate-b-core/api-v1.schema.json", "schemas/r4/gate-b-core/api-v1-index.json",
+    "schemas/r4/gate-b-core/postgres-contract.md", "schemas/r4/gate-b-core/core-basis.json",
+    "schemas/r4/gate-b-core/runtime-boundary.json", "schemas/r4/gate-b-core/artifact-index.json",
+    "schemas/r4/gate-b-core/evidence.schema.json", "schemas/r4/gate-b-core/codex-zero-call-contract.json",
+    "schemas/r4/gate-b-core/sql/0000_r4_gate_b_core_bootstrap.sql",
+    "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql",
+    "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.verify.sql",
+    "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.rollback.sql",
+    "schemas/r4/gate-b-core/macos/transient-candidate-contract.json",
+    "schemas/r4/gate-b-core/macos/build-recipe.json",
+    "schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb",
+    "schemas/r4/gate-b-core/macos/forme-core-transient-response.sb",
+    "schemas/r4/gate-b-core/macos/evidence.schema.json",
+    "fixtures/r4-gate-b-core/postgres/core-happy-path.sql",
+    "fixtures/r4-gate-b-core/postgres/core-errors.sql",
+    "fixtures/r4-gate-b-core/postgres/core-races.sql",
+    "fixtures/r4-gate-b-core/codex/initialize-result.json",
+    "packages/r4-codex-adapter/src/zero-call-physical.ts", "packages/r4-local/src/hosted-room-api.ts",
+    "apps/room/src/core-policy.ts", "scripts/r4-gate-b-core-api-contract.mjs",
+    "scripts/r4-gate-b-core-postgres.mjs", "scripts/r4-gate-b-macos-core.mjs",
+    "test/r4-gate-b-core/api-contract.test.ts", "test/r4-gate-b-core/postgres-static.test.ts",
+    "test/r4-gate-b-core/postgres-adapter.test.ts", "test/r4-gate-b-core/surface-parity.test.ts",
+    "test/r4-gate-b-core/web-cli-surface.test.ts", "test/r4-gate-b-core/codex-physical-adapter.test.ts",
+    "test/r4-gate-b-core/macos-core-adapter.test.ts",
+    "native/macos/Sources/FormeCoreLocal/CoreLauncher.swift",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateSession.swift",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateReviewWindow.swift",
+    "native/macos/Sources/FormeCoreLocal/UserPresenceAuthorizer.swift",
+    "native/macos/Sources/FormeCoreLocal/CoreProcessSupervisor.swift",
+    "native/macos/Sources/FormeCoreLocal/CorePhysicalEvidence.swift",
+    "native/macos/Sources/FormeCoreLocal/CoreSandboxProfile.swift",
+    "native/macos/Sources/FormeCoreLocal/CoreLockedMemory.swift",
+    "native/macos/Sources/FormeCoreLocal/CountingHandoffPort.swift",
+    "native/macos/Resources/FormeCoreLocal.Info.plist", "native/macos/Resources/FormeCoreLocal.entitlements",
+    "native/macos/Tests/FormeCoreLocalTests/TransientCandidateTests.swift",
+    evidencePath, reportPath, executionManifestPath, executionOwnerReviewPath,
+  ];
+  const modifiable = [
+    "package.json", "tsconfig.json", "src/cli.ts", "scripts/r4-doc-audit.mjs",
+    "scripts/r4-gate-b-preflight.mjs", "scripts/r4-gate-b-runner.mjs", "scripts/r4-gate-b-cleanup.mjs",
+    "scripts/r4-gate-b-codex-probe.mjs", "packages/r4-codex-adapter/src/app-server-probe.ts",
+    "packages/r4-codex-adapter/src/index.ts", "packages/r4-local/src/cli.ts", "packages/r4-local/src/index.ts",
+    "apps/room/src/operation-inventory.ts", "apps/room/src/http.ts", "apps/room/src/application.ts",
+    "apps/room/src/projection-page.ts", "apps/room/src/components/GuestStatus.tsx",
+    "apps/room/src/components/OwnerControls.tsx", "apps/room/src/components/client-api.ts",
+    "apps/room/app/page.tsx", "apps/room/app/layout.tsx", "apps/room/app/owner/page.tsx",
+    "apps/room/app/owner/interactions/[interactionId]/page.tsx", "apps/room/app/private/[projectionId]/page.tsx",
+    "native/macos/Package.swift", "test/r4-gate-b/codex-adapter.test.ts",
+    "test/r4-gate-b/macos-boundary.test.ts", "test/r4/hosted-http.test.ts",
+    "test/r4/hosted-web-agent-parity.test.ts", "test/r4/ui-static-safety.test.ts", "test/r4/local-cli.test.ts",
+  ];
+  const allowed = new Set([...newPaths, ...modifiable]);
+  const gitEnvironment = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
+  const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, encoding: "utf8", maxBuffer: 8_388_608 });
+  const changedPaths = [...new Set([
+    ...git(["diff", "--name-only", `${commencementCommit}..HEAD`, "--"]).split("\n"),
+    ...git(["diff", "--name-only", "--"]).split("\n"),
+    ...git(["diff", "--cached", "--name-only", "--"]).split("\n"),
+    ...git(["ls-files", "--others", "--exclude-standard", "--"]).split("\n"),
+  ].filter(Boolean))].sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  const unlisted = changedPaths.filter((path) => !allowed.has(path));
+  if (unlisted.length > 0) throw new Error(`Core Construction unlisted workset:${unlisted.join(",")}`);
+  if (changedPaths.includes("package-lock.json") || sha256(text("package-lock.json")) !== "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812") {
+    throw new Error("Core Construction package-lock drifted");
+  }
+  for (const [path, expected] of [
+    ["docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md", "5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6"],
+    ["docs/R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md", "2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299"],
+  ]) if (sha256(readFileSync(join(root, path))) !== expected) throw new Error(`Core immutable approval drifted:${path}`);
+
+  const evidence = JSON.parse(text(evidencePath));
+  if (!existsSync(join(root, executionOwnerReviewPath))) throw new Error("Core Execution Owner Review missing");
+  const schema = JSON.parse(text("schemas/r4/gate-b-core/evidence.schema.json"));
+  const ajv = new Ajv2020({ strict: true, strictSchema: true, allErrors: true });
+  if (!ajv.compile(schema)(evidence)) throw new Error(`Core evidence schema mismatch:${JSON.stringify(ajv.errors)}`);
+  for (const [path, expected] of Object.entries(evidence.immutableBindings)) {
+    const actual = `sha256:${sha256(readFileSync(join(root, path)))}`;
+    if (actual !== expected) throw new Error(`Core immutable evidence drifted:${path}`);
+  }
+  for (const [path, expected] of Object.entries(evidence.constructedFiles)) {
+    if (!allowed.has(path)) throw new Error(`Core evidence path unlisted:${path}`);
+    const metadata = lstatSync(join(root, path));
+    if (!metadata.isFile() || metadata.isSymbolicLink() || metadata.nlink !== 1) throw new Error(`Core constructed path unsafe:${path}`);
+    const actual = `sha256:${sha256(readFileSync(join(root, path)))}`;
+    if (actual !== expected) throw new Error(`Core constructed hash drifted:${path}`);
+  }
+  const outputPaths = new Set([evidencePath, reportPath, executionManifestPath, executionOwnerReviewPath]);
+  const unhashed = changedPaths.filter((path) => !outputPaths.has(path) && !Object.prototype.hasOwnProperty.call(evidence.constructedFiles, path));
+  if (unhashed.length > 0) throw new Error(`Core changed path missing evidence hash:${unhashed.join(",")}`);
+
+  const artifactIndexPath = "schemas/r4/gate-b-core/artifact-index.json";
+  const artifactIndex = JSON.parse(text(artifactIndexPath));
+  const actualArtifacts = filesBelow("schemas/r4/gate-b-core").filter((path) => path !== artifactIndexPath);
+  const indexedArtifacts = artifactIndex.files.map((entry) => entry.path);
+  if (JSON.stringify(actualArtifacts) !== JSON.stringify(indexedArtifacts)) throw new Error("Core artifact index path drift");
+  const artifactLines = artifactIndex.files.map((entry) => {
+    const actual = `sha256:${sha256(readFileSync(join(root, entry.path)))}`;
+    if (actual !== entry.sha256) throw new Error(`Core artifact hash drift:${entry.path}`);
+    return `${actual.slice(7)}  ${entry.path}\n`;
+  }).join("");
+  if (artifactIndex.fileCount !== actualArtifacts.length || artifactIndex.aggregateSha256 !== `sha256:${sha256(artifactLines)}`) throw new Error("Core artifact aggregate drift");
+  if (artifactIndex.retryExecutionGrant !== "NOT_REQUESTED" || artifactIndex.firstProviderCallTestGrant !== "NOT_REQUESTED") throw new Error("Core artifact index opens an execution grant");
+
+  for (const generatedPath of ["native/macos/.build", "native/macos/.swiftpm", ".forme/gate-b-evidence"]) {
+    if (existsSync(join(root, generatedPath))) throw new Error(`Core generated output remains:${generatedPath}`);
+  }
+  for (const path of [evidencePath, reportPath, executionManifestPath, executionOwnerReviewPath]) {
+    const value = text(path);
+    if (value.includes("@@") || value.includes("PENDING_FINAL")) throw new Error(`Core output placeholder:${path}`);
+    if (/synthetic-machine-secret|synthetic-install-secret|process-secret-machine|process-secret-install|Use the narrow reversible experiment first/u.test(value)) throw new Error(`Core output contains synthetic body/identity canary:${path}`);
+    if (!value.includes("NOT_REQUESTED") && !value.includes("NOT REQUESTED")) throw new Error(`Core output grant closure missing:${path}`);
+  }
+  const boundary = JSON.parse(text("schemas/r4/gate-b-core/runtime-boundary.json"));
+  if (boundary.status !== "CORE_REPOSITORY_REVIEWABLE_YELLOW" || boundary.continuity.aggregateRetryVerdict !== "YELLOW" || boundary.authority.retryExecutionGrant !== "NOT_REQUESTED" || boundary.authority.firstProviderCallTestGrant !== "NOT_REQUESTED") throw new Error("Core runtime claim drift");
+  coreConstruction = {
+    schemaVersion: "r4.gate-b-core.static-audit.v1",
+    changedPathCount: changedPaths.length,
+    constructedHashCount: Object.keys(evidence.constructedFiles).length,
+    immutableHashCount: Object.keys(evidence.immutableBindings).length,
+    artifactCount: actualArtifacts.length,
+    packageLockUnchanged: true,
+    unlistedPathCount: 0,
+    generatedOutputRemainingCount: 0,
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallTestGrant: "NOT_REQUESTED",
+    status: "passed",
+  };
+}
+
 const report = {
   schemaVersion: "r4_gate_document_audit.v1",
-  mode: finalMode ? "final" : "draft",
+  mode: finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
   approvedPacketSha256: `sha256:${packetHash}`,
   crosswalkRowCount: actualRows.length,
   localLinksChecked: Object.values(documents).reduce(
@@ -368,6 +512,7 @@ const report = {
   ),
   firstProviderCallGrant: "not_requested",
   ...(retryConstruction === null ? {} : { retryConstruction }),
+  ...(coreConstruction === null ? {} : { coreConstruction }),
   status: "passed",
 };
 

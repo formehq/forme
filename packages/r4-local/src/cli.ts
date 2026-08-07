@@ -7,6 +7,11 @@ import {
   type GuestCapsuleV1,
 } from "../../r4-protocol/src/index.ts";
 import { assertBodyFree } from "./body-free.ts";
+import {
+  parseCoreRoomApiSecureInput,
+  type CoreRoomApiAction,
+  type CoreRoomApiSecureInputV1,
+} from "./hosted-room-api.ts";
 
 export interface R4CliIo {
   stdout(value: string): void;
@@ -21,6 +26,7 @@ export interface RoomCliPort {
   sync(): Promise<unknown>;
   prepareResponse(interactionId: string): Promise<unknown>;
   reconcile(): Promise<unknown>;
+  api(input: { action: CoreRoomApiAction; input: CoreRoomApiSecureInputV1 }): Promise<unknown>;
 }
 
 export interface GuestCliPort {
@@ -336,6 +342,33 @@ export async function runR4Cli(args: string[], environment: R4CliEnvironment, io
   throw new Error("unknown R4 CLI family");
 }
 
+/**
+ * Active Core CLI. Historical Full tests continue to use `runR4Cli`, while
+ * the installable binary enters here so Full-only Agent derivative minting is
+ * absent and every Core API operation has one closed secure-descriptor path.
+ */
+export async function runR4CoreCli(args: string[], environment: R4CliEnvironment, io: R4CliIo): Promise<void> {
+  const [family, action, ...rest] = args;
+  if (family === "room" && action === "api") {
+    exactArgs(rest, 1, "forme room api <core-operation>");
+    const actionName = rest[0];
+    if (!actionName) throw new Error("Core Room API action is required");
+    const parsed = parseCoreRoomApiSecureInput(actionName, parseStrictJson(io.readSecret(0)));
+    const result = await environment.room.api(parsed);
+    io.writeSecret(oneLineJson(result));
+    io.stdout(oneLineJson({
+      schemaVersion: "forme.room.core-api-cli-receipt.v1",
+      action: parsed.action,
+      resultWrittenToSecureOutput: true,
+    }));
+    return;
+  }
+  if (family === "guest" && action === "agent-token") {
+    throw new Error("usage: forme guest inspect|ask|status|delete");
+  }
+  await runR4Cli(args, environment, io);
+}
+
 export function processIo(): R4CliIo {
   return {
     stdout: (value) => console.log(value),
@@ -362,6 +395,7 @@ export function unavailableR4Environment(): R4CliEnvironment {
       sync: async () => unavailable(),
       prepareResponse: async () => unavailable(),
       reconcile: async () => unavailable(),
+      api: async () => unavailable(),
     },
     guest: {
       inspect: async () => unavailable(),

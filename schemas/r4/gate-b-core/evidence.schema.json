@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/evidence.schema.json",
+  "title": "R4 Gate B Core Construction evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "generatedAt", "authority", "preflight", "coreSurface", "postgresConstruction", "codexConstruction", "macosConstruction", "aggregateConstruction", "regressions", "effectAudit", "cleanup", "immutableBindings", "constructedFiles", "claims"],
+  "properties": {
+    "schemaVersion": { "const": "r4.gate-b-core.construction-evidence.v1" },
+    "status": { "const": "CORE_REPOSITORY_REVIEWABLE_YELLOW" },
+    "generatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$" },
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": ["constructionPacketSha256", "ownerReviewSha256", "proposalHead", "proposalTree", "correctionConstructionGrant", "retryExecutionGrant", "firstProviderCallTestGrant", "providerSessions", "providerBytes", "spendUsd"],
+      "properties": {
+        "constructionPacketSha256": { "const": "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6" },
+        "ownerReviewSha256": { "const": "sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299" },
+        "proposalHead": { "const": "5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e" },
+        "proposalTree": { "const": "15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f" },
+        "correctionConstructionGrant": { "const": "APPROVED" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+        "firstProviderCallTestGrant": { "const": "NOT_REQUESTED" },
+        "providerSessions": { "const": 0 }, "providerBytes": { "const": 0 }, "spendUsd": { "const": 0 }
+      }
+    },
+    "preflight": {
+      "type": "object", "additionalProperties": false,
+      "required": ["approvedBindingsMatched", "branch", "upstreamDivergence", "packageLockSha256", "baselineTestsPassed"],
+      "properties": {
+        "approvedBindingsMatched": { "const": true }, "branch": { "const": "codex/r4-gate-a-build" },
+        "upstreamDivergence": { "const": "0/0" },
+        "packageLockSha256": { "const": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812" },
+        "baselineTestsPassed": { "const": true }
+      }
+    },
+    "coreSurface": { "$ref": "#/$defs/constructionLane" },
+    "postgresConstruction": { "$ref": "#/$defs/constructionLane" },
+    "codexConstruction": { "$ref": "#/$defs/constructionLane" },
+    "macosConstruction": { "$ref": "#/$defs/constructionLane" },
+    "aggregateConstruction": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "verdict", "blockers", "laneCount", "injectedFaultCaseCount", "cleanupAlwaysRan", "bodyFreeCheckpointsPassed", "aiLaneEnabled"],
+      "properties": {
+        "status": { "const": "CORE_REPOSITORY_REVIEWABLE_YELLOW" }, "verdict": { "const": "YELLOW" },
+        "blockers": { "const": ["postgres_race_worker_call_bytes_and_persistent_verifiers", "host_binding_and_core_physical_runner", "macos_signed_helper_physical_executor"] },
+        "laneCount": { "const": 9 }, "injectedFaultCaseCount": { "const": 16 },
+        "cleanupAlwaysRan": { "const": true }, "bodyFreeCheckpointsPassed": { "const": true }, "aiLaneEnabled": { "const": false }
+      }
+    },
+    "regressions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["nodeTests", "swiftTests", "typecheckPassed", "gateAAndFullPassed", "packageLockUnchanged"],
+      "properties": {
+        "nodeTests": { "type": "integer", "minimum": 1 }, "swiftTests": { "const": 19 },
+        "typecheckPassed": { "const": true }, "gateAAndFullPassed": { "const": true }, "packageLockUnchanged": { "const": true }
+      }
+    },
+    "effectAudit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dockerCommands", "postgresProcesses", "realCodexCalls", "sandboxExecCalls", "threadStarts", "turnStarts", "providerCalls", "providerBytes", "networkCalls", "appAssemblies", "signingCalls", "keychainCalls", "localAuthenticationCalls", "secureEnclaveOperations", "realGuestBytes", "externalMessages", "deploys", "merges"],
+      "properties": {
+        "dockerCommands": { "const": 0 }, "postgresProcesses": { "const": 0 }, "realCodexCalls": { "const": 0 },
+        "sandboxExecCalls": { "const": 0 }, "threadStarts": { "const": 0 }, "turnStarts": { "const": 0 },
+        "providerCalls": { "const": 0 }, "providerBytes": { "const": 0 }, "networkCalls": { "const": 0 },
+        "appAssemblies": { "const": 0 }, "signingCalls": { "const": 0 }, "keychainCalls": { "const": 0 },
+        "localAuthenticationCalls": { "const": 0 }, "secureEnclaveOperations": { "const": 0 },
+        "realGuestBytes": { "const": 0 }, "externalMessages": { "const": 0 }, "deploys": { "const": 0 }, "merges": { "const": 0 }
+      }
+    },
+    "cleanup": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "constructionTempRootAbsent", "fakeChildrenAbsent", "generatedBuildBytesCommitted"],
+      "properties": { "status": { "const": "GREEN" }, "constructionTempRootAbsent": { "const": true }, "fakeChildrenAbsent": { "const": true }, "generatedBuildBytesCommitted": { "const": false } }
+    },
+    "immutableBindings": { "$ref": "#/$defs/hashMap" },
+    "constructedFiles": { "$ref": "#/$defs/hashMap" },
+    "claims": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repositoryReviewableYellow", "coreConstructedOffline", "postgresCoreLaneGreen", "greenTransientMacosMechanismOnly", "zeroCallChildMechanismPhysicalGreen", "fullGateBGreen", "persistentCandidateRecovery", "candidateToPublicationBridge", "deploymentBridge", "aggregateRetryVerdict"],
+      "properties": {
+        "repositoryReviewableYellow": { "const": true }, "coreConstructedOffline": { "const": false }, "postgresCoreLaneGreen": { "const": false },
+        "greenTransientMacosMechanismOnly": { "const": false }, "zeroCallChildMechanismPhysicalGreen": { "const": false },
+        "fullGateBGreen": { "const": false }, "persistentCandidateRecovery": { "const": false },
+        "candidateToPublicationBridge": { "const": false }, "deploymentBridge": { "const": false },
+        "aggregateRetryVerdict": { "const": "YELLOW" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "constructionLane": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "testsPassed", "realEffects", "aggregateVerdict"],
+      "properties": {
+        "status": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,127}$" },
+        "testsPassed": { "type": "integer", "minimum": 1 }, "realEffects": { "const": 0 },
+        "aggregateVerdict": { "enum": ["GREEN", "YELLOW"] }
+      }
+    },
+    "hashMap": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": { "type": "string", "pattern": "^[A-Za-z0-9._/\\[\\]-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/sha256" }
+    },
+    "codexZeroCallEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "status", "reasonCode", "profileSourceSha256", "profileStagedSha256", "launcherSourceSha256", "nativeSourceSha256", "nativeStagedSha256", "logicalCommandShapeSha256", "reportedVersion", "helpStdoutSha256", "helpStdoutBytes", "schemaStdoutBytes", "schemaFileCount", "schemaAggregateSha256", "selectedSchemaSetSha256", "initializeResultSha256", "sanitizedNotificationSha256", "clientWrites", "serverResponses", "serverRequests", "serverNotifications", "exitCodes", "stderrBytes", "isolatedWriteInventorySha256", "processGroupsStarted", "syntheticDescendantsStarted", "allStartedGroupsReaped", "allStartedGroupsAbsent", "threadStarts", "turnStarts", "providerCalls", "providerBytes", "networkBytes", "cleanupPassed", "aiLaneEnabled", "aggregateVerdict"],
+      "properties": {
+        "schemaVersion": { "const": "r4.gate-b-core.codex-zero-call-evidence.v1" },
+        "status": { "enum": ["ZERO_CALL_CHILD_MECHANISM_GREEN", "YELLOW", "RED"] },
+        "reasonCode": { "enum": ["clean_zero_call_mechanism", "host_unsupported", "profile_unsupported", "timeout_reaped", "source_drift", "profile_drift", "schema_drift", "method_denied", "wire_invalid", "write_escape", "network_boundary", "cleanup_failed"] },
+        "profileSourceSha256": { "$ref": "#/$defs/sha256" }, "profileStagedSha256": { "$ref": "#/$defs/sha256" },
+        "launcherSourceSha256": { "$ref": "#/$defs/sha256" }, "nativeSourceSha256": { "$ref": "#/$defs/sha256" }, "nativeStagedSha256": { "$ref": "#/$defs/sha256" },
+        "logicalCommandShapeSha256": {
+          "type": "object", "additionalProperties": false, "required": ["version", "help", "schema", "initialize"],
+          "properties": { "version": { "$ref": "#/$defs/sha256" }, "help": { "$ref": "#/$defs/sha256" }, "schema": { "$ref": "#/$defs/sha256" }, "initialize": { "$ref": "#/$defs/sha256" } }
+        },
+        "reportedVersion": { "enum": ["codex-cli 0.145.0", null] },
+        "helpStdoutSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "helpStdoutBytes": { "type": "integer", "minimum": 0 }, "schemaStdoutBytes": { "type": "integer", "minimum": 0 },
+        "schemaFileCount": { "type": "integer", "minimum": 0, "maximum": 273 },
+        "schemaAggregateSha256": { "enum": ["sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62", null] },
+        "selectedSchemaSetSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "initializeResultSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "sanitizedNotificationSha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "clientWrites": { "type": "integer", "minimum": 0, "maximum": 2 }, "serverResponses": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "serverRequests": { "const": 0 }, "serverNotifications": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "exitCodes": { "type": "array", "maxItems": 4, "items": { "type": "integer" } },
+        "stderrBytes": { "type": "integer", "minimum": 0 },
+        "isolatedWriteInventorySha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "processGroupsStarted": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "syntheticDescendantsStarted": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "allStartedGroupsReaped": { "type": "boolean" }, "allStartedGroupsAbsent": { "type": "boolean" },
+        "threadStarts": { "const": 0 }, "turnStarts": { "const": 0 }, "providerCalls": { "const": 0 }, "providerBytes": { "const": 0 }, "networkBytes": { "const": 0 },
+        "cleanupPassed": { "type": "boolean" }, "aiLaneEnabled": { "const": false }, "aggregateVerdict": { "enum": ["YELLOW", "RED"] }
+      },
+      "allOf": [{
+        "if": { "properties": { "status": { "const": "ZERO_CALL_CHILD_MECHANISM_GREEN" } }, "required": ["status"] },
+        "then": {
+          "properties": {
+            "reportedVersion": { "const": "codex-cli 0.145.0" }, "schemaFileCount": { "const": 273 },
+            "helpStdoutSha256": { "$ref": "#/$defs/sha256" },
+            "schemaAggregateSha256": { "const": "sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62" },
+            "selectedSchemaSetSha256": { "$ref": "#/$defs/sha256" }, "initializeResultSha256": { "$ref": "#/$defs/sha256" },
+            "isolatedWriteInventorySha256": { "$ref": "#/$defs/sha256" },
+            "clientWrites": { "const": 2 }, "serverResponses": { "const": 1 }, "exitCodes": { "const": [0, 0, 0, 0] },
+            "schemaStdoutBytes": { "const": 0 }, "stderrBytes": { "const": 0 }, "processGroupsStarted": { "const": 4 },
+            "syntheticDescendantsStarted": { "const": 0 }, "allStartedGroupsReaped": { "const": true },
+            "allStartedGroupsAbsent": { "const": true }, "cleanupPassed": { "const": true }, "aggregateVerdict": { "const": "YELLOW" }
+          }
+        }
+      }]
+    }
+  }
+}

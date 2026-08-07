@@ -28,6 +28,17 @@ export const AGGREGATE_LANE_ORDER = Object.freeze([
   "macos-physical-boundary",
   "cleanup-and-artifact-index",
 ]);
+export const CORE_AGGREGATE_LANE_ORDER = Object.freeze([
+  "core-preflight",
+  "gate-a-and-full-regression",
+  "core-contract-web-api-cli",
+  "core-postgres-static-and-fake",
+  "encrypted-field-regression",
+  "core-codex-zero-call-fake",
+  "core-macos-transient-fake",
+  "core-static-effect-and-workset-audit",
+  "core-cleanup-and-artifact-index",
+]);
 export const LANE_STATUSES = Object.freeze(["GREEN", "YELLOW", "RED", "NOT_RUN"]);
 export const FORBIDDEN_EFFECT_KEYS = Object.freeze([
   "providerSessions", "providerBytes", "spendUsd", "codexThreadStarts", "codexTurnStarts",
@@ -48,6 +59,12 @@ const ZERO_EFFECT_COUNTS = Object.freeze({
   postgresProcesses: 0,
   keychainOperations: 0,
   userPresencePrompts: 0,
+  realCodexCalls: 0,
+  sandboxExecCalls: 0,
+  signingCalls: 0,
+  localAuthenticationCalls: 0,
+  secureEnclaveOperations: 0,
+  networkCalls: 0,
 });
 const CODE_PATTERN = /^[A-Z][A-Z0-9_]{2,127}$/u;
 const repositoryRoot = repositoryRootPath();
@@ -165,6 +182,41 @@ export async function runSerialAggregate(adapter) {
   });
 }
 
+export async function runCoreConstructionAggregate(adapter) {
+  const results = [];
+  let stopped = false;
+  let yellow = false;
+  let aiLaneEnabled = false;
+  for (const laneName of CORE_AGGREGATE_LANE_ORDER) {
+    if (laneName === "core-cleanup-and-artifact-index") continue;
+    if (stopped) { results.push(notRun(laneName)); continue; }
+    let normalized;
+    try { normalized = normalizeLaneResult(laneName, await adapter.run(laneName)); }
+    catch (error) {
+      normalized = normalizeLaneResult(laneName, { status: "RED", code: controlledErrorCode(error, "CORE_UNCONTROLLED_LANE_FAILURE"), effects: ZERO_EFFECT_COUNTS, metrics: {} });
+    }
+    results.push(normalized);
+    if (normalized.status === "RED") stopped = true;
+    if (normalized.status === "YELLOW") yellow = true;
+  }
+  let cleanup;
+  try { cleanup = normalizeLaneResult("core-cleanup-and-artifact-index", await adapter.run("core-cleanup-and-artifact-index")); }
+  catch (error) {
+    cleanup = normalizeLaneResult("core-cleanup-and-artifact-index", { status: "RED", code: controlledErrorCode(error, "CORE_CLEANUP_UNCONTROLLED_FAILURE"), effects: ZERO_EFFECT_COUNTS, metrics: {} });
+  }
+  results.push(cleanup);
+  const red = results.some((entry) => entry.status === "RED");
+  if (cleanup.status === "YELLOW") yellow = true;
+  return Object.freeze({
+    schemaVersion: "r4.gate-b-core.aggregate-construction.v1",
+    verdict: red ? "RED" : yellow ? "YELLOW" : "GREEN",
+    aiLaneEnabled,
+    laneOrderSha256: `sha256:${digest(`${CORE_AGGREGATE_LANE_ORDER.join("\n")}\n`)}`,
+    lanes: Object.freeze(results),
+    effectCounts: sumEffects(results),
+  });
+}
+
 function controlledErrorCode(error, fallback) {
   if (
     error instanceof GateBRunnerError
@@ -177,6 +229,7 @@ function controlledErrorCode(error, fallback) {
 
 export function parseRunnerArguments(argv) {
   if (argv.length === 1 && argv[0] === "dry-run") return Object.freeze({ mode: "dry-run" });
+  if (argv.length === 1 && argv[0] === "dry-run-core") return Object.freeze({ mode: "dry-run-core" });
   if (
     argv.length !== 9
     || argv[0] !== "execute"
@@ -299,6 +352,86 @@ export async function runSyntheticDryRun() {
   });
 }
 
+class CoreSyntheticAdapter {
+  constructor(overrides = {}, faultLane = null, faultWindow = "before") {
+    this.overrides = overrides;
+    this.faultLane = faultLane;
+    this.faultWindow = faultWindow;
+    this.calls = [];
+    this.cleanupCalls = 0;
+  }
+  async run(laneName) {
+    this.calls.push(laneName);
+    if (laneName === "core-cleanup-and-artifact-index") {
+      this.cleanupCalls += 1;
+      return lane("GREEN", "CORE_SYNTHETIC_CLEANUP_GREEN", { cleanupPassed: true });
+    }
+    if (this.faultLane === laneName) {
+      const error = new GateBRunnerError(this.faultWindow === "before" ? "CORE_INJECTED_BEFORE_EFFECT" : "CORE_INJECTED_AFTER_EFFECT_BEFORE_MARKER");
+      throw error;
+    }
+    return this.overrides[laneName] ?? lane("GREEN", "CORE_SYNTHETIC_GREEN", { bodyFreeCheckpoint: true });
+  }
+}
+
+export async function runCoreConstructionDryRun() {
+  const expectedYellow = {
+    "core-postgres-static-and-fake": lane("YELLOW", "CORE_POSTGRES_RACE_WORKER_CONSTRUCTION_INCOMPLETE", { fakeMechanismPassed: true }),
+    "core-codex-zero-call-fake": lane("YELLOW", "CORE_CODEX_HOST_BOUND_PHYSICAL_ADAPTER_INCOMPLETE", { fakeMechanismPassed: true }),
+    "core-macos-transient-fake": lane("YELLOW", "CORE_MACOS_HOST_BOUND_PHYSICAL_ADAPTER_INCOMPLETE", { fakeMechanismPassed: true }),
+  };
+  const normalAdapter = new CoreSyntheticAdapter(expectedYellow);
+  const normal = await runCoreConstructionAggregate(normalAdapter);
+  assertDryRun(normal.verdict === "YELLOW" && normal.aiLaneEnabled === false, "CORE_DRY_RUN_EXPECTED_YELLOW_FAILED");
+  assertDryRun(normalAdapter.calls.join("|") === CORE_AGGREGATE_LANE_ORDER.join("|"), "CORE_DRY_RUN_ORDER_FAILED");
+  assertDryRun(Object.values(normal.effectCounts).every((value) => value === 0), "CORE_DRY_RUN_EFFECT_NONZERO");
+
+  let faultCases = 0;
+  for (const faultWindow of ["before", "after"]) {
+    for (const laneName of CORE_AGGREGATE_LANE_ORDER.slice(0, -1)) {
+      const adapter = new CoreSyntheticAdapter({}, laneName, faultWindow);
+      const result = await runCoreConstructionAggregate(adapter);
+      assertDryRun(result.verdict === "RED", "CORE_DRY_RUN_FAULT_NOT_RED");
+      assertDryRun(adapter.cleanupCalls === 1 && adapter.calls.at(-1) === "core-cleanup-and-artifact-index", "CORE_DRY_RUN_FAULT_CLEANUP_FAILED");
+      faultCases += 1;
+    }
+  }
+  // CoreSyntheticAdapter always owns cleanup; exercise cleanup Red through a minimal exact adapter.
+  const cleanupFailure = await runCoreConstructionAggregate({
+    async run(laneName) { return laneName === "core-cleanup-and-artifact-index" ? lane("RED", "CORE_SYNTHETIC_CLEANUP_RED") : lane(); },
+  });
+  assertDryRun(cleanupFailure.verdict === "RED", "CORE_DRY_RUN_CLEANUP_RED_FAILED");
+  return Object.freeze({
+    schemaVersion: "r4.gate-b-core.aggregate-construction-dry-run.v1",
+    status: "CORE_REPOSITORY_REVIEWABLE_YELLOW",
+    verdict: "YELLOW",
+    blockers: Object.freeze([
+      "postgres_race_worker_call_bytes_and_persistent_verifiers",
+      "host_binding_and_core_physical_runner",
+      "macos_signed_helper_physical_executor",
+    ]),
+    laneCount: CORE_AGGREGATE_LANE_ORDER.length,
+    injectedFaultCaseCount: faultCases,
+    serialOrderPassed: true,
+    redStopPassed: true,
+    cleanupAlwaysRan: true,
+    bodyFreeCheckpointsPassed: true,
+    aiLaneEnabled: false,
+    retryExecutionGranted: false,
+    firstProviderCallGranted: false,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    dockerCommands: 0,
+    postgresProcesses: 0,
+    signingCalls: 0,
+    keychainOperations: 0,
+    localAuthenticationCalls: 0,
+    secureEnclaveOperations: 0,
+    providerCalls: 0,
+    networkCalls: 0,
+  });
+}
+
 function runExactNode(args, timeout = 120_000) {
   const result = spawnSync(process.execPath, args, {
     cwd: repositoryRoot,
@@ -387,7 +520,9 @@ async function runExecution(input) {
 async function main() {
   try {
     const input = parseRunnerArguments(process.argv.slice(2));
-    const result = input.mode === "dry-run" ? await runSyntheticDryRun() : await runExecution(input);
+    const result = input.mode === "dry-run" ? await runSyntheticDryRun()
+      : input.mode === "dry-run-core" ? await runCoreConstructionDryRun()
+        : await runExecution(input);
     process.stdout.write(`${JSON.stringify(result)}\n`);
   } catch (error) {
     process.stdout.write(`${JSON.stringify({ status: "RED", code: controlledErrorCode(error, "RUNNER_UNCONTROLLED_FAILURE") })}\n`);

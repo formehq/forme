@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "r4.gate-b-core.artifact-index.v1",
+  "status": "CORE_REPOSITORY_REVIEWABLE_YELLOW",
+  "constructionPacketSha256": "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6",
+  "retryExecutionGrant": "NOT_REQUESTED",
+  "firstProviderCallTestGrant": "NOT_REQUESTED",
+  "fileCount": 18,
+  "aggregateSha256": "sha256:176005479f74570d872dbfa47ea50acdf2cdf46bdace101b9bf010dfeac9bb66",
+  "files": [
+    {
+      "path": "schemas/r4/gate-b-core/README.md",
+      "sha256": "sha256:2efac708c4c1d1e8e376b62ba54092e47f7f460ddf7018852fcd04fafe6d6bab"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/api-v1-index.json",
+      "sha256": "sha256:ff029f3988b9fbd734bf797c1309548fd056304fba8c7dbc1605305a35e5cdf5"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/api-v1.schema.json",
+      "sha256": "sha256:b6877ca0d9ea309f558504f0499115e16c7c9276785ba4ff8ae25f5c81ec1251"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/codex-zero-call-contract.json",
+      "sha256": "sha256:1f7cc3e7db61b1d0f3fcd564b3a00d68004a7a2198b331dbe995e6a2004d0412"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/core-basis.json",
+      "sha256": "sha256:eabd968569b8245a7d6ed15493a3e79a59c913304e8d429169bf611b3d173d35"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/evidence.schema.json",
+      "sha256": "sha256:34bda9a95ea6aa13047aa12c25f656e051a95c107416d4a2c50c20ba2343a9e1"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/build-recipe.json",
+      "sha256": "sha256:da6c5ff813bd4863ce99d642b0a57e41754eeac8444bfbfad9f96fe54c97bcb9"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/evidence.schema.json",
+      "sha256": "sha256:08eb1e8331ddcb1fd1c6c84762ad285550420a9ef685394db2415c033b53f81f"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb",
+      "sha256": "sha256:0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/forme-core-transient-response.sb",
+      "sha256": "sha256:3a8c17648b02e0bcebedbcf1405de3fa4d4ca7ceb4c324e0b4969676d777732c"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/transient-candidate-contract.json",
+      "sha256": "sha256:9fb4efe68883e4985062b4a3d02699d69e6de5687174fce9e4661a0270e324dc"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/operations.md",
+      "sha256": "sha256:d32a5a54b2f8dca432279b27553a461d05636b7ee9d5ca022796a9a427ea9108"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/postgres-contract.md",
+      "sha256": "sha256:093ef9f6ad869cebc134555dd5562b32ea59162a254442beaac272d81138d8f4"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/runtime-boundary.json",
+      "sha256": "sha256:97601dec99c2044025619cef88833e3da974091e7704eed406f3e10391f5e1d4"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0000_r4_gate_b_core_bootstrap.sql",
+      "sha256": "sha256:1776d1e0b7deacadd59b5d59fa9807c3e565332f9fd716cf42810ba40efa20b8"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.rollback.sql",
+      "sha256": "sha256:f33497a36e810b8a6e8f393da3ef50b93a19126ecebd53cfc41847d3ce4e09c0"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql",
+      "sha256": "sha256:6bace220f1de958469938d876ff346981ccc16006423e7265f62f8fe0b357fcd"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.verify.sql",
+      "sha256": "sha256:4bad90577693b363c86857018f29159f77c79419aa93b9ebb7afae0decd95133"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { Fragment, createElement, type ComponentType, type ReactNode } from "react";
 import { notFound } from "next/navigation.js";
 import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
-import { operationDefinition } from "./operation-inventory.ts";
+import { coreOperationDefinition } from "./core-policy.ts";
 
 interface ProjectionPageProps {
   params: Promise<{ projectionId: string }>;
@@ -22,8 +22,8 @@ export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
   let lifecycle: Record<string, unknown>;
   let warning: unknown;
   try {
-    const result = await hostedApplication().run({
-      definition: operationDefinition("projection.read"),
+    const result = await hostedApplication().runCore({
+      definition: coreOperationDefinition("projection.read"),
       params: { projectionId },
       body: {},
       authorization: null,

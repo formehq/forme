@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "r4.gate-b-core.macos-build-recipe.v1",
+  "status": "CONSTRUCTED_NOT_EXECUTED",
+  "minimumOS": "macOS 26.0",
+  "swiftPackage": "native/macos/Package.swift",
+  "product": "FormeCoreLocal",
+  "target": "FormeCoreLocal",
+  "bundleIdentifier": "org.chaostudio.forme.gate-b.core-local",
+  "bundleExecutable": "FormeCoreLocal",
+  "acceptedArguments": [
+    "--gate-b-core-transient-probe"
+  ],
+  "preSignPayloadMembers": [
+    "Contents/Info.plist",
+    "Contents/MacOS/FormeCoreLocal",
+    "Contents/Resources/forme-core-transient-response.sb"
+  ],
+  "postSignBundleMembers": [
+    "Contents/Info.plist",
+    "Contents/MacOS/FormeCoreLocal",
+    "Contents/Resources/forme-core-transient-response.sb",
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "codesignGeneratedMembers": [
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "entitlements": "native/macos/Resources/FormeCoreLocal.entitlements",
+  "entitlementDictionaryEntryCount": 0,
+  "effectOrder": [
+    "compile",
+    "assembleBundle",
+    "snapshotKeychainMetadata",
+    "createTemporaryKeychain",
+    "createOneSigningIdentity",
+    "signAndVerifyBundle",
+    "launchExactHelper",
+    "collectBodyFreeEvidence",
+    "cleanupAndVerifyAbsence"
+  ],
+  "effectAuthority": {
+    "constructionExecutor": "fake_only",
+    "correctionConstructionGranted": true,
+    "retryExecutionGranted": false,
+    "firstProviderCallGranted": false,
+    "realProcessEffects": 0,
+    "securityFrameworkEffects": 0,
+    "localAuthenticationEffects": 0,
+    "networkEffects": 0,
+    "providerCalls": 0
+  },
+  "signingScope": {
+    "mechanism": "future_one_run_custom_file_keychain_probe",
+    "identityCount": 1,
+    "candidateBytesAllowed": false,
+    "fallbackToLoginKeychain": false,
+    "fallbackToDataProtectionKeychain": false,
+    "metadataReadCounts": {
+      "defaultKeychain": 2,
+      "keychainSearchList": 2
+    },
+    "customTemporaryKeychainOperations": 12,
+    "customOperationBreakdown": {
+      "securityLifecycleSubcommands": 10,
+      "identityInventoryReads": 1,
+      "signingPrivateKeyUses": 1
+    },
+    "certificateFingerprintBinding": "OBSERVE_AFTER_ONE_RUN_CREATION_THEN_VALIDATE_BEFORE_SIGNING",
+    "physicalAdapterStatus": "REQUIRES_SEPARATE_OWNER_GRANTED_CONSTRUCTION"
+  },
+  "claims": {
+    "candidatePersistence": false,
+    "persistentRecovery": false,
+    "crashZeroization": false,
+    "bodyBearingHandoffOutsideHelper": false,
+    "productionSigning": false,
+    "notarization": false
+  },
+  "inputHashes": {
+    "native/macos/Sources/FormeCoreLocal/CoreLauncher.swift": "sha256:9a4edcea641064ffd2b905dbe3e462fc81a10421d464c5cd39956757d548de07",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateSession.swift": "sha256:5c1e0aee09a0f3a2fae0d4512a82db69c1602fbc2e1713b6eac03394bc1dfdff",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateReviewWindow.swift": "sha256:cd12d469cfab479c201570232eca79560cfee423b67e08cc75836ec1b2b58a56",
+    "native/macos/Sources/FormeCoreLocal/UserPresenceAuthorizer.swift": "sha256:c4966b58c96fe7685d8ef84039493eb152c08aabf59461beaceb0ba1c2f6f99d",
+    "native/macos/Sources/FormeCoreLocal/CoreProcessSupervisor.swift": "sha256:4ebc7e8916a92aa2e7be35231284f1f4d44a90888b28241e6f587a21936ceb2c",
+    "native/macos/Sources/FormeCoreLocal/CorePhysicalEvidence.swift": "sha256:2b25fc54359eb7dab512ab11ec532faea1de10d3167adb873c0000d4ea0dd310",
+    "native/macos/Sources/FormeCoreLocal/CoreSandboxProfile.swift": "sha256:b42a9f8fa25f91ff8c94ad4f6d0bb1e435e6984c99e05f3e12b282babb06716e",
+    "native/macos/Sources/FormeCoreLocal/CoreLockedMemory.swift": "sha256:08d948ec1be5c5fc953c595a58a9c1d2bded04644ec27adae37508c801773a41",
+    "native/macos/Sources/FormeCoreLocal/CountingHandoffPort.swift": "sha256:5002f68acfa8c4004240a415ff6cd5323e574ac5d4639dbea452db2b7abe8a4d",
+    "native/macos/Resources/FormeCoreLocal.Info.plist": "sha256:285990b2afa108cd1fcbd406bc79f1fc81be2894fb1767808cd4898940878192",
+    "native/macos/Resources/FormeCoreLocal.entitlements": "sha256:97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+    "schemas/r4/gate-b-core/macos/forme-core-transient-response.sb": "sha256:3a8c17648b02e0bcebedbcf1405de3fa4d4ca7ceb4c324e0b4969676d777732c",
+    "schemas/r4/gate-b-core/macos/transient-candidate-contract.json": "sha256:9fb4efe68883e4985062b4a3d02699d69e6de5687174fce9e4661a0270e324dc",
+    "schemas/r4/gate-b-core/macos/evidence.schema.json": "sha256:08eb1e8331ddcb1fd1c6c84762ad285550420a9ef685394db2415c033b53f81f"
+  },
+  "compiledExecutableSha256": null,
+  "preSignPayloadInventorySha256": null,
+  "signedBundleInventorySha256": null
+}

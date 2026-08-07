@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { readClientApiJson, safeClientFailure } from "./client-api.ts";
 
 interface InteractionView {
@@ -10,7 +10,6 @@ interface InteractionView {
   acceptedAt: string;
   expiresAt: string;
   response: { body: string; publishedAt: string } | null;
-  notificationEndpoint: { state: string; version: number };
   grantOffer: {
     schemaVersion: "grant_offer_reply_view.v1";
     offerId: string;
@@ -102,14 +101,6 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
   const [offerRecovery, setOfferRecovery] = useState<GrantOfferRecoveryV1 | null>(null);
 
   const replySecret = useCallback(() => window.location.hash.slice(1), []);
-  const terminal = interaction !== null && [
-    "closed_without_response",
-    "interaction_expired",
-    "interaction_deleted",
-    "origin_revoked",
-    "room_retired",
-  ].includes(interaction.state);
-
   const refresh = useCallback(async () => {
     const capability = replySecret();
     if (!capability) {
@@ -144,42 +135,6 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
     setOfferRecovery(pendingOfferRecovery(interactionId));
     void refresh();
   }, [interactionId, refresh]);
-
-  async function setNotification(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!interaction) return;
-    setBusy(true);
-    setError(null);
-    setNotice(null);
-    try {
-      const email = new FormData(event.currentTarget).get("email");
-      const response = await fetch(`/api/v1/interactions/${encodeURIComponent(interactionId)}/notification`, {
-        method: "PUT",
-        cache: "no-store",
-        headers: {
-          Authorization: `Bearer ${replySecret()}`,
-          "Content-Type": "application/json",
-          "Idempotency-Key": secret(),
-          "If-Match": String(interaction.notificationEndpoint.version),
-        },
-        body: JSON.stringify({ email }),
-      });
-      const result = await readClientApiJson(
-        response,
-        "Notification settings could not be updated. Your private reply link is unchanged; refresh the status and retry.",
-      ) as { endpoint?: InteractionView["notificationEndpoint"] };
-      if (!result.endpoint) throw new Error("invalid response shape");
-      setInteraction({ ...interaction, notificationEndpoint: result.endpoint });
-      setNotice("Synthetic verification is pending. No external email was sent; use code 000000 through the API fixture.");
-    } catch (cause) {
-      setError(safeClientFailure(
-        cause,
-        "The Room server could not be reached. Your private reply link is unchanged; check your connection and retry.",
-      ));
-    } finally {
-      setBusy(false);
-    }
-  }
 
   async function deleteInteraction() {
     if (!interaction) return;
@@ -287,7 +242,7 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
           <p>
             {(interaction.grantOffer ?? offerRecovery?.offer)?.publicRoomLabel
               ? `${(interaction.grantOffer ?? offerRecovery?.offer)?.publicRoomLabel} · `
-              : "Private Room · "}
+              : "Continuation · "}
             {(interaction.grantOffer ?? offerRecovery?.offer)?.presetId.replaceAll("_", " ")}
           </p>
           <p className="mono">Accept by {(interaction.grantOffer ?? offerRecovery?.offer)?.acceptanceExpiresAt}</p>
@@ -300,13 +255,6 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
         </section>
       ) : null}
       <button className="buttonQuiet" disabled={busy} onClick={() => void refresh()} type="button">{busy ? "Working…" : "Check status"}</button>
-      <form className="formStack" onSubmit={setNotification}>
-        <label>
-          Optional response-ready email
-          <input name="email" type="email" required placeholder="you@example.com" />
-        </label>
-        <button disabled={busy || terminal} type="submit">Set notification</button>
-      </form>
       <button className="buttonQuiet" disabled={busy || interaction.state === "interaction_deleted"} onClick={() => void deleteInteraction()} type="button">Delete this Interaction</button>
       {notice ? <p className="success" role="status">{notice}</p> : null}
       {error ? <p className="error" role="alert">{error}</p> : null}

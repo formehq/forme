@@ -17,7 +17,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <Link className="wordmark" href="/">Forme</Link>
           <nav aria-label="Primary">
             <Link href="/">Third Place</Link>
-            <Link href="/private/proj_formeprivate0000000000000000000">Private Room</Link>
             <Link href="/owner">Owner control</Link>
           </nav>
         </header>

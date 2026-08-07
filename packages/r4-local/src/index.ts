@@ -6,6 +6,7 @@ export * from "./capability-probe.ts";
 export * from "./cli.ts";
 export * from "./coordinator.ts";
 export * from "./fresh-session.ts";
+export * from "./hosted-room-api.ts";
 export * from "./fault-injection.ts";
 export * from "./ledger.ts";
 export * from "./lock.ts";
