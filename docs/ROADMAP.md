@@ -25,10 +25,12 @@
   Green cleanup and a Yellow aggregate verdict. Its Retry Execution Manifest
   is explicitly not recommended. A later read-only review found that the next
   correction must choose a truthful Demo-critical semantic cut rather than
-  merely wire three physical adapters. The active Owner input is
-  [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
-  at `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
-  Retry Execution is not requested. Provider calls,
+  merely wire three physical adapters. The Owner approved that five-part scope
+  correction. The active Owner input is now exact Core Construction Packet
+  [`sha256:5c8ec32c…e0b3e6`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md)
+  plus low-load Review
+  [`sha256:2ad228be…bb299`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md).
+  Correction Construction and Retry Execution are not yet approved. Provider calls,
   real Guest data, production migration, deployment, spend, production Room
   mutation, external email, production secrets, and public traffic remain
   unauthorized
@@ -45,7 +47,7 @@
 | R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
 | R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three proposals useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. The first Gate B attempt is Red/cleaned; Retry Construction is Yellow/cleaned and proves the repository/offline mechanism, not runtime readiness. A five-part Core-versus-Full scope decision is now pending before any exact correction Packet or Retry Execution.
+R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three proposals useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. The first Gate B attempt is Red/cleaned; Retry Construction is Yellow/cleaned and proves the repository/offline mechanism, not runtime readiness. The five-part Core-versus-Full scope decision is approved, and the exact Core Correction Construction Packet is now at the Owner gate. No corrected implementation or physical Retry has started.
 
 ## R4 owner-approved product target — Gate A Technical Review complete
 
@@ -180,8 +182,9 @@ Native Harness role clarification
   → Gate A repository implementation + Technical Review ✓
   → Gate B v0.1 approval ✓ → first execution RED/CLEAN
   → Retry Construction Packet ✓ → Construction YELLOW/CLEAN ✓
-  → Correction Scope Decision Brief [Owner decision pending]
-  → exact Core Correction Packet [not prepared]
+  → Correction Scope Decision Brief [Owner approved ✓]
+  → exact Core Correction Construction Packet [ready · Owner gate]
+  → Core repo-only Construction [not approved]
   → corrected Retry Execution [not requested]
 ```
 
@@ -196,9 +199,11 @@ complete. The first approved Gate B attempt is preserved as Red/cleaned.
 Retry Construction is preserved as Yellow/cleaned: it built and verified the
 offline runner, but physical review found that PostgreSQL semantic completion,
 real Codex diagnostic containment and macOS candidate-protection scope require
-an Owner cut before another Packet. The recommended cut keeps one real hero
-encounter exact and hides/defers unimplemented surfaces rather than returning
-placeholders under a broad P0 claim.
+an Owner cut before another Packet. That cut is now approved and translated
+into an exact Construction proposal. It keeps one real hero encounter exact,
+hides/defers unimplemented surfaces rather than returning placeholders under a
+broad P0 claim, and explicitly does not connect candidate body to publication
+inside the zero-provider Retry.
 Real execution, First Provider-Call Test Grant, production durable writes,
 public actions, and spend remain separate later decisions.
 

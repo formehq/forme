@@ -4,30 +4,32 @@
 - Active gate: **R4 Gate A remains technically complete. The first Gate B
   attempt stopped Red and cleaned. The approved repo-only Retry Construction
   then completed at `d6374ed` with 56/56 offline tests, Green cleanup and an
-  honest Yellow verdict. Retry Execution Manifest
-  `sha256:f2276d7dfd5716bc5f14e7853925cbc991349b525eb28e0453c9cf9b4602b976`
-  is explicitly `DO NOT APPROVE`. A deeper physical-gap review found that the
-  next step requires an Owner scope correction, not a three-line wiring patch.
-  Retry Execution and the First Provider-Call Test Grant remain not requested.**
+  honest Yellow verdict. The Owner has now approved the five-part
+  Demo-critical Core scope correction. Exact Correction Construction Packet
+  `sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6`
+  and low-load Review
+  `sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299`
+  are ready for the next Owner gate. Correction Construction, Retry Execution
+  and the First Provider-Call Test are not yet approved.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
   Gate A is technically implemented and verified. Gate B Retry Construction is
-  Yellow/cleaned; PostgreSQL real semantics, Codex zero-call containment and
-  macOS physical protection remain incomplete. R4 is not Owner-accepted or
-  Done, and Gate C remains unexecuted.**
+  Yellow/cleaned; the corrected Core implementation is proposed but not built.
+  PostgreSQL Core semantics, Codex zero-call containment and macOS transient
+  candidate protection remain incomplete. R4 is not Owner-accepted or Done,
+  and Gate C remains unexecuted.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: Owner reviews
-  [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
-  at `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
-  The recommended cut is a truthful Demo-critical PostgreSQL Core, a separate
-  Codex zero-call diagnostic Seatbelt profile, a transient-candidate macOS
-  boundary, an explicitly procedural controlling-Agent boundary for MVP, and
-  retained public PostgreSQL image cache. Approval would authorize preparation
-  of an exact Correction Packet only. It would not authorize code changes,
-  Docker, real Codex, signing/Keychain, user presence, Retry Execution,
-  provider call, Gate C, production, deployment, public traffic, merge or spend.
+- Next action: Owner reviews the exact
+  [`R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md)
+  through its
+  [`low-load Owner Review`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md).
+  Recommended approval opens repository-only Core Construction with fake
+  physical adapters, then STOP. It does not open Docker/PostgreSQL execution,
+  real Codex or `sandbox-exec`, signing/Keychain/LocalAuthentication, Retry
+  Execution, Provider Call, real Guest data, Gate C, deployment, public
+  traffic, merge or spend.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -50,7 +52,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A ✓ · RETRY CONSTRUCTION YELLOW/CLEAN · SCOPE DECISION
+R4 Controlled Presence    ← GATE A ✓ · CORE CORRECTION PACKET READY · OWNER GATE
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -207,9 +209,11 @@ Current truth:
   pinned-real branch still uses fixture assumptions and has no diagnostic
   Seatbelt/process-group composition; and the macOS custom-Keychain + persistent
   Secure-Enclave design is unimplemented and may be unsupported. No prior
-  Yellow evidence is reclassified. The pending Owner decision is whether to
-  adopt the five recommended Demo-critical scope corrections in
-  [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md);
+  Yellow evidence is reclassified. The Owner approved all five recommended
+  Demo-critical scope corrections in
+  [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md).
+  The exact Core Construction Packet and low-load Review now await separate
+  Owner approval; Construction, Retry and Provider authority remain closed;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
