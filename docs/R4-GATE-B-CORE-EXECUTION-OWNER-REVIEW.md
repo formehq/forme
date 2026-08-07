@@ -45,9 +45,9 @@
 | Approved Construction Packet | `sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6` |
 | Approved Construction Owner Review | `sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299` |
 | Approved proposal HEAD / tree | `5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e` / `15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f` |
-| Construction implementation commit / tree | `be931ec6768d3734ab6ce649f1f57dfa9a0216d3` / `d9397e84152436a873aeaf1d5ac36bbcd511c704` |
-| Construction Report | `sha256:6d68bc236287ac526c4b4b9ed233b6adb1af5af56ca2e97c16f74a8162b2d2ed` |
-| Machine evidence | `sha256:0e690d35bffd3dfe790d3a7969027c2af5351130a6e25271e2f037ba5f0fb49b` |
+| Construction implementation commit / tree | `2b0b0cf4dedccec3781470ee8fc51ea3fff1254b` / `069458f059b9a15e63cb9ef72ca62192e7b68b15` |
+| Construction Report | `sha256:4369c5bf7f95e805b440c47a5d2908b091d74c14ab0b322a39d663978c570f40` |
+| Machine evidence | `sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09` |
 | Non-approvable Execution Manifest | `sha256:f743f8f17daa3aa4d12805cc12563c94a1e3e3343ab4069e4ce351058bcc0b74` |
 
 验证结果是 381 个 Node tests、19 个 Swift tests、TypeScript passed；真实
