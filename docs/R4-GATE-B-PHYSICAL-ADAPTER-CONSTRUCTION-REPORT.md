@@ -110,3 +110,53 @@ provider end-to-end claim.
 
 The companion Retry manifest is deliberately **NON-APPROVABLE Yellow** and contains
 no executable Retry command.
+
+## R2 addendum — approved post-I portability correction
+
+The historical implementation, evidence, and single Host Binding attempt above
+remain frozen exactly as recorded. They are not rebound to later code. After that
+record was published, the Owner approved a narrow C-layer correction for an Ubuntu
+CI portability defect: construction-only temporary roots had assumed the macOS
+`/private/tmp` spelling even though Linux canonically exposes `/tmp`.
+
+The correction is the strict linear pair below:
+
+| Layer | HEAD | Tree | Result |
+| --- | --- | --- | --- |
+| Historical output R | `63ae16940faf17694152cffa12848e62c2933c52` | `ebfd96e7c1003c076d417798e53430891f60f057` | Frozen Yellow record |
+| C1 | `63979037c2b43a0ca7e62d3edb9c39b69ab48669` | `4fbea4f69c59c80fe4fcee44fde586b31e9c4318` | Canonical `/tmp` portability correction |
+| C2 / final C | `383bf00611eaf180d4146f75e294deca49a4d5b1` | `3b2ef06165975d2fad1e781aedbe04b91af49287` | Unsupported CI Node identity remains fail-closed |
+
+Across `R..C`, exactly these six paths changed:
+
+| Path | SHA-256 at C |
+| --- | --- |
+| `scripts/r4-gate-b-physical-port.mjs` | `sha256:5d52f3336f722ceb716fe3815ad1696397bb6b834e775fb5d053b93fa707215f` |
+| `scripts/r4-gate-b-physical-runner.mjs` | `sha256:20ad515b02972d43bb670bb1363858e55e8690d5c3b8f43f966f87dc1bacf426` |
+| `test/r4-gate-b-core/physical-runner.test.ts` | `sha256:2b7568522d17dcd04a9ac73a68cecc10a03fbfc6c90a707500049df729c1d6d1` |
+| `schemas/r4/gate-b-core/physical-runner-contract.json` | `sha256:def50fae98a3452c1ac4053cb39168334a6daf930e0edc05cd64cea2875de9e2` |
+| `schemas/r4/gate-b-core/artifact-index.json` | `sha256:1d64f9f15fc47490d3ee7c5de5261e967a749055c89753bf95170f726997ea6b` |
+| `scripts/r4-doc-audit.mjs` | `sha256:9d8ef86446877637bebda4bb83d96fd3da914523f56ac9ebc82eba609fece283` |
+
+The implementation now derives its system temporary-root authority only from
+`realpath(/tmp)`. It does not trust `TMPDIR`, `os.tmpdir()`, or caller input. The
+production Phase-A branch/workset gate and blocked-start Node identity checks were
+not relaxed. A detached/post-output checkout still stops before a journal, private
+root, child process, or external effect; a CI Node binary with unsupported link
+identity likewise stops before child start and removes its private test root.
+
+GitHub Actions run
+[`31277888019`](https://github.com/formehq/forme/actions/runs/31277888019)
+proved the latter fail-closed condition. C2 then taught the offline test to record
+that safe refusal without treating it as production authority. Run
+[`31278070883`](https://github.com/formehq/forme/actions/runs/31278070883)
+completed `npm run check` Green on Ubuntu in 1m24s. Local validation also completed
+50/50 physical-runner tests, 130/130 Gate-B Core tests, typecheck, both applicable
+documentation audits, and the full 468-test `npm run check` aggregate.
+
+No second Host Binding attempt occurred. The fixed Host input was not inspected,
+opened, or read; the historical Yellow observation and evidence hash
+`sha256:ca9500ef9384a00c52444cafe41aee0414f1311f5d9897c2faccbf95466fe42e`
+remain unchanged. The runner at C is explicitly **NOT_HOST_BOUND**. Retry Execution
+and First Provider-Call Test remain **NOT_REQUESTED**, with zero real physical,
+provider, deployment, merge, traffic, or spend effects in this correction.

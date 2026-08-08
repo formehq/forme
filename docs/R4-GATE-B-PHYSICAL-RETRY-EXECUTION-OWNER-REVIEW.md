@@ -60,8 +60,42 @@ call。因此当前 Manifest 是一份**不可批准的 Yellow 记录**，不是
 | Codex/unified audit receipt | `sha256:d38f7ad3dd7dceaa002023eb3a29fb666515e19db393857f3dca1ba5bb21ac7c` |
 | macOS/authority audit receipt | `sha256:2b7111df2aa6ae719da2434e5ef39f2a1896448e1efe5c54ff62eeb54cfb18e6` |
 | Machine evidence | `sha256:ca9500ef9384a00c52444cafe41aee0414f1311f5d9897c2faccbf95466fe42e` |
-| Construction Report | `sha256:d2899bc56f27fe91874e16583cac6da861b86be86956a82bedd995869777cb46` |
-| Non-approvable Retry Manifest | `sha256:eb884dd118b7e8ae783031f084ed7fb2bebf726ff49e1a1dd75a2491ddf14cf8` |
+| Historical R Construction Report | `sha256:d2899bc56f27fe91874e16583cac6da861b86be86956a82bedd995869777cb46` |
+| Historical R Non-approvable Retry Manifest | `sha256:eb884dd118b7e8ae783031f084ed7fb2bebf726ff49e1a1dd75a2491ddf14cf8` |
+
+## R2：批准的 C-layer 可移植性纠错
+
+历史 `I`、输出 `R`、machine evidence 和唯一一次 Host Binding Yellow 结果保持不变，
+也没有被投射到新代码上。Owner 后续只批准了一个窄 C layer，用来修复 Ubuntu CI
+没有 macOS `/private/tmp` 拼写的问题，并保留所有生产 fail-closed 边界。
+
+| 项目 | Exact value |
+| --- | --- |
+| Historical output R / tree | `63ae16940faf17694152cffa12848e62c2933c52` / `ebfd96e7c1003c076d417798e53430891f60f057` |
+| C1 / tree | `63979037c2b43a0ca7e62d3edb9c39b69ab48669` / `4fbea4f69c59c80fe4fcee44fde586b31e9c4318` |
+| Final C / tree | `383bf00611eaf180d4146f75e294deca49a4d5b1` / `3b2ef06165975d2fad1e781aedbe04b91af49287` |
+| Historical evidence | `sha256:ca9500ef9384a00c52444cafe41aee0414f1311f5d9897c2faccbf95466fe42e`（未改变） |
+| R2 Construction Report | `sha256:aa679d5be2fb040aff80123d21a3383013f198377a6778ef421d0e3e96bbd1a2` |
+| R2 Non-approvable Retry Manifest | `sha256:3356a5a6dff3e8a0bbc92355b7615b40fa09b2a353e2bc050bc7bcb63e124ec5` |
+| Final Ubuntu CI | [`31278070883`](https://github.com/formehq/forme/actions/runs/31278070883) — `npm run check` Green |
+
+`R..C` 累计只改了六个已批准路径：physical port、physical runner、对应测试、runner
+contract、artifact index 和 doc audit。系统临时目录只取 `realpath(/tmp)`；不信任
+`TMPDIR`、`os.tmpdir()` 或调用者输入。生产 branch/workset gate 和 Node 文件身份检查
+均未放宽。detached/post-output checkout 会在创建 journal/root 或产生 effect 之前拒绝；
+GitHub 托管 Node 的 hardlink 身份不受支持时，也会在 child start 前安全拒绝并清理测试
+root。
+
+第一次 C CI
+[`31277888019`](https://github.com/formehq/forme/actions/runs/31277888019)
+正是因为这条严格 Node 身份检查而停止；C2 只让测试把这种安全拒绝记录为预期结果，
+没有给它生产 authority。第二次 CI 全绿。C 层之后 runner 的状态明确是
+**NOT_HOST_BOUND**。
+
+没有第二次 Host Binding：fixed Host input 未被 stat/open/read，没有新 capsule 或 public
+receipt，也没有执行 Retry、Docker/PostgreSQL、real Codex、signing、Keychain、LA、
+provider、部署、merge、traffic 或 spend。Retry Execution 与 First Provider-Call Test 仍为
+**NOT_REQUESTED**。
 
 ## Owner 的下一步边界
 

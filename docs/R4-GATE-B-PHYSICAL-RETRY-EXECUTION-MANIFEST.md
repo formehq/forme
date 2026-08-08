@@ -74,3 +74,33 @@ notarization, nor real provider end-to-end behavior.
 
 Any future Host Binding attempt or Retry requires a new, explicit Owner decision.
 This manifest grants neither.
+
+## R2 portability-correction notice
+
+An Owner-approved post-I C layer now ends at
+`383bf00611eaf180d4146f75e294deca49a4d5b1`, tree
+`3b2ef06165975d2fad1e781aedbe04b91af49287`. Its only purpose was to replace the
+macOS-only `/private/tmp` spelling with the canonical `realpath(/tmp)` authority in
+the six approved construction/contract/audit paths and to preserve fail-closed
+testing on GitHub's unsupported hardlinked Node runtime.
+
+The historical implementation I, output R, evidence, and one-time Yellow Host
+Binding attempt remain bound to their original commits and were not rerun or
+reinterpreted. In particular:
+
+- the fixed Host input was not inspected, opened, or read again;
+- no capsule or public receipt was created;
+- the runner after C is **NOT_HOST_BOUND**;
+- Retry Execution and First Provider-Call Test remain **NOT_REQUESTED**;
+- this manifest still contains no executable Retry command.
+
+Ubuntu run
+[`31278070883`](https://github.com/formehq/forme/actions/runs/31278070883)
+completed `npm run check` Green after the earlier run
+[`31277888019`](https://github.com/formehq/forme/actions/runs/31277888019)
+correctly exposed the unsupported Node-file identity as a pre-child fail-closed
+condition. Neither run performed Docker, PostgreSQL, real Codex, signing, Keychain,
+LocalAuthentication, provider, deployment, or network effects.
+
+The C layer does not grant authority to use this manifest. A future Retry still
+requires a new successful Host Binding and a new explicit Owner grant.
