@@ -78,13 +78,14 @@ test("fixtures include success, conflict, terminal and exact race/non-race plans
   for (const token of ["idempotency_conflict", "version_conflict", "interaction_deleted", "dispatch_already_committed", "ack_out_of_order", "projection_revoked", "binding_revoked"]) assert.match(errors, new RegExp(token, "u"));
   for (const scenario of RACE_SCENARIOS) assert.match(races, new RegExp(scenario, "u"));
   for (const assertionName of NON_RACE_ASSERTIONS) assert.match(races, new RegExp(assertionName, "u"));
-  assert.equal((races.match(/\(\d+,'[^']+','core-race-/gu) ?? []).length, 13);
-  assert.match(races, /pg_advisory_xact_lock/u);
-  assert.match(races, /RACE_WORKER_CALL_BYTES_REQUIRE_FOLLOWUP_CONSTRUCTION/u);
+  assert.equal((races.match(/\('C(?:0[1-9]|1[0-6])-[AB]-[AB]','C(?:0[1-9]|1[0-6])'/gu) ?? []).length, 32);
+  assert.match(races, /READ COMMITTED/u);
+  assert.match(races, /observer_wait_event_type/u);
+  assert.doesNotMatch(races, /RACE_WORKER_CALL_BYTES_REQUIRE_FOLLOWUP_CONSTRUCTION|SERIALIZABLE/u);
   for (const token of ["basis_null_context_not_closed", "basis_null_hash_not_closed", "basis_null_actor_not_closed", "basis_negative_fixture_mutated_state"]) assert.match(CORE_BASIS_ERRORS_SQL, new RegExp(token, "u"));
 });
 
-test("all 13 fake race interpretations remain one-effect controlled plans", () => {
+test("historical 13-family fake interpreter remains regression-only and body-free", () => {
   for (const scenario of RACE_SCENARIOS) {
     for (const order of [["a", "b"], ["b", "a"]] as const) {
       const outcome = replayRace(scenario, [...order]);

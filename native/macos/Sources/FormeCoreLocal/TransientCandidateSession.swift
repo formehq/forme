@@ -325,7 +325,9 @@ final class TransientCandidateSession {
             guard clock() < parsed.effectiveDeadline else { return outcome(.authorityExpired) }
             guard await presence.authorizeExactCandidate() else { return outcome(.controlledFailure) }
             guard clock() < parsed.effectiveDeadline else { return outcome(.authorityExpired) }
-            guard await review.reviewExactCandidate(uiBridge) == .approveExact else { return outcome(.discard) }
+            let reviewDecision = await review.reviewExactCandidate(uiBridge, authorityDeadline: parsed.effectiveDeadline)
+            if reviewDecision == .authorityExpired { return outcome(.authorityExpired) }
+            guard reviewDecision == .approveExact else { return outcome(.discard) }
             let recheckScratch = try CoreLockedBuffer(capacity: CoreLockedBuffer.scratchCapacity, label: "approval-recheck", observer: observer)
             let recheckResponse = try CoreLockedBuffer(capacity: CoreLockedBuffer.frameCapacity, label: "approval-recheck-response", observer: observer)
             defer { recheckScratch.zeroize(); recheckResponse.zeroize() }

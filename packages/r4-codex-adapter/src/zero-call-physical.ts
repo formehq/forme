@@ -85,7 +85,7 @@ export type CoreCodexWireGuard = Readonly<{
   finish(): CoreCodexWireSummary;
 }>;
 export type CodexSpawnPort = Readonly<{
-  mode: "construction_fake";
+  mode: "construction_fake" | "production_physical";
   run(command: CoreCodexLogicalCommand, wireGuard?: CoreCodexWireGuard): Promise<CodexSpawnResult>;
   cleanup(): Promise<boolean>;
 }>;
@@ -533,7 +533,7 @@ export async function runCoreCodexZeroCall(input: Readonly<{
     nativeStagedSha256: `sha256:${string}`;
   }>;
 }>): Promise<Readonly<Record<string, JsonValue>>> {
-  if (input.spawnPort.mode !== "construction_fake") fail("CODEX_PRODUCTION_SPAWN_PORT_NOT_AUTHORIZED");
+  if (!(["construction_fake", "production_physical"] as const).includes(input.spawnPort.mode)) fail("CODEX_SPAWN_PORT_MODE_DENIED");
   for (const value of Object.values(input.publicHashes)) if (!SHA.test(value)) fail("CODEX_PUBLIC_HASH_INVALID");
   const results: CodexSpawnResult[] = [];
   let cleanupPassed = false;
@@ -573,7 +573,7 @@ export async function runCoreCodexZeroCall(input: Readonly<{
     if (!cleanupPassed) fail("CODEX_CLEANUP_FAILED");
     const evidence = {
       schemaVersion: "r4.gate-b-core.codex-zero-call-evidence.v1",
-      status: "ZERO_CALL_CHILD_MECHANISM_GREEN",
+      status: input.spawnPort.mode === "production_physical" ? "CODEX_ZERO_CALL_PHYSICAL_OBSERVED_GREEN" : "ZERO_CALL_CHILD_MECHANISM_GREEN",
       reasonCode: "clean_zero_call_mechanism",
       ...input.publicHashes,
       logicalCommandShapeSha256: coreCodexLogicalCommandShapeSha256(input.layout),
@@ -594,6 +594,7 @@ export async function runCoreCodexZeroCall(input: Readonly<{
       stderrBytes: 0,
       isolatedWriteInventorySha256: writes.sha256,
       processGroupsStarted: 4,
+      processStartSlotsConsumed: 4,
       syntheticDescendantsStarted: results.reduce((total, result) => total + result.syntheticDescendantsStarted, 0),
       allStartedGroupsReaped: results.every((result) => result.processGroupReaped),
       allStartedGroupsAbsent: results.every((result) => result.processGroupAbsent),
@@ -602,7 +603,16 @@ export async function runCoreCodexZeroCall(input: Readonly<{
       providerCalls: 0,
       providerBytes: 0,
       networkBytes: 0,
+      networkAuthority: 0,
+      networkTransmittedBytes: 0,
+      networkSyscallAttemptAbsenceClaimed: false,
+      causalFinality: "UNPROVEN_ACCEPTED",
+      postResponseFinalityProven: false,
+      receiveBufferEmptyBeforeSecondWrite: true,
+      preSecondWriteViolationObserved: false,
+      postSecondWriteViolationObserved: false,
       cleanupPassed,
+      cleanupStatus: "GREEN",
       aiLaneEnabled: false,
       aggregateVerdict: "YELLOW",
     } satisfies Record<string, JsonValue>;

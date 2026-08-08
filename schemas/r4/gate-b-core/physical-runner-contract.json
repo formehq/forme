@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "r4.gate-b-core.physical-runner-contract.v1",
+  "status": "CONSTRUCTION_GRANTED_PHYSICAL_RETRY_NOT_REQUESTED",
+  "authority": {
+    "approvedDecisionBriefSha256": "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2",
+    "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+    "constructionOwnerReviewSha256": "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9",
+    "approvedProposalHead": "a45ea061e8e92f247597787e36ecfe52740b216a",
+    "approvedProposalTree": "89b28903fc34e985a17e8f3fdc4bfd7d0972880e",
+    "hostBindingAdapterConstructionGrant": "APPROVED",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallGrant": "NOT_REQUESTED"
+  },
+  "construction": {
+    "runId": "79b7775defbdaf043697ef9b6d0ab45c",
+    "runIdDerivation": "first32(sha256(r4-gate-b-physical-construction:+prefixedPacketSha+proposalHead+proposalTree))",
+    "inputPath": ".forme/gate-b-host-binding-input.v1.json",
+    "checkpointPath": ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c/construction-checkpoint.v1.json",
+    "journalPath": ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c/journal.v1.jsonl",
+    "capsuleDirectory": ".forme/gate-b-host-bindings",
+    "capsuleTtlSeconds": 259200
+  },
+  "argumentShapes": [
+    ["construct-physical-adapters"],
+    ["finalize-host-binding"],
+    ["cleanup-construction", "--construction-packet-sha", "<sha256>"],
+    ["execute-core-retry", "--manifest-sha", "<sha256>", "--execution-grant", "<same-sha256>", "--host-binding-id", "<32hex>"],
+    ["cleanup-core-retry", "--manifest-sha", "<sha256>", "--execution-grant", "<same-sha256>", "--host-binding-id", "<32hex>"]
+  ],
+  "laneOrder": ["postgres", "codex", "macos", "cleanup", "evidence", "stop"],
+  "inspectorEnvironmentKeys": ["HOME", "DOCKER_CONFIG", "TMPDIR", "PATH"],
+  "inspectorEnvironment": { "PATH": "/usr/bin:/bin:/usr/sbin:/sbin" },
+  "inspectorCommands": [
+    { "id": "docker-client-version", "source": "owner.dockerCli", "argv": ["--version"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 512, "stderrLimitBytes": 0 },
+    { "id": "docker-daemon-version", "source": "owner.dockerCli", "argv": ["--host", "unix://<owner-socket>", "version", "--format", "{{json .Client.Version}} {{json .Client.APIVersion}} {{json .Server.Version}} {{json .Server.APIVersion}} {{json .Server.Os}} {{json .Server.Arch}}"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 2048, "stderrLimitBytes": 0 },
+    { "id": "docker-image-observation", "source": "owner.dockerCli", "argv": ["--host", "unix://<owner-socket>", "image", "inspect", "--format", "{{json .RepoDigests}} {{json .Id}} {{json .Os}} {{json .Architecture}} {{json .Size}}", "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "macos-product-version", "source": "/usr/bin/sw_vers", "argv": ["-productVersion"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "macos-build-version", "source": "/usr/bin/sw_vers", "argv": ["-buildVersion"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "macos-architecture", "source": "/usr/bin/uname", "argv": ["-m"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "developer-root", "source": "/usr/bin/xcode-select", "argv": ["-p"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "swiftc-path", "source": "/usr/bin/xcrun", "argv": ["--find", "swiftc"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "sdk-path", "source": "/usr/bin/xcrun", "argv": ["--sdk", "macosx", "--show-sdk-path"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "sdk-version", "source": "/usr/bin/xcrun", "argv": ["--sdk", "macosx", "--show-sdk-version"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "swift-version", "source": "resolved.swiftc", "argv": ["--version"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 },
+    { "id": "openssl-version", "source": "/usr/bin/openssl", "argv": ["version"], "deadlineMilliseconds": 5000, "stdoutLimitBytes": 4096, "stderrLimitBytes": 0 }
+  ],
+  "processSupervision": {
+    "shell": false,
+    "detachedProcessGroup": true,
+    "termGraceMilliseconds": 2000,
+    "killGraceMilliseconds": 2000,
+    "epermMeansPresent": true,
+    "esrchMeansAbsent": true,
+    "otherAbsenceResult": "UNKNOWN"
+  },
+  "futureRetry": {
+    "entrypoint": "scripts/r4-gate-b-physical-runner.mjs",
+    "productionFactoriesExported": false,
+    "manifestAuthorityMarker": "R4_GATE_B_RETRY_AUTHORITY",
+    "manifestAndExecutionGrantMustEqual": true,
+    "repoImplementationAncestorRequired": true,
+    "hostBindingCapsuleMustRevalidate": true,
+    "laneOrder": ["postgres", "codex", "macos", "cleanup", "evidence", "stop"],
+    "cleanupAllowedAfterCapsuleExpiry": true,
+    "cleanupStillRequiresJournalAndOwnedIdentity": true,
+    "unknownAbsenceInterimVerdict": "YELLOW_QUARANTINED",
+    "unknownAbsenceAfterOneCleanupVerdict": "RED_QUARANTINED"
+  },
+  "postgresPlan": {
+    "namedRaceFamilies": 13,
+    "executableCases": 16,
+    "orderedExecutions": 32,
+    "expectedCoreCalls": 68,
+    "expected2xx": 39,
+    "expectedControlledNon2xx": 29,
+    "expectedNewReceipts": 37,
+    "persistedVerifiers": 32,
+    "transactionIsolation": "READ COMMITTED",
+    "overlapProof": "second backend active with wait_event_type Lock and first backend in pg_blocking_pids before first COMMIT",
+    "networkMode": "none",
+    "publishedPorts": 0,
+    "pull": "never"
+  },
+  "codexPlan": {
+    "logicalProcessStarts": 4,
+    "schemaFileCount": 273,
+    "schemaAggregateSha256": "sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62",
+    "receiveBufferMustBeEmptyBeforeSecondWrite": true,
+    "secondWriteIsStdinEndInSerializedListenerTurn": true,
+    "postResponseFinalityProven": false,
+    "causalFinality": "UNPROVEN_ACCEPTED",
+    "threadStarts": 0,
+    "turnStarts": 0,
+    "providerCalls": 0
+  },
+  "macosPlan": {
+    "typedSteps": 36,
+    "securityCliInvocationsFutureCleanRun": 15,
+    "codesignCliInvocationsFutureCleanRun": 5,
+    "opensslCliInvocationsFutureCleanRun": 2,
+    "candidateInput": "synthetic-feeder-memory-to-held-helper-stdin-fd",
+    "helperSeatbeltApplied": false,
+    "transientProviderProfileExecutionCount": 0,
+    "localAuthenticationCeremoniesMaximum": 1,
+    "handoffsMaximum": 1,
+    "preReceiptCounts": "unknown-null",
+    "terminalCleanup": "known-resource-journal-bound-and-idempotent"
+  },
+  "constructionClaims": {
+    "strongestPhaseA": "ADAPTER_CONSTRUCTION_CHECKPOINT_GREEN",
+    "strongestAfterHostBinding": "PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW",
+    "physicalRetryExecuted": false,
+    "firstProviderCallExecuted": false,
+    "aggregateCeiling": "YELLOW"
+  },
+  "constructedFilesAggregate": {
+    "scope": "proposal-head-to-final-implementation-I changed tracked files only; excludes Phase-B receipt and output documents",
+    "ordering": "raw UTF-8 path byte order",
+    "line": "<sha256-prefixed-file-hash><two-spaces><repository-relative-path><LF>",
+    "digest": "SHA-256 of concatenated exact lines"
+  },
+  "physicalEffectsDuringConstruction": {
+    "dockerReadOnlyCliCalls": 3,
+    "localDockerUnixSocketRequests": 2,
+    "macosReadOnlyInspectionCalls": 9,
+    "dockerMutationCalls": 0,
+    "postgresCalls": 0,
+    "realCodexCalls": 0,
+    "sandboxExecCalls": 0,
+    "codesignCalls": 0,
+    "securityCalls": 0,
+    "localAuthenticationCalls": 0,
+    "helperLaunches": 0,
+    "providerCalls": 0
+  }
+}

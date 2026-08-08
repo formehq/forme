@@ -77,7 +77,7 @@ RESET ROLE;
 const LINEAGE_FIXED = Object.freeze({
   technical_packet_sha: "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
   scope_brief_sha: "sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f",
-  construction_packet_sha: "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6",
+  construction_packet_sha: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
   core_basis_sha: "sha256:eabd968569b8245a7d6ed15493a3e79a59c913304e8d429169bf611b3d173d35",
 });
 const SHA256_PATTERN = /^sha256:[0-9a-f]{64}$/u;
@@ -453,7 +453,7 @@ function assertStaticContract(files) {
   for (const value of [
     "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
     "sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f",
-    "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6",
+    "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
     "sha256:eabd968569b8245a7d6ed15493a3e79a59c913304e8d429169bf611b3d173d35",
   ]) if (!migration.includes(value)) fail("POSTGRES_LINEAGE_HASH_DRIFT");
   const basis = exactFile("schemas/r4/gate-b-core/core-basis.json");

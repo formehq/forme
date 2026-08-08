@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/host-binding-public-receipt.schema.json",
+  "title": "Public R4 Gate B Host Binding Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "hostBindingId", "hostBindingCapsuleSha256", "createdAt", "expiresAt", "implementationHead", "implementationTree", "platform", "tools", "docker", "closedBoundaries", "retryExecutionGrant", "firstProviderCallGrant", "providerCalls", "providerNetworkAuthority", "externalRuntimeNetworkAuthority", "localDockerUnixSocketRequests", "aggregateVerdict"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_host_binding_public_receipt.v1" },
+    "hostBindingId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "hostBindingCapsuleSha256": { "$ref": "#/$defs/sha" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "implementationHead": { "$ref": "#/$defs/gitObject" },
+    "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "platform": { "const": "darwin-arm64" },
+    "tools": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["logicalName", "version", "sha256"],
+        "properties": {
+          "logicalName": { "type": "string", "pattern": "^[a-z0-9._-]+$" },
+          "version": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sha256": { "$ref": "#/$defs/sha" }
+        }
+      }
+    },
+    "docker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clientVersion", "clientApiVersion", "serverVersion", "serverApiVersion", "serverOs", "serverArch", "repoDigest", "localImageId", "imageOs", "imageArch", "imageSizeBytes"],
+      "properties": {
+        "clientVersion": { "type": "string" }, "clientApiVersion": { "type": "string" },
+        "serverVersion": { "type": "string" }, "serverApiVersion": { "type": "string" },
+        "serverOs": { "const": "linux" }, "serverArch": { "const": "arm64" },
+        "repoDigest": { "type": "string", "pattern": "^postgres@sha256:[0-9a-f]{64}$" },
+        "localImageId": { "$ref": "#/$defs/sha" }, "imageOs": { "const": "linux" },
+        "imageArch": { "const": "arm64" }, "imageSizeBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "closedBoundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pathsWithheld", "accountIdentityWithheld", "credentialsRead", "dockerMutationCalls", "realCodexCalls", "sandboxExecCalls", "macosPhysicalCalls"],
+      "properties": {
+        "pathsWithheld": { "const": true }, "accountIdentityWithheld": { "const": true },
+        "credentialsRead": { "const": 0 }, "dockerMutationCalls": { "const": 0 },
+        "realCodexCalls": { "const": 0 }, "sandboxExecCalls": { "const": 0 },
+        "macosPhysicalCalls": { "const": 0 }
+      }
+    },
+    "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+    "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+    "providerCalls": { "const": 0 },
+    "providerNetworkAuthority": { "const": 0 },
+    "externalRuntimeNetworkAuthority": { "const": 0 },
+    "localDockerUnixSocketRequests": { "const": 2 },
+    "aggregateVerdict": { "const": "YELLOW" }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+  }
+}

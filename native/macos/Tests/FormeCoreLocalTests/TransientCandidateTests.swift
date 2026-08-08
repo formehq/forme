@@ -222,6 +222,19 @@ final class TransientCandidateTests: XCTestCase {
         XCTAssertEqual(handoff.handoffCount, 0)
     }
 
+    func testReviewOwnedExpiryTerminalNeverHandoffs() async throws {
+        let review = FakeCandidateReviewPort(.authorityExpired)
+        let handoff = CountingHandoffPort()
+        let session = TransientCandidateSession(
+            presence: FakeUserPresenceAuthorizer(.approve), review: review, handoff: handoff,
+            clock: { self.helperStart.addingTimeInterval(1) }
+        )
+        let outcome = await session.runSynthetic(frame: try frame(), helperStartedAt: helperStart)
+        XCTAssertEqual(outcome.terminal, .authorityExpired)
+        XCTAssertEqual(review.reviewCount, 1)
+        XCTAssertEqual(handoff.handoffCount, 0)
+    }
+
     func testPresenceAndReviewPoliciesAreExact() {
         let presence = FakeUserPresenceAuthorizer(.approve)
         XCTAssertEqual(presence.policy, "deviceOwnerAuthentication")

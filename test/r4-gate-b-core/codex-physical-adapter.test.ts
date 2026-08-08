@@ -350,8 +350,8 @@ test("construction wrapper execs only the staged fake Codex and reaps adversaria
   }
 });
 
-test("process wire guard separates pre-response rejection from split post-response failure and bounds TERM/KILL", async () => {
-  for (const behavior of ["server_request", "invalid_result", "response_then_unknown", "oversized_line"] as const) {
+test("process wire guard separates pre-response rejection, same-buffer partial, and split post-response failure while bounding TERM/KILL", async () => {
+  for (const behavior of ["server_request", "invalid_result", "response_then_partial", "response_then_unknown", "oversized_line"] as const) {
     const root = constructionRoot();
     const fixture = await createCoreProcessFakeFixture(root, behavior);
     const port = createCoreProcessSpawnPort(fixture, { termGraceMilliseconds: 100, killGraceMilliseconds: 500 });

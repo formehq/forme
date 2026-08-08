@@ -48,7 +48,7 @@ BEGIN
      OR to_regnamespace('forme_r4') IS NULL
      OR current_setting('forme_r4.technical_packet_sha') <> 'sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5'
      OR current_setting('forme_r4.scope_brief_sha') <> 'sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f'
-     OR current_setting('forme_r4.construction_packet_sha') <> 'sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6'
+     OR current_setting('forme_r4.construction_packet_sha') <> 'sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06'
      OR current_setting('forme_r4.core_basis_sha') <> 'sha256:eabd968569b8245a7d6ed15493a3e79a59c913304e8d429169bf611b3d173d35'
      OR current_setting('forme_r4.execution_manifest_sha') !~ '^sha256:[0-9a-f]{64}$'
      OR current_setting('forme_r4.migration_sha') !~ '^sha256:[0-9a-f]{64}$' THEN
@@ -1545,7 +1545,7 @@ BEGIN
   SELECT i.*,o.target_id,o.target_version INTO replay FROM forme_r4.idempotency_records i JOIN forme_r4.operation_receipts o USING(receipt_id) WHERE i.actor_scope_digest=(p_ctx).actor_scope_digest AND i.action='public_encounter.issue' AND i.idempotency_key=(p_ctx).idempotency_key;
   IF FOUND THEN IF replay.canonical_request_hash<>(p_ctx).canonical_request_hash THEN RETURN ROW(409::smallint,'idempotency_conflict',NULL,NULL,NULL,jsonb_build_object('code','idempotency_conflict'))::forme_r4.api_result_v1; END IF; RETURN ROW(replay.http_status,replay.result_code,replay.target_id,replay.target_version,replay.receipt_id,replay.body_free_result)::forme_r4.api_result_v1; END IF;
   IF (p_ctx).expected_object_version IS DISTINCT FROM p.lifecycle_version THEN RETURN ROW(409::smallint,'version_conflict',p_projection_id,p.lifecycle_version,NULL,jsonb_build_object('code','version_conflict'))::forme_r4.api_result_v1; END IF;
-  IF (SELECT count(*) FROM forme_r4.interactions WHERE room_id=p.room_id AND state IN ('accepted','seen_locally','preparing'))>=20
+  IF (SELECT count(*) FROM forme_r4.interactions WHERE room_id=p.room_id AND origin_capability_class='public_encounter' AND state IN ('accepted','seen_locally','preparing'))>=20
      OR (SELECT count(*) FROM forme_r4.rate_buckets WHERE room_id=p.room_id AND scope='encounter_issue' AND bucket_digest=p_edge_bucket_digest AND committed_at>committed-interval '1 hour')>=10
      OR (SELECT count(*) FROM forme_r4.rate_buckets WHERE room_id=p.room_id AND scope='encounter_issue' AND bucket_digest=p_edge_bucket_digest AND committed_at>committed-interval '24 hours')>=50 THEN
     RETURN ROW(429::smallint,'rate_limited',p_projection_id,p.lifecycle_version,NULL,jsonb_build_object('code','rate_limited'))::forme_r4.api_result_v1;
@@ -1573,7 +1573,7 @@ CREATE FUNCTION forme_r4.tx_interaction_create(
   p_reply_capability_id forme_r4.r4_id,p_reply_digest forme_r4.sha256_digest,
   p_delete_digest forme_r4.sha256_digest)
 RETURNS forme_r4.api_result_v1 LANGUAGE plpgsql VOLATILE SECURITY DEFINER SET search_path = pg_catalog, forme_r4 AS $function$
-DECLARE v_room_id forme_r4.r4_id; cap_version bigint; cap_expiry timestamptz(3); cap_count integer; cap_quota integer;
+DECLARE v_room_id forme_r4.r4_id; v_edge_bucket_digest forme_r4.sha256_digest; cap_version bigint; cap_expiry timestamptz(3); cap_count integer; cap_quota integer;
   replay record; receipt forme_r4.r4_id; result_body jsonb; committed timestamptz(3):=transaction_timestamp(); next_sequence bigint;
 BEGIN
   IF (p_ctx).actor_class NOT IN ('manual_guest','guest_agent') OR (p_ctx).actor_subject_id IS NOT NULL
@@ -1590,6 +1590,14 @@ BEGIN
         AND g.secret_digest=(p_ctx).actor_scope_digest FOR UPDATE;
   END IF;
   IF v_room_id IS NULL THEN RETURN ROW(404::smallint,'not_found',NULL,NULL,NULL,jsonb_build_object('code','not_found'))::forme_r4.api_result_v1; END IF;
+  IF p_submission_class='public_encounter' THEN
+    SELECT bucket_digest INTO v_edge_bucket_digest
+      FROM forme_r4.rate_buckets
+      WHERE room_id=v_room_id AND scope='encounter_issue' AND source_object_id=p_submission_id;
+    IF NOT FOUND THEN
+      RETURN ROW(409::smallint,'capability_unavailable',p_submission_id,cap_version,NULL,jsonb_build_object('code','capability_unavailable'))::forme_r4.api_result_v1;
+    END IF;
+  END IF;
   SELECT i.*,o.target_id,o.target_version INTO replay FROM forme_r4.idempotency_records i JOIN forme_r4.operation_receipts o USING(receipt_id) WHERE i.actor_scope_digest=(p_ctx).actor_scope_digest AND i.action='interaction.create' AND i.idempotency_key=(p_ctx).idempotency_key;
   IF FOUND THEN IF replay.canonical_request_hash<>(p_ctx).canonical_request_hash THEN RETURN ROW(409::smallint,'idempotency_conflict',NULL,NULL,NULL,jsonb_build_object('code','idempotency_conflict'))::forme_r4.api_result_v1; END IF; RETURN ROW(replay.http_status,replay.result_code,replay.target_id,replay.target_version,replay.receipt_id,replay.body_free_result)::forme_r4.api_result_v1; END IF;
   PERFORM 1 FROM forme_r4.rooms WHERE rooms.room_id=v_room_id AND room_kind='third_place_public' AND status='active' FOR UPDATE;
@@ -1598,9 +1606,11 @@ BEGIN
      OR EXISTS (SELECT 1 FROM forme_r4.interactions WHERE unresolved_scope_id=p_submission_id AND state IN ('accepted','seen_locally','preparing')) THEN
     RETURN ROW(409::smallint,'capability_unavailable',p_submission_id,cap_version,NULL,jsonb_build_object('code','capability_unavailable'))::forme_r4.api_result_v1;
   END IF;
-  IF (SELECT count(*) FROM forme_r4.interactions WHERE interactions.room_id=v_room_id AND state IN ('accepted','seen_locally','preparing'))>=20
-     OR (SELECT count(*) FROM forme_r4.rate_buckets WHERE rate_buckets.room_id=v_room_id AND scope='public_accept' AND bucket_digest=(p_ctx).actor_scope_digest AND committed_at>committed-interval '24 hours')>=3 THEN
-    RETURN ROW(429::smallint,'rate_limited',p_projection_id,NULL,NULL,jsonb_build_object('code','rate_limited'))::forme_r4.api_result_v1;
+  IF p_submission_class='public_encounter' THEN
+    IF (SELECT count(*) FROM forme_r4.interactions WHERE interactions.room_id=v_room_id AND origin_capability_class='public_encounter' AND state IN ('accepted','seen_locally','preparing'))>=20
+       OR (SELECT count(*) FROM forme_r4.rate_buckets WHERE rate_buckets.room_id=v_room_id AND scope='public_accept' AND bucket_digest=v_edge_bucket_digest AND committed_at>committed-interval '24 hours')>=3 THEN
+      RETURN ROW(429::smallint,'rate_limited',p_projection_id,NULL,NULL,jsonb_build_object('code','rate_limited'))::forme_r4.api_result_v1;
+    END IF;
   END IF;
   IF p_submission_class='public_encounter' THEN
     UPDATE forme_r4.public_encounters SET state='consumed',accepted_count=1,unresolved_interaction_id=p_interaction_id,version=version+1 WHERE encounter_id=p_submission_id;
@@ -1612,7 +1622,9 @@ BEGIN
   INSERT INTO forme_r4.interaction_lifecycle_events VALUES(('event_interaction_create_'||replace((p_ctx).correlation_id::text,'-',''))::forme_r4.r4_id,p_interaction_id,v_room_id,NULL,'accepted',1,(p_ctx).actor_class,NULL,(p_ctx).canonical_request_hash,committed);
   SELECT event_high_water+1 INTO next_sequence FROM forme_r4.rooms WHERE rooms.room_id=v_room_id;
   INSERT INTO forme_r4.room_event_stream VALUES(v_room_id,next_sequence,('streamevent_interaction_'||replace((p_ctx).correlation_id::text,'-',''))::forme_r4.r4_id,'room_event.v1','interaction',p_interaction_id,'interaction.accepted',1,(p_ctx).canonical_request_hash,committed,true,false,NULL);
-  INSERT INTO forme_r4.rate_buckets VALUES(('rate_accept_'||replace((p_ctx).correlation_id::text,'-',''))::forme_r4.r4_id,v_room_id,'public_accept',(p_ctx).actor_scope_digest,p_interaction_id,committed,committed+interval '24 hours');
+  IF p_submission_class='public_encounter' THEN
+    INSERT INTO forme_r4.rate_buckets VALUES(('rate_accept_'||replace((p_ctx).correlation_id::text,'-',''))::forme_r4.r4_id,v_room_id,'public_accept',v_edge_bucket_digest,p_interaction_id,committed,committed+interval '24 hours');
+  END IF;
   receipt:=('receipt_interaction_create_'||replace((p_ctx).correlation_id::text,'-',''))::forme_r4.r4_id;
   result_body:=jsonb_build_object('schemaVersion','interaction_create_result.v1','interactionId',p_interaction_id,'state','accepted','expiresAt',to_char(LEAST(committed+interval '7 days',cap_expiry) AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),'receipt',jsonb_build_object('schemaVersion','operation_receipt.v1','receiptId',receipt,'actorClass',(p_ctx).actor_class,'action','interaction.create','idempotencyKey',(p_ctx).idempotency_key,'canonicalRequestHash',(p_ctx).canonical_request_hash,'targetId',p_interaction_id,'targetVersion',1,'status','committed','committedAt',to_char(committed AT TIME ZONE 'UTC','YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'),'bodyFreeCode','interaction_accepted'));
   INSERT INTO forme_r4.operation_receipts VALUES(receipt,'operation_receipt.v1',v_room_id,(p_ctx).actor_class,NULL,(p_ctx).actor_scope_digest,'interaction.create',(p_ctx).idempotency_key,(p_ctx).canonical_request_hash,p_interaction_id,1,'committed','interaction_accepted',jsonb_build_object('code','interaction_accepted'),committed,committed+interval '37 days');

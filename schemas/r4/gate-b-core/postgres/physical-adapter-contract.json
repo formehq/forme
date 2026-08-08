@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "r4.gate-b-core.postgres-physical-adapter-contract.v1",
+  "status": "POSTGRES_PHYSICAL_ADAPTER_CONSTRUCTED_OFFLINE",
+  "authority": {
+    "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+    "hostBindingAdapterConstructionGrant": "APPROVED",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "physicalEffects": 0
+  },
+  "image": {
+    "reference": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "platform": "linux/arm64",
+    "network": "none",
+    "pull": "never",
+    "database": "forme_r4_gate_b",
+    "containerUser": "postgres",
+    "publishedPorts": 0
+  },
+  "sourceCorrections": [
+    {
+      "id": "public-active-pool-only",
+      "rule": "both active-20 checks count only origin_capability_class=public_encounter in accepted,seen_locally,preparing; grant bypasses public pool and public_accept rate"
+    },
+    {
+      "id": "public-accept-issued-edge-lineage",
+      "rule": "public interaction create resolves exactly one encounter_issue rate row by room and source encounter and reuses its bucket digest; missing lineage returns 409 capability_unavailable without effect"
+    }
+  ],
+  "raceCounts": {
+    "namedFamilies": 13,
+    "executableCases": 16,
+    "orderedExecutions": 32,
+    "concurrentCoreCalls": 64,
+    "recoveryCoreCalls": 4,
+    "expectedCoreCalls": 68,
+    "expected2xx": 39,
+    "expectedControlledNon2xx": 29,
+    "expectedNewReceipts": 37,
+    "persistedVerifierPlans": 32
+  },
+  "isolation": "READ COMMITTED",
+  "workerProtocol": ["BEGIN", "SET_LOCAL_ROLE", "READY", "START_BARRIER", "CALL_STARTED", "CORE_CALL", "POST_CALL", "COMMIT_GATE", "COMMIT_ACK"],
+  "observerPredicate": {
+    "role": "postgres",
+    "rowCount": 1,
+    "state": "active",
+    "waitEventType": "Lock",
+    "expectedBlocker": "firstPid",
+    "unexpectedBlockers": 0
+  },
+  "deadlinesMilliseconds": {
+    "phase": 5000,
+    "case": 30000,
+    "lane": 900000,
+    "workerLockTimeout": 15000,
+    "workerStatementTimeout": 20000,
+    "workerIdleTransactionTimeout": 20000,
+    "termGrace": 2000,
+    "killGrace": 2000
+  },
+  "futurePlan": ["capsule-revalidate", "collision-check", "volume-create", "container-create", "marker", "container-start", "marker", "readiness", "bootstrap", "migration", "basis", "verify", "happy-errors-ack", "rollback", "32-fresh-race-overlays", "clean-reapply-verify-rollback", "cleanup"],
+  "constructionExecutor": "fake_only",
+  "strongestConstructionVerdict": "POSTGRES_RETRY_READY_YELLOW"
+}

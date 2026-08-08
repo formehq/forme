@@ -1,6 +1,14 @@
 {
   "schemaVersion": "r4.gate-b-core.codex-zero-call-contract.v1",
-  "status": "CONSTRUCTED_NOT_EXECUTED",
+  "status": "HOST_BINDING_AWARE_PHYSICAL_ADAPTER_CONSTRUCTED_OFFLINE_NOT_EXECUTED",
+  "constructionAuthority": {
+    "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+    "hostBindingAdapterConstructionGrant": "APPROVED",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallGrant": "NOT_REQUESTED",
+    "realCodexCalls": 0,
+    "sandboxExecCalls": 0
+  },
   "distribution": {
     "npmVersion": "0.145.0",
     "reportedCliVersion": "codex-cli 0.145.0",
@@ -36,14 +44,24 @@
   "handshakeOrdering": {
     "schemaInventoryAndReferenceClosureValidatedBeforeInitializeSpawn": true,
     "preResponseWireValidatedBeforeInitialized": true,
+    "singleSerializedStdoutReader": true,
+    "allCurrentCompleteFramesConsumedBeforeSecondWrite": true,
+    "receiveBufferEmptyBeforeSecondWrite": true,
+    "secondWriteIsStdinEndInSameListenerTurn": true,
+    "awaitOrQuiescenceTimerBeforeSecondWrite": false,
+    "optionalDisabledNotificationAllowedOnlyBeforeResponse": true,
     "preResponseInvalidWireMaximumClientWrites": 1,
     "postResponseUnexpectedWireTerminalizesAndCleans": true,
     "postResponseViolationMaximumClientWrites": 2,
     "clientWritesAfterPostResponseViolation": 0,
     "postResponseWireFinalityUnproven": true,
+    "causalFinality": "UNPROVEN_ACCEPTED",
     "cleanWireClientWrites": 2
   },
   "processSupervision": {
+    "orderedStartAuthoritySlots": ["version", "help", "schema", "initialize"],
+    "maximumProcessGroups": 4,
+    "retryOrFifthCanary": false,
     "deadlineThenSignalOrder": ["SIGTERM", "SIGKILL"],
     "termGraceMilliseconds": 2000,
     "killGraceMilliseconds": 2000,
@@ -75,7 +93,7 @@
     "aggregateVerdict": "YELLOW"
   },
   "claims": {
-    "proves": ["zero-call child mechanism", "pre-response guarded stdio handshake", "post-response violation terminalization and cleanup", "schema and write inventory"],
-    "doesNotProve": ["post-response wire finality before initialized", "model call", "Fresh Session", "source visibility", "candidate", "publication authority", "automatic reaping after parent death", "host-bound production process adapter"]
+    "proves": ["zero-call child mechanism", "pre-response guarded stdio handshake", "post-response violation terminalization and cleanup", "schema and write inventory", "closed host-capsule-aware production process port constructed offline"],
+    "doesNotProve": ["post-response wire finality before initialized", "real Codex or Seatbelt execution", "actual Host Binding on a current machine", "model call", "Fresh Session", "source visibility", "candidate", "publication authority", "automatic reaping after parent death"]
   }
 }

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "r4.gate-b-core.macos-physical-adapter-contract.v1",
+  "status": "MACOS_PHYSICAL_ADAPTER_CONSTRUCTED_OFFLINE",
+  "authority": {
+    "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+    "hostBindingAdapterConstructionGrant": "APPROVED",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallGrant": "NOT_REQUESTED",
+    "physicalEffects": 0
+  },
+  "platform": { "os": "darwin", "architecture": "arm64", "minimumMajor": 26, "swiftLanguageMode": "6.2" },
+  "openssl": {
+    "configurationSha256": "sha256:b6b24dcd5d30e255ca32c45a58d9d3c2abd922c090b56a24d9d49202bb7877d6",
+    "cleanCliInvocations": 2,
+    "operations": ["derive-key-certificate", "derive-pkcs12"]
+  },
+  "helper": {
+    "bundleIdentifier": "org.chaostudio.forme.gate-b.core-local",
+    "executable": "Contents/MacOS/FormeCoreLocal",
+    "argument": "--gate-b-core-transient-probe",
+    "seatbeltApplied": false,
+    "transientProviderProfileExecutionCount": 0,
+    "realProviderChildStarts": 0,
+    "maximumCandidateBytes": 32768,
+    "localizedReason": "Approve this exact Forme demo response for one synthetic handoff.",
+    "authorityDeadlineCeilingSeconds": 900,
+    "receiptExitGraceMilliseconds": 2000
+  },
+  "bundle": {
+    "preSignDirectories": ["Contents", "Contents/MacOS", "Contents/Resources"],
+    "preSignFiles": ["Contents/Info.plist", "Contents/MacOS/FormeCoreLocal", "Contents/Resources/forme-core-transient-response.sb"],
+    "postSignDirectories": ["Contents", "Contents/MacOS", "Contents/Resources", "Contents/_CodeSignature"],
+    "postSignFiles": ["Contents/Info.plist", "Contents/MacOS/FormeCoreLocal", "Contents/Resources/forme-core-transient-response.sb", "Contents/_CodeSignature/CodeResources"]
+  },
+  "customKeychainSequence": [
+    { "ordinal": 1, "tool": "/usr/bin/security", "operation": "create-keychain", "phase": "setup" },
+    { "ordinal": 2, "tool": "/usr/bin/security", "operation": "unlock-keychain", "phase": "setup" },
+    { "ordinal": 3, "tool": "/usr/bin/security", "operation": "import-pkcs12", "phase": "setup" },
+    { "ordinal": 4, "tool": "/usr/bin/security", "operation": "set-key-partition-list", "phase": "setup" },
+    { "ordinal": 5, "tool": "/usr/bin/security", "operation": "add-generic-password", "phase": "setup" },
+    { "ordinal": 6, "tool": "/usr/bin/security", "operation": "find-generic-password", "phase": "setup" },
+    { "ordinal": 7, "tool": "/usr/bin/security", "operation": "find-identity", "phase": "setup-inventory" },
+    { "ordinal": 8, "tool": "/usr/bin/codesign", "operation": "sign-private-key-use", "phase": "sign" },
+    { "ordinal": 9, "tool": "/usr/bin/security", "operation": "delete-generic-password", "phase": "cleanup" },
+    { "ordinal": 10, "tool": "/usr/bin/security", "operation": "delete-identity", "phase": "cleanup" },
+    { "ordinal": 11, "tool": "/usr/bin/security", "operation": "lock-keychain", "phase": "cleanup" },
+    { "ordinal": 12, "tool": "/usr/bin/security", "operation": "delete-keychain", "phase": "cleanup" }
+  ],
+  "cleanProcessCounts": {
+    "customTemporaryKeychainOperations": 12,
+    "securityLifecycleSubcommands": 10,
+    "identityInventoryReads": 1,
+    "signingPrivateKeyUses": 1,
+    "defaultKeychainMetadataReads": 2,
+    "searchListMetadataReads": 2,
+    "securityCliInvocations": 15,
+    "codesignCliInvocations": 5,
+    "localAuthenticationCeremoniesMaximum": 1,
+    "reviewsMaximum": 1,
+    "handoffsMaximum": 1
+  },
+  "signing": {
+    "selfSignedSyntheticOnly": true,
+    "options": "runtime",
+    "timestamp": "none",
+    "deep": false,
+    "entitlementsDictionaryEntries": 0,
+    "designatedRequirementTemplate": "designated => identifier \"org.chaostudio.forme.gate-b.core-local\" and certificate leaf = H\"<exact-der-sha1>\"",
+    "trustClaim": false,
+    "notarizationClaim": false,
+    "teamIdClaim": false
+  },
+  "candidateFlow": ["spawn-helper-with-stdin-open", "live-pid-path-hash-check", "pre-body-inet-inet6-zero-sample", "spawn-synthetic-feeder", "exact-frame-write", "body-free-completion-marker", "feeder-exit-zero", "close-guard-fd-to-release-eof", "helper-mlock-before-first-byte", "bounded-parse-and-canonical-validate", "device-owner-authentication", "noneditable-review", "optional-count-and-discard", "body-free-receipt", "cleanup"],
+  "syntheticCandidateVector": {
+    "frameSha256": "sha256:0576ca281013f55670897488801dcfef98fb00db08a303fcbd8a028f97f2c001",
+    "frameBytes": 1390,
+    "candidateHash": "sha256:7fec81b95698754e4bd6fc2c8b126e61f3f1a9c62881d4f60820ca0bff1fe617"
+  },
+  "receipt": {
+    "maximumBytes": 4096,
+    "framing": "one-canonical-json-plus-one-lf",
+    "stderrBytes": 0,
+    "successExit": 0,
+    "controlledFailureExit": 70,
+    "preReceiptFailureExit": 64,
+    "unknownWithoutValidatedReceipt": ["presenceCeremonies", "handoffCount", "helperControlledZeroizationPassed", "helperCleanupPassed"]
+  },
+  "fakeDeathCases": ["feeder-before-byte", "feeder-mid-frame", "feeder-full-nonzero", "feeder-full-zero", "marker-missing", "marker-early", "marker-duplicate", "marker-malformed", "marker-wrong-fd", "helper-before-read", "helper-mid-read", "helper-before-la", "helper-during-la", "helper-during-review", "helper-post-count-pre-receipt", "helper-post-receipt-pre-exit", "receipt-partial", "receipt-duplicate", "receipt-oversize", "receipt-trailing", "receipt-wrong-exit", "receipt-stderr"],
+  "constructionExecutor": "fake_only",
+  "strongestConstructionVerdict": "MACOS_RETRY_READY_YELLOW",
+  "strongestFutureLaneVerdict": "GREEN_TRANSIENT_MACOS_MECHANISM_ONLY",
+  "fullPersistentLaneStatus": "UNPROVEN_POST_DEMO"
+}

@@ -86,7 +86,7 @@ export function expectedCoreMacOSBuildRecipe() {
       customTemporaryKeychainOperations: 12,
       customOperationBreakdown: { securityLifecycleSubcommands: 10, identityInventoryReads: 1, signingPrivateKeyUses: 1 },
       certificateFingerprintBinding: "OBSERVE_AFTER_ONE_RUN_CREATION_THEN_VALIDATE_BEFORE_SIGNING",
-      physicalAdapterStatus: "REQUIRES_SEPARATE_OWNER_GRANTED_CONSTRUCTION",
+      physicalAdapterStatus: "PHYSICAL_ADAPTER_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED",
     },
     claims: {
       candidatePersistence: false,

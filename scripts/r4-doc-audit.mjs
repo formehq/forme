@@ -16,6 +16,8 @@ const root = resolve(import.meta.dirname, "..");
 const finalMode = process.argv.includes("--final");
 const retryConstructionMode = process.argv.includes("--retry-construction");
 const coreConstructionMode = process.argv.includes("--core-construction");
+const physicalConstructionMode = process.argv.includes("--physical-construction") || process.argv.includes("--physical-construction-final");
+const physicalConstructionFinalMode = process.argv.includes("--physical-construction-final");
 const files = {
   packet: "docs/R4-TECHNICAL-CONTROL-PACKET.md",
   verification: "docs/R4-GATE-A-VERIFICATION.md",
@@ -501,9 +503,166 @@ if (coreConstructionMode) {
   };
 }
 
+let physicalConstruction = null;
+if (physicalConstructionMode) {
+  const proposalHead = "a45ea061e8e92f247597787e36ecfe52740b216a";
+  const proposalTree = "89b28903fc34e985a17e8f3fdc4bfd7d0972880e";
+  const packetPath = "docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md";
+  const reviewPath = "docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md";
+  const evidencePath = "docs/evidence/r4-gate-b-physical-adapter-construction.json";
+  const publicReceiptPath = "docs/evidence/r4-gate-b-host-binding-public.json";
+  const outputPaths = new Set([
+    evidencePath, publicReceiptPath,
+    "docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md",
+    "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md",
+    "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md",
+    "README.md", "docs/README.md", "docs/CONTROL.md", "docs/ROADMAP.md", "docs/DECISIONS.md",
+  ]);
+  const allowed = new Set(`
+schemas/r4/gate-b-core/host-binding-input.schema.json
+schemas/r4/gate-b-core/host-binding-capsule.schema.json
+schemas/r4/gate-b-core/host-binding-public-receipt.schema.json
+schemas/r4/gate-b-core/physical-runner-contract.json
+schemas/r4/gate-b-core/physical-construction-evidence.schema.json
+schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json
+schemas/r4/gate-b-core/physical-retry-evidence.schema.json
+schemas/r4/gate-b-core/postgres/physical-adapter-contract.json
+schemas/r4/gate-b-core/postgres/race-catalog.json
+schemas/r4/gate-b-core/postgres/race-byte-index.json
+schemas/r4/gate-b-core/macos/physical-adapter-contract.json
+scripts/r4-gate-b-host-binding.mjs
+scripts/r4-gate-b-physical-port.mjs
+scripts/r4-gate-b-physical-runner.mjs
+fixtures/r4-gate-b-core/macos/fake-provider-child.mjs
+fixtures/r4-gate-b-core/macos/fake-helper-child.mjs
+fixtures/r4-gate-b-core/macos/synthetic-feeder.mjs
+fixtures/r4-gate-b-core/postgres/core-race-setup.sql
+fixtures/r4-gate-b-core/postgres/core-race-worker.sql
+fixtures/r4-gate-b-core/postgres/core-race-verify.sql
+test/r4-gate-b-core/host-binding.test.ts
+test/r4-gate-b-core/physical-runner.test.ts
+test/r4-gate-b-core/postgres-races.test.ts
+test/r4-gate-b-core/macos-process-death.test.ts
+schemas/r4/gate-b-core/README.md
+schemas/r4/gate-b-core/artifact-index.json
+schemas/r4/gate-b-core/runtime-boundary.json
+schemas/r4/gate-b-core/postgres-contract.md
+schemas/r4/gate-b-core/codex-zero-call-contract.json
+schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql
+schemas/r4/gate-b-core/macos/build-recipe.json
+schemas/r4/gate-b-core/macos/transient-candidate-contract.json
+fixtures/r4-gate-b-core/postgres/core-happy-path.sql
+fixtures/r4-gate-b-core/postgres/core-errors.sql
+fixtures/r4-gate-b-core/postgres/core-races.sql
+packages/r4-codex-adapter/src/zero-call-physical.ts
+scripts/r4-doc-audit.mjs
+scripts/r4-gate-b-path-fence.mjs
+scripts/r4-gate-b-core-postgres.mjs
+scripts/r4-gate-b-codex-probe.mjs
+scripts/r4-gate-b-macos-core.mjs
+test/r4-gate-b-core/postgres-static.test.ts
+test/r4-gate-b-core/postgres-adapter.test.ts
+test/r4-gate-b-core/codex-physical-adapter.test.ts
+test/r4-gate-b-core/macos-core-adapter.test.ts
+native/macos/Sources/FormeCoreLocal/CoreLauncher.swift
+native/macos/Sources/FormeCoreLocal/CoreLockedMemory.swift
+native/macos/Sources/FormeCoreLocal/CorePhysicalEvidence.swift
+native/macos/Sources/FormeCoreLocal/CoreProcessSupervisor.swift
+native/macos/Sources/FormeCoreLocal/CountingHandoffPort.swift
+native/macos/Sources/FormeCoreLocal/TransientCandidateReviewWindow.swift
+native/macos/Sources/FormeCoreLocal/TransientCandidateSession.swift
+native/macos/Sources/FormeCoreLocal/UserPresenceAuthorizer.swift
+native/macos/Tests/FormeCoreLocalTests/TransientCandidateTests.swift
+docs/evidence/r4-gate-b-physical-adapter-construction.json
+docs/evidence/r4-gate-b-host-binding-public.json
+docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md
+docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md
+docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md
+README.md
+docs/README.md
+docs/CONTROL.md
+docs/ROADMAP.md
+docs/DECISIONS.md
+`.trim().split("\n"));
+  const gitEnvironment = { PATH: "/usr/bin:/bin:/usr/sbin:/sbin", GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
+  const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, encoding: "utf8", maxBuffer: 16_777_216 });
+  if (git(["rev-parse", `${proposalHead}^{tree}`]).trim() !== proposalTree) throw new Error("Physical Construction proposal tree drifted");
+  if (sha256(readFileSync(join(root, packetPath))) !== "7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06") throw new Error("Physical Construction Packet drifted");
+  if (sha256(readFileSync(join(root, reviewPath))) !== "27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9") throw new Error("Physical Construction Owner Review drifted");
+  const changedPaths = [...new Set([
+    ...git(["diff", "--name-only", `${proposalHead}..HEAD`, "--"]).split("\n"),
+    ...git(["diff", "--name-only", "--"]).split("\n"),
+    ...git(["diff", "--cached", "--name-only", "--"]).split("\n"),
+    ...git(["ls-files", "--others", "--exclude-standard", "--"]).split("\n"),
+  ].filter(Boolean))].sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  const unlisted = changedPaths.filter((value) => !allowed.has(value));
+  if (unlisted.length > 0) throw new Error(`Physical Construction unlisted workset:${unlisted.join(",")}`);
+  if (changedPaths.includes("package-lock.json") || sha256(text("package-lock.json")) !== "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812") throw new Error("Physical Construction package-lock drifted");
+  for (const [immutablePath, expected] of [
+    ["schemas/r4/gate-b-core/evidence.schema.json", "34bda9a95ea6aa13047aa12c25f656e051a95c107416d4a2c50c20ba2343a9e1"],
+    ["schemas/r4/gate-b-core/macos/evidence.schema.json", "08eb1e8331ddcb1fd1c6c84762ad285550420a9ef685394db2415c033b53f81f"],
+    ["schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb", "0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce"],
+  ]) if (sha256(readFileSync(join(root, immutablePath))) !== expected) throw new Error(`Physical Construction immutable drift:${immutablePath}`);
+  const artifactIndexPath = "schemas/r4/gate-b-core/artifact-index.json";
+  const artifactIndex = JSON.parse(text(artifactIndexPath));
+  const actualArtifacts = filesBelow("schemas/r4/gate-b-core").filter((value) => value !== artifactIndexPath);
+  const indexedArtifacts = artifactIndex.files.map((entry) => entry.path);
+  if (JSON.stringify(actualArtifacts) !== JSON.stringify(indexedArtifacts)) throw new Error("Physical Core artifact index path drift");
+  const artifactLines = artifactIndex.files.map((entry) => {
+    const actual = `sha256:${sha256(readFileSync(join(root, entry.path)))}`;
+    if (actual !== entry.sha256) throw new Error(`Physical Core artifact hash drift:${entry.path}`);
+    return `${actual.slice(7)}  ${entry.path}\n`;
+  }).join("");
+  if (artifactIndex.fileCount !== actualArtifacts.length || artifactIndex.aggregateSha256 !== `sha256:${sha256(artifactLines)}`) throw new Error("Physical Core artifact aggregate drift");
+  if (artifactIndex.retryExecutionGrant !== "NOT_REQUESTED" || artifactIndex.firstProviderCallTestGrant !== "NOT_REQUESTED") throw new Error("Physical artifact index opened grant");
+  for (const schemaPath of [
+    "schemas/r4/gate-b-core/host-binding-input.schema.json",
+    "schemas/r4/gate-b-core/host-binding-capsule.schema.json",
+    "schemas/r4/gate-b-core/host-binding-public-receipt.schema.json",
+    "schemas/r4/gate-b-core/physical-construction-evidence.schema.json",
+    "schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json",
+    "schemas/r4/gate-b-core/physical-retry-evidence.schema.json",
+  ]) new Ajv2020({ strict: true, strictSchema: true, allErrors: true, validateFormats: false }).compile(JSON.parse(text(schemaPath)));
+  const boundary = JSON.parse(text("schemas/r4/gate-b-core/runtime-boundary.json"));
+  if (boundary.status !== "PHYSICAL_ADAPTERS_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED" || boundary.authority.hostBindingAdapterConstructionGrant !== "APPROVED" || boundary.authority.retryExecutionGrant !== "NOT_REQUESTED" || boundary.authority.firstProviderCallTestGrant !== "NOT_REQUESTED" || boundary.continuity.aggregateRetryVerdict !== "YELLOW") throw new Error("Physical runtime boundary claim drift");
+  let implementationFileCount = null;
+  if (physicalConstructionFinalMode) {
+    for (const value of outputPaths) if (!existsSync(join(root, value))) throw new Error(`Physical output missing:${value}`);
+    const evidence = JSON.parse(text(evidencePath));
+    const evidenceSchema = JSON.parse(text("schemas/r4/gate-b-core/physical-construction-evidence.schema.json"));
+    const validateEvidence = new Ajv2020({ strict: true, strictSchema: true, allErrors: true, validateFormats: false });
+    if (!validateEvidence.compile(evidenceSchema)(evidence)) throw new Error(`Physical evidence schema mismatch:${JSON.stringify(validateEvidence.errors)}`);
+    const receipt = JSON.parse(text(publicReceiptPath));
+    const receiptSchema = JSON.parse(text("schemas/r4/gate-b-core/host-binding-public-receipt.schema.json"));
+    if (!validateEvidence.compile(receiptSchema)(receipt)) throw new Error(`Host Binding public receipt schema mismatch:${JSON.stringify(validateEvidence.errors)}`);
+    if (`sha256:${sha256(readFileSync(join(root, publicReceiptPath)))}` !== evidence.hostBindingPublicReceiptSha256) throw new Error("Host Binding public receipt evidence hash drift");
+    if (git(["rev-parse", `${evidence.implementationHead}^{tree}`]).trim() !== evidence.implementationTree || git(["merge-base", evidence.implementationHead, "HEAD"]).trim() !== evidence.implementationHead) throw new Error("Physical implementation lineage drift");
+    const implementationPaths = git(["diff", "--name-only", `${proposalHead}..${evidence.implementationHead}`, "--"]).split("\n").filter(Boolean).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+    const implementationLines = implementationPaths.map((value) => `sha256:${sha256(git(["show", `${evidence.implementationHead}:${value}`]))}  ${value}\n`).join("");
+    implementationFileCount = implementationPaths.length;
+    if (evidence.constructedFileCount !== implementationPaths.length || evidence.constructedFilesAggregateSha256 !== `sha256:${sha256(implementationLines)}`) throw new Error("Physical implementation aggregate drift");
+    for (const value of outputPaths) {
+      const output = text(value);
+      if (output.includes("@@") || output.includes("PENDING_FINAL") || output.includes("__PACKET_SHA256__")) throw new Error(`Physical output placeholder:${value}`);
+    }
+  }
+  physicalConstruction = {
+    schemaVersion: "r4_gate_b_physical_static_audit.v1",
+    phase: physicalConstructionFinalMode ? "final" : "phase-a",
+    changedPathCount: changedPaths.length,
+    implementationFileCount,
+    artifactCount: actualArtifacts.length,
+    unlistedPathCount: 0,
+    packageLockUnchanged: true,
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+    status: "passed",
+  };
+}
+
 const report = {
   schemaVersion: "r4_gate_document_audit.v1",
-  mode: finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
+  mode: physicalConstructionMode ? (physicalConstructionFinalMode ? "physical-construction-final" : "physical-construction-phase-a") : finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
   approvedPacketSha256: `sha256:${packetHash}`,
   crosswalkRowCount: actualRows.length,
   localLinksChecked: Object.values(documents).reduce(
@@ -513,6 +672,7 @@ const report = {
   firstProviderCallGrant: "not_requested",
   ...(retryConstruction === null ? {} : { retryConstruction }),
   ...(coreConstruction === null ? {} : { coreConstruction }),
+  ...(physicalConstruction === null ? {} : { physicalConstruction }),
   status: "passed",
 };
 

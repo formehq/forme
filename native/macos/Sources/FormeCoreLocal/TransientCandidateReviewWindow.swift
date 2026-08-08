@@ -3,7 +3,7 @@ import CoreText
 import CryptoKit
 import Foundation
 
-enum CandidateReviewDecision: Equatable { case approveExact, discard }
+enum CandidateReviewDecision: Equatable { case approveExact, discard, authorityExpired }
 
 struct CandidateReviewPolicy: Equatable {
     let editable = false
@@ -24,14 +24,19 @@ struct CandidateReviewPolicy: Equatable {
 protocol CandidateReviewPort: AnyObject {
     var reviewCount: Int { get }
     var policy: CandidateReviewPolicy { get }
-    func reviewExactCandidate(_ bytes: CoreLockedBuffer) async -> CandidateReviewDecision
+    func reviewExactCandidate(_ bytes: CoreLockedBuffer, authorityDeadline: Date) async -> CandidateReviewDecision
 }
 
 @MainActor
-private final class CoreReviewDecisionBox: NSObject {
+private final class CoreReviewDecisionBox: NSObject, NSWindowDelegate {
     var value: CandidateReviewDecision = .discard
     @objc func approve() { value = .approveExact; NSApplication.shared.stopModal() }
     @objc func discard() { value = .discard; NSApplication.shared.stopModal() }
+    @objc func expire() { value = .authorityExpired; NSApplication.shared.stopModal() }
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        discard()
+        return true
+    }
 }
 
 @MainActor
@@ -76,8 +81,9 @@ final class TransientCandidateReviewWindow: CandidateReviewPort {
     private(set) var reviewCount = 0
     let policy = CandidateReviewPolicy()
 
-    func reviewExactCandidate(_ bytes: CoreLockedBuffer) async -> CandidateReviewDecision {
+    func reviewExactCandidate(_ bytes: CoreLockedBuffer, authorityDeadline: Date) async -> CandidateReviewDecision {
         reviewCount += 1
+        guard authorityDeadline > Date() else { return .authorityExpired }
         let application = NSApplication.shared
         application.setActivationPolicy(.accessory)
         let window = NSWindow(
@@ -98,10 +104,21 @@ final class TransientCandidateReviewWindow: CandidateReviewPort {
         content.addSubview(discard)
         window.contentView = content
         let box = CoreReviewDecisionBox()
+        window.delegate = box
         approve.target = box; approve.action = #selector(CoreReviewDecisionBox.approve)
         discard.target = box; discard.action = #selector(CoreReviewDecisionBox.discard)
+        let timer = Timer(
+            timeInterval: max(0, authorityDeadline.timeIntervalSinceNow),
+            target: box,
+            selector: #selector(CoreReviewDecisionBox.expire),
+            userInfo: nil,
+            repeats: false
+        )
+        RunLoop.main.add(timer, forMode: .modalPanel)
         application.activate(ignoringOtherApps: true)
         application.runModal(for: window)
+        timer.invalidate()
+        window.delegate = nil
         window.orderOut(nil)
         window.contentView = nil
         return box.value
@@ -115,8 +132,9 @@ final class FakeCandidateReviewPort: CandidateReviewPort {
     private(set) var reviewedBodySha256: String?
     let policy = CandidateReviewPolicy()
     init(_ decision: CandidateReviewDecision) { self.decision = decision }
-    func reviewExactCandidate(_ bytes: CoreLockedBuffer) async -> CandidateReviewDecision {
+    func reviewExactCandidate(_ bytes: CoreLockedBuffer, authorityDeadline: Date) async -> CandidateReviewDecision {
         reviewCount += 1
+        _ = authorityDeadline
         return bytes.withUnsafeBytes { raw in
             guard let base = raw.baseAddress, !raw.isEmpty else { return .discard }
             let digest = SHA256.hash(data: Data(bytesNoCopy: UnsafeMutableRawPointer(mutating: base), count: raw.count, deallocator: .none))

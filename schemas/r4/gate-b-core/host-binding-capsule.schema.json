@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/host-binding-capsule.schema.json",
+  "title": "Private R4 Gate B Host Binding Capsule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "hostBindingId", "privateSalt", "createdAt", "expiresAt", "implementationHead", "implementationTree", "authority", "boundFiles", "docker", "macos", "invalidationRules"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_host_binding_capsule.v1" },
+    "hostBindingId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "privateSalt": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "implementationHead": { "$ref": "#/$defs/gitObject" },
+    "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["constructionPacketSha256", "constructionOwnerReviewSha256", "approvedProposalHead", "approvedProposalTree", "retryExecutionGrant", "firstProviderCallGrant"],
+      "properties": {
+        "constructionPacketSha256": { "$ref": "#/$defs/sha" },
+        "constructionOwnerReviewSha256": { "$ref": "#/$defs/sha" },
+        "approvedProposalHead": { "$ref": "#/$defs/gitObject" },
+        "approvedProposalTree": { "$ref": "#/$defs/gitObject" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+        "firstProviderCallGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "boundFiles": {
+      "type": "array",
+      "minItems": 20,
+      "maxItems": 32,
+      "items": { "$ref": "#/$defs/fileIdentity" }
+    },
+    "docker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cliPath", "socketPath", "socketIdentity", "clientVersion", "clientApiVersion", "serverVersion", "serverApiVersion", "serverOs", "serverArch", "imageReference", "repoDigest", "localImageId", "imageOs", "imageArch", "imageSizeBytes", "unixSocketRequests"],
+      "properties": {
+        "cliPath": { "type": "string" },
+        "socketPath": { "type": "string" },
+        "socketIdentity": { "$ref": "#/$defs/socketIdentity" },
+        "clientVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "clientApiVersion": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "serverVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "serverApiVersion": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "serverOs": { "const": "linux" },
+        "serverArch": { "const": "arm64" },
+        "imageReference": { "const": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74" },
+        "repoDigest": { "type": "string", "pattern": "^postgres@sha256:[0-9a-f]{64}$" },
+        "localImageId": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "imageOs": { "const": "linux" },
+        "imageArch": { "const": "arm64" },
+        "imageSizeBytes": { "type": "integer", "minimum": 1 },
+        "unixSocketRequests": { "const": 2 }
+      }
+    },
+    "macos": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["platform", "productVersion", "buildVersion", "architecture", "developerRoot", "sdkPath", "sdkVersion", "swiftcPath", "swiftVersion", "opensslVersion", "nodeVersion", "readOnlyInspectionCalls"],
+      "properties": {
+        "platform": { "const": "darwin-arm64" },
+        "productVersion": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+){1,2}$" },
+        "buildVersion": { "type": "string", "pattern": "^[A-Za-z0-9.]+$" },
+        "architecture": { "const": "arm64" },
+        "developerRoot": { "type": "string" },
+        "sdkPath": { "type": "string" },
+        "sdkVersion": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "swiftcPath": { "type": "string" },
+        "swiftVersion": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "opensslVersion": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "nodeVersion": { "type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "readOnlyInspectionCalls": { "const": 9 }
+      }
+    },
+    "invalidationRules": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["expired", "implementation_head_drift", "implementation_tree_drift", "runner_hash_drift", "contract_hash_drift", "profile_hash_drift", "bound_file_identity_drift", "bound_file_hash_drift", "path_mode_owner_drift", "docker_socket_drift", "docker_image_drift", "platform_drift"] }
+    }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logicalName", "path", "sha256", "size", "mode", "uid", "gid", "device", "inode", "nlink", "mtimeMilliseconds"],
+      "properties": {
+        "logicalName": { "type": "string", "pattern": "^[a-z0-9._-]+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha" },
+        "size": { "type": "integer", "minimum": 0 },
+        "mode": { "type": "integer", "minimum": 0 },
+        "uid": { "type": "integer", "minimum": 0 },
+        "gid": { "type": "integer", "minimum": 0 },
+        "device": { "type": "string", "pattern": "^[0-9]+$" },
+        "inode": { "type": "string", "pattern": "^[0-9]+$" },
+        "nlink": { "const": 1 },
+        "mtimeMilliseconds": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "socketIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["size", "mode", "uid", "gid", "device", "inode", "nlink", "mtimeMilliseconds"],
+      "properties": {
+        "size": { "type": "integer", "minimum": 0 },
+        "mode": { "type": "integer", "minimum": 0 },
+        "uid": { "type": "integer", "minimum": 0 },
+        "gid": { "type": "integer", "minimum": 0 },
+        "device": { "type": "string", "pattern": "^[0-9]+$" },
+        "inode": { "type": "string", "pattern": "^[0-9]+$" },
+        "nlink": { "type": "integer", "minimum": 1 },
+        "mtimeMilliseconds": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

@@ -398,6 +398,10 @@ if (args.length === 1 && args[0] === "--version") {
       if (behavior === "ignore_term") return;
       if (behavior === "server_request") { process.stdout.write(JSON.stringify({ id: 9, method: "thread/start", params: {} }) + "\\n"); return; }
       if (behavior === "invalid_result") { process.stdout.write(JSON.stringify({ id: 0, result: { userAgent: 7 } }) + "\\n"); return; }
+      if (behavior === "response_then_partial") {
+        process.stdout.write(JSON.stringify({ id: 0, result: ${exactRead("fixtures/r4-gate-b-core/codex/initialize-result.json").trim()}.result }) + "\\n{");
+        return;
+      }
       if (behavior === "response_then_unknown") {
         process.stdout.write(JSON.stringify({ id: 0, result: ${exactRead("fixtures/r4-gate-b-core/codex/initialize-result.json").trim()}.result }) + "\\n", () => {
           setTimeout(() => process.stdout.write(JSON.stringify({ method: "thread/started", params: {} }) + "\\n"), 20);
@@ -432,7 +436,7 @@ function spawnAndWait(executable, argv, options) {
 }
 
 export async function createCoreProcessFakeFixture(constructionTempRoot, behavior = "clean") {
-  if (!["clean", "descendant", "stubborn_descendant", "ignore_term", "server_request", "invalid_result", "response_then_unknown", "oversized_line"].includes(behavior)) fail("CORE_PROCESS_BEHAVIOR_DENIED");
+  if (!["clean", "descendant", "stubborn_descendant", "ignore_term", "server_request", "invalid_result", "response_then_partial", "response_then_unknown", "oversized_line"].includes(behavior)) fail("CORE_PROCESS_BEHAVIOR_DENIED");
   const temporary = canonicalTempRoot(constructionTempRoot);
   const root = path.join(temporary, `codex-core-process-${behavior}`);
   if (fs.existsSync(root)) fail("CORE_PROCESS_ROOT_EXISTS");
@@ -589,13 +593,16 @@ export function createCoreProcessSpawnPort(fixture, timing = {}) {
             }
           }
           if (receive.length > 1_048_576) { protocolError = new Error("CODEX_WIRE_LINE_TOO_LARGE"); requestStop(); }
-          if (protocolError === null && shouldWriteInitialized) {
-            child.stdin.write(guardClientMessage(initializedMessage()));
+          if (protocolError === null && shouldWriteInitialized && receive.length !== 0) {
+            protocolError = new Error("CODEX_WIRE_PARTIAL_AFTER_RESPONSE");
+            requestStop();
+          }
+          if (protocolError === null && shouldWriteInitialized && receive.length === 0) {
+            child.stdin.end(guardClientMessage(initializedMessage()));
             clientWrites += 1;
             initializeClientWrites = clientWrites;
             initializedWritten = true;
             initializedAt = Date.now();
-            child.stdin.end();
           }
         }
       });
