@@ -5,7 +5,7 @@
   "retryExecutionGrant": "NOT_REQUESTED",
   "firstProviderCallTestGrant": "NOT_REQUESTED",
   "fileCount": 29,
-  "aggregateSha256": "sha256:2d13f972ed9c512817c6b6acf625d1f0e7fa70548253eebbca4c7330e1cd57fb",
+  "aggregateSha256": "sha256:b18f92a91bf31271ad01773807bdbb01ed4e714a51830774290837d257545cdb",
   "files": [
     {
       "path": "schemas/r4/gate-b-core/README.md",
@@ -85,7 +85,7 @@
     },
     {
       "path": "schemas/r4/gate-b-core/physical-runner-contract.json",
-      "sha256": "sha256:f704706571b7e9fec65284f3d88fe4157dd63eacc5de2fcdbbbfb2f281371c43"
+      "sha256": "sha256:def50fae98a3452c1ac4053cb39168334a6daf930e0edc05cd64cea2875de9e2"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres-contract.md",

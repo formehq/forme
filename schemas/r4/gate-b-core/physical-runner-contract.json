@@ -34,6 +34,8 @@
     "temporaryRootEnvironmentAuthority": false,
     "temporaryRootCallerAuthority": false,
     "productionPhaseABranchGuardChanged": false,
+    "productionBlockedStartNodeIdentityChanged": false,
+    "standaloneBlockedStartUnsupportedNodeRuntime": "fail-closed-before-child-start-and-remove-private-test-root",
     "postOutputOrDetachedConstructionEntry": "fail-closed-before-journal-root-or-effect",
     "historicalHostBindingAttemptRebound": false,
     "historicalHostBindingAttemptRerun": false,

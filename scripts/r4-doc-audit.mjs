@@ -728,8 +728,14 @@ docs/DECISIONS.md
     } else {
       correctionHead = reviewTip;
     }
-    const correctionLine = git(["rev-list", "--parents", "-n", "1", correctionHead]).trim().split(" ");
-    if (correctionLine.length !== 2 || correctionLine[1] !== historicalOutputHead || !exactPathSet(committedPaths(historicalOutputHead, correctionHead), correctionPaths)) throw new Error("Physical post-I correction lineage drifted");
+    const correctionCommits = git(["rev-list", "--ancestry-path", "--reverse", `${historicalOutputHead}..${correctionHead}`]).split("\n").filter(Boolean);
+    let expectedCorrectionParent = historicalOutputHead;
+    for (const commit of correctionCommits) {
+      const correctionLine = git(["rev-list", "--parents", "-n", "1", commit]).trim().split(" ");
+      if (correctionLine.length !== 2 || correctionLine[1] !== expectedCorrectionParent) throw new Error("Physical post-I correction commit chain drifted");
+      expectedCorrectionParent = commit;
+    }
+    if (correctionCommits.length < 1 || expectedCorrectionParent !== correctionHead || !exactPathSet(committedPaths(historicalOutputHead, correctionHead), correctionPaths)) throw new Error("Physical post-I correction lineage drifted");
     if (correctionOutputHead === null && reviewTip !== correctionHead) throw new Error("Physical correction output lineage drifted");
     for (const value of requiredOutputPaths) if (!existsSync(join(root, value))) throw new Error(`Physical output missing:${value}`);
     const readCanonicalJson = (relativePath, label) => {

@@ -79,6 +79,14 @@ const isPostOutputAuthorityFailure = (error: unknown) => error instanceof Error
   && (error.code === "PHYSICAL_BRANCH_DRIFT" || error.code.startsWith("PHYSICAL_PHASE_A_WORKSET_ESCAPE:"))
   && "verdict" in error
   && error.verdict === "RED";
+const isUnsupportedNodeRuntimeFailure = (error: unknown) => error instanceof Error
+  && "code" in error
+  && error.code === "BLOCKED_SUPERVISOR_NODE_FILE_UNSAFE"
+  && "verdict" in error
+  && error.verdict === "RED";
+const standaloneBlockedStartRoots = () => fs.readdirSync(CANONICAL_SYSTEM_TEMP_ROOT)
+  .filter((name) => name.startsWith("forme-r4-blocked-start-"))
+  .sort();
 const constructionJournalFixtureRoot = () => {
   const fixtureRoot = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-construction-journal-")));
   fs.chmodSync(fixtureRoot, 0o700);
@@ -171,6 +179,8 @@ test("blocked-start supervisor bytes and logical process-group accounting are fr
     temporaryRootEnvironmentAuthority: false,
     temporaryRootCallerAuthority: false,
     productionPhaseABranchGuardChanged: false,
+    productionBlockedStartNodeIdentityChanged: false,
+    standaloneBlockedStartUnsupportedNodeRuntime: "fail-closed-before-child-start-and-remove-private-test-root",
     postOutputOrDetachedConstructionEntry: "fail-closed-before-journal-root-or-effect",
     historicalHostBindingAttemptRebound: false,
     historicalHostBindingAttemptRerun: false,
@@ -276,7 +286,14 @@ test("blocked-start supervisor bytes and logical process-group accounting are fr
 });
 
 test("blocked-start launcher releases one owned fake target by same-PID exec replacement", async () => {
-  const result = await exerciseBlockedStartProtocolForConstruction();
+  const rootsBefore = standaloneBlockedStartRoots();
+  let result;
+  try { result = await exerciseBlockedStartProtocolForConstruction(); }
+  catch (error) {
+    assert.equal(isUnsupportedNodeRuntimeFailure(error), true);
+    assert.deepEqual(standaloneBlockedStartRoots(), rootsBefore, "unsupported CI Node must fail before child start and remove its private test root");
+    return;
+  }
   assert.deepEqual(result, {
     status: "GREEN",
     fakeProcessStarts: 6,
@@ -292,6 +309,21 @@ test("blocked-start launcher releases one owned fake target by same-PID exec rep
       residueCount: 0,
     },
   });
+  assert.deepEqual(standaloneBlockedStartRoots(), rootsBefore);
+});
+
+test("blocked-start preserves production Node identity checks and cleans an unsupported toolcache runtime", async () => {
+  const rootsBefore = standaloneBlockedStartRoots();
+  const originalLstat = fs.lstatSync;
+  const mutableFs = fs as unknown as { lstatSync: typeof fs.lstatSync };
+  mutableFs.lstatSync = ((candidate: fs.PathLike, options?: fs.StatSyncOptions) => {
+    const observed = originalLstat(candidate, options as never);
+    if (String(candidate) !== process.execPath || typeof observed.nlink !== "number") return observed;
+    return Object.assign(Object.create(Object.getPrototypeOf(observed)), observed, { nlink: 2 });
+  }) as typeof fs.lstatSync;
+  try { await assert.rejects(exerciseBlockedStartProtocolForConstruction(), isUnsupportedNodeRuntimeFailure); }
+  finally { mutableFs.lstatSync = originalLstat; }
+  assert.deepEqual(standaloneBlockedStartRoots(), rootsBefore);
 });
 
 test("macOS direct helper and feeder remain gated until their started journals are durable", async () => {
