@@ -787,3 +787,42 @@ Seatbelt, signing/Keychain/LocalAuthentication, Retry, provider call, real
 Guest/Room data, Gate C, deployment, merge, public traffic or spend. Those
 proposal bytes must return with exact hashes and commit/tree before the Owner
 may open the requested Host-Binding / Adapter Construction Grant.
+
+## 2026-08-08 — Physical Adapter Construction built; sole Host Binding attempt returned Yellow
+
+**Decision:** the Owner approved exact R4 Gate B Physical Adapter + Host Binding
+Construction Packet v0.1 at
+`sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06`
+and its immutable Owner Review at
+`sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9`,
+bound to proposal HEAD/tree
+`a45ea061e8e92f247597787e36ecfe52740b216a` /
+`89b28903fc34e985a17e8f3fdc4bfd7d0972880e`. The fixed Host Binding input was
+prepared, the Host-Binding / Adapter Construction Grant was `APPROVED`, and
+Retry Execution and First Provider-Call Test remained `NOT_REQUESTED`. That
+grant authorized exactly one Construction + Host Binding sequence and is now
+consumed; it does not authorize a re-run or Retry.
+
+**Reason:** the approved boundary first needed one byte-frozen, fake-validated
+physical machine, then one bounded read-only attempt to bind it to the
+Owner-supplied local environment. A binding identity failure must return to the
+Owner without relaxing file identity, starting inspectors, or converting the
+Construction grant into Retry authority.
+
+**Effect:** Physical Adapter Construction completed at final implementation
+`I` / tree
+`92c6c3f8896494aed699671a04a93a09fb59087d` /
+`cf2ce5567c601fff1ad709e565dde41cf9c3540d`. The unified runner, corrected
+PostgreSQL race machine, Codex zero-call lane and transient macOS lane were
+built and fake-validated with zero real physical effects. Exactly one approved
+Host Binding attempt then found a supplied binding path symlinked before any
+inspector start and returned Yellow. The input was consumed and removed;
+Docker CLI starts were `0/3`, local Docker socket requests `0/2`, and macOS
+inspector starts `0/9`. Cleanup is Green, no Host Binding capsule or body-free
+public receipt was created, and Retry/provider effects remained zero. No retry
+occurred. The result is recorded in the
+[`Physical Adapter Construction Report`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md),
+the non-approvable
+[`Physical Retry Execution Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
+and its returned
+[`Owner Review`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md).

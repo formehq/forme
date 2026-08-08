@@ -1,39 +1,38 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-07
+- Updated: 2026-08-08
 - Active gate: **R4 Gate A remains technically complete. The first Gate B
   attempt stopped Red/cleaned; repo-only Retry Construction returned
   Yellow/cleaned. The Owner then approved and authorized the narrower
   Demo-critical Core Construction. It completed at published review HEAD
   `0e6a1a2` with 381 Node and 19 Swift tests Green, zero real physical effects,
-  and an honest non-approvable Yellow Manifest. The Owner has now approved the
-  five-part Physical Adapter + Host Binding direction. The exact Construction
-  Packet and low-load Review are the proposed next Owner input. That proposal
-  requests one Host-Binding / Adapter Construction Grant, but it is not yet
-  approved; Retry Execution and First Provider-Call remain `NOT_REQUESTED`.**
+  and an honest non-approvable Yellow Manifest. The later Physical Adapter
+  Construction is built and fake-validated at final implementation `I`
+  `92c6c3f`. Its one approved Host Binding attempt was consumed and stopped
+  Yellow before inspectors because a supplied binding path was symlinked. The
+  input was removed, cleanup is Green, no capsule/public receipt exists, and
+  Retry Execution and First Provider-Call remain `NOT_REQUESTED`.**
 - Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
-  Gate A is technically implemented and verified. The current PostgreSQL Core
-  SQL/fake mechanism, Codex zero-call containment, and transient macOS helper
-  now exist. The Owner has fixed the successor PostgreSQL public-pool/race
-  interpretation, but its two narrow SQL corrections and the unified physical
-  machine are not constructed yet. Host binding, executable races and real
-  physical adapters remain incomplete. R4 is not Owner-accepted or Done, and
-  Gate C is unexecuted.**
+  Gate A is technically implemented and verified. The corrected PostgreSQL
+  Core/race mechanism, Codex zero-call containment, transient macOS helper and
+  unified physical runner are now constructed and fake-validated. They have
+  not run physically: the sole Host Binding attempt stopped on input identity
+  before any of the planned 3 Docker CLI, 2 local Docker socket or 9 macOS
+  inspector starts. R4 is not Owner-accepted or Done, and Gate C is
+  unexecuted.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
   2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: Owner reviews the proposed exact
-  [`Physical Adapter + Host Binding Construction Packet`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md)
-  through its
-  [`low-load Owner Review`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md).
-  Their frozen hashes are `sha256:7ad7fd34…69d06` and
-  `sha256:27c64b28…41ff9` respectively.
-  The proposal requests repository/fake adapter Construction followed by one
-  bounded read-only binding to Owner-chosen paths. Until exact approval, it
-  opens no host read, code Construction, Docker/PostgreSQL execution, real
-  Codex/Seatbelt, signing/Keychain/LocalAuthentication, Retry, Provider Call,
-  real Guest data, Gate C, deployment, public traffic, merge, or spend.
+- Next action: Owner reads the
+  [`Physical Adapter Construction Report`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md),
+  non-approvable
+  [`Physical Retry Execution Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
+  and its
+  [`low-load Owner Review`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md).
+  The approved Construction/Host Binding grant is consumed. No Host Binding
+  re-run, physical Retry or provider call is active or requested; any successor
+  attempt requires a new exact gate.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -56,7 +55,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A ✓ · CORE YELLOW · EXACT CONSTRUCTION PACKET PROPOSED
+R4 Controlled Presence    ← GATE A ✓ · ADAPTERS BUILT · HOST BINDING YELLOW/CLEAN · RETRY CLOSED
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -231,18 +230,23 @@ Current truth:
   Its Manifest `sha256:f743f8f17daa3aa4d12805cc12563c94a1e3e3343ab4069e4ce351058bcc0b74`
   is intentionally non-approvable Yellow: physical adapters, host bytes, one
   unified runner and executable PostgreSQL races remain unclosed;
-- a successor read-only review found PostgreSQL interpretations/corrections
-  that must be explicit before more Construction: 13 conceptual race families
-  expand to 16 executable cases / 32 orders; the proposed exact Packet closes
-  this at exactly 68 Core calls. The
-  recommended pool-20 definition is public-encounter-only active-unresolved
-  rather than rolling 24 hours; and public-accept 3/day needs exact issuance
-  bucket lineage. The Owner-approved successor Brief keeps current version
-  precedence, explicitly accepts that Codex post-response finality remains
-  unproven, and discloses the transient macOS CLI-signing tradeoff. It authorized
-  preparation of the exact successor Packet only. That Packet/Review is now
-  proposed; no Construction, Host Binding, Retry or provider authority has yet
-  been granted;
+- a successor read-only review fixed the PostgreSQL interpretations before
+  more Construction: 13 conceptual race families expand to 16 executable cases
+  / 32 orders and exactly 68 Core calls; pool-20 is public-encounter-only
+  active-unresolved, and public-accept 3/day follows exact issuance-bucket
+  lineage. The Owner then approved the exact Physical Adapter + Host Binding
+  Construction Packet `sha256:7ad7fd34…69d06` and immutable Review
+  `sha256:27c64b28…41ff9`, bound to proposal `a45ea06` / tree `89b2890`, while
+  keeping Retry and provider authority `NOT_REQUESTED`;
+- that consumed grant produced final implementation `I` `92c6c3f` / tree
+  `cf2ce55`: the unified runner, corrected race machine and three physical
+  adapters were built and fake-validated with zero physical effects. Exactly
+  one Host Binding attempt then consumed and removed its fixed input and
+  stopped Yellow on a symlinked supplied path before starting any of the 3/2/9
+  Docker CLI/local-socket/macOS inspectors. Cleanup is Green, no capsule or
+  public receipt was produced, no re-run occurred, and the returned
+  [`Physical Retry Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
+  is non-approvable;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
@@ -1034,5 +1038,11 @@ If a change is only an internal refactor, the report says explicitly: **no owner
   Forme Room foundation
 - [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
   — owner-approved Hybrid encounter, Third Place, identity, and P0/P1 boundary
+- [`R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md)
+  — final `I`, fake-validation, sole Host Binding attempt and Green cleanup evidence
+- [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
+  — current non-approvable Retry boundary after the Yellow Host Binding result
+- [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md)
+  — low-load return surface with Retry and provider authority closed
 - [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map
