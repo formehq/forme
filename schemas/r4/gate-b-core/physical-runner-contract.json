@@ -11,6 +11,36 @@
     "retryExecutionGrant": "NOT_REQUESTED",
     "firstProviderCallGrant": "NOT_REQUESTED"
   },
+  "postImplementationCorrection": {
+    "status": "OWNER_APPROVED_C_LAYER_PORTABILITY_CORRECTION",
+    "historicalImplementationHead": "92c6c3f8896494aed699671a04a93a09fb59087d",
+    "historicalImplementationTree": "cf2ce5567c601fff1ad709e565dde41cf9c3540d",
+    "historicalOutputHead": "63ae16940faf17694152cffa12848e62c2933c52",
+    "historicalOutputTree": "ebfd96e7c1003c076d417798e53430891f60f057",
+    "allowedImplementationPaths": [
+      "schemas/r4/gate-b-core/artifact-index.json",
+      "schemas/r4/gate-b-core/physical-runner-contract.json",
+      "scripts/r4-doc-audit.mjs",
+      "scripts/r4-gate-b-physical-port.mjs",
+      "scripts/r4-gate-b-physical-runner.mjs",
+      "test/r4-gate-b-core/physical-runner.test.ts"
+    ],
+    "allowedR2OutputPaths": [
+      "docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md",
+      "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md",
+      "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md"
+    ],
+    "canonicalSystemTemporaryRoot": "realpath(/tmp)",
+    "temporaryRootEnvironmentAuthority": false,
+    "temporaryRootCallerAuthority": false,
+    "productionPhaseABranchGuardChanged": false,
+    "postOutputOrDetachedConstructionEntry": "fail-closed-before-journal-root-or-effect",
+    "historicalHostBindingAttemptRebound": false,
+    "historicalHostBindingAttemptRerun": false,
+    "runnerAfterCorrectionHostBound": false,
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallGrant": "NOT_REQUESTED"
+  },
   "construction": {
     "runId": "79b7775defbdaf043697ef9b6d0ab45c",
     "runIdDerivation": "first32(sha256(r4-gate-b-physical-construction:+prefixedPacketSha+proposalHead+proposalTree))",

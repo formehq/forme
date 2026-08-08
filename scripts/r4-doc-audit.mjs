@@ -510,6 +510,23 @@ let physicalConstruction = null;
 if (physicalConstructionMode) {
   const proposalHead = "a45ea061e8e92f247597787e36ecfe52740b216a";
   const proposalTree = "89b28903fc34e985a17e8f3fdc4bfd7d0972880e";
+  const historicalImplementationHead = "92c6c3f8896494aed699671a04a93a09fb59087d";
+  const historicalImplementationTree = "cf2ce5567c601fff1ad709e565dde41cf9c3540d";
+  const historicalOutputHead = "63ae16940faf17694152cffa12848e62c2933c52";
+  const historicalOutputTree = "ebfd96e7c1003c076d417798e53430891f60f057";
+  const correctionPaths = new Set([
+    "schemas/r4/gate-b-core/artifact-index.json",
+    "schemas/r4/gate-b-core/physical-runner-contract.json",
+    "scripts/r4-doc-audit.mjs",
+    "scripts/r4-gate-b-physical-port.mjs",
+    "scripts/r4-gate-b-physical-runner.mjs",
+    "test/r4-gate-b-core/physical-runner.test.ts",
+  ]);
+  const correctionOutputPaths = new Set([
+    "docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md",
+    "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md",
+    "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md",
+  ]);
   const physicalEvidenceAuthority = Object.freeze({
     approvedDecisionBriefSha256: "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2",
     constructionPacketSha256: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
@@ -579,6 +596,8 @@ if (physicalConstructionMode) {
     "README.md", "docs/README.md", "docs/CONTROL.md", "docs/ROADMAP.md", "docs/DECISIONS.md",
   ]);
   const requiredOutputPaths = new Set([...outputPaths].filter((value) => value !== publicReceiptPath));
+  let correctionHead = null;
+  let correctionOutputHead = null;
   const allowed = new Set(`
 schemas/r4/gate-b-core/host-binding-input.schema.json
 schemas/r4/gate-b-core/host-binding-capsule.schema.json
@@ -649,11 +668,17 @@ docs/DECISIONS.md
   const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, encoding: "utf8", maxBuffer: 16_777_216 });
   const gitBytes = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, maxBuffer: 16_777_216 });
   const gitBlob = (head, relativePath) => gitBytes(["cat-file", "blob", `${head}:${relativePath}`]);
+  const rawPathSort = (left, right) => Buffer.compare(Buffer.from(left, "utf8"), Buffer.from(right, "utf8"));
+  const committedPaths = (from, to) => git(["diff", "--name-only", `${from}..${to}`, "--"]).split("\n").filter(Boolean).sort(rawPathSort);
+  const exactPathSet = (observed, expected) => observed.length === expected.size && observed.every((value) => expected.has(value));
+  const headLine = git(["rev-list", "--parents", "-n", "1", "HEAD"]).trim().split(" ");
+  let reviewTip = headLine[0];
+  if (headLine.length === 3 && git(["merge-base", historicalImplementationHead, headLine[2]]).trim() === historicalImplementationHead) reviewTip = headLine[2];
   if (git(["rev-parse", `${proposalHead}^{tree}`]).trim() !== proposalTree) throw new Error("Physical Construction proposal tree drifted");
   if (sha256(readFileSync(join(root, packetPath))) !== "7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06") throw new Error("Physical Construction Packet drifted");
   if (sha256(readFileSync(join(root, reviewPath))) !== "27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9") throw new Error("Physical Construction Owner Review drifted");
   const changedPaths = [...new Set([
-    ...git(["diff", "--name-only", `${proposalHead}..HEAD`, "--"]).split("\n"),
+    ...git(["diff", "--name-only", `${proposalHead}..${reviewTip}`, "--"]).split("\n"),
     ...git(["diff", "--name-only", "--"]).split("\n"),
     ...git(["diff", "--cached", "--name-only", "--"]).split("\n"),
     ...git(["ls-files", "--others", "--exclude-standard", "--"]).split("\n"),
@@ -690,6 +715,22 @@ docs/DECISIONS.md
   if (boundary.status !== "PHYSICAL_ADAPTERS_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED" || boundary.authority.hostBindingAdapterConstructionGrant !== "APPROVED" || boundary.authority.retryExecutionGrant !== "NOT_REQUESTED" || boundary.authority.firstProviderCallTestGrant !== "NOT_REQUESTED" || boundary.continuity.aggregateRetryVerdict !== "YELLOW") throw new Error("Physical runtime boundary claim drift");
   let implementationFileCount = null;
   if (physicalConstructionFinalMode) {
+    if (git(["rev-parse", `${historicalImplementationHead}^{tree}`]).trim() !== historicalImplementationTree) throw new Error("Physical historical implementation tree drifted");
+    if (git(["rev-parse", `${historicalOutputHead}^{tree}`]).trim() !== historicalOutputTree) throw new Error("Physical historical output tree drifted");
+    const historicalOutputLine = git(["rev-list", "--parents", "-n", "1", historicalOutputHead]).trim().split(" ");
+    if (historicalOutputLine.length !== 2 || historicalOutputLine[1] !== historicalImplementationHead || !exactPathSet(committedPaths(historicalImplementationHead, historicalOutputHead), requiredOutputPaths)) throw new Error("Physical historical I-to-R lineage drifted");
+    const reviewTipLine = git(["rev-list", "--parents", "-n", "1", reviewTip]).trim().split(" ");
+    if (reviewTipLine.length !== 2) throw new Error("Physical correction review tip is not a single-parent commit");
+    const tipPaths = committedPaths(reviewTipLine[1], reviewTip);
+    if (exactPathSet(tipPaths, correctionOutputPaths)) {
+      correctionOutputHead = reviewTip;
+      correctionHead = reviewTipLine[1];
+    } else {
+      correctionHead = reviewTip;
+    }
+    const correctionLine = git(["rev-list", "--parents", "-n", "1", correctionHead]).trim().split(" ");
+    if (correctionLine.length !== 2 || correctionLine[1] !== historicalOutputHead || !exactPathSet(committedPaths(historicalOutputHead, correctionHead), correctionPaths)) throw new Error("Physical post-I correction lineage drifted");
+    if (correctionOutputHead === null && reviewTip !== correctionHead) throw new Error("Physical correction output lineage drifted");
     for (const value of requiredOutputPaths) if (!existsSync(join(root, value))) throw new Error(`Physical output missing:${value}`);
     const readCanonicalJson = (relativePath, label) => {
       const bytes = readFileSync(join(root, relativePath));
@@ -749,14 +790,14 @@ docs/DECISIONS.md
       const runtimeDependencyAggregateSha256 = `sha256:${sha256(Buffer.from(`${canonicalJson(runtimeDependencies)}\n`, "utf8"))}`;
       if (receipt.runtimeDependencyAggregateSha256 !== runtimeDependencyAggregateSha256) throw new Error("Host Binding public receipt runtime dependency aggregate drift");
     }
-    if (git(["rev-parse", `${evidence.implementationHead}^{tree}`]).trim() !== evidence.implementationTree || git(["merge-base", proposalHead, evidence.implementationHead]).trim() !== proposalHead || git(["merge-base", evidence.implementationHead, "HEAD"]).trim() !== evidence.implementationHead) throw new Error("Physical implementation lineage drift");
+    if (evidence.implementationHead !== historicalImplementationHead || evidence.implementationTree !== historicalImplementationTree || git(["rev-parse", `${evidence.implementationHead}^{tree}`]).trim() !== evidence.implementationTree || git(["merge-base", proposalHead, evidence.implementationHead]).trim() !== proposalHead || git(["merge-base", evidence.implementationHead, reviewTip]).trim() !== evidence.implementationHead) throw new Error("Physical implementation lineage drift");
     const postImplementationPaths = [...new Set([
-      ...git(["diff", "--name-only", `${evidence.implementationHead}..HEAD`, "--"]).split("\n"),
+      ...git(["diff", "--name-only", `${evidence.implementationHead}..${reviewTip}`, "--"]).split("\n"),
       ...git(["diff", "--name-only", "--"]).split("\n"),
       ...git(["diff", "--cached", "--name-only", "--"]).split("\n"),
       ...git(["ls-files", "--others", "--exclude-standard", "--"]).split("\n"),
     ].filter(Boolean))];
-    const postImplementationNonOutputs = postImplementationPaths.filter((value) => !outputPaths.has(value));
+    const postImplementationNonOutputs = postImplementationPaths.filter((value) => !outputPaths.has(value) && !correctionPaths.has(value));
     if (postImplementationNonOutputs.length > 0) throw new Error(`Physical bytes changed after implementation I:${postImplementationNonOutputs.join(",")}`);
     if (`sha256:${sha256(gitBlob(evidence.implementationHead, "package-lock.json"))}` !== physicalEvidenceAuthority.packageLockSha256) throw new Error("Physical implementation package-lock drift");
     const implementationPathBytes = gitBytes(["diff", "--name-only", "-z", `${proposalHead}..${evidence.implementationHead}`, "--"]);
@@ -796,6 +837,11 @@ docs/DECISIONS.md
   physicalConstruction = {
     schemaVersion: "r4_gate_b_physical_static_audit.v1",
     phase: physicalConstructionFinalMode ? "final" : "phase-a",
+    historicalImplementationHead: physicalConstructionFinalMode ? historicalImplementationHead : null,
+    historicalOutputHead: physicalConstructionFinalMode ? historicalOutputHead : null,
+    correctionHead,
+    correctionOutputHead,
+    runnerAfterCorrectionHostBound: false,
     changedPathCount: changedPaths.length,
     implementationFileCount,
     artifactCount: actualArtifacts.length,

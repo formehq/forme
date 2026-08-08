@@ -14,6 +14,11 @@ import {
 } from "../packages/r4-codex-adapter/src/zero-call-physical.ts";
 import { buildCorePostgresStdin } from "./r4-gate-b-core-postgres.mjs";
 
+// Resolve the operating system's canonical temporary root once. On macOS
+// /tmp resolves to /private/tmp; on Linux it remains /tmp. Environment and
+// caller supplied temporary roots are intentionally not authority sources.
+export const CANONICAL_SYSTEM_TEMP_ROOT = fs.realpathSync("/tmp");
+
 export const PHYSICAL_AUTHORITY = Object.freeze({
   constructionPacketSha256: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
   constructionOwnerReviewSha256: "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9",
@@ -901,7 +906,7 @@ export function buildPostgresPhysicalPlan(binding, manifestSha256, runId, readRu
   const host = `unix://${binding.dockerUnixSocket}`;
   const name = `forme-r4-core-${runId}`;
   const volume = `forme-r4-core-${runId}`;
-  const runRoot = `/private/tmp/forme-r4-gate-b-postgres-${runId}`;
+  const runRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-postgres-${runId}`);
   const runtimeReader = pinnedPostgresRuntimeReader(readRuntimeFile);
   const base = [binding.dockerCli, "--host", host];
   const environment = deepFreeze({ HOME: `${runRoot}/home`, DOCKER_CONFIG: `${runRoot}/docker-config`, TMPDIR: `${runRoot}/tmp`, PATH: "/usr/bin:/bin:/usr/sbin:/sbin" });
@@ -1033,7 +1038,7 @@ export function buildMacOSPhysicalPlan(binding, manifestSha256, runId, readRunti
     catch { fail(`MACOS_RUNTIME_JSON_INVALID:${relativePath}`, "RED"); }
     finally { bytes.fill(0); }
   };
-  const root = `/private/tmp/forme-r4-gate-b-core-${runId}`;
+  const root = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-core-${runId}`);
   const build = `${root}/build`;
   const app = `${root}/FormeCoreLocal.app`;
   const executable = `${app}/Contents/MacOS/FormeCoreLocal`;

@@ -25,6 +25,7 @@ import {
 } from "./r4-gate-b-host-binding.mjs";
 import {
   PHYSICAL_AUTHORITY,
+  CANONICAL_SYSTEM_TEMP_ROOT,
   CODEX_PROCESS_KINDS,
   MACOS_DIRECT_START_PROTOCOL,
   MACOS_PLAN_ORDER,
@@ -325,7 +326,7 @@ export function closeExactOwnedRootAuthority(authority, code = null) {
   if (closeFailed && code !== null) fail(code, "RED_QUARANTINED");
 }
 function exactOwnedRootAnchor(root, codePrefix) {
-  for (const anchor of [REPOSITORY_ROOT, "/private/tmp"]) {
+  for (const anchor of [REPOSITORY_ROOT, CANONICAL_SYSTEM_TEMP_ROOT]) {
     const relative = path.relative(anchor, root);
     if (relative !== "" && !path.isAbsolute(relative) && relative !== ".." && !relative.startsWith(`..${path.sep}`)) return anchor;
   }
@@ -1337,7 +1338,7 @@ async function atomicPublishConstructionFile(target, bytes, { mode, kind, parent
 
 export async function exerciseConstructionPublicationProtocolForConstruction(baseRoot = null) {
   const ownsRoot = baseRoot === null;
-  const base = ownsRoot ? fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-publication-protocol-")) : baseRoot;
+  const base = ownsRoot ? fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-publication-protocol-"))) : baseRoot;
   if (!path.isAbsolute(base) || path.normalize(base) !== base || (!ownsRoot && path.dirname(base) !== CONSTRUCTION_ROOT)) fail("PUBLICATION_EXERCISE_ROOT_INVALID", "RED");
   if (!ownsRoot) fs.mkdirSync(base, { recursive: false, mode: 0o700 });
   fs.chmodSync(base, 0o700);
@@ -1566,9 +1567,9 @@ function removeObservedSupervisorSlot(slotPath, startId, releaseAuthoritySha256,
 }
 function createProductionBlockedProcessPort(root, expectedNodeBinding = null, auditDiscardFileDescriptors = null, constructionFaultPoint = null) {
   const prepared = prepareBlockedSupervisor(root, expectedNodeBinding);
-  if (auditDiscardFileDescriptors !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith("/private/tmp/forme-r4-blocked-start-")) || !Array.isArray(auditDiscardFileDescriptors) || auditDiscardFileDescriptors.length !== 2 || auditDiscardFileDescriptors.some((fd) => !Number.isSafeInteger(fd) || fd < 0))) fail("BLOCKED_SUPERVISOR_AUDIT_FD_AUTHORITY_INVALID", "RED");
+  if (auditDiscardFileDescriptors !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-blocked-start-"))) || !Array.isArray(auditDiscardFileDescriptors) || auditDiscardFileDescriptors.length !== 2 || auditDiscardFileDescriptors.some((fd) => !Number.isSafeInteger(fd) || fd < 0))) fail("BLOCKED_SUPERVISOR_AUDIT_FD_AUTHORITY_INVALID", "RED");
   const constructionFaultPoints = new Set(["after-slot-open", "before-slot-fstat", "after-slot-fstat", "before-slot-fsync", "after-slot-fsync", "before-parent-fsync", "after-parent-fsync", "before-spawn", "after-spawn", "before-slot-close", "after-slot-close", "before-ready", "after-ready"]);
-  if (constructionFaultPoint !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith("/private/tmp/forme-r4-blocked-start-")) || !constructionFaultPoints.has(constructionFaultPoint))) fail("BLOCKED_SUPERVISOR_FAULT_AUTHORITY_INVALID", "RED");
+  if (constructionFaultPoint !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-blocked-start-"))) || !constructionFaultPoints.has(constructionFaultPoint))) fail("BLOCKED_SUPERVISOR_FAULT_AUTHORITY_INVALID", "RED");
   let constructionFaultConsumed = false;
   const injectConstructionFault = (point) => {
     if (constructionFaultPoint !== point || constructionFaultConsumed) return;
@@ -2013,7 +2014,7 @@ export function createRetryJournal(root, manifestSha256, hostBindingId, runId) {
 
 function mkdirOwned0700(directory) {
   if (!path.isAbsolute(directory) || path.normalize(directory) !== directory || directory.includes("\0")) fail("RETRY_OWNED_DIRECTORY_PATH_INVALID", "RED");
-  const privateTmp = "/private/tmp";
+  const privateTmp = CANONICAL_SYSTEM_TEMP_ROOT;
   const inside = (anchor) => {
     const relative = path.relative(anchor, directory);
     return relative !== "" && !path.isAbsolute(relative) && relative !== ".." && !relative.startsWith(`..${path.sep}`);
@@ -2174,7 +2175,7 @@ async function exerciseBlockedStartPreparationFaultMatrix({ root, journal }) {
 export async function exerciseBlockedStartProtocolForConstruction(options = {}) {
   const ownsLifecycle = options.root === undefined && options.journal === undefined;
   if (!ownsLifecycle && (options.root !== CONSTRUCTION_ROOT || options.journal === null || typeof options.journal?.append !== "function" || typeof options.journal?.records !== "function")) fail("BLOCKED_START_EXERCISE_EXTERNAL_AUTHORITY_INVALID", "RED");
-  const root = ownsLifecycle ? `/private/tmp/forme-r4-blocked-start-${crypto.randomBytes(16).toString("hex")}` : options.root;
+  const root = ownsLifecycle ? path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-blocked-start-${crypto.randomBytes(16).toString("hex")}`) : options.root;
   const journal = ownsLifecycle ? createRetryJournal(root, `sha256:${"0".repeat(64)}`, "0".repeat(32), path.basename(root)) : options.journal;
   const initialRecordCount = journal.records().length;
   let stdout = Buffer.alloc(0);
@@ -2246,7 +2247,7 @@ export async function exerciseBlockedStartProtocolForConstruction(options = {}) 
 export async function exerciseMacOSDirectStartProtocolForConstruction(options = {}) {
   const ownsLifecycle = options.root === undefined && options.journal === undefined;
   if (!ownsLifecycle && (options.root !== CONSTRUCTION_ROOT || options.journal === null || typeof options.journal?.append !== "function" || typeof options.journal?.records !== "function")) fail("MACOS_DIRECT_EXERCISE_EXTERNAL_AUTHORITY_INVALID", "RED");
-  const root = ownsLifecycle ? `/private/tmp/forme-r4-macos-direct-start-${crypto.randomBytes(16).toString("hex")}` : options.root;
+  const root = ownsLifecycle ? path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-macos-direct-start-${crypto.randomBytes(16).toString("hex")}`) : options.root;
   const journal = ownsLifecycle ? createRetryJournal(root, `sha256:${"1".repeat(64)}`, "1".repeat(32), path.basename(root)) : options.journal;
   const initialRecordCount = journal.records().length;
   const helperSource = [
@@ -2837,7 +2838,7 @@ export async function executePostgresLane({ capsule, manifestSha256, runId, runt
   requirePathEntryAbsent(plan.runRoot, "POSTGRES_RUN_ROOT_PREEXISTS", "RED_QUARANTINED");
   const runRootShapeSha256 = sha256(Buffer.from(`postgres-run-root:${runId}\n`, "utf8"));
   await journal.append({ lane: "postgres", event: "marker:run-root-target-absent", commandShapeSha256: runRootShapeSha256, ownedResources: ["postgres-run-root"], cleanupState: "required" });
-  const postgresRootAuthority = createExclusiveOwnedRoot0700(plan.runRoot, "/private/tmp", "POSTGRES_RUN_ROOT");
+  const postgresRootAuthority = createExclusiveOwnedRoot0700(plan.runRoot, CANONICAL_SYSTEM_TEMP_ROOT, "POSTGRES_RUN_ROOT");
   postgresRootState.authority = postgresRootAuthority;
   let rootRemovalAttempted = false;
   let createdMarkerDurable = false;
@@ -3053,7 +3054,7 @@ async function appendRetryCleanupAbsenceMarker(journal, lane) {
 }
 
 export async function cleanupPostgresResources({ capsule, runId, journal, records, processPort, rootAuthority = null }) {
-  const plan = Object.freeze({ runRoot: `/private/tmp/forme-r4-gate-b-postgres-${runId}`, containerName: `forme-r4-core-${runId}`, volumeName: `forme-r4-core-${runId}` });
+  const plan = Object.freeze({ runRoot: path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-postgres-${runId}`), containerName: `forme-r4-core-${runId}`, volumeName: `forme-r4-core-${runId}` });
   const postgresIntents = new Set(records.filter((record) => record.lane === "postgres" && typeof record.event === "string" && record.event.startsWith("intent:")).map((record) => record.event.slice("intent:".length)));
   const mayHaveContainer = postgresIntents.has("container-create");
   const mayHaveVolume = postgresIntents.has("volume-create");
@@ -3079,7 +3080,7 @@ export async function cleanupPostgresResources({ capsule, runId, journal, record
     if (postgresAbsenceProofObserved) return true;
     fail("POSTGRES_CLEANUP_ROOT_MISSING_WITH_EFFECT_AUTHORITY", "RED_QUARANTINED");
   }
-  const postgresRootAuthority = rootAuthority ?? openExactOwnedRootAuthority({ root: plan.runRoot, anchor: "/private/tmp", codePrefix: "POSTGRES_CLEANUP_ROOT" });
+  const postgresRootAuthority = rootAuthority ?? openExactOwnedRootAuthority({ root: plan.runRoot, anchor: CANONICAL_SYSTEM_TEMP_ROOT, codePrefix: "POSTGRES_CLEANUP_ROOT" });
   let rootRemovalAttempted = false;
   try {
   assertExactOwnedRootAuthorityCurrent(postgresRootAuthority, "POSTGRES_CLEANUP_ROOT");
@@ -3637,7 +3638,7 @@ async function cleanupMacOSAfterTerminal({ plan, state, journal, processPort, ro
 }
 
 export async function cleanupMacOSResourcesFromJournal({ capsule, runId, records, journal, processPort }) {
-  const runRoot = `/private/tmp/forme-r4-gate-b-core-${runId}`;
+  const runRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-core-${runId}`);
   const runRootTargetAbsent = records.some((record) => record.lane === "macos" && record.event === "marker:run-root-target-absent" && record.processGroupId === null);
   const runRootCreated = records.some((record) => record.lane === "macos" && record.event === "marker:run-root-created" && record.processGroupId === null);
   const macOSCleanupAbsenceObserved = retryCleanupAbsenceMarkerObserved(records, "macos");
@@ -3651,7 +3652,7 @@ export async function cleanupMacOSResourcesFromJournal({ capsule, runId, records
     if (!macOSCleanupAbsenceObserved) fail("MACOS_CLEANUP_ROOT_MISSING_WITH_KEYCHAIN_AUTHORITY", "RED_QUARANTINED");
     return true;
   }
-  const macOSRootAuthority = openExactOwnedRootAuthority({ root: runRoot, anchor: "/private/tmp", codePrefix: "MACOS_CLEANUP_ROOT" });
+  const macOSRootAuthority = openExactOwnedRootAuthority({ root: runRoot, anchor: CANONICAL_SYSTEM_TEMP_ROOT, codePrefix: "MACOS_CLEANUP_ROOT" });
   let rootAuthorityTransferred = false;
   try {
   if (macOSCleanupAbsenceObserved) {
@@ -3720,7 +3721,7 @@ async function executeMacOSLane({ capsule, manifestSha256, runId, runtimeSnapsho
   const state = { keychainPassword: randomHexBuffer(24), p12Password: randomHexBuffer(24), bindingCanary: randomHexBuffer(24), absoluteAuthorityDeadlineMilliseconds: plan.absoluteAuthorityDeadlineMilliseconds, syntheticCandidateFrameBytes: plan.syntheticCandidateFrameBytes, certificateSha1: null, certificateSha256: null, helper: null, helperEvidence: null, feederEvidence: null, defaultPre: null, searchPre: null, defaultPost: null, searchPost: null, preInventory: null, postInventory: null, preSignExecutableSha256: null, postSignExecutableSha256: null, runtimeIdentityValidated: false, signingValidated: false, networkSampleZero: false, attempted: new Set(), completed: new Set(), counters: { security: 0, codesign: 0, openssl: 0, securityLifecycle: 0, identityInventory: 0, signingPrivateKeyUses: 0, defaultKeychainMetadata: 0, searchListMetadata: 0 } };
   requirePathEntryAbsent(plan.runRoot, "MACOS_RUN_ROOT_PREEXISTS", "RED_QUARANTINED");
   await journal.append({ lane: "macos", event: "marker:run-root-target-absent", commandShapeSha256: sha256(Buffer.from(`macos-run-root:${runId}\n`)), ownedResources: ["macos-run-root"], cleanupState: "required" });
-  let macOSRootAuthority = createExclusiveOwnedRoot0700(plan.runRoot, "/private/tmp", "MACOS_RUN_ROOT");
+  let macOSRootAuthority = createExclusiveOwnedRoot0700(plan.runRoot, CANONICAL_SYSTEM_TEMP_ROOT, "MACOS_RUN_ROOT");
   const app = path.join(plan.runRoot, "FormeCoreLocal.app");
   const executable = path.join(app, "Contents/MacOS/FormeCoreLocal");
   try {
@@ -3966,7 +3967,7 @@ export function removeEmptyAuthenticatedRetryJournalRoot(authenticated) {
   const journalPath = authenticated.journalPath;
   const parent = path.dirname(root);
   const inside = (anchor) => { const relative = path.relative(anchor, root); return relative !== "" && !path.isAbsolute(relative) && relative !== ".." && !relative.startsWith(`..${path.sep}`); };
-  if (!inside(REPOSITORY_ROOT) && !inside("/private/tmp")) fail("RETRY_EMPTY_JOURNAL_ROOT_AUTHORITY_INVALID", "RED_QUARANTINED");
+  if (!inside(REPOSITORY_ROOT) && !inside(CANONICAL_SYSTEM_TEMP_ROOT)) fail("RETRY_EMPTY_JOURNAL_ROOT_AUTHORITY_INVALID", "RED_QUARANTINED");
   const journalAlreadyRemoved = authenticated.journalAlreadyRemoved === true;
   const expectedName = Buffer.from("journal.v1.jsonl", "utf8");
   const parentChain = snapshotNoSymlinkPathChain(parent, "RETRY_EMPTY_JOURNAL_PARENT_UNSAFE");
@@ -4571,7 +4572,7 @@ async function cleanupRetryResources({ parsed, capsule, journal, runId, processP
     if (postgresRootState?.authority !== null && postgresRootState?.authority !== undefined) closeExactOwnedRootAuthority(postgresRootState.authority);
     if (postgresRootState !== null && typeof postgresRootState === "object") postgresRootState.authority = null;
   }
-  const macRoot = `/private/tmp/forme-r4-gate-b-core-${runId}`;
+  const macRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-core-${runId}`);
   try {
     const macOSRecords = currentRecords();
     if (!await cleanupMacOSResourcesFromJournal({ capsule, runId, records: macOSRecords, journal, processPort, cleanupAuthority: validateRetryJournalForCleanup(macOSRecords, capsule.runtimeDependencyAggregateSha256) })) clean = false;
@@ -4749,11 +4750,11 @@ export async function cleanupConstruction({ retainCompletePublication = false, r
 
 export function exerciseCheckpointPublicationProtocolForConstruction(baseRoot = null) {
   const ownsRoot = baseRoot === null;
-  const base = ownsRoot ? fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-checkpoint-publication-")) : baseRoot;
+  const base = ownsRoot ? fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-checkpoint-publication-"))) : baseRoot;
   if (!path.isAbsolute(base) || path.normalize(base) !== base || (!ownsRoot && path.dirname(base) !== CONSTRUCTION_ROOT)) fail("CHECKPOINT_PUBLICATION_EXERCISE_ROOT_INVALID", "RED");
   if (!ownsRoot) fs.mkdirSync(base, { recursive: false, mode: 0o700 });
   fs.chmodSync(base, 0o700);
-  const baseAuthority = ownsRoot ? openExactOwnedRootAuthority({ root: base, anchor: "/private/tmp", codePrefix: "CHECKPOINT_PUBLICATION_EXERCISE_ROOT" }) : null;
+  const baseAuthority = ownsRoot ? openExactOwnedRootAuthority({ root: base, anchor: CANONICAL_SYSTEM_TEMP_ROOT, codePrefix: "CHECKPOINT_PUBLICATION_EXERCISE_ROOT" }) : null;
   const bytes = Buffer.from(`${canonicalJson({ schemaVersion: "r4_gate_b_checkpoint_publication_fixture.v1" })}\n`, "utf8");
   const sentinel = Buffer.from("same-uid-owner-preserve\n", "utf8");
   const makeCase = (name) => {

@@ -51,6 +51,7 @@ import {
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 } from "../../scripts/r4-gate-b-physical-runner.mjs";
 import {
+  CANONICAL_SYSTEM_TEMP_ROOT,
   POSTGRES_CONTAINER_ID_PLACEHOLDER,
   buildPostgresPhysicalPlan,
   postgresContainerCleanupCommandShapeSha256,
@@ -71,8 +72,15 @@ import {
 
 const root = path.resolve(import.meta.dirname, "../..");
 const hashFrame = (value: string) => `sha256:${createHash("sha256").update(value, "utf8").digest("hex")}`;
+const constructionRoot = path.join(root, ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c");
+const isPostOutputAuthorityFailure = (error: unknown) => error instanceof Error
+  && "code" in error
+  && typeof error.code === "string"
+  && (error.code === "PHYSICAL_BRANCH_DRIFT" || error.code.startsWith("PHYSICAL_PHASE_A_WORKSET_ESCAPE:"))
+  && "verdict" in error
+  && error.verdict === "RED";
 const constructionJournalFixtureRoot = () => {
-  const fixtureRoot = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-construction-journal-"));
+  const fixtureRoot = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-construction-journal-")));
   fs.chmodSync(fixtureRoot, 0o700);
   return fixtureRoot;
 };
@@ -82,7 +90,7 @@ const phaseBCheckpointFixtureRoot = (contents = "checkpoint\n") => {
   return fixtureRoot;
 };
 const retryJournalFixtureRoot = () => {
-  const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-retry-journal-"));
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-retry-journal-")));
   fs.chmodSync(parent, 0o700);
   return Object.freeze({ parent, root: path.join(parent, "run") });
 };
@@ -143,6 +151,38 @@ const assertNoEffectConstructionPlan = (records: readonly unknown[]) => {
 
 test("blocked-start supervisor bytes and logical process-group accounting are frozen in the runner contract", () => {
   const contract = JSON.parse(fs.readFileSync(path.join(root, "schemas/r4/gate-b-core/physical-runner-contract.json"), "utf8"));
+  assert.equal(CANONICAL_SYSTEM_TEMP_ROOT, fs.realpathSync("/tmp"));
+  assert.deepEqual(contract.postImplementationCorrection, {
+    status: "OWNER_APPROVED_C_LAYER_PORTABILITY_CORRECTION",
+    historicalImplementationHead: "92c6c3f8896494aed699671a04a93a09fb59087d",
+    historicalImplementationTree: "cf2ce5567c601fff1ad709e565dde41cf9c3540d",
+    historicalOutputHead: "63ae16940faf17694152cffa12848e62c2933c52",
+    historicalOutputTree: "ebfd96e7c1003c076d417798e53430891f60f057",
+    allowedImplementationPaths: [
+      "schemas/r4/gate-b-core/artifact-index.json", "schemas/r4/gate-b-core/physical-runner-contract.json", "scripts/r4-doc-audit.mjs",
+      "scripts/r4-gate-b-physical-port.mjs", "scripts/r4-gate-b-physical-runner.mjs", "test/r4-gate-b-core/physical-runner.test.ts",
+    ],
+    allowedR2OutputPaths: [
+      "docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md",
+      "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md",
+      "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md",
+    ],
+    canonicalSystemTemporaryRoot: "realpath(/tmp)",
+    temporaryRootEnvironmentAuthority: false,
+    temporaryRootCallerAuthority: false,
+    productionPhaseABranchGuardChanged: false,
+    postOutputOrDetachedConstructionEntry: "fail-closed-before-journal-root-or-effect",
+    historicalHostBindingAttemptRebound: false,
+    historicalHostBindingAttemptRerun: false,
+    runnerAfterCorrectionHostBound: false,
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+  });
+  for (const sourcePath of ["scripts/r4-gate-b-physical-port.mjs", "scripts/r4-gate-b-physical-runner.mjs"]) {
+    const source = fs.readFileSync(path.join(root, sourcePath), "utf8");
+    assert.doesNotMatch(source, /os\.tmpdir|process\.env\.(?:TMPDIR|TMP|TEMP)/u);
+    assert.doesNotMatch(source, /["'`]\/private\/tmp/u);
+  }
   assert.equal(contract.construction.checkpointGreenRequiresAllSerialExercises, true);
   assert.ok(contract.construction.phaseARequiredSerialExercises.includes("exec-replace-3fd same-PID blocked-start protocol"));
   assert.ok(contract.construction.phaseARequiredSerialExercises.includes("self-blocked direct macOS helper and feeder protocol"));
@@ -300,7 +340,7 @@ test("checkpoint crash aliases are removable only as one internal one-link name 
     "construction-checkpoint.v1.json": Object.freeze({ kind: "file", modes: Object.freeze([0o600]), aliasGroup: "checkpoint" }),
     ".construction-checkpoint.v1.json.fixture.tmp": Object.freeze({ kind: "file", modes: Object.freeze([0o600]), aliasGroup: "checkpoint" }),
   });
-  const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-checkpoint-alias-"));
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-checkpoint-alias-")));
   const ownedRoot = path.join(parent, "run");
   fs.mkdirSync(ownedRoot, { mode: 0o700 });
   const finalPath = path.join(ownedRoot, "construction-checkpoint.v1.json");
@@ -330,7 +370,7 @@ test("checkpoint crash aliases are removable only as one internal one-link name 
 test("exact owned-root removal preserves unknown entries, symlinks and same-UID path replacements", () => {
   const inventory = Object.freeze({ known: Object.freeze({ kind: "directory", modes: Object.freeze([0o700]) }) });
   for (const collisionKind of ["unknown", "symlink"] as const) {
-    const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-owned-root-inventory-"));
+    const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-owned-root-inventory-")));
     const ownedRoot = path.join(parent, "run");
     fs.mkdirSync(ownedRoot, { mode: 0o700 });
     fs.mkdirSync(path.join(ownedRoot, "known"), { mode: 0o700 });
@@ -351,7 +391,7 @@ test("exact owned-root removal preserves unknown entries, symlinks and same-UID 
     fs.rmSync(parent, { recursive: true, force: true });
   }
 
-  const hardlinkParent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-owned-root-hardlink-"));
+  const hardlinkParent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-owned-root-hardlink-")));
   const hardlinkRoot = path.join(hardlinkParent, "run");
   const ownerFile = path.join(hardlinkParent, "owner-file");
   fs.mkdirSync(hardlinkRoot, { mode: 0o700 });
@@ -366,7 +406,7 @@ test("exact owned-root removal preserves unknown entries, symlinks and same-UID 
   assert.equal(fs.readFileSync(path.join(hardlinkRoot, "known-file"), "utf8"), "owner-hardlink-preserve\n");
   fs.rmSync(hardlinkParent, { recursive: true, force: true });
 
-  const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-owned-root-swap-"));
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-owned-root-swap-")));
   const ownedRoot = path.join(parent, "run");
   const displaced = path.join(parent, "run-displaced");
   fs.mkdirSync(ownedRoot, { mode: 0o700 });
@@ -403,7 +443,7 @@ test("exact owned-root removal preserves unknown entries, symlinks and same-UID 
   assert.deepEqual(fs.readdirSync(displaced), ["known"]);
   fs.rmSync(parent, { recursive: true, force: true });
 
-  const closeParent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-owned-root-close-"));
+  const closeParent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-owned-root-close-")));
   const closeRoot = path.join(closeParent, "run");
   fs.mkdirSync(closeRoot, { mode: 0o700 });
   const closeAuthority = openExactOwnedRootAuthority({ root: closeRoot, anchor: closeParent, codePrefix: "TEST_OWNED_ROOT_CLOSE" });
@@ -429,7 +469,7 @@ test("exact owned-root removal preserves unknown entries, symlinks and same-UID 
 });
 
 test("carried Construction authority rejects a renamed root before journal interpretation", () => {
-  const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-carried-construction-root-"));
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-carried-construction-root-")));
   const constructionRoot = path.join(parent, "run");
   const displaced = path.join(parent, "run-displaced");
   const journal = createConstructionJournal(constructionRoot);
@@ -494,7 +534,7 @@ test("Retry authority transfer gate closes journal and held root descriptors on 
 });
 
 test("owned-file rollback and blocked-slot recovery preserve same-UID replacements and symlinks", async () => {
-  const parent = fs.realpathSync(fs.mkdtempSync("/tmp/forme-r4-owned-mutation-"));
+  const parent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-owned-mutation-")));
   const exerciseRollbackSwap = (target: string, displaced: string, mode: number, operation: () => unknown, expectedCode: string) => {
     const replacement = Buffer.from(`same-uid-replacement:${path.basename(target)}\n`, "utf8");
     const originalOpen = fs.openSync;
@@ -967,7 +1007,7 @@ test("retry cleanup journal accepts only exact non-process FSM crash prefixes", 
   const dirtyMacOSAuthority = validateRetryJournalForCleanup(dirtyMacOSRecords, runtimeSha256);
   assert.equal(dirtyMacOSAuthority.macOSExternalEffectsAbsent, false);
   assert.equal(dirtyMacOSAuthority.macOSMetadataRestored, false);
-  assert.equal(fs.existsSync(`/private/tmp/forme-r4-gate-b-core-${runId}`), false);
+  assert.equal(fs.existsSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-core-${runId}`)), false);
   await assert.rejects(
     () => cleanupMacOSResourcesFromJournal({ capsule: Object.freeze({}), runId, records: dirtyMacOSRecords, journal: Object.freeze({}), processPort: null, cleanupAuthority: dirtyMacOSAuthority }),
     /MACOS_CLEANUP_ROOT_MISSING_WITH_KEYCHAIN_AUTHORITY/u,
@@ -999,7 +1039,7 @@ test("retry cleanup journal accepts only exact non-process FSM crash prefixes", 
 
 test("Postgres journal proof bypasses closed effects and compensation marker makes root-removal re-entry idempotent", async () => {
   const absentRunId = createHash("sha256").update(`postgres-absence:${process.pid}:${Date.now()}`).digest("hex").slice(0, 32);
-  const absentRoot = `/private/tmp/forme-r4-gate-b-postgres-${absentRunId}`;
+  const absentRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-postgres-${absentRunId}`);
   assert.equal(fs.existsSync(absentRoot), false);
   let processStarts = 0;
   assert.equal(await cleanupPostgresResources({
@@ -1034,7 +1074,7 @@ test("Postgres journal proof bypasses closed effects and compensation marker mak
   );
 
   const transferRunId = createHash("sha256").update(`postgres-transfer:${process.pid}:${Date.now()}`).digest("hex").slice(0, 32);
-  const transferRoot = `/private/tmp/forme-r4-gate-b-postgres-${transferRunId}`;
+  const transferRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-postgres-${transferRunId}`);
   assert.equal(fs.existsSync(transferRoot), false);
   const records: Array<Record<string, unknown>> = [];
   const journal = Object.freeze({
@@ -1052,7 +1092,7 @@ test("Postgres journal proof bypasses closed effects and compensation marker mak
   }) as typeof fs.mkdirSync;
   try {
     await assert.rejects(() => executePostgresLane({
-      capsule: Object.freeze({ docker: Object.freeze({ cliPath: "/usr/bin/false", socketPath: "/private/tmp/forme-r4-unused-docker.sock", localImageId: hashFrame("postgres-image\n") }) }),
+      capsule: Object.freeze({ docker: Object.freeze({ cliPath: "/usr/bin/false", socketPath: path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-unused-docker.sock"), localImageId: hashFrame("postgres-image\n") }) }),
       manifestSha256: hashFrame("postgres-transfer-manifest\n"),
       runId: transferRunId,
       runtimeSnapshot: Object.freeze({ readText(relativePath: string) { return fs.readFileSync(path.join(root, relativePath), "utf8"); } }),
@@ -1108,7 +1148,7 @@ test("Postgres journal proof bypasses closed effects and compensation marker mak
 
 test("macOS compensation marker is durable before root removal and is the only root-absent re-entry authority", async () => {
   const runId = createHash("sha256").update(`macos-cleanup-reentry:${process.pid}:${Date.now()}`).digest("hex").slice(0, 32);
-  const runRoot = `/private/tmp/forme-r4-gate-b-core-${runId}`;
+  const runRoot = path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-gate-b-core-${runId}`);
   assert.equal(fs.existsSync(runRoot), false);
   fs.mkdirSync(runRoot, { mode: 0o700 });
   const records: Array<Record<string, unknown>> = [
@@ -2094,46 +2134,9 @@ test("terminal selection preserves first-cause code and escalates to the stronge
   assert.equal(selectPhysicalRunnerTerminalError(primaryYellowQuarantined, null, null), primaryYellowQuarantined);
 });
 
-test("Construction finalization preserves an injected body first cause while cleanup still removes the root", async () => {
-  await cleanupConstruction();
-  const constructionRoot = path.join(root, ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c");
-  const journalPath = path.join(constructionRoot, "journal.v1.jsonl");
-  const originalWrite = fs.writeSync;
-  const originalClose = fs.closeSync;
-  let bodyInjected = false;
-  let closeInjected = false;
-  fs.writeSync = (() => {
-    bodyInjected = true;
-    throw Object.assign(new Error("INJECTED_CONSTRUCTION_BODY_PRIMARY"), { code: "INJECTED_CONSTRUCTION_BODY_PRIMARY" });
-  }) as typeof fs.writeSync;
-  fs.closeSync = ((descriptor: number) => {
-    if (bodyInjected && !closeInjected) {
-      try {
-        const opened = fs.fstatSync(descriptor);
-        const observed = fs.lstatSync(journalPath);
-        if (opened.dev === observed.dev && opened.ino === observed.ino) {
-          closeInjected = true;
-          originalClose(descriptor);
-          throw Object.assign(new Error("injected Construction finalization close fault"), { code: "EIO" });
-        }
-      } catch (error) {
-        if (closeInjected) throw error;
-      }
-    }
-    return originalClose(descriptor);
-  }) as typeof fs.closeSync;
-  try {
-    await assert.rejects(
-      constructPhysicalAdapters(),
-      (error: unknown) => error instanceof Error && "code" in error && error.code === "INJECTED_CONSTRUCTION_BODY_PRIMARY" && "verdict" in error && error.verdict === "RED",
-    );
-    assert.equal(bodyInjected, true);
-    assert.equal(closeInjected, true);
-  } finally {
-    fs.writeSync = originalWrite;
-    fs.closeSync = originalClose;
-    try { await cleanupConstruction(); } catch { /* assertion below remains authoritative */ }
-  }
+test("post-output Construction entry fails before journal creation or cleanup effects", async () => {
+  assert.equal(fs.existsSync(constructionRoot), false);
+  await assert.rejects(constructPhysicalAdapters(), isPostOutputAuthorityFailure);
   assert.equal(fs.existsSync(constructionRoot), false);
   assert.equal((await cleanupConstruction()).constructionRunRootAbsent, true);
 });
@@ -2678,11 +2681,9 @@ test("construction journal recovery authenticates only a complete prefix and rej
   } finally { fs.rmSync(corruptRoot, { recursive: true, force: true }); }
 });
 
-test("Phase A authority binds approval bytes, proposal ancestry, immutable roots and exact workset", () => {
-  const result = verifyPhaseAAuthority();
-  assert.equal(result.packetSha256, "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06");
-  assert.equal(result.proposalAncestor, true);
-  assert.ok(result.changedPaths.every((entry: string) => !entry.startsWith(".forme/")));
+test("Phase A authority remains strict after output publication and in detached CI", () => {
+  assert.throws(verifyPhaseAAuthority, isPostOutputAuthorityFailure);
+  assert.equal(fs.existsSync(constructionRoot), false);
 });
 
 test("checkpoint reader zeroizes before close and preserves a schema first cause over the later close fault", () => {
@@ -2731,64 +2732,21 @@ test("final checkpoint writer maps four exact flat receipt hashes into the schem
   assert.equal(schema.properties.approvedDecisionBriefSha256.const, "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2");
 });
 
-test("Construction mode runs only deterministic fake adapters, never reads Host Binding input, and cleans", async () => {
-  await cleanupConstruction();
-  const result = await constructPhysicalAdapters();
-  assert.equal(result.status, "ADAPTER_CONSTRUCTION_CHECKPOINT_GREEN");
-  assert.equal(result.physicalEffects, 0);
-  assert.equal(result.hostBindingInputRead, false);
-  assert.equal(result.result.deterministicStressRuns, 3);
-  assert.equal(result.result.expectedCoreCalls, 68);
-  assert.deepEqual(result.blockedStartCheck, {
-    status: "GREEN",
-    fakeProcessStarts: 6,
-    samePidExecReplaceProven: true,
-    startedJournalBeforeTargetOutputProven: true,
-    supervisorDiscardCanariesNotInherited: true,
-    residentCarrierProcesses: 0,
-    processGroupsAbsent: true,
-    preparationFaultMatrix: {
-      casesValidated: 13,
-      logicalStartsObserved: 5,
-      allProcessGroupsAbsent: true,
-      residueCount: 0,
-    },
-  });
-  assert.deepEqual(result.macosDirectStartCheck, {
-    status: "GREEN",
-    fakeProcessStarts: 2,
-    helperDirectPidReadyValidated: true,
-    feederDirectPidReadyValidated: true,
-    startedJournalBeforeBothReleases: true,
-    candidateBytesWritten: 1390,
-    handoffCount: 1,
-    processGroupsAbsent: true,
-    realHelperStarts: 0,
-    providerCalls: 0,
-  });
-  assert.deepEqual(result.publicationProtocolCheck, {
-    status: "GREEN",
-    casesValidated: 4,
-    durableStageAuthorityProven: true,
-    finalNoClobberProven: true,
-    wrongResourcePreserved: true,
-    danglingSymlinkNeverAbsent: true,
-    retainedFinalLinkCount: 1,
-  });
-  assert.deepEqual(result.checkpointPublicationProtocolCheck, {
-    status: "GREEN",
-    casesValidated: 4,
-    actualCheckpointWriterProtocolExercised: true,
-    durableOwnershipClaimExercised: true,
-    noClobberHardlinkProven: true,
-    deterministicTempResiduePreserved: true,
-    crashAliasCleanupProven: true,
-    renameFallbackUsed: false,
-  });
-  assert.equal(result.fakeChildStarts, result.result.fakeChildStarts + 8);
-  assert.equal(result.retryExecutionGrant, "NOT_REQUESTED");
-  assert.equal(result.firstProviderCallGrant, "NOT_REQUESTED");
-  assert.equal(fs.existsSync(path.join(root, ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c")), false);
+test("C-layer preserves the historical Host result without rerunning or rebinding Construction", async () => {
+  const evidence = JSON.parse(fs.readFileSync(path.join(root, "docs/evidence/r4-gate-b-physical-adapter-construction.json"), "utf8"));
+  assert.equal(evidence.implementationHead, "92c6c3f8896494aed699671a04a93a09fb59087d");
+  assert.equal(evidence.implementationTree, "cf2ce5567c601fff1ad709e565dde41cf9c3540d");
+  assert.equal(evidence.status, "HOST_BINDING_INCOMPLETE_YELLOW");
+  assert.equal(evidence.reasonCode, "HOST_BOUND_PATH_SYMLINKED");
+  assert.equal(evidence.hostBindingAttempted, true);
+  assert.equal(evidence.postgresCalls, 0);
+  assert.equal(evidence.realCodexCalls, 0);
+  assert.equal(evidence.providerCalls, 0);
+  assert.equal(evidence.retryExecutionGrant, "NOT_REQUESTED");
+  assert.equal(evidence.firstProviderCallGrant, "NOT_REQUESTED");
+  assert.equal(fs.existsSync(constructionRoot), false);
+  await assert.rejects(constructPhysicalAdapters(), isPostOutputAuthorityFailure);
+  assert.equal(fs.existsSync(constructionRoot), false);
 });
 
 test("library direct execution is denied and Retry stays closed", () => {
