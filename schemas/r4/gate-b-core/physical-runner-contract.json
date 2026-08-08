@@ -136,6 +136,11 @@
       "directHelperFeederOverlapRule": "after feeder intent, both feeder and helper must be terminal-or-cleanup-observed absent before the first subsequent ordinary macOS or cleanup process intent",
       "directHelperFeederRecoveryOrder": "cleanup-observed absence recovery may record helper then feeder or feeder then helper; feeder absence accepts helper started or absent, and neither order authorizes the next ordinary intent until both are absent",
       "postgresAbsenceMarkerLaneTerminal": "after an execution absence proof or compensation absence marker, every later PostgreSQL lane marker, observation, or process record is RED_QUARANTINED; other lanes may continue toward unified Green",
+      "postgresNormalIdentityCapture": "volume create is followed immediately by a durable stable identity observation binding exact name, forme.run label, CreatedAt, Driver and Scope; container create stdout must be one exact 64-lower-hex ID line and is durably observed with exact name and forme.run authority before start",
+      "postgresNormalTailOrder": ["container-pre-remove-exact-id-name-label-inspect", "container-remove-by-observed-immutable-id", "container-post-remove-exact-id-absence", "container-post-remove-exact-name-absence", "volume-pre-remove-exact-stable-identity-and-label-inspect", "volume-remove-by-name-under-same-user-procedural-boundary", "volume-post-remove-exact-name-absence", "postgres-absence-proof"],
+      "postgresResolvedCommandBinding": "container remove and post-ID inspect argv substitute the observed immutable ID and their durable command-authority hashes include that exact ID; volume remove command authority includes the durable stable volume identity hash",
+      "postgresDirtyClearRule": "remove exit 0 never clears container or volume dirty state; dirty clears only after the corresponding exact post-remove name-absence process succeeds and its parsed observation is durable",
+      "postgresCompensationIdentityRule": "crash cleanup reuses only the durable create-time container ID and volume stable identity; a present resource without that authority, a pre-remove identity/label mismatch, or any post-remove same-name recreation is preserved and RED_QUARANTINED",
       "macosAbsenceMarkerJournalTerminal": "after the macOS effects-absence marker, every later lane marker, observation, or process record is RED_QUARANTINED; only one exact final unified cleanup Green marker may follow",
       "postgresCompensationMarker": {
         "lane": "postgres",
@@ -171,6 +176,10 @@
     "persistedVerifiers": 32,
     "transactionIsolation": "READ COMMITTED",
     "overlapProof": "second backend active with wait_event_type Lock and first backend in pg_blocking_pids before first COMMIT",
+    "containerCreateOutput": "one exact LF-terminated 64-lower-hex immutable container ID",
+    "volumeStableIdentityFields": ["Name", "forme.run", "CreatedAt", "Driver", "Scope"],
+    "cleanupTail": ["container-cleanup-inspect-by-ID", "container-remove-by-ID", "container-id-absence", "container-name-absence", "volume-cleanup-inspect-stable-identity", "volume-remove-by-name", "volume-name-absence", "postgres-absence-proof"],
+    "absenceProofRequires": ["all cleanup-tail parsed observations durable", "container dirty false only after name absence", "volume dirty false only after name absence", "all journal-authorized process groups absent", "zero pending intents"],
     "networkMode": "none",
     "publishedPorts": 0,
     "pull": "never"

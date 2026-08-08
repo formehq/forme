@@ -28,10 +28,18 @@ import {
   CODEX_PROCESS_KINDS,
   MACOS_DIRECT_START_PROTOCOL,
   MACOS_PLAN_ORDER,
+  POSTGRES_CONTAINER_ID_PLACEHOLDER,
   buildCodexPhysicalPlan,
   buildMacOSPhysicalPlan,
   buildPostgresPhysicalPlan,
+  postgresContainerCleanupCommandShapeSha256,
+  postgresContainerIdentityAuthoritySha256,
+  postgresVolumeCleanupCommandShapeSha256,
   runConstructionFakeMatrix,
+  validatePostgresContainerCreateFrame,
+  validatePostgresContainerIdentityFrame,
+  validatePostgresVolumeCreateFrame,
+  validatePostgresVolumeIdentityFrame,
   validateMacOSDesignatedRequirementObservation,
   validateMacOSExactEntitlements,
   validateMacOSHelperTerminal,
@@ -1766,6 +1774,16 @@ export function validateDockerExactNameAbsent({ resourceKind, resourceName, stdo
   return true;
 }
 
+export function resolvePostgresContainerIdentityStep(rawStep, runId, containerId) {
+  if (!rawStep || !["container-cleanup-inspect", "container-remove", "container-id-absence"].includes(rawStep.kind) || !Array.isArray(rawStep.argv) || rawStep.argv.filter((value) => value === POSTGRES_CONTAINER_ID_PLACEHOLDER).length !== 1) fail("POSTGRES_CONTAINER_STEP_PLACEHOLDER_INVALID", "RED_QUARANTINED");
+  postgresContainerIdentityAuthoritySha256(runId, `forme-r4-core-${runId}`, containerId);
+  const step = Object.freeze({ ...rawStep, argv: Object.freeze(rawStep.argv.map((value) => value === POSTGRES_CONTAINER_ID_PLACEHOLDER ? containerId : value)) });
+  const journalCommandShapeSha256 = ["container-remove", "container-id-absence"].includes(rawStep.kind)
+    ? postgresContainerCleanupCommandShapeSha256(rawStep.kind, runId, containerId)
+    : null;
+  return Object.freeze({ step, journalCommandShapeSha256 });
+}
+
 async function runClosedProcess(command, { journal, lane, processPort, stdin = null, acceptedExitCodes = command.expectedExitCodes ?? [0], onStarted = null, onCompleted = null, journalCommandShapeSha256 = null } = {}) {
   if (!command || !path.isAbsolute(command.executable) || !Array.isArray(command.argv) || !path.isAbsolute(command.cwd) || command.shell !== false || command.callerArguments !== 0 || !Number.isInteger(command.deadlineMilliseconds) || command.deadlineMilliseconds < 1 || !Number.isInteger(command.stdoutLimitBytes) || !Number.isInteger(command.stderrLimitBytes)) fail("PHYSICAL_PROCESS_COMMAND_DENIED", "RED");
   if (!processPort || typeof processPort.start !== "function") fail("PHYSICAL_BLOCKED_PROCESS_PORT_REQUIRED", "RED");
@@ -2823,6 +2841,13 @@ export async function executePostgresLane({ capsule, manifestSha256, runId, runt
   postgresRootState.authority = postgresRootAuthority;
   let rootRemovalAttempted = false;
   let createdMarkerDurable = false;
+  let containerIdentity = null;
+  let volumeIdentity = null;
+  let containerPreRemoveIdentityObserved = false;
+  let containerIdAbsenceObserved = false;
+  let containerNameAbsenceObserved = false;
+  let volumePreRemoveIdentityObserved = false;
+  let volumeNameAbsenceObserved = false;
   let orderedExecutions = 0;
   let readinessAttempts = 0;
   let recoveriesValidated = 0;
@@ -2840,8 +2865,12 @@ export async function executePostgresLane({ capsule, manifestSha256, runId, runt
     createdMarkerDurable = true;
     for (const directory of [path.join(plan.runRoot, "home"), path.join(plan.runRoot, "docker-config"), path.join(plan.runRoot, "tmp"), path.join(plan.runRoot, "neutral-cwd")]) mkdirOwned0700(directory);
     for (const rawStep of plan.steps) {
-      const step = rawStep.executable === null ? rawStep : boundedStep(rawStep);
+      const resolved = rawStep.executable !== null && rawStep.argv.includes(POSTGRES_CONTAINER_ID_PLACEHOLDER)
+        ? resolvePostgresContainerIdentityStep(rawStep, runId, containerIdentity?.containerId ?? "")
+        : Object.freeze({ step: rawStep, journalCommandShapeSha256: null });
+      const step = resolved.step.executable === null ? resolved.step : boundedStep(resolved.step);
       if (step.executable === null) {
+        if (step.kind === "postgres-absence-proof" && (containerIdentity === null || volumeIdentity === null || !containerPreRemoveIdentityObserved || !containerIdAbsenceObserved || !containerNameAbsenceObserved || !volumePreRemoveIdentityObserved || !volumeNameAbsenceObserved)) fail("POSTGRES_ABSENCE_PROOF_INCOMPLETE", "RED_QUARANTINED");
         await journal.append({ lane: "postgres", event: `marker:${step.kind}`, commandShapeSha256: sha256(Buffer.from(step.kind, "utf8")), ownedResources: ["postgres-container", "postgres-volume", "postgres-workers"], cleanupState: "required" });
         continue;
       }
@@ -2868,7 +2897,10 @@ export async function executePostgresLane({ capsule, manifestSha256, runId, runt
         continue;
       }
       const stdin = step.stdinSource === "exact-plan-bytes" ? step.stdinText : null;
-      const result = await runClosedProcess(step, { journal, lane: "postgres", processPort, stdin });
+      const journalCommandShapeSha256 = step.kind === "volume-remove"
+        ? postgresVolumeCleanupCommandShapeSha256(runId, volumeIdentity?.identitySha256 ?? "")
+        : resolved.journalCommandShapeSha256;
+      const result = await runClosedProcess(step, { journal, lane: "postgres", processPort, stdin, journalCommandShapeSha256 });
       if (step.outputParser === "exact-name-must-be-absent") {
         const resourceKind = step.kind.startsWith("container-") ? "container" : "volume";
         const resourceName = resourceKind === "container" ? plan.containerName : plan.volumeName;
@@ -2881,6 +2913,43 @@ export async function executePostgresLane({ capsule, manifestSha256, runId, runt
         if (fields.length !== 4) fail("POSTGRES_IMAGE_OBSERVATION_FIELD_COUNT", "RED");
         const [imageId, osName, architecture, repoDigests] = fields;
         if (imageId !== step.expectedLocalImageId || osName !== step.expectedOs || architecture !== step.expectedArchitecture || !repoDigests.split(",").includes(step.expectedRepoDigest)) fail("POSTGRES_BOUND_IMAGE_DRIFT", "RED");
+      }
+      if (step.kind === "volume-create") validatePostgresVolumeCreateFrame({ ...result, volumeName: plan.volumeName });
+      if (step.kind === "volume-identity-capture") {
+        volumeIdentity = validatePostgresVolumeIdentityFrame({ ...result, runId, volumeName: plan.volumeName });
+        await journal.append({ lane: "postgres", event: "observation:postgres-volume-identity", commandShapeSha256: volumeIdentity.identitySha256, ownedResources: ["postgres-volume"], terminalCode: "OBSERVED", cleanupState: "required" });
+      }
+      if (step.kind === "container-create") {
+        containerIdentity = validatePostgresContainerCreateFrame({ ...result, runId, containerName: plan.containerName });
+        await journal.append({ lane: "postgres", event: "observation:postgres-container-identity", commandShapeSha256: containerIdentity.identitySha256, ownedResources: ["postgres-container"], terminalCode: containerIdentity.containerId, cleanupState: "required" });
+      }
+      if (step.kind === "container-cleanup-inspect") {
+        const observed = validatePostgresContainerIdentityFrame({ ...result, runId, containerName: plan.containerName, expectedContainerId: containerIdentity?.containerId ?? "" });
+        if (observed.identitySha256 !== containerIdentity?.identitySha256) fail("POSTGRES_CONTAINER_IDENTITY_DRIFT", "RED_QUARANTINED");
+        containerPreRemoveIdentityObserved = true;
+        await journal.append({ lane: "postgres", event: "observation:postgres-container-pre-remove-identity", commandShapeSha256: observed.identitySha256, ownedResources: ["postgres-container"], terminalCode: observed.containerId, cleanupState: "required" });
+      }
+      if (step.kind === "container-remove" && (result.stdout.toString("utf8") !== `${containerIdentity?.containerId}\n` || result.stderr.length !== 0)) fail("POSTGRES_CONTAINER_REMOVE_OBSERVATION_INVALID", "RED_QUARANTINED");
+      if (step.kind === "container-id-absence") {
+        validateDockerExactNameAbsent({ resourceKind: "container", resourceName: containerIdentity?.containerId ?? "", stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode });
+        containerIdAbsenceObserved = true;
+        await journal.append({ lane: "postgres", event: "observation:postgres-container-id-absent", commandShapeSha256: containerIdentity.identitySha256, ownedResources: ["postgres-container"], terminalCode: "ABSENT", cleanupState: "observed-absent" });
+      }
+      if (step.kind === "container-name-absence") {
+        validateDockerExactNameAbsent({ resourceKind: "container", resourceName: plan.containerName, stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode });
+        containerNameAbsenceObserved = true;
+        await journal.append({ lane: "postgres", event: "observation:postgres-container-name-absent", commandShapeSha256: containerIdentity.identitySha256, ownedResources: ["postgres-container"], terminalCode: "ABSENT", cleanupState: "observed-absent" });
+      }
+      if (step.kind === "volume-cleanup-inspect") {
+        const observed = validatePostgresVolumeIdentityFrame({ ...result, runId, volumeName: plan.volumeName, expectedIdentitySha256: volumeIdentity?.identitySha256 ?? null });
+        volumePreRemoveIdentityObserved = true;
+        await journal.append({ lane: "postgres", event: "observation:postgres-volume-pre-remove-identity", commandShapeSha256: observed.identitySha256, ownedResources: ["postgres-volume"], terminalCode: "OBSERVED", cleanupState: "required" });
+      }
+      if (step.kind === "volume-remove" && (result.stdout.toString("utf8") !== `${plan.volumeName}\n` || result.stderr.length !== 0)) fail("POSTGRES_VOLUME_REMOVE_OBSERVATION_INVALID", "RED_QUARANTINED");
+      if (step.kind === "volume-name-absence") {
+        validateDockerExactNameAbsent({ resourceKind: "volume", resourceName: plan.volumeName, stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode });
+        volumeNameAbsenceObserved = true;
+        await journal.append({ lane: "postgres", event: "observation:postgres-volume-name-absent", commandShapeSha256: volumeIdentity.identitySha256, ownedResources: ["postgres-volume"], terminalCode: "ABSENT", cleanupState: "observed-absent" });
       }
       if (step.sqlKey === "c09-recovery") {
         const framed = result.stdout.toString("utf8");
@@ -2958,6 +3027,25 @@ function retryPostgresExecutionAbsenceProofObserved(records) {
     && record.terminalCode === null
     && record.cleanupState === "required");
 }
+function retryPostgresIdentityAuthority(records, runId) {
+  const containerRecords = records.filter((record) => record?.lane === "postgres" && record.event === "observation:postgres-container-identity");
+  const volumeRecords = records.filter((record) => record?.lane === "postgres" && record.event === "observation:postgres-volume-identity");
+  if (containerRecords.length > 1 || volumeRecords.length > 1) fail("POSTGRES_CLEANUP_IDENTITY_AUTHORITY_DUPLICATE", "RED_QUARANTINED");
+  let container = null;
+  if (containerRecords.length === 1) {
+    const record = containerRecords[0];
+    const expectedSha256 = postgresContainerIdentityAuthoritySha256(runId, `forme-r4-core-${runId}`, record.terminalCode);
+    if (record.processGroupId !== null || record.commandShapeSha256 !== expectedSha256 || canonicalJson(record.ownedResources) !== canonicalJson(["postgres-container"]) || record.cleanupState !== "required") fail("POSTGRES_CLEANUP_CONTAINER_IDENTITY_AUTHORITY_INVALID", "RED_QUARANTINED");
+    container = Object.freeze({ containerId: record.terminalCode, identitySha256: expectedSha256 });
+  }
+  let volume = null;
+  if (volumeRecords.length === 1) {
+    const record = volumeRecords[0];
+    if (record.processGroupId !== null || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["postgres-volume"]) || record.terminalCode !== "OBSERVED" || record.cleanupState !== "required") fail("POSTGRES_CLEANUP_VOLUME_IDENTITY_AUTHORITY_INVALID", "RED_QUARANTINED");
+    volume = Object.freeze({ identitySha256: record.commandShapeSha256 });
+  }
+  return Object.freeze({ container, volume });
+}
 async function appendRetryCleanupAbsenceMarker(journal, lane) {
   const marker = RETRY_CLEANUP_ABSENCE_MARKERS[lane];
   if (marker === undefined || typeof journal?.append !== "function") fail("RETRY_CLEANUP_ABSENCE_MARKER_WRITER_INVALID", "RED_QUARANTINED");
@@ -2974,6 +3062,7 @@ export async function cleanupPostgresResources({ capsule, runId, journal, record
   const postgresExecutionAbsenceProofObserved = retryPostgresExecutionAbsenceProofObserved(records);
   const postgresCleanupAbsenceObserved = retryCleanupAbsenceMarkerObserved(records, "postgres");
   const postgresAbsenceProofObserved = postgresExecutionAbsenceProofObserved || postgresCleanupAbsenceObserved;
+  const identityAuthority = retryPostgresIdentityAuthority(records, runId);
   if (rootAuthority !== null && rootAuthority.root !== plan.runRoot) {
     closeExactOwnedRootAuthority(rootAuthority);
     fail("POSTGRES_CLEANUP_CARRIED_ROOT_AUTHORITY_INVALID", "RED_QUARANTINED");
@@ -3005,39 +3094,57 @@ export async function cleanupPostgresResources({ capsule, runId, journal, record
   for (const directory of [path.join(plan.runRoot, "home"), path.join(plan.runRoot, "docker-config"), path.join(plan.runRoot, "tmp"), path.join(plan.runRoot, "neutral-cwd")]) mkdirOwned0700(directory);
   const base = ["--host", `unix://${dockerSocket}`];
   const environment = { HOME: path.join(plan.runRoot, "home"), DOCKER_CONFIG: path.join(plan.runRoot, "docker-config"), TMPDIR: path.join(plan.runRoot, "tmp"), PATH: "/usr/bin:/bin:/usr/sbin:/sbin" };
-  const inspect = async (kind, resourceKind, resourceName, format) => {
+  const inspectAbsentOrResult = async (kind, resourceKind, resourceName, format, journalCommandShapeSha256 = null) => {
     assertCleanupBoundFileCurrent(capsule, "docker-cli");
     assertCleanupDockerSocketCurrent(capsule);
     const command = { kind, executable: dockerCli, argv: [...base, resourceKind, "inspect", "--format", format, resourceName], environment, cwd: path.join(plan.runRoot, "neutral-cwd"), shell: false, callerArguments: 0, deadlineMilliseconds: 30_000, stdoutLimitBytes: 65_536, stderrLimitBytes: 4096, expectedExitCodes: [0, 1] };
-    const result = await runClosedProcess(command, { journal, lane: "cleanup", processPort, acceptedExitCodes: [0, 1] });
-    try {
-      if (result.exitCode === 1) { validateDockerExactNameAbsent({ resourceKind, resourceName, stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode }); return false; }
-      if (result.stderr.length !== 0 || !result.stdout.endsWith(Buffer.from("\n")) || result.stdout.subarray(0, -1).includes(0x0a)) fail("POSTGRES_CLEANUP_LABEL_FRAME_INVALID", "RED");
-      let labels;
-      try { labels = JSON.parse(result.stdout.subarray(0, -1).toString("utf8")); } catch { fail("POSTGRES_CLEANUP_LABEL_JSON_INVALID", "RED"); }
-      if (labels === null || typeof labels !== "object" || Array.isArray(labels) || labels["forme.run"] !== runId) fail("POSTGRES_CLEANUP_LABEL_MISMATCH", "RED");
-      return true;
-    } finally { result.stdout.fill(0); result.stderr.fill(0); }
+    const result = await runClosedProcess(command, { journal, lane: "cleanup", processPort, acceptedExitCodes: [0, 1], journalCommandShapeSha256 });
+    if (result.exitCode === 1) {
+      try { validateDockerExactNameAbsent({ resourceKind, resourceName, stdout: result.stdout, stderr: result.stderr, exitCode: result.exitCode }); }
+      finally { result.stdout.fill(0); result.stderr.fill(0); }
+      return null;
+    }
+    return result;
   };
   if (mayHaveContainer) {
-    const containerExists = await inspect("cleanup-container-inspect", "container", plan.containerName, "{{json .Config.Labels}}");
-    if (containerExists) {
+    if (identityAuthority.container === null) {
+      const unauthenticated = await inspectAbsentOrResult("cleanup-container-inspect", "container", plan.containerName, "{{.Id}}\t{{.Name}}\t{{index .Config.Labels \"forme.run\"}}");
+      if (unauthenticated !== null) { unauthenticated.stdout.fill(0); unauthenticated.stderr.fill(0); fail("POSTGRES_CLEANUP_CONTAINER_IDENTITY_UNAVAILABLE", "RED_QUARANTINED"); }
+      if (await inspectAbsentOrResult("cleanup-container-absence", "container", plan.containerName, "{{.Id}}") !== null) fail("POSTGRES_CLEANUP_CONTAINER_RECREATED", "RED_QUARANTINED");
+    } else {
+      const preRemove = await inspectAbsentOrResult("cleanup-container-inspect", "container", identityAuthority.container.containerId, "{{.Id}}\t{{.Name}}\t{{index .Config.Labels \"forme.run\"}}");
+      if (preRemove === null) {
+        const replacement = await inspectAbsentOrResult("cleanup-container-name-inspect", "container", plan.containerName, "{{.Id}}\t{{.Name}}\t{{index .Config.Labels \"forme.run\"}}");
+        if (replacement !== null) { replacement.stdout.fill(0); replacement.stderr.fill(0); fail("POSTGRES_CLEANUP_CONTAINER_REPLACED", "RED_QUARANTINED"); }
+        if (await inspectAbsentOrResult("cleanup-container-absence", "container", plan.containerName, "{{.Id}}") !== null) fail("POSTGRES_CLEANUP_CONTAINER_RECREATED", "RED_QUARANTINED");
+      } else {
+        try {
+          const observed = validatePostgresContainerIdentityFrame({ ...preRemove, runId, containerName: plan.containerName, expectedContainerId: identityAuthority.container.containerId });
+          if (observed.identitySha256 !== identityAuthority.container.identitySha256) fail("POSTGRES_CLEANUP_CONTAINER_REPLACED", "RED_QUARANTINED");
+        } finally { preRemove.stdout.fill(0); preRemove.stderr.fill(0); }
       assertCleanupBoundFileCurrent(capsule, "docker-cli"); assertCleanupDockerSocketCurrent(capsule);
-      const remove = { kind: "cleanup-container-remove", executable: dockerCli, argv: [...base, "container", "rm", "--force", plan.containerName], environment, cwd: path.join(plan.runRoot, "neutral-cwd"), shell: false, callerArguments: 0, deadlineMilliseconds: 30_000, stdoutLimitBytes: 65_536, stderrLimitBytes: 0, expectedExitCodes: [0] };
-      const result = await runClosedProcess(remove, { journal, lane: "cleanup", processPort });
-      try { if (result.stdout.toString("utf8") !== `${plan.containerName}\n` || result.stderr.length !== 0) fail("POSTGRES_CONTAINER_REMOVE_OBSERVATION_INVALID", "RED"); } finally { result.stdout.fill(0); result.stderr.fill(0); }
-      if (await inspect("cleanup-container-absence", "container", plan.containerName, "{{json .Config.Labels}}")) fail("POSTGRES_CONTAINER_STILL_PRESENT", "RED_QUARANTINED");
+        const remove = { kind: "cleanup-container-remove", executable: dockerCli, argv: [...base, "container", "rm", "--force", identityAuthority.container.containerId], environment, cwd: path.join(plan.runRoot, "neutral-cwd"), shell: false, callerArguments: 0, deadlineMilliseconds: 30_000, stdoutLimitBytes: 65_536, stderrLimitBytes: 0, expectedExitCodes: [0] };
+        const result = await runClosedProcess(remove, { journal, lane: "cleanup", processPort, journalCommandShapeSha256: postgresContainerCleanupCommandShapeSha256("container-remove", runId, identityAuthority.container.containerId) });
+        try { if (result.stdout.toString("utf8") !== `${identityAuthority.container.containerId}\n` || result.stderr.length !== 0) fail("POSTGRES_CONTAINER_REMOVE_OBSERVATION_INVALID", "RED_QUARANTINED"); } finally { result.stdout.fill(0); result.stderr.fill(0); }
+        if (await inspectAbsentOrResult("cleanup-container-id-absence", "container", identityAuthority.container.containerId, "{{.Id}}", postgresContainerCleanupCommandShapeSha256("container-id-absence", runId, identityAuthority.container.containerId)) !== null) fail("POSTGRES_CONTAINER_ID_STILL_PRESENT", "RED_QUARANTINED");
+        const recreated = await inspectAbsentOrResult("cleanup-container-absence", "container", plan.containerName, "{{.Id}}");
+        if (recreated !== null) { recreated.stdout.fill(0); recreated.stderr.fill(0); fail("POSTGRES_CLEANUP_CONTAINER_RECREATED", "RED_QUARANTINED"); }
+      }
     }
   }
   if (mayHaveVolume) {
-    const volumeExists = await inspect("cleanup-volume-inspect", "volume", plan.volumeName, "{{json .Labels}}");
-    if (volumeExists) {
+    const volumeExists = await inspectAbsentOrResult("cleanup-volume-inspect", "volume", plan.volumeName, "{{.Name}}\t{{index .Labels \"forme.run\"}}\t{{.CreatedAt}}\t{{.Driver}}\t{{.Scope}}");
+    if (volumeExists !== null) {
+      if (identityAuthority.volume === null) { volumeExists.stdout.fill(0); volumeExists.stderr.fill(0); fail("POSTGRES_CLEANUP_VOLUME_IDENTITY_UNAVAILABLE", "RED_QUARANTINED"); }
+      try { validatePostgresVolumeIdentityFrame({ ...volumeExists, runId, volumeName: plan.volumeName, expectedIdentitySha256: identityAuthority.volume.identitySha256 }); }
+      finally { volumeExists.stdout.fill(0); volumeExists.stderr.fill(0); }
       assertCleanupBoundFileCurrent(capsule, "docker-cli"); assertCleanupDockerSocketCurrent(capsule);
       const remove = { kind: "cleanup-volume-remove", executable: dockerCli, argv: [...base, "volume", "rm", plan.volumeName], environment, cwd: path.join(plan.runRoot, "neutral-cwd"), shell: false, callerArguments: 0, deadlineMilliseconds: 30_000, stdoutLimitBytes: 65_536, stderrLimitBytes: 0, expectedExitCodes: [0] };
-      const result = await runClosedProcess(remove, { journal, lane: "cleanup", processPort });
-      try { if (result.stdout.toString("utf8") !== `${plan.volumeName}\n` || result.stderr.length !== 0) fail("POSTGRES_VOLUME_REMOVE_OBSERVATION_INVALID", "RED"); } finally { result.stdout.fill(0); result.stderr.fill(0); }
-      if (await inspect("cleanup-volume-absence", "volume", plan.volumeName, "{{json .Labels}}")) fail("POSTGRES_VOLUME_STILL_PRESENT", "RED_QUARANTINED");
-    }
+      const result = await runClosedProcess(remove, { journal, lane: "cleanup", processPort, journalCommandShapeSha256: postgresVolumeCleanupCommandShapeSha256(runId, identityAuthority.volume.identitySha256) });
+      try { if (result.stdout.toString("utf8") !== `${plan.volumeName}\n` || result.stderr.length !== 0) fail("POSTGRES_VOLUME_REMOVE_OBSERVATION_INVALID", "RED_QUARANTINED"); } finally { result.stdout.fill(0); result.stderr.fill(0); }
+      const recreated = await inspectAbsentOrResult("cleanup-volume-absence", "volume", plan.volumeName, "{{.Name}}");
+      if (recreated !== null) { recreated.stdout.fill(0); recreated.stderr.fill(0); fail("POSTGRES_CLEANUP_VOLUME_RECREATED", "RED_QUARANTINED"); }
+    } else if (await inspectAbsentOrResult("cleanup-volume-absence", "volume", plan.volumeName, "{{.Name}}") !== null) fail("POSTGRES_CLEANUP_VOLUME_RECREATED", "RED_QUARANTINED");
   }
     await appendRetryCleanupAbsenceMarker(journal, "postgres");
     rootRemovalAttempted = true;
@@ -3986,7 +4093,16 @@ const RETRY_MACOS_NON_PROCESS_KINDS = new Set(["preflight", "write-openssl-confi
 const RETRY_MACOS_PROCESS_ORDER = Object.freeze(MACOS_PLAN_ORDER.filter((kind) => !RETRY_MACOS_NON_PROCESS_KINDS.has(kind)));
 const RETRY_MACOS_PROCESS_KINDS = new Set(RETRY_MACOS_PROCESS_ORDER.filter((kind) => !["helper-spawn", "feeder-spawn"].includes(kind)));
 const RETRY_MACOS_MUTATION_KINDS = new Set(["custom-keychain-create", "custom-keychain-unlock", "custom-keychain-import", "custom-keychain-partition", "binding-canary-add", "binding-canary-delete", "identity-delete", "custom-keychain-lock", "custom-keychain-delete"]);
-const RETRY_CLEANUP_PROCESS_KINDS = new Set(["cleanup-container-inspect", "cleanup-container-remove", "cleanup-container-absence", "cleanup-volume-inspect", "cleanup-volume-remove", "cleanup-volume-absence", "binding-canary-delete", "identity-delete", "custom-keychain-lock", "custom-keychain-delete", "default-keychain-post", "search-list-post"]);
+const RETRY_CLEANUP_PROCESS_KINDS = new Set(["cleanup-container-inspect", "cleanup-container-name-inspect", "cleanup-container-remove", "cleanup-container-id-absence", "cleanup-container-absence", "cleanup-volume-inspect", "cleanup-volume-remove", "cleanup-volume-absence", "binding-canary-delete", "identity-delete", "custom-keychain-lock", "custom-keychain-delete", "default-keychain-post", "search-list-post"]);
+const RETRY_POSTGRES_NORMAL_TAIL = Object.freeze([
+  Object.freeze({ kind: "container-cleanup-inspect", terminalCode: "0", observation: "postgres-container-pre-remove-identity" }),
+  Object.freeze({ kind: "container-remove", terminalCode: "0", observation: null }),
+  Object.freeze({ kind: "container-id-absence", terminalCode: "1", observation: "postgres-container-id-absent" }),
+  Object.freeze({ kind: "container-name-absence", terminalCode: "1", observation: "postgres-container-name-absent" }),
+  Object.freeze({ kind: "volume-cleanup-inspect", terminalCode: "0", observation: "postgres-volume-pre-remove-identity" }),
+  Object.freeze({ kind: "volume-remove", terminalCode: "0", observation: null }),
+  Object.freeze({ kind: "volume-name-absence", terminalCode: "1", observation: "postgres-volume-name-absent" }),
+]);
 export function validateRetryJournalForCleanup(records, expectedRuntimeDependencyAggregateSha256 = null) {
   if (!Array.isArray(records) || records.length < 1) fail("RETRY_CLEANUP_JOURNAL_EMPTY", "RED_QUARANTINED");
   if (expectedRuntimeDependencyAggregateSha256 !== null && !SHA.test(expectedRuntimeDependencyAggregateSha256)) fail("RETRY_CLEANUP_RUNTIME_SNAPSHOT_AUTHORITY_INVALID", "RED_QUARANTINED");
@@ -4015,7 +4131,12 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
   let postgresVolumeEverCreated = false;
   let postgresContainerDirty = false;
   let postgresVolumeDirty = false;
-  let postgresRemovalSuffixPhase = 0;
+  let postgresTailActive = false;
+  let postgresTailCursor = 0;
+  let postgresTailLifecycleKey = null;
+  let postgresTailPendingObservation = null;
+  let postgresContainerIdentity = null;
+  let postgresVolumeIdentitySha256 = null;
   let codexProcessIntentCursor = 0;
   let codexCompletedCursor = 0;
   let codexLifecycleKey = null;
@@ -4076,6 +4197,34 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
       slotRootObserved = true;
       return true;
     }
+    if (record.lane === "postgres" && typeof record.event === "string" && record.event.startsWith("observation:postgres-")) {
+      const kind = record.event.slice("observation:".length);
+      if (!slotRootObserved || postgresRunRootPhase !== 2 || postgresAbsenceProofObserved || laterThanPostgresProcessSeen || cleanupProcessSeen || record.processGroupId !== null) fail("RETRY_CLEANUP_POSTGRES_OBSERVATION_INVALID", "RED_QUARANTINED");
+      if (kind === "postgres-volume-identity") {
+        if (postgresVolumeIdentitySha256 !== null || postgresContainerIdentity !== null || postgresTailActive || !successfulProcessKinds.has("postgres:volume-identity-capture") || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["postgres-volume"]) || record.terminalCode !== "OBSERVED" || record.cleanupState !== "required") fail("RETRY_CLEANUP_POSTGRES_VOLUME_IDENTITY_INVALID", "RED_QUARANTINED");
+        postgresVolumeIdentitySha256 = record.commandShapeSha256;
+        return true;
+      }
+      if (kind === "postgres-container-identity") {
+        if (postgresVolumeIdentitySha256 === null || postgresContainerIdentity !== null || postgresTailActive || !successfulProcessKinds.has("postgres:container-create") || typeof record.terminalCode !== "string" || !/^[0-9a-f]{64}$/u.test(record.terminalCode) || record.commandShapeSha256 !== postgresContainerIdentityAuthoritySha256(first.runId, `forme-r4-core-${first.runId}`, record.terminalCode) || canonicalJson(record.ownedResources) !== canonicalJson(["postgres-container"]) || record.cleanupState !== "required") fail("RETRY_CLEANUP_POSTGRES_CONTAINER_IDENTITY_INVALID", "RED_QUARANTINED");
+        postgresContainerIdentity = Object.freeze({ containerId: record.terminalCode, identitySha256: record.commandShapeSha256 });
+        return true;
+      }
+      if (postgresTailPendingObservation !== kind || postgresTailCursor < 1) fail("RETRY_CLEANUP_POSTGRES_TAIL_OBSERVATION_INVALID", "RED_QUARANTINED");
+      const isContainerIdentity = ["postgres-container-pre-remove-identity"].includes(kind);
+      const isContainerAbsence = ["postgres-container-id-absent", "postgres-container-name-absent"].includes(kind);
+      const isVolumeIdentity = kind === "postgres-volume-pre-remove-identity";
+      const isVolumeAbsence = kind === "postgres-volume-name-absent";
+      const expectedSha256 = isContainerIdentity || isContainerAbsence ? postgresContainerIdentity?.identitySha256 : postgresVolumeIdentitySha256;
+      const expectedResources = isContainerIdentity || isContainerAbsence ? ["postgres-container"] : ["postgres-volume"];
+      const expectedTerminalCode = isContainerIdentity ? postgresContainerIdentity?.containerId : isVolumeIdentity ? "OBSERVED" : "ABSENT";
+      const expectedCleanupState = isContainerAbsence || isVolumeAbsence ? "observed-absent" : "required";
+      if (expectedSha256 === null || expectedSha256 === undefined || record.commandShapeSha256 !== expectedSha256 || canonicalJson(record.ownedResources) !== canonicalJson(expectedResources) || record.terminalCode !== expectedTerminalCode || record.cleanupState !== expectedCleanupState) fail("RETRY_CLEANUP_POSTGRES_TAIL_OBSERVATION_INVALID", "RED_QUARANTINED");
+      postgresTailPendingObservation = null;
+      if (kind === "postgres-container-name-absent") postgresContainerDirty = false;
+      if (kind === "postgres-volume-name-absent") postgresVolumeDirty = false;
+      return true;
+    }
     if (record.lane === "postgres" && record.event === RETRY_CLEANUP_ABSENCE_MARKERS.postgres.event) {
       if (postgresAbsenceProofObserved || postgresContainerDirty || postgresVolumeDirty || pendingIntentCount() !== 0 || !allGroupsAbsent() || !exactRetryCleanupAbsenceMarker(record, RETRY_CLEANUP_ABSENCE_MARKERS.postgres)) fail("RETRY_CLEANUP_POSTGRES_ABSENCE_MARKER_INVALID", "RED_QUARANTINED");
       postgresAbsenceProofObserved = true;
@@ -4095,8 +4244,9 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
       const kind = record.event.slice("marker:".length);
       const expectedKind = postgresMarkerKinds[postgresMarkerCursor];
       const prerequisiteKinds = kind === "container-created-marker" ? ["container-create"] : kind === "container-started-marker" ? ["container-start"] : [];
-      const absenceProofInvalid = kind === "postgres-absence-proof" && (!postgresContainerEverCreated || !postgresVolumeEverCreated || postgresContainerDirty || postgresVolumeDirty || postgresRemovalSuffixPhase !== 3 || pendingIntentCount() !== 0 || !allGroupsAbsent());
-      if (!slotRootObserved || postgresRunRootPhase !== 2 || laterThanPostgresProcessSeen || macOSRunRootPhase !== 0 || cleanupProcessSeen || kind !== expectedKind || !exactNonProcess(record, { lane: "postgres", event: `marker:${kind}`, commandShapeSha256: sha256(Buffer.from(kind, "utf8")), ownedResources: ["postgres-container", "postgres-volume", "postgres-workers"], terminalCode: null, cleanupState: "required" }) || prerequisiteKinds.some((processKind) => !successfulProcessKinds.has(`postgres:${processKind}`)) || absenceProofInvalid) fail("RETRY_CLEANUP_POSTGRES_MARKER_INVALID", "RED_QUARANTINED");
+      const identityPrerequisiteInvalid = kind === "container-created-marker" && (postgresContainerIdentity === null || postgresVolumeIdentitySha256 === null);
+      const absenceProofInvalid = kind === "postgres-absence-proof" && (!postgresContainerEverCreated || !postgresVolumeEverCreated || postgresContainerDirty || postgresVolumeDirty || !postgresTailActive || postgresTailCursor !== RETRY_POSTGRES_NORMAL_TAIL.length || postgresTailLifecycleKey !== null || postgresTailPendingObservation !== null || pendingIntentCount() !== 0 || !allGroupsAbsent());
+      if (!slotRootObserved || postgresRunRootPhase !== 2 || laterThanPostgresProcessSeen || macOSRunRootPhase !== 0 || cleanupProcessSeen || kind !== expectedKind || !exactNonProcess(record, { lane: "postgres", event: `marker:${kind}`, commandShapeSha256: sha256(Buffer.from(kind, "utf8")), ownedResources: ["postgres-container", "postgres-volume", "postgres-workers"], terminalCode: null, cleanupState: "required" }) || prerequisiteKinds.some((processKind) => !successfulProcessKinds.has(`postgres:${processKind}`)) || identityPrerequisiteInvalid || absenceProofInvalid) fail("RETRY_CLEANUP_POSTGRES_MARKER_INVALID", "RED_QUARANTINED");
       postgresMarkerCursor += 1;
       if (kind === "postgres-absence-proof") postgresAbsenceProofObserved = true;
       return true;
@@ -4158,7 +4308,7 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
     let allowed = false;
     if (record.lane === "codex" && CODEX_PROCESS_KINDS.includes(kind)) { resources = ["codex-process-group", "codex-stdio"]; allowed = true; }
     else if (record.lane === "postgres" && /^race-(?:CONTROLLER|A|B|OBSERVER)$/u.test(kind)) { resources = ["postgres-race-process-group"]; allowed = true; }
-    else if (record.lane === "postgres" && /^(?:image-binding-revalidate|container-collision-check|volume-collision-check|volume-create|container-create|container-start|readiness|container-remove|volume-remove|baseline-(?:bootstrap|migration|basisErrors|basis|verify|happy|errors|rollback)|nonrace-(?:bootstrap|migration|basis|public-boundaries|rollback)|C\d{2}-[AB]-[AB]-(?:bootstrap|migration|basis|setup|recover-(?:winner|loser)|verify|rollback)|final-(?:bootstrap|migration|basis|verify|rollback))$/u.test(kind)) { resources = ["postgres-process-group"]; allowed = true; }
+    else if (record.lane === "postgres" && /^(?:image-binding-revalidate|container-collision-check|volume-collision-check|volume-create|volume-identity-capture|container-create|container-start|readiness|container-cleanup-inspect|container-remove|container-id-absence|container-name-absence|volume-cleanup-inspect|volume-remove|volume-name-absence|baseline-(?:bootstrap|migration|basisErrors|basis|verify|happy|errors|rollback)|nonrace-(?:bootstrap|migration|basis|public-boundaries|rollback)|C\d{2}-[AB]-[AB]-(?:bootstrap|migration|basis|setup|recover-(?:winner|loser)|verify|rollback)|final-(?:bootstrap|migration|basis|verify|rollback))$/u.test(kind)) { resources = ["postgres-process-group"]; allowed = true; }
     else if (record.lane === "macos" && RETRY_MACOS_PROCESS_KINDS.has(kind)) { resources = ["macos-process-group"]; allowed = true; }
     else if (record.lane === "macos" && kind === "helper-spawn") { resources = MACOS_HELPER_PROCESS_RESOURCES; allowed = true; }
     else if (record.lane === "macos" && kind === "feeder-spawn") { resources = MACOS_FEEDER_PROCESS_RESOURCES; allowed = true; }
@@ -4171,6 +4321,7 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
   for (let index = 1; index < records.length; index += 1) {
     const record = records[index];
     if (cleanupCheckpointSeen) fail("RETRY_CLEANUP_RECORD_AFTER_CHECKPOINT", "RED_QUARANTINED");
+    if (postgresTailPendingObservation !== null && !cleanupProcessSeen && record.lane !== "cleanup" && !(record.lane === "postgres" && record.event === `observation:${postgresTailPendingObservation}`)) fail("RETRY_CLEANUP_POSTGRES_TAIL_OBSERVATION_MISSING", "RED_QUARANTINED");
     const unifiedCleanupGreen = record.lane === "cleanup" && ["retry-cleanup-observed", "retry-cleanup-after-terminal"].includes(record.event);
     if (macOSCleanupAbsenceObserved && !unifiedCleanupGreen) fail("RETRY_CLEANUP_RECORD_AFTER_MACOS_ABSENCE", "RED_QUARANTINED");
     if (postgresAbsenceProofObserved && record.lane === "postgres") fail("RETRY_CLEANUP_RECORD_AFTER_POSTGRES_ABSENCE", "RED_QUARANTINED");
@@ -4178,7 +4329,10 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
     if (descriptor === null) { if (!validateNonProcess(record)) fail("RETRY_CLEANUP_JOURNAL_EVENT_DENIED", "RED_QUARANTINED"); continue; }
     if (!slotRootObserved || (cleanupProcessSeen && descriptor.lane !== "cleanup")) fail("RETRY_CLEANUP_PROCESS_PHASE_INVALID", "RED_QUARANTINED");
     if (descriptor.lane === "postgres" && (postgresRunRootPhase !== 2 || postgresAbsenceProofObserved || laterThanPostgresProcessSeen || cleanupProcessSeen)) fail("RETRY_CLEANUP_POSTGRES_PROCESS_PHASE_INVALID", "RED_QUARANTINED");
-    if (descriptor.lane === "postgres" && (postgresRemovalSuffixPhase === 3 || (postgresRemovalSuffixPhase === 1 && !(descriptor.phase === "intent" && descriptor.kind === "volume-remove")) || (postgresRemovalSuffixPhase === 2 && descriptor.kind !== "volume-remove"))) fail("RETRY_CLEANUP_POSTGRES_REMOVAL_SUFFIX_INVALID", "RED_QUARANTINED");
+    if (descriptor.lane === "postgres" && postgresTailActive) {
+      const expected = RETRY_POSTGRES_NORMAL_TAIL[postgresTailCursor];
+      if (expected === undefined || descriptor.kind !== expected.kind || (descriptor.phase === "intent" ? postgresTailLifecycleKey !== null : postgresTailLifecycleKey !== descriptor.key)) fail("RETRY_CLEANUP_POSTGRES_REMOVAL_SUFFIX_INVALID", "RED_QUARANTINED");
+    }
     if (descriptor.lane === "codex" && (!postgresAbsenceProofObserved || macOSRunRootPhase !== 0 || cleanupProcessSeen)) fail("RETRY_CLEANUP_CODEX_PROCESS_PHASE_INVALID", "RED_QUARANTINED");
     if (descriptor.lane === "macos" && macOSRunRootPhase !== 3) fail("RETRY_CLEANUP_MACOS_PROCESS_WITHOUT_RUN_ROOT", "RED_QUARANTINED");
     if (descriptor.lane === "cleanup" && macOSCleanupAbsenceObserved) fail("RETRY_CLEANUP_PROCESS_AFTER_MACOS_ABSENCE", "RED_QUARANTINED");
@@ -4194,7 +4348,19 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
         if (descriptor.kind === "volume-create") { postgresVolumeEverCreated = true; postgresVolumeDirty = true; }
         if (descriptor.kind === "container-create") { postgresContainerEverCreated = true; postgresContainerDirty = true; }
         if (descriptor.kind === "container-start") postgresContainerDirty = true;
-        if (descriptor.kind === "volume-remove" && postgresRemovalSuffixPhase === 1) postgresRemovalSuffixPhase = 2;
+        const tailIndex = RETRY_POSTGRES_NORMAL_TAIL.findIndex((step) => step.kind === descriptor.kind);
+        if (!postgresTailActive && tailIndex >= 0) {
+          if (tailIndex !== 0 || postgresContainerIdentity === null || postgresVolumeIdentitySha256 === null || postgresMarkerCursor !== 3) fail("RETRY_CLEANUP_POSTGRES_REMOVAL_SUFFIX_INVALID", "RED_QUARANTINED");
+          postgresTailActive = true;
+        }
+        if (postgresTailActive) {
+          const expected = RETRY_POSTGRES_NORMAL_TAIL[postgresTailCursor];
+          if (expected === undefined || expected.kind !== descriptor.kind || postgresTailLifecycleKey !== null) fail("RETRY_CLEANUP_POSTGRES_REMOVAL_SUFFIX_INVALID", "RED_QUARANTINED");
+          if (descriptor.kind === "container-remove" && record.commandShapeSha256 !== postgresContainerCleanupCommandShapeSha256("container-remove", first.runId, postgresContainerIdentity.containerId)) fail("RETRY_CLEANUP_POSTGRES_CONTAINER_REMOVE_BINDING_INVALID", "RED_QUARANTINED");
+          if (descriptor.kind === "container-id-absence" && record.commandShapeSha256 !== postgresContainerCleanupCommandShapeSha256("container-id-absence", first.runId, postgresContainerIdentity.containerId)) fail("RETRY_CLEANUP_POSTGRES_CONTAINER_ABSENCE_BINDING_INVALID", "RED_QUARANTINED");
+          if (descriptor.kind === "volume-remove" && record.commandShapeSha256 !== postgresVolumeCleanupCommandShapeSha256(first.runId, postgresVolumeIdentitySha256)) fail("RETRY_CLEANUP_POSTGRES_VOLUME_REMOVE_BINDING_INVALID", "RED_QUARANTINED");
+          postgresTailLifecycleKey = descriptor.key;
+        }
       }
       if (descriptor.lane === "codex") {
         if (descriptor.kind !== CODEX_PROCESS_KINDS[codexProcessIntentCursor] || codexProcessIntentCursor !== codexCompletedCursor || codexLifecycleKey !== null) fail("RETRY_CLEANUP_CODEX_PROCESS_ORDER_INVALID", "RED_QUARANTINED");
@@ -4217,6 +4383,9 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
         }
       }
       if (descriptor.lane === "cleanup" && (["intent", "started"].includes(macOSHelperLifecycle) || ["intent", "started"].includes(macOSFeederLifecycle))) fail("RETRY_CLEANUP_MACOS_DIRECT_PROCESS_OVERLAP", "RED_QUARANTINED");
+      if (descriptor.lane === "cleanup" && descriptor.kind === "cleanup-container-remove" && (postgresContainerIdentity === null || record.commandShapeSha256 !== postgresContainerCleanupCommandShapeSha256("container-remove", first.runId, postgresContainerIdentity.containerId))) fail("RETRY_CLEANUP_POSTGRES_CONTAINER_REMOVE_BINDING_INVALID", "RED_QUARANTINED");
+      if (descriptor.lane === "cleanup" && descriptor.kind === "cleanup-container-id-absence" && (postgresContainerIdentity === null || record.commandShapeSha256 !== postgresContainerCleanupCommandShapeSha256("container-id-absence", first.runId, postgresContainerIdentity.containerId))) fail("RETRY_CLEANUP_POSTGRES_CONTAINER_ABSENCE_BINDING_INVALID", "RED_QUARANTINED");
+      if (descriptor.lane === "cleanup" && descriptor.kind === "cleanup-volume-remove" && (postgresVolumeIdentitySha256 === null || record.commandShapeSha256 !== postgresVolumeCleanupCommandShapeSha256(first.runId, postgresVolumeIdentitySha256))) fail("RETRY_CLEANUP_POSTGRES_VOLUME_REMOVE_BINDING_INVALID", "RED_QUARANTINED");
       if (["macos", "cleanup"].includes(descriptor.lane) && RETRY_MACOS_MUTATION_KINDS.has(descriptor.kind)) {
         macOSMutationSeen = true;
         macOSMutationEpoch += 1;
@@ -4282,8 +4451,14 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
     if (descriptor.lane === "postgres" && descriptor.phase === "terminal") {
       if (["container-create", "container-start"].includes(descriptor.kind)) postgresContainerDirty = true;
       if (descriptor.kind === "volume-create") postgresVolumeDirty = true;
-      if (processState?.absent === true && record.terminalCode === "0" && descriptor.kind === "container-remove") { postgresContainerDirty = false; postgresRemovalSuffixPhase = 1; }
-      if (processState?.absent === true && record.terminalCode === "0" && descriptor.kind === "volume-remove") { postgresVolumeDirty = false; if (postgresRemovalSuffixPhase === 2) postgresRemovalSuffixPhase = 3; }
+      if (postgresTailActive && postgresTailLifecycleKey === descriptor.key) {
+        const expected = RETRY_POSTGRES_NORMAL_TAIL[postgresTailCursor];
+        if (expected !== undefined && expected.kind === descriptor.kind && processState?.absent === true && record.terminalCode === expected.terminalCode) {
+          postgresTailLifecycleKey = null;
+          postgresTailCursor += 1;
+          postgresTailPendingObservation = expected.observation;
+        } else postgresTailLifecycleKey = "failed";
+      }
     }
     if (["macos", "cleanup"].includes(descriptor.lane) && descriptor.phase === "terminal") {
       if (descriptor.kind === "custom-keychain-create") macOSKeychainDirty = true;
@@ -4296,8 +4471,8 @@ export function validateRetryJournalForCleanup(records, expectedRuntimeDependenc
       }
     }
     if (descriptor.lane === "cleanup" && descriptor.phase === "terminal" && processState?.absent === true && record.terminalCode === "1") {
-      if (["cleanup-container-inspect", "cleanup-container-absence"].includes(descriptor.kind)) postgresContainerDirty = false;
-      if (["cleanup-volume-inspect", "cleanup-volume-absence"].includes(descriptor.kind)) postgresVolumeDirty = false;
+      if (descriptor.kind === "cleanup-container-absence") postgresContainerDirty = false;
+      if (descriptor.kind === "cleanup-volume-absence") postgresVolumeDirty = false;
     }
     if (descriptor.lane === "codex" && processState?.absent === true) {
       if (descriptor.phase === "terminal" && record.terminalCode === "0" && CODEX_PROCESS_KINDS[codexCompletedCursor] === descriptor.kind) codexCompletedCursor += 1;

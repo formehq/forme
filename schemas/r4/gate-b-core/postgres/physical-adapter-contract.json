@@ -70,7 +70,13 @@
     "termGrace": 2000,
     "killGrace": 2000
   },
-  "futurePlan": ["capsule-revalidate", "collision-check", "volume-create", "container-create", "marker", "container-start", "marker", "readiness", "bootstrap", "migration", "basis", "verify", "happy-errors-ack", "rollback", "32-fresh-race-overlays", "clean-reapply-verify-rollback", "cleanup"],
+  "futurePlan": ["capsule-revalidate", "collision-check", "volume-create", "volume-stable-identity-capture", "container-create-and-immutable-id-capture", "marker", "container-start", "marker", "readiness", "bootstrap", "migration", "basis", "verify", "happy-errors-ack", "rollback", "32-fresh-race-overlays", "clean-reapply-verify-rollback", "container-pre-remove-id-name-label-inspect", "container-remove-by-id", "container-post-id-absence", "container-post-name-absence", "volume-pre-remove-stable-identity-label-inspect", "volume-remove-by-name", "volume-post-name-absence", "postgres-absence-proof"],
+  "cleanupAuthority": {
+    "container": "create stdout is exactly one LF-framed 64-lower-hex immutable ID; pre-remove inspect must reproduce that ID, exact /name and forme.run label; remove argv and journal authority bind the ID; both ID and name must be absent afterward",
+    "volume": "create-time inspect durably binds exact Name, forme.run, CreatedAt, Driver and Scope; pre-remove inspect must reproduce the complete identity, name removal is immediate under the existing same-user procedural boundary, and exact name absence must follow",
+    "dirtyClear": "remove exit 0 alone never clears dirty; only parsed durable post-name absence does",
+    "raceVerdict": "pre-remove foreign replacement is preserved RED_QUARANTINED; post-remove same-name recreation prevents absence proof and Green"
+  },
   "constructionExecutor": "fake_only",
   "strongestConstructionVerdict": "POSTGRES_RETRY_READY_YELLOW"
 }

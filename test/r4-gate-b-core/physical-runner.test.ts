@@ -35,6 +35,7 @@ import {
   readCheckpoint,
   removeEmptyAuthenticatedRetryJournalRoot,
   removeExactOwnedRootTree,
+  resolvePostgresContainerIdentityStep,
   RETRY_CLEANUP_ABSENCE_MARKERS,
   reconcileCheckpointOwnershipJournalForCleanup,
   selectPhysicalRunnerTerminalError,
@@ -49,6 +50,18 @@ import {
   writeFinalConstructionCheckpoint,
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 } from "../../scripts/r4-gate-b-physical-runner.mjs";
+import {
+  POSTGRES_CONTAINER_ID_PLACEHOLDER,
+  buildPostgresPhysicalPlan,
+  postgresContainerCleanupCommandShapeSha256,
+  postgresContainerIdentityAuthoritySha256,
+  postgresVolumeCleanupCommandShapeSha256,
+  validatePostgresContainerCreateFrame,
+  validatePostgresContainerIdentityFrame,
+  validatePostgresVolumeCreateFrame,
+  validatePostgresVolumeIdentityFrame,
+// @ts-expect-error Construction scripts intentionally remain executable ESM.
+} from "../../scripts/r4-gate-b-physical-port.mjs";
 import {
   atomicWritePrivateFile,
   runtimeDependencyInventory,
@@ -190,6 +203,14 @@ test("blocked-start supervisor bytes and logical process-group accounting are fr
   assert.match(cleanupFsm.directHelperFeederRecoveryOrder, /helper then feeder or feeder then helper/u);
   assert.match(cleanupFsm.directHelperFeederRecoveryOrder, /until both are absent/u);
   assert.match(cleanupFsm.postgresAbsenceMarkerLaneTerminal, /every later PostgreSQL lane marker, observation, or process record is RED_QUARANTINED/u);
+  assert.match(cleanupFsm.postgresNormalIdentityCapture, /64-lower-hex ID/u);
+  assert.deepEqual(cleanupFsm.postgresNormalTailOrder, [
+    "container-pre-remove-exact-id-name-label-inspect", "container-remove-by-observed-immutable-id", "container-post-remove-exact-id-absence", "container-post-remove-exact-name-absence",
+    "volume-pre-remove-exact-stable-identity-and-label-inspect", "volume-remove-by-name-under-same-user-procedural-boundary", "volume-post-remove-exact-name-absence", "postgres-absence-proof",
+  ]);
+  assert.match(cleanupFsm.postgresResolvedCommandBinding, /durable command-authority hashes include that exact ID/u);
+  assert.match(cleanupFsm.postgresDirtyClearRule, /remove exit 0 never clears/u);
+  assert.match(cleanupFsm.postgresCompensationIdentityRule, /same-name recreation is preserved and RED_QUARANTINED/u);
   assert.match(cleanupFsm.macosAbsenceMarkerJournalTerminal, /only one exact final unified cleanup Green marker may follow/u);
   assert.deepEqual(cleanupFsm.postgresCompensationMarker, {
     lane: RETRY_CLEANUP_ABSENCE_MARKERS.postgres.lane,
@@ -210,6 +231,8 @@ test("blocked-start supervisor bytes and logical process-group accounting are fr
   assert.equal(RETRY_CLEANUP_ABSENCE_MARKERS.postgres.commandShapeSha256, hashFrame(cleanupFsm.postgresCompensationMarker.commandFrame));
   assert.equal(RETRY_CLEANUP_ABSENCE_MARKERS.macos.commandShapeSha256, hashFrame(cleanupFsm.macosCompensationMarker.commandFrame));
   assert.match(cleanupFsm.rootAbsentFastPathAuthority, /caller-injected booleans are ignored/u);
+  assert.deepEqual(contract.postgresPlan.cleanupTail, ["container-cleanup-inspect-by-ID", "container-remove-by-ID", "container-id-absence", "container-name-absence", "volume-cleanup-inspect-stable-identity", "volume-remove-by-name", "volume-name-absence", "postgres-absence-proof"]);
+  assert.match(contract.postgresPlan.containerCreateOutput, /64-lower-hex immutable container ID/u);
 });
 
 test("blocked-start launcher releases one owned fake target by same-PID exec replacement", async () => {
@@ -589,6 +612,35 @@ test("Docker exact-name absence accepts only the closed daemon not-found frame",
   ]) assert.throws(() => validateDockerExactNameAbsent(input), /POSTGRES_EXACT_NAME_ABSENCE_INVALID/u);
 });
 
+test("Postgres cleanup identity frames and resolved container argv are exact and body-free", () => {
+  const runId = "d".repeat(32);
+  const containerName = `forme-r4-core-${runId}`;
+  const containerId = "a".repeat(64);
+  const created = validatePostgresContainerCreateFrame({ stdout: Buffer.from(`${containerId}\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName });
+  assert.equal(created.containerId, containerId);
+  assert.equal(created.identitySha256, postgresContainerIdentityAuthoritySha256(runId, containerName, containerId));
+  assert.equal(validatePostgresContainerIdentityFrame({ stdout: Buffer.from(`${containerId}\t/${containerName}\t${runId}\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName, expectedContainerId: containerId }).identitySha256, created.identitySha256);
+  const volumeName = containerName;
+  assert.equal(validatePostgresVolumeCreateFrame({ stdout: Buffer.from(`${volumeName}\n`), stderr: Buffer.alloc(0), exitCode: 0, volumeName }), true);
+  const volumeFrame = `${volumeName}\t${runId}\t2026-08-08T12:34:56Z\tlocal\tlocal\n`;
+  const volume = validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(volumeFrame), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName });
+  assert.equal(validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(volumeFrame), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName, expectedIdentitySha256: volume.identitySha256 }).identitySha256, volume.identitySha256);
+  const plan = buildPostgresPhysicalPlan({ dockerCli: "/owned/docker", dockerUnixSocket: "/owned/docker.sock", localImageId: `sha256:${"b".repeat(64)}` }, `sha256:${"c".repeat(64)}`, runId);
+  const rawRemove = plan.steps.find((step: { kind: string }) => step.kind === "container-remove");
+  assert.equal(rawRemove.argv.at(-1), POSTGRES_CONTAINER_ID_PLACEHOLDER);
+  const resolved = resolvePostgresContainerIdentityStep(rawRemove, runId, containerId);
+  assert.equal(resolved.step.argv.at(-1), containerId);
+  assert.equal(resolved.journalCommandShapeSha256, postgresContainerCleanupCommandShapeSha256("container-remove", runId, containerId));
+  assert.match(postgresVolumeCleanupCommandShapeSha256(runId, volume.identitySha256), /^sha256:[0-9a-f]{64}$/u);
+  for (const invoke of [
+    () => validatePostgresContainerCreateFrame({ stdout: Buffer.from(`${containerId}\r\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName }),
+    () => validatePostgresContainerIdentityFrame({ stdout: Buffer.from(`${"b".repeat(64)}\t/${containerName}\t${runId}\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName, expectedContainerId: containerId }),
+    () => validatePostgresContainerIdentityFrame({ stdout: Buffer.from(`${containerId}\t/${containerName}\tforeign\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName, expectedContainerId: containerId }),
+    () => validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(volumeFrame.replace("2026-08-08", "2026-08-09")), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName, expectedIdentitySha256: volume.identitySha256 }),
+    () => validatePostgresVolumeCreateFrame({ stdout: Buffer.from(`${volumeName}\nextra\n`), stderr: Buffer.alloc(0), exitCode: 0, volumeName }),
+  ]) assert.throws(invoke, /POSTGRES_(?:CONTAINER|VOLUME)_/u);
+});
+
 test("runtime snapshot aggregate binds every capsule source size and rejects size drift", () => {
   type RuntimeEntry = Readonly<{ path: string; sha256: string }>;
   type BoundRuntimeEntry = Readonly<{ logicalName: string; path: string; sha256: string; size: number }>;
@@ -626,7 +678,7 @@ test("retry cleanup journal accepts only exact non-process FSM crash prefixes", 
   };
   const capsuleSha256 = hashFrame("retry-capsule\n");
   const runtimeSha256 = hashFrame("retry-runtime-snapshot\n");
-  const runId = "retry-journal-fixture";
+  const runId = "e".repeat(32);
   let sequence = 0;
   const record = (overrides: Partial<RetryJournalRecord>): RetryJournalRecord => ({
     schemaVersion: "r4_gate_b_physical_journal.v1", sequence: sequence++, previousRecordSha256: null,
@@ -634,12 +686,12 @@ test("retry cleanup journal accepts only exact non-process FSM crash prefixes", 
     lane: "runner", event: "", commandShapeSha256: null, processGroupId: null,
     ownedResources: [], terminalCode: null, cleanupState: "required", ...overrides,
   });
-  const process = (lane: "postgres" | "macos" | "cleanup" | "codex", kind: string, pid: number, ownedResources: string[]) => {
-    const commandShapeSha256 = hashFrame(`${lane}:${kind}\n`);
+  const process = (lane: "postgres" | "macos" | "cleanup" | "codex", kind: string, pid: number, ownedResources: string[], options: { commandShapeSha256?: string; terminalCode?: string } = {}) => {
+    const commandShapeSha256 = options.commandShapeSha256 ?? hashFrame(`${lane}:${kind}\n`);
     return [
       record({ lane, event: `intent:${kind}`, commandShapeSha256, ownedResources }),
       record({ lane, event: `started:${kind}`, commandShapeSha256, processGroupId: pid, ownedResources }),
-      record({ lane, event: `terminal:${kind}`, commandShapeSha256, processGroupId: pid, ownedResources, terminalCode: "0", cleanupState: "observed-absent" }),
+      record({ lane, event: `terminal:${kind}`, commandShapeSha256, processGroupId: pid, ownedResources, terminalCode: options.terminalCode ?? "0", cleanupState: "observed-absent" }),
     ];
   };
   const CODEX_PROCESS_KINDS_FOR_TEST = ["version", "help", "schema", "initialize"];
@@ -654,22 +706,100 @@ test("retry cleanup journal accepts only exact non-process FSM crash prefixes", 
   assert.equal(validateRetryJournalForCleanup(prologue, runtimeSha256).runtimeDependencyAggregateSha256, runtimeSha256);
 
   const postgresMarker = (kind: string) => record({ lane: "postgres", event: `marker:${kind}`, commandShapeSha256: hashFrame(kind), ownedResources: ["postgres-container", "postgres-volume", "postgres-workers"] });
+  const postgresContainerId = "a".repeat(64);
+  const postgresContainerIdentitySha256 = postgresContainerIdentityAuthoritySha256(runId, `forme-r4-core-${runId}`, postgresContainerId);
+  const postgresVolumeIdentitySha256 = hashFrame("postgres-volume-identity\n");
+  const postgresObservation = (kind: string, commandShapeSha256: string, ownedResources: string[], terminalCode: string, cleanupState = "required") => record({ lane: "postgres", event: `observation:${kind}`, commandShapeSha256, ownedResources, terminalCode, cleanupState });
   const postgresRunRootShapeSha256 = hashFrame(`postgres-run-root:${runId}\n`);
   const postgresEvents = [
     record({ lane: "postgres", event: "marker:run-root-target-absent", commandShapeSha256: postgresRunRootShapeSha256, ownedResources: ["postgres-run-root"] }),
     record({ lane: "postgres", event: "marker:run-root-created", commandShapeSha256: postgresRunRootShapeSha256, ownedResources: ["postgres-run-root"], terminalCode: "CREATED" }),
     postgresMarker("capsule-revalidate"),
     ...process("postgres", "volume-create", 10_000, ["postgres-process-group"]),
-    ...process("postgres", "container-create", 10_001, ["postgres-process-group"]),
+    ...process("postgres", "volume-identity-capture", 10_001, ["postgres-process-group"]),
+    postgresObservation("postgres-volume-identity", postgresVolumeIdentitySha256, ["postgres-volume"], "OBSERVED"),
+    ...process("postgres", "container-create", 10_002, ["postgres-process-group"]),
+    postgresObservation("postgres-container-identity", postgresContainerIdentitySha256, ["postgres-container"], postgresContainerId),
     postgresMarker("container-created-marker"),
-    ...process("postgres", "container-start", 10_002, ["postgres-process-group"]),
+    ...process("postgres", "container-start", 10_003, ["postgres-process-group"]),
     postgresMarker("container-started-marker"),
-    ...process("postgres", "container-remove", 10_003, ["postgres-process-group"]),
-    ...process("postgres", "volume-remove", 10_004, ["postgres-process-group"]),
+    ...process("postgres", "container-cleanup-inspect", 10_004, ["postgres-process-group"]),
+    postgresObservation("postgres-container-pre-remove-identity", postgresContainerIdentitySha256, ["postgres-container"], postgresContainerId),
+    ...process("postgres", "container-remove", 10_005, ["postgres-process-group"], { commandShapeSha256: postgresContainerCleanupCommandShapeSha256("container-remove", runId, postgresContainerId) }),
+    ...process("postgres", "container-id-absence", 10_006, ["postgres-process-group"], { commandShapeSha256: postgresContainerCleanupCommandShapeSha256("container-id-absence", runId, postgresContainerId), terminalCode: "1" }),
+    postgresObservation("postgres-container-id-absent", postgresContainerIdentitySha256, ["postgres-container"], "ABSENT", "observed-absent"),
+    ...process("postgres", "container-name-absence", 10_007, ["postgres-process-group"], { terminalCode: "1" }),
+    postgresObservation("postgres-container-name-absent", postgresContainerIdentitySha256, ["postgres-container"], "ABSENT", "observed-absent"),
+    ...process("postgres", "volume-cleanup-inspect", 10_008, ["postgres-process-group"]),
+    postgresObservation("postgres-volume-pre-remove-identity", postgresVolumeIdentitySha256, ["postgres-volume"], "OBSERVED"),
+    ...process("postgres", "volume-remove", 10_009, ["postgres-process-group"], { commandShapeSha256: postgresVolumeCleanupCommandShapeSha256(runId, postgresVolumeIdentitySha256) }),
+    ...process("postgres", "volume-name-absence", 10_010, ["postgres-process-group"], { terminalCode: "1" }),
+    postgresObservation("postgres-volume-name-absent", postgresVolumeIdentitySha256, ["postgres-volume"], "ABSENT", "observed-absent"),
     postgresMarker("postgres-absence-proof"),
   ];
   for (let length = 1; length <= postgresEvents.length; length += 1) assert.doesNotThrow(() => validateRetryJournalForCleanup([...prologue, ...postgresEvents.slice(0, length)], runtimeSha256));
   assert.equal(validateRetryJournalForCleanup([...prologue, ...postgresEvents], runtimeSha256).postgresAbsenceProofObserved, true);
+  const containerRemoveTerminalIndex = postgresEvents.findIndex((entry) => entry.event === "terminal:container-remove");
+  const containerNameAbsenceTerminalIndex = postgresEvents.findIndex((entry) => entry.event === "terminal:container-name-absence");
+  const volumeNameAbsenceTerminalIndex = postgresEvents.findIndex((entry) => entry.event === "terminal:volume-name-absence");
+  assert.ok(containerRemoveTerminalIndex > 0 && containerNameAbsenceTerminalIndex > containerRemoveTerminalIndex && volumeNameAbsenceTerminalIndex > containerNameAbsenceTerminalIndex);
+  assert.throws(
+    () => validateRetryJournalForCleanup([...prologue, ...postgresEvents.slice(0, containerRemoveTerminalIndex + 1), postgresMarker("postgres-absence-proof")], runtimeSha256),
+    /RETRY_CLEANUP_POSTGRES_MARKER_INVALID/u,
+    "container rm exit 0 alone must never clear dirty state",
+  );
+  for (const recreationTerminalIndex of [containerNameAbsenceTerminalIndex, volumeNameAbsenceTerminalIndex]) {
+    const dirtyPrefix = [...postgresEvents.slice(0, recreationTerminalIndex), { ...postgresEvents[recreationTerminalIndex]!, terminalCode: "0" }];
+    assert.doesNotThrow(() => validateRetryJournalForCleanup([...prologue, ...dirtyPrefix], runtimeSha256));
+    assert.throws(
+      () => validateRetryJournalForCleanup([...prologue, ...dirtyPrefix, postgresMarker("postgres-absence-proof")], runtimeSha256),
+      /RETRY_CLEANUP_POSTGRES_MARKER_INVALID/u,
+      "same-name recreation must prevent the absence marker and Green",
+    );
+  }
+  const containerPreObservationIndex = postgresEvents.findIndex((entry) => entry.event === "observation:postgres-container-pre-remove-identity");
+  assert.throws(
+    () => validateRetryJournalForCleanup([...prologue, ...postgresEvents.slice(0, containerPreObservationIndex), { ...postgresEvents[containerPreObservationIndex]!, commandShapeSha256: hashFrame("foreign-container-identity\n") }], runtimeSha256),
+    /RETRY_CLEANUP_POSTGRES_TAIL_OBSERVATION_INVALID/u,
+  );
+  const containerRemoveIntent = postgresEvents.find((entry) => entry.event === "intent:container-remove")!;
+  assert.throws(
+    () => validateRetryJournalForCleanup([...prologue, ...postgresEvents.slice(0, containerPreObservationIndex + 1), { ...containerRemoveIntent, commandShapeSha256: hashFrame("name-bound-remove-forbidden\n") }], runtimeSha256),
+    /RETRY_CLEANUP_POSTGRES_CONTAINER_REMOVE_BINDING_INVALID/u,
+  );
+  const startedMarkerIndex = postgresEvents.findIndex((entry) => entry.event === "marker:container-started-marker");
+  const dirtyPostgresPrefix = [...prologue, ...postgresEvents.slice(0, startedMarkerIndex + 1)];
+  const postgresCleanupMarkerEarly = record({
+    lane: RETRY_CLEANUP_ABSENCE_MARKERS.postgres.lane,
+    event: RETRY_CLEANUP_ABSENCE_MARKERS.postgres.event,
+    commandShapeSha256: RETRY_CLEANUP_ABSENCE_MARKERS.postgres.commandShapeSha256,
+    ownedResources: [...RETRY_CLEANUP_ABSENCE_MARKERS.postgres.ownedResources],
+    terminalCode: "ABSENT",
+    cleanupState: "observed-absent",
+  });
+  const cleanupThroughContainerRemove = [
+    ...process("cleanup", "cleanup-container-inspect", 10_020, ["cleanup-process-group"]),
+    ...process("cleanup", "cleanup-container-remove", 10_021, ["cleanup-process-group"], { commandShapeSha256: postgresContainerCleanupCommandShapeSha256("container-remove", runId, postgresContainerId) }),
+  ];
+  assert.throws(() => validateRetryJournalForCleanup([...dirtyPostgresPrefix, ...cleanupThroughContainerRemove, postgresCleanupMarkerEarly], runtimeSha256), /RETRY_CLEANUP_POSTGRES_ABSENCE_MARKER_INVALID/u);
+  const cleanupThroughContainerAbsence = [
+    ...cleanupThroughContainerRemove,
+    ...process("cleanup", "cleanup-container-id-absence", 10_022, ["cleanup-process-group"], { commandShapeSha256: postgresContainerCleanupCommandShapeSha256("container-id-absence", runId, postgresContainerId), terminalCode: "1" }),
+    ...process("cleanup", "cleanup-container-absence", 10_023, ["cleanup-process-group"], { terminalCode: "1" }),
+  ];
+  assert.throws(() => validateRetryJournalForCleanup([...dirtyPostgresPrefix, ...cleanupThroughContainerAbsence, postgresCleanupMarkerEarly], runtimeSha256), /RETRY_CLEANUP_POSTGRES_ABSENCE_MARKER_INVALID/u);
+  const cleanupThroughVolumeRemove = [
+    ...cleanupThroughContainerAbsence,
+    ...process("cleanup", "cleanup-volume-inspect", 10_024, ["cleanup-process-group"]),
+    ...process("cleanup", "cleanup-volume-remove", 10_025, ["cleanup-process-group"], { commandShapeSha256: postgresVolumeCleanupCommandShapeSha256(runId, postgresVolumeIdentitySha256) }),
+  ];
+  assert.throws(() => validateRetryJournalForCleanup([...dirtyPostgresPrefix, ...cleanupThroughVolumeRemove, postgresCleanupMarkerEarly], runtimeSha256), /RETRY_CLEANUP_POSTGRES_ABSENCE_MARKER_INVALID/u);
+  assert.doesNotThrow(() => validateRetryJournalForCleanup([
+    ...dirtyPostgresPrefix,
+    ...cleanupThroughVolumeRemove,
+    ...process("cleanup", "cleanup-volume-absence", 10_026, ["cleanup-process-group"], { terminalCode: "1" }),
+    postgresCleanupMarkerEarly,
+  ], runtimeSha256));
 
   const codexEvents = CODEX_PROCESS_KINDS_FOR_TEST.flatMap((kind, index) => process("codex", kind, 10_100 + index, ["codex-process-group", "codex-stdio"]));
   const codexBeforePostgresProof = process("codex", "version", 10_099, ["codex-process-group", "codex-stdio"]);

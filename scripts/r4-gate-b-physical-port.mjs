@@ -73,6 +73,8 @@ export const MACOS_DIRECT_START_PROTOCOL = deepFreeze({
 
 const SHA = /^sha256:[0-9a-f]{64}$/u;
 const ID = /^[0-9a-f]{32}$/u;
+const POSTGRES_CONTAINER_ID = /^[0-9a-f]{64}$/u;
+export const POSTGRES_CONTAINER_ID_PLACEHOLDER = "<OBSERVED_CONTAINER_ID>";
 const MACOS_SYNTHETIC_FRAME_BYTES = 1390;
 const MACOS_SYNTHETIC_FRAME_SHA256 = "sha256:0576ca281013f55670897488801dcfef98fb00db08a303fcbd8a028f97f2c001";
 const MACOS_OPENSSL_CONFIG = `[req]\ndistinguished_name=dn\nx509_extensions=ext\nprompt=no\n[dn]\nCN=Forme Gate B Synthetic\n[ext]\nbasicConstraints=critical,CA:FALSE\nkeyUsage=critical,digitalSignature\nextendedKeyUsage=codeSigning\nsubjectKeyIdentifier=hash\n`;
@@ -131,6 +133,69 @@ function exactObject(value, keys, code, verdict = null) {
 function deepFreeze(value) {
   if (value && typeof value === "object" && !Object.isFrozen(value)) { Object.freeze(value); for (const child of Object.values(value)) deepFreeze(child); }
   return value;
+}
+function exactPostgresDockerLine(stdout, stderr, exitCode, code) {
+  if (!Buffer.isBuffer(stdout) || !Buffer.isBuffer(stderr) || exitCode !== 0 || stderr.length !== 0 || stdout.length < 2 || stdout.at(-1) !== 0x0a || stdout.subarray(0, -1).includes(0x0a) || stdout.includes(0x00) || stdout.includes(0x0d)) fail(code, "RED_QUARANTINED");
+  return stdout.subarray(0, -1).toString("utf8");
+}
+export function postgresContainerIdentityAuthoritySha256(runId, containerName, containerId) {
+  if (!ID.test(runId) || containerName !== `forme-r4-core-${runId}` || !POSTGRES_CONTAINER_ID.test(containerId)) fail("POSTGRES_CONTAINER_IDENTITY_AUTHORITY_INVALID", "RED_QUARANTINED");
+  return sha256(Buffer.from(`${canonicalJson({ schemaVersion: "r4.gate-b-core.postgres-container-identity.v1", runId, containerName, containerId, formeRunLabel: runId })}\n`, "utf8"));
+}
+export function postgresContainerCleanupCommandShapeSha256(kind, runId, containerId) {
+  if (!new Set(["container-remove", "container-id-absence"]).has(kind) || !ID.test(runId) || !POSTGRES_CONTAINER_ID.test(containerId)) fail("POSTGRES_CONTAINER_CLEANUP_COMMAND_AUTHORITY_INVALID", "RED_QUARANTINED");
+  return sha256(Buffer.from(`r4-postgres-${kind}-v1\0${runId}\0${containerId}\n`, "utf8"));
+}
+export function postgresVolumeCleanupCommandShapeSha256(runId, volumeIdentitySha256) {
+  if (!ID.test(runId) || !SHA.test(volumeIdentitySha256)) fail("POSTGRES_VOLUME_CLEANUP_COMMAND_AUTHORITY_INVALID", "RED_QUARANTINED");
+  return sha256(Buffer.from(`r4-postgres-volume-remove-v1\0${runId}\0${volumeIdentitySha256}\n`, "utf8"));
+}
+export function validatePostgresContainerCreateFrame({ stdout, stderr, exitCode, runId, containerName }) {
+  const containerId = exactPostgresDockerLine(stdout, stderr, exitCode, "POSTGRES_CONTAINER_CREATE_FRAME_INVALID");
+  return deepFreeze({ containerId, identitySha256: postgresContainerIdentityAuthoritySha256(runId, containerName, containerId) });
+}
+export function validatePostgresContainerIdentityFrame({ stdout, stderr, exitCode, runId, containerName, expectedContainerId }) {
+  const line = exactPostgresDockerLine(stdout, stderr, exitCode, "POSTGRES_CONTAINER_IDENTITY_FRAME_INVALID");
+  const fields = line.split("\t");
+  if (fields.length !== 3 || fields[0] !== expectedContainerId || fields[1] !== `/${containerName}` || fields[2] !== runId) fail("POSTGRES_CONTAINER_IDENTITY_MISMATCH", "RED_QUARANTINED");
+  return deepFreeze({ containerId: fields[0], identitySha256: postgresContainerIdentityAuthoritySha256(runId, containerName, fields[0]) });
+}
+export function validatePostgresVolumeCreateFrame({ stdout, stderr, exitCode, volumeName }) {
+  if (exactPostgresDockerLine(stdout, stderr, exitCode, "POSTGRES_VOLUME_CREATE_FRAME_INVALID") !== volumeName) fail("POSTGRES_VOLUME_CREATE_FRAME_INVALID", "RED_QUARANTINED");
+  return true;
+}
+export function validatePostgresVolumeIdentityFrame({ stdout, stderr, exitCode, runId, volumeName, expectedIdentitySha256 = null }) {
+  const line = exactPostgresDockerLine(stdout, stderr, exitCode, "POSTGRES_VOLUME_IDENTITY_FRAME_INVALID");
+  const fields = line.split("\t");
+  if (fields.length !== 5 || fields[0] !== volumeName || fields[1] !== runId || fields[2].length < 1 || fields[2].length > 128 || !/^[A-Za-z0-9._-]+$/u.test(fields[3]) || !/^[A-Za-z0-9._-]+$/u.test(fields[4])) fail("POSTGRES_VOLUME_IDENTITY_MISMATCH", "RED_QUARANTINED");
+  const identity = deepFreeze({ schemaVersion: "r4.gate-b-core.postgres-volume-identity.v1", runId, volumeName, formeRunLabel: fields[1], createdAt: fields[2], driver: fields[3], scope: fields[4] });
+  const identitySha256 = sha256(Buffer.from(`${canonicalJson(identity)}\n`, "utf8"));
+  if (expectedIdentitySha256 !== null && identitySha256 !== expectedIdentitySha256) fail("POSTGRES_VOLUME_IDENTITY_DRIFT", "RED_QUARANTINED");
+  return deepFreeze({ identity, identitySha256 });
+}
+export function runPostgresCleanupAuthorityFakeMatrix() {
+  const runId = "f".repeat(32);
+  const containerName = `forme-r4-core-${runId}`;
+  const volumeName = containerName;
+  const capturedId = "a".repeat(64);
+  let removalCalls = 0;
+  let containerForeignReplacementPreserved = false;
+  try {
+    validatePostgresContainerIdentityFrame({ stdout: Buffer.from(`${"b".repeat(64)}\t/${containerName}\t${runId}\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName, expectedContainerId: capturedId });
+    removalCalls += 1;
+  } catch (error) { containerForeignReplacementPreserved = error instanceof PhysicalPortError && error.code === "POSTGRES_CONTAINER_IDENTITY_MISMATCH" && error.verdict === "RED_QUARANTINED"; }
+  const capturedVolume = validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(`${volumeName}\t${runId}\t2026-08-08T00:00:00Z\tlocal\tlocal\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName });
+  let volumeForeignReplacementPreserved = false;
+  try {
+    validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(`${volumeName}\t${runId}\t2026-08-09T00:00:00Z\tlocal\tlocal\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName, expectedIdentitySha256: capturedVolume.identitySha256 });
+    removalCalls += 1;
+  } catch (error) { volumeForeignReplacementPreserved = error instanceof PhysicalPortError && error.code === "POSTGRES_VOLUME_IDENTITY_DRIFT" && error.verdict === "RED_QUARANTINED"; }
+  const recreated = validatePostgresContainerIdentityFrame({ stdout: Buffer.from(`${"c".repeat(64)}\t/${containerName}\t${runId}\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, containerName, expectedContainerId: "c".repeat(64) });
+  const recreatedVolume = validatePostgresVolumeIdentityFrame({ stdout: Buffer.from(`${volumeName}\t${runId}\t2026-08-10T00:00:00Z\tlocal\tlocal\n`), stderr: Buffer.alloc(0), exitCode: 0, runId, volumeName });
+  const foreignReplacementPreserved = containerForeignReplacementPreserved && volumeForeignReplacementPreserved;
+  const postRemoveRecreationBlocksProof = recreated.containerId === "c".repeat(64) && recreatedVolume.identitySha256 !== capturedVolume.identitySha256;
+  if (!foreignReplacementPreserved || removalCalls !== 0 || !postRemoveRecreationBlocksProof) fail("POSTGRES_CLEANUP_AUTHORITY_FAKE_MATRIX_DRIFT");
+  return deepFreeze({ caseCount: 4, containerForeignReplacementPreserved, volumeForeignReplacementPreserved, foreignReplacementPreserved, removalCalls, postRemoveRecreationBlocksProof, absenceProofsIssued: 0, realPhysicalEffects: 0 });
 }
 function closedFile(filePath) {
   const stat = fs.lstatSync(filePath);
@@ -852,8 +917,9 @@ export function buildPostgresPhysicalPlan(binding, manifestSha256, runId, readRu
     docker("image-binding-revalidate", ["image", "inspect", "--format", "{{.Id}}|{{.Os}}|{{.Architecture}}|{{join .RepoDigests \",\"}}", "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"], "read-only-bound-image", { outputParser: "exact-bound-image-id-platform-index", expectedLocalImageId: binding.localImageId, expectedOs: "linux", expectedArchitecture: "arm64", expectedRepoDigest: "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74" }),
     docker("container-collision-check", ["container", "inspect", "--format", "{{json .Config.Labels}}", name], "read-only-exact-name", { expectedExitCodes: [1], stderrLimitBytes: 4096, outputParser: "exact-name-must-be-absent" }),
     docker("volume-collision-check", ["volume", "inspect", "--format", "{{json .Labels}}", volume], "read-only-exact-name", { expectedExitCodes: [1], stderrLimitBytes: 4096, outputParser: "exact-name-must-be-absent" }),
-    docker("volume-create", ["volume", "create", "--label", `forme.run=${runId}`, volume], "volume-create"),
-    docker("container-create", ["create", "--pull=never", "--name", name, "--label", `forme.run=${runId}`, "--platform", "linux/arm64", "--network", "none", "--env", "POSTGRES_DB=forme_r4_gate_b", "--env", "POSTGRES_HOST_AUTH_METHOD=trust", "--volume", `${volume}:/var/lib/postgresql/data`, "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"], "container-create"),
+    docker("volume-create", ["volume", "create", "--label", `forme.run=${runId}`, volume], "volume-create", { outputParser: "exact-volume-create-name" }),
+    docker("volume-identity-capture", ["volume", "inspect", "--format", "{{.Name}}\t{{index .Labels \"forme.run\"}}\t{{.CreatedAt}}\t{{.Driver}}\t{{.Scope}}", volume], "read-only-volume-identity", { outputParser: "exact-volume-identity" }),
+    docker("container-create", ["create", "--pull=never", "--name", name, "--label", `forme.run=${runId}`, "--platform", "linux/arm64", "--network", "none", "--env", "POSTGRES_DB=forme_r4_gate_b", "--env", "POSTGRES_HOST_AUTH_METHOD=trust", "--volume", `${volume}:/var/lib/postgresql/data`, "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"], "container-create", { outputParser: "exact-container-create-id" }),
     marker("container-created-marker"),
     docker("container-start", ["start", name], "container-start"),
     marker("container-started-marker"),
@@ -874,7 +940,16 @@ export function buildPostgresPhysicalPlan(binding, manifestSha256, runId, readRu
     steps.push(psql(`${artifact.orderId}-rollback`, buildCorePostgresStdin("rollback", manifestSha256, runtimeReader), { orderId: artifact.orderId, sqlKey: "rollback" }));
   }
   for (const sqlKey of ["bootstrap", "migration", "basis", "verify", "rollback"]) steps.push(psql(`final-${sqlKey}`, buildCorePostgresStdin(sqlKey, manifestSha256, runtimeReader), { sqlKey }));
-  steps.push(docker("container-remove", ["rm", "--force", name], "container-remove"), docker("volume-remove", ["volume", "rm", volume], "volume-remove"), marker("postgres-absence-proof"));
+  steps.push(
+    docker("container-cleanup-inspect", ["container", "inspect", "--format", "{{.Id}}\t{{.Name}}\t{{index .Config.Labels \"forme.run\"}}", POSTGRES_CONTAINER_ID_PLACEHOLDER], "read-only-container-identity", { outputParser: "exact-container-identity" }),
+    docker("container-remove", ["rm", "--force", POSTGRES_CONTAINER_ID_PLACEHOLDER], "container-remove", { outputParser: "exact-container-remove-id" }),
+    docker("container-id-absence", ["container", "inspect", "--format", "{{.Id}}", POSTGRES_CONTAINER_ID_PLACEHOLDER], "read-only-container-id-absence", { expectedExitCodes: [1], stderrLimitBytes: 4096, outputParser: "exact-container-id-absence" }),
+    docker("container-name-absence", ["container", "inspect", "--format", "{{.Id}}", name], "read-only-container-name-absence", { expectedExitCodes: [1], stderrLimitBytes: 4096, outputParser: "exact-container-name-absence" }),
+    docker("volume-cleanup-inspect", ["volume", "inspect", "--format", "{{.Name}}\t{{index .Labels \"forme.run\"}}\t{{.CreatedAt}}\t{{.Driver}}\t{{.Scope}}", volume], "read-only-volume-identity", { outputParser: "exact-volume-identity" }),
+    docker("volume-remove", ["volume", "rm", volume], "volume-remove", { outputParser: "exact-volume-remove-name" }),
+    docker("volume-name-absence", ["volume", "inspect", "--format", "{{.Name}}", volume], "read-only-volume-name-absence", { expectedExitCodes: [1], stderrLimitBytes: 4096, outputParser: "exact-volume-name-absence" }),
+    marker("postgres-absence-proof"),
+  );
   return deepFreeze({
     schemaVersion: "r4.gate-b-core.postgres-physical-plan.v1", manifestSha256, runId, runRoot, containerName: name, volumeName: volume, imageReference: "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", localImageId: binding.localImageId,
     steps: deepFreeze(steps), orderedExecutions: 32, expectedCoreCalls: 68, expected2xx: 39, expectedControlledNon2xx: 29, expectedNewReceipts: 37, persistedVerifiers: 32, byteIndexSha256: sha256(Buffer.from(canonicalJson(raceByteIndex(catalog, runtimeReader)), "utf8")),
@@ -1066,9 +1141,10 @@ export function createStatefulConstructionEffectExecutor(lane) {
     if (lane === "postgres") {
       if (["volume-create"].includes(step.kind)) resources.add("postgres-volume");
       if (["container-create", "container-start"].includes(step.kind)) resources.add("postgres-container");
-      if (step.operation === "read-committed-overlap-controller") resources.add("postgres-controller-workers-observer");
-      if (step.kind === "container-remove") resources.delete("postgres-container");
-      if (step.kind === "volume-remove") resources.delete("postgres-volume");
+      if (step.operation === "read-committed-overlap-controller") { resources.add("postgres-controller-workers-observer"); resources.delete("postgres-controller-workers-observer"); }
+      if (step.kind === "container-name-absence") resources.delete("postgres-container");
+      if (step.kind === "volume-name-absence") resources.delete("postgres-volume");
+      if (step.kind === "postgres-absence-proof" && [...resources].some((resource) => resource.startsWith("postgres-"))) fail("POSTGRES_STATEFUL_FAKE_PROOF_WITH_RESIDUE");
     } else {
       if (step.kind === "compile") resources.add("macos-build-output");
       if (step.kind === "assemble-bundle") resources.add("macos-app-bundle");
@@ -1547,6 +1623,7 @@ export async function runConstructionFakeMatrix(options = {}) {
   const codexShared = options.runCodexSharedCase === undefined ? null : await runCodexSharedOrchestrationFaultMatrix(options.runCodexSharedCase);
   if (requireCodexShared && codexShared === null) fail("CODEX_SHARED_PRODUCTION_ORCHESTRATION_MATRIX_REQUIRED");
   const catalog = loadRaceCatalog();
+  const postgresCleanupAuthorityRaces = runPostgresCleanupAuthorityFakeMatrix();
   const stressHashes = [];
   for (let run = 0; run < 3; run += 1) stressHashes.push(sha256(canonicalJson(raceByteIndex(catalog))));
   if (new Set(stressHashes).size !== 1) fail("RACE_STRESS_NONDETERMINISTIC");
@@ -1580,6 +1657,9 @@ export async function runConstructionFakeMatrix(options = {}) {
     raceOrders: catalog.orders.length,
     expectedCoreCalls: POSTGRES_COUNTS.expectedCoreCalls,
     postgresAtomicFaultCases: postgresPlan.steps.length * 2,
+    postgresCleanupAuthorityRaceCases: postgresCleanupAuthorityRaces.caseCount,
+    postgresForeignReplacementPreserved: postgresCleanupAuthorityRaces.foreignReplacementPreserved,
+    postgresPostRemoveRecreationBlocksProof: postgresCleanupAuthorityRaces.postRemoveRecreationBlocksProof,
     macosAtomicFaultCases: macPlan.steps.length * MACOS_JOURNAL_FAULT_WINDOWS.length,
     codexSharedOrchestrationCases: codexShared?.caseCount ?? 0,
     codexSharedOrchestrationAggregateSha256: codexShared?.aggregateSha256 ?? null,

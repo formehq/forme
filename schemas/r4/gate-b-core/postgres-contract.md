@@ -64,10 +64,22 @@ Repository-derived SQL/catalog/template bytes enter the plan only through
 pre-opened, no-follow, hash-pinned snapshot; the plan may not reread worktree
 paths after that snapshot is frozen.
 
-The future exact order is collision checks → owned volume/container creation →
+The future exact order is collision checks → owned volume creation → stable
+volume identity capture (`Name`, `forme.run`, `CreatedAt`, `Driver`, `Scope`) →
+container creation with one exact LF-framed 64-lower-hex immutable ID capture →
 bounded readiness → baseline migration/happy/error/ACK/rollback → non-race
 public boundary checks → all 32 fresh race overlays → clean reapply/verify/
-rollback → exact label-bound cleanup and absence proof. The pinned image may
+rollback → container pre-remove inspection of that exact ID, `/name` and
+`forme.run` → removal by immutable ID → exact post-remove ID and name absence →
+volume pre-remove equality with the create-time stable identity and label →
+immediate name removal under the pinned same-user procedural boundary → exact
+post-name absence → durable absence proof. Remove exit zero is never absence:
+container/volume dirty state clears only after its parsed post-name absence is
+durable and every journal-authorized process group is absent. A missing captured
+identity, foreign pre-remove replacement, identity/label drift or post-remove
+same-name recreation preserves the observed resource, prevents the proof and is
+`RED_QUARANTINED`. Crash cleanup consumes the same durable identity observations;
+it never upgrades a name-plus-label match into ownership. The pinned image may
 remain as a pre-existing cache; the runner-owned container, volume, workers and
 run root may not.
 

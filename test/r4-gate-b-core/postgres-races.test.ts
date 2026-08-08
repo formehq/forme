@@ -4,6 +4,7 @@ import path from "node:path";
 import test from "node:test";
 import { canonicalJson } from "../../packages/r4-protocol/src/index.ts";
 import {
+  POSTGRES_CONTAINER_ID_PLACEHOLDER,
   buildPostgresPhysicalPlan,
   composeRaceArtifacts,
   composeRaceRecoveries,
@@ -227,10 +228,23 @@ test("future Docker plan is typed, local-socket bound, pull-never, portless and 
   assert.match(nonrace.stdinText, /public_issue_active_cap20_not_closed/u);
   assert.match(nonrace.stdinText, /public_missing_issuance_lineage_not_closed/u);
   assert.ok(plan.steps.every((entry: { executable?: string | null; argv?: string[] }) => entry.executable === null || entry.executable === "/owned/docker"));
+  assert.equal(plan.steps[plan.steps.findIndex((entry: { kind: string }) => entry.kind === "volume-create") + 1]?.kind, "volume-identity-capture");
+  assert.equal(create.outputParser, "exact-container-create-id");
+  assert.deepEqual(plan.steps.slice(-8).map((entry: { kind: string }) => entry.kind), [
+    "container-cleanup-inspect", "container-remove", "container-id-absence", "container-name-absence",
+    "volume-cleanup-inspect", "volume-remove", "volume-name-absence", "postgres-absence-proof",
+  ]);
+  assert.equal(plan.steps.at(-7)?.argv.at(-1), POSTGRES_CONTAINER_ID_PLACEHOLDER);
+  assert.equal(plan.steps.at(-6)?.argv.at(-1), POSTGRES_CONTAINER_ID_PLACEHOLDER);
+  assert.equal(plan.steps.at(-5)?.argv.at(-1), plan.containerName);
+  assert.equal(plan.steps.at(-3)?.argv.at(-1), plan.volumeName);
   const fake = await runConstructionFakeMatrix();
   assert.equal(fake.realPhysicalEffects, 0);
   assert.equal(fake.deterministicStressRuns, 3);
   assert.equal(fake.postgresAtomicFaultCases, plan.steps.length * 2);
+  assert.equal(fake.postgresCleanupAuthorityRaceCases, 4);
+  assert.equal(fake.postgresForeignReplacementPreserved, true);
+  assert.equal(fake.postgresPostRemoveRecreationBlocksProof, true);
 });
 
 test("PostgreSQL plan composes every repo-derived stdin from an injected pinned runtime reader", () => {

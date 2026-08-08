@@ -5,7 +5,7 @@
   "retryExecutionGrant": "NOT_REQUESTED",
   "firstProviderCallTestGrant": "NOT_REQUESTED",
   "fileCount": 29,
-  "aggregateSha256": "sha256:3411db18c2b7bf05e8cbf233cf8642b13cda9c36cee2ddd18bc1e2f3c38e8665",
+  "aggregateSha256": "sha256:e432b67879ae752a381e8cbff8a67589a7dd6ee6ac55927c3fc4dec9c62d7641",
   "files": [
     {
       "path": "schemas/r4/gate-b-core/README.md",
@@ -85,15 +85,15 @@
     },
     {
       "path": "schemas/r4/gate-b-core/physical-runner-contract.json",
-      "sha256": "sha256:54e9134dedbeeaab6144f830ca6a8b9012a543053f9a2534754a21baae234690"
+      "sha256": "sha256:dc64ece23dd1bfdcb63578c5ca5704666c7ce35ce3923e1ea592c1ac1d812dd6"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres-contract.md",
-      "sha256": "sha256:7bb89e4d9939d129c845945c2714af482151097c58ab606d59161129b0c0d2e8"
+      "sha256": "sha256:028d7c53675247027fbd5d8185e73fb478355929aa8adbe8a5bdd4edfab6bd95"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres/physical-adapter-contract.json",
-      "sha256": "sha256:04e88d9264968279ce949b40460a46d37c2e55be95e7b34576d6a15f4023f666"
+      "sha256": "sha256:a13581791d2de6c134040385ca57def1689fa53a9b2af15a67c2612b0ecc0119"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres/race-byte-index.json",
