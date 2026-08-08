@@ -74,6 +74,7 @@ export type CodexSpawnResult = Readonly<{
   trailingBytes: number;
   handshakeExitLatencyMilliseconds: number;
   lines?: readonly Uint8Array[];
+  observeOwnedBufferZeroization?: () => void;
 }>;
 export type CoreCodexWireSummary = Readonly<{
   initializeResultSha256: `sha256:${string}`;
@@ -166,101 +167,6 @@ export function buildCoreCodexLogicalCommand(layout: CoreCodexLayout, kind: Core
 export function validateCoreCodexLogicalCommand(layout: CoreCodexLayout, value: CoreCodexLogicalCommand): void {
   const expected = buildCoreCodexLogicalCommand(layout, value.kind);
   if (canonicalJson(value as unknown as JsonValue) !== canonicalJson(expected as unknown as JsonValue)) fail("CODEX_LOGICAL_COMMAND_DENIED");
-}
-
-function assertNoSymlinkComponents(value: string): void {
-  const resolved = assertAbsoluteClean(value, "CODEX_PATH_INVALID");
-  const parsed = path.parse(resolved);
-  let cursor = parsed.root;
-  for (const part of resolved.slice(parsed.root.length).split(path.sep).filter(Boolean)) {
-    cursor = path.join(cursor, part);
-    const stat = fs.lstatSync(cursor);
-    if (stat.isSymbolicLink()) fail("CODEX_PATH_SYMLINK_DENIED");
-  }
-}
-function componentIdentities(value: string): Readonly<Record<string, string>> {
-  const resolved = assertAbsoluteClean(value, "CODEX_PATH_INVALID");
-  const parsed = path.parse(resolved);
-  let cursor = parsed.root;
-  const result: Record<string, string> = {};
-  for (const part of resolved.slice(parsed.root.length).split(path.sep).filter(Boolean)) {
-    cursor = path.join(cursor, part);
-    const stat = fs.lstatSync(cursor);
-    if (stat.isSymbolicLink()) fail("CODEX_PATH_SYMLINK_DENIED");
-    result[cursor] = `${stat.dev}:${stat.ino}:${stat.mode}:${stat.uid}`;
-  }
-  return Object.freeze(result);
-}
-function assertComponentIdentities(expected: Readonly<Record<string, string>>): void {
-  for (const [candidate, identity] of Object.entries(expected)) {
-    const stat = fs.lstatSync(candidate);
-    if (stat.isSymbolicLink() || `${stat.dev}:${stat.ino}:${stat.mode}:${stat.uid}` !== identity) fail("CODEX_PATH_COMPONENT_CHANGED");
-  }
-}
-function openedIdentity(stat: fs.Stats): string {
-  return `${stat.dev}:${stat.ino}:${stat.size}:${stat.mtimeMs}:${stat.mode}`;
-}
-
-export function copyOpenedRegularFile(input: Readonly<{
-  source: string;
-  destination: string;
-  expectedSha256: `sha256:${string}`;
-  destinationMode: 0o500 | 0o600;
-  constructionTestHookAfterOpen?: () => void;
-}>): Readonly<{ sha256: `sha256:${string}`; bytes: number }> {
-  if (!SHA.test(input.expectedSha256)) fail("CODEX_SOURCE_HASH_INVALID");
-  assertNoSymlinkComponents(input.source);
-  assertNoSymlinkComponents(path.dirname(input.destination));
-  const sourceComponents = componentIdentities(input.source);
-  const destinationParentComponents = componentIdentities(path.dirname(input.destination));
-  const sourceFd = fs.openSync(input.source, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
-  let destinationFd: number | null = null;
-  let createdDestination = false;
-  let bytes = Buffer.alloc(0);
-  try {
-    const before = fs.fstatSync(sourceFd);
-    if (!before.isFile() || before.uid !== uid() || before.nlink !== 1) fail("CODEX_SOURCE_FILE_UNSAFE");
-    input.constructionTestHookAfterOpen?.();
-    assertComponentIdentities(sourceComponents);
-    assertComponentIdentities(destinationParentComponents);
-    destinationFd = fs.openSync(input.destination, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_NOFOLLOW, input.destinationMode);
-    createdDestination = true;
-    bytes = Buffer.alloc(before.size);
-    let offset = 0;
-    while (offset < bytes.length) {
-      const read = fs.readSync(sourceFd, bytes, offset, bytes.length - offset, offset);
-      if (read === 0) fail("CODEX_SOURCE_SHORT_READ");
-      offset += read;
-    }
-    if (sha(bytes) !== input.expectedSha256) fail("CODEX_SOURCE_HASH_MISMATCH");
-    fs.writeSync(destinationFd, bytes, 0, bytes.length, 0);
-    fs.fsyncSync(destinationFd);
-    fs.fchmodSync(destinationFd, input.destinationMode);
-    const after = fs.fstatSync(sourceFd);
-    const sourcePath = fs.lstatSync(input.source);
-    assertComponentIdentities(sourceComponents);
-    assertComponentIdentities(destinationParentComponents);
-    if (openedIdentity(before) !== openedIdentity(after) || sourcePath.ino !== after.ino || sourcePath.dev !== after.dev || sourcePath.nlink !== 1) fail("CODEX_SOURCE_CHANGED_DURING_COPY");
-  } catch (error) {
-    if (destinationFd !== null) fs.closeSync(destinationFd);
-    destinationFd = null;
-    if (createdDestination) try { fs.rmSync(input.destination, { force: true }); } catch { /* cleanup is checked by caller */ }
-    throw error;
-  } finally {
-    if (destinationFd !== null) fs.closeSync(destinationFd);
-    fs.closeSync(sourceFd);
-    bytes.fill(0);
-  }
-  const staged = fs.lstatSync(input.destination);
-  if (!staged.isFile() || staged.isSymbolicLink() || staged.nlink !== 1 || staged.uid !== uid() || (staged.mode & 0o777) !== input.destinationMode || fs.realpathSync(input.destination) !== input.destination) fail("CODEX_STAGE_FILE_UNSAFE");
-  const stagedBytes = fs.readFileSync(input.destination);
-  try {
-    const stagedHash = sha(stagedBytes);
-    if (stagedHash !== input.expectedSha256) fail("CODEX_STAGE_HASH_MISMATCH");
-    const parentFd = fs.openSync(path.dirname(input.destination), fs.constants.O_RDONLY);
-    try { fs.fsyncSync(parentFd); } finally { fs.closeSync(parentFd); }
-    return Object.freeze({ sha256: stagedHash, bytes: stagedBytes.length });
-  } finally { stagedBytes.fill(0); }
 }
 
 function canonicalSchemaName(relative: string): string {
@@ -622,6 +528,7 @@ export async function runCoreCodexZeroCall(input: Readonly<{
       result.stdout.fill(0);
       result.stderr.fill(0);
       for (const line of result.lines ?? []) line.fill(0);
+      result.observeOwnedBufferZeroization?.();
     }
     if (!cleanupPassed) await input.spawnPort.cleanup().catch(() => false);
   }

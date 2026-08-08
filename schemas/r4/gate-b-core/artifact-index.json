@@ -5,7 +5,7 @@
   "retryExecutionGrant": "NOT_REQUESTED",
   "firstProviderCallTestGrant": "NOT_REQUESTED",
   "fileCount": 29,
-  "aggregateSha256": "sha256:70830ee593153ac047816578de7f42ab42327f155ccd111c03d94528738f5778",
+  "aggregateSha256": "sha256:3411db18c2b7bf05e8cbf233cf8642b13cda9c36cee2ddd18bc1e2f3c38e8665",
   "files": [
     {
       "path": "schemas/r4/gate-b-core/README.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "schemas/r4/gate-b-core/host-binding-capsule.schema.json",
-      "sha256": "sha256:02a25179b2f34c2786af789a9e62cecd88e81104bd529a9b502e67803793dbb7"
+      "sha256": "sha256:dea2fc5e17174b0c1ef7818abffeec14f776436846c6b5053a0b447fb192ea12"
     },
     {
       "path": "schemas/r4/gate-b-core/host-binding-input.schema.json",
@@ -41,11 +41,11 @@
     },
     {
       "path": "schemas/r4/gate-b-core/host-binding-public-receipt.schema.json",
-      "sha256": "sha256:ca0cadb8fd52c0e3d1f62fba7b038ac2f4796ecf445c723e2674edb463894281"
+      "sha256": "sha256:80a0e13c0f728cba84514e31db9704f1ac43ec50bb899f534cec4f153f574c01"
     },
     {
       "path": "schemas/r4/gate-b-core/macos/build-recipe.json",
-      "sha256": "sha256:fd055feb6ad4a643e05d37b23936e6dfbd811cde3366913b1751527ab34057d7"
+      "sha256": "sha256:6685aa357222667b967d54bfa9dce7a54851ea13154121196b60b21b2cd1d17c"
     },
     {
       "path": "schemas/r4/gate-b-core/macos/evidence.schema.json",
@@ -61,7 +61,7 @@
     },
     {
       "path": "schemas/r4/gate-b-core/macos/physical-adapter-contract.json",
-      "sha256": "sha256:8d9a20e801b792623a875a0b9c1725521106be3d0686fd2c2f9766f2ade49523"
+      "sha256": "sha256:484e6b1f4bb8822ac80f50ac9fc103f8201b4ffe81e5211ae53ac65715e4ac1f"
     },
     {
       "path": "schemas/r4/gate-b-core/macos/transient-candidate-contract.json",
@@ -73,31 +73,31 @@
     },
     {
       "path": "schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json",
-      "sha256": "sha256:5daccb43502eec1fd96c4dd1b6710e9d01433209e164e2e1b2dc0958edf7e630"
+      "sha256": "sha256:0448b46079d02f1d222b049e4de3dcf1d75615b3acb35956ed0da6d2b12dad69"
     },
     {
       "path": "schemas/r4/gate-b-core/physical-construction-evidence.schema.json",
-      "sha256": "sha256:e07ff0a43e19e34a71dfe21028af88b9fd4a7b52557ee9d982b542123865cfeb"
+      "sha256": "sha256:fd14ee175863728c433a87dda1a1c0875ba1c1aae75e746f7915b4529477d8a5"
     },
     {
       "path": "schemas/r4/gate-b-core/physical-retry-evidence.schema.json",
-      "sha256": "sha256:19aa0739043654994d6324e8cdf928e6aaf61d55a8c83cc8ccf2b84c01246510"
+      "sha256": "sha256:bb1df602ac4b3d5ba5a9c0b33aa0b8721b8ec27d5ec95ad20c37723f6bbf095f"
     },
     {
       "path": "schemas/r4/gate-b-core/physical-runner-contract.json",
-      "sha256": "sha256:f818fd8032f907a0ba97bba2de1088e0113b0f971add0662383eca0bc11f7160"
+      "sha256": "sha256:54e9134dedbeeaab6144f830ca6a8b9012a543053f9a2534754a21baae234690"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres-contract.md",
-      "sha256": "sha256:e8da1e732b1ff31b3762ef0d992b04ff6afa43358e5635558062a3fe707c757d"
+      "sha256": "sha256:7bb89e4d9939d129c845945c2714af482151097c58ab606d59161129b0c0d2e8"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres/physical-adapter-contract.json",
-      "sha256": "sha256:5b5cdbe5100b036f66ab73b05bf7ced3864bd039fed9ea5f099b50f70e0483a8"
+      "sha256": "sha256:04e88d9264968279ce949b40460a46d37c2e55be95e7b34576d6a15f4023f666"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres/race-byte-index.json",
-      "sha256": "sha256:f312cfa3936777502150e1a6b0ae1220aa101ba5925a5135f37113bc87337f70"
+      "sha256": "sha256:3844ece0645e7c686ab51ef253511a0f49abb5f32936b5553b6882a7b23f17a6"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres/race-catalog.json",

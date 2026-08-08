@@ -1,7 +1,7 @@
 import Foundation
 
 struct CoreMacOSHelperReceipt: Encodable, Equatable {
-    let schemaVersion = "r4.gate-b-core.macos-helper-receipt.v1"
+    let schemaVersion = "r4.gate-b-core.macos-helper-receipt.v2"
     let terminal: TransientCandidateTerminal
     let reasonCode: String
     let handoffCount: Int

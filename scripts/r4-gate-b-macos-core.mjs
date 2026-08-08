@@ -22,6 +22,7 @@ const resourcePaths = Object.freeze([
 ]);
 const contractPath = "schemas/r4/gate-b-core/macos/transient-candidate-contract.json";
 const evidenceSchemaPath = "schemas/r4/gate-b-core/macos/evidence.schema.json";
+const runtimeFixturePaths = Object.freeze(["fixtures/r4-gate-b-core/macos/synthetic-feeder.mjs"]);
 const recipePath = "schemas/r4/gate-b-core/macos/build-recipe.json";
 const preSignPayloadMembers = Object.freeze([
   "Contents/Info.plist",
@@ -40,7 +41,7 @@ function fail(code) { const error = new Error(code); error.code = code; throw er
 function sha256(value) { return `sha256:${crypto.createHash("sha256").update(value).digest("hex")}`; }
 
 function exactRead(relative) {
-  if (![...sourcePaths, ...resourcePaths, contractPath, evidenceSchemaPath, recipePath, "native/macos/Package.swift", "native/macos/Tests/FormeCoreLocalTests/TransientCandidateTests.swift"].includes(relative)) fail("MACOS_CORE_PATH_DENIED");
+  if (![...sourcePaths, ...resourcePaths, contractPath, evidenceSchemaPath, ...runtimeFixturePaths, recipePath, "native/macos/Package.swift", "native/macos/Tests/FormeCoreLocalTests/TransientCandidateTests.swift"].includes(relative)) fail("MACOS_CORE_PATH_DENIED");
   const target = path.join(repositoryRoot, ...relative.split("/"));
   const stat = fs.lstatSync(target);
   if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1 || fs.realpathSync(target) !== target) fail("MACOS_CORE_PATH_UNSAFE");
@@ -48,22 +49,51 @@ function exactRead(relative) {
 }
 
 export function expectedCoreMacOSBuildRecipe() {
-  const hashes = Object.fromEntries([...sourcePaths, ...resourcePaths, contractPath, evidenceSchemaPath].map((relative) => [relative, sha256(exactRead(relative))]));
+  const hashes = Object.fromEntries([...sourcePaths, ...resourcePaths, contractPath, evidenceSchemaPath, ...runtimeFixturePaths].map((relative) => [relative, sha256(exactRead(relative))]));
   return Object.freeze({
     schemaVersion: "r4.gate-b-core.macos-build-recipe.v1",
     status: "CONSTRUCTED_NOT_EXECUTED",
     minimumOS: "macOS 26.0",
+    swiftToolsVersion: "6.2",
+    swiftLanguageMode: "6",
     swiftPackage: "native/macos/Package.swift",
     product: "FormeCoreLocal",
     target: "FormeCoreLocal",
     bundleIdentifier: "org.chaostudio.forme.gate-b.core-local",
     bundleExecutable: "FormeCoreLocal",
     acceptedArguments: ["--gate-b-core-transient-probe"],
+    directStartGate: {
+      schemaVersion: "r4.gate-b-core.macos-direct-start.v1",
+      readyTransport: "inherited-pipe-only-no-durable-pid-slot",
+      normalPathAuthority: "exact-ready-frame-plus-live-child-process-handle",
+      crashBeforeStartedJournalVerdict: "RED_QUARANTINED",
+      helper: {
+        implementation: "self-blocked-direct-helper",
+        descriptorMap: { candidateInput: 0, receiptOutput: 1, diagnosticOutput: 2, readyOutput: 3, releaseInput: 4 },
+        readyFramePattern: "R4_GATE_B_DIRECT_READY_V1 helper <positive-decimal-pid>\n",
+        releaseFrame: "R4_GATE_B_DIRECT_RELEASE_V1 helper\n",
+        releaseRequiresEOF: true,
+      },
+      feeder: {
+        implementation: "self-blocked-direct-feeder",
+        argvTail: ["3", "4", "5", "6", "complete"],
+        descriptorMap: { candidateOutput: 3, completionOutput: 4, readyOutput: 5, releaseInput: 6 },
+        readyFramePattern: "R4_GATE_B_DIRECT_READY_V1 feeder <positive-decimal-pid>\n",
+        releaseFrame: "R4_GATE_B_DIRECT_RELEASE_V1 feeder\n",
+        releaseRequiresEOF: true,
+      },
+      releaseOrdering: [
+        "direct-child-ready", "pid-and-process-group-validated", "started-journal-fsync",
+        "listeners-installed", "exact-release-frame-and-eof", "first-functional-effect",
+      ],
+    },
     preSignPayloadMembers,
     postSignBundleMembers,
     codesignGeneratedMembers: ["Contents/_CodeSignature/CodeResources"],
     entitlements: "native/macos/Resources/FormeCoreLocal.entitlements",
     entitlementDictionaryEntryCount: 0,
+    runtimeInputSource: "runner-owned-o-nofollow-hash-pinned-staging",
+    worktreeReadsAfterRevalidation: 0,
     effectOrder,
     effectAuthority: {
       constructionExecutor: "fake_only",
@@ -155,7 +185,7 @@ export function validateCoreBundleInventory(entries, phase) {
     "Contents/Info.plist": "0600",
     "Contents/MacOS/FormeCoreLocal": "0500",
     "Contents/Resources/forme-core-transient-response.sb": "0600",
-    "Contents/_CodeSignature/CodeResources": "0600",
+    "Contents/_CodeSignature/CodeResources": "0644",
   });
   const normalized = entries.map((entry) => {
     const value = exactKeys(entry, ["path", "type", "mode", "linkCount", "ownerMatches"], "MACOS_CORE_BUNDLE_INVENTORY_INVALID");
@@ -229,7 +259,7 @@ function auditSources() {
   for (const forbidden of ["import Security", "SecKeyCreate", "SecItemAdd", "SecItemCopyMatching", "SecKeychain", "SecureEnclave.P256", "KeychainProtector", "GateBProbe.runLive", "URLSession", "NWListener", "NWConnection"]) if (all.includes(forbidden)) fail("MACOS_CORE_FORBIDDEN_LINKAGE");
   for (const forbidden of ["text.string =", "NSString(bytesNoCopy:"]) if (all.includes(forbidden)) fail("MACOS_CORE_UNTRACKED_RESPONSE_STRING");
   for (const required of [
-    "--gate-b-core-transient-probe", "deviceOwnerAuthentication", "touchIDAuthenticationAllowableReuseDuration = 0",
+    "--gate-b-core-transient-probe", "deviceOwnerAuthentication", "context.reuseDuration = 0", "context.invalidate()",
     "Approve this exact Forme demo response for one synthetic handoff.", "mlock", "firstByteRead",
     "candidate.zeroize()", "bodyBearingDescriptorCount = 0", "crashZeroizationClaimed = false",
     "persistentCandidateRecoverySupported = false",
@@ -239,7 +269,8 @@ function auditSources() {
   for (const token of [
     "testWrongHashBindingDuplicateTrailingAndLateRejectBeforePresence", "testMlockPrecedesFirstByteAndEveryOwnedBufferZeroizes",
     "testCanonicalUnicodeAndEscapesAreDecodedBeforeExactReview", "testDescriptorBoundaryIsExactlyThirtyTwoKiBAndRejectsOneTrailingByte",
-    "testDeadlineIsRecheckedAfterReviewBeforeHandoff", "testClosedFakeEffectPlanAndEveryFaultCleans",
+    "testDeadlineIsRecheckedAfterReviewBeforeHandoff", "testActivePresenceDeadlineInvalidatesAwaitingContext",
+    "testPostReviewCandidateDriftIsRedClassReasonNotAuthorityExpiry", "testClosedFakeEffectPlanAndEveryFaultCleans",
   ]) if (!tests.includes(token)) fail("MACOS_CORE_TEST_MATRIX_MISSING");
   return Object.freeze({ sourceCount: sourcePaths.length, sourceHashes: Object.fromEntries(Object.entries(sources).map(([name, value]) => [name, sha256(value)])) });
 }

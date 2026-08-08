@@ -8,28 +8,58 @@
   "properties": {
     "schemaVersion": { "const": "r4_gate_b_physical_adapter_construction_evidence.v1" },
     "generatedAt": { "type": "string", "format": "date-time" },
-    "status": { "enum": ["PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW", "HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY", "ADAPTER_CONSTRUCTION_YELLOW", "RED"] },
+    "status": { "enum": ["PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW", "HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY", "ADAPTER_CONSTRUCTION_YELLOW", "YELLOW_QUARANTINED", "RED", "RED_QUARANTINED"] },
     "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
-    "approvedDecisionBriefSha256": { "$ref": "#/$defs/sha" },
+    "approvedDecisionBriefSha256": { "const": "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2" },
     "constructionPacketSha256": { "const": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06" },
     "constructionOwnerReviewSha256": { "const": "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9" },
     "approvedProposalHead": { "const": "a45ea061e8e92f247597787e36ecfe52740b216a" },
     "approvedProposalTree": { "const": "89b28903fc34e985a17e8f3fdc4bfd7d0972880e" },
     "implementationHead": { "$ref": "#/$defs/gitObject" }, "implementationTree": { "$ref": "#/$defs/gitObject" },
     "hostBindingAdapterConstructionGrant": { "const": "APPROVED" },
-    "packageLockSha256": { "$ref": "#/$defs/sha" }, "immutableCoreAggregateSha256": { "$ref": "#/$defs/sha" }, "immutableFullAggregateSha256": { "$ref": "#/$defs/sha" },
+    "packageLockSha256": { "const": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812" }, "immutableCoreAggregateSha256": { "const": "sha256:f4bd00354f1c7cd330b421faec735efb83c4f0efbc5f18eabc39923b11d1733d" }, "immutableFullAggregateSha256": { "const": "sha256:f290ba035efa2eb84d899bf67d4ffb03c523d88556ce96b66f4f3a2862159310" },
     "physicalRunnerSha256": { "$ref": "#/$defs/sha" }, "hostBindingModuleSha256": { "$ref": "#/$defs/sha" }, "physicalPortSha256": { "$ref": "#/$defs/sha" },
     "postgresMigrationSha256": { "$ref": "#/$defs/sha" }, "postgresRaceCatalogSha256": { "$ref": "#/$defs/sha" }, "postgresRaceByteIndexSha256": { "$ref": "#/$defs/sha" },
-    "codexPortSha256": { "$ref": "#/$defs/sha" }, "codexProfileSha256": { "$ref": "#/$defs/sha" }, "macosPhysicalContractSha256": { "$ref": "#/$defs/sha" }, "macosBuildRecipeSha256": { "$ref": "#/$defs/sha" },
+    "codexPortSha256": { "$ref": "#/$defs/sha" }, "codexProfileSha256": { "const": "sha256:0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce" }, "macosPhysicalContractSha256": { "$ref": "#/$defs/sha" }, "macosBuildRecipeSha256": { "$ref": "#/$defs/sha" },
     "constructedFileCount": { "type": "integer", "minimum": 1 }, "constructedFilesAggregateSha256": { "$ref": "#/$defs/sha" },
     "postgresNamedFamilies": { "const": 13 }, "postgresExecutableCases": { "const": 16 }, "postgresOrderedExecutions": { "const": 32 }, "postgresExpectedCoreCalls": { "const": 68 }, "postgresExpected2xx": { "const": 39 }, "postgresExpectedControlledNon2xx": { "const": 29 }, "postgresExpectedNewReceipts": { "const": 37 }, "postgresPersistedVerifierPlans": { "const": 32 },
     "offlineTestFiles": { "type": "integer", "minimum": 4 }, "offlineTestsPassed": { "type": "integer", "minimum": 1 }, "deterministicStressRuns": { "const": 3 }, "fakeChildStarts": { "type": "integer", "minimum": 0 }, "normalCompilerTestStarts": { "type": "integer", "minimum": 0 },
-    "dockerReadOnlyCliCalls": { "enum": [0, 3] }, "localDockerUnixSocketRequests": { "enum": [0, 2] }, "macosReadOnlyInspectionCalls": { "enum": [0, 9] },
+    "dockerReadOnlyCliCalls": { "type": "integer", "minimum": 0, "maximum": 3 }, "localDockerUnixSocketRequests": { "type": "integer", "minimum": 0, "maximum": 2 }, "macosReadOnlyInspectionCalls": { "type": "integer", "minimum": 0, "maximum": 9 },
     "gitPushCommands": { "const": 0 }, "githubIssuesUpdated": { "const": 0 }, "publicationPushPlanned": { "const": 1 }, "githubIssueUpdatesPlanned": { "const": 2 },
     "dockerMutationCalls": { "const": 0 }, "postgresCalls": { "const": 0 }, "realCodexCalls": { "const": 0 }, "sandboxExecCalls": { "const": 0 }, "threadStarts": { "const": 0 }, "turnStarts": { "const": 0 }, "providerCalls": { "const": 0 }, "macosPhysicalCompileCalls": { "const": 0 }, "appAssemblyCalls": { "const": 0 }, "codesignCalls": { "const": 0 }, "securityCalls": { "const": 0 }, "localAuthenticationCalls": { "const": 0 }, "helperLaunches": { "const": 0 }, "candidateHandoffs": { "const": 0 },
     "hostBindingAttempted": { "type": "boolean" }, "hostBindingId": { "type": ["string", "null"], "pattern": "^[0-9a-f]{32}$" }, "hostBindingCapsuleSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] }, "hostBindingPublicReceiptSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] }, "hostBindingExpiresAt": { "type": ["string", "null"], "format": "date-time" },
-    "constructionRunRootAbsent": { "const": true }, "fakeProcessGroupsAbsent": { "const": true }, "bindingInputAbsent": { "const": true }, "constructionJournalAbsent": { "const": true }, "cleanupStatus": { "const": "GREEN" },
-    "retryExecutionGrant": { "const": "NOT_REQUESTED" }, "firstProviderCallGrant": { "const": "NOT_REQUESTED" }, "aggregateVerdict": { "const": "YELLOW" }
+    "constructionRunRootAbsent": { "type": "boolean" }, "fakeProcessGroupsAbsent": { "type": "boolean" }, "bindingInputAbsent": { "type": ["boolean", "null"], "description": "null means NOT_INSPECTED; Phase A must not stat or open the Host Binding input" }, "constructionJournalAbsent": { "type": "boolean" }, "cleanupStatus": { "enum": ["GREEN", "YELLOW_QUARANTINED", "RED_QUARANTINED"] },
+    "retryExecutionGrant": { "const": "NOT_REQUESTED" }, "firstProviderCallGrant": { "const": "NOT_REQUESTED" }, "aggregateVerdict": { "enum": ["YELLOW", "RED"] }
   },
+  "allOf": [
+    {
+      "if": { "properties": { "hostBindingAttempted": { "const": false } }, "required": ["hostBindingAttempted"] },
+      "then": { "properties": { "dockerReadOnlyCliCalls": { "const": 0 }, "localDockerUnixSocketRequests": { "const": 0 }, "macosReadOnlyInspectionCalls": { "const": 0 }, "hostBindingId": { "type": "null" }, "hostBindingCapsuleSha256": { "type": "null" }, "hostBindingPublicReceiptSha256": { "type": "null" }, "hostBindingExpiresAt": { "type": "null" }, "bindingInputAbsent": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW" } }, "required": ["status"] },
+      "then": { "properties": { "dockerReadOnlyCliCalls": { "const": 3 }, "localDockerUnixSocketRequests": { "const": 2 }, "macosReadOnlyInspectionCalls": { "const": 9 }, "hostBindingAttempted": { "const": true }, "hostBindingId": { "type": "string", "pattern": "^[0-9a-f]{32}$" }, "hostBindingCapsuleSha256": { "$ref": "#/$defs/sha" }, "hostBindingPublicReceiptSha256": { "$ref": "#/$defs/sha" }, "hostBindingExpiresAt": { "type": "string", "format": "date-time" }, "constructionRunRootAbsent": { "const": true }, "fakeProcessGroupsAbsent": { "const": true }, "bindingInputAbsent": { "const": true }, "constructionJournalAbsent": { "const": true }, "cleanupStatus": { "const": "GREEN" }, "aggregateVerdict": { "const": "YELLOW" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["RED", "RED_QUARANTINED"] } }, "required": ["status"] },
+      "then": { "properties": { "aggregateVerdict": { "const": "RED" } } }
+    },
+    {
+      "if": { "properties": { "status": { "enum": ["HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY", "ADAPTER_CONSTRUCTION_YELLOW"] } }, "required": ["status"] },
+      "then": { "properties": { "constructionRunRootAbsent": { "const": true }, "fakeProcessGroupsAbsent": { "const": true }, "constructionJournalAbsent": { "const": true }, "cleanupStatus": { "const": "GREEN" }, "aggregateVerdict": { "const": "YELLOW" } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "YELLOW_QUARANTINED" } }, "required": ["status"] },
+      "then": { "properties": { "constructionJournalAbsent": { "const": false }, "cleanupStatus": { "const": "YELLOW_QUARANTINED" }, "aggregateVerdict": { "const": "YELLOW" } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "RED_QUARANTINED" } }, "required": ["status"] },
+      "then": { "properties": { "constructionJournalAbsent": { "const": false }, "cleanupStatus": { "const": "RED_QUARANTINED" }, "aggregateVerdict": { "const": "RED" } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "RED" } }, "required": ["status"] },
+      "then": { "properties": { "constructionRunRootAbsent": { "const": true }, "fakeProcessGroupsAbsent": { "const": true }, "constructionJournalAbsent": { "const": true }, "cleanupStatus": { "const": "GREEN" } } }
+    }
+  ],
   "$defs": { "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }, "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" } }
 }

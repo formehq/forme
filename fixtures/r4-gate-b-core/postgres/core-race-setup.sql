@@ -11,8 +11,7 @@ SET LOCAL lock_timeout = '15s';
 SET LOCAL statement_timeout = '20s';
 SELECT CASE
   WHEN '{{CASE_ID}}' IN ('C01','C02','C03','C04','C05','C06','C07','C08','C09','C10','C11','C12','C13','C14','C15','C16')
-   AND '{{ORDER_ID}}' IN ('A-B','B-A')
   THEN 1 ELSE pg_catalog.current_setting('forme_r4.closed_race_setup_rejected')::integer
-END AS exact_catalog_guard;
+END AS exact_catalog_guard \gset r4_setup_guard_
 {{EXACT_SCENARIO_SETUP_SQL}}
 COMMIT;

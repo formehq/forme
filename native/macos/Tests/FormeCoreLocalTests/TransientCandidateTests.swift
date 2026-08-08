@@ -5,8 +5,71 @@ import XCTest
 @testable import FormeCoreLocal
 
 @MainActor
+private final class BlockingDeviceOwnerAuthenticationContext: DeviceOwnerAuthenticationContextPort {
+    var reuseDuration: TimeInterval = -1
+    private(set) var evaluationStarted = false
+    private(set) var evaluationCount = 0
+    private(set) var invalidationCount = 0
+    private var continuation: CheckedContinuation<Bool, any Error>?
+
+    func canEvaluateDeviceOwnerAuthentication() -> Bool { true }
+
+    func evaluateDeviceOwnerAuthentication(localizedReason: String) async throws -> Bool {
+        XCTAssertEqual(localizedReason, DeviceOwnerPresenceAuthorizer.localizedReason)
+        evaluationStarted = true
+        evaluationCount += 1
+        return try await withCheckedThrowingContinuation { continuation = $0 }
+    }
+
+    func invalidate() {
+        invalidationCount += 1
+        continuation?.resume(throwing: CancellationError())
+        continuation = nil
+    }
+}
+
+@MainActor
 final class TransientCandidateTests: XCTestCase {
     private let helperStart = ISO8601DateFormatter().date(from: "2026-08-07T12:00:00Z")!
+
+    private func makePipe() throws -> [Int32] {
+        var descriptors = [Int32](repeating: -1, count: 2)
+        guard descriptors.withUnsafeMutableBufferPointer({ Darwin.pipe($0.baseAddress!) }) == 0 else {
+            throw CoreLauncherError.encodingFailed
+        }
+        return descriptors
+    }
+
+    private func writeAll(_ bytes: [UInt8], to descriptor: Int32) throws {
+        try bytes.withUnsafeBytes { raw in
+            guard let base = raw.baseAddress else { throw CoreLauncherError.encodingFailed }
+            var offset = 0
+            while offset < raw.count {
+                let count = Darwin.write(descriptor, base.advanced(by: offset), raw.count - offset)
+                if count < 0 {
+                    if errno == EINTR { continue }
+                    throw CoreLauncherError.encodingFailed
+                }
+                guard count > 0 else { throw CoreLauncherError.encodingFailed }
+                offset += count
+            }
+        }
+    }
+
+    private func readToEOF(_ descriptor: Int32, maximumBytes: Int = 256) throws -> [UInt8] {
+        var result: [UInt8] = []
+        var byte: UInt8 = 0
+        while result.count <= maximumBytes {
+            let count = withUnsafeMutablePointer(to: &byte) { Darwin.read(descriptor, $0, 1) }
+            if count < 0 {
+                if errno == EINTR { continue }
+                throw CoreLauncherError.encodingFailed
+            }
+            if count == 0 { return result }
+            result.append(byte)
+        }
+        throw CoreLauncherError.encodingFailed
+    }
 
     private func canonicalData(_ value: Any) throws -> Data {
         try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys, .withoutEscapingSlashes])
@@ -58,6 +121,72 @@ final class TransientCandidateTests: XCTestCase {
         XCTAssertThrowsError(try CoreLauncherCommand.parse(["--gate-b-core-transient-probe", "extra"]))
     }
 
+    func testHelperDirectStartGateEmitsReadyThenBlocksUntilExactReleaseAndEOF() throws {
+        let ready = try makePipe()
+        var release = try makePipe()
+        let childReady = ready[1]
+        let childRelease = release[0]
+        let success = DispatchSemaphore(value: 0)
+        let failure = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async {
+            do {
+                try CoreDirectStartGate.awaitHelperRelease(
+                    readyDescriptor: childReady,
+                    releaseDescriptor: childRelease,
+                    processID: 4242
+                )
+                success.signal()
+            } catch {
+                failure.signal()
+            }
+        }
+        defer {
+            Darwin.close(ready[0])
+            if release[1] >= 0 { Darwin.close(release[1]) }
+        }
+
+        let observedReady = try readToEOF(ready[0])
+        XCTAssertEqual(observedReady, Array("R4_GATE_B_DIRECT_READY_V1 helper 4242\n".utf8))
+        XCTAssertEqual(success.wait(timeout: .now() + .milliseconds(25)), .timedOut)
+        XCTAssertEqual(failure.wait(timeout: .now() + .milliseconds(1)), .timedOut)
+        try writeAll(CoreDirectStartGate.releaseFrame, to: release[1])
+        Darwin.close(release[1])
+        release[1] = -1
+        XCTAssertEqual(success.wait(timeout: .now() + .seconds(1)), .success)
+        XCTAssertEqual(failure.wait(timeout: .now() + .milliseconds(1)), .timedOut)
+    }
+
+    func testHelperDirectStartGateRejectsPartialWrongAndTrailingReleaseFrames() throws {
+        let exact = CoreDirectStartGate.releaseFrame
+        let malformed = [
+            Array(exact.dropLast()),
+            Array("R4_GATE_B_DIRECT_RELEASE_V1 feeder\n".utf8),
+            exact + [0x78],
+        ]
+        for (index, releaseBytes) in malformed.enumerated() {
+            let ready = try makePipe()
+            var release = try makePipe()
+            defer {
+                Darwin.close(ready[0])
+                if release[1] >= 0 { Darwin.close(release[1]) }
+            }
+            try writeAll(releaseBytes, to: release[1])
+            Darwin.close(release[1])
+            release[1] = -1
+            XCTAssertThrowsError(try CoreDirectStartGate.awaitHelperRelease(
+                readyDescriptor: ready[1],
+                releaseDescriptor: release[0],
+                processID: Int32(5000 + index)
+            )) { error in
+                XCTAssertEqual(error as? CoreLauncherError, .directStartReleaseInvalid)
+            }
+            XCTAssertEqual(
+                try readToEOF(ready[0]),
+                Array("R4_GATE_B_DIRECT_READY_V1 helper \(5000 + index)\n".utf8)
+            )
+        }
+    }
+
     func testApproveExactProducesOneCountingDiscardAndNoBodyDescriptor() async throws {
         let presence = FakeUserPresenceAuthorizer(.approve)
         let review = FakeCandidateReviewPort(.approveExact)
@@ -103,6 +232,7 @@ final class TransientCandidateTests: XCTestCase {
         )
         let rejectedOutcome = await rejected.runSynthetic(frame: try frame(responseText: decomposed), helperStartedAt: helperStart)
         XCTAssertEqual(rejectedOutcome.terminal, .controlledFailure)
+        XCTAssertEqual(rejectedOutcome.reasonCode, .candidateBindingDrift)
         XCTAssertEqual(presence.ceremonyCount, 0)
     }
 
@@ -235,6 +365,63 @@ final class TransientCandidateTests: XCTestCase {
         XCTAssertEqual(handoff.handoffCount, 0)
     }
 
+    func testActivePresenceDeadlineTerminalNeverReviewsOrHandoffs() async throws {
+        let review = FakeCandidateReviewPort(.approveExact)
+        let handoff = CountingHandoffPort()
+        let presence = FakeUserPresenceAuthorizer(.authorityExpired)
+        let session = TransientCandidateSession(
+            presence: presence, review: review, handoff: handoff,
+            clock: { self.helperStart.addingTimeInterval(1) }
+        )
+        let outcome = await session.runSynthetic(frame: try frame(), helperStartedAt: helperStart)
+        XCTAssertEqual(outcome.terminal, .authorityExpired)
+        XCTAssertEqual(presence.ceremonyCount, 0)
+        XCTAssertEqual(review.reviewCount, 0)
+        XCTAssertEqual(handoff.handoffCount, 0)
+    }
+
+    func testActivePresenceDeadlineInvalidatesAwaitingContext() async {
+        let context = BlockingDeviceOwnerAuthenticationContext()
+        let deadline = helperStart.addingTimeInterval(60)
+        let presence = DeviceOwnerPresenceAuthorizer(
+            contextFactory: { context },
+            clock: { self.helperStart.addingTimeInterval(1) },
+            waitUntil: { _ in
+                while !context.evaluationStarted { await Task.yield() }
+            }
+        )
+        let decision = await presence.authorizeExactCandidate(authorityDeadline: deadline)
+        XCTAssertEqual(decision, .authorityExpired)
+        XCTAssertEqual(presence.ceremonyCount, 1)
+        XCTAssertEqual(context.reuseDuration, 0)
+        XCTAssertEqual(context.evaluationCount, 1)
+        XCTAssertGreaterThanOrEqual(context.invalidationCount, 1)
+    }
+
+    func testPostReviewCandidateDriftIsRedClassReasonNotAuthorityExpiry() async throws {
+        let review = FakeCandidateReviewPort(.approveExact)
+        let handoff = CountingHandoffPort()
+        let session = TransientCandidateSession(
+            presence: FakeUserPresenceAuthorizer(.approve), review: review, handoff: handoff,
+            clock: { self.helperStart.addingTimeInterval(1) },
+            approvalRecheck: { ingress, scratch, response, started in
+                let parsed = try CoreCandidateParser.parse(ingress, scratch: scratch, decodedResponse: response, helperStartedAt: started)
+                return ParsedTransientCandidate(
+                    candidateHash: "sha256:" + String(repeating: "0", count: 64),
+                    candidateObjectRange: parsed.candidateObjectRange,
+                    candidateHashMemberRange: parsed.candidateHashMemberRange,
+                    responseTextSha256: parsed.responseTextSha256,
+                    effectiveDeadline: parsed.effectiveDeadline
+                )
+            }
+        )
+        let outcome = await session.runSynthetic(frame: try frame(), helperStartedAt: helperStart)
+        XCTAssertEqual(outcome.terminal, .controlledFailure)
+        XCTAssertEqual(outcome.reasonCode, .candidateBindingDrift)
+        XCTAssertEqual(review.reviewCount, 1)
+        XCTAssertEqual(handoff.handoffCount, 0)
+    }
+
     func testPresenceAndReviewPoliciesAreExact() {
         let presence = FakeUserPresenceAuthorizer(.approve)
         XCTAssertEqual(presence.policy, "deviceOwnerAuthentication")
@@ -286,6 +473,7 @@ final class TransientCandidateTests: XCTestCase {
         )
         let data = try JSONEncoder().encode(evidence)
         let text = String(decoding: data, as: UTF8.self)
+        XCTAssertEqual(evidence.schemaVersion, "r4.gate-b-core.macos-helper-receipt.v2")
         XCTAssertFalse(evidence.crashZeroizationClaimed)
         XCTAssertFalse(evidence.persistentCandidateRecoverySupported)
         XCTAssertFalse(evidence.fullPersistentLaneStatusChanged)

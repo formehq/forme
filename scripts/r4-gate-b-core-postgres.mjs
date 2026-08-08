@@ -247,13 +247,23 @@ function exactFile(relativePath) {
   if (real !== candidate || !real.startsWith(`${REPOSITORY_ROOT}${path.sep}`)) fail("SQL_PATH_ESCAPE");
   return fs.readFileSync(real, "utf8");
 }
+function runtimeFile(relativePath, readRuntimeFile = undefined) {
+  if (![...Object.values(SQL_PATHS), ...Object.values(FIXTURE_PATHS), "schemas/r4/gate-b-core/core-basis.json"].includes(relativePath)) fail("SQL_PATH_NOT_ALLOWLISTED");
+  if (readRuntimeFile === undefined) return exactFile(relativePath);
+  if (typeof readRuntimeFile !== "function") fail("POSTGRES_RUNTIME_READER_INVALID");
+  let value;
+  try { value = readRuntimeFile(relativePath); } catch { fail(`POSTGRES_RUNTIME_READ_FAILED:${relativePath}`); }
+  if (typeof value === "string") return value;
+  if (!Buffer.isBuffer(value)) fail(`POSTGRES_RUNTIME_BYTES_INVALID:${relativePath}`);
+  try { return new TextDecoder("utf-8", { fatal: true }).decode(value); } catch { fail(`POSTGRES_RUNTIME_UTF8_INVALID:${relativePath}`); }
+}
 
-function exactLineage(executionManifestSha256) {
+function exactLineage(executionManifestSha256, readRuntimeFile = undefined) {
   if (!SHA256_PATTERN.test(executionManifestSha256)) fail("POSTGRES_EXECUTION_MANIFEST_HASH_INVALID");
   return Object.freeze({
     ...LINEAGE_FIXED,
     execution_manifest_sha: executionManifestSha256,
-    migration_sha: sha256(exactFile(SQL_PATHS.migration)),
+    migration_sha: sha256(runtimeFile(SQL_PATHS.migration, readRuntimeFile)),
   });
 }
 
@@ -261,8 +271,8 @@ function lineagePrefix(lineage) {
   return `${Object.entries(lineage).map(([key, value]) => `\\set ${key} '${value}'\n`).join("")}`;
 }
 
-function coreBasisInstallSql() {
-  const basisBytes = exactFile("schemas/r4/gate-b-core/core-basis.json");
+function coreBasisInstallSql(readRuntimeFile = undefined) {
+  const basisBytes = runtimeFile("schemas/r4/gate-b-core/core-basis.json", readRuntimeFile);
   const basis = JSON.parse(basisBytes);
   const expected = {
     controllerSubjectId: "subject_gatebcorecontroller0001",
@@ -275,13 +285,13 @@ function coreBasisInstallSql() {
   return `\\set ON_ERROR_STOP on\nSET ROLE forme_r4_migrate;\nDO $basis$\nDECLARE result forme_r4.api_result_v1;\nBEGIN\n  result := forme_r4.tx_gate_b_core_basis_install(\n    ROW('controller','${basis.controllerSubjectId}','${basis.actorScopeDigest}','${basis.idempotencyKey}','${basis.canonicalRequestHash}',NULL,'${basis.correlationId}')::forme_r4.mutation_context_v1,\n    '${LINEAGE_FIXED.core_basis_sha}'::forme_r4.sha256_digest);\n  IF (result).http_status<>201 OR (result).code<>'gate_b_core_basis_installed' THEN RAISE EXCEPTION 'core_basis_install_failed'; END IF;\nEND\n$basis$;\nRESET ROLE;\n`;
 }
 
-export function buildCorePostgresStdin(sqlKey, executionManifestSha256) {
+export function buildCorePostgresStdin(sqlKey, executionManifestSha256, readRuntimeFile = undefined) {
   if (![...Object.keys(SQL_PATHS), "basis", "basisErrors", ...Object.keys(FIXTURE_PATHS)].includes(sqlKey)) fail("POSTGRES_SQL_STEP_UNKNOWN");
-  if (sqlKey === "basis") return coreBasisInstallSql();
+  if (sqlKey === "basis") return coreBasisInstallSql(readRuntimeFile);
   if (sqlKey === "basisErrors") return CORE_BASIS_ERRORS_SQL;
   const relative = SQL_PATHS[sqlKey] ?? FIXTURE_PATHS[sqlKey];
-  const source = exactFile(relative);
-  if (["migration", "verify", "rollback"].includes(sqlKey)) return lineagePrefix(exactLineage(executionManifestSha256)) + source;
+  const source = runtimeFile(relative, readRuntimeFile);
+  if (["migration", "verify", "rollback"].includes(sqlKey)) return lineagePrefix(exactLineage(executionManifestSha256, readRuntimeFile)) + source;
   return source;
 }
 

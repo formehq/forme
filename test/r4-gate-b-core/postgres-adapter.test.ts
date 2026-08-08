@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import test from "node:test";
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 import { CORE_POSTGRES_PHYSICAL, buildCorePostgresExecutionPlan, buildCorePostgresStdin, executeCorePostgresPlanWithInjectedExecutor, validateCorePostgresImageObservation, validateCorePostgresRaceObservation, validateCorePostgresReadinessObservation } from "../../scripts/r4-gate-b-core-postgres.mjs";
@@ -57,6 +59,20 @@ test("stdin composer binds all six lineage values and installs basis only throug
   assert.doesNotMatch(basis, /INSERT\s+INTO/iu);
   assert.match(buildCorePostgresStdin("basisErrors", manifestHash), /basis_null_context_not_closed/u);
   assert.throws(() => buildCorePostgresStdin("migration", "unbound"), /POSTGRES_EXECUTION_MANIFEST_HASH_INVALID/u);
+});
+
+test("stdin composer accepts only pinned string/byte runtime sources", () => {
+  const root = path.resolve(import.meta.dirname, "../..");
+  const reads: string[] = [];
+  const readRuntimeFile = (relativePath: string) => {
+    reads.push(relativePath);
+    return fs.readFileSync(path.join(root, relativePath));
+  };
+  const manifestHash = `sha256:${"9".repeat(64)}`;
+  assert.equal(buildCorePostgresStdin("migration", manifestHash, readRuntimeFile), buildCorePostgresStdin("migration", manifestHash));
+  assert.ok(reads.includes("schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql"));
+  assert.match(buildCorePostgresStdin("basis", manifestHash, readRuntimeFile), /tx_gate_b_core_basis_install/u);
+  assert.throws(() => buildCorePostgresStdin("migration", manifestHash, (() => 1) as never), /POSTGRES_RUNTIME_BYTES_INVALID/u);
 });
 
 test("physical observation validators reject manifest, readiness and race drift", () => {

@@ -1,8 +1,11 @@
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
+import { EventEmitter } from "node:events";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { Ajv2020 } from "ajv/dist/2020.js";
+import { canonicalJson } from "../packages/r4-protocol/src/index.ts";
 import {
   guardClientMessage,
   initializedMessage,
@@ -11,6 +14,7 @@ import {
   validatePinnedCodexFixtures,
 } from "../packages/r4-codex-adapter/src/app-server-probe.ts";
 import {
+  CORE_CODEX_ALLOWED_HOME,
   CORE_CODEX_VERSION,
   buildCoreCodexLogicalCommand,
   computeSchemaInventory,
@@ -366,6 +370,695 @@ export function coreSyntheticPublicHashes(fixture) {
     profile.fill(0);
     native.fill(0);
   }
+}
+
+function immediateConstructionTiming(onSchedule = () => {}, onNow = () => {}) {
+  let now = 0;
+  return Object.freeze({
+    setTimeout(callback, milliseconds) {
+      onSchedule(milliseconds);
+      const token = { active: true };
+      token.handle = setImmediate(() => {
+        if (!token.active) return;
+        now += milliseconds;
+        callback();
+      });
+      return token;
+    },
+    clearTimeout(token) {
+      if (token && token.active) {
+        token.active = false;
+        clearImmediate(token.handle);
+      }
+    },
+    now() { onNow(); return now; },
+  });
+}
+
+function compilePhysicalCodexEvidenceProjection() {
+  const schemaPath = path.join(repositoryRoot, "schemas/r4/gate-b-core/physical-retry-evidence.schema.json");
+  const stat = fs.lstatSync(schemaPath);
+  if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1 || fs.realpathSync(schemaPath) !== schemaPath || stat.size < 1 || stat.size > 1_048_576) fail("CORE_SHARED_EVIDENCE_SCHEMA_UNSAFE");
+  const schema = JSON.parse(fs.readFileSync(schemaPath, "utf8"));
+  if (!schema?.$defs?.codex) fail("CORE_SHARED_EVIDENCE_SCHEMA_MISSING");
+  const validator = new Ajv2020({ strict: true, allErrors: false }).compile(schema.$defs.codex);
+  return (value) => validator(value) === true;
+}
+
+function physicalCodexEvidenceProjection(evidence) {
+  return Object.freeze({
+    status: "CODEX_ZERO_CALL_PHYSICAL_OBSERVED_GREEN",
+    reportedVersion: evidence.reportedVersion,
+    schemaFileCount: evidence.schemaFileCount,
+    // The synthetic 273-file fixture has its own aggregate; the physical
+    // projection binds the separately frozen production aggregate while every
+    // other observable field is carried from the actual shared-factory result.
+    schemaAggregateSha256: "sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62",
+    processStartSlotsConsumed: evidence.processStartSlotsConsumed,
+    processGroupsStarted: evidence.processGroupsStarted,
+    clientWrites: evidence.clientWrites,
+    serverResponses: evidence.serverResponses,
+    serverRequests: evidence.serverRequests,
+    serverNotifications: evidence.serverNotifications,
+    receiveBufferEmptyBeforeSecondWrite: evidence.receiveBufferEmptyBeforeSecondWrite,
+    preSecondWriteViolationObserved: evidence.preSecondWriteViolationObserved,
+    postSecondWriteViolationObserved: evidence.postSecondWriteViolationObserved,
+    allStartedGroupsReaped: evidence.allStartedGroupsReaped,
+    allStartedGroupsAbsent: evidence.allStartedGroupsAbsent,
+    exitCodes: evidence.exitCodes,
+    stderrBytes: evidence.stderrBytes,
+    schemaStdoutBytes: evidence.schemaStdoutBytes,
+    threadStarts: evidence.threadStarts,
+    turnStarts: evidence.turnStarts,
+    providerCalls: evidence.providerCalls,
+    providerBytes: evidence.providerBytes,
+    networkAuthority: evidence.networkAuthority,
+    networkTransmittedBytes: evidence.networkTransmittedBytes,
+    networkSyscallAttemptAbsenceClaimed: evidence.networkSyscallAttemptAbsenceClaimed,
+    causalFinality: evidence.causalFinality,
+    postResponseFinalityProven: evidence.postResponseFinalityProven,
+    aiLaneEnabled: evidence.aiLaneEnabled,
+    cleanupStatus: evidence.cleanupStatus,
+  });
+}
+
+function journalFaultFromCase(caseId) {
+  const ordinary = /^journal-(intent|started|terminal)-(version|help|schema|initialize)-(before|after)$/u.exec(caseId);
+  if (ordinary !== null) return Object.freeze({ event: `${ordinary[1]}:${ordinary[2]}`, side: ordinary[3] });
+  const cleanup = /^journal-cleanup-observed-absent-(version|help|schema|initialize)-(before|after)$/u.exec(caseId);
+  return cleanup === null ? null : Object.freeze({ event: `cleanup-observed-absent:${cleanup[1]}`, side: cleanup[2] });
+}
+
+function schemaBehaviorFromCase(caseId) {
+  if (caseId === "schema-missing") return "schema_missing";
+  if (caseId === "schema-extra") return "schema_extra";
+  if (caseId === "schema-nested") return "schema_nested";
+  return "clean";
+}
+
+function mutateCommandForSharedCase(command, mutationMode) {
+  if (mutationMode === "argv-extra") return Object.freeze({ ...command, argv: Object.freeze([...command.argv, "denied-extra"]) });
+  if (mutationMode === "argv-missing") return Object.freeze({ ...command, argv: Object.freeze(command.argv.slice(0, -1)) });
+  if (mutationMode === "argv-reordered") {
+    const argv = [...command.argv];
+    const last = argv.length - 1;
+    [argv[last], argv[last - 1]] = [argv[last - 1], argv[last]];
+    return Object.freeze({ ...command, argv: Object.freeze(argv) });
+  }
+  if (mutationMode === "argv-value") {
+    const argv = [...command.argv];
+    argv[argv.length - 1] = `${argv.at(-1)}-denied`;
+    return Object.freeze({ ...command, argv: Object.freeze(argv) });
+  }
+  if (mutationMode === "env-extra") return Object.freeze({ ...command, environment: Object.freeze({ ...command.environment, INHERITED: "denied" }) });
+  if (mutationMode === "env-missing") {
+    const environment = { ...command.environment };
+    delete environment.NO_COLOR;
+    return Object.freeze({ ...command, environment: Object.freeze(environment) });
+  }
+  if (mutationMode === "env-value") return Object.freeze({ ...command, environment: Object.freeze({ ...command.environment, PATH: "/denied" }) });
+  if (mutationMode === "cwd") return Object.freeze({ ...command, cwd: path.dirname(command.cwd) });
+  if (mutationMode === "deadline") return Object.freeze({ ...command, deadlineMilliseconds: command.deadlineMilliseconds + 1 });
+  if (mutationMode === "output-ceiling") return Object.freeze({ ...command, stdoutLimitBytes: command.stdoutLimitBytes + 1 });
+  return command;
+}
+
+/**
+ * Builds the body-free callback consumed by runConstructionFakeMatrix.  It
+ * runs every case through the injected shared production orchestration
+ * factory, but its children, clock, process groups and journal are entirely
+ * synthetic and bounded below one caller-owned private temp root. Production
+ * Construction defers filesystem deletion to its authenticated top-root
+ * authority; standalone callers retain the default per-case cleanup.
+ */
+export function createCoreSharedOrchestrationCaseExecutor({ constructionTempRoot, createOrchestrator, deferFilesystemCleanupToConstructionRoot = false }) {
+  const privateRoot = canonicalTempRoot(constructionTempRoot);
+  if (typeof createOrchestrator !== "function") fail("CORE_SHARED_ORCHESTRATOR_FACTORY_REQUIRED");
+  if (typeof deferFilesystemCleanupToConstructionRoot !== "boolean") fail("CORE_SHARED_FILESYSTEM_CLEANUP_POLICY_INVALID");
+  const validateEvidenceProjection = compilePhysicalCodexEvidenceProjection();
+  let caseSequence = 0;
+  return async function runSharedCase(spec) {
+    if (spec === null || typeof spec !== "object" || typeof spec.caseId !== "string" || typeof spec.faultClass !== "string") fail("CORE_SHARED_CASE_SPEC_INVALID");
+    caseSequence += 1;
+    const caseRoot = path.join(privateRoot, `codex-shared-${String(caseSequence).padStart(3, "0")}`);
+    mkdir0700(caseRoot);
+    const fixture = createCoreFakeCodexLayout(caseRoot, schemaBehaviorFromCase(spec.caseId));
+    const fakeWrapper = path.join(fixture.root, "shared-fake-wrapper");
+    const fakeWrapperMarker = Buffer.from("FORME_GATE_B_CORE_SHARED_FAKE_WRAPPER_V1\n", "utf8");
+    fs.writeFileSync(fakeWrapper, fakeWrapperMarker, { flag: "wx", mode: 0o500 });
+    fs.chmodSync(fakeWrapper, 0o500);
+    const fakeWrapperStat = fs.lstatSync(fakeWrapper);
+    const fakeWrapperBytes = fs.readFileSync(fakeWrapper);
+    const fakeWrapperIdentityValid = fakeWrapperStat.isFile() && !fakeWrapperStat.isSymbolicLink() && fakeWrapperStat.uid === process.getuid() && fakeWrapperStat.nlink === 1
+      && (fakeWrapperStat.mode & 0o777) === 0o500 && fs.realpathSync(fakeWrapper) === fakeWrapper
+      && digest(fakeWrapperBytes) === digest(fakeWrapperMarker);
+    fakeWrapperBytes.fill(0);
+    fakeWrapperMarker.fill(0);
+    if (!fakeWrapperIdentityValid) fail("CORE_SHARED_FAKE_WRAPPER_UNSAFE");
+    const memoryPort = createCoreMemorySpawnPort(fixture);
+    const expectedSchema = { ...expectedCoreFakeSchema(), selected: { ...expectedCoreFakeSchema().selected } };
+    const publicHashes = coreSyntheticPublicHashes(fixture);
+    const journalFault = journalFaultFromCase(spec.caseId);
+    const journalLines = [];
+    const journalRecords = [];
+    let priorJournalSha256 = null;
+    let journalFaultObserved = false;
+    let journalInputShapeValidated = true;
+    let journalInputRejectionObserved = false;
+    let startedFsyncObserved = new Set();
+    const validateJournalInput = (partial, productionInput = true) => {
+      const match = /^(intent|started|terminal|cleanup-observed-absent):(version|help|schema|initialize)$/u.exec(partial?.event);
+      const marker = match?.[1] ?? null;
+      const kind = match?.[2] ?? null;
+      const expectedCommandShapeSha256 = kind === null ? null : `sha256:${digest(Buffer.from(canonicalJson(buildCoreCodexLogicalCommand(fixture.layout, kind)), "utf8"))}`;
+      const keys = marker === "intent"
+        ? ["lane", "event", "commandShapeSha256", "ownedResources", "cleanupState"]
+        : marker === "started"
+          ? ["lane", "event", "commandShapeSha256", "processGroupId", "ownedResources", "cleanupState"]
+          : ["terminal", "cleanup-observed-absent"].includes(marker)
+            ? ["lane", "event", "commandShapeSha256", "processGroupId", "ownedResources", "terminalCode", "cleanupState"]
+            : [];
+      const actualKeys = partial !== null && typeof partial === "object" && !Array.isArray(partial) ? Object.keys(partial).sort() : [];
+      const expectedKeys = [...keys].sort();
+      const exactKeys = actualKeys.length === expectedKeys.length && actualKeys.every((key, index) => key === expectedKeys[index]);
+      const valid = exactKeys
+        && partial.lane === "codex"
+        && /^sha256:[0-9a-f]{64}$/u.test(partial.commandShapeSha256)
+        && partial.commandShapeSha256 === expectedCommandShapeSha256
+        && Array.isArray(partial.ownedResources)
+        && canonicalJson(partial.ownedResources) === canonicalJson(["codex-process-group", "codex-stdio"])
+        && (marker === "intent" || (Number.isSafeInteger(partial.processGroupId) && partial.processGroupId > 1 && children.get(partial.processGroupId)?.command.kind === kind))
+        && (!["terminal", "cleanup-observed-absent"].includes(marker) || typeof partial.terminalCode === "string")
+        && (marker === "terminal"
+          ? (partial.terminalCode === "NO_TERMINAL" || /^(?:0|-?[1-9][0-9]*)$/u.test(partial.terminalCode))
+            && ["observed-absent", "quarantined"].includes(partial.cleanupState)
+          : marker === "cleanup-observed-absent"
+            ? partial.terminalCode === "ABSENT" && partial.cleanupState === "observed-absent"
+            : partial.cleanupState === "required");
+      if (!valid) {
+        if (productionInput) journalInputShapeValidated = false;
+        fail("CORE_SHARED_JOURNAL_INPUT_INVALID");
+      }
+      return marker;
+    };
+    const journal = Object.freeze({
+      records() { return Object.freeze([...journalRecords]); },
+      async append(partial) {
+        validateJournalInput(partial);
+        if (spec.faultClass === "JOURNAL_INPUT_CANARY" && !journalInputRejectionObserved) {
+          const key = spec.caseId.includes("body-canary") ? "responseText"
+            : spec.caseId.includes("path-canary") ? "privatePath"
+              : "machineIdentity";
+          try {
+            validateJournalInput({ ...partial, [key]: "synthetic-canary" }, false);
+            fail("CORE_SHARED_JOURNAL_CANARY_ACCEPTED");
+          } catch (error) {
+            if (error?.code !== "CORE_SHARED_JOURNAL_INPUT_INVALID") throw error;
+            journalInputRejectionObserved = true;
+            throw error;
+          }
+        }
+        const matchesFault = journalFault !== null && journalFault.event === partial.event && !journalFaultObserved;
+        if (matchesFault && journalFault.side === "before") { journalFaultObserved = true; throw new Error(`CORE_SHARED_JOURNAL_FAULT_BEFORE:${partial.event}`); }
+        const record = Object.freeze({
+          schemaVersion: "r4_gate_b_physical_journal.v1",
+          sequence: journalRecords.length,
+          previousRecordSha256: priorJournalSha256,
+          runId: "c".repeat(32),
+          manifestSha256: null,
+          hostBindingId: null,
+          lane: partial.lane,
+          event: partial.event,
+          commandShapeSha256: partial.commandShapeSha256 ?? null,
+          processGroupId: partial.processGroupId ?? null,
+          ownedResources: partial.ownedResources ?? [],
+          terminalCode: partial.terminalCode ?? null,
+          cleanupState: partial.cleanupState ?? "required",
+        });
+        const bytes = Buffer.from(`${canonicalJson(record)}\n`, "utf8");
+        journalRecords.push(record);
+        journalLines.push(bytes);
+        priorJournalSha256 = `sha256:${digest(bytes)}`;
+        if (partial.event.startsWith("started:")) startedFsyncObserved.add(partial.event.slice("started:".length));
+        if (matchesFault && journalFault.side === "after") { journalFaultObserved = true; throw new Error(`CORE_SHARED_JOURNAL_FAULT_AFTER:${partial.event}`); }
+        return record;
+      },
+    });
+    const observations = {
+      processStartSlotsConsumed: 0,
+      processGroupsStarted: 0,
+      clientWrites: 0,
+      termSignals: 0,
+      killSignals: 0,
+      stdinErrors: 0,
+      esrchObservations: 0,
+      epermObservations: 0,
+      unknownAbsenceObservations: 0,
+      syntheticDescendantsStarted: 0,
+      mutationBeforeSpawnRejected: false,
+      inMemoryFakeExecutorBoundaryProven: true,
+      inMemoryFakeWrapperSubstitutionProven: true,
+      clientWriteBytesValidated: true,
+      releaseOrderingViolation: false,
+      stdioCloseBeforeSignalViolation: false,
+      writeAfterStdioCloseViolation: false,
+      emittedBuffers: [],
+      timerScheduleMilliseconds: [],
+      initializedWriteTimerEvents: [],
+      retryStarts: 0,
+      fifthStarts: 0,
+      alternateExecutableStarts: 0,
+    };
+    const children = new Map();
+    const startedKinds = new Set();
+    const initializeFixture = JSON.parse(exactRead("fixtures/r4-gate-b-core/codex/initialize-result.json")).result;
+    const cleanCase = spec.caseId === "clean-notification-before-response-four-start";
+    const exitGraceHangCase = ["start-4-response-then-hang-term", "start-4-response-then-hang-kill"].includes(spec.caseId);
+    const groupCase = spec.caseId.includes("group-eperm") || spec.caseId.includes("group-unknown");
+    const cleanupMarkerFaultMatch = /^journal-cleanup-observed-absent-(version|help|schema|initialize)-(before|after)$/u.exec(spec.caseId);
+    const cleanupMarkerFaultKind = cleanupMarkerFaultMatch?.[1] ?? null;
+    const persistentGroupCase = spec.caseId.endsWith("-persistent");
+    const descendantCase = spec.caseId.includes("adversarial-descendant");
+    let evidenceSchemaRejectionObserved = false;
+
+    const emitOwned = (emitter, bytes) => {
+      const source = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes);
+      const owned = Buffer.from(source);
+      observations.emittedBuffers.push(source, owned);
+      try { emitter.emit("data", owned); } finally { owned.fill(0); source.fill(0); }
+    };
+    const writeAllowedHome = () => {
+      for (const name of CORE_CODEX_ALLOWED_HOME) {
+        const candidate = path.join(fixture.layout.codexHome, name);
+        if (["skills", ".tmp", "tmp"].includes(name)) mkdir0700(candidate);
+        else fs.writeFileSync(candidate, "synthetic-state", { flag: "wx", mode: 0o600 });
+      }
+    };
+    const mutateSchemaAfterGeneration = () => {
+      if (!["schema-dialect", "schema-ref-closure", "schema-selected-hash"].includes(spec.caseId)) return;
+      const target = spec.caseId === "schema-selected-hash"
+        ? path.join(fixture.layout.schemaRoot, "ClientRequest.json")
+        : path.join(fixture.layout.schemaRoot, "InitializeResponse.json");
+      const value = spec.caseId === "schema-dialect"
+        ? { $schema: "https://attacker.invalid/schema", type: "object" }
+        : spec.caseId === "schema-ref-closure"
+          ? { $schema: "http://json-schema.org/draft-07/schema#", $id: "forme://synthetic/initialize-response", $ref: "./Missing.json" }
+          : { $schema: "http://json-schema.org/draft-07/schema#", $id: "forme://synthetic/client-request-mutated", type: "object" };
+      fs.writeFileSync(target, `${JSON.stringify(value)}\n`, { flag: "w", mode: 0o600 });
+      if (["schema-dialect", "schema-ref-closure"].includes(spec.caseId)) {
+        const inventory = computeSchemaInventory(fixture.layout.schemaRoot, Object.keys(expectedSchema.selected));
+        expectedSchema.fileCount = inventory.fileCount;
+        expectedSchema.aggregateSha256 = inventory.aggregateSha256;
+        expectedSchema.selected = Object.fromEntries(Object.keys(expectedSchema.selected).map((name) => [name, inventory.files[name].sha256]));
+      } else if (spec.caseId === "schema-selected-hash") {
+        const inventory = computeSchemaInventory(fixture.layout.schemaRoot, Object.keys(expectedSchema.selected));
+        expectedSchema.fileCount = inventory.fileCount;
+        expectedSchema.aggregateSha256 = inventory.aggregateSha256;
+      }
+    };
+    const initializeChunks = () => {
+      const notification = `${JSON.stringify({ method: "remoteControl/status/changed", params: { status: "disabled", machineName: "synthetic-machine-secret", installationId: "synthetic-install-secret" } })}\n`;
+      const response = `${JSON.stringify({ id: 0, result: spec.caseId === "wire-invalid-result" ? { userAgent: 7 } : initializeFixture })}\n`;
+      if (groupCase || spec.caseId === "wire-server-request-before-response") return [`${JSON.stringify({ id: 9, method: "thread/start", params: {} })}\n`];
+      if (spec.caseId === "wire-unknown-notification-before-response") return [`${JSON.stringify({ method: "thread/started", params: {} })}\n`];
+      if (spec.caseId === "wire-duplicate-notification") return [`${notification}${notification}${response}`];
+      if (spec.caseId === "wire-response-full-line-same-chunk") return [`${response}${JSON.stringify({ id: 9, method: "thread/start", params: {} })}\n`];
+      if (spec.caseId === "wire-response-partial-same-chunk") return [`${response}{`];
+      if (spec.caseId === "wire-response-unknown-next-chunk") return [response, `${JSON.stringify({ method: "thread/started", params: {} })}\n`];
+      if (spec.caseId === "wire-notification-after-response") return [`${response}${notification}`];
+      if (spec.caseId === "wire-duplicate-response") return [`${response}${response}`];
+      if (spec.caseId === "wire-malformed") return ["{bad\n"];
+      if (spec.caseId === "wire-oversize-line") return ["x".repeat(1_048_577)];
+      if (spec.caseId === "wire-trailing-buffer") return [`${notification}{`];
+      return [`${notification}${response}`];
+    };
+
+    const stopSyntheticGroup = async (pid) => {
+      const child = children.get(pid);
+      if (!child || child.logicalAbsent) return true;
+      if (cleanupMarkerFaultKind === child.command.kind) {
+        child.absenceAttempts += 1;
+        if (child.absenceAttempts === 1) { observations.unknownAbsenceObservations += 1; return false; }
+        child.logicalAbsent = true;
+        child.close(0, null);
+        observations.esrchObservations += 1;
+        return true;
+      }
+      if (child.slot === 4 && groupCase) {
+        child.absenceAttempts += 1;
+        if (child.absenceAttempts === 1) {
+          if (spec.caseId.includes("eperm")) observations.epermObservations += 1;
+          else observations.unknownAbsenceObservations += 1;
+          return false;
+        }
+        if (!child.allStdioClosed()) observations.stdioCloseBeforeSignalViolation = true;
+        observations.termSignals += 1;
+        if (persistentGroupCase) {
+          if (!child.allStdioClosed()) observations.stdioCloseBeforeSignalViolation = true;
+          observations.killSignals += 1;
+          if (spec.caseId.includes("eperm")) observations.epermObservations += 1;
+          else observations.unknownAbsenceObservations += 1;
+          return false;
+        }
+        child.logicalAbsent = true;
+        child.close(0, null);
+        for (const descendant of child.descendants) descendant.closed = true;
+        observations.esrchObservations += 1;
+        return true;
+      }
+      if (child.slot === 4 && descendantCase) {
+        if (!child.allStdioClosed()) observations.stdioCloseBeforeSignalViolation = true;
+        observations.termSignals += 1;
+        for (const descendant of child.descendants) if (!descendant.ignoresTerm) descendant.closed = true;
+        if (child.descendants.some((descendant) => !descendant.closed)) {
+          if (!child.allStdioClosed()) observations.stdioCloseBeforeSignalViolation = true;
+          observations.killSignals += 1;
+          for (const descendant of child.descendants) descendant.closed = true;
+        }
+      }
+      child.logicalAbsent = true;
+      child.close(0, null);
+      observations.esrchObservations += 1;
+      return true;
+    };
+
+    const spawnChild = async (command) => {
+      observations.processStartSlotsConsumed += 1;
+      const slot = observations.processStartSlotsConsumed;
+      validateCoreCodexLogicalCommand(fixture.layout, command);
+      if (command.argv[0] !== "/usr/bin/sandbox-exec" || command.cwd !== fixture.layout.neutralCwd || Object.keys(command.environment).length !== 6) observations.inMemoryFakeExecutorBoundaryProven = false;
+      const substitutedArgv = [fakeWrapper, ...command.argv.slice(1)];
+      if (substitutedArgv[0] !== fakeWrapper || substitutedArgv.length !== command.argv.length || substitutedArgv.slice(1).some((value, index) => value !== command.argv[index + 1])) {
+        observations.inMemoryFakeWrapperSubstitutionProven = false;
+        observations.alternateExecutableStarts += 1;
+      }
+      if ((spec.caseId === "spawn-call-rejected-slot-1" && slot === 1) || (spec.caseId === "spawn-call-rejected-slot-4" && slot === 4)) throw new Error(`CORE_SHARED_SPAWN_REJECTED:${slot}`);
+      const pid = 10_000 + caseSequence * 10 + slot;
+      observations.processGroupsStarted += 1;
+      if (startedKinds.has(command.kind)) observations.retryStarts += 1;
+      startedKinds.add(command.kind);
+      if (observations.processGroupsStarted > 4) observations.fifthStarts += 1;
+      const childEmitter = new EventEmitter();
+      const stdout = new EventEmitter();
+      const stderr = new EventEmitter();
+      const stdin = new EventEmitter();
+      const stdioState = { stdin: false, stdout: false, stderr: false };
+      stdin.destroy = () => { stdioState.stdin = true; return stdin; };
+      stdout.destroy = () => { stdioState.stdout = true; return stdout; };
+      stderr.destroy = () => { stdioState.stderr = true; return stderr; };
+      let initializeOutputSent = false;
+      const child = {
+        pid,
+        slot,
+        command,
+        stdin,
+        stdout,
+        stderr,
+        logicalAbsent: false,
+        closed: false,
+        released: false,
+        absenceAttempts: 0,
+        descendants: descendantCase && slot === 4 ? [{ closed: false, ignoresTerm: spec.caseId.endsWith("-kill") }] : [],
+        zeroizationReports: [],
+        allStdioClosed() { return stdioState.stdin && stdioState.stdout && stdioState.stderr; },
+        once: childEmitter.once.bind(childEmitter),
+        close(code = 0, signal = null) {
+          if (!child.closed) {
+            stdin.destroy(); stdout.destroy(); stderr.destroy();
+            child.closed = true;
+            childEmitter.emit("close", code, signal);
+          }
+        },
+        async abortBeforeRelease() {
+          if (child.released) throw new Error("CORE_SHARED_ABORT_AFTER_RELEASE");
+          child.logicalAbsent = true;
+          child.close(0, null);
+          observations.esrchObservations += 1;
+          return true;
+        },
+        async release() {
+          child.released = true;
+          if (!startedFsyncObserved.has(command.kind)) observations.releaseOrderingViolation = true;
+          if (command.kind === "initialize") return;
+          if (spec.caseId === "start-3-oversize" && slot === 3) {
+            emitOwned(stdout, Buffer.alloc(command.stdoutLimitBytes + 1, 0x41));
+            return;
+          }
+          const result = await memoryPort.run(command);
+          try {
+            if (command.kind === "schema") mutateSchemaAfterGeneration();
+            if (result.stdout.length > 0) emitOwned(stdout, result.stdout);
+            if ((spec.caseId === "start-1-stderr" && slot === 1) || result.stderr.length > 0) emitOwned(stderr, Buffer.from("synthetic stderr", "utf8"));
+            child.close(spec.caseId === "start-2-nonzero" && slot === 2 ? 7 : result.exitCode);
+          } finally {
+            result.stdout.fill(0);
+            result.stderr.fill(0);
+            for (const line of result.lines ?? []) line.fill(0);
+          }
+        },
+        signalGroup(signal) {
+          if (!child.allStdioClosed()) observations.stdioCloseBeforeSignalViolation = true;
+          if (signal === "SIGTERM") observations.termSignals += 1;
+          else if (signal === "SIGKILL") observations.killSignals += 1;
+          if (groupCase) return false;
+          if (["start-4-timeout-kill", "start-4-response-then-hang-kill"].includes(spec.caseId) && signal === "SIGTERM") return false;
+          child.close(signal === "SIGKILL" ? -1 : 0, signal);
+          return true;
+        },
+        async stopAndProveAbsent() { return await stopSyntheticGroup(pid); },
+        observeOrchestratorZeroization(summary) {
+          const keys = summary !== null && typeof summary === "object" ? Object.keys(summary).sort() : [];
+          if (canonicalJson(keys) !== canonicalJson(["bufferCount", "nonzeroBytes"])) observations.inMemoryFakeExecutorBoundaryProven = false;
+          child.zeroizationReports.push(Object.freeze({ bufferCount: summary?.bufferCount, nonzeroBytes: summary?.nonzeroBytes }));
+        },
+        observeInitializedFramePrepared() { observations.initializedWriteTimerEvents.push("initialized-frame-prepared"); },
+      };
+      stdin.write = (bytes) => {
+        if (command.kind !== "initialize") return true;
+        if (stdioState.stdin) observations.writeAfterStdioCloseViolation = true;
+        const expected = guardClientMessage(initializeMessage());
+        if (typeof bytes !== "string" || bytes !== expected) observations.clientWriteBytesValidated = false;
+        observations.clientWrites += 1;
+        if (spec.caseId === "start-4-stdin-epipe-before-response" && observations.clientWrites === 1) {
+          observations.stdinErrors += 1;
+          stdin.emit("error", Object.assign(new Error("synthetic EPIPE"), { code: "EPIPE" }));
+          return false;
+        }
+        if (!initializeOutputSent) {
+          initializeOutputSent = true;
+          if (!["start-4-timeout-term", "start-4-timeout-kill"].includes(spec.caseId)) {
+            const chunks = initializeChunks();
+            for (const chunk of chunks) emitOwned(stdout, chunk);
+            if (spec.caseId === "wire-trailing-buffer") child.close(0);
+          }
+        }
+        return true;
+      };
+      stdin.end = (bytes) => {
+        if (command.kind !== "initialize") return true;
+        if (stdioState.stdin) observations.writeAfterStdioCloseViolation = true;
+        if (bytes !== undefined) {
+          observations.initializedWriteTimerEvents.push("initialized-end");
+          const expected = guardClientMessage(initializedMessage());
+          if (typeof bytes !== "string" || bytes !== expected) observations.clientWriteBytesValidated = false;
+          observations.clientWrites += 1;
+        }
+        if (spec.caseId === "start-4-stdin-epipe-second-write" && bytes !== undefined) {
+          observations.stdinErrors += 1;
+          stdin.emit("error", Object.assign(new Error("synthetic EPIPE"), { code: "EPIPE" }));
+          return false;
+        }
+        if (bytes !== undefined) {
+          if (cleanCase) writeAllowedHome();
+          if (spec.caseId === "isolated-home-write-escape") fs.writeFileSync(path.join(fixture.layout.codexHome, "unknown.sqlite"), "synthetic", { flag: "wx", mode: 0o600 });
+          if (spec.caseId === "private-canary-detected") fs.writeFileSync(path.join(fixture.layout.home, "session.txt"), "prompt: synthetic-private-canary", { flag: "wx", mode: 0o600 });
+          if (spec.caseId === "schema-toctou-after-initialize") fs.appendFileSync(path.join(fixture.layout.schemaRoot, "InitializeResponse.json"), " ");
+          if (spec.caseId !== "wire-response-unknown-next-chunk" && !exitGraceHangCase) child.close(0);
+        }
+        return true;
+      };
+      children.set(pid, child);
+      observations.syntheticDescendantsStarted += child.descendants.length;
+      return child;
+    };
+
+    const rawPort = createOrchestrator({
+      layout: fixture.layout,
+      journal,
+      spawnChild,
+      stopProcessGroup: stopSyntheticGroup,
+      timing: immediateConstructionTiming((milliseconds) => {
+        observations.timerScheduleMilliseconds.push(milliseconds);
+        observations.initializedWriteTimerEvents.push(`timer:${milliseconds}`);
+      }, () => observations.initializedWriteTimerEvents.push("timing-now")),
+    });
+    let portCleanupCalls = 0;
+    const port = Object.freeze({
+      mode: rawPort.mode,
+      run: rawPort.run.bind(rawPort),
+      async cleanup() {
+        portCleanupCalls += 1;
+        return await rawPort.cleanup();
+      },
+    });
+    let evidence = null;
+    let invocationError = null;
+    try {
+      if (spec.faultClass === "COMMAND_MUTATION") {
+        const command = mutateCommandForSharedCase(buildCoreCodexLogicalCommand(fixture.layout, spec.commandKind), spec.mutationMode);
+        try { await port.run(command); }
+        catch (error) { invocationError = error; observations.mutationBeforeSpawnRejected = observations.processStartSlotsConsumed === 0; }
+        await port.cleanup();
+      } else {
+        try {
+          evidence = await runCoreCodexZeroCall({ layout: fixture.layout, spawnPort: port, expectedSchema, publicHashes });
+        } catch (error) { invocationError = error; }
+      }
+      const sawQuarantine = observations.epermObservations + observations.unknownAbsenceObservations > 0;
+      if (!sawQuarantine || cleanupMarkerFaultKind !== null) await port.cleanup();
+      if (spec.caseId.startsWith("evidence-")) {
+        if (evidence === null || !validateEvidenceProjection(physicalCodexEvidenceProjection(evidence))) fail("CORE_SHARED_CLEAN_EVIDENCE_PROJECTION_INVALID");
+        const mutated = { ...physicalCodexEvidenceProjection(evidence) };
+        if (spec.caseId === "evidence-schema-required-field-rejected") delete mutated.status;
+        else if (spec.caseId === "evidence-schema-wrong-type-rejected") mutated.providerCalls = "0";
+        else if (spec.caseId === "evidence-schema-wrong-enum-rejected") mutated.cleanupStatus = "UNKNOWN";
+        else {
+          const canaryKey = spec.caseId === "evidence-body-canary-rejected" ? "responseText"
+            : spec.caseId === "evidence-path-canary-rejected" ? "privatePath"
+              : spec.caseId === "evidence-pid-canary-rejected" ? "processGroupId"
+                : spec.caseId === "evidence-wire-canary-rejected" ? "rawWire"
+                  : spec.caseId === "evidence-argv-canary-rejected" ? "argv"
+                    : spec.caseId === "evidence-env-canary-rejected" ? "environment"
+                      : spec.caseId === "evidence-schema-body-canary-rejected" ? "schemaBody"
+                        : spec.caseId === "evidence-private-inventory-canary-rejected" ? "privateInventory"
+                          : spec.caseId === "evidence-stable-identity-canary-rejected" ? "machineIdentity"
+                            : "extra";
+          mutated[canaryKey] = "synthetic-canary";
+        }
+        evidenceSchemaRejectionObserved = !validateEvidenceProjection(mutated);
+      }
+      const allProcessGroupsAbsent = [...children.values()].every((child) => child.logicalAbsent);
+      const unresolved = [...children.values()].filter((child) => !child.logicalAbsent);
+      const descendantGroupCleanupObserved = descendantCase
+        && observations.syntheticDescendantsStarted === 1
+        && allProcessGroupsAbsent
+        && [...children.values()].every((child) => child.descendants.every((descendant) => descendant.closed));
+      const releasedChildren = [...children.values()].filter((child) => child.released);
+      const ownedBufferZeroizationPassed = releasedChildren.every((child) => child.zeroizationReports.length > 0
+        && child.zeroizationReports.every((report) => Number.isSafeInteger(report.bufferCount) && report.bufferCount >= 3 && report.nonzeroBytes === 0));
+      const fakeEmitterBufferZeroizationPassed = observations.emittedBuffers.every((buffer) => buffer.every((byte) => byte === 0));
+      const ownedStdioClosedBeforeReturn = [...children.values()].every((child) => child.allStdioClosed());
+      for (const child of children.values()) {
+        child.close(0, null);
+        for (const descendant of child.descendants) descendant.closed = true;
+      }
+      const syntheticChildHandlesClosedAtReturn = [...children.values()].every((child) => child.closed && child.descendants.every((descendant) => descendant.closed));
+      let previous = null;
+      let journalChainValid = true;
+      for (let index = 0; index < journalLines.length; index += 1) {
+        const record = journalRecords[index];
+        if (record.sequence !== index || record.previousRecordSha256 !== previous || `${canonicalJson(record)}\n` !== journalLines[index].toString("utf8")) journalChainValid = false;
+        previous = `sha256:${digest(journalLines[index])}`;
+      }
+      const journalAggregateSha256 = `sha256:${digest(Buffer.concat(journalLines))}`;
+      const yellowCleaned = sawQuarantine && allProcessGroupsAbsent;
+      const terminalClass = cleanCase && invocationError === null
+        ? "CLEAN"
+        : !allProcessGroupsAbsent
+          ? "RED_QUARANTINED"
+          : yellowCleaned
+            ? "YELLOW_QUARANTINED_CLEANED"
+            : "CONTROLLED_FAILURE";
+      const idempotenceCleanupCalls = sawQuarantine ? 0 : Math.max(0, portCleanupCalls - 1);
+      const quarantineCleanupCalls = sawQuarantine ? portCleanupCalls : 0;
+      const invocationReason = invocationError === null
+        ? "NO_ERROR"
+        : typeof invocationError.code === "string"
+          ? invocationError.code
+          : typeof invocationError.message === "string"
+            ? invocationError.message
+            : "UNKNOWN_ERROR";
+      const observedReasonCode = cleanCase && invocationError === null
+        ? "CLEAN"
+        : spec.faultClass === "EVIDENCE_SCHEMA" && evidenceSchemaRejectionObserved
+          ? "EVIDENCE_SCHEMA_REJECTED"
+          : journalFaultObserved && journalFault !== null
+            ? `CORE_SHARED_JOURNAL_FAULT_${journalFault.side.toUpperCase()}:${journalFault.event}`
+          : descendantGroupCleanupObserved
+            ? "SYNTHETIC_DESCENDANT_GROUP_CLEANED"
+            : invocationReason;
+      const injectedFaultObserved = observedReasonCode !== "CLEAN" && observedReasonCode !== "NO_ERROR" && observedReasonCode !== "UNKNOWN_ERROR";
+      const initializedFrameIndex = observations.initializedWriteTimerEvents.indexOf("initialized-frame-prepared");
+      const initializedEndIndex = observations.initializedWriteTimerEvents.indexOf("initialized-end");
+      const exitGraceTimerIndex = initializedEndIndex < 0 ? -1 : observations.initializedWriteTimerEvents.indexOf("timer:2000", initializedEndIndex + 1);
+      return Object.freeze({
+        caseId: spec.caseId,
+        terminalClass,
+        processStartSlotsConsumed: observations.processStartSlotsConsumed,
+        processGroupsStarted: observations.processGroupsStarted,
+        clientWrites: observations.clientWrites,
+        termSignals: observations.termSignals,
+        killSignals: observations.killSignals,
+        stdinErrors: observations.stdinErrors,
+        esrchObservations: observations.esrchObservations,
+        epermObservations: observations.epermObservations,
+        unknownAbsenceObservations: observations.unknownAbsenceObservations,
+        syntheticDescendantsStarted: observations.syntheticDescendantsStarted,
+        timerScheduleMilliseconds: Object.freeze([...observations.timerScheduleMilliseconds]),
+        initializedEndBeforeExitGraceTimerProven: observations.clientWrites < 2 || (initializedFrameIndex >= 0 && observations.initializedWriteTimerEvents[initializedFrameIndex + 1] === "timing-now" && initializedEndIndex === initializedFrameIndex + 2 && observations.initializedWriteTimerEvents[initializedEndIndex + 1] === "timing-now" && exitGraceTimerIndex === initializedEndIndex + 2),
+        journalFaultObserved,
+        journalRecordCount: journalRecords.length,
+        journalAggregateSha256,
+        journalChainValid,
+        effectReleaseAfterStartedFsync: observations.processGroupsStarted === 0 ? null : !observations.releaseOrderingViolation,
+        logicalCleanupObligationRetained: !allProcessGroupsAbsent,
+        logicalAllProcessGroupsAbsent: allProcessGroupsAbsent,
+        syntheticChildHandlesClosedAtReturn,
+        cleanupCalls: portCleanupCalls,
+        portCleanupCalls,
+        idempotenceCleanupCalls,
+        quarantineCleanupCalls,
+        residueCount: unresolved.length,
+        injectedFaultObserved,
+        observedReasonCode,
+        logicalCommandBoundaryProven: spec.faultClass === "COMMAND_MUTATION" ? invocationError !== null : true,
+        mutationBeforeSpawnRejected: observations.mutationBeforeSpawnRejected,
+        inMemoryFakeExecutorBoundaryProven: observations.inMemoryFakeExecutorBoundaryProven,
+        inMemoryFakeWrapperSubstitutionProven: observations.inMemoryFakeWrapperSubstitutionProven,
+        clientWriteBytesValidated: observations.clientWriteBytesValidated,
+        evidenceSchemaRejectionObserved,
+        journalInputShapeValidated,
+        journalInputRejectionObserved,
+        stdioCloseBeforeSignalProven: !observations.stdioCloseBeforeSignalViolation,
+        ownedStdioClosedBeforeReturn,
+        noWritesAfterStdioClose: !observations.writeAfterStdioCloseViolation,
+        ownedBufferZeroizationPassed,
+        fakeEmitterBufferZeroizationPassed,
+        bodyBytesExposed: 0,
+        privatePathFields: 0,
+        stableIdentityFields: 0,
+        realCodexCalls: 0,
+        sandboxExecCalls: 0,
+        threadStarts: 0,
+        turnStarts: 0,
+        providerCalls: 0,
+        providerBytes: 0,
+        networkAuthority: 0,
+        networkTransmittedBytes: 0,
+        retryStarts: observations.retryStarts,
+        fifthStarts: observations.fifthStarts,
+        alternateExecutableStarts: observations.alternateExecutableStarts,
+      });
+    } finally {
+      for (const line of journalLines) line.fill(0);
+      for (const buffer of observations.emittedBuffers) buffer.fill(0);
+      if (!deferFilesystemCleanupToConstructionRoot) {
+        cleanupFakeCodexFixture(fixture.root);
+        fs.rmSync(caseRoot, { recursive: true, force: true });
+        if (fs.existsSync(caseRoot)) fail("CORE_SHARED_CASE_ROOT_CLEANUP_FAILED");
+      }
+    }
+  };
 }
 
 function coreProcessFakeSource(behavior) {

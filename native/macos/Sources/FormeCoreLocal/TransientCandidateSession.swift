@@ -271,8 +271,17 @@ enum TransientCandidateTerminal: String, Codable, Equatable {
     case controlledFailure = "controlled_failure"
 }
 
+enum TransientCandidateReasonCode: String, Codable, Equatable {
+    case approveExact = "approve_exact"
+    case discard
+    case authorityExpired = "authority_expired"
+    case controlledFailure = "controlled_failure"
+    case candidateBindingDrift = "candidate_binding_drift"
+}
+
 struct TransientCandidateOutcome: Equatable {
     let terminal: TransientCandidateTerminal
+    let reasonCode: TransientCandidateReasonCode
     let handoffCount: Int
     let presenceCeremonies: Int
     let cleanupPassed: Bool
@@ -280,18 +289,31 @@ struct TransientCandidateOutcome: Equatable {
 
 @MainActor
 final class TransientCandidateSession {
+    typealias ApprovalRecheck = (CoreLockedBuffer, CoreLockedBuffer, CoreLockedBuffer, Date) throws -> ParsedTransientCandidate
+
     private let presence: UserPresencePort
     private let review: CandidateReviewPort
     private let handoff: CountingHandoffPort
     private let clock: () -> Date
     private let observer: CoreLockedMemoryObserver?
+    private let approvalRecheck: ApprovalRecheck
 
-    init(presence: UserPresencePort, review: CandidateReviewPort, handoff: CountingHandoffPort, clock: @escaping () -> Date, observer: CoreLockedMemoryObserver? = nil) {
+    init(
+        presence: UserPresencePort,
+        review: CandidateReviewPort,
+        handoff: CountingHandoffPort,
+        clock: @escaping () -> Date,
+        observer: CoreLockedMemoryObserver? = nil,
+        approvalRecheck: @escaping ApprovalRecheck = {
+            try CoreCandidateParser.parse($0, scratch: $1, decodedResponse: $2, helperStartedAt: $3)
+        }
+    ) {
         self.presence = presence
         self.review = review
         self.handoff = handoff
         self.clock = clock
         self.observer = observer
+        self.approvalRecheck = approvalRecheck
     }
 
     func runSynthetic(frame: Data, helperStartedAt: Date) async -> TransientCandidateOutcome {
@@ -301,7 +323,7 @@ final class TransientCandidateSession {
             try ingress.loadSyntheticBytes(frame)
             return await runLockedIngress(ingress, helperStartedAt: helperStartedAt)
         } catch {
-            return outcome(.controlledFailure)
+            return failureOutcome(error)
         }
     }
 
@@ -312,7 +334,7 @@ final class TransientCandidateSession {
             try ingress.readFrameDirectly(from: descriptor)
             return await runLockedIngress(ingress, helperStartedAt: helperStartedAt)
         } catch {
-            return outcome(.controlledFailure)
+            return failureOutcome(error)
         }
     }
 
@@ -323,7 +345,11 @@ final class TransientCandidateSession {
             defer { scratch.zeroize(); uiBridge.zeroize() }
             let parsed = try CoreCandidateParser.parse(ingress, scratch: scratch, decodedResponse: uiBridge, helperStartedAt: helperStartedAt)
             guard clock() < parsed.effectiveDeadline else { return outcome(.authorityExpired) }
-            guard await presence.authorizeExactCandidate() else { return outcome(.controlledFailure) }
+            switch await presence.authorizeExactCandidate(authorityDeadline: parsed.effectiveDeadline) {
+            case .approved: break
+            case .denied: return outcome(.controlledFailure)
+            case .authorityExpired: return outcome(.authorityExpired)
+            }
             guard clock() < parsed.effectiveDeadline else { return outcome(.authorityExpired) }
             let reviewDecision = await review.reviewExactCandidate(uiBridge, authorityDeadline: parsed.effectiveDeadline)
             if reviewDecision == .authorityExpired { return outcome(.authorityExpired) }
@@ -331,16 +357,34 @@ final class TransientCandidateSession {
             let recheckScratch = try CoreLockedBuffer(capacity: CoreLockedBuffer.scratchCapacity, label: "approval-recheck", observer: observer)
             let recheckResponse = try CoreLockedBuffer(capacity: CoreLockedBuffer.frameCapacity, label: "approval-recheck-response", observer: observer)
             defer { recheckScratch.zeroize(); recheckResponse.zeroize() }
-            let rechecked = try CoreCandidateParser.parse(ingress, scratch: recheckScratch, decodedResponse: recheckResponse, helperStartedAt: helperStartedAt)
-            guard rechecked == parsed, clock() < rechecked.effectiveDeadline else { return outcome(.authorityExpired) }
+            let rechecked = try approvalRecheck(ingress, recheckScratch, recheckResponse, helperStartedAt)
+            guard rechecked == parsed else { return outcome(.controlledFailure, reasonCode: .candidateBindingDrift) }
+            guard clock() < rechecked.effectiveDeadline else { return outcome(.authorityExpired) }
             try handoff.acceptAndDiscard(ingress, candidateHash: rechecked.candidateHash)
             return outcome(.approveExact)
         } catch {
-            return outcome(.controlledFailure)
+            return failureOutcome(error)
         }
     }
 
-    private func outcome(_ terminal: TransientCandidateTerminal) -> TransientCandidateOutcome {
-        TransientCandidateOutcome(terminal: terminal, handoffCount: handoff.handoffCount, presenceCeremonies: presence.ceremonyCount, cleanupPassed: true)
+    private func failureOutcome(_ error: Error) -> TransientCandidateOutcome {
+        if error is TransientCandidateError { return outcome(.controlledFailure, reasonCode: .candidateBindingDrift) }
+        if let memory = error as? CoreLockedMemoryError,
+           [.frameTooLarge, .trailingBytes, .invalidJSONString, .invalidUTF8, .nonNFCText].contains(memory) {
+            return outcome(.controlledFailure, reasonCode: .candidateBindingDrift)
+        }
+        return outcome(.controlledFailure)
+    }
+
+    private func outcome(_ terminal: TransientCandidateTerminal, reasonCode: TransientCandidateReasonCode? = nil) -> TransientCandidateOutcome {
+        let exactReason = reasonCode ?? {
+            switch terminal {
+            case .approveExact: .approveExact
+            case .discard: .discard
+            case .authorityExpired: .authorityExpired
+            case .controlledFailure: .controlledFailure
+            }
+        }()
+        return TransientCandidateOutcome(terminal: terminal, reasonCode: exactReason, handoffCount: handoff.handoffCount, presenceCeremonies: presence.ceremonyCount, cleanupPassed: true)
     }
 }

@@ -6,11 +6,14 @@ import Ajv2020 from "ajv/dist/2020.js";
 import { OPERATION_INVENTORY } from "../apps/room/src/operation-inventory.ts";
 import {
   GOLDEN_FIXTURE_BUNDLE_SHA256,
+  canonicalJson,
   canonicalSha256,
+  parseStrictJson,
   verifyGoldenVectors,
 } from "../packages/r4-protocol/src/index.ts";
 import { PROTOCOL_SCHEMA_VERSIONS } from "../packages/r4-protocol/src/registry.ts";
 import { buildSourceInventory } from "./r4-source-inventory.mjs";
+import { RUNTIME_DEPENDENCY_PATHS } from "./r4-gate-b-host-binding.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const finalMode = process.argv.includes("--final");
@@ -507,6 +510,63 @@ let physicalConstruction = null;
 if (physicalConstructionMode) {
   const proposalHead = "a45ea061e8e92f247597787e36ecfe52740b216a";
   const proposalTree = "89b28903fc34e985a17e8f3fdc4bfd7d0972880e";
+  const physicalEvidenceAuthority = Object.freeze({
+    approvedDecisionBriefSha256: "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2",
+    constructionPacketSha256: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+    constructionOwnerReviewSha256: "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9",
+    approvedProposalHead: proposalHead,
+    approvedProposalTree: proposalTree,
+    hostBindingAdapterConstructionGrant: "APPROVED",
+    packageLockSha256: "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812",
+    immutableCoreAggregateSha256: "sha256:f4bd00354f1c7cd330b421faec735efb83c4f0efbc5f18eabc39923b11d1733d",
+    immutableFullAggregateSha256: "sha256:f290ba035efa2eb84d899bf67d4ffb03c523d88556ce96b66f4f3a2862159310",
+    codexProfileSha256: "sha256:0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+  });
+  const physicalEvidenceStaticCounters = Object.freeze({
+    postgresNamedFamilies: 13,
+    postgresExecutableCases: 16,
+    postgresOrderedExecutions: 32,
+    postgresExpectedCoreCalls: 68,
+    postgresExpected2xx: 39,
+    postgresExpectedControlledNon2xx: 29,
+    postgresExpectedNewReceipts: 37,
+    postgresPersistedVerifierPlans: 32,
+    deterministicStressRuns: 3,
+    gitPushCommands: 0,
+    githubIssuesUpdated: 0,
+    publicationPushPlanned: 1,
+    githubIssueUpdatesPlanned: 2,
+  });
+  const physicalEvidenceZeroEffectCounters = Object.freeze({
+    dockerMutationCalls: 0,
+    postgresCalls: 0,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    threadStarts: 0,
+    turnStarts: 0,
+    providerCalls: 0,
+    macosPhysicalCompileCalls: 0,
+    appAssemblyCalls: 0,
+    codesignCalls: 0,
+    securityCalls: 0,
+    localAuthenticationCalls: 0,
+    helperLaunches: 0,
+    candidateHandoffs: 0,
+  });
+  const implementationHashPaths = Object.freeze({
+    physicalRunnerSha256: "scripts/r4-gate-b-physical-runner.mjs",
+    hostBindingModuleSha256: "scripts/r4-gate-b-host-binding.mjs",
+    physicalPortSha256: "scripts/r4-gate-b-physical-port.mjs",
+    postgresMigrationSha256: "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql",
+    postgresRaceCatalogSha256: "schemas/r4/gate-b-core/postgres/race-catalog.json",
+    postgresRaceByteIndexSha256: "schemas/r4/gate-b-core/postgres/race-byte-index.json",
+    codexPortSha256: "packages/r4-codex-adapter/src/zero-call-physical.ts",
+    codexProfileSha256: "schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb",
+    macosPhysicalContractSha256: "schemas/r4/gate-b-core/macos/physical-adapter-contract.json",
+    macosBuildRecipeSha256: "schemas/r4/gate-b-core/macos/build-recipe.json",
+  });
   const packetPath = "docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md";
   const reviewPath = "docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md";
   const evidencePath = "docs/evidence/r4-gate-b-physical-adapter-construction.json";
@@ -518,6 +578,7 @@ if (physicalConstructionMode) {
     "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md",
     "README.md", "docs/README.md", "docs/CONTROL.md", "docs/ROADMAP.md", "docs/DECISIONS.md",
   ]);
+  const requiredOutputPaths = new Set([...outputPaths].filter((value) => value !== publicReceiptPath));
   const allowed = new Set(`
 schemas/r4/gate-b-core/host-binding-input.schema.json
 schemas/r4/gate-b-core/host-binding-capsule.schema.json
@@ -583,9 +644,11 @@ docs/README.md
 docs/CONTROL.md
 docs/ROADMAP.md
 docs/DECISIONS.md
-`.trim().split("\n"));
+  `.trim().split("\n"));
   const gitEnvironment = { PATH: "/usr/bin:/bin:/usr/sbin:/sbin", GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
   const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, encoding: "utf8", maxBuffer: 16_777_216 });
+  const gitBytes = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, maxBuffer: 16_777_216 });
+  const gitBlob = (head, relativePath) => gitBytes(["cat-file", "blob", `${head}:${relativePath}`]);
   if (git(["rev-parse", `${proposalHead}^{tree}`]).trim() !== proposalTree) throw new Error("Physical Construction proposal tree drifted");
   if (sha256(readFileSync(join(root, packetPath))) !== "7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06") throw new Error("Physical Construction Packet drifted");
   if (sha256(readFileSync(join(root, reviewPath))) !== "27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9") throw new Error("Physical Construction Owner Review drifted");
@@ -627,21 +690,105 @@ docs/DECISIONS.md
   if (boundary.status !== "PHYSICAL_ADAPTERS_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED" || boundary.authority.hostBindingAdapterConstructionGrant !== "APPROVED" || boundary.authority.retryExecutionGrant !== "NOT_REQUESTED" || boundary.authority.firstProviderCallTestGrant !== "NOT_REQUESTED" || boundary.continuity.aggregateRetryVerdict !== "YELLOW") throw new Error("Physical runtime boundary claim drift");
   let implementationFileCount = null;
   if (physicalConstructionFinalMode) {
-    for (const value of outputPaths) if (!existsSync(join(root, value))) throw new Error(`Physical output missing:${value}`);
-    const evidence = JSON.parse(text(evidencePath));
+    for (const value of requiredOutputPaths) if (!existsSync(join(root, value))) throw new Error(`Physical output missing:${value}`);
+    const readCanonicalJson = (relativePath, label) => {
+      const bytes = readFileSync(join(root, relativePath));
+      if (bytes.length < 2 || bytes.at(-1) !== 0x0a) throw new Error(`${label} is not one LF-framed canonical JSON value`);
+      const sourceBytes = bytes.subarray(0, -1);
+      const source = sourceBytes.toString("utf8");
+      if (!Buffer.from(source, "utf8").equals(sourceBytes)) throw new Error(`${label} is not valid UTF-8`);
+      const value = parseStrictJson(source);
+      if (!Buffer.from(`${canonicalJson(value)}\n`, "utf8").equals(bytes)) throw new Error(`${label} is not exact canonical JSON`);
+      return value;
+    };
+    const evidence = readCanonicalJson(evidencePath, "Physical evidence");
     const evidenceSchema = JSON.parse(text("schemas/r4/gate-b-core/physical-construction-evidence.schema.json"));
-    const validateEvidence = new Ajv2020({ strict: true, strictSchema: true, allErrors: true, validateFormats: false });
-    if (!validateEvidence.compile(evidenceSchema)(evidence)) throw new Error(`Physical evidence schema mismatch:${JSON.stringify(validateEvidence.errors)}`);
-    const receipt = JSON.parse(text(publicReceiptPath));
-    const receiptSchema = JSON.parse(text("schemas/r4/gate-b-core/host-binding-public-receipt.schema.json"));
-    if (!validateEvidence.compile(receiptSchema)(receipt)) throw new Error(`Host Binding public receipt schema mismatch:${JSON.stringify(validateEvidence.errors)}`);
-    if (`sha256:${sha256(readFileSync(join(root, publicReceiptPath)))}` !== evidence.hostBindingPublicReceiptSha256) throw new Error("Host Binding public receipt evidence hash drift");
-    if (git(["rev-parse", `${evidence.implementationHead}^{tree}`]).trim() !== evidence.implementationTree || git(["merge-base", evidence.implementationHead, "HEAD"]).trim() !== evidence.implementationHead) throw new Error("Physical implementation lineage drift");
-    const implementationPaths = git(["diff", "--name-only", `${proposalHead}..${evidence.implementationHead}`, "--"]).split("\n").filter(Boolean).sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
-    const implementationLines = implementationPaths.map((value) => `sha256:${sha256(git(["show", `${evidence.implementationHead}:${value}`]))}  ${value}\n`).join("");
+    const evidenceAjv = new Ajv2020({ strict: true, strictSchema: true, allErrors: true, validateFormats: false });
+    const validateEvidence = evidenceAjv.compile(evidenceSchema);
+    if (!validateEvidence(evidence)) throw new Error(`Physical evidence schema mismatch:${JSON.stringify(validateEvidence.errors)}`);
+    for (const [key, expected] of Object.entries(physicalEvidenceAuthority)) {
+      if (evidence[key] !== expected) throw new Error(`Physical evidence authority drift:${key}`);
+    }
+    for (const [key, expected] of Object.entries(physicalEvidenceStaticCounters)) {
+      if (evidence[key] !== expected) throw new Error(`Physical evidence static counter drift:${key}`);
+    }
+    for (const [key, expected] of Object.entries(physicalEvidenceZeroEffectCounters)) {
+      if (evidence[key] !== expected) throw new Error(`Physical evidence zero-effect counter drift:${key}`);
+    }
+    if (evidence.hostBindingAttempted === false) {
+      for (const [key, expected] of Object.entries({
+        dockerReadOnlyCliCalls: 0,
+        localDockerUnixSocketRequests: 0,
+        macosReadOnlyInspectionCalls: 0,
+        hostBindingId: null,
+        hostBindingCapsuleSha256: null,
+        hostBindingPublicReceiptSha256: null,
+        hostBindingExpiresAt: null,
+        bindingInputAbsent: null,
+      })) if (evidence[key] !== expected) throw new Error(`Physical Phase-A NOT_INSPECTED drift:${key}`);
+    }
+    if (evidence.status === "PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW") {
+      for (const [key, expected] of Object.entries({ dockerReadOnlyCliCalls: 3, localDockerUnixSocketRequests: 2, macosReadOnlyInspectionCalls: 9, hostBindingAttempted: true, bindingInputAbsent: true })) {
+        if (evidence[key] !== expected) throw new Error(`Physical Host Binding clean counter drift:${key}`);
+      }
+    }
+    const publicReceiptPresent = existsSync(join(root, publicReceiptPath));
+    if (evidence.hostBindingPublicReceiptSha256 === null) {
+      if (publicReceiptPresent) throw new Error("Host Binding public receipt exists without an evidence binding");
+    } else {
+      if (!publicReceiptPresent) throw new Error(`Physical output missing:${publicReceiptPath}`);
+      const receipt = readCanonicalJson(publicReceiptPath, "Host Binding public receipt");
+      const receiptSchema = JSON.parse(text("schemas/r4/gate-b-core/host-binding-public-receipt.schema.json"));
+      const validateReceipt = evidenceAjv.compile(receiptSchema);
+      if (!validateReceipt(receipt)) throw new Error(`Host Binding public receipt schema mismatch:${JSON.stringify(validateReceipt.errors)}`);
+      if (`sha256:${sha256(readFileSync(join(root, publicReceiptPath)))}` !== evidence.hostBindingPublicReceiptSha256) throw new Error("Host Binding public receipt evidence hash drift");
+      for (const [evidenceKey, receiptKey] of Object.entries({ hostBindingId: "hostBindingId", hostBindingCapsuleSha256: "hostBindingCapsuleSha256", hostBindingExpiresAt: "expiresAt", implementationHead: "implementationHead", implementationTree: "implementationTree" })) {
+        if (evidence[evidenceKey] !== receipt[receiptKey]) throw new Error(`Host Binding public receipt cross-binding drift:${evidenceKey}`);
+      }
+      const runtimeDependencies = RUNTIME_DEPENDENCY_PATHS.map((runtimePath) => Object.freeze({ path: runtimePath, sha256: `sha256:${sha256(gitBlob(evidence.implementationHead, runtimePath))}` }));
+      const runtimeDependencyAggregateSha256 = `sha256:${sha256(Buffer.from(`${canonicalJson(runtimeDependencies)}\n`, "utf8"))}`;
+      if (receipt.runtimeDependencyAggregateSha256 !== runtimeDependencyAggregateSha256) throw new Error("Host Binding public receipt runtime dependency aggregate drift");
+    }
+    if (git(["rev-parse", `${evidence.implementationHead}^{tree}`]).trim() !== evidence.implementationTree || git(["merge-base", proposalHead, evidence.implementationHead]).trim() !== proposalHead || git(["merge-base", evidence.implementationHead, "HEAD"]).trim() !== evidence.implementationHead) throw new Error("Physical implementation lineage drift");
+    const postImplementationPaths = [...new Set([
+      ...git(["diff", "--name-only", `${evidence.implementationHead}..HEAD`, "--"]).split("\n"),
+      ...git(["diff", "--name-only", "--"]).split("\n"),
+      ...git(["diff", "--cached", "--name-only", "--"]).split("\n"),
+      ...git(["ls-files", "--others", "--exclude-standard", "--"]).split("\n"),
+    ].filter(Boolean))];
+    const postImplementationNonOutputs = postImplementationPaths.filter((value) => !outputPaths.has(value));
+    if (postImplementationNonOutputs.length > 0) throw new Error(`Physical bytes changed after implementation I:${postImplementationNonOutputs.join(",")}`);
+    if (`sha256:${sha256(gitBlob(evidence.implementationHead, "package-lock.json"))}` !== physicalEvidenceAuthority.packageLockSha256) throw new Error("Physical implementation package-lock drift");
+    const implementationPathBytes = gitBytes(["diff", "--name-only", "-z", `${proposalHead}..${evidence.implementationHead}`, "--"]);
+    if (implementationPathBytes.length > 0 && implementationPathBytes.at(-1) !== 0x00) throw new Error("Physical implementation path frame drift");
+    const implementationPaths = [];
+    let pathStart = 0;
+    for (let index = 0; index < implementationPathBytes.length; index += 1) {
+      if (implementationPathBytes[index] !== 0x00) continue;
+      const rawPath = implementationPathBytes.subarray(pathStart, index);
+      if (rawPath.length === 0) throw new Error("Physical implementation empty path");
+      const value = rawPath.toString("utf8");
+      if (!Buffer.from(value, "utf8").equals(rawPath)) throw new Error("Physical implementation path is not valid UTF-8");
+      implementationPaths.push(value);
+      pathStart = index + 1;
+    }
+    implementationPaths.sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+    const implementationUnlisted = implementationPaths.filter((value) => !allowed.has(value));
+    if (implementationUnlisted.length > 0) throw new Error(`Physical implementation unlisted workset:${implementationUnlisted.join(",")}`);
+    const implementationOutputs = implementationPaths.filter((value) => outputPaths.has(value));
+    if (implementationOutputs.length > 0) throw new Error(`Physical implementation I contains Phase-B output:${implementationOutputs.join(",")}`);
+    for (const [key, implementationPath] of Object.entries(implementationHashPaths)) {
+      const actual = `sha256:${sha256(gitBlob(evidence.implementationHead, implementationPath))}`;
+      if (evidence[key] !== actual) throw new Error(`Physical implementation blob hash drift:${key}:${implementationPath}`);
+    }
+    const implementationLines = Buffer.concat(implementationPaths.map((value) => {
+      const blobSha256 = sha256(gitBlob(evidence.implementationHead, value));
+      return Buffer.from(`sha256:${blobSha256}  ${value}\n`, "utf8");
+    }));
     implementationFileCount = implementationPaths.length;
     if (evidence.constructedFileCount !== implementationPaths.length || evidence.constructedFilesAggregateSha256 !== `sha256:${sha256(implementationLines)}`) throw new Error("Physical implementation aggregate drift");
-    for (const value of outputPaths) {
+    const presentOutputPaths = [...requiredOutputPaths, ...(publicReceiptPresent ? [publicReceiptPath] : [])];
+    for (const value of presentOutputPaths) {
       const output = text(value);
       if (output.includes("@@") || output.includes("PENDING_FINAL") || output.includes("__PACKET_SHA256__")) throw new Error(`Physical output placeholder:${value}`);
     }

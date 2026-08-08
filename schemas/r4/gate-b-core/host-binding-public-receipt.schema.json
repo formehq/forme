@@ -4,7 +4,7 @@
   "title": "Public R4 Gate B Host Binding Receipt",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "hostBindingId", "hostBindingCapsuleSha256", "createdAt", "expiresAt", "implementationHead", "implementationTree", "platform", "tools", "docker", "closedBoundaries", "retryExecutionGrant", "firstProviderCallGrant", "providerCalls", "providerNetworkAuthority", "externalRuntimeNetworkAuthority", "localDockerUnixSocketRequests", "aggregateVerdict"],
+  "required": ["schemaVersion", "hostBindingId", "hostBindingCapsuleSha256", "createdAt", "expiresAt", "implementationHead", "implementationTree", "runtimeDependencyAggregateSha256", "platform", "tools", "docker", "closedBoundaries", "retryExecutionGrant", "firstProviderCallGrant", "providerCalls", "providerNetworkAuthority", "externalRuntimeNetworkAuthority", "localDockerUnixSocketRequests", "aggregateVerdict"],
   "properties": {
     "schemaVersion": { "const": "r4_gate_b_host_binding_public_receipt.v1" },
     "hostBindingId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
@@ -13,6 +13,7 @@
     "expiresAt": { "type": "string", "format": "date-time" },
     "implementationHead": { "$ref": "#/$defs/gitObject" },
     "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "runtimeDependencyAggregateSha256": { "$ref": "#/$defs/sha" },
     "platform": { "const": "darwin-arm64" },
     "tools": {
       "type": "array",

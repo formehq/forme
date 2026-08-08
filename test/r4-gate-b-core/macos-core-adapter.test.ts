@@ -82,6 +82,31 @@ test("bundle recipe separates the three pre-sign payload members from required c
     "Contents/Info.plist", "Contents/MacOS/FormeCoreLocal", "Contents/Resources/forme-core-transient-response.sb",
     "Contents/_CodeSignature/CodeResources",
   ]);
+  assert.deepEqual(recipe.directStartGate, {
+    schemaVersion: "r4.gate-b-core.macos-direct-start.v1",
+    readyTransport: "inherited-pipe-only-no-durable-pid-slot",
+    normalPathAuthority: "exact-ready-frame-plus-live-child-process-handle",
+    crashBeforeStartedJournalVerdict: "RED_QUARANTINED",
+    helper: {
+      implementation: "self-blocked-direct-helper",
+      descriptorMap: { candidateInput: 0, receiptOutput: 1, diagnosticOutput: 2, readyOutput: 3, releaseInput: 4 },
+      readyFramePattern: "R4_GATE_B_DIRECT_READY_V1 helper <positive-decimal-pid>\n",
+      releaseFrame: "R4_GATE_B_DIRECT_RELEASE_V1 helper\n",
+      releaseRequiresEOF: true,
+    },
+    feeder: {
+      implementation: "self-blocked-direct-feeder",
+      argvTail: ["3", "4", "5", "6", "complete"],
+      descriptorMap: { candidateOutput: 3, completionOutput: 4, readyOutput: 5, releaseInput: 6 },
+      readyFramePattern: "R4_GATE_B_DIRECT_READY_V1 feeder <positive-decimal-pid>\n",
+      releaseFrame: "R4_GATE_B_DIRECT_RELEASE_V1 feeder\n",
+      releaseRequiresEOF: true,
+    },
+    releaseOrdering: [
+      "direct-child-ready", "pid-and-process-group-validated", "started-journal-fsync",
+      "listeners-installed", "exact-release-frame-and-eof", "first-functional-effect",
+    ],
+  });
   assert.deepEqual(recipe.codesignGeneratedMembers, ["Contents/_CodeSignature/CodeResources"]);
   assert.equal(recipe.entitlementDictionaryEntryCount, 0);
   assert.equal(recipe.effectAuthority.retryExecutionGranted, false);
@@ -100,7 +125,7 @@ test("bundle, signing, Keychain and helper-receipt validators fail closed on eve
     ["Contents/MacOS/FormeCoreLocal", "0500"],
     ["Contents/Resources/forme-core-transient-response.sb", "0600"],
   ].map(([memberPath, mode]) => ({ path: memberPath, type: "file", mode, linkCount: 1, ownerMatches: true }));
-  const codeResources = { path: "Contents/_CodeSignature/CodeResources", type: "file", mode: "0600", linkCount: 1, ownerMatches: true };
+  const codeResources = { path: "Contents/_CodeSignature/CodeResources", type: "file", mode: "0644", linkCount: 1, ownerMatches: true };
   assert.equal(validateCoreBundleInventory(preMembers, "pre-sign").memberCount, 3);
   assert.equal(validateCoreBundleInventory([...preMembers, codeResources], "post-sign").memberCount, 4);
   assert.throws(() => validateCoreBundleInventory([...preMembers, { ...codeResources, type: "symlink" }], "post-sign"), /MACOS_CORE_BUNDLE_MEMBER_UNSAFE/u);

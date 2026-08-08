@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
+import { spawn } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -12,7 +13,6 @@ import {
   buildCoreCodexLogicalCommand,
   computeIsolatedWriteInventory,
   computeSchemaInventory,
-  copyOpenedRegularFile,
   coreCodexLogicalCommandShapeSha256,
   runCoreCodexZeroCall,
   validateCoreCodexLogicalCommand,
@@ -21,7 +21,11 @@ import {
   validateSchemaInventory,
 } from "../../packages/r4-codex-adapter/src/zero-call-physical.ts";
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
-import { cleanupFakeCodexFixture, coreSyntheticPublicHashes, createCoreFakeCodexLayout, createCoreMemorySpawnPort, createCoreProcessFakeFixture, createCoreProcessSpawnPort, expectedCoreFakeSchema } from "../../scripts/r4-gate-b-codex-probe.mjs";
+import { cleanupFakeCodexFixture, coreSyntheticPublicHashes, createCoreFakeCodexLayout, createCoreMemorySpawnPort, createCoreProcessFakeFixture, createCoreProcessSpawnPort, createCoreSharedOrchestrationCaseExecutor, expectedCoreFakeSchema } from "../../scripts/r4-gate-b-codex-probe.mjs";
+// @ts-expect-error Construction scripts intentionally remain executable ESM.
+import { CODEX_SHARED_ORCHESTRATION_FAULT_CASES, runCodexSharedOrchestrationFaultMatrix, runConstructionFakeMatrix } from "../../scripts/r4-gate-b-physical-port.mjs";
+// @ts-expect-error Construction scripts intentionally remain executable ESM.
+import { createConstructionCodexProcessOrchestrator } from "../../scripts/r4-gate-b-physical-runner.mjs";
 
 let ownedTestRoot: string | undefined;
 const repositoryRoot = fs.realpathSync(path.resolve(import.meta.dirname, "../.."));
@@ -108,52 +112,6 @@ test("Core Codex command surface is four exact logical argv shapes and six envir
     assert.deepEqual(hashes, coreCodexLogicalCommandShapeSha256(fixture.layout));
   } finally {
     cleanupFakeCodexFixture(fixture.root);
-    fs.rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("opened-file staging preserves exact bytes and rejects symlink, hard link, replacement and existing destination", () => {
-  const root = constructionRoot();
-  try {
-    const sourceDirectory = path.join(root, "source");
-    const destinationDirectory = path.join(root, "destination");
-    fs.mkdirSync(sourceDirectory, { mode: 0o700 });
-    fs.mkdirSync(destinationDirectory, { mode: 0o700 });
-    const source = path.join(sourceDirectory, "codex");
-    const destination = path.join(destinationDirectory, "codex");
-    const bytes = Buffer.from("synthetic executable\n");
-    fs.writeFileSync(source, bytes, { mode: 0o600 });
-    const copied = copyOpenedRegularFile({ source, destination, expectedSha256: digest(bytes), destinationMode: 0o500 });
-    assert.equal(copied.sha256, digest(bytes));
-    assert.equal(fs.statSync(destination).mode & 0o777, 0o500);
-
-    const existing = path.join(destinationDirectory, "existing");
-    fs.writeFileSync(existing, "keep", { mode: 0o600 });
-    assert.throws(() => copyOpenedRegularFile({ source, destination: existing, expectedSha256: digest(bytes), destinationMode: 0o500 }), /EEXIST/u);
-    assert.equal(fs.readFileSync(existing, "utf8"), "keep");
-
-    const symlink = path.join(sourceDirectory, "symlink");
-    fs.symlinkSync(source, symlink);
-    assert.throws(() => copyOpenedRegularFile({ source: symlink, destination: path.join(destinationDirectory, "symlink-copy"), expectedSha256: digest(bytes), destinationMode: 0o500 }), /CODEX_PATH_SYMLINK_DENIED/u);
-
-    const hardlink = path.join(sourceDirectory, "hardlink");
-    fs.linkSync(source, hardlink);
-    assert.throws(() => copyOpenedRegularFile({ source, destination: path.join(destinationDirectory, "hard-copy"), expectedSha256: digest(bytes), destinationMode: 0o500 }), /CODEX_SOURCE_FILE_UNSAFE/u);
-    fs.rmSync(hardlink);
-
-    const changingParent = path.join(root, "changing-parent");
-    fs.mkdirSync(changingParent, { mode: 0o700 });
-    assert.throws(() => copyOpenedRegularFile({
-      source,
-      destination: path.join(changingParent, "copy"),
-      expectedSha256: digest(bytes),
-      destinationMode: 0o500,
-      constructionTestHookAfterOpen() {
-        fs.renameSync(changingParent, `${changingParent}-old`);
-        fs.mkdirSync(changingParent, { mode: 0o700 });
-      },
-    }), /CODEX_PATH_COMPONENT_CHANGED/u);
-  } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
@@ -386,6 +344,174 @@ test("process wire guard separates pre-response rejection, same-buffer partial, 
     assert.ok(port.cleanupCalls >= 1);
   } finally {
     cleanupFakeCodexFixture(fixture.root);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("the production Codex orchestration is the same state machine exercised by an injected construction executor", async () => {
+  for (const behavior of ["clean", "response_then_partial", "response_then_unknown"] as const) {
+    const root = constructionRoot();
+    const fixture = await createCoreProcessFakeFixture(root, behavior);
+    let sequence = 0;
+    const journal = { async append() { const record = { sequence }; sequence += 1; return record; } };
+    const port = createConstructionCodexProcessOrchestrator({
+      layout: fixture.layout,
+      journal,
+      spawnChild(command: { argv: string[]; cwd: string; environment: Record<string, string> }) {
+        return spawn(fixture.wrapper, command.argv.slice(1), { cwd: command.cwd, env: { ...command.environment } as NodeJS.ProcessEnv, detached: true, shell: false, stdio: ["pipe", "pipe", "pipe"] });
+      },
+    });
+    try {
+      const invocation = runCoreCodexZeroCall({ layout: fixture.layout, spawnPort: port, expectedSchema: expectedCoreFakeSchema(), publicHashes: coreSyntheticPublicHashes(fixture) });
+      if (behavior === "clean") {
+        const evidence = await invocation;
+        assert.equal(evidence.status, "ZERO_CALL_CHILD_MECHANISM_GREEN");
+      } else await assert.rejects(invocation, /CODEX_/u, behavior);
+      assert.equal(await port.cleanup(), true);
+    } finally {
+      cleanupFakeCodexFixture(fixture.root);
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  }
+});
+
+test("the shared-orchestration matrix catalog is closed, body-free and rejects any counter or authority drift", async () => {
+  const closedResult = (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({
+    caseId: spec.caseId,
+    terminalClass: spec.expectedTerminalClass,
+    processStartSlotsConsumed: spec.expectedStartSlotsConsumed,
+    processGroupsStarted: spec.expectedProcessGroupsStarted,
+    clientWrites: spec.minimumClientWrites,
+    termSignals: spec.expectedTermSignals,
+    killSignals: spec.expectedKillSignals,
+    stdinErrors: spec.expectedStdinErrors,
+    esrchObservations: spec.expectedEsrchObservations,
+    epermObservations: spec.expectedEpermObservations,
+    unknownAbsenceObservations: spec.expectedUnknownAbsenceObservations,
+    syntheticDescendantsStarted: spec.expectedDescendantsStarted,
+    timerScheduleMilliseconds: spec.expectedTimerScheduleMilliseconds,
+    initializedEndBeforeExitGraceTimerProven: true,
+    journalFaultObserved: spec.expectedJournalFault,
+    journalRecordCount: spec.expectedJournalRecordCount,
+    journalAggregateSha256: `sha256:${"0".repeat(64)}`,
+    journalChainValid: true,
+    effectReleaseAfterStartedFsync: spec.expectedReleaseOrdering,
+    logicalCleanupObligationRetained: !spec.expectedAllProcessGroupsAbsent,
+    logicalAllProcessGroupsAbsent: spec.expectedAllProcessGroupsAbsent,
+    syntheticChildHandlesClosedAtReturn: true,
+    cleanupCalls: spec.expectedPortCleanupCalls,
+    portCleanupCalls: spec.expectedPortCleanupCalls,
+    idempotenceCleanupCalls: spec.expectedIdempotenceCleanupCalls,
+    quarantineCleanupCalls: spec.expectedQuarantineCleanupCalls,
+    residueCount: spec.expectedAllProcessGroupsAbsent ? 0 : 1,
+    injectedFaultObserved: spec.expectedTerminalClass !== "CLEAN",
+    observedReasonCode: spec.expectedReasonCode,
+    logicalCommandBoundaryProven: true,
+    mutationBeforeSpawnRejected: spec.expectedMutationBeforeSpawnRejected,
+    inMemoryFakeExecutorBoundaryProven: true,
+    inMemoryFakeWrapperSubstitutionProven: true,
+    clientWriteBytesValidated: true,
+    evidenceSchemaRejectionObserved: spec.expectedEvidenceSchemaRejection,
+    journalInputShapeValidated: true,
+    journalInputRejectionObserved: spec.expectedJournalInputRejection,
+    stdioCloseBeforeSignalProven: true,
+    ownedStdioClosedBeforeReturn: true,
+    noWritesAfterStdioClose: true,
+    ownedBufferZeroizationPassed: true,
+    fakeEmitterBufferZeroizationPassed: true,
+    bodyBytesExposed: 0,
+    privatePathFields: 0,
+    stableIdentityFields: 0,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    threadStarts: 0,
+    turnStarts: 0,
+    providerCalls: 0,
+    providerBytes: 0,
+    networkAuthority: 0,
+    networkTransmittedBytes: 0,
+    retryStarts: 0,
+    fifthStarts: 0,
+    alternateExecutableStarts: 0,
+  });
+  assert.ok(CODEX_SHARED_ORCHESTRATION_FAULT_CASES.length >= 92);
+  assert.deepEqual(new Set(CODEX_SHARED_ORCHESTRATION_FAULT_CASES.map((entry: { caseId: string }) => entry.caseId)).size, CODEX_SHARED_ORCHESTRATION_FAULT_CASES.length);
+  assert.deepEqual(new Set(CODEX_SHARED_ORCHESTRATION_FAULT_CASES.map((entry: { faultClass: string }) => entry.faultClass)).has("JOURNAL_MARKER_FAULT"), true);
+  const exitGraceTerm = CODEX_SHARED_ORCHESTRATION_FAULT_CASES.find((entry: { caseId: string }) => entry.caseId === "start-4-response-then-hang-term");
+  const exitGraceKill = CODEX_SHARED_ORCHESTRATION_FAULT_CASES.find((entry: { caseId: string }) => entry.caseId === "start-4-response-then-hang-kill");
+  assert.deepEqual(exitGraceTerm?.expectedTimerScheduleMilliseconds, [5_000, 5_000, 30_000, 2_000, 10_000, 2_000]);
+  assert.deepEqual(exitGraceKill?.expectedTimerScheduleMilliseconds, [5_000, 5_000, 30_000, 2_000, 10_000, 2_000, 2_000]);
+  const clean = await runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => closedResult(spec));
+  assert.equal(clean.status, "CODEX_SHARED_PRODUCTION_ORCHESTRATION_FAULT_MATRIX_GREEN");
+  assert.equal(clean.caseCount, CODEX_SHARED_ORCHESTRATION_FAULT_CASES.length);
+  assert.equal(clean.cleanCases, 1);
+  assert.equal(clean.realCodexCalls, 0);
+  assert.equal(clean.sandboxExecCalls, 0);
+  assert.match(clean.aggregateSha256, /^sha256:[0-9a-f]{64}$/u);
+  await assert.rejects(runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({ ...closedResult(spec), providerCalls: spec.caseId === "clean-notification-before-response-four-start" ? 1 : 0 })), /CODEX_SHARED_CASE_AUTHORITY_ESCAPE/u);
+  await assert.rejects(runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({ ...closedResult(spec), observedReasonCode: "UNRELATED_FAILURE" })), /CODEX_SHARED_CASE_REASON_DRIFT/u);
+  await assert.rejects(runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({ ...closedResult(spec), timerScheduleMilliseconds: [] })), /CODEX_SHARED_CASE_TIMER_DRIFT/u);
+  await assert.rejects(runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({ ...closedResult(spec), journalInputShapeValidated: false })), /CODEX_SHARED_CASE_BOUNDARY_UNPROVEN/u);
+  await assert.rejects(runCodexSharedOrchestrationFaultMatrix(async (spec: (typeof CODEX_SHARED_ORCHESTRATION_FAULT_CASES)[number]) => ({ ...closedResult(spec), ownedBufferZeroizationPassed: false })), /CODEX_SHARED_CASE_BOUNDARY_UNPROVEN/u);
+  await assert.rejects(runConstructionFakeMatrix({ requireCodexShared: true }), /CODEX_SHARED_PRODUCTION_ORCHESTRATION_MATRIX_REQUIRED/u);
+});
+
+test("the complete body-free fault matrix executes through the shared production Codex orchestration", async () => {
+  const root = constructionRoot();
+  try {
+    const runCase = createCoreSharedOrchestrationCaseExecutor({
+      constructionTempRoot: root,
+      createOrchestrator: createConstructionCodexProcessOrchestrator,
+    });
+    const cleanSpec = CODEX_SHARED_ORCHESTRATION_FAULT_CASES.find((entry: { caseId: string }) => entry.caseId === "clean-notification-before-response-four-start");
+    assert.ok(cleanSpec);
+    const independentlyObserved = await runCase({ ...cleanSpec, expectedReasonCode: "DENIED_SELF_ATTESTATION", expectedTimerScheduleMilliseconds: [] });
+    assert.equal(independentlyObserved.observedReasonCode, "CLEAN");
+    assert.deepEqual(independentlyObserved.timerScheduleMilliseconds, [5_000, 5_000, 30_000, 2_000, 10_000]);
+    assert.deepEqual(fs.readdirSync(root), []);
+    const result = await runConstructionFakeMatrix({ requireCodexShared: true, runCodexSharedCase: runCase });
+    assert.equal(result.status, "ADAPTER_CONSTRUCTION_CHECKPOINT_GREEN");
+    assert.equal(result.codexSharedOrchestrationCases, CODEX_SHARED_ORCHESTRATION_FAULT_CASES.length);
+    assert.match(result.codexSharedOrchestrationAggregateSha256, /^sha256:[0-9a-f]{64}$/u);
+    assert.equal(result.realPhysicalEffects, 0);
+    assert.deepEqual(fs.readdirSync(root), []);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("the production Construction callback defers its owned filesystem tree to top-root cleanup", async () => {
+  const root = constructionRoot();
+  try {
+    assert.throws(() => createCoreSharedOrchestrationCaseExecutor({
+      constructionTempRoot: root,
+      createOrchestrator: createConstructionCodexProcessOrchestrator,
+      deferFilesystemCleanupToConstructionRoot: "true",
+    }), /CORE_SHARED_FILESYSTEM_CLEANUP_POLICY_INVALID/u);
+    const runCase = createCoreSharedOrchestrationCaseExecutor({
+      constructionTempRoot: root,
+      createOrchestrator: createConstructionCodexProcessOrchestrator,
+      deferFilesystemCleanupToConstructionRoot: true,
+    });
+    const cleanSpec = CODEX_SHARED_ORCHESTRATION_FAULT_CASES.find((entry: { caseId: string }) => entry.caseId === "clean-notification-before-response-four-start");
+    assert.ok(cleanSpec);
+    const observed = await runCase(cleanSpec);
+    assert.equal(observed.logicalAllProcessGroupsAbsent, true);
+    assert.equal(observed.syntheticChildHandlesClosedAtReturn, true);
+    assert.equal(observed.ownedStdioClosedBeforeReturn, true);
+    assert.equal(observed.ownedBufferZeroizationPassed, true);
+    assert.equal(observed.fakeEmitterBufferZeroizationPassed, true);
+    assert.deepEqual(fs.readdirSync(root), ["codex-shared-001"]);
+    const caseRoot = path.join(root, "codex-shared-001");
+    const fixtureRoot = path.join(caseRoot, "codex-core-fixture-clean");
+    for (const retainedRoot of [caseRoot, fixtureRoot]) {
+      const metadata = fs.lstatSync(retainedRoot);
+      assert.ok(metadata.isDirectory() && !metadata.isSymbolicLink());
+      assert.equal(metadata.mode & 0o077, 0);
+      assert.equal(fs.realpathSync(retainedRoot), retainedRoot);
+      assert.equal(path.relative(root, retainedRoot).startsWith(`..${path.sep}`), false);
+    }
+  } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });

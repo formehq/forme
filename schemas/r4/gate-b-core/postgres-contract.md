@@ -43,6 +43,14 @@ A-then-B execution cannot satisfy the protocol. Every order then checks exact
 result arms, versions, receipts, events/high-water marks, absence of rejected
 side effects and process-group absence before rollback.
 
+The aggregates are observations, not catalog arithmetic: every inline-validated
+worker emits one body-free `RESULT` token, every recovery emits one same-shape
+`RECOVERY_RESULT` token, and every exact
+persisted verifier emits one `VERIFIED` token carrying that order's new-receipt
+count. A future runner must reduce 64 worker plus four recovery tokens to
+68/39/29 and the 32 verifier tokens to 37; deriving those values only from the
+expected catalog is forbidden.
+
 ## Future physical execution
 
 The closed runner pins
@@ -51,6 +59,10 @@ The closed runner pins
 database `forme_r4_gate_b`. Every Docker call uses the Owner-pinned Unix socket;
 every `psql` call is stdin-only with `-X`, `--no-password`,
 `ON_ERROR_STOP=1`, user `postgres`, and all six lineage variables.
+Repository-derived SQL/catalog/template bytes enter the plan only through
+`readRuntimeFile(relativePath)`. In production that reader must serve a
+pre-opened, no-follow, hash-pinned snapshot; the plan may not reread worktree
+paths after that snapshot is frozen.
 
 The future exact order is collision checks → owned volume/container creation →
 bounded readiness → baseline migration/happy/error/ACK/rollback → non-race

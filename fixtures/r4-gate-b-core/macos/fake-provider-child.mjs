@@ -9,7 +9,7 @@ try {
   else if (mode === "mid-frame") { process.stdout.write(bytes.subarray(0, Math.max(1, Math.floor(bytes.length / 2)))); process.exitCode = 72; }
   else {
     process.stdout.write(bytes);
-    if (mode === "full-zero") fs.writeSync(Number(completionFdText), Buffer.from("FRAME_COMPLETE\n", "utf8"));
+    if (mode === "full-zero") fs.writeSync(Number(completionFdText), Buffer.from(`FRAME_COMPLETE ${bytes.length}\n`, "utf8"));
     process.exitCode = mode === "full-zero" ? 0 : 73;
   }
 } finally {

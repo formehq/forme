@@ -38,8 +38,20 @@
     "expectedNewReceipts": 37,
     "persistedVerifierPlans": 32
   },
+  "runtimeSourceBinding": {
+    "reader": "readRuntimeFile(relativePath)",
+    "acceptedValueTypes": ["utf8_string", "buffer"],
+    "productionSource": "preopened_no_follow_hash_pinned_snapshot",
+    "worktreeRereadAfterSnapshot": false
+  },
   "isolation": "READ COMMITTED",
-  "workerProtocol": ["BEGIN", "SET_LOCAL_ROLE", "READY", "START_BARRIER", "CALL_STARTED", "CORE_CALL", "POST_CALL", "COMMIT_GATE", "COMMIT_ACK"],
+  "workerProtocol": ["BEGIN", "SET_LOCAL_ROLE", "READY", "START_BARRIER", "CALL_STARTED", "CORE_CALL", "POST_CALL", "RESULT", "COMMIT_GATE", "COMMIT_ACK"],
+  "observedAggregateReduction": {
+    "coreCalls": "64 validated worker RESULT tokens plus 4 validated RECOVERY_RESULT tokens",
+    "statusCounts": "reduce the 68 validated call-result tokens to exactly 39 2xx and 29 controlled non-2xx",
+    "receipts": "reduce 32 persisted verifier VERIFIED tokens to exactly 37 new receipt/idempotency pairs",
+    "catalogOnlyDerivationForbidden": true
+  },
   "observerPredicate": {
     "role": "postgres",
     "rowCount": 1,
