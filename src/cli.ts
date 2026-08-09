@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { readSync } from "node:fs";
 import { resolve } from "node:path";
 import { runActionProposal } from "./agency.ts";
 import { buildActionContextPacket } from "./action-context.ts";
@@ -12,6 +13,12 @@ import {
 } from "./context.ts";
 import { CodexExecRuntime } from "./runtime.ts";
 import { processIo, runR4CoreCli, unavailableR4Environment } from "../packages/r4-local/src/cli.ts";
+import {
+  approveLocalProjection,
+  prepareLocalProjection,
+  previewLocalProjection,
+  recoverLocalProjectionReview,
+} from "../packages/r4-local/src/projection-review.ts";
 import {
   approveAction,
   correctReflection,
@@ -36,6 +43,12 @@ const ALLOWED_OPTIONS: Record<string, Set<string>> = {
   "action-approve": new Set(["--workspace", "--proposal", "--effect-hash"]),
   "action-execute": new Set(["--workspace", "--approval"]),
   "action-rollback": new Set(["--workspace", "--receipt"]),
+  "projection-prepare": new Set([
+    "--workspace", "--title", "--summary", "--open-to", "--tension", "--becoming-reflection", "--effect",
+  ]),
+  "projection-preview": new Set(["--workspace"]),
+  "projection-approve": new Set(["--workspace"]),
+  "projection-recover": new Set(["--workspace", "--lock-pid"]),
 };
 const LIST_OPTIONS = new Set(["--include", "--unresolved"]);
 
@@ -85,6 +98,34 @@ function contextSelection(options: ParsedOptions): ContextSelection {
   };
 }
 
+function projectionOptions(action: string, args: string[]): ParsedOptions {
+  if (action !== "prepare" && action !== "preview" && action !== "approve" && action !== "recover") {
+    throw new Error("usage: forme projection prepare|preview|approve|recover");
+  }
+  return parseOptions(`projection-${action}`, args);
+}
+
+function ownerProjectionConfirmation(): string {
+  const bytes = Buffer.alloc(129);
+  try {
+    let length = 0;
+    while (length < bytes.byteLength) {
+      const read = readSync(0, bytes, length, 1, null);
+      if (read === 0) break;
+      length += read;
+      if (bytes[length - 1] === 0x0a) break;
+    }
+    if (length > 128) throw new Error("Projection approval input is too large");
+    const value = bytes.subarray(0, length).toString("utf8");
+    if (!/^APPROVE sha256:[a-f0-9]{64}\n?$/u.test(value)) {
+      throw new Error("type the exact displayed `APPROVE sha256:<64 hex>` line on standard input");
+    }
+    return value.endsWith("\n") ? value.slice(0, -1) : value;
+  } finally {
+    bytes.fill(0);
+  }
+}
+
 function help(): string {
   return [
     "Forme Living Project Twin — R1 Continuity + R2 Cognition + R3 Bounded Agency + R4 Gate A",
@@ -101,6 +142,7 @@ function help(): string {
     "  action-approve  owner-approve one exact proposal/effect-plan hash pair",
     "  action-execute  consume one approval through the fixed-marker executor",
     "  action-rollback explicitly restore the approved pre-effect marker body",
+    "  projection prepare/preview/approve/recover one local-only exact Projection review",
     "  room     pair/status/sync/prepare-response/reconcile/api (adapter-gated)",
     "  guest    inspect/ask/status/delete (adapter-gated)",
     "",
@@ -139,6 +181,14 @@ function help(): string {
     "  --approval <id>           one-use apr_ approval ID",
     "  --receipt <id>            successful eff_ execution receipt to roll back",
     "",
+    "R4 local Projection options:",
+    "  projection prepare --open-to <text> [--title/--summary/--tension <text>]",
+    "  projection preview",
+    "  projection approve        reads exact `APPROVE sha256:<hash>` from stdin",
+    "  projection recover --lock-pid <pid>  explicitly recover one dead writer",
+    "  --becoming-reflection <id> optional exact active Owner-corrected Reflection",
+    "  --effect <id>              optional exact verified current/rolled-back R3 proposal",
+    "",
     "The model never receives canonical write authority. Only Forme may replace the fixed README.md managed block after exact owner approval.",
   ].join("\n");
 }
@@ -149,6 +199,36 @@ try {
     console.log(help());
   } else if (command === "room" || command === "guest") {
     await runR4CoreCli([command, ...args], unavailableR4Environment(), processIo());
+  } else if (command === "projection") {
+    const [action, ...projectionArgs] = args;
+    if (!action) throw new Error("usage: forme projection prepare|preview|approve|recover");
+    const options = projectionOptions(action, projectionArgs);
+    const workspaceRoot = resolve(option(options, "--workspace") ?? process.cwd());
+    if (action === "prepare") {
+      const view = prepareLocalProjection({
+        workspaceRoot,
+        openTo: required(options, "--open-to"),
+        ...(option(options, "--title") === undefined ? {} : { title: option(options, "--title") }),
+        ...(option(options, "--summary") === undefined ? {} : { summary: option(options, "--summary") }),
+        ...(option(options, "--tension") === undefined ? {} : { tension: option(options, "--tension") }),
+        ...(option(options, "--becoming-reflection") === undefined ? {} : { becomingReflectionId: option(options, "--becoming-reflection") }),
+        ...(option(options, "--effect") === undefined ? {} : { effectProposalId: option(options, "--effect") }),
+      });
+      process.stdout.write(view.preview);
+    } else if (action === "preview") {
+      process.stdout.write(previewLocalProjection({ workspaceRoot }).preview);
+    } else if (action === "approve") {
+      process.stdout.write(approveLocalProjection({
+        workspaceRoot,
+        confirmation: ownerProjectionConfirmation(),
+      }).preview);
+    } else {
+      const lockPidText = required(options, "--lock-pid");
+      if (!/^[1-9][0-9]*$/u.test(lockPidText)) throw new Error("--lock-pid must be one exact positive decimal PID");
+      const lockPid = Number.parseInt(lockPidText, 10);
+      const recovered = recoverLocalProjectionReview({ workspaceRoot, expectedLockPid: lockPid });
+      process.stdout.write(recovered?.preview ?? "Projection lock recovered; no candidate was committed. Run projection prepare.\n");
+    }
   } else {
     const options = parseOptions(command, args);
     const workspaceRoot = resolve(option(options, "--workspace") ?? process.cwd());
