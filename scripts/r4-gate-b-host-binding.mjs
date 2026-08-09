@@ -37,10 +37,12 @@ export const INSPECTOR_LIMITS = Object.freeze({
 const SHA = /^sha256:[0-9a-f]{64}$/u;
 const GIT = /^[0-9a-f]{40}$/u;
 const ID = /^[0-9a-f]{32}$/u;
+const BASE64URL = /^[A-Za-z0-9_-]+$/u;
 const VERSION = /^[0-9]+(?:\.[0-9]+){1,3}(?:[-+][0-9A-Za-z][0-9A-Za-z.-]*)?$/u;
 const API_VERSION = /^[0-9]+\.[0-9]+$/u;
 const REPOSITORY_COMPONENT = /^[a-z0-9]+(?:(?:[._]|__|-+)[a-z0-9]+)*$/u;
 const INPUT_KEYS = new Set(["schemaVersion", "dockerCli", "dockerUnixSocket", "codexPackageRoot"]);
+const REATTEMPT_ACTIVATION_GRANT_KEYS = new Set(["schemaVersion", "activationCardSha256", "attemptOrdinal", "checkpointSha256", "firstProviderCallGrant", "hostBindingAttemptGrant", "hostBindingInputPreparedByOwner", "implementationHead", "implementationTree", "retryExecutionGrant"]);
 const INSPECTOR_SNAPSHOT_KEYS = new Set(["dockerCliStarts", "localDockerUnixSocketRequests", "macosInspectorStarts", "activeProcessGroups", "unknownProcessGroups", "cleanupState", "quarantineState"]);
 const MINIMAL_PATH = "/usr/bin:/bin:/usr/sbin:/sbin";
 const SYSTEM_TOOLS = Object.freeze({
@@ -58,6 +60,12 @@ const DOCKER_INSPECTOR_IDS = new Set(["docker-client-version", "docker-daemon-ve
 const DOCKER_SOCKET_INSPECTOR_IDS = new Set(["docker-daemon-version", "docker-image-observation"]);
 const MACOS_INSPECTOR_IDS = new Set(["macos-product-version", "macos-build-version", "macos-architecture", "developer-root", "swiftc-path", "sdk-path", "sdk-version", "swift-version", "openssl-version"]);
 const HOST_INSPECTOR_SEQUENCE = Object.freeze(["docker-client-version", "docker-daemon-version", "docker-image-observation", "macos-product-version", "macos-build-version", "macos-architecture", "developer-root", "swiftc-path", "sdk-path", "sdk-version", "swift-version", "openssl-version"]);
+export const HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS = Object.freeze([
+  Object.freeze({ name: "home", environmentKey: "HOME", ownedResource: "host-inspector-environment-home" }),
+  Object.freeze({ name: "docker-config", environmentKey: "DOCKER_CONFIG", ownedResource: "host-inspector-environment-docker-config" }),
+  Object.freeze({ name: "tmp", environmentKey: "TMPDIR", ownedResource: "host-inspector-environment-tmp" }),
+]);
+const HOST_BINDING_ENVIRONMENT_DIRECTORY_SPEC_BY_NAME = new Map(HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.map((spec) => [spec.name, spec]));
 export const RUNTIME_DEPENDENCY_PATHS = Object.freeze(`
 scripts/r4-gate-b-physical-runner.mjs
 scripts/r4-gate-b-host-binding.mjs
@@ -84,6 +92,11 @@ schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json
 schemas/r4/gate-b-core/host-binding-input.schema.json
 schemas/r4/gate-b-core/host-binding-capsule.schema.json
 schemas/r4/gate-b-core/host-binding-public-receipt.schema.json
+schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json
+schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json
+schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json
+schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json
+schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json
 schemas/r4/gate-b-core/postgres/physical-adapter-contract.json
 schemas/r4/gate-b-core/postgres/race-catalog.json
 schemas/r4/gate-b-core/postgres/race-byte-index.json
@@ -148,6 +161,42 @@ export class HostBindingError extends Error {
 }
 function fail(code, verdict) { throw new HostBindingError(code, verdict); }
 export function sha256(bytes) { return `sha256:${crypto.createHash("sha256").update(bytes).digest("hex")}`; }
+function hostInspectorEnvironmentDirectorySpec(directoryName) {
+  if (typeof directoryName !== "string" || !HOST_BINDING_ENVIRONMENT_DIRECTORY_SPEC_BY_NAME.has(directoryName)) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_ROLE_INVALID", "RED");
+  return HOST_BINDING_ENVIRONMENT_DIRECTORY_SPEC_BY_NAME.get(directoryName);
+}
+function hostInspectorStructuralDirectoryIdentity(stat) {
+  if (stat === null || typeof stat !== "object" || typeof stat.isDirectory !== "function" || !stat.isDirectory() || (typeof stat.isSymbolicLink === "function" && stat.isSymbolicLink()) || stat.uid !== currentUid() || (stat.mode & 0o7777) !== 0o700) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_IDENTITY_INVALID", "RED_QUARANTINED");
+  return Object.freeze({
+    device: String(stat.dev),
+    inode: String(stat.ino),
+    mode: stat.mode & 0o7777,
+    uid: stat.uid,
+    gid: stat.gid,
+  });
+}
+function sameHostInspectorStructuralDirectoryIdentity(left, right) {
+  return left.device === right.device && left.inode === right.inode && left.mode === right.mode && left.uid === right.uid && left.gid === right.gid;
+}
+export function observeHostBindingReattemptEnvironmentDirectoryIdentity(reattemptRunId, directoryName, stat) {
+  if (!ID.test(reattemptRunId)) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_RUN_ID_INVALID", "RED");
+  const spec = hostInspectorEnvironmentDirectorySpec(directoryName);
+  return Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_owned_directory_identity.v2",
+    reattemptRunId,
+    directoryName: spec.name,
+    ownedResource: spec.ownedResource,
+    ...hostInspectorStructuralDirectoryIdentity(stat),
+  });
+}
+export function hostBindingReattemptEnvironmentDirectoryIntentSha256(reattemptRunId, directoryName) {
+  if (!ID.test(reattemptRunId)) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_RUN_ID_INVALID", "RED");
+  const spec = hostInspectorEnvironmentDirectorySpec(directoryName);
+  return sha256(Buffer.from(`r4-gate-b-host-binding-reattempt-environment-directory-create-v2\n${reattemptRunId}\n${spec.name}\n${spec.ownedResource}\n`, "utf8"));
+}
+export function hostBindingReattemptEnvironmentDirectoryIdentitySha256(reattemptRunId, directoryName, stat) {
+  return sha256(Buffer.from(canonicalJson(observeHostBindingReattemptEnvironmentDirectoryIdentity(reattemptRunId, directoryName, stat)), "utf8"));
+}
 export function runtimeDependencyLogicalName(relativePath) {
   if (typeof relativePath !== "string" || !RUNTIME_DEPENDENCY_PATHS.includes(relativePath)) fail("RUNTIME_DEPENDENCY_LOGICAL_NAME_PATH_INVALID", "RED");
   return `repo-${crypto.createHash("sha256").update(Buffer.from(relativePath, "utf8")).digest("hex")}`;
@@ -158,10 +207,81 @@ function validateTrackedSchema(relativePath, value, code) {
   addFormats(ajv, { mode: "full", keywords: false });
   if (ajv.compile(schema)(value) !== true) fail(code, "RED");
 }
-function exactKeys(value, keys, code) {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) fail(code);
-  if (Object.keys(value).sort().join("\n") !== [...keys].sort().join("\n")) fail(code);
+function exactKeys(value, keys, code, verdict) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) fail(code, verdict);
+  if (Object.keys(value).sort().join("\n") !== [...keys].sort().join("\n")) fail(code, verdict);
   return value;
+}
+function deepFreezeJson(value) {
+  const pending = [value];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (current === null || typeof current !== "object" || Object.isFrozen(current)) continue;
+    for (const child of Object.values(current)) if (child !== null && typeof child === "object") pending.push(child);
+    Object.freeze(current);
+  }
+  return value;
+}
+export function decodeCanonicalJsonFrameBase64Url(encoded, { maximumBytes = 4_096, code = "CANONICAL_FRAME_INVALID" } = {}) {
+  if (!Number.isInteger(maximumBytes) || maximumBytes < 1 || maximumBytes > 4_096 || typeof code !== "string" || !/^[A-Z][A-Z0-9_]{0,95}$/u.test(code)) fail("CANONICAL_FRAME_OPTIONS_INVALID", "RED");
+  if (typeof encoded !== "string" || encoded.length < 1 || encoded.length > 5_462 || !BASE64URL.test(encoded)) fail(code, "RED");
+  let bytes = Buffer.alloc(0);
+  try {
+    bytes = Buffer.from(encoded, "base64url");
+    if (bytes.length < 1 || bytes.length > maximumBytes || bytes.toString("base64url") !== encoded || bytes.includes(0x00) || bytes.includes(0x0a) || bytes.includes(0x0d)) fail(code, "RED");
+    const text = bytes.toString("utf8");
+    if (!Buffer.from(text, "utf8").equals(bytes)) fail(code, "RED");
+    let value;
+    try { value = parseStrictJson(text); } catch { fail(code, "RED"); }
+    if (canonicalJson(value) !== text) fail(code, "RED");
+    return Object.freeze({ value: deepFreezeJson(value), sha256: sha256(bytes) });
+  } finally {
+    bytes.fill(0);
+  }
+}
+export function decodeHostBindingReattemptEvidenceReceipt(encoded, expectedKind, expectedBinding = {}) {
+  const expected = Object.freeze({
+    validation: Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_validation_receipt.v2", auditClass: null }),
+    "authority-audit": Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_audit_receipt.v2", auditClass: "authority-checkpoint-journal-cleanup" }),
+    "host-audit": Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_audit_receipt.v2", auditClass: "host-admission-counters-zeroization-publication" }),
+  })[expectedKind];
+  if (expected === undefined || expectedBinding === null || typeof expectedBinding !== "object" || Array.isArray(expectedBinding)) fail("HOST_BINDING_REATTEMPT_EVIDENCE_KIND_INVALID", "RED");
+  const decoded = decodeCanonicalJsonFrameBase64Url(encoded, { maximumBytes: 4_096, code: "HOST_BINDING_REATTEMPT_EVIDENCE_FRAME_INVALID" });
+  validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", decoded.value, "HOST_BINDING_REATTEMPT_EVIDENCE_SCHEMA_INVALID");
+  if (decoded.value.schemaVersion !== expected.schemaVersion || (expected.auditClass !== null && decoded.value.auditClass !== expected.auditClass)) fail("HOST_BINDING_REATTEMPT_EVIDENCE_KIND_MISMATCH", "RED");
+  for (const [key, value] of Object.entries(expectedBinding)) {
+    if (!new Set(["implementationHead", "implementationTree"]).has(key) || typeof value !== "string" || !GIT.test(value) || decoded.value[key] !== value) fail("HOST_BINDING_REATTEMPT_EVIDENCE_BINDING_MISMATCH", "RED");
+  }
+  return decoded;
+}
+export function createHostBindingReattemptActivationGrantFrame({ activationCardSha256, checkpointSha256, implementationHead, implementationTree }) {
+  const frame = {
+    schemaVersion: "r4_gate_b_host_binding_activation_grant.v2",
+    activationCardSha256,
+    attemptOrdinal: 2,
+    checkpointSha256,
+    firstProviderCallGrant: "NOT_REQUESTED",
+    hostBindingAttemptGrant: "APPROVED_ONCE",
+    hostBindingInputPreparedByOwner: true,
+    implementationHead,
+    implementationTree,
+    retryExecutionGrant: "NOT_REQUESTED",
+  };
+  exactKeys(frame, REATTEMPT_ACTIVATION_GRANT_KEYS, "HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_SHAPE");
+  if (!SHA.test(frame.activationCardSha256) || !SHA.test(frame.checkpointSha256) || !GIT.test(frame.implementationHead) || !GIT.test(frame.implementationTree)) fail("HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_INVALID", "RED");
+  validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", frame, "HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_SCHEMA_INVALID");
+  return deepFreezeJson(frame);
+}
+export function assertHostBindingReattemptActivationGrantHash(fields, expectedSha256) {
+  if (!SHA.test(expectedSha256)) fail("HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_HASH_INVALID", "RED");
+  const frame = createHostBindingReattemptActivationGrantFrame(fields);
+  const frameSha256 = sha256(Buffer.from(canonicalJson(frame), "utf8"));
+  if (frameSha256 !== expectedSha256) fail("HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_HASH_MISMATCH", "RED");
+  return Object.freeze({ frame, sha256: frameSha256 });
+}
+export function deriveHostBindingReattemptAttemptId({ reattemptPacketSha256, reattemptOwnerReviewSha256, approvedProposalHead, implementationHead, checkpointSha256 }) {
+  if (!SHA.test(reattemptPacketSha256) || !SHA.test(reattemptOwnerReviewSha256) || !GIT.test(approvedProposalHead) || !GIT.test(implementationHead) || !SHA.test(checkpointSha256)) fail("HOST_BINDING_REATTEMPT_ATTEMPT_ID_AUTHORITY_INVALID", "RED");
+  return crypto.createHash("sha256").update(Buffer.from(`r4-gate-b-host-binding-reattempt-attempt-v2\n${reattemptPacketSha256}\n${reattemptOwnerReviewSha256}\n${approvedProposalHead}\n${implementationHead}\n${checkpointSha256}\n`, "utf8")).digest("hex").slice(0, 32);
 }
 export function validateHostInspectorSnapshot(value, { complete = false } = {}) {
   exactKeys(value, INSPECTOR_SNAPSHOT_KEYS, "HOST_INSPECTOR_SNAPSHOT_SHAPE");
@@ -423,16 +543,24 @@ export function createHostBindingFinalRevalidator() {
   });
 }
 
-export function validateHostBindingInputBytes(bytes) {
+function validateHostBindingInputBytesForVersion(bytes, schemaVersion) {
   if (!Buffer.isBuffer(bytes) || bytes.length === 0 || bytes.length > 16_384 || bytes[bytes.length - 1] !== 0x0a) fail("HOST_BINDING_INPUT_FRAMING");
   if (bytes.subarray(0, -1).includes(0x0a) || bytes.includes(0x00)) fail("HOST_BINDING_INPUT_FRAMING");
   let value;
   try { value = parseStrictJson(bytes.subarray(0, -1).toString("utf8")); } catch { fail("HOST_BINDING_INPUT_JSON_INVALID"); }
   exactKeys(value, INPUT_KEYS, "HOST_BINDING_INPUT_SHAPE");
-  if (value.schemaVersion !== "r4_gate_b_host_binding_input.v1") fail("HOST_BINDING_INPUT_VERSION");
+  if (value.schemaVersion !== schemaVersion) fail("HOST_BINDING_INPUT_VERSION");
   for (const key of ["dockerCli", "dockerUnixSocket", "codexPackageRoot"]) assertAbsoluteLiteral(value[key], "HOST_BINDING_INPUT_PATH_INVALID");
   if (`${canonicalJson(value)}\n` !== bytes.toString("utf8")) fail("HOST_BINDING_INPUT_NOT_CANONICAL");
   return Object.freeze(value);
+}
+export function validateHostBindingInputBytes(bytes) {
+  return validateHostBindingInputBytesForVersion(bytes, "r4_gate_b_host_binding_input.v1");
+}
+export function validateHostBindingReattemptInputBytes(bytes) {
+  const value = validateHostBindingInputBytesForVersion(bytes, "r4_gate_b_host_binding_reattempt_input.v2");
+  validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json", value, "HOST_BINDING_REATTEMPT_INPUT_SCHEMA_INVALID");
+  return value;
 }
 function classifyMissingHostBindingInput(operation) {
   try { return operation(); }
@@ -441,7 +569,9 @@ function classifyMissingHostBindingInput(operation) {
     throw error;
   }
 }
-function readAndConsumeHostBindingInputCore(inputPath) {
+function readAndConsumeHostBindingInputCore(inputPath, validator = validateHostBindingInputBytes, observation = null) {
+  if (typeof validator !== "function") fail("HOST_BINDING_INPUT_VALIDATOR_INVALID", "RED");
+  if (observation !== null && (typeof observation !== "object" || Array.isArray(observation))) fail("HOST_BINDING_INPUT_OBSERVATION_INVALID", "RED");
   const exact = assertAbsoluteLiteral(inputPath, "HOST_BINDING_INPUT_PATH_INVALID");
   const parent = path.dirname(exact);
   const parentChain = snapshotPathChain(parent, "HOST_BINDING_INPUT_PARENT_UNSAFE");
@@ -454,11 +584,13 @@ function readAndConsumeHostBindingInputCore(inputPath) {
   let expectedIdentity = null;
   let targetChain = null;
   try {
+    if (observation !== null) observation.accessed = true;
     const stat = classifyMissingHostBindingInput(() => fs.lstatSync(exact));
     if (stat.isFile() && !stat.isSymbolicLink() && stat.nlink === 1 && stat.uid === currentUid()) expectedIdentity = statIdentity(stat);
     if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1 || stat.uid !== currentUid() || (stat.mode & 0o777) !== 0o600 || stat.size < 1 || stat.size > 16_384) fail("HOST_BINDING_INPUT_FILE_UNSAFE");
     targetChain = snapshotPathChain(exact, "HOST_BINDING_INPUT_PATH_SYMLINKED");
     fd = classifyMissingHostBindingInput(() => fs.openSync(exact, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0)));
+    if (observation !== null) observation.openCalls = 1;
     bytes = Buffer.allocUnsafe(stat.size);
     let offset = 0;
     while (offset < bytes.length) {
@@ -471,7 +603,7 @@ function readAndConsumeHostBindingInputCore(inputPath) {
     const afterPath = statIdentity(classifyMissingHostBindingInput(() => fs.lstatSync(exact)));
     assertPathChainStable(targetChain, "HOST_BINDING_INPUT_PATH_CHAIN_DRIFT");
     if (!sameIdentity(afterFd, afterPath) || !sameIdentity(afterFd, statIdentity(stat))) fail("HOST_BINDING_INPUT_TOCTOU");
-    return validateHostBindingInputBytes(bytes);
+    return validator(bytes);
   } finally {
     bytes.fill(0);
     trailing.fill(0);
@@ -490,11 +622,13 @@ function readAndConsumeHostBindingInputCore(inputPath) {
       catch (error) { if (error?.code !== "ENOENT") fail("HOST_BINDING_INPUT_CLEANUP_INSPECTION_FAILED", "RED"); }
       if (current === null) {
         fsyncDirectory(parent);
+        if (observation !== null) observation.removedOrAbsent = true;
       } else {
         if (expectedIdentity === null || !current.isFile() || current.isSymbolicLink() || current.nlink !== 1 || current.uid !== currentUid() || !sameIdentity(statIdentity(current), expectedIdentity)) fail("HOST_BINDING_INPUT_CLEANUP_IDENTITY_DRIFT", "RED");
         if (targetChain !== null) assertPathChainStable(targetChain, "HOST_BINDING_INPUT_CLEANUP_PATH_DRIFT", "RED");
         try { fs.unlinkSync(exact); } catch { fail("HOST_BINDING_INPUT_UNLINK_FAILED", "RED"); }
         fsyncDirectory(parent);
+        if (observation !== null) observation.removedOrAbsent = true;
       }
     } catch (error) {
       finalizationError = error instanceof HostBindingError ? error : new HostBindingError("HOST_BINDING_INPUT_CLEANUP_FAILED", "RED");
@@ -503,10 +637,31 @@ function readAndConsumeHostBindingInputCore(inputPath) {
   }
 }
 export function readAndConsumeHostBindingInput(inputPath) {
-  try { return readAndConsumeHostBindingInputCore(inputPath); }
+  try { return readAndConsumeHostBindingInputCore(inputPath, validateHostBindingInputBytes); }
   catch (error) {
     if (error instanceof HostBindingError && error.verdict !== "RED" && !String(error.verdict).includes("QUARANTINED") && String(error.code).startsWith("HOST_BINDING_INPUT_")) throw new HostBindingError("HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY");
     throw error;
+  }
+}
+export function readAndConsumeHostBindingReattemptInput(inputPath, options = {}) {
+  const observation = { accessed: false, openCalls: 0, removedOrAbsent: false };
+  const snapshot = () => Object.freeze({ accessed: observation.accessed, openCalls: observation.openCalls, removedOrAbsent: observation.removedOrAbsent });
+  try {
+    if (options === null || typeof options !== "object" || Array.isArray(options) || Object.keys(options).some((key) => key !== "onInputObservation")) fail("HOST_BINDING_REATTEMPT_INPUT_OBSERVATION_OPTIONS_INVALID", "RED");
+    const { onInputObservation = null } = options;
+    if (onInputObservation !== null && typeof onInputObservation !== "function") fail("HOST_BINDING_REATTEMPT_INPUT_OBSERVATION_CALLBACK_INVALID", "RED");
+    const value = readAndConsumeHostBindingInputCore(inputPath, validateHostBindingReattemptInputBytes, observation);
+    if (onInputObservation !== null) {
+      try { onInputObservation(snapshot()); }
+      catch { const callbackError = new HostBindingError("HOST_BINDING_REATTEMPT_INPUT_OBSERVATION_CALLBACK_FAILED", "RED"); callbackError.inputObservation = snapshot(); throw callbackError; }
+    }
+    return value;
+  }
+  catch (error) {
+    let terminalError = error;
+    if (terminalError instanceof HostBindingError && terminalError.verdict !== "RED" && !String(terminalError.verdict).includes("QUARANTINED") && String(terminalError.code).startsWith("HOST_BINDING_INPUT_")) terminalError = new HostBindingError("HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY");
+    if (terminalError !== null && (typeof terminalError === "object" || typeof terminalError === "function")) terminalError.inputObservation = snapshot();
+    throw terminalError;
   }
 }
 export function removeHostBindingInputEnvelope(inputPath) {
@@ -669,12 +824,151 @@ function resolveObservedCanonicalPath(value, code) {
 
 export function createProcessHostInspector({ root, journal = async () => {}, clock = () => Date.now(), processPort = null }) {
   const canonicalRoot = fs.realpathSync(root);
+  if (typeof journal !== "function" || typeof clock !== "function") fail("HOST_INSPECTOR_PORT_INVALID", "RED");
   let dockerCliStarts = 0;
   let localDockerUnixSocketRequests = 0;
   let macosInspectorStarts = 0;
   const attemptedCommandIds = new Set();
   const activeProcessGroups = new Set();
   const unknownProcessGroups = new Set();
+  let environmentState = "unprepared";
+  let environmentReattemptRunId = null;
+  let environmentRootAuthority = null;
+  let preparedEnvironment = null;
+  const environmentDirectoryAuthorities = [];
+  const environmentDirectoryObservations = [];
+  const assertEnvironmentRootCurrent = () => {
+    if (environmentRootAuthority === null || environmentRootAuthority.fd === null) fail("HOST_INSPECTOR_ENVIRONMENT_ROOT_AUTHORITY_INVALID", "RED_QUARANTINED");
+    const opened = hostInspectorStructuralDirectoryIdentity(fs.fstatSync(environmentRootAuthority.fd));
+    const observed = hostInspectorStructuralDirectoryIdentity(fs.lstatSync(canonicalRoot));
+    if (fs.realpathSync(canonicalRoot) !== canonicalRoot || !sameHostInspectorStructuralDirectoryIdentity(opened, environmentRootAuthority.identity) || !sameHostInspectorStructuralDirectoryIdentity(observed, environmentRootAuthority.identity)) fail("HOST_INSPECTOR_ENVIRONMENT_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+  };
+  const assertEnvironmentDirectoryCurrent = (authority) => {
+    const opened = hostInspectorStructuralDirectoryIdentity(fs.fstatSync(authority.fd));
+    const observedStat = fs.lstatSync(authority.path);
+    const observed = hostInspectorStructuralDirectoryIdentity(observedStat);
+    if (fs.realpathSync(authority.path) !== authority.path || !sameHostInspectorStructuralDirectoryIdentity(opened, authority.identity) || !sameHostInspectorStructuralDirectoryIdentity(observed, authority.identity) || hostBindingReattemptEnvironmentDirectoryIdentitySha256(environmentReattemptRunId, authority.spec.name, observedStat) !== authority.identitySha256) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_IDENTITY_DRIFT", "RED_QUARANTINED");
+  };
+  const assertEnvironmentCurrentCore = () => {
+    try {
+      if (environmentState !== "prepared") fail("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_NOT_PREPARED", "RED_QUARANTINED");
+      assertEnvironmentRootCurrent();
+      if (!ID.test(environmentReattemptRunId) || environmentDirectoryAuthorities.length !== HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.length) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_AUTHORITY_INCOMPLETE", "RED_QUARANTINED");
+      for (const authority of environmentDirectoryAuthorities) assertEnvironmentDirectoryCurrent(authority);
+      assertEnvironmentRootCurrent();
+      return true;
+    } catch (error) {
+      if (error instanceof HostBindingError) throw error;
+      throw new HostBindingError("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_UNREADABLE", "RED_QUARANTINED");
+    }
+  };
+  const closeEnvironmentAuthority = () => {
+    if (environmentState === "closed") return true;
+    let closeFailed = false;
+    for (const authority of [...environmentDirectoryAuthorities].reverse()) {
+      if (authority.fd === null) continue;
+      try { fs.closeSync(authority.fd); }
+      catch { closeFailed = true; }
+      authority.fd = null;
+    }
+    if (environmentRootAuthority?.fd !== null && environmentRootAuthority?.fd !== undefined) {
+      try { fs.closeSync(environmentRootAuthority.fd); }
+      catch { closeFailed = true; }
+      environmentRootAuthority.fd = null;
+    }
+    environmentState = "closed";
+    if (closeFailed) fail("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_CLOSE_UNCERTAIN", "RED_QUARANTINED");
+    return true;
+  };
+  const prepareEnvironment = async (authority) => {
+    if (authority === null || typeof authority !== "object" || Array.isArray(authority)) fail("HOST_INSPECTOR_ENVIRONMENT_PREPARE_AUTHORITY_INVALID", "RED");
+    exactKeys(authority, new Set(["reattemptRunId"]), "HOST_INSPECTOR_ENVIRONMENT_PREPARE_AUTHORITY_SHAPE", "RED");
+    if (!ID.test(authority.reattemptRunId) || environmentState !== "unprepared" || attemptedCommandIds.size !== 0 || typeof fs.constants.O_DIRECTORY !== "number" || typeof fs.constants.O_NOFOLLOW !== "number") fail("HOST_INSPECTOR_ENVIRONMENT_PREPARE_AUTHORITY_INVALID", "RED");
+    environmentReattemptRunId = authority.reattemptRunId;
+    environmentState = "preparing";
+    try {
+      const rootBefore = fs.lstatSync(canonicalRoot);
+      const rootIdentity = hostInspectorStructuralDirectoryIdentity(rootBefore);
+      const rootFd = fs.openSync(canonicalRoot, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | fs.constants.O_NOFOLLOW);
+      environmentRootAuthority = { fd: rootFd, identity: rootIdentity };
+      assertEnvironmentRootCurrent();
+      preparedEnvironment = inspectorEnvironment(canonicalRoot);
+      for (const spec of HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS) {
+        const intentSha256 = hostBindingReattemptEnvironmentDirectoryIntentSha256(environmentReattemptRunId, spec.name);
+        try {
+          await journal({
+            lane: "host-binding",
+            event: `environment-directory-create-intent:${spec.name}`,
+            hostBindingId: null,
+            commandShapeSha256: intentSha256,
+            processGroupId: null,
+            ownedResources: [spec.ownedResource],
+            terminalCode: null,
+            cleanupState: "required",
+          });
+        } catch { fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_INTENT_JOURNAL_FAILED", "RED_QUARANTINED"); }
+        assertEnvironmentRootCurrent();
+        const directory = path.join(canonicalRoot, spec.name);
+        try { fs.mkdirSync(directory, { recursive: false, mode: 0o700 }); }
+        catch (error) {
+          if (error?.code === "EEXIST") fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_PREEXISTS", "RED_QUARANTINED");
+          fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_CREATE_FAILED", "RED_QUARANTINED");
+        }
+        let directoryFd = null;
+        try {
+          const created = fs.lstatSync(directory);
+          const createdIdentity = hostInspectorStructuralDirectoryIdentity(created);
+          if (fs.realpathSync(directory) !== directory) fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_CREATE_IDENTITY_INVALID", "RED_QUARANTINED");
+          directoryFd = fs.openSync(directory, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | fs.constants.O_NOFOLLOW);
+          const authority = {
+            spec,
+            path: directory,
+            fd: directoryFd,
+            identity: createdIdentity,
+            identitySha256: hostBindingReattemptEnvironmentDirectoryIdentitySha256(environmentReattemptRunId, spec.name, created),
+          };
+          environmentDirectoryAuthorities.push(authority);
+          directoryFd = null;
+          assertEnvironmentDirectoryCurrent(authority);
+          fs.fsyncSync(authority.fd);
+          fs.fsyncSync(environmentRootAuthority.fd);
+          assertEnvironmentRootCurrent();
+          assertEnvironmentDirectoryCurrent(authority);
+          const observation = Object.freeze({
+            reattemptRunId: environmentReattemptRunId,
+            environmentKey: spec.environmentKey,
+            name: spec.name,
+            ownedResource: spec.ownedResource,
+            identitySha256: authority.identitySha256,
+          });
+          try {
+            await journal({
+              lane: "host-binding",
+              event: `environment-directory-created:${spec.name}`,
+              hostBindingId: null,
+              commandShapeSha256: authority.identitySha256,
+              processGroupId: null,
+              ownedResources: [spec.ownedResource],
+              terminalCode: "CREATED",
+              cleanupState: "required",
+            });
+          } catch { fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_CREATED_JOURNAL_FAILED", "RED_QUARANTINED"); }
+          environmentDirectoryObservations.push(observation);
+          assertEnvironmentRootCurrent();
+          assertEnvironmentDirectoryCurrent(authority);
+        } finally {
+          if (directoryFd !== null) try { fs.closeSync(directoryFd); } catch { fail("HOST_INSPECTOR_ENVIRONMENT_DIRECTORY_AUTHORITY_CLOSE_UNCERTAIN", "RED_QUARANTINED"); }
+        }
+      }
+      environmentState = "prepared";
+      assertEnvironmentCurrentCore();
+      return Object.freeze({ environment: preparedEnvironment, directories: Object.freeze([...environmentDirectoryObservations]) });
+    } catch (error) {
+      environmentState = "quarantined";
+      if (error instanceof HostBindingError) throw error;
+      throw new HostBindingError("HOST_INSPECTOR_ENVIRONMENT_PREPARE_FAILED", "RED_QUARANTINED");
+    }
+  };
   const snapshot = () => Object.freeze({
     dockerCliStarts,
     localDockerUnixSocketRequests,
@@ -696,6 +990,10 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
     unknownProcessGroups.add(token);
   };
   return Object.freeze({
+    prepareEnvironment,
+    assertEnvironmentCurrent: assertEnvironmentCurrentCore,
+    closeEnvironmentAuthority,
+    environmentDirectoryObservations: () => Object.freeze([...environmentDirectoryObservations]),
     async run(command, guards = []) {
       try {
         exactKeys(command, new Set(["id", "executable", "argv", "deadlineMilliseconds", "stdoutLimitBytes", "environment"]), "HOST_INSPECTOR_COMMAND_SHAPE");
@@ -704,14 +1002,21 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
         const dockerSocketCommand = DOCKER_SOCKET_INSPECTOR_IDS.has(command.id);
         const macosCommand = MACOS_INSPECTOR_IDS.has(command.id);
         if ((!dockerCommand && !macosCommand) || (dockerCommand && macosCommand) || attemptedCommandIds.has(command.id) || command.id !== HOST_INSPECTOR_SEQUENCE[attemptedCommandIds.size] || dockerCliStarts + Number(dockerCommand) > 3 || localDockerUnixSocketRequests + Number(dockerSocketCommand) > 2 || macosInspectorStarts + Number(macosCommand) > 9) fail("HOST_INSPECTOR_COMMAND_CEILING_INVALID", "RED");
+      if (environmentState !== "unprepared") {
+        assertEnvironmentCurrentCore();
+        if (canonicalJson(command.environment) !== canonicalJson(preparedEnvironment)) fail("HOST_INSPECTOR_ENVIRONMENT_COMMAND_DRIFT", "RED");
+      }
       for (const guard of guards) guard("before-start");
+      if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
       attemptedCommandIds.add(command.id);
-      const intentRecord = await journal({ lane: "host-binding", event: `intent:${command.id}`, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), processGroupId: null });
+      const commandShapeSha256 = sha256(Buffer.from(canonicalJson(command), "utf8"));
+      const intentRecord = await journal({ lane: "host-binding", event: `intent:${command.id}`, commandShapeSha256, processGroupId: null });
+      if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
       const startedAt = clock();
       let child;
       try {
         if (processPort === null || typeof processPort.start !== "function") fail("HOST_INSPECTOR_PROCESS_PORT_MISSING", "RED");
-        child = await processPort.start({ family: "host-inspector", logicalId: command.id, startSequence: intentRecord.sequence, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), executable: command.executable, argv: command.argv, cwd: canonicalRoot, environment: command.environment, stdio: ["ignore", "pipe", "pipe"], targetStdioCount: 3 });
+        child = await processPort.start({ family: "host-inspector", logicalId: command.id, startSequence: intentRecord.sequence, commandShapeSha256, executable: command.executable, argv: command.argv, cwd: canonicalRoot, environment: command.environment, stdio: ["ignore", "pipe", "pipe"], targetStdioCount: 3 });
       }
       catch (error) {
         if (error && typeof error === "object" && typeof error.verdict === "string") {
@@ -734,7 +1039,18 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
             partial = supplied;
           }
           const code = typeof error.code === "string" && /^[A-Z][A-Z0-9_:-]{0,127}$/u.test(error.code) ? error.code : "HOST_INSPECTOR_PROCESS_PORT_FAILED";
-          throw new HostBindingError(code, error.verdict, partial);
+          let verdict = error.verdict;
+          let closure = null;
+          if (error.logicalStartObserved === false && error.processGroupState === "not-started") {
+            closure = { lane: "host-binding", event: `not-started:${command.id}`, commandShapeSha256, processGroupId: null, terminalCode: "NOT_STARTED", cleanupState: "observed-absent" };
+          } else if (error.logicalStartObserved === true && error.processGroupState === "observed-absent" && Number.isSafeInteger(error.processGroupId) && error.processGroupId > 1) {
+            closure = { lane: "host-binding", event: `cleanup-observed-absent:${command.id}`, commandShapeSha256, processGroupId: error.processGroupId, terminalCode: "ABSENT", cleanupState: "observed-absent" };
+          }
+          if (closure !== null) {
+            try { await journal(closure); }
+            catch { verdict = "RED_QUARANTINED"; }
+          }
+          throw new HostBindingError(code, verdict, partial);
         }
         fail("HOST_INSPECTOR_SPAWN_FAILED");
       }
@@ -799,10 +1115,14 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
         finally { clearTimeout(timeout); }
       };
       try {
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         await journal({ lane: "host-binding", event: `started:${command.id}`, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), processGroupId: child.pid });
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         for (const guard of guards) guard("after-start");
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         if (typeof child.release !== "function") fail("HOST_INSPECTOR_RELEASE_PORT_MISSING", "RED");
         await child.release();
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
       } catch (error) {
         closeOwnedStdio();
         const absent = typeof child.abortBeforeRelease === "function" ? await child.abortBeforeRelease() : false;
@@ -832,10 +1152,13 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
       else unknownProcessGroups.add(child.pid);
       const out = Buffer.concat(stdout); const err = Buffer.concat(stderr);
       try {
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         for (const guard of guards) guard("after-terminal");
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         try {
           await journal({ lane: "host-binding", event: `terminal:${command.id}`, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), processGroupId: child.pid, terminalCode: terminal === null ? "NO_TERMINAL" : String(terminal.code), cleanupState: absent ? "observed-absent" : "quarantined" });
           if (absent && typeof child.finalizeSlotAfterTerminal === "function") child.finalizeSlotAfterTerminal();
+          if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         } catch (error) {
           if (absent) {
             await journal({ lane: "host-binding", event: `cleanup-observed-absent:${command.id}`, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), processGroupId: child.pid, terminalCode: "ABSENT", cleanupState: "observed-absent" });
@@ -846,9 +1169,17 @@ export function createProcessHostInspector({ root, journal = async () => {}, clo
         if (!absent) fail("HOST_INSPECTOR_GROUP_ABSENCE_UNKNOWN", "YELLOW_QUARANTINED");
         if (terminal === null || terminal.error || terminal.code !== 0 || terminal.signal !== null || timedOut || overflow || stderrBytes !== 0 || err.length !== 0 || out.length > command.stdoutLimitBytes || clock() - startedAt > command.deadlineMilliseconds + INSPECTOR_LIMITS.termGraceMilliseconds + INSPECTOR_LIMITS.killGraceMilliseconds) fail("HOST_INSPECTOR_TERMINAL_INVALID", "YELLOW_NO_RETRY");
         await journal({ lane: "host-binding", event: `observed:${command.id}`, commandShapeSha256: sha256(Buffer.from(canonicalJson(command), "utf8")), processGroupId: child.pid, terminalCode: "0", cleanupState: "observed-absent" });
+        if (environmentState !== "unprepared") assertEnvironmentCurrentCore();
         return out.toString("utf8");
       } finally { out.fill(0); err.fill(0); for (const part of stdout) part.fill(0); for (const part of stderr) part.fill(0); }
       } catch (error) {
+        if (environmentState !== "unprepared") {
+          try { assertEnvironmentCurrentCore(); }
+          catch (authorityError) {
+            if (authorityError instanceof HostBindingError) throw authorityError.attachPartialObservation(snapshot());
+            throw new HostBindingError("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_UNREADABLE", "RED_QUARANTINED", snapshot());
+          }
+        }
         if (error instanceof HostBindingError) throw error.attachPartialObservation(snapshot());
         throw new HostBindingError("HOST_INSPECTOR_UNEXPECTED_FAILURE", "RED", snapshot());
       }
@@ -871,9 +1202,56 @@ function assertCheckpoint(checkpoint) {
   if (checkpoint.runtimeDependencyCount !== actualRuntime.fileCount || checkpoint.runtimeDependencyAggregateSha256 !== actualRuntime.aggregateSha256 || canonicalJson(checkpoint.runtimeDependencies) !== canonicalJson(actualRuntime.files)) fail("HOST_BINDING_CHECKPOINT_RUNTIME_DEPENDENCY_DRIFT", "RED");
   return checkpoint;
 }
+function assertHostBindingReattemptCheckpoint(checkpoint) {
+  validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", checkpoint, "HOST_BINDING_REATTEMPT_CHECKPOINT_SCHEMA_INVALID");
+  const actualRuntime = runtimeDependencyInventory();
+  if (checkpoint.runtimeDependencyCount !== actualRuntime.fileCount || checkpoint.runtimeDependencyAggregateSha256 !== actualRuntime.aggregateSha256 || canonicalJson(checkpoint.runtimeDependencies) !== canonicalJson(actualRuntime.files)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_RUNTIME_DEPENDENCY_DRIFT", "RED");
+  const runtimeHashes = new Map(checkpoint.runtimeDependencies.map((entry) => [entry.path, entry.sha256]));
+  for (const [field, relativePath] of Object.entries({
+    physicalRunnerSha256: "scripts/r4-gate-b-physical-runner.mjs",
+    hostBindingModuleSha256: "scripts/r4-gate-b-host-binding.mjs",
+    physicalPortSha256: "scripts/r4-gate-b-physical-port.mjs",
+    runnerContractSha256: "schemas/r4/gate-b-core/physical-runner-contract.json",
+    codexProfileSha256: "schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb",
+  })) if (runtimeHashes.get(relativePath) !== checkpoint[field]) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_RUNTIME_HASH_DRIFT", "RED");
+  return checkpoint;
+}
+function legacyCheckpointViewOfReattempt(checkpoint) {
+  return Object.freeze({
+    schemaVersion: "r4_gate_b_physical_construction_checkpoint.v1",
+    constructionRunId: HOST_BINDING_AUTHORITY.constructionRunId,
+    approvedDecisionBriefSha256: HOST_BINDING_AUTHORITY.decisionBriefSha256,
+    constructionPacketSha256: HOST_BINDING_AUTHORITY.constructionPacketSha256,
+    constructionOwnerReviewSha256: HOST_BINDING_AUTHORITY.constructionOwnerReviewSha256,
+    approvedProposalHead: HOST_BINDING_AUTHORITY.approvedProposalHead,
+    approvedProposalTree: HOST_BINDING_AUTHORITY.approvedProposalTree,
+    implementationHead: checkpoint.implementationHead,
+    implementationTree: checkpoint.implementationTree,
+    physicalRunnerSha256: checkpoint.physicalRunnerSha256,
+    hostBindingModuleSha256: checkpoint.hostBindingModuleSha256,
+    physicalPortSha256: checkpoint.physicalPortSha256,
+    runnerContractSha256: checkpoint.runnerContractSha256,
+    codexProfileSha256: checkpoint.codexProfileSha256,
+    runtimeDependencyCount: checkpoint.runtimeDependencyCount,
+    runtimeDependencyAggregateSha256: checkpoint.runtimeDependencyAggregateSha256,
+    runtimeDependencies: checkpoint.runtimeDependencies,
+    validationAggregateSha256: checkpoint.validationAggregateSha256,
+    auditReceipts: Object.freeze({ postgres: checkpoint.validationReceiptSha256, codexUnified: checkpoint.authorityAuditReceiptSha256, macosAuthority: checkpoint.hostAuditReceiptSha256 }),
+  });
+}
 
-async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, checkpoint, ownerInput, inspector, now = () => new Date(), randomBytes = crypto.randomBytes }) {
-  if (typeof inspector?.run !== "function" || typeof inspector?.snapshot !== "function") fail("HOST_INSPECTOR_PORT_INVALID", "RED");
+async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, checkpoint, ownerInput, inspector, now = () => new Date(), randomBytes = crypto.randomBytes }, environmentAuthority = null) {
+  if (typeof inspector?.run !== "function" || typeof inspector?.snapshot !== "function" || (environmentAuthority !== null && (typeof inspector?.prepareEnvironment !== "function" || typeof inspector?.assertEnvironmentCurrent !== "function" || typeof inspector?.closeEnvironmentAuthority !== "function"))) fail("HOST_INSPECTOR_PORT_INVALID", "RED");
+  if (environmentAuthority !== null) {
+    exactKeys(environmentAuthority, new Set(["reattemptRunId"]), "HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_SHAPE", "RED");
+    if (!ID.test(environmentAuthority.reattemptRunId)) fail("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_INVALID", "RED");
+  }
+  const assertPreparedEnvironmentCurrent = () => {
+    if (inspector.assertEnvironmentCurrent() !== true) fail("HOST_INSPECTOR_ENVIRONMENT_REVALIDATION_UNCONFIRMED", "RED_QUARANTINED");
+  };
+  const closePreparedEnvironmentAuthority = () => {
+    if (inspector.closeEnvironmentAuthority() !== true) fail("HOST_INSPECTOR_ENVIRONMENT_AUTHORITY_CLOSE_UNCONFIRMED", "RED_QUARANTINED");
+  };
   const repo = fs.realpathSync(repositoryRoot);
   const construction = fs.realpathSync(constructionRoot);
   const frozen = assertCheckpoint(checkpoint);
@@ -902,8 +1280,23 @@ async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, check
   };
   const dockerCliGuard = guardIdentities([dockerCli]);
   const dockerDaemonGuard = guardIdentities([dockerCli, socket]);
+  let environmentPreparationStarted = false;
+  try {
   const env = inspectorEnvironment(construction);
-  fs.mkdirSync(env.HOME, { mode: 0o700 }); fs.mkdirSync(env.DOCKER_CONFIG, { mode: 0o700 }); fs.mkdirSync(env.TMPDIR, { mode: 0o700 });
+  if (environmentAuthority === null) {
+    fs.mkdirSync(env.HOME, { mode: 0o700 }); fs.mkdirSync(env.DOCKER_CONFIG, { mode: 0o700 }); fs.mkdirSync(env.TMPDIR, { mode: 0o700 });
+  } else {
+    environmentPreparationStarted = true;
+    const preparedInspectorEnvironment = await inspector.prepareEnvironment(environmentAuthority);
+    exactKeys(preparedInspectorEnvironment, new Set(["environment", "directories"]), "HOST_INSPECTOR_ENVIRONMENT_PREPARE_RESULT_SHAPE", "RED_QUARANTINED");
+    if (canonicalJson(preparedInspectorEnvironment.environment) !== canonicalJson(env) || !Array.isArray(preparedInspectorEnvironment.directories) || preparedInspectorEnvironment.directories.length !== HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.length) fail("HOST_INSPECTOR_ENVIRONMENT_PREPARE_RESULT_INVALID", "RED_QUARANTINED");
+    for (const [index, spec] of HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.entries()) {
+      const observation = preparedInspectorEnvironment.directories[index];
+      exactKeys(observation, new Set(["reattemptRunId", "environmentKey", "name", "ownedResource", "identitySha256"]), "HOST_INSPECTOR_ENVIRONMENT_OBSERVATION_SHAPE", "RED_QUARANTINED");
+      if (observation.reattemptRunId !== environmentAuthority.reattemptRunId || observation.environmentKey !== spec.environmentKey || observation.name !== spec.name || observation.ownedResource !== spec.ownedResource || !SHA.test(observation.identitySha256)) fail("HOST_INSPECTOR_ENVIRONMENT_OBSERVATION_INVALID", "RED_QUARANTINED");
+    }
+    assertPreparedEnvironmentCurrent();
+  }
   const dockerClientRaw = await inspector.run(command("docker-client-version", dockerCli.path, ["--version"], INSPECTOR_LIMITS.dockerClient, env), [dockerCliGuard]);
   const dockerClientVersion = parseDockerClientVersion(dockerClientRaw);
   const dockerVersionRaw = await inspector.run(command("docker-daemon-version", dockerCli.path, ["--host", `unix://${socket.path}`, "version", "--format", "{{json .Client.Version}} {{json .Client.APIVersion}} {{json .Server.Version}} {{json .Server.APIVersion}} {{json .Server.Os}} {{json .Server.Arch}}"], INSPECTOR_LIMITS.dockerVersion, env), [dockerDaemonGuard]);
@@ -932,6 +1325,7 @@ async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, check
   const opensslBound = boundFiles.find((entry) => entry.path === SYSTEM_TOOLS.openssl);
   const opensslVersion = parseOpenSSLVersion(await inspector.run(command("openssl-version", SYSTEM_TOOLS.openssl, ["version"], INSPECTOR_LIMITS.macos, env), [guardIdentities([opensslBound])]));
   validateHostInspectorSnapshot(inspector.snapshot(), { complete: true });
+  if (environmentAuthority !== null) assertPreparedEnvironmentCurrent();
   finalRevalidator.revalidate();
   const created = now();
   const expires = new Date(created.getTime() + 259_200_000);
@@ -978,6 +1372,11 @@ async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, check
     publicReceiptBytes = Buffer.from(`${canonicalJson(publicReceipt)}\n`, "utf8");
     validateTrackedSchema("schemas/r4/gate-b-core/host-binding-capsule.schema.json", capsule, "HOST_BINDING_CAPSULE_SCHEMA_INVALID");
     validateTrackedSchema("schemas/r4/gate-b-core/host-binding-public-receipt.schema.json", publicReceipt, "HOST_BINDING_PUBLIC_RECEIPT_SCHEMA_INVALID");
+    if (environmentPreparationStarted) {
+      assertPreparedEnvironmentCurrent();
+      closePreparedEnvironmentAuthority();
+      environmentPreparationStarted = false;
+    }
     bytesTransferred = true;
     return Object.freeze({ capsule, capsuleBytes, capsuleSha256, publicReceipt, publicReceiptBytes, hostBindingId, expiresAt: capsule.expiresAt });
   } finally {
@@ -986,10 +1385,13 @@ async function finalizeHostBindingCore({ repositoryRoot, constructionRoot, check
       publicReceiptBytes?.fill(0);
     }
   }
+  } finally {
+    if (environmentPreparationStarted) closePreparedEnvironmentAuthority();
+  }
 }
 
-export async function finalizeHostBinding(options) {
-  try { return await finalizeHostBindingCore(options); }
+async function finalizeHostBindingWithEnvironmentAuthority(options, environmentAuthority = null) {
+  try { return await finalizeHostBindingCore(options, environmentAuthority); }
   catch (error) {
     if (error instanceof HostBindingError) {
       if (typeof options?.inspector?.snapshot === "function") error.attachPartialObservation(options.inspector.snapshot());
@@ -997,6 +1399,139 @@ export async function finalizeHostBinding(options) {
     }
     const observation = typeof options?.inspector?.snapshot === "function" ? validateHostInspectorSnapshot(options.inspector.snapshot()) : null;
     throw new HostBindingError("HOST_BINDING_UNEXPECTED_FAILURE", "RED", observation);
+  }
+}
+export async function finalizeHostBinding(options) { return await finalizeHostBindingWithEnvironmentAuthority(options); }
+
+export function buildHostBindingReattemptOutputFrames({ frozen, legacy, checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256, attemptId }) {
+  const authority = Object.freeze({
+    reattemptPacketSha256: frozen.reattemptPacketSha256,
+    reattemptOwnerReviewSha256: frozen.reattemptOwnerReviewSha256,
+    approvedProposalHead: frozen.approvedProposalHead,
+    approvedProposalTree: frozen.approvedProposalTree,
+    hostBindingAttemptGrant: "APPROVED_ONCE",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+  });
+  const closedCounters = Object.freeze({
+    dockerReadOnlyCliCalls: 3,
+    localDockerUnixSocketRequests: 2,
+    macosReadOnlyInspectionCalls: 9,
+    dockerMutationCalls: 0,
+    credentialsRead: 0,
+    realPhysicalEffects: 0,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    signingCalls: 0,
+    keychainCalls: 0,
+    localAuthenticationCalls: 0,
+    retryExecutions: 0,
+    providerCalls: 0,
+    externalRuntimeNetworkCalls: 0,
+  });
+  let capsuleBytes = null;
+  let publicReceiptBytes = null;
+  let transferred = false;
+  try {
+    const capsule = deepFreezeJson({
+      schemaVersion: "r4_gate_b_host_binding_reattempt_capsule.v2",
+      reattemptRunId: frozen.reattemptRunId,
+      attemptId,
+      attemptOrdinal: 2,
+      cumulativeHostBindingAttemptCeiling: 2,
+      hostBindingId: legacy.hostBindingId,
+      privateSalt: legacy.capsule.privateSalt,
+      createdAt: legacy.capsule.createdAt,
+      expiresAt: legacy.capsule.expiresAt,
+      implementationHead: frozen.implementationHead,
+      implementationTree: frozen.implementationTree,
+      checkpointSha256,
+      activationCardSha256,
+      activationGrantSha256,
+      consumedAttemptTombstoneSha256,
+      runtimeDependencyAggregateSha256: frozen.runtimeDependencyAggregateSha256,
+      authority,
+      boundFiles: legacy.capsule.boundFiles,
+      docker: legacy.capsule.docker,
+      macos: legacy.capsule.macos,
+      closedCounters,
+      invalidationRules: HOST_BINDING_INVALIDATION_RULES,
+    });
+    capsuleBytes = Buffer.from(`${canonicalJson(capsule)}\n`, "utf8");
+    const capsuleSha256 = sha256(capsuleBytes);
+    const publicReceipt = deepFreezeJson({
+      schemaVersion: "r4_gate_b_host_binding_reattempt_public_receipt.v2",
+      reattemptRunId: frozen.reattemptRunId,
+      attemptId,
+      attemptOrdinal: 2,
+      cumulativeHostBindingAttemptCeiling: 2,
+      hostBindingId: legacy.hostBindingId,
+      hostBindingCapsuleSha256: capsuleSha256,
+      consumedAttemptTombstoneSha256,
+      createdAt: legacy.publicReceipt.createdAt,
+      expiresAt: legacy.publicReceipt.expiresAt,
+      implementationHead: frozen.implementationHead,
+      implementationTree: frozen.implementationTree,
+      checkpointSha256,
+      activationCardSha256,
+      activationGrantSha256,
+      runtimeDependencyAggregateSha256: frozen.runtimeDependencyAggregateSha256,
+      platform: legacy.publicReceipt.platform,
+      tools: legacy.publicReceipt.tools,
+      docker: legacy.publicReceipt.docker,
+      closedBoundaries: Object.freeze({ pathsWithheld: true, accountIdentityWithheld: true, ...closedCounters }),
+      hostBindingAttemptGrant: "APPROVED_ONCE",
+      retryExecutionGrant: "NOT_REQUESTED",
+      firstProviderCallGrant: "NOT_REQUESTED",
+      status: "HOST_BOUND_YELLOW",
+      aggregateVerdict: "YELLOW",
+    });
+    publicReceiptBytes = Buffer.from(`${canonicalJson(publicReceipt)}\n`, "utf8");
+    const publicReceiptSha256 = sha256(publicReceiptBytes);
+    validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json", capsule, "HOST_BINDING_REATTEMPT_CAPSULE_SCHEMA_INVALID");
+    validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json", publicReceipt, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_SCHEMA_INVALID");
+    transferred = true;
+    return Object.freeze({ capsule, capsuleBytes, capsuleSha256, publicReceipt, publicReceiptBytes, publicReceiptSha256, hostBindingId: legacy.hostBindingId, expiresAt: capsule.expiresAt });
+  } finally {
+    if (!transferred) {
+      capsuleBytes?.fill(0);
+      publicReceiptBytes?.fill(0);
+    }
+  }
+}
+
+export async function finalizeHostBindingReattempt({
+  repositoryRoot,
+  reattemptRoot,
+  checkpoint,
+  checkpointSha256,
+  activationCardSha256,
+  activationGrantSha256,
+  consumedAttemptTombstoneSha256,
+  attemptId,
+  ownerInput,
+  inspector,
+  now = () => new Date(),
+  randomBytes = crypto.randomBytes,
+}) {
+  const frozen = assertHostBindingReattemptCheckpoint(checkpoint);
+  for (const value of [checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256]) if (!SHA.test(value)) fail("HOST_BINDING_REATTEMPT_FINALIZATION_HASH_INVALID", "RED");
+  if (!ID.test(attemptId)) fail("HOST_BINDING_REATTEMPT_ATTEMPT_ID_INVALID", "RED");
+  if (sha256(Buffer.from(`${canonicalJson(frozen)}\n`, "utf8")) !== checkpointSha256) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_HASH_MISMATCH", "RED");
+  if (deriveHostBindingReattemptAttemptId({ reattemptPacketSha256: frozen.reattemptPacketSha256, reattemptOwnerReviewSha256: frozen.reattemptOwnerReviewSha256, approvedProposalHead: frozen.approvedProposalHead, implementationHead: frozen.implementationHead, checkpointSha256 }) !== attemptId) fail("HOST_BINDING_REATTEMPT_ATTEMPT_ID_MISMATCH", "RED");
+  assertHostBindingReattemptActivationGrantHash({ activationCardSha256, checkpointSha256, implementationHead: frozen.implementationHead, implementationTree: frozen.implementationTree }, activationGrantSha256);
+  exactKeys(ownerInput, INPUT_KEYS, "HOST_BINDING_INPUT_SHAPE");
+  if (ownerInput.schemaVersion !== "r4_gate_b_host_binding_reattempt_input.v2") fail("HOST_BINDING_INPUT_VERSION");
+  validateTrackedSchema("schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json", ownerInput, "HOST_BINDING_REATTEMPT_INPUT_SCHEMA_INVALID");
+  const legacy = await finalizeHostBindingWithEnvironmentAuthority(
+    { repositoryRoot, constructionRoot: reattemptRoot, checkpoint: legacyCheckpointViewOfReattempt(frozen), ownerInput, inspector, now, randomBytes },
+    Object.freeze({ reattemptRunId: frozen.reattemptRunId }),
+  );
+  try {
+    return buildHostBindingReattemptOutputFrames({ frozen, legacy, checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256, attemptId });
+  } finally {
+    legacy.capsuleBytes.fill(0);
+    legacy.publicReceiptBytes.fill(0);
   }
 }
 
@@ -1067,13 +1602,15 @@ export function readAndRevalidateHostBindingCapsule({ capsulePath, expectedHostB
   }
 }
 
-export function privateWriteTemporaryPath(target) {
+export function privateWriteTemporaryPath(target, temporaryRunId = HOST_BINDING_AUTHORITY.constructionRunId) {
   const exact = assertAbsoluteLiteral(target, "PRIVATE_WRITE_TARGET_INVALID");
-  return path.join(path.dirname(exact), `.${path.basename(exact)}.${HOST_BINDING_AUTHORITY.constructionRunId}.tmp`);
+  if (!ID.test(temporaryRunId)) fail("PRIVATE_WRITE_TEMPORARY_RUN_ID_INVALID", "RED");
+  return path.join(path.dirname(exact), `.${path.basename(exact)}.${temporaryRunId}.tmp`);
 }
 
 export function atomicWritePrivateFile(target, bytes, mode = 0o600, {
   anchor = REPOSITORY_ROOT,
+  temporaryRunId = HOST_BINDING_AUTHORITY.constructionRunId,
   onTemporaryDurable = null,
   onLinkDurable = null,
   onPublishedDurable = null,
@@ -1098,7 +1635,7 @@ export function atomicWritePrivateFile(target, bytes, mode = 0o600, {
     }
   };
   requireFinalAbsent();
-  const temp = privateWriteTemporaryPath(exact);
+  const temp = privateWriteTemporaryPath(exact, temporaryRunId);
   const parentBefore = fs.lstatSync(parent);
   const parentFd = fs.openSync(parent, fs.constants.O_RDONLY | (fs.constants.O_DIRECTORY ?? 0) | (fs.constants.O_NOFOLLOW ?? 0));
   const parentOpened = fs.fstatSync(parentFd);

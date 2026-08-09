@@ -12,35 +12,49 @@ import {
   PhysicalRunnerError,
   cleanupConstruction,
   cleanupCoreRetry,
+  cleanupHostBindingReattempt,
   cleanupMacOSResourcesFromJournal,
   cleanupPostgresResources,
   closeExactOwnedRootAuthority,
   constructPhysicalAdapters,
   createCheckpointOwnershipJournal,
   createConstructionJournal,
+  createHostBindingReattemptCheckpointClaim,
+  createHostBindingReattemptJournal,
+  createPermanentHostBindingReattemptConsumedAttempt,
   createRetryJournal,
   exerciseBlockedStartProtocolForConstruction,
   exerciseConstructionPublicationProtocolForConstruction,
   exerciseCheckpointPublicationProtocolForConstruction,
   exerciseMacOSDirectStartProtocolForConstruction,
   executePostgresLane,
+  finalizeHostBindingReattemptOnce,
   finalizeFailedCheckpointWriterRoot,
+  deriveHostBindingReattemptRunId,
+  createHostBindingReattemptActivationCard,
+  HOST_BINDING_REATTEMPT_AUTHORITY,
+  HOST_BINDING_REATTEMPT_WORKSET,
   openAuthenticatedConstructionJournalForAppend,
   openAuthenticatedRetryJournalForAppend,
   openExactOwnedRootAuthority,
   PHYSICAL_RUNNER_OFFLINE_MUTATION_TEST_HOOKS,
   normalizeFinalConstructionCheckpointInputs,
   parsePhysicalRunnerArguments,
+  physicalRunnerDirectErrorBody,
   readConstructionJournalForCleanup,
+  readHostBindingReattemptCheckpointClaimForCleanup,
+  readHostBindingReattemptConsumedAttempt,
   readCheckpoint,
   removeEmptyAuthenticatedRetryJournalRoot,
   removeExactOwnedRootTree,
   resolvePostgresContainerIdentityStep,
   RETRY_CLEANUP_ABSENCE_MARKERS,
   reconcileCheckpointOwnershipJournalForCleanup,
+  reconcileHostBindingReattemptCheckpointClaimForCleanup,
   selectPhysicalRunnerTerminalError,
   stageRuntimeDependencies,
   preparePhaseBHostBindingPreInput,
+  prepareHostBindingReattempt,
   validateConstructionJournalForCleanup,
   validateDockerExactNameAbsent,
   validateRetryJournalForCleanup,
@@ -64,7 +78,11 @@ import {
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 } from "../../scripts/r4-gate-b-physical-port.mjs";
 import {
+  HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS,
   atomicWritePrivateFile,
+  buildHostBindingReattemptOutputFrames,
+  hostBindingReattemptEnvironmentDirectoryIdentitySha256,
+  hostBindingReattemptEnvironmentDirectoryIntentSha256,
   runtimeDependencyInventory,
   runtimeDependencyLogicalName,
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
@@ -72,6 +90,21 @@ import {
 
 const root = path.resolve(import.meta.dirname, "../..");
 const hashFrame = (value: string) => `sha256:${createHash("sha256").update(value, "utf8").digest("hex")}`;
+const syntheticHostBindingReattemptOutput = ({ checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256, attemptId, hostBindingId = "c".repeat(32) }: { checkpoint: Record<string, any>; checkpointSha256: string; activationCardSha256: string; activationGrantSha256: string; consumedAttemptTombstoneSha256: string; attemptId: string; hostBindingId?: string }) => {
+  const digest = (value: string) => hashFrame(`synthetic-reattempt:${value}\n`);
+  const identity = (index: number) => Object.freeze({ logicalName: `tool-${index}`, path: `/synthetic/tool-${index}`, sha256: digest(`tool-${index}`), size: 1, mode: 0o755, uid: 501, gid: 20, device: "1", inode: String(index + 1), nlink: 1, mtimeMilliseconds: 1 });
+  const directoryIdentity = (directoryPath: string, inode: string) => Object.freeze({ path: directoryPath, size: 1, mode: 0o755, uid: 501, gid: 20, device: "1", inode, nlink: 2, mtimeMilliseconds: 1 });
+  const docker = Object.freeze({ cliPath: "/synthetic/docker", socketPath: "/synthetic/docker.sock", socketIdentity: Object.freeze({ size: 1, mode: 0o600, uid: 501, gid: 20, device: "1", inode: "30", nlink: 1, mtimeMilliseconds: 1 }), clientVersion: "28.3.2", clientApiVersion: "1.51", serverVersion: "28.3.2", serverApiVersion: "1.51", serverOs: "linux", serverArch: "arm64", imageReference: "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", repoDigest: "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74", localImageId: digest("image"), imageOs: "linux", imageArch: "arm64", imageSizeBytes: 1, unixSocketRequests: 2 });
+  const publicDocker = Object.freeze(Object.fromEntries(Object.entries(docker).filter(([key]) => !new Set(["cliPath", "socketPath", "socketIdentity", "imageReference", "unixSocketRequests"]).has(key))));
+  const macos = Object.freeze({ platform: "darwin-arm64", productVersion: "26.0", buildVersion: "26A1", architecture: "arm64", developerRoot: "/synthetic/developer", developerRootIdentity: directoryIdentity("/synthetic/developer", "31"), sdkPath: "/synthetic/developer/SDKs/MacOSX26.0.sdk", sdkPathIdentity: directoryIdentity("/synthetic/developer/SDKs/MacOSX26.0.sdk", "32"), sdkVersion: "26.0", swiftcPath: "/synthetic/developer/usr/bin/swiftc", swiftVersion: "Apple Swift version 6.2", opensslVersion: "LibreSSL 3.3.6", nodeVersion: process.version, readOnlyInspectionCalls: 9 });
+  const createdAt = "2026-08-09T12:00:00.000Z";
+  const expiresAt = "2026-08-12T12:00:00.000Z";
+  return buildHostBindingReattemptOutputFrames({
+    frozen: Object.freeze({ reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId, reattemptPacketSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256, reattemptOwnerReviewSha256: HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256, approvedProposalHead: HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead, approvedProposalTree: HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree, implementationHead: checkpoint.implementationHead, implementationTree: checkpoint.implementationTree, runtimeDependencyAggregateSha256: checkpoint.runtimeDependencyAggregateSha256 }),
+    legacy: Object.freeze({ hostBindingId, capsule: Object.freeze({ privateSalt: "d".repeat(64), createdAt, expiresAt, boundFiles: Object.freeze(Array.from({ length: 20 }, (_, index) => identity(index))), docker, macos }), publicReceipt: Object.freeze({ createdAt, expiresAt, platform: "darwin-arm64", tools: Object.freeze(Array.from({ length: 12 }, (_, index) => Object.freeze({ logicalName: `tool-${index}`, version: "byte-bound", sha256: digest(`public-tool-${index}`) }))), docker: publicDocker }) }),
+    checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256, attemptId,
+  });
+};
 const constructionRoot = path.join(root, ".forme/gate-b-physical-construction/79b7775defbdaf043697ef9b6d0ab45c");
 const isPostOutputAuthorityFailure = (error: unknown) => error instanceof Error
   && "code" in error
@@ -151,6 +184,20 @@ const assertNoEffectConstructionPlan = (records: readonly unknown[]) => {
     capsuleStageReady: false,
     receiptExpectedSha256: null,
     receiptStageReady: false,
+    capsuleRootIntent: false,
+    capsuleRootCreated: false,
+    capsuleRootIdentitySha256: null,
+    slotRootIntent: false,
+    slotRootObserved: false,
+    slotRootIdentitySha256: null,
+    environmentDirectoryPlans: HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.map((spec: Readonly<{ name: string; environmentKey: string; ownedResource: string }>) => ({
+      name: spec.name,
+      environmentKey: spec.environmentKey,
+      ownedResource: spec.ownedResource,
+      intentObserved: false,
+      createdObserved: false,
+      identitySha256: null,
+    })),
     removeOwnerInput: false,
     unstartedSupervisorStarts: [],
     unstartedDirectGateIntents: 0,
@@ -664,13 +711,1376 @@ test("owned-file rollback and blocked-slot recovery preserve same-UID replacemen
   } finally { fs.rmSync(parent, { recursive: true, force: true }); }
 });
 
-test("successor runner accepts only five frozen argument shapes", () => {
+test("successor runner accepts only the eight frozen v1/v2 argument shapes", () => {
   assert.deepEqual(parsePhysicalRunnerArguments(["construct-physical-adapters"]), { mode: "construct-physical-adapters" });
   assert.deepEqual(parsePhysicalRunnerArguments(["finalize-host-binding"]), { mode: "finalize-host-binding" });
   assert.deepEqual(parsePhysicalRunnerArguments(["cleanup-construction", "--construction-packet-sha", "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06"]), { mode: "cleanup-construction", constructionPacketSha256: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06" });
   const hash = `sha256:${"a".repeat(64)}`;
+  const receipt = Buffer.from(canonicalJson({ schemaVersion: "fixture" }), "utf8").toString("base64url");
+  assert.deepEqual(parsePhysicalRunnerArguments(["prepare-host-binding-reattempt", "--validation-receipt", receipt, "--authority-audit-receipt", receipt, "--host-audit-receipt", receipt]), { mode: "prepare-host-binding-reattempt", validationReceipt: receipt, authorityAuditReceipt: receipt, hostAuditReceipt: receipt });
+  assert.deepEqual(parsePhysicalRunnerArguments(["finalize-host-binding-reattempt", "--checkpoint-sha", hash, "--activation-card-sha", hash, "--activation-grant-sha", hash]), { mode: "finalize-host-binding-reattempt", checkpointSha256: hash, activationCardSha256: hash, activationGrantSha256: hash });
+  assert.deepEqual(parsePhysicalRunnerArguments(["cleanup-host-binding-reattempt", "--packet-sha", HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256]), { mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 });
   assert.deepEqual(parsePhysicalRunnerArguments(["execute-core-retry", "--manifest-sha", hash, "--execution-grant", hash, "--host-binding-id", "b".repeat(32)]), { mode: "execute-core-retry", manifestSha256: hash, executionGrantSha256: hash, hostBindingId: "b".repeat(32) });
-  for (const argv of [[], ["--help"], ["construct-physical-adapters", "extra"], ["execute-core-retry"], ["execute-core-retry", "--manifest-sha", hash, "--execution-grant", `sha256:${"b".repeat(64)}`, "--host-binding-id", "b".repeat(32)]]) assert.throws(() => parsePhysicalRunnerArguments(argv), /PHYSICAL_RUNNER_ARGUMENTS_DENIED/u);
+  for (const argv of [[], ["--help"], ["construct-physical-adapters", "extra"], ["prepare-host-binding-reattempt", "--validation-receipt", `${receipt}=`, "--authority-audit-receipt", receipt, "--host-audit-receipt", receipt], ["finalize-host-binding-reattempt", "--checkpoint-sha", hash, "--activation-card-sha", hash, "--activation-grant-sha", "invalid"], ["cleanup-host-binding-reattempt", "--packet-sha", `sha256:${"b".repeat(64)}`], ["execute-core-retry"], ["execute-core-retry", "--manifest-sha", hash, "--execution-grant", `sha256:${"b".repeat(64)}`, "--host-binding-id", "b".repeat(32)]]) assert.throws(() => parsePhysicalRunnerArguments(argv), /PHYSICAL_RUNNER_ARGUMENTS_DENIED/u);
+});
+
+test("direct runner errors emit an admitted v2 terminal frame exactly and retain the generic pre-admission envelope", () => {
+  const terminalResult = Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_terminal.v2", status: "RED_QUARANTINED", reasonCode: "FIXTURE" });
+  const admitted = new PhysicalRunnerError("HOST_BINDING_REATTEMPT_FIXTURE", "RED_QUARANTINED") as PhysicalRunnerError & { terminalResult: typeof terminalResult };
+  admitted.terminalResult = terminalResult;
+  assert.equal(physicalRunnerDirectErrorBody(admitted), terminalResult, "an admitted failure must not wrap or nest the canonical terminal frame");
+  assert.deepEqual(physicalRunnerDirectErrorBody(new PhysicalRunnerError("HOST_BINDING_REATTEMPT_PREADMISSION_FIXTURE", "RED")), {
+    schemaVersion: "r4_gate_b_physical_runner_error.v1",
+    code: "HOST_BINDING_REATTEMPT_PREADMISSION_FIXTURE",
+    verdict: "RED",
+  });
+  const source = fs.readFileSync(path.join(root, "scripts/r4-gate-b-physical-runner.mjs"), "utf8");
+  const directCatch = source.slice(source.indexOf("if (direct) {"));
+  assert.match(directCatch, /physicalRunnerDirectErrorBody\(error\)/u);
+  assert.match(directCatch, /process\.exitCode = 1/u);
+});
+
+test("reattempt authority derives the approved run id independently and freezes the exact 12-path workset", () => {
+  const preimage = `r4-gate-b-host-binding-reattempt-v2\n${HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256}\n${HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256}\n${HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead}\n${HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree}\n`;
+  const independentlyDerived = createHash("sha256").update(Buffer.from(preimage, "utf8")).digest("hex").slice(0, 32);
+  assert.equal(independentlyDerived, "5cf5b31b5adfceac7fda4d5319db8957");
+  assert.equal(deriveHostBindingReattemptRunId(HOST_BINDING_REATTEMPT_AUTHORITY), independentlyDerived);
+  assert.equal(HOST_BINDING_REATTEMPT_WORKSET.length, 12);
+  assert.deepEqual(HOST_BINDING_REATTEMPT_WORKSET.filter((entry: { status: string }) => entry.status === "A").map((entry: { path: string }) => entry.path).sort(), [
+    "schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json",
+  ]);
+  assert.equal(HOST_BINDING_REATTEMPT_WORKSET.filter((entry: { status: string }) => entry.status === "M").length, 7);
+  assert.deepEqual({ preparation: HOST_BINDING_REATTEMPT_AUTHORITY.preparationGrant, host: HOST_BINDING_REATTEMPT_AUTHORITY.hostBindingAttemptGrant, retry: HOST_BINDING_REATTEMPT_AUTHORITY.retryExecutionGrant, provider: HOST_BINDING_REATTEMPT_AUTHORITY.firstProviderCallGrant }, { preparation: "APPROVED", host: "NOT_REQUESTED", retry: "NOT_REQUESTED", provider: "NOT_REQUESTED" });
+});
+
+test("reattempt journal binds slot and Host environment directory identities in one exact order", () => {
+  const tombstoneSha256 = hashFrame("reattempt-owned-directory-tombstone\n");
+  const slotIntentSha256 = hashFrame("r4-gate-b-blocked-start-slot-root.v1\n");
+  let sequence = 0;
+  const record = (overrides: Record<string, unknown>) => Object.freeze({
+    schemaVersion: "r4_gate_b_physical_journal.v1", sequence: sequence++, previousRecordSha256: null, runId: HOST_BINDING_REATTEMPT_AUTHORITY.runId, manifestSha256: null,
+    hostBindingId: null, lane: "host-binding", event: "fixture", commandShapeSha256: null, processGroupId: null, ownedResources: Object.freeze([]), terminalCode: null, cleanupState: "required", ...overrides,
+  });
+  const prefix = [
+    record({ event: "input-open-intent", commandShapeSha256: tombstoneSha256, ownedResources: ["owner-input-envelope"] }),
+    record({ event: "intent:blocked-start-slot-root", commandShapeSha256: slotIntentSha256, ownedResources: ["blocked-start-slot-root"] }),
+    record({ event: "observed:blocked-start-slot-root", commandShapeSha256: hashFrame("slot-root-identity\n"), ownedResources: ["blocked-start-slot-root"], terminalCode: "CREATED" }),
+  ];
+  for (const spec of HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS) {
+    prefix.push(record({ event: `environment-directory-create-intent:${spec.name}`, commandShapeSha256: hostBindingReattemptEnvironmentDirectoryIntentSha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, spec.name), ownedResources: [spec.ownedResource] }));
+    prefix.push(record({ event: `environment-directory-created:${spec.name}`, commandShapeSha256: hashFrame(`environment-directory-identity:${spec.name}\n`), ownedResources: [spec.ownedResource], terminalCode: "CREATED" }));
+  }
+  prefix.push(record({ event: "intent:docker-client-version", commandShapeSha256: hashFrame("docker-client-intent\n"), ownedResources: ["inspector-process-group"] }));
+  const options = { inputOpenCommandFrame: "fixed-owner-input-open-v2\n", inputOpenCommandShapeSha256: tombstoneSha256, publicationTerminalCode: "HOST_BOUND_YELLOW", capsuleRootIdentityRequired: true, ownedDirectoryIdentityRequired: true };
+  const plan = validateConstructionJournalForCleanup(prefix, options);
+  assert.equal(plan.slotRootObserved, true);
+  assert.equal(plan.slotRootIdentitySha256, hashFrame("slot-root-identity\n"));
+  assert.deepEqual(plan.environmentDirectoryPlans.map((entry: { name: string; intentObserved: boolean; createdObserved: boolean; identitySha256: string }) => ({ name: entry.name, intent: entry.intentObserved, created: entry.createdObserved, identity: entry.identitySha256 })), HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.map((spec: { name: string }) => ({ name: spec.name, intent: true, created: true, identity: hashFrame(`environment-directory-identity:${spec.name}\n`) })));
+
+  const swapped = [...prefix];
+  [swapped[3], swapped[5]] = [swapped[5]!, swapped[3]!];
+  assert.throws(() => validateConstructionJournalForCleanup(swapped, options), /CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_ORDER_INVALID/u);
+  assert.throws(() => validateConstructionJournalForCleanup(prefix.slice(0, 4).concat(prefix.at(-1)!), options), /CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_PAIR_INTERRUPTED/u);
+  const legacyPrefix = [prefix[0]!, prefix[1]!, Object.freeze({ ...prefix[2]!, commandShapeSha256: slotIntentSha256 })];
+  assert.doesNotThrow(() => validateConstructionJournalForCleanup(legacyPrefix, { ...options, ownedDirectoryIdentityRequired: false }));
+});
+
+test("Gate P preparation has a source-closed boundary with no Host input capability", () => {
+  const source = fs.readFileSync(path.join(root, "scripts/r4-gate-b-physical-runner.mjs"), "utf8");
+  const start = source.indexOf("const HOST_BINDING_REATTEMPT_NO_INPUT_SENTINEL");
+  const end = source.indexOf("\nfunction hostBindingReattemptJournalRecord", start);
+  assert.ok(start >= 0 && end > start);
+  const preparationBoundary = source.slice(start, end);
+  for (const forbidden of ["REATTEMPT_INPUT_PATH", "readAndConsumeHostBindingReattemptInput", "removeHostBindingInputEnvelope", "proveHostBindingReattemptInputAbsent"]) assert.equal(preparationBoundary.includes(forbidden), false, `Gate P preparation must not reference ${forbidden}`);
+  const signature = preparationBoundary.slice(preparationBoundary.indexOf("export function prepareHostBindingReattempt"), preparationBoundary.indexOf("} = {}) {", preparationBoundary.indexOf("export function prepareHostBindingReattempt")));
+  for (const forbiddenOption of ["inputPath", "inputReader", "inputConsumer", "inputRemover", "inputAbsenceProver"]) assert.equal(signature.includes(forbiddenOption), false, `Gate P options must not expose ${forbiddenOption}`);
+  const finalizeStart = source.indexOf("export async function finalizeHostBindingReattemptOnce");
+  const finalizeAdmissionEnd = source.indexOf("rejectHostBindingReattemptTombstoneCollision(consumedAttemptPath);", finalizeStart);
+  assert.ok(finalizeStart >= 0 && finalizeAdmissionEnd > finalizeStart);
+  const finalizeAdmission = source.slice(finalizeStart, finalizeAdmissionEnd);
+  assert.match(finalizeAdmission, /now = hostBindingReattemptNow/u);
+  assert.match(finalizeAdmission, /now !== hostBindingReattemptNow/u, "production admission must reject an injected clock before any tombstone or Host input access");
+});
+
+test("Gate P reattempt preparation publishes only an authenticated checkpoint and never touches the Host input port", async () => {
+  const fixtureParent = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-reattempt-prepare-")));
+  fs.chmodSync(fixtureParent, 0o700);
+  const implementationHead = "a".repeat(40);
+  const implementationTree = "b".repeat(40);
+  const validationAggregateSha256 = hashFrame("reattempt-validation\n");
+  const encode = (value: unknown) => Buffer.from(canonicalJson(value), "utf8").toString("base64url");
+  const validationReceipt = encode({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_validation_receipt.v2", implementationHead, implementationTree, status: "PASS", validationAggregateSha256,
+    hostBindingInputAccessed: false, hostBindingInputPresenceObserved: false, dockerReadOnlyCliCalls: 0, localDockerUnixSocketRequests: 0, macosReadOnlyInspectionCalls: 0, realPhysicalEffects: 0, retryExecutions: 0, providerCalls: 0,
+  });
+  const auditReceipt = (auditClass: string) => encode({ schemaVersion: "r4_gate_b_host_binding_reattempt_audit_receipt.v2", auditClass, implementationHead, implementationTree, status: "PASS", findingsCount: 0, blockerCount: 0, importantCount: 0, summarySha256: hashFrame(`${auditClass}\n`) });
+  const input = Object.freeze({ mode: "prepare-host-binding-reattempt", validationReceipt, authorityAuditReceipt: auditReceipt("authority-checkpoint-journal-cleanup"), hostAuditReceipt: auditReceipt("host-admission-counters-zeroization-publication") });
+  const runtime = runtimeDependencyInventory(root);
+  const authority = Object.freeze({ implementationHead, implementationTree, changedPathCount: 12, worksetAggregateSha256: hashFrame("prefixed-workset-lines\n") });
+  const hashFile = (relativePath: string) => `sha256:${createHash("sha256").update(fs.readFileSync(path.join(root, relativePath))).digest("hex")}`;
+  const counters = { directoryListCalls: 0, statCalls: 0, openCalls: 0, readCalls: 0, removeCalls: 0, presenceObservations: 0 };
+  let sentinelSnapshots = 0;
+  const inputAccessSentinel = Object.freeze({ snapshot() { sentinelSnapshots += 1; return Object.freeze({ ...counters }); } });
+  const prepareAt = (name: string, overrides: Record<string, unknown> = {}) => {
+    const reattemptRoot = path.join(fixtureParent, name);
+    return Object.freeze({
+      reattemptRoot,
+      options: {
+        reattemptRoot,
+        rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+        consumedAttemptPath: path.join(fixtureParent, `${name}.consumed.json`),
+        publicReceiptPath: path.join(fixtureParent, `${name}.public.json`),
+        capsuleRoot: path.join(fixtureParent, `${name}.capsules`),
+        authorityVerifier: () => authority,
+        runtimeInventory: () => runtime,
+        hashFile,
+        activationCardFactory: createHostBindingReattemptActivationCard,
+        inputAccessSentinel,
+        ...overrides,
+      },
+    });
+  };
+  type FixtureJournal = { append(record: Record<string, unknown>): Promise<unknown> };
+  const appendEnvironmentDirectoryFixtures = async (journal: FixtureJournal, reattemptRoot: string) => {
+    for (const spec of HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS) {
+      await journal.append({ lane: "host-binding", event: `environment-directory-create-intent:${spec.name}`, commandShapeSha256: hostBindingReattemptEnvironmentDirectoryIntentSha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, spec.name), ownedResources: [spec.ownedResource], cleanupState: "required" });
+      const directory = path.join(reattemptRoot, spec.name);
+      fs.mkdirSync(directory, { mode: 0o700 });
+      await journal.append({ lane: "host-binding", event: `environment-directory-created:${spec.name}`, commandShapeSha256: hostBindingReattemptEnvironmentDirectoryIdentitySha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, spec.name, fs.lstatSync(directory)), ownedResources: [spec.ownedResource], terminalCode: "CREATED", cleanupState: "required" });
+    }
+  };
+  try {
+    const green = prepareAt("green");
+    const card = prepareHostBindingReattempt(input, green.options);
+    assert.equal(card.schemaVersion, "r4_gate_b_host_binding_activation_card.v2");
+    assert.equal(card.status, "WAITING_OWNER_ACTIVATION");
+    assert.equal(card.hostBindingInputAccessed, false);
+    assert.equal(card.hostBindingInputPresenceObserved, false);
+    assert.deepEqual(fs.readdirSync(green.reattemptRoot), ["checkpoint.v2.json"]);
+    const checkpointBytes = fs.readFileSync(path.join(green.reattemptRoot, "checkpoint.v2.json"));
+    assert.equal(card.checkpointSha256, `sha256:${createHash("sha256").update(checkpointBytes).digest("hex")}`);
+    assert.equal(checkpointBytes.at(-1), 0x0a);
+    checkpointBytes.fill(0);
+    assert.deepEqual(counters, { directoryListCalls: 0, statCalls: 0, openCalls: 0, readCalls: 0, removeCalls: 0, presenceObservations: 0 });
+    assert.ok(sentinelSnapshots >= 2);
+
+    const cardFault = prepareAt("card-fault", { activationCardFactory: () => { throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CARD_FIXTURE_FAULT", "RED"); } });
+    assert.throws(() => prepareHostBindingReattempt(input, cardFault.options), /HOST_BINDING_REATTEMPT_CARD_FIXTURE_FAULT/u);
+    assert.equal(fs.existsSync(cardFault.reattemptRoot), false, "a deterministic Card fault before claim commit must remove the exact checkpoint, claim and root");
+
+    const hookNames = ["onTemporaryDurable", "onLinkDurable", "onPublishedDurable"] as const;
+    for (const hookName of hookNames) {
+      const checkpointWriter = (target: string, bytes: Buffer, mode: number, options: Record<string, unknown>) => atomicWritePrivateFile(target, bytes, mode, {
+        ...options,
+        [hookName](publication: unknown) {
+          (options[hookName] as (value: unknown) => void)(publication);
+          throw new PhysicalRunnerError(`HOST_BINDING_REATTEMPT_${hookName.toUpperCase()}_FIXTURE_FAULT`, "RED");
+        },
+      });
+      const fault = prepareAt(`hook-${hookName}`, { checkpointWriter });
+      assert.throws(() => prepareHostBindingReattempt(input, fault.options), new RegExp(`HOST_BINDING_REATTEMPT_${hookName.toUpperCase()}_FIXTURE_FAULT`, "u"));
+      assert.equal(fs.existsSync(fault.reattemptRoot), false, `${hookName} pre-commit fault must roll back the exact root`);
+    }
+
+    const mutableFs = fs as typeof fs & { writeSync: typeof fs.writeSync; fsyncSync: typeof fs.fsyncSync; unlinkSync: typeof fs.unlinkSync; rmdirSync: typeof fs.rmdirSync; closeSync: typeof fs.closeSync; linkSync: typeof fs.linkSync };
+    const factoryFaults = [
+      {
+        name: "claim-partial-write",
+        factory(args: Parameters<typeof createHostBindingReattemptCheckpointClaim>[0]) {
+          const original = mutableFs.writeSync;
+          let calls = 0;
+          mutableFs.writeSync = ((...writeArgs: Parameters<typeof fs.writeSync>) => {
+            calls += 1;
+            if (calls === 1) return Math.max(1, Math.floor(Number(writeArgs[3]) / 2));
+            throw new Error("CLAIM_PARTIAL_WRITE_FIXTURE_FAULT");
+          }) as typeof fs.writeSync;
+          try { return createHostBindingReattemptCheckpointClaim(args); } finally { mutableFs.writeSync = original; }
+        },
+      },
+      {
+        name: "claim-append-fsync",
+        factory(args: Parameters<typeof createHostBindingReattemptCheckpointClaim>[0]) {
+          const original = mutableFs.fsyncSync;
+          let calls = 0;
+          mutableFs.fsyncSync = ((fd: number) => { calls += 1; if (calls === 3) throw new Error("CLAIM_APPEND_FSYNC_FIXTURE_FAULT"); return original(fd); }) as typeof fs.fsyncSync;
+          try { return createHostBindingReattemptCheckpointClaim(args); } finally { mutableFs.fsyncSync = original; }
+        },
+      },
+    ];
+    for (const faultCase of factoryFaults) {
+      const fault = prepareAt(faultCase.name, { checkpointClaimFactory: faultCase.factory });
+      assert.throws(() => prepareHostBindingReattempt(input, fault.options));
+      assert.equal(fs.existsSync(fault.reattemptRoot), false, `${faultCase.name} must leave no Gate-P root before commitStarted`);
+    }
+
+    const commitFaultFactory = (kind: "unlink" | "root-fsync" | "fd-close") => (args: Parameters<typeof createHostBindingReattemptCheckpointClaim>[0]) => {
+      const claim = createHostBindingReattemptCheckpointClaim(args);
+      return Object.freeze({
+        ...claim,
+        commit() {
+          const originalUnlink = mutableFs.unlinkSync;
+          const originalFsync = mutableFs.fsyncSync;
+          const originalClose = mutableFs.closeSync;
+          let closeCalls = 0;
+          if (kind === "unlink") mutableFs.unlinkSync = ((candidate: fs.PathLike) => { if (candidate === claim.path) throw new Error("CLAIM_COMMIT_UNLINK_FIXTURE_FAULT"); return originalUnlink(candidate); }) as typeof fs.unlinkSync;
+          if (kind === "root-fsync") mutableFs.fsyncSync = ((fd: number) => { if (fd === args.rootAuthority.rootFd) throw new Error("CLAIM_COMMIT_ROOT_FSYNC_FIXTURE_FAULT"); return originalFsync(fd); }) as typeof fs.fsyncSync;
+          if (kind === "fd-close") mutableFs.closeSync = ((fd: number) => { closeCalls += 1; if (closeCalls === 1) throw new Error("CLAIM_COMMIT_CLOSE_FIXTURE_FAULT"); return originalClose(fd); }) as typeof fs.closeSync;
+          try { return claim.commit(); }
+          finally { mutableFs.unlinkSync = originalUnlink; mutableFs.fsyncSync = originalFsync; mutableFs.closeSync = originalClose; }
+        },
+      });
+    };
+    for (const kind of ["unlink", "root-fsync", "fd-close"] as const) {
+      const fault = prepareAt(`commit-${kind}`, { checkpointClaimFactory: commitFaultFactory(kind) });
+      assert.throws(() => prepareHostBindingReattempt(input, fault.options), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED");
+      assert.equal(fs.existsSync(fault.reattemptRoot), true, `${kind} uncertainty after commitStarted must preserve the authenticated root`);
+      if (kind === "unlink") {
+        const authorityForRecovery = openExactOwnedRootAuthority({ root: fault.reattemptRoot, anchor: CANONICAL_SYSTEM_TEMP_ROOT, codePrefix: "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_TEST" });
+        const authenticated = readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority: authorityForRecovery });
+        assert.deepEqual(reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: authorityForRecovery }), { rootAbsent: true, claimRecovered: true });
+      }
+    }
+
+    const claimTailIdentity = (stat: fs.Stats) => Object.freeze({ size: stat.size, mode: stat.mode & 0o7777, uid: stat.uid, gid: stat.gid, device: String(stat.dev), inode: String(stat.ino), nlink: stat.nlink, mtimeMilliseconds: Math.trunc(stat.mtimeMs) });
+    const claimTailBytes = Buffer.from("host-binding-reattempt-claim-tail\n", "utf8");
+    const claimTailSha256 = hashFrame("host-binding-reattempt-claim-tail\n");
+    const buildClaimTail = (name: string, phase: 2 | 3 | 4) => {
+      const reattemptRoot = path.join(fixtureParent, name);
+      fs.mkdirSync(reattemptRoot, { mode: 0o700 });
+      const rootAuthority = openExactOwnedRootAuthority({ root: reattemptRoot, anchor: CANONICAL_SYSTEM_TEMP_ROOT, codePrefix: "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_TAIL_TEST" });
+      const checkpointPath = path.join(reattemptRoot, "checkpoint.v2.json");
+      const temporaryPath = path.join(reattemptRoot, `.checkpoint.v2.json.${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.tmp`);
+      const claim = createHostBindingReattemptCheckpointClaim({ rootAuthority, checkpointPath, checkpointSha256: claimTailSha256 });
+      fs.writeFileSync(temporaryPath, claimTailBytes, { flag: "wx", mode: 0o600 });
+      const temporaryFd = fs.openSync(temporaryPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+      try { fs.fsyncSync(temporaryFd); } finally { fs.closeSync(temporaryFd); }
+      claim.onTemporaryDurable(Object.freeze({ sha256: claimTailSha256, identity: claimTailIdentity(fs.lstatSync(temporaryPath)) }));
+      if (phase >= 3) {
+        fs.linkSync(temporaryPath, checkpointPath);
+        fs.fsyncSync(rootAuthority.rootFd);
+        claim.onLinkDurable(Object.freeze({ sha256: claimTailSha256, identity: claimTailIdentity(fs.lstatSync(checkpointPath)) }));
+      }
+      if (phase === 4) {
+        fs.unlinkSync(temporaryPath);
+        fs.fsyncSync(rootAuthority.rootFd);
+        claim.onPublishedDurable(Object.freeze({ sha256: claimTailSha256, identity: claimTailIdentity(fs.lstatSync(checkpointPath)) }));
+      }
+      return Object.freeze({ reattemptRoot, rootAuthority, checkpointPath, temporaryPath, claim });
+    };
+    try {
+      for (const phase of [2, 3, 4] as const) {
+        const claimTail = buildClaimTail(`claim-only-tail-records-${phase}`, phase);
+        try {
+          for (const alias of [claimTail.temporaryPath, claimTail.checkpointPath]) if (fs.existsSync(alias)) fs.unlinkSync(alias);
+          claimTail.claim.closeForRecovery();
+          let authenticated = readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority: claimTail.rootAuthority });
+          if (phase === 2) {
+            const originalLstat = fs.lstatSync;
+            (fs as typeof fs & { lstatSync: typeof fs.lstatSync }).lstatSync = ((candidate: fs.PathLike, options?: fs.StatOptions) => {
+              if (String(candidate) === claimTail.checkpointPath) throw Object.assign(new Error("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_UNKNOWN_FIXTURE"), { code: "EIO" });
+              return originalLstat(candidate, options as never);
+            }) as typeof fs.lstatSync;
+            try {
+              assert.throws(() => reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: claimTail.rootAuthority }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FINAL_UNREADABLE" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+            } finally { (fs as typeof fs & { lstatSync: typeof fs.lstatSync }).lstatSync = originalLstat; }
+            assert.deepEqual(fs.readdirSync(claimTail.reattemptRoot), ["checkpoint-claim.v2.jsonl"], "an unknown alias observation must preserve the exact claim-only root");
+          }
+          if (phase === 3) {
+            const originalFsync = mutableFs.fsyncSync;
+            let aliasAbsenceFsyncFault = false;
+            mutableFs.fsyncSync = ((fd: number) => {
+              if (!aliasAbsenceFsyncFault && fd === claimTail.rootAuthority.rootFd) { aliasAbsenceFsyncFault = true; throw new Error("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_ABSENCE_FSYNC_FIXTURE"); }
+              return originalFsync(fd);
+            }) as typeof fs.fsyncSync;
+            try {
+              assert.throws(() => reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: claimTail.rootAuthority }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_UNCERTAIN" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+            } finally { mutableFs.fsyncSync = originalFsync; }
+            assert.equal(aliasAbsenceFsyncFault, true);
+            assert.deepEqual(fs.readdirSync(claimTail.reattemptRoot), ["checkpoint-claim.v2.jsonl"], "a fault after the last alias unlink must retain the exact claim until alias absence is durable");
+            authenticated = readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority: claimTail.rootAuthority });
+          }
+          assert.deepEqual(reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: claimTail.rootAuthority }), { rootAbsent: true, claimRecovered: true });
+          assert.equal(fs.existsSync(claimTail.reattemptRoot), false, `records=${phase} claim-only cleanup tail must be idempotently removable`);
+        } finally {
+          closeExactOwnedRootAuthority(claimTail.rootAuthority);
+          fs.rmSync(claimTail.reattemptRoot, { recursive: true, force: true });
+        }
+      }
+
+      const replacementTail = buildClaimTail("claim-only-tail-replacement", 4);
+      try {
+        fs.unlinkSync(replacementTail.checkpointPath);
+        fs.writeFileSync(replacementTail.checkpointPath, claimTailBytes, { flag: "wx", mode: 0o600 });
+        replacementTail.claim.closeForRecovery();
+        const authenticated = readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority: replacementTail.rootAuthority });
+        assert.throws(() => reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: replacementTail.rootAuthority }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FILE_INVALID" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+        assert.equal(fs.readFileSync(replacementTail.checkpointPath).equals(claimTailBytes), true, "a replacement checkpoint alias must be preserved for quarantine");
+        assert.equal(fs.existsSync(path.join(replacementTail.reattemptRoot, "checkpoint-claim.v2.jsonl")), true);
+        fs.unlinkSync(replacementTail.checkpointPath);
+        assert.deepEqual(reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticated, rootAuthority: replacementTail.rootAuthority }), { rootAbsent: true, claimRecovered: true });
+      } finally {
+        closeExactOwnedRootAuthority(replacementTail.rootAuthority);
+        fs.rmSync(replacementTail.reattemptRoot, { recursive: true, force: true });
+      }
+    } finally { claimTailBytes.fill(0); }
+
+    const originalRollbackTailFsync = mutableFs.fsyncSync;
+    let rollbackTailRootFd: number | null = null;
+    let rollbackTailArmed = false;
+    let rollbackTailFsyncFault = false;
+    const rollbackTail = prepareAt("prepare-rollback-final-unlink-tail", {
+      activationCardFactory() { rollbackTailArmed = true; throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_ROLLBACK_TAIL_CARD_FIXTURE", "RED"); },
+      checkpointClaimFactory(args: Parameters<typeof createHostBindingReattemptCheckpointClaim>[0]) { rollbackTailRootFd = args.rootAuthority.rootFd; return createHostBindingReattemptCheckpointClaim(args); },
+    });
+    mutableFs.fsyncSync = ((fd: number) => {
+      if (rollbackTailArmed && fd === rollbackTailRootFd && !rollbackTailFsyncFault) { rollbackTailFsyncFault = true; throw new Error("HOST_BINDING_REATTEMPT_ROLLBACK_TAIL_ROOT_FSYNC_FIXTURE"); }
+      return originalRollbackTailFsync(fd);
+    }) as typeof fs.fsyncSync;
+    try {
+      assert.throws(() => prepareHostBindingReattempt(input, rollbackTail.options), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_ROLLBACK_TAIL_CARD_FIXTURE" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    } finally { mutableFs.fsyncSync = originalRollbackTailFsync; }
+    assert.equal(rollbackTailFsyncFault, true);
+    assert.deepEqual(fs.readdirSync(rollbackTail.reattemptRoot), ["checkpoint-claim.v2.jsonl"], "a rollback fault after final unlink must preserve the authenticated claim-only tail");
+    const recoveredRollbackTail = await cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      ...rollbackTail.options,
+      inputPath: path.join(fixtureParent, "prepare-rollback-tail-input-must-not-be-observed.json"),
+    });
+    assert.equal(recoveredRollbackTail.status, "GREEN");
+    assert.equal(recoveredRollbackTail.claimRecovered, true);
+    assert.equal(fs.existsSync(rollbackTail.reattemptRoot), false);
+
+    const admitted = prepareAt("admitted-yellow");
+    const activationCard = prepareHostBindingReattempt(input, admitted.options);
+    const activationCardSha256 = hashFrame(canonicalJson(activationCard));
+    const activationGrant = Object.freeze({
+      schemaVersion: "r4_gate_b_host_binding_activation_grant.v2",
+      activationCardSha256,
+      attemptOrdinal: 2,
+      checkpointSha256: activationCard.checkpointSha256,
+      firstProviderCallGrant: "NOT_REQUESTED",
+      hostBindingAttemptGrant: "APPROVED_ONCE",
+      hostBindingInputPreparedByOwner: true,
+      implementationHead,
+      implementationTree,
+      retryExecutionGrant: "NOT_REQUESTED",
+    });
+    const activationGrantSha256 = hashFrame(canonicalJson(activationGrant));
+    const neverOpenedInput = path.join(fixtureParent, "owner-input-never-created.json");
+    const inputConsumer = (_inputPath: string) => {
+      const error = new PhysicalRunnerError("HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY") as PhysicalRunnerError & { inputObservation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean } };
+      error.inputObservation = Object.freeze({ accessed: true, openCalls: 0, removedOrAbsent: true });
+      throw error;
+    };
+    const preAdmission = prepareAt("preadmission-grant-denied");
+    const preAdmissionCard = prepareHostBindingReattempt(input, preAdmission.options);
+    let preAdmissionInputCalls = 0;
+    let preAdmissionTombstoneCalls = 0;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: preAdmissionCard.checkpointSha256, activationCardSha256: hashFrame(canonicalJson(preAdmissionCard)), activationGrantSha256: `sha256:${"f".repeat(64)}` }, {
+      ...preAdmission.options,
+      inputPath: path.join(fixtureParent, "preadmission-input-must-not-be-observed.json"),
+      inputConsumer() { preAdmissionInputCalls += 1; throw new Error("PREADMISSION_INPUT_MUST_NOT_RUN"); },
+      tombstoneFactory(args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) { preAdmissionTombstoneCalls += 1; return createPermanentHostBindingReattemptConsumedAttempt(args); },
+      processPortFactory() { throw new Error("PREADMISSION_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("PREADMISSION_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("PREADMISSION_HOST_FINALIZER_MUST_NOT_RUN"); },
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_ACTIVATION_GRANT_HASH_MISMATCH" && (error as { terminalResult?: unknown }).terminalResult === undefined);
+    assert.equal(preAdmissionInputCalls, 0);
+    assert.equal(preAdmissionTombstoneCalls, 0);
+    assert.equal(fs.existsSync(preAdmission.options.consumedAttemptPath as string), false);
+    assert.equal(fs.existsSync(preAdmission.reattemptRoot), false);
+
+    for (const collisionKind of ["public-receipt", "capsule-root"] as const) {
+      const collision = prepareAt(`preadmission-${collisionKind}-collision`);
+      const collisionCard = prepareHostBindingReattempt(input, collision.options);
+      const collisionCardSha256 = hashFrame(canonicalJson(collisionCard));
+      const collisionGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: collisionCardSha256, checkpointSha256: collisionCard.checkpointSha256 }));
+      const publicReceiptPath = collision.options.publicReceiptPath as string;
+      const capsuleRoot = collision.options.capsuleRoot as string;
+      const sentinelPath = collisionKind === "public-receipt" ? publicReceiptPath : path.join(capsuleRoot, "owner-sentinel.txt");
+      if (collisionKind === "public-receipt") fs.writeFileSync(publicReceiptPath, "owner-public-receipt-collision\n", { flag: "wx", mode: 0o644 });
+      else {
+        fs.mkdirSync(capsuleRoot, { mode: 0o700 });
+        fs.writeFileSync(sentinelPath, "owner-capsule-root-collision\n", { flag: "wx", mode: 0o600 });
+      }
+      const sentinelBytes = fs.readFileSync(sentinelPath);
+      let tombstoneCalls = 0;
+      let inputCalls = 0;
+      let inspectorCalls = 0;
+      await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: collisionCard.checkpointSha256, activationCardSha256: collisionCardSha256, activationGrantSha256: collisionGrantSha256 }, {
+        ...collision.options,
+        inputPath: path.join(fixtureParent, `${collisionKind}-collision-input-must-not-be-observed.json`),
+        tombstoneFactory(args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) { tombstoneCalls += 1; return createPermanentHostBindingReattemptConsumedAttempt(args); },
+        inputConsumer() { inputCalls += 1; throw new Error("PREADMISSION_COLLISION_INPUT_MUST_NOT_RUN"); },
+        processPortFactory() { throw new Error("PREADMISSION_COLLISION_PROCESS_PORT_MUST_NOT_RUN"); },
+        inspectorFactory() { inspectorCalls += 1; throw new Error("PREADMISSION_COLLISION_INSPECTOR_MUST_NOT_RUN"); },
+        hostFinalizer() { throw new Error("PREADMISSION_COLLISION_HOST_FINALIZER_MUST_NOT_RUN"); },
+      }), (error: unknown) => error instanceof Error
+        && "code" in error
+        && error.code === (collisionKind === "public-receipt" ? "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PREEXISTS" : "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_PREEXISTS")
+        && (error as { terminalResult?: unknown }).terminalResult === undefined);
+      assert.equal(tombstoneCalls, 0, `${collisionKind} collision must stop before the permanent tombstone`);
+      assert.equal(inputCalls, 0, `${collisionKind} collision must stop before Host input access`);
+      assert.equal(inspectorCalls, 0, `${collisionKind} collision must stop before inspector construction`);
+      assert.equal(fs.existsSync(collision.options.consumedAttemptPath as string), false);
+      assert.equal(fs.existsSync(collision.reattemptRoot), false, `${collisionKind} collision must clean only the pre-admission checkpoint root`);
+      assert.equal(fs.readFileSync(sentinelPath).equals(sentinelBytes), true, `${collisionKind} collision bytes must be preserved`);
+      sentinelBytes.fill(0);
+    }
+
+    const unsafeReceiptParent = path.join(fixtureParent, "unsafe-public-receipt-parent");
+    fs.mkdirSync(unsafeReceiptParent, { mode: 0o700 });
+    fs.chmodSync(unsafeReceiptParent, 0o755);
+    const unsafeReceipt = prepareAt("unsafe-public-receipt-parent-admission", { publicReceiptPath: path.join(unsafeReceiptParent, "receipt.json") });
+    const unsafeReceiptCard = prepareHostBindingReattempt(input, unsafeReceipt.options);
+    const unsafeReceiptCardSha256 = hashFrame(canonicalJson(unsafeReceiptCard));
+    const unsafeReceiptGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: unsafeReceiptCardSha256, checkpointSha256: unsafeReceiptCard.checkpointSha256 }));
+    let unsafeReceiptTombstoneCalls = 0;
+    let unsafeReceiptInputCalls = 0;
+    let unsafeReceiptInspectorCalls = 0;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: unsafeReceiptCard.checkpointSha256, activationCardSha256: unsafeReceiptCardSha256, activationGrantSha256: unsafeReceiptGrantSha256 }, {
+      ...unsafeReceipt.options,
+      inputPath: path.join(fixtureParent, "unsafe-parent-input-must-not-be-observed.json"),
+      tombstoneFactory(args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) { unsafeReceiptTombstoneCalls += 1; return createPermanentHostBindingReattemptConsumedAttempt(args); },
+      inputConsumer() { unsafeReceiptInputCalls += 1; throw new Error("UNSAFE_PARENT_INPUT_MUST_NOT_RUN"); },
+      processPortFactory() { throw new Error("UNSAFE_PARENT_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { unsafeReceiptInspectorCalls += 1; throw new Error("UNSAFE_PARENT_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("UNSAFE_PARENT_HOST_FINALIZER_MUST_NOT_RUN"); },
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "OWNED_DIRECTORY_COMPONENT_UNSAFE" && (error as { terminalResult?: unknown }).terminalResult === undefined);
+    assert.equal(unsafeReceiptTombstoneCalls, 0, "an unsafe public-receipt parent must stop before the permanent tombstone");
+    assert.equal(unsafeReceiptInputCalls, 0, "an unsafe public-receipt parent must stop before Host input access");
+    assert.equal(unsafeReceiptInspectorCalls, 0, "an unsafe public-receipt parent must stop before inspector construction");
+    assert.equal(fs.existsSync(unsafeReceipt.options.consumedAttemptPath as string), false);
+    assert.equal(fs.existsSync(unsafeReceipt.reattemptRoot), false);
+
+    const foreignDomain = prepareAt("foreign-construction-journal-domain");
+    const foreignDomainCard = prepareHostBindingReattempt(input, foreignDomain.options);
+    const foreignDomainCardSha256 = hashFrame(canonicalJson(foreignDomainCard));
+    const foreignDomainGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: foreignDomainCardSha256, checkpointSha256: foreignDomainCard.checkpointSha256 }));
+    let foreignDomainStopCalls = 0;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: foreignDomainCard.checkpointSha256, activationCardSha256: foreignDomainCardSha256, activationGrantSha256: foreignDomainGrantSha256 }, {
+      ...foreignDomain.options,
+      inputPath: path.join(fixtureParent, "foreign-domain-input-never-created.json"),
+      journalFactory(rootAuthority: Parameters<typeof createHostBindingReattemptJournal>[0]) {
+        const journal = createHostBindingReattemptJournal(rootAuthority);
+        let domainPrimed = false;
+        return Object.freeze({
+          ...journal,
+          async append(partial: Record<string, unknown>) {
+            if (!domainPrimed) {
+              domainPrimed = true;
+              await journal.append({ lane: "construction", event: "fake-matrix-intent", commandShapeSha256: hashFrame("construction-fake-matrix-v1\n"), ownedResources: ["construction-run-root", "fake-process-groups"] });
+            }
+            return journal.append(partial);
+          },
+        });
+      },
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 0, removedOrAbsent: true }));
+        throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_FOREIGN_DOMAIN_FIXTURE", "YELLOW_NO_RETRY");
+      },
+      processPortFactory() { throw new Error("FOREIGN_DOMAIN_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("FOREIGN_DOMAIN_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("FOREIGN_DOMAIN_HOST_FINALIZER_MUST_NOT_RUN"); },
+      stopProcessGroup() { foreignDomainStopCalls += 1; return true; },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_FOREIGN_DOMAIN_FIXTURE" && "verdict" in error && error.verdict === "RED_QUARANTINED" && (error as { terminalResult?: { status?: string } }).terminalResult?.status === "RED_QUARANTINED");
+    assert.equal(foreignDomainStopCalls, 0, "a foreign-domain journal must be rejected before any process signaling");
+    assert.equal(fs.existsSync(foreignDomain.reattemptRoot), true, "a foreign-domain journal and checkpoint must be preserved for quarantine");
+    assert.equal(fs.existsSync(foreignDomain.options.consumedAttemptPath as string), true, "the permanent consumed-attempt tombstone must be preserved");
+    assert.deepEqual(fs.readdirSync(foreignDomain.reattemptRoot).sort(), ["checkpoint.v2.json", "journal.v2.jsonl"]);
+    await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      ...foreignDomain.options,
+      inputPath: path.join(fixtureParent, "foreign-domain-input-never-created.json"),
+      stopProcessGroup() { foreignDomainStopCalls += 1; return true; },
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_JOURNAL_DOMAIN_INVALID" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(foreignDomainStopCalls, 0, "standalone cleanup must reject a foreign-domain journal before any process signaling");
+    assert.deepEqual(fs.readdirSync(foreignDomain.reattemptRoot).sort(), ["checkpoint.v2.json", "journal.v2.jsonl"], "standalone cleanup must preserve the foreign journal and checkpoint");
+
+    const preCreateFault = prepareAt("tombstone-pre-create-open-fault");
+    const preCreateCard = prepareHostBindingReattempt(input, preCreateFault.options);
+    const preCreateCardSha256 = hashFrame(canonicalJson(preCreateCard));
+    const preCreateGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: preCreateCardSha256, checkpointSha256: preCreateCard.checkpointSha256 }));
+    let preCreateInputCalls = 0;
+    let preCreateTerminal: Record<string, unknown> | null = null;
+    const preCreateTombstoneFactory = (args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) => {
+      const originalOpen = fs.openSync;
+      const mutableOpen = fs as typeof fs & { openSync: typeof fs.openSync };
+      mutableOpen.openSync = ((candidate: fs.PathLike, flags: fs.OpenMode, mode?: fs.Mode) => {
+        if (String(candidate) === args.consumedAttemptPath && typeof flags === "number" && (flags & fs.constants.O_EXCL) !== 0) throw Object.assign(new Error("TOMBSTONE_PRE_CREATE_OPEN_FIXTURE_FAULT"), { code: "EIO" });
+        return originalOpen(candidate, flags, mode);
+      }) as typeof fs.openSync;
+      try { return createPermanentHostBindingReattemptConsumedAttempt(args); }
+      finally { mutableOpen.openSync = originalOpen; }
+    };
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: preCreateCard.checkpointSha256, activationCardSha256: preCreateCardSha256, activationGrantSha256: preCreateGrantSha256 }, {
+      ...preCreateFault.options,
+      inputPath: path.join(fixtureParent, "pre-create-input-must-not-be-observed.json"),
+      inputConsumer() { preCreateInputCalls += 1; throw new Error("PRE_CREATE_INPUT_MUST_NOT_RUN"); },
+      tombstoneFactory: preCreateTombstoneFactory,
+      processPortFactory() { throw new Error("PRE_CREATE_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("PRE_CREATE_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("PRE_CREATE_HOST_FINALIZER_MUST_NOT_RUN"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => {
+      preCreateTerminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+      return error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_TOMBSTONE_CREATE_FAILED";
+    });
+    assert.equal(preCreateInputCalls, 0);
+    assert.ok(preCreateTerminal !== null);
+    const observedPreCreateTerminal = preCreateTerminal as unknown as Record<string, unknown>;
+    assert.equal(observedPreCreateTerminal.status, "RED");
+    assert.equal(observedPreCreateTerminal.consumedAttemptTombstoneStatus, "ABSENT");
+    assert.equal(observedPreCreateTerminal.attemptConsumed, false);
+    assert.equal(observedPreCreateTerminal.consumedAttemptTombstonePresent, false);
+    assert.equal(observedPreCreateTerminal.consumedAttemptTombstoneSha256, null);
+    assert.equal(observedPreCreateTerminal.hostBindingInputAccessed, false);
+    assert.equal(observedPreCreateTerminal.reattemptRunRootAbsent, true);
+    assert.equal(observedPreCreateTerminal.reattemptJournalAbsent, true);
+    assert.equal(fs.existsSync(preCreateFault.options.consumedAttemptPath as string), false);
+    assert.equal(fs.existsSync(preCreateFault.reattemptRoot), false);
+
+    const postFsyncFault = prepareAt("tombstone-post-parent-fsync-fault");
+    const postFsyncCard = prepareHostBindingReattempt(input, postFsyncFault.options);
+    const postFsyncCardSha256 = hashFrame(canonicalJson(postFsyncCard));
+    const postFsyncGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: postFsyncCardSha256, checkpointSha256: postFsyncCard.checkpointSha256 }));
+    let postFsyncInputCalls = 0;
+    let postFsyncTerminal: Record<string, unknown> | null = null;
+    const postFsyncTombstoneFactory = (args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) => {
+      const originalOpen = fs.openSync;
+      const originalFsync = mutableFs.fsyncSync;
+      const originalLstat = fs.lstatSync;
+      const mutableOpen = fs as typeof fs & { openSync: typeof fs.openSync; lstatSync: typeof fs.lstatSync };
+      const parent = path.dirname(args.consumedAttemptPath);
+      let parentFd: number | null = null;
+      let parentFsyncReturned = false;
+      let postFsyncFaultInjected = false;
+      mutableOpen.openSync = ((candidate: fs.PathLike, flags: fs.OpenMode, mode?: fs.Mode) => {
+        const opened = originalOpen(candidate, flags, mode);
+        if (String(candidate) === parent && typeof flags === "number" && (flags & fs.constants.O_DIRECTORY) !== 0 && parentFd === null) parentFd = opened;
+        return opened;
+      }) as typeof fs.openSync;
+      mutableFs.fsyncSync = ((fd: number) => {
+        const result = originalFsync(fd);
+        if (parentFd !== null && fd === parentFd) parentFsyncReturned = true;
+        return result;
+      }) as typeof fs.fsyncSync;
+      mutableOpen.lstatSync = ((candidate: fs.PathLike, options?: fs.StatOptions) => {
+        if (parentFsyncReturned && !postFsyncFaultInjected && String(candidate) === parent) {
+          postFsyncFaultInjected = true;
+          throw Object.assign(new Error("TOMBSTONE_POST_PARENT_FSYNC_IDENTITY_FIXTURE_FAULT"), { code: "EIO" });
+        }
+        return originalLstat(candidate, options as never);
+      }) as typeof fs.lstatSync;
+      try { return createPermanentHostBindingReattemptConsumedAttempt(args); }
+      finally { mutableOpen.openSync = originalOpen; mutableFs.fsyncSync = originalFsync; mutableOpen.lstatSync = originalLstat; }
+    };
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: postFsyncCard.checkpointSha256, activationCardSha256: postFsyncCardSha256, activationGrantSha256: postFsyncGrantSha256 }, {
+      ...postFsyncFault.options,
+      inputPath: path.join(fixtureParent, "post-fsync-input-must-not-be-observed.json"),
+      inputConsumer() { postFsyncInputCalls += 1; throw new Error("POST_FSYNC_INPUT_MUST_NOT_RUN"); },
+      tombstoneFactory: postFsyncTombstoneFactory,
+      processPortFactory() { throw new Error("POST_FSYNC_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("POST_FSYNC_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("POST_FSYNC_HOST_FINALIZER_MUST_NOT_RUN"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => {
+      postFsyncTerminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+      return error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_DRIFT" && "verdict" in error && error.verdict === "RED_QUARANTINED";
+    });
+    assert.equal(postFsyncInputCalls, 0);
+    assert.ok(postFsyncTerminal !== null);
+    const observedPostFsyncTerminal = postFsyncTerminal as unknown as Record<string, unknown>;
+    assert.equal(observedPostFsyncTerminal.status, "RED_QUARANTINED");
+    assert.equal(observedPostFsyncTerminal.consumedAttemptTombstoneStatus, "PRESENT_UNAUTHENTICATED");
+    assert.equal(observedPostFsyncTerminal.attemptConsumed, true);
+    assert.equal(observedPostFsyncTerminal.consumedAttemptTombstonePresent, true);
+    assert.equal(observedPostFsyncTerminal.consumedAttemptTombstoneSha256, null);
+    assert.equal(observedPostFsyncTerminal.hostBindingInputAccessed, false);
+    assert.equal(observedPostFsyncTerminal.reattemptRunRootAbsent, false);
+    assert.equal(fs.existsSync(postFsyncFault.options.consumedAttemptPath as string), true);
+    assert.equal(fs.existsSync(postFsyncFault.reattemptRoot), true, "a post-parent-fsync identity fault must never roll back or revive the consumed attempt");
+
+    let terminal: Record<string, unknown> | null = null;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: activationCard.checkpointSha256, activationCardSha256, activationGrantSha256 }, {
+      ...admitted.options,
+      inputPath: neverOpenedInput,
+      inputConsumer,
+      inputAbsenceProver(candidate: string) { assert.equal(candidate, neverOpenedInput); return true; },
+      processPortFactory() { throw new Error("PROCESS_PORT_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+      inspectorFactory() { throw new Error("INSPECTOR_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+      hostFinalizer() { throw new Error("HOST_FINALIZER_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => {
+      terminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+      return error instanceof Error && "code" in error && error.code === "HOST_BINDING_INCOMPLETE_YELLOW";
+    });
+    assert.ok(terminal !== null);
+    const admittedTerminal = terminal as unknown as Record<string, unknown>;
+    assert.equal(admittedTerminal.status, "YELLOW_NO_RETRY");
+    assert.equal(admittedTerminal.consumedAttemptTombstoneStatus, "AUTHENTICATED");
+    assert.equal(admittedTerminal.hostBindingInputAccessed, true);
+    assert.equal(admittedTerminal.hostBindingInputOpenCalls, 0);
+    assert.equal(admittedTerminal.hostBindingInputRemoved, true);
+    assert.equal(admittedTerminal.reattemptRunRootAbsent, true);
+    assert.equal(admittedTerminal.reattemptJournalAbsent, true);
+    assert.equal(admittedTerminal.processGroupsAbsent, true);
+    assert.equal(admittedTerminal.publicationStatus, "ABSENT");
+    assert.equal(fs.existsSync(admitted.reattemptRoot), false);
+    assert.equal(fs.existsSync(admitted.options.consumedAttemptPath as string), true, "the consumed-attempt tombstone is permanent");
+
+    for (const runtimeDrift of ["deleted", "replaced"] as const) {
+      const drift = prepareAt(`runtime-tombstone-${runtimeDrift}`);
+      const driftCard = prepareHostBindingReattempt(input, drift.options);
+      const driftCardSha256 = hashFrame(canonicalJson(driftCard));
+      const driftGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: driftCardSha256, checkpointSha256: driftCard.checkpointSha256 }));
+      const driftTombstonePath = drift.options.consumedAttemptPath as string;
+      let driftTerminal: Record<string, unknown> | null = null;
+      await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: driftCard.checkpointSha256, activationCardSha256: driftCardSha256, activationGrantSha256: driftGrantSha256 }, {
+        ...drift.options,
+        inputPath: path.join(fixtureParent, `runtime-tombstone-${runtimeDrift}-input-consumed-by-fixture.json`),
+        inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+          options.onInputObservation(Object.freeze({ accessed: true, openCalls: 0, removedOrAbsent: true }));
+          fs.unlinkSync(driftTombstonePath);
+          if (runtimeDrift === "replaced") fs.writeFileSync(driftTombstonePath, "{}\n", { flag: "wx", mode: 0o600 });
+          throw new PhysicalRunnerError(`HOST_BINDING_REATTEMPT_RUNTIME_TOMBSTONE_${runtimeDrift.toUpperCase()}_FIXTURE`, "YELLOW_NO_RETRY");
+        },
+        processPortFactory() { throw new Error("RUNTIME_TOMBSTONE_DRIFT_PROCESS_PORT_MUST_NOT_RUN"); },
+        inspectorFactory() { throw new Error("RUNTIME_TOMBSTONE_DRIFT_INSPECTOR_MUST_NOT_RUN"); },
+        hostFinalizer() { throw new Error("RUNTIME_TOMBSTONE_DRIFT_HOST_FINALIZER_MUST_NOT_RUN"); },
+        now: () => new Date("2026-08-09T12:00:00.000Z"),
+      }), (error: unknown) => {
+        driftTerminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+        return error instanceof Error && "code" in error && error.code === `HOST_BINDING_REATTEMPT_RUNTIME_TOMBSTONE_${runtimeDrift.toUpperCase()}_FIXTURE` && "verdict" in error && error.verdict === "RED_QUARANTINED";
+      });
+      assert.ok(driftTerminal !== null);
+      const observedDriftTerminal = driftTerminal as unknown as Record<string, unknown>;
+      assert.equal(observedDriftTerminal.status, "RED_QUARANTINED");
+      assert.equal(observedDriftTerminal.attemptConsumed, true);
+      assert.equal(observedDriftTerminal.consumedAttemptTombstoneStatus, runtimeDrift === "replaced" ? "PRESENT_UNAUTHENTICATED" : "PRESENCE_UNKNOWN");
+      assert.equal(observedDriftTerminal.consumedAttemptTombstonePresent, runtimeDrift === "replaced" ? true : null);
+      assert.equal(observedDriftTerminal.consumedAttemptTombstoneSha256, null);
+      assert.equal(observedDriftTerminal.cleanupStatus, "RED_QUARANTINED");
+      assert.equal(observedDriftTerminal.reattemptRunRootAbsent, false);
+      assert.deepEqual(fs.readdirSync(drift.reattemptRoot).sort(), ["checkpoint.v2.json", "journal.v2.jsonl"], "runtime tombstone drift must stop before journal or checkpoint mutation");
+      assert.equal(fs.existsSync(driftTombstonePath), runtimeDrift === "replaced");
+    }
+
+    const destructiveCleanupDrift = prepareAt("destructive-cleanup-tombstone-deleted");
+    const destructiveCleanupCard = prepareHostBindingReattempt(input, destructiveCleanupDrift.options);
+    const destructiveCleanupCardSha256 = hashFrame(canonicalJson(destructiveCleanupCard));
+    const destructiveCleanupGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: destructiveCleanupCardSha256, checkpointSha256: destructiveCleanupCard.checkpointSha256 }));
+    const destructiveCleanupTombstonePath = destructiveCleanupDrift.options.consumedAttemptPath as string;
+    let destructiveCleanupAbsenceCalls = 0;
+    let destructiveCleanupTerminal: Record<string, unknown> | null = null;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: destructiveCleanupCard.checkpointSha256, activationCardSha256: destructiveCleanupCardSha256, activationGrantSha256: destructiveCleanupGrantSha256 }, {
+      ...destructiveCleanupDrift.options,
+      inputPath: path.join(fixtureParent, "destructive-cleanup-input-consumed-by-fixture.json"),
+      inputConsumer,
+      inputAbsenceProver() {
+        destructiveCleanupAbsenceCalls += 1;
+        fs.unlinkSync(destructiveCleanupTombstonePath);
+        return true;
+      },
+      processPortFactory() { throw new Error("DESTRUCTIVE_CLEANUP_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("DESTRUCTIVE_CLEANUP_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("DESTRUCTIVE_CLEANUP_HOST_FINALIZER_MUST_NOT_RUN"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => {
+      destructiveCleanupTerminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+      return error instanceof Error && "code" in error && error.code === "HOST_BINDING_INCOMPLETE_YELLOW" && "verdict" in error && error.verdict === "RED_QUARANTINED";
+    });
+    assert.equal(destructiveCleanupAbsenceCalls, 1);
+    assert.ok(destructiveCleanupTerminal !== null);
+    const observedDestructiveCleanupTerminal = destructiveCleanupTerminal as unknown as Record<string, unknown>;
+    assert.equal(observedDestructiveCleanupTerminal.status, "RED_QUARANTINED");
+    assert.equal(observedDestructiveCleanupTerminal.attemptConsumed, true);
+    assert.equal(observedDestructiveCleanupTerminal.consumedAttemptTombstoneStatus, "PRESENCE_UNKNOWN");
+    assert.equal(observedDestructiveCleanupTerminal.cleanupStatus, "RED_QUARANTINED");
+    assert.deepEqual(fs.readdirSync(destructiveCleanupDrift.reattemptRoot).sort(), ["checkpoint.v2.json", "journal.v2.jsonl"], "the final tombstone reauthentication must precede checkpoint or journal deletion");
+    assert.equal(fs.existsSync(destructiveCleanupTombstonePath), false);
+
+    for (const [phase, openCalls] of [["before", 0], ["during", 1]] as const) {
+      const consumeCrash = prepareAt(`input-${phase}-consume-crash`);
+      const consumeCrashCard = prepareHostBindingReattempt(input, consumeCrash.options);
+      const consumeCrashCardSha256 = hashFrame(canonicalJson(consumeCrashCard));
+      const consumeCrashGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: consumeCrashCardSha256, checkpointSha256: consumeCrashCard.checkpointSha256 }));
+      const consumeCrashInputPath = path.join(fixtureParent, `input-${phase}-consume.json`);
+      fs.writeFileSync(consumeCrashInputPath, "{}\n", { flag: "wx", mode: 0o600 });
+      await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: consumeCrashCard.checkpointSha256, activationCardSha256: consumeCrashCardSha256, activationGrantSha256: consumeCrashGrantSha256 }, {
+        ...consumeCrash.options,
+        inputPath: consumeCrashInputPath,
+        inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+          options.onInputObservation(Object.freeze({ accessed: true, openCalls, removedOrAbsent: false }));
+          throw new PhysicalRunnerError(`HOST_BINDING_REATTEMPT_INPUT_${phase.toUpperCase()}_CONSUME_FIXTURE`, "YELLOW_NO_RETRY");
+        },
+        processPortFactory() { throw new Error(`${phase.toUpperCase()}_CONSUME_PROCESS_PORT_MUST_NOT_RUN`); },
+        inspectorFactory() { throw new Error(`${phase.toUpperCase()}_CONSUME_INSPECTOR_MUST_NOT_RUN`); },
+        hostFinalizer() { throw new Error(`${phase.toUpperCase()}_CONSUME_HOST_FINALIZER_MUST_NOT_RUN`); },
+        now: () => new Date("2026-08-09T12:00:00.000Z"),
+      }), (error: unknown) => error instanceof Error && "code" in error && error.code === `HOST_BINDING_REATTEMPT_INPUT_${phase.toUpperCase()}_CONSUME_FIXTURE` && "verdict" in error && error.verdict === "RED_QUARANTINED" && (error as { terminalResult?: { cleanupStatus?: string; status?: string } }).terminalResult?.cleanupStatus === "RED_QUARANTINED" && (error as { terminalResult?: { status?: string } }).terminalResult?.status === "RED_QUARANTINED");
+      assert.equal(fs.existsSync(consumeCrashInputPath), true, `crash-${phase}-consume cleanup must preserve an input whose inode was never durably journaled`);
+      assert.equal(fs.existsSync(consumeCrash.reattemptRoot), true, `crash-${phase}-consume cleanup must preserve the authenticated journal/root for quarantine`);
+      assert.equal(fs.existsSync(consumeCrash.options.consumedAttemptPath as string), true);
+    }
+
+    const hostNotStarted = prepareAt("host-not-started-terminal");
+    const hostNotStartedCard = prepareHostBindingReattempt(input, hostNotStarted.options);
+    const hostNotStartedCardSha256 = hashFrame(canonicalJson(hostNotStartedCard));
+    const hostNotStartedGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: hostNotStartedCardSha256, checkpointSha256: hostNotStartedCard.checkpointSha256 }));
+    let hostNotStartedJournal: FixtureJournal | null = null;
+    let hostNotStartedRecoveryCalls = 0;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: hostNotStartedCard.checkpointSha256, activationCardSha256: hostNotStartedCardSha256, activationGrantSha256: hostNotStartedGrantSha256 }, {
+      ...hostNotStarted.options,
+      inputPath: path.join(fixtureParent, "host-not-started-input-consumed-by-fixture.json"),
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+        return Object.freeze({ fixture: "owner-input" });
+      },
+      processPortFactory() { return Object.freeze({}); },
+      inspectorFactory({ journal }: { journal: FixtureJournal }) {
+        hostNotStartedJournal = journal;
+        return Object.freeze({ snapshot() { return Object.freeze({ dockerCliStarts: 0, localDockerUnixSocketRequests: 0, macosInspectorStarts: 0, activeProcessGroups: 0, unknownProcessGroups: 0, cleanupState: "observed-absent", quarantineState: "none" }); } });
+      },
+      async hostFinalizer() {
+        const journal = hostNotStartedJournal;
+        assert.ok(journal !== null);
+        await appendEnvironmentDirectoryFixtures(journal, hostNotStarted.reattemptRoot);
+        const logicalId = "docker-client-version";
+        const commandShapeSha256 = hashFrame(`host-not-started-inspector:${logicalId}\n`);
+        await journal.append({ lane: "host-binding", event: `intent:${logicalId}`, commandShapeSha256, ownedResources: ["inspector-process-group"], cleanupState: "required" });
+        await journal.append({ lane: "host-binding", event: `not-started:${logicalId}`, commandShapeSha256, processGroupId: null, ownedResources: ["inspector-process-group"], terminalCode: "NOT_STARTED", cleanupState: "observed-absent" });
+        throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_NOT_STARTED_FIXTURE", "RED");
+      },
+      recoverUnstarted() { hostNotStartedRecoveryCalls += 1; throw new Error("HOST_NOT_STARTED_MUST_NOT_REPLAY"); },
+      stopProcessGroup() { throw new Error("HOST_NOT_STARTED_MUST_NOT_SIGNAL"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_NOT_STARTED_FIXTURE");
+    assert.equal(hostNotStartedRecoveryCalls, 0);
+    assert.equal(fs.existsSync(hostNotStarted.reattemptRoot), false, fs.existsSync(hostNotStarted.reattemptRoot) ? `unexpected host-not-started residue: ${canonicalJson(fs.readdirSync(hostNotStarted.reattemptRoot).sort())}` : undefined);
+    assert.equal(fs.existsSync(hostNotStarted.options.consumedAttemptPath as string), true);
+
+    const consumedAttemptPath = admitted.options.consumedAttemptPath as string;
+    {
+      const originalFsync = mutableFs.fsyncSync;
+      mutableFs.fsyncSync = (() => { throw new Error("TOMBSTONE_READER_PARENT_FSYNC_FIXTURE_FAULT"); }) as typeof fs.fsyncSync;
+      try {
+        assert.throws(() => readHostBindingReattemptConsumedAttempt({ consumedAttemptPath }), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED");
+      } finally { mutableFs.fsyncSync = originalFsync; }
+      assert.equal(fs.existsSync(consumedAttemptPath), true, "reader parent-fsync uncertainty must preserve the permanent tombstone");
+    }
+    for (const [closeName, failAtClose] of [["file", 1], ["parent", 2]] as const) {
+      const originalClose = mutableFs.closeSync;
+      let closeCalls = 0;
+      mutableFs.closeSync = ((fd: number) => {
+        closeCalls += 1;
+        if (closeCalls === failAtClose) throw new Error(`TOMBSTONE_READER_${closeName.toUpperCase()}_CLOSE_FIXTURE_FAULT`);
+        return originalClose(fd);
+      }) as typeof fs.closeSync;
+      try {
+        assert.throws(() => readHostBindingReattemptConsumedAttempt({ consumedAttemptPath }), (error: unknown) => {
+          const observation = (error as { tombstoneObservation?: { attemptConsumed?: boolean; consumedAttemptTombstoneStatus?: string; consumedAttemptTombstonePresent?: boolean | null; tombstoneSha256?: string | null } }).tombstoneObservation;
+          return error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED" && observation?.attemptConsumed === true && observation.consumedAttemptTombstoneStatus === "PRESENT_UNAUTHENTICATED" && observation.consumedAttemptTombstonePresent === true && observation.tombstoneSha256 === null;
+        });
+      } finally { mutableFs.closeSync = originalClose; }
+    }
+
+    const collision = prepareAt("tombstone-eexist-collision");
+    const collisionCard = prepareHostBindingReattempt(input, collision.options);
+    const collisionCardSha256 = hashFrame(canonicalJson(collisionCard));
+    const collisionGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: collisionCardSha256, checkpointSha256: collisionCard.checkpointSha256 }));
+    let collisionInputCalls = 0;
+    let collisionTerminal: Record<string, unknown> | null = null;
+    const collisionTombstoneFactory = (args: Parameters<typeof createPermanentHostBindingReattemptConsumedAttempt>[0]) => {
+      const originalOpen = fs.openSync;
+      const originalClose = mutableFs.closeSync;
+      const target = args.consumedAttemptPath;
+      const parent = path.dirname(target);
+      let factoryParentFd: number | null = null;
+      let collisionInjected = false;
+      let parentCloseFaultInjected = false;
+      (fs as typeof fs & { openSync: typeof fs.openSync }).openSync = ((candidate: fs.PathLike, flags: fs.OpenMode, mode?: fs.Mode) => {
+        const candidateText = String(candidate);
+        if (candidateText === target && typeof flags === "number" && (flags & fs.constants.O_EXCL) !== 0 && !collisionInjected) {
+          const foreignFd = originalOpen(target, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | (fs.constants.O_NOFOLLOW ?? 0), 0o600);
+          try { fs.fchmodSync(foreignFd, 0o600); fs.writeSync(foreignFd, Buffer.from("{}\n", "utf8")); fs.fsyncSync(foreignFd); }
+          finally { originalClose(foreignFd); }
+          collisionInjected = true;
+        }
+        const opened = originalOpen(candidate, flags, mode);
+        if (candidateText === parent && factoryParentFd === null) factoryParentFd = opened;
+        return opened;
+      }) as typeof fs.openSync;
+      mutableFs.closeSync = ((fd: number) => {
+        if (factoryParentFd !== null && fd === factoryParentFd && !parentCloseFaultInjected) {
+          parentCloseFaultInjected = true;
+          throw new Error("TOMBSTONE_COLLISION_PARENT_CLOSE_FIXTURE_FAULT");
+        }
+        return originalClose(fd);
+      }) as typeof fs.closeSync;
+      try { return createPermanentHostBindingReattemptConsumedAttempt(args); }
+      finally { (fs as typeof fs & { openSync: typeof fs.openSync }).openSync = originalOpen; mutableFs.closeSync = originalClose; }
+    };
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: collisionCard.checkpointSha256, activationCardSha256: collisionCardSha256, activationGrantSha256: collisionGrantSha256 }, {
+      ...collision.options,
+      inputPath: path.join(fixtureParent, "collision-input-must-not-be-observed.json"),
+      inputConsumer() { collisionInputCalls += 1; throw new Error("COLLISION_INPUT_MUST_NOT_RUN"); },
+      tombstoneFactory: collisionTombstoneFactory,
+      processPortFactory() { throw new Error("COLLISION_PROCESS_PORT_MUST_NOT_RUN"); },
+      inspectorFactory() { throw new Error("COLLISION_INSPECTOR_MUST_NOT_RUN"); },
+      hostFinalizer() { throw new Error("COLLISION_HOST_FINALIZER_MUST_NOT_RUN"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => {
+      collisionTerminal = (error as { terminalResult?: Record<string, unknown> }).terminalResult ?? null;
+      return error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED";
+    });
+    assert.equal(collisionInputCalls, 0);
+    assert.ok(collisionTerminal !== null);
+    const observedCollisionTerminal = collisionTerminal as unknown as Record<string, unknown>;
+    assert.equal(observedCollisionTerminal.status, "RED_QUARANTINED");
+    assert.equal(observedCollisionTerminal.consumedAttemptTombstoneStatus, "PRESENT_UNAUTHENTICATED");
+    assert.equal(observedCollisionTerminal.attemptConsumed, false);
+    assert.equal(observedCollisionTerminal.consumedAttemptTombstonePresent, true);
+    assert.equal(observedCollisionTerminal.consumedAttemptTombstoneSha256, null);
+    assert.equal(observedCollisionTerminal.hostBindingInputAccessed, false);
+    assert.equal(observedCollisionTerminal.reattemptRunRootAbsent, false);
+    assert.equal(fs.existsSync(collision.reattemptRoot), true, "a non-ABSENT collision must preserve the pre-admission root for quarantine");
+
+    const successful = prepareAt("admitted-success");
+    const successCard = prepareHostBindingReattempt(input, successful.options);
+    const successCardSha256 = hashFrame(canonicalJson(successCard));
+    const successGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: successCardSha256, checkpointSha256: successCard.checkpointSha256 }));
+    const hostBindingId = "c".repeat(32);
+    let capsuleBytes = Buffer.alloc(0);
+    let publicReceiptBytes = Buffer.alloc(0);
+    let capsuleSha256 = "";
+    let publicReceiptSha256 = "";
+    const inspectorCommandIds = [
+      "docker-client-version", "docker-daemon-version", "docker-image-observation",
+      "macos-product-version", "macos-build-version", "macos-architecture", "developer-root",
+      "swiftc-path", "sdk-path", "sdk-version", "swift-version", "openssl-version",
+    ];
+    let inspectionJournal: FixtureJournal | null = null;
+    const hostSnapshot = Object.freeze({ dockerCliStarts: 3, localDockerUnixSocketRequests: 2, macosInspectorStarts: 9, activeProcessGroups: 0, unknownProcessGroups: 0, cleanupState: "observed-absent", quarantineState: "none" });
+    const appendObservedInspectorFixtures = async (journal: FixtureJournal, reattemptRoot: string) => {
+      await appendEnvironmentDirectoryFixtures(journal, reattemptRoot);
+      for (const [index, id] of inspectorCommandIds.entries()) {
+        const commandShapeSha256 = hashFrame(`host-inspector-fixture:${id}\n`);
+        const processGroupId = 10_000 + index;
+        await journal.append({ lane: "host-binding", event: `intent:${id}`, commandShapeSha256, ownedResources: ["inspector-process-group"], cleanupState: "required" });
+        await journal.append({ lane: "host-binding", event: `started:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], cleanupState: "required" });
+        await journal.append({ lane: "host-binding", event: `terminal:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], terminalCode: "0", cleanupState: "observed-absent" });
+        await journal.append({ lane: "host-binding", event: `observed:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], terminalCode: "0", cleanupState: "observed-absent" });
+      }
+    };
+
+    const capsuleRace = prepareAt("capsule-root-post-admission-race");
+    const capsuleRaceCard = prepareHostBindingReattempt(input, capsuleRace.options);
+    const capsuleRaceCardSha256 = hashFrame(canonicalJson(capsuleRaceCard));
+    const capsuleRaceGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: capsuleRaceCardSha256, checkpointSha256: capsuleRaceCard.checkpointSha256 }));
+    const capsuleRaceRoot = capsuleRace.options.capsuleRoot as string;
+    const capsuleRaceSentinel = path.join(capsuleRaceRoot, "owner-race-sentinel.txt");
+    let capsuleRaceJournal: FixtureJournal | null = null;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: capsuleRaceCard.checkpointSha256, activationCardSha256: capsuleRaceCardSha256, activationGrantSha256: capsuleRaceGrantSha256 }, {
+      ...capsuleRace.options,
+      inputPath: path.join(fixtureParent, "capsule-root-race-input-consumed-by-fixture.json"),
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+        return Object.freeze({ fixture: "owner-input" });
+      },
+      inputAbsenceProver() { return true; },
+      processPortFactory() { return Object.freeze({ fixture: "no-process-authority" }); },
+      inspectorFactory({ journal }: { journal: FixtureJournal }) {
+        capsuleRaceJournal = journal;
+        return Object.freeze({ snapshot() { return hostSnapshot; } });
+      },
+      async hostFinalizer(hostArguments: Record<string, any>) {
+        const journal = capsuleRaceJournal;
+        assert.ok(journal !== null);
+        await appendObservedInspectorFixtures(journal, capsuleRace.reattemptRoot);
+        fs.mkdirSync(capsuleRaceRoot, { mode: 0o700 });
+        fs.writeFileSync(capsuleRaceSentinel, "owner-created-after-admission\n", { flag: "wx", mode: 0o600 });
+        return syntheticHostBindingReattemptOutput({
+          checkpoint: hostArguments.checkpoint,
+          checkpointSha256: hostArguments.checkpointSha256,
+          activationCardSha256: hostArguments.activationCardSha256,
+          activationGrantSha256: hostArguments.activationGrantSha256,
+          consumedAttemptTombstoneSha256: hostArguments.consumedAttemptTombstoneSha256,
+          attemptId: hostArguments.attemptId,
+          hostBindingId,
+        });
+      },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_CREATE_TARGET_PREEXISTS" && "verdict" in error && error.verdict === "RED_QUARANTINED" && (error as { terminalResult?: { status?: string } }).terminalResult?.status === "RED_QUARANTINED");
+    assert.equal(fs.readFileSync(capsuleRaceSentinel, "utf8"), "owner-created-after-admission\n", "a capsule root raced in after admission must be preserved, never adopted or removed");
+    assert.equal(fs.existsSync(capsuleRace.reattemptRoot), true, "the authenticated attempt root must remain quarantined after a capsule-root race");
+
+    const successTerminal = await finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: successCard.checkpointSha256, activationCardSha256: successCardSha256, activationGrantSha256: successGrantSha256 }, {
+      ...successful.options,
+      inputPath: path.join(fixtureParent, "success-input-consumed-by-fixture.json"),
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+        return Object.freeze({ fixture: "owner-input" });
+      },
+      inputAbsenceProver() { return true; },
+      processPortFactory() { return Object.freeze({ fixture: "no-process-authority" }); },
+      inspectorFactory({ journal }: { journal: FixtureJournal }) {
+        inspectionJournal = journal;
+        return Object.freeze({ snapshot() { return hostSnapshot; } });
+      },
+      async hostFinalizer(hostArguments: Record<string, any>) {
+        const journal = inspectionJournal;
+        assert.ok(journal !== null);
+        await appendObservedInspectorFixtures(journal, successful.reattemptRoot);
+        const output = syntheticHostBindingReattemptOutput({
+          checkpoint: hostArguments.checkpoint,
+          checkpointSha256: hostArguments.checkpointSha256,
+          activationCardSha256: hostArguments.activationCardSha256,
+          activationGrantSha256: hostArguments.activationGrantSha256,
+          consumedAttemptTombstoneSha256: hostArguments.consumedAttemptTombstoneSha256,
+          attemptId: hostArguments.attemptId,
+          hostBindingId,
+        });
+        capsuleBytes = output.capsuleBytes;
+        publicReceiptBytes = output.publicReceiptBytes;
+        capsuleSha256 = output.capsuleSha256;
+        publicReceiptSha256 = output.publicReceiptSha256;
+        return output;
+      },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    });
+    assert.equal(successTerminal.status, "HOST_BOUND_YELLOW");
+    assert.equal(successTerminal.dockerReadOnlyCliCalls, 3);
+    assert.equal(successTerminal.localDockerUnixSocketRequests, 2);
+    assert.equal(successTerminal.macosReadOnlyInspectionCalls, 9);
+    assert.equal(successTerminal.publicationStatus, "PUBLISHED");
+    assert.equal(successTerminal.hostBindingId, hostBindingId);
+    assert.equal(successTerminal.hostBindingCapsuleSha256, capsuleSha256);
+    assert.equal(successTerminal.hostBindingPublicReceiptSha256, publicReceiptSha256);
+    assert.equal(successTerminal.reattemptRunRootAbsent, true);
+    assert.equal(successTerminal.reattemptJournalAbsent, true);
+    assert.equal(successTerminal.processGroupsAbsent, true);
+    assert.equal(successTerminal.cleanupStatus, "GREEN");
+    assert.equal(successTerminal.retryExecutionGrant, "NOT_REQUESTED");
+    assert.equal(successTerminal.firstProviderCallGrant, "NOT_REQUESTED");
+    assert.equal(fs.existsSync(successful.reattemptRoot), false);
+    assert.equal(fs.existsSync(path.join(successful.options.capsuleRoot as string, `${hostBindingId}.json`)), true);
+    assert.equal(fs.existsSync(successful.options.publicReceiptPath as string), true);
+    assert.ok(capsuleBytes.every((byte) => byte === 0), "private capsule buffer must be zeroized only after retained-output revalidation");
+    assert.ok(publicReceiptBytes.every((byte) => byte === 0), "public receipt working buffer must be zeroized at the terminal boundary");
+
+    const retainedPublicReceiptPath = successful.options.publicReceiptPath as string;
+    const retainedCapsulePath = path.join(successful.options.capsuleRoot as string, `${hostBindingId}.json`);
+    const invalidTtlReceipt = JSON.parse(fs.readFileSync(retainedPublicReceiptPath, "utf8"));
+    invalidTtlReceipt.expiresAt = new Date(Date.parse(invalidTtlReceipt.createdAt) + 259_200_001).toISOString();
+    fs.writeFileSync(retainedPublicReceiptPath, `${canonicalJson(invalidTtlReceipt)}\n`, { mode: 0o644 });
+    await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      reattemptRoot: successful.reattemptRoot,
+      rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+      consumedAttemptPath: successful.options.consumedAttemptPath as string,
+      inputPath: path.join(fixtureParent, "success-input-consumed-by-fixture.json"),
+      capsuleRoot: successful.options.capsuleRoot as string,
+      publicReceiptPath: retainedPublicReceiptPath,
+      inputAbsenceProver() { return true; },
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_SURVIVING_PUBLICATION_PAIR_DRIFT" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(fs.existsSync(retainedCapsulePath), true, "invalid-TTL reentry must preserve the capsule for quarantine");
+    assert.equal(fs.existsSync(retainedPublicReceiptPath), true, "invalid-TTL reentry must preserve the receipt for quarantine");
+    assert.equal(fs.existsSync(successful.options.consumedAttemptPath as string), true, "invalid-TTL reentry must preserve the consumed-attempt tombstone");
+
+    const executionCrash = prepareAt("execution-inventory-crash");
+    const executionCrashCard = prepareHostBindingReattempt(input, executionCrash.options);
+    const executionCrashCardSha256 = hashFrame(canonicalJson(executionCrashCard));
+    const executionCrashGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: executionCrashCardSha256, checkpointSha256: executionCrashCard.checkpointSha256 }));
+    const executionCrashHostBindingId = "e".repeat(32);
+    let executionCrashJournal: FixtureJournal | null = null;
+    let executionCrashStageLinkFault = false;
+    const originalLink = mutableFs.linkSync;
+    mutableFs.linkSync = ((existingPath: fs.PathLike, newPath: fs.PathLike) => {
+      if (!executionCrashStageLinkFault && String(existingPath) === path.join(executionCrash.reattemptRoot, "publication-capsule.v2.stage")) {
+        executionCrashStageLinkFault = true;
+        throw Object.assign(new Error("HOST_BINDING_REATTEMPT_CAPSULE_STAGE_CRASH_FIXTURE"), { code: "EIO" });
+      }
+      return originalLink(existingPath, newPath);
+    }) as typeof fs.linkSync;
+    try {
+      await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: executionCrashCard.checkpointSha256, activationCardSha256: executionCrashCardSha256, activationGrantSha256: executionCrashGrantSha256 }, {
+        ...executionCrash.options,
+        inputPath: path.join(fixtureParent, "execution-crash-input-consumed-by-fixture.json"),
+        inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+          options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+          return Object.freeze({ fixture: "owner-input" });
+        },
+        inputAbsenceProver() { throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CRASH_PRESERVE_FIXTURE", "RED_QUARANTINED"); },
+        processPortFactory() { return Object.freeze({}); },
+        inspectorFactory({ journal }: { journal: FixtureJournal }) {
+          executionCrashJournal = journal;
+          return Object.freeze({ snapshot() { return hostSnapshot; } });
+        },
+        async hostFinalizer(hostArguments: Record<string, any>) {
+          const journal = executionCrashJournal;
+          assert.ok(journal !== null);
+          await appendEnvironmentDirectoryFixtures(journal, executionCrash.reattemptRoot);
+          for (const [index, id] of inspectorCommandIds.entries()) {
+            const commandShapeSha256 = hashFrame(`execution-crash-inspector:${id}\n`);
+            const processGroupId = 20_000 + index;
+            const intentRecord = await journal.append({ lane: "host-binding", event: `intent:${id}`, commandShapeSha256, ownedResources: ["inspector-process-group"], cleanupState: "required" }) as { sequence: number };
+            await journal.append({ lane: "host-binding", event: `started:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], cleanupState: "required" });
+            if (index === 0) {
+              const startId = PHYSICAL_RUNNER_OFFLINE_MUTATION_TEST_HOOKS.blockedStartId({ runId: path.basename(executionCrash.reattemptRoot), startSequence: intentRecord.sequence, family: "host-inspector", logicalId: id, commandShapeSha256 });
+              const readyBytes = Buffer.from(`${canonicalJson({ pid: processGroupId, releaseAuthoritySha256: hashFrame("execution-crash-release-authority\n"), schemaVersion: "r4_gate_b_blocked_supervisor_ready.v2", startId })}\n`, "utf8");
+              try { fs.writeFileSync(path.join(executionCrash.reattemptRoot, "blocked-supervisor-pids", `${startId.slice(7)}.jsonl`), readyBytes, { flag: "wx", mode: 0o600 }); }
+              finally { readyBytes.fill(0); }
+            }
+            await journal.append({ lane: "host-binding", event: `terminal:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], terminalCode: "0", cleanupState: "observed-absent" });
+            await journal.append({ lane: "host-binding", event: `observed:${id}`, commandShapeSha256, processGroupId, ownedResources: ["inspector-process-group"], terminalCode: "0", cleanupState: "observed-absent" });
+          }
+          return syntheticHostBindingReattemptOutput({
+            checkpoint: hostArguments.checkpoint,
+            checkpointSha256: hostArguments.checkpointSha256,
+            activationCardSha256: hostArguments.activationCardSha256,
+            activationGrantSha256: hostArguments.activationGrantSha256,
+            consumedAttemptTombstoneSha256: hostArguments.consumedAttemptTombstoneSha256,
+            attemptId: hostArguments.attemptId,
+            hostBindingId: executionCrashHostBindingId,
+          });
+        },
+        now: () => new Date("2026-08-09T12:00:00.000Z"),
+      }), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED" && (error as { terminalResult?: { status?: string } }).terminalResult?.status === "RED_QUARANTINED");
+    } finally { mutableFs.linkSync = originalLink; }
+    assert.equal(executionCrashStageLinkFault, true);
+    assert.deepEqual(fs.readdirSync(executionCrash.reattemptRoot).sort(), ["blocked-supervisor-pids", "checkpoint.v2.json", "docker-config", "home", "journal.v2.jsonl", "publication-capsule.v2.stage", "tmp"]);
+    const unknownExecutionSibling = path.join(executionCrash.reattemptRoot, "unknown-sibling");
+    fs.symlinkSync("unowned-target", unknownExecutionSibling);
+    await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      reattemptRoot: executionCrash.reattemptRoot,
+      rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+      consumedAttemptPath: executionCrash.options.consumedAttemptPath as string,
+      inputPath: path.join(fixtureParent, "execution-crash-input-consumed-by-fixture.json"),
+      capsuleRoot: executionCrash.options.capsuleRoot as string,
+      publicReceiptPath: executionCrash.options.publicReceiptPath as string,
+      inputAbsenceProver() { return true; },
+    }), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_ROOT_INVENTORY_INVALID" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(fs.lstatSync(unknownExecutionSibling).isSymbolicLink(), true, "an unknown sibling must be preserved for quarantine");
+    assert.equal(fs.existsSync(executionCrash.reattemptRoot), true);
+    assert.equal(fs.existsSync(path.join(executionCrash.reattemptRoot, "publication-capsule.v2.stage")), true);
+    fs.unlinkSync(unknownExecutionSibling);
+    const executionCrashCleanupOptions = {
+      reattemptRoot: executionCrash.reattemptRoot,
+      rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+      consumedAttemptPath: executionCrash.options.consumedAttemptPath as string,
+      inputPath: path.join(fixtureParent, "execution-crash-input-consumed-by-fixture.json"),
+      capsuleRoot: executionCrash.options.capsuleRoot as string,
+      publicReceiptPath: executionCrash.options.publicReceiptPath as string,
+      inputAbsenceProver() { return true; },
+    };
+    for (const [directoryName, expectedCode] of [["home", "HOST_BINDING_REATTEMPT_ENVIRONMENT_HOME_IDENTITY_DRIFT"], ["blocked-supervisor-pids", "HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT_IDENTITY_DRIFT"]] as const) {
+      const ownedDirectory = path.join(executionCrash.reattemptRoot, directoryName);
+      const displacedDirectory = path.join(fixtureParent, `execution-crash-${directoryName}-owned`);
+      fs.renameSync(ownedDirectory, displacedDirectory);
+      fs.mkdirSync(ownedDirectory, { mode: 0o700 });
+      await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === expectedCode && "verdict" in error && error.verdict === "RED_QUARANTINED");
+      assert.equal(fs.lstatSync(ownedDirectory).isDirectory(), true, `${directoryName} replacement must be preserved for quarantine`);
+      fs.rmdirSync(ownedDirectory);
+      fs.renameSync(displacedDirectory, ownedDirectory);
+    }
+    const executionCapsuleRoot = executionCrash.options.capsuleRoot as string;
+    const originalExecutionRmdir = mutableFs.rmdirSync;
+    const originalExecutionFsync = mutableFs.fsyncSync;
+    let capsuleRootRmdirObserved = false;
+    let capsuleRootParentFsyncFault = false;
+    mutableFs.rmdirSync = ((candidate: fs.PathLike, options?: fs.RmDirOptions) => {
+      const result = originalExecutionRmdir(candidate, options);
+      if (String(candidate) === executionCapsuleRoot) capsuleRootRmdirObserved = true;
+      return result;
+    }) as typeof fs.rmdirSync;
+    mutableFs.fsyncSync = ((fd: number) => {
+      if (capsuleRootRmdirObserved && !capsuleRootParentFsyncFault) {
+        capsuleRootParentFsyncFault = true;
+        throw new Error("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_PARENT_FSYNC_FIXTURE_FAULT");
+      }
+      return originalExecutionFsync(fd);
+    }) as typeof fs.fsyncSync;
+    try {
+      await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_ABSENCE_PROOF_FAILED" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    } finally { mutableFs.rmdirSync = originalExecutionRmdir; mutableFs.fsyncSync = originalExecutionFsync; }
+    assert.equal(capsuleRootRmdirObserved, true);
+    assert.equal(capsuleRootParentFsyncFault, true);
+    assert.equal(fs.existsSync(executionCapsuleRoot), false, "the rmdir/fsync crash window leaves an absent capsule root that cleanup must recognize on reentry");
+    assert.equal(fs.existsSync(executionCrash.reattemptRoot), true);
+
+    fs.mkdirSync(executionCapsuleRoot, { mode: 0o700 });
+    await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_DRIFT" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(fs.lstatSync(executionCapsuleRoot).isDirectory(), true, "a replacement capsule root must be preserved for quarantine");
+    fs.rmdirSync(executionCapsuleRoot);
+
+    fs.symlinkSync("unowned-capsule-target", executionCapsuleRoot);
+    await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNSAFE" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(fs.lstatSync(executionCapsuleRoot).isSymbolicLink(), true, "a symlink capsule root must be preserved for quarantine");
+    fs.unlinkSync(executionCapsuleRoot);
+
+    const originalExecutionLstat = fs.lstatSync;
+    (fs as typeof fs & { lstatSync: typeof fs.lstatSync }).lstatSync = ((candidate: fs.PathLike, options?: fs.StatOptions) => {
+      if (String(candidate) === executionCapsuleRoot) throw Object.assign(new Error("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_LSTAT_FIXTURE_FAULT"), { code: "EIO" });
+      return originalExecutionLstat(candidate, options as never);
+    }) as typeof fs.lstatSync;
+    try {
+      await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNREADABLE" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    } finally { (fs as typeof fs & { lstatSync: typeof fs.lstatSync }).lstatSync = originalExecutionLstat; }
+    assert.equal(fs.existsSync(executionCrash.reattemptRoot), true, "an unknown capsule-root observation must preserve the authenticated cleanup root");
+
+    const executionHome = path.join(executionCrash.reattemptRoot, "home");
+    const originalTransientRmdir = mutableFs.rmdirSync;
+    const originalTransientFsync = mutableFs.fsyncSync;
+    let homeRmdirObserved = false;
+    let homeRootFsyncFault = false;
+    mutableFs.rmdirSync = ((candidate: fs.PathLike, options?: fs.RmDirOptions) => {
+      const result = originalTransientRmdir(candidate, options);
+      if (String(candidate) === executionHome) homeRmdirObserved = true;
+      return result;
+    }) as typeof fs.rmdirSync;
+    mutableFs.fsyncSync = ((fd: number) => {
+      if (homeRmdirObserved && !homeRootFsyncFault) { homeRootFsyncFault = true; throw new Error("HOST_BINDING_REATTEMPT_ENVIRONMENT_HOME_ROOT_FSYNC_FIXTURE_FAULT"); }
+      return originalTransientFsync(fd);
+    }) as typeof fs.fsyncSync;
+    try {
+      await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    } finally { mutableFs.rmdirSync = originalTransientRmdir; mutableFs.fsyncSync = originalTransientFsync; }
+    assert.equal(homeRmdirObserved, true);
+    assert.equal(homeRootFsyncFault, true);
+    assert.equal(fs.existsSync(executionHome), false, "a created-directory rmdir/fsync crash tail must be reenterable from exact absence");
+    assert.equal(fs.existsSync(executionCrash.reattemptRoot), true);
+
+    const recoveredExecutionCrash = await cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, executionCrashCleanupOptions);
+    assert.equal(recoveredExecutionCrash.status, "GREEN");
+    assert.equal(recoveredExecutionCrash.publicationStatus, "ABSENT");
+    assert.equal(fs.existsSync(executionCrash.reattemptRoot), false);
+    assert.equal(fs.existsSync(executionCrash.options.capsuleRoot as string), false);
+    assert.equal(fs.existsSync(executionCrash.options.consumedAttemptPath as string), true, "standalone crash cleanup must preserve the permanent tombstone");
+
+    const stoppedGroupCrash = prepareAt("started-group-cleanup-crash");
+    const stoppedGroupCard = prepareHostBindingReattempt(input, stoppedGroupCrash.options);
+    const stoppedGroupCardSha256 = hashFrame(canonicalJson(stoppedGroupCard));
+    const stoppedGroupGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: stoppedGroupCardSha256, checkpointSha256: stoppedGroupCard.checkpointSha256 }));
+    const stoppedGroupId = inspectorCommandIds[0];
+    const stoppedGroupProcessGroupId = 21_000;
+    let stoppedGroupJournal: FixtureJournal | null = null;
+    const initialStopCalls: number[] = [];
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: stoppedGroupCard.checkpointSha256, activationCardSha256: stoppedGroupCardSha256, activationGrantSha256: stoppedGroupGrantSha256 }, {
+      ...stoppedGroupCrash.options,
+      inputPath: path.join(fixtureParent, "started-group-input-consumed-by-fixture.json"),
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+        return Object.freeze({ fixture: "owner-input" });
+      },
+      inputAbsenceProver() { throw new Error("INPUT_ABSENCE_MUST_NOT_PRECEDE_GROUP_RECOVERY"); },
+      processPortFactory() { return Object.freeze({}); },
+      inspectorFactory({ journal }: { journal: FixtureJournal }) {
+        stoppedGroupJournal = journal;
+        return Object.freeze({ snapshot() { return hostSnapshot; } });
+      },
+      async hostFinalizer() {
+        const journal = stoppedGroupJournal;
+        assert.ok(journal !== null);
+        await appendEnvironmentDirectoryFixtures(journal, stoppedGroupCrash.reattemptRoot);
+        const commandShapeSha256 = hashFrame(`started-group-crash-inspector:${stoppedGroupId}\n`);
+        const intentRecord = await journal.append({ lane: "host-binding", event: `intent:${stoppedGroupId}`, commandShapeSha256, ownedResources: ["inspector-process-group"], cleanupState: "required" }) as { sequence: number };
+        await journal.append({ lane: "host-binding", event: `started:${stoppedGroupId}`, commandShapeSha256, processGroupId: stoppedGroupProcessGroupId, ownedResources: ["inspector-process-group"], cleanupState: "required" });
+        const startId = PHYSICAL_RUNNER_OFFLINE_MUTATION_TEST_HOOKS.blockedStartId({ runId: path.basename(stoppedGroupCrash.reattemptRoot), startSequence: intentRecord.sequence, family: "host-inspector", logicalId: stoppedGroupId, commandShapeSha256 });
+        const readyBytes = Buffer.from(`${canonicalJson({ pid: stoppedGroupProcessGroupId, releaseAuthoritySha256: hashFrame("started-group-crash-release-authority\n"), schemaVersion: "r4_gate_b_blocked_supervisor_ready.v2", startId })}\n`, "utf8");
+        try { fs.writeFileSync(path.join(stoppedGroupCrash.reattemptRoot, "blocked-supervisor-pids", `${startId.slice(7)}.jsonl`), readyBytes, { flag: "wx", mode: 0o600 }); }
+        finally { readyBytes.fill(0); }
+        throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_STARTED_GROUP_CRASH_FIXTURE", "RED_QUARANTINED");
+      },
+      async stopProcessGroup(processGroupId: number) { initialStopCalls.push(processGroupId); return false; },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.deepEqual(initialStopCalls, [stoppedGroupProcessGroupId]);
+    assert.equal(fs.readdirSync(path.join(stoppedGroupCrash.reattemptRoot, "blocked-supervisor-pids")).length, 1, "a failed first cleanup must preserve the authenticated ready slot");
+    const recoveryStopCalls: number[] = [];
+    const recoveredStoppedGroup = await cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      reattemptRoot: stoppedGroupCrash.reattemptRoot,
+      rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+      consumedAttemptPath: stoppedGroupCrash.options.consumedAttemptPath as string,
+      inputPath: path.join(fixtureParent, "started-group-input-consumed-by-fixture.json"),
+      capsuleRoot: stoppedGroupCrash.options.capsuleRoot as string,
+      publicReceiptPath: stoppedGroupCrash.options.publicReceiptPath as string,
+      inputAbsenceProver() { return true; },
+      async stopProcessGroup(processGroupId: number) { recoveryStopCalls.push(processGroupId); return true; },
+    });
+    assert.deepEqual(recoveryStopCalls, [stoppedGroupProcessGroupId]);
+    assert.equal(recoveredStoppedGroup.status, "GREEN");
+    assert.equal(recoveredStoppedGroup.processGroupsAbsent, true);
+    assert.equal(fs.existsSync(stoppedGroupCrash.reattemptRoot), false, "cleanup must remove the ready slot before removing the now-empty slot root");
+    assert.equal(fs.existsSync(stoppedGroupCrash.options.consumedAttemptPath as string), true);
+
+    const unstartedAppendCrash = prepareAt("unstarted-append-before-slot-remove-crash");
+    const unstartedAppendCard = prepareHostBindingReattempt(input, unstartedAppendCrash.options);
+    const unstartedAppendCardSha256 = hashFrame(canonicalJson(unstartedAppendCard));
+    const unstartedAppendGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: unstartedAppendCardSha256, checkpointSha256: unstartedAppendCard.checkpointSha256 }));
+    const unstartedLogicalId = inspectorCommandIds[0];
+    const unstartedProcessGroupId = 22_000;
+    let unstartedJournal: FixtureJournal | null = null;
+    let unstartedSlotPath: string | null = null;
+    let durableRecoveryAppends = 0;
+    await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: unstartedAppendCard.checkpointSha256, activationCardSha256: unstartedAppendCardSha256, activationGrantSha256: unstartedAppendGrantSha256 }, {
+      ...unstartedAppendCrash.options,
+      inputPath: path.join(fixtureParent, "unstarted-append-input-consumed-by-fixture.json"),
+      inputConsumer(_candidate: string, options: { onInputObservation(observation: { accessed: boolean; openCalls: number; removedOrAbsent: boolean }): void }) {
+        options.onInputObservation(Object.freeze({ accessed: true, openCalls: 1, removedOrAbsent: true }));
+        return Object.freeze({ fixture: "owner-input" });
+      },
+      processPortFactory() { return Object.freeze({}); },
+      inspectorFactory({ journal }: { journal: FixtureJournal }) {
+        unstartedJournal = journal;
+        return Object.freeze({ snapshot() { return hostSnapshot; } });
+      },
+      async hostFinalizer() {
+        const journal = unstartedJournal;
+        assert.ok(journal !== null);
+        await appendEnvironmentDirectoryFixtures(journal, unstartedAppendCrash.reattemptRoot);
+        const commandShapeSha256 = hashFrame(`unstarted-append-crash-inspector:${unstartedLogicalId}\n`);
+        const intentRecord = await journal.append({ lane: "host-binding", event: `intent:${unstartedLogicalId}`, commandShapeSha256, ownedResources: ["inspector-process-group"], cleanupState: "required" }) as { sequence: number };
+        const startId = PHYSICAL_RUNNER_OFFLINE_MUTATION_TEST_HOOKS.blockedStartId({ runId: path.basename(unstartedAppendCrash.reattemptRoot), startSequence: intentRecord.sequence, family: "host-inspector", logicalId: unstartedLogicalId, commandShapeSha256 });
+        unstartedSlotPath = path.join(unstartedAppendCrash.reattemptRoot, "blocked-supervisor-pids", `${startId.slice(7)}.jsonl`);
+        const readyBytes = Buffer.from(`${canonicalJson({ pid: unstartedProcessGroupId, releaseAuthoritySha256: hashFrame("unstarted-append-crash-release-authority\n"), schemaVersion: "r4_gate_b_blocked_supervisor_ready.v2", startId })}\n`, "utf8");
+        try { fs.writeFileSync(unstartedSlotPath, readyBytes, { flag: "wx", mode: 0o600 }); }
+        finally { readyBytes.fill(0); }
+        throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_UNSTARTED_APPEND_CRASH_FIXTURE", "RED_QUARANTINED");
+      },
+      async recoverUnstarted(_root: string, starts: readonly Record<string, any>[], recoveryJournal: FixtureJournal) {
+        assert.equal(starts.length, 1);
+        const start = starts[0];
+        if (start === undefined) throw new Error("UNSTARTED_RECOVERY_AUTHORITY_MISSING");
+        await recoveryJournal.append({ lane: start.lane, event: `cleanup-observed-absent:${start.logicalId}`, commandShapeSha256: start.commandShapeSha256, processGroupId: unstartedProcessGroupId, ownedResources: start.ownedResources, terminalCode: "ABSENT", cleanupState: "observed-absent" });
+        durableRecoveryAppends += 1;
+        throw new PhysicalRunnerError("HOST_BINDING_REATTEMPT_AFTER_ABSENCE_APPEND_BEFORE_SLOT_REMOVE_FIXTURE", "RED_QUARANTINED");
+      },
+      stopProcessGroup() { throw new Error("UNSTARTED_STOP_PROCESS_GROUP_MUST_NOT_RUN"); },
+      now: () => new Date("2026-08-09T12:00:00.000Z"),
+    }), (error: unknown) => error instanceof Error && "verdict" in error && error.verdict === "RED_QUARANTINED");
+    assert.equal(durableRecoveryAppends, 1);
+    assert.ok(unstartedSlotPath !== null && fs.existsSync(unstartedSlotPath), "the append/remove crash window must retain the exact ready slot for journal-authenticated reentry");
+    const recoveredUnstartedAppend = await cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, {
+      reattemptRoot: unstartedAppendCrash.reattemptRoot,
+      rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+      consumedAttemptPath: unstartedAppendCrash.options.consumedAttemptPath as string,
+      inputPath: path.join(fixtureParent, "unstarted-append-input-consumed-by-fixture.json"),
+      capsuleRoot: unstartedAppendCrash.options.capsuleRoot as string,
+      publicReceiptPath: unstartedAppendCrash.options.publicReceiptPath as string,
+      inputAbsenceProver() { return true; },
+      recoverUnstarted() { throw new Error("DURABLE_ABSENCE_MUST_PREVENT_UNSTARTED_REPLAY"); },
+      stopProcessGroup() { throw new Error("DURABLE_ABSENCE_MUST_PREVENT_GROUP_SIGNAL"); },
+    });
+    assert.equal(recoveredUnstartedAppend.status, "GREEN");
+    assert.equal(fs.existsSync(unstartedAppendCrash.reattemptRoot), false);
+    assert.equal(fs.existsSync(unstartedAppendCrash.options.consumedAttemptPath as string), true);
+
+    for (const [tailName, expectedRootNames] of [
+      ["checkpoint-unlink", ["journal.v2.jsonl"]],
+      ["journal-unlink", []],
+      ["root-rmdir", null],
+    ] as const) {
+      const tail = prepareAt(`cleanup-tail-${tailName}`);
+      const tailCard = prepareHostBindingReattempt(input, tail.options);
+      const tailCardSha256 = hashFrame(canonicalJson(tailCard));
+      const tailGrantSha256 = hashFrame(canonicalJson({ ...activationGrant, activationCardSha256: tailCardSha256, checkpointSha256: tailCard.checkpointSha256 }));
+      const originalFsync = mutableFs.fsyncSync;
+      const originalUnlink = mutableFs.unlinkSync;
+      const originalRmdir = mutableFs.rmdirSync;
+      let armed = false;
+      let throwOnNextFsync = false;
+      const tailInputPath = path.join(fixtureParent, `tail-${tailName}-input-never-created.json`);
+      try {
+        await assert.rejects(finalizeHostBindingReattemptOnce({ mode: "finalize-host-binding-reattempt", checkpointSha256: tailCard.checkpointSha256, activationCardSha256: tailCardSha256, activationGrantSha256: tailGrantSha256 }, {
+          ...tail.options,
+          inputPath: tailInputPath,
+          inputConsumer,
+          inputAbsenceProver() {
+            if (!armed) {
+              armed = true;
+              mutableFs.unlinkSync = ((candidate: fs.PathLike) => {
+                const result = originalUnlink(candidate);
+                if (tailName === "journal-unlink" && String(candidate) === path.join(tail.reattemptRoot, "journal.v2.jsonl") || tailName === "checkpoint-unlink" && String(candidate) === path.join(tail.reattemptRoot, "checkpoint.v2.json")) throwOnNextFsync = true;
+                return result;
+              }) as typeof fs.unlinkSync;
+              mutableFs.rmdirSync = ((candidate: fs.PathLike, options?: fs.RmDirOptions) => {
+                const result = originalRmdir(candidate, options);
+                if (tailName === "root-rmdir" && String(candidate) === tail.reattemptRoot) throwOnNextFsync = true;
+                return result;
+              }) as typeof fs.rmdirSync;
+              mutableFs.fsyncSync = ((fd: number) => {
+                if (throwOnNextFsync) { throwOnNextFsync = false; throw new Error(`CLEANUP_TAIL_${tailName.toUpperCase()}_FSYNC_FAULT`); }
+                return originalFsync(fd);
+              }) as typeof fs.fsyncSync;
+            }
+            return true;
+          },
+          processPortFactory() { throw new Error("PROCESS_PORT_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+          inspectorFactory() { throw new Error("INSPECTOR_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+          hostFinalizer() { throw new Error("HOST_FINALIZER_MUST_NOT_RUN_AFTER_INPUT_FAILURE"); },
+          now: () => new Date("2026-08-09T12:00:00.000Z"),
+        }), (error: unknown) => error instanceof Error && (error as { terminalResult?: { status?: string } }).terminalResult?.status === "RED_QUARANTINED");
+      } finally { mutableFs.fsyncSync = originalFsync; mutableFs.unlinkSync = originalUnlink; mutableFs.rmdirSync = originalRmdir; }
+      if (expectedRootNames === null) assert.equal(fs.existsSync(tail.reattemptRoot), false);
+      else assert.deepEqual(fs.readdirSync(tail.reattemptRoot).sort(), [...expectedRootNames]);
+      const cleanupOptions = {
+        reattemptRoot: tail.reattemptRoot,
+        rootAnchor: CANONICAL_SYSTEM_TEMP_ROOT,
+        consumedAttemptPath: tail.options.consumedAttemptPath as string,
+        inputPath: tailInputPath,
+        capsuleRoot: tail.options.capsuleRoot as string,
+        publicReceiptPath: tail.options.publicReceiptPath as string,
+        inputAbsenceProver() { return true; },
+      };
+      if (tailName !== "root-rmdir") {
+        assert.ok(expectedRootNames !== null);
+        const tombstonePath = tail.options.consumedAttemptPath as string;
+        const originalTombstoneBytes = fs.readFileSync(tombstonePath);
+        fs.unlinkSync(tombstonePath);
+        try {
+          await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, cleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_TOMBSTONE_ABSENT_ROOT_AMBIGUOUS" && "verdict" in error && error.verdict === "RED_QUARANTINED" && (error as { tombstoneObservation?: { attemptConsumed?: boolean; consumedAttemptTombstoneStatus?: string } }).tombstoneObservation?.attemptConsumed === true && (error as { tombstoneObservation?: { consumedAttemptTombstoneStatus?: string } }).tombstoneObservation?.consumedAttemptTombstoneStatus === "PRESENCE_UNKNOWN");
+          assert.deepEqual(fs.readdirSync(tail.reattemptRoot).sort(), [...expectedRootNames], `${tailName} with a missing tombstone must preserve the ambiguous cleanup tail`);
+        } finally {
+          fs.writeFileSync(tombstonePath, originalTombstoneBytes, { flag: "wx", mode: 0o600 });
+          originalTombstoneBytes.fill(0);
+        }
+      }
+      if (tailName === "checkpoint-unlink") {
+        const tombstonePath = tail.options.consumedAttemptPath as string;
+        const originalTombstoneBytes = fs.readFileSync(tombstonePath);
+        try {
+          const originalTombstone = JSON.parse(originalTombstoneBytes.toString("utf8")) as Record<string, any>;
+          const replacementImplementationTree = "e".repeat(40);
+          const replacementGrant = {
+            schemaVersion: "r4_gate_b_host_binding_activation_grant.v2",
+            activationCardSha256: originalTombstone.activationCardSha256,
+            attemptOrdinal: 2,
+            checkpointSha256: originalTombstone.checkpointSha256,
+            firstProviderCallGrant: "NOT_REQUESTED",
+            hostBindingAttemptGrant: "APPROVED_ONCE",
+            hostBindingInputPreparedByOwner: true,
+            implementationHead: originalTombstone.implementationHead,
+            implementationTree: replacementImplementationTree,
+            retryExecutionGrant: "NOT_REQUESTED",
+          };
+          const replacementTombstone = { ...originalTombstone, implementationTree: replacementImplementationTree, activationGrantSha256: hashFrame(canonicalJson(replacementGrant)) };
+          fs.writeFileSync(tombstonePath, `${canonicalJson(replacementTombstone)}\n`, { mode: 0o600 });
+          await assert.rejects(cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, cleanupOptions), (error: unknown) => error instanceof Error && "code" in error && error.code === "HOST_BINDING_REATTEMPT_JOURNAL_DOMAIN_INVALID" && "verdict" in error && error.verdict === "RED_QUARANTINED");
+          assert.deepEqual(fs.readdirSync(tail.reattemptRoot), ["journal.v2.jsonl"], "a journal-only tail must preserve its root when the tombstone no longer matches record zero");
+        } finally {
+          fs.writeFileSync(tombstonePath, originalTombstoneBytes, { mode: 0o600 });
+          originalTombstoneBytes.fill(0);
+        }
+      }
+      const cleanup = await cleanupHostBindingReattempt({ mode: "cleanup-host-binding-reattempt", packetSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 }, cleanupOptions);
+      assert.equal(cleanup.status, "GREEN");
+      assert.equal(cleanup.reattemptRunRootAbsent, true);
+      assert.equal(fs.existsSync(tail.reattemptRoot), false);
+    }
+  } finally { fs.rmSync(fixtureParent, { recursive: true, force: true }); }
 });
 
 test("Docker exact-name absence accepts only the closed daemon not-found frame", () => {

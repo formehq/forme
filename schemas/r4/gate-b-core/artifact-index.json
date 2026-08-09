@@ -1,11 +1,17 @@
 {
   "schemaVersion": "r4.gate-b-core.artifact-index.v1",
-  "status": "PHYSICAL_ADAPTERS_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED",
+  "status": "HOST_BINDING_REATTEMPT_PREPARATION_GRANTED_HOST_ACTIVATION_NOT_REQUESTED",
   "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+  "hostBindingReattemptPacketSha256": "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3",
+  "hostBindingReattemptOwnerReviewSha256": "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445",
+  "approvedReattemptProposalHead": "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d",
+  "approvedReattemptProposalTree": "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e",
+  "hostBindingReattemptPreparationGrant": "APPROVED",
+  "hostBindingAttemptGrant": "NOT_REQUESTED",
   "retryExecutionGrant": "NOT_REQUESTED",
   "firstProviderCallTestGrant": "NOT_REQUESTED",
-  "fileCount": 29,
-  "aggregateSha256": "sha256:b18f92a91bf31271ad01773807bdbb01ed4e714a51830774290837d257545cdb",
+  "fileCount": 34,
+  "aggregateSha256": "sha256:b6204f1a6541fd9d94ab3907f0a6ead78be340fd3de05bb41c7cac76f70abc4e",
   "files": [
     {
       "path": "schemas/r4/gate-b-core/README.md",
@@ -42,6 +48,26 @@
     {
       "path": "schemas/r4/gate-b-core/host-binding-public-receipt.schema.json",
       "sha256": "sha256:80a0e13c0f728cba84514e31db9704f1ac43ec50bb899f534cec4f153f574c01"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json",
+      "sha256": "sha256:a7764c5840be3ba7ed96067392674b52ec25c6a31128ab86d612c3ab3d883ccc"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json",
+      "sha256": "sha256:ccf699d840d9b0e372294176d620436d9daff04b5cdb18a5d6ea0f07a4cbd240"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json",
+      "sha256": "sha256:b45c76e73632a0b39afd99c0e48175887f1512d1712d500c45116ad048638464"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json",
+      "sha256": "sha256:debfe126076e6acff6ac16a563dcda49c09923ba0c443f4498043c58d3b6026c"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json",
+      "sha256": "sha256:f2d1e9dde1755cfe78958aa613c109eae62bcef4e45b5f7ed7536b395e728c61"
     },
     {
       "path": "schemas/r4/gate-b-core/macos/build-recipe.json",
@@ -85,7 +111,7 @@
     },
     {
       "path": "schemas/r4/gate-b-core/physical-runner-contract.json",
-      "sha256": "sha256:def50fae98a3452c1ac4053cb39168334a6daf930e0edc05cd64cea2875de9e2"
+      "sha256": "sha256:d9ecaf94b97152ac912b79f826ef10284e422ceee64884facb3fa30cd85f1116"
     },
     {
       "path": "schemas/r4/gate-b-core/postgres-contract.md",

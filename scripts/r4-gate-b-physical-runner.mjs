@@ -10,13 +10,21 @@ import { fileURLToPath } from "node:url";
 import { canonicalJson, parseStrictJson } from "../packages/r4-protocol/src/index.ts";
 import {
   HOST_BINDING_AUTHORITY,
+  HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS,
   HostBindingError,
+  assertHostBindingReattemptActivationGrantHash,
   atomicWritePrivateFile,
   createProcessHostInspector,
+  decodeHostBindingReattemptEvidenceReceipt,
+  deriveHostBindingReattemptAttemptId,
   ensureOwnedPrivateDirectory,
   finalizeHostBinding,
+  finalizeHostBindingReattempt,
+  hostBindingReattemptEnvironmentDirectoryIdentitySha256,
+  hostBindingReattemptEnvironmentDirectoryIntentSha256,
   readAndRevalidateHostBindingCapsule,
   readAndConsumeHostBindingInput,
+  readAndConsumeHostBindingReattemptInput,
   removeHostBindingInputEnvelope,
   privateWriteTemporaryPath,
   runtimeDependencyLogicalName,
@@ -75,9 +83,90 @@ const CAPSULE_ROOT = path.join(REPOSITORY_ROOT, ".forme/gate-b-host-bindings");
 const PUBLIC_RECEIPT_PATH = path.join(REPOSITORY_ROOT, "docs/evidence/r4-gate-b-host-binding-public.json");
 const RETRY_MANIFEST_PATH = path.join(REPOSITORY_ROOT, "docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md");
 const RETRY_ROOT_PARENT = path.join(REPOSITORY_ROOT, ".forme/gate-b-physical-retry");
+const REATTEMPT_PACKET_PATH = "docs/R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md";
+const REATTEMPT_REVIEW_PATH = "docs/R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md";
 const SHA = /^sha256:[0-9a-f]{64}$/u;
 const ID = /^[0-9a-f]{32}$/u;
 const GIT = /^[0-9a-f]{40}$/u;
+const BASE64URL_CANONICAL_JSON = /^[A-Za-z0-9_-]{1,5462}$/u;
+
+const REATTEMPT_AUTHORITY_BASE = Object.freeze({
+  packetSha256: "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3",
+  ownerReviewSha256: "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445",
+  proposalHead: "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d",
+  proposalTree: "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e",
+  proposalParentHead: "b160d03af447bcb51e84030cb1fa15b9711947f0",
+  proposalParentTree: "a5161d692726e65db6df4e34b41885d2d8d3e18f",
+});
+export function deriveHostBindingReattemptRunId({ packetSha256, ownerReviewSha256, proposalHead, proposalTree }) {
+  if (!SHA.test(packetSha256) || !SHA.test(ownerReviewSha256) || !GIT.test(proposalHead) || !GIT.test(proposalTree)) fail("HOST_BINDING_REATTEMPT_RUN_ID_AUTHORITY_INVALID", "RED");
+  return crypto.createHash("sha256").update(Buffer.from(`r4-gate-b-host-binding-reattempt-v2\n${packetSha256}\n${ownerReviewSha256}\n${proposalHead}\n${proposalTree}\n`, "utf8")).digest("hex").slice(0, 32);
+}
+export const HOST_BINDING_REATTEMPT_AUTHORITY = Object.freeze({
+  ...REATTEMPT_AUTHORITY_BASE,
+  runId: deriveHostBindingReattemptRunId(REATTEMPT_AUTHORITY_BASE),
+  preparationGrant: "APPROVED",
+  hostBindingAttemptGrant: "NOT_REQUESTED",
+  retryExecutionGrant: "NOT_REQUESTED",
+  firstProviderCallGrant: "NOT_REQUESTED",
+  priorHostBindingAttempts: 1,
+  additionalHostBindingAttemptCeiling: 1,
+  attemptOrdinal: 2,
+});
+const HOST_BINDING_REATTEMPT_HISTORY = Object.freeze({
+  approvedDecisionBriefSha256: "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2",
+  historicalConstructionPacketSha256: "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+  historicalConstructionOwnerReviewSha256: "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9",
+  historicalProposalHead: "a45ea061e8e92f247597787e36ecfe52740b216a",
+  historicalProposalTree: "89b28903fc34e985a17e8f3fdc4bfd7d0972880e",
+  historicalImplementationHead: "92c6c3f8896494aed699671a04a93a09fb59087d",
+  historicalImplementationTree: "cf2ce5567c601fff1ad709e565dde41cf9c3540d",
+  historicalOutputHead: "63ae16940faf17694152cffa12848e62c2933c52",
+  historicalOutputTree: "ebfd96e7c1003c076d417798e53430891f60f057",
+  portabilityCorrectionHead: "383bf00611eaf180d4146f75e294deca49a4d5b1",
+  portabilityCorrectionTree: "3b2ef06165975d2fad1e781aedbe04b91af49287",
+  closureHead: "3c5ea06b9e8d0813e7d49c115005e1d5efea2d75",
+  closureTree: "98d605f0db2260542f649f4dc6582ea3dffbe56a",
+  historicalMachineEvidenceSha256: "sha256:ca9500ef9384a00c52444cafe41aee0414f1311f5d9897c2faccbf95466fe42e",
+  historicalAttemptOrdinal: 1,
+  historicalAttemptTerminalCode: "HOST_BOUND_PATH_SYMLINKED",
+  historicalDockerReadOnlyCliCalls: 0,
+  historicalLocalDockerUnixSocketRequests: 0,
+  historicalMacosReadOnlyInspectionCalls: 0,
+  historicalCleanupStatus: "GREEN",
+  historicalCapsulePresent: false,
+  historicalPublicReceiptPresent: false,
+});
+const REATTEMPT_ROOT_PARENT = path.join(REPOSITORY_ROOT, ".forme/gate-b-host-binding-reattempt");
+const REATTEMPT_ROOT = path.join(REATTEMPT_ROOT_PARENT, HOST_BINDING_REATTEMPT_AUTHORITY.runId);
+const REATTEMPT_CHECKPOINT_PATH = path.join(REATTEMPT_ROOT, "checkpoint.v2.json");
+const REATTEMPT_JOURNAL_PATH = path.join(REATTEMPT_ROOT, "journal.v2.jsonl");
+const REATTEMPT_CHECKPOINT_CLAIM_PATH = path.join(REATTEMPT_ROOT, "checkpoint-claim.v2.jsonl");
+const REATTEMPT_INPUT_PATH = path.join(REPOSITORY_ROOT, ".forme/gate-b-host-binding-reattempt-input.v2.json");
+const REATTEMPT_CONSUMED_PARENT = path.join(REPOSITORY_ROOT, ".forme/gate-b-host-binding-reattempt-consumed");
+const REATTEMPT_CONSUMED_PATH = path.join(REATTEMPT_CONSUMED_PARENT, `${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.attempt-2.json`);
+const REATTEMPT_CAPSULE_ROOT = path.join(REPOSITORY_ROOT, ".forme/gate-b-host-bindings-v2");
+const REATTEMPT_PUBLIC_RECEIPT_PATH = path.join(REPOSITORY_ROOT, "docs/evidence/r4-gate-b-host-binding-public.v2.json");
+
+const REATTEMPT_PROPOSAL_PATHS = Object.freeze(new Map([
+  [REATTEMPT_PACKET_PATH, "M"],
+  [REATTEMPT_REVIEW_PATH, "M"],
+]));
+const REATTEMPT_IMPLEMENTATION_PATHS = Object.freeze(new Map([
+  ["schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json", "A"],
+  ["schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", "A"],
+  ["schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json", "A"],
+  ["schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json", "A"],
+  ["schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", "A"],
+  ["schemas/r4/gate-b-core/physical-runner-contract.json", "M"],
+  ["schemas/r4/gate-b-core/artifact-index.json", "M"],
+  ["scripts/r4-gate-b-host-binding.mjs", "M"],
+  ["scripts/r4-gate-b-physical-runner.mjs", "M"],
+  ["scripts/r4-doc-audit.mjs", "M"],
+  ["test/r4-gate-b-core/host-binding.test.ts", "M"],
+  ["test/r4-gate-b-core/physical-runner.test.ts", "M"],
+]));
+export const HOST_BINDING_REATTEMPT_WORKSET = Object.freeze([...REATTEMPT_IMPLEMENTATION_PATHS].map(([relativePath, status]) => Object.freeze({ path: relativePath, status })));
 
 const ALLOWED_PATHS = new Set(`
 schemas/r4/gate-b-core/host-binding-input.schema.json
@@ -217,7 +306,7 @@ export function selectPhysicalRunnerTerminalError(primaryError = null, cleanupEr
   else if (laterVerdicts.some((verdict) => verdict.startsWith("RED")) && strongestVerdict !== "RED_QUARANTINED") strongestVerdict = "RED";
   if (strongestVerdict === undefined || strongestVerdict === selected?.verdict) return selected;
   const escalated = new PhysicalRunnerError(selected?.code ?? selected?.message ?? "PHYSICAL_RUNNER_TERMINAL", strongestVerdict);
-  for (const key of ["partialObservation", "hostInspection", "logicalStartObserved", "processGroupState", "processGroupId"]) if (selected?.[key] !== undefined) escalated[key] = selected[key];
+  for (const key of ["partialObservation", "hostInspection", "logicalStartObserved", "processGroupState", "processGroupId", "tombstoneObservation", "inputObservation", "cleanupObservation", "terminalResult"]) if (selected?.[key] !== undefined) escalated[key] = selected[key];
   escalated.primaryCause = selected;
   return escalated;
 }
@@ -286,6 +375,8 @@ function assertNoSymlinkPathChainStable(entries, code) {
 }
 
 const exactOwnedRootAuthorities = new WeakSet();
+const authenticatedHostBindingReattemptTombstones = new WeakSet();
+const authenticatedHostBindingReattemptJournals = new WeakSet();
 function structuralDirectoryIdentity(stat) {
   return Object.freeze({ dev: stat.dev, ino: stat.ino, mode: stat.mode, uid: stat.uid, gid: stat.gid });
 }
@@ -505,12 +596,153 @@ export function removeExactOwnedRootTree(authority, inventory) {
   }
 }
 
+function removeExactEmptyOwnedRoot(authority) {
+  const codePrefix = authority?.codePrefix ?? "OWNED_ROOT";
+  if (!exactOwnedRootAuthorities.has(authority) || authority.state.closed) fail(`${codePrefix}_EMPTY_REMOVE_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  let primaryError = null;
+  try {
+    assertClosedExactOwnedRootInventory(authority, Object.freeze({}), codePrefix);
+    const heldBefore = fs.fstatSync(authority.rootFd, { bigint: true });
+    const pathBefore = fs.lstatSync(authority.root, { bigint: true });
+    if (!sameStructuralDirectoryIdentity(authority.rootIdentity, structuralDirectoryIdentity(heldBefore)) || !sameStructuralDirectoryIdentity(authority.rootIdentity, structuralDirectoryIdentity(pathBefore))) fail(`${codePrefix}_EMPTY_REMOVE_IDENTITY_DRIFT`, "RED_QUARANTINED");
+    fs.rmdirSync(authority.root);
+    const heldAfter = fs.fstatSync(authority.rootFd, { bigint: true });
+    if (!sameStructuralDirectoryIdentity(authority.rootIdentity, structuralDirectoryIdentity(heldAfter)) || lstatIfPresent(authority.root, `${codePrefix}_EMPTY_REMOVE_ABSENCE_UNREADABLE`) !== null) fail(`${codePrefix}_EMPTY_REMOVE_ABSENCE_UNKNOWN`, "RED_QUARANTINED");
+    assertStructuralDirectoryChainStable(authority.ancestorChain, `${codePrefix}_ANCESTOR_DRIFT`);
+    const parentAfterFd = fs.fstatSync(authority.parentFd, { bigint: true });
+    const parentAfterPath = fs.lstatSync(authority.parent, { bigint: true });
+    if (!sameStructuralDirectoryIdentity(authority.parentIdentity, structuralDirectoryIdentity(parentAfterFd)) || !sameStructuralDirectoryIdentity(authority.parentIdentity, structuralDirectoryIdentity(parentAfterPath))) fail(`${codePrefix}_PARENT_DRIFT`, "RED_QUARANTINED");
+    fs.fsyncSync(authority.parentFd);
+    return Object.freeze({ rootAbsent: true, exactIdentityRemoved: true, parentStable: true, parentFsyncPassed: true });
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError ? error : new PhysicalRunnerError(`${codePrefix}_EMPTY_REMOVE_FAILED`, "RED_QUARANTINED"); throw primaryError; }
+  finally {
+    try { closeExactOwnedRootAuthority(authority, `${codePrefix}_AUTHORITY_CLOSE_FAILED`); }
+    catch (closeError) { if (primaryError === null) throw closeError; }
+  }
+}
+
+function removeExactEmptyOwnedChildDirectory(rootAuthority, name, codePrefix) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || typeof name !== "string" || name.length < 1 || name.includes(path.sep) || typeof codePrefix !== "string") fail(`${String(codePrefix || "OWNED_CHILD")}_REMOVE_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  const directory = path.join(rootAuthority.root, name);
+  const before = assertEmptyOwnedReattemptDirectory(directory, codePrefix);
+  let fd = null;
+  try {
+    fd = fs.openSync(directory, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | (fs.constants.O_NOFOLLOW ?? 0));
+    const opened = fs.fstatSync(fd); const observed = fs.lstatSync(directory);
+    if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(opened)) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(observed))) fail(`${codePrefix}_IDENTITY_DRIFT`, "RED_QUARANTINED");
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, `${codePrefix}_ROOT`);
+    fs.rmdirSync(directory);
+    const held = fs.fstatSync(fd);
+    if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(held)) || lstatIfPresent(directory, `${codePrefix}_ABSENCE_UNREADABLE`) !== null) fail(`${codePrefix}_ABSENCE_UNKNOWN`, "RED_QUARANTINED");
+    fs.fsyncSync(rootAuthority.rootFd);
+  } finally {
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, `${codePrefix}_CLOSE_UNCERTAIN`);
+      if (closeError !== null) throw closeError;
+    }
+  }
+}
+
+function proveHostBindingReattemptOwnedChildAbsentDurably(rootAuthority, name, codePrefix) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || typeof name !== "string" || name.length < 1 || name.includes(path.sep)) fail(`${codePrefix}_ABSENCE_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  const directory = path.join(rootAuthority.root, name);
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, `${codePrefix}_ROOT`);
+  if (lstatIfPresent(directory, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_ABSENCE_NOT_ESTABLISHED`, "RED_QUARANTINED");
+  fs.fsyncSync(rootAuthority.rootFd);
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, `${codePrefix}_ROOT`);
+  if (lstatIfPresent(directory, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_ABSENCE_DRIFT`, "RED_QUARANTINED");
+  return true;
+}
+
+function assertHostBindingReattemptOwnedChildAuthorityForCleanup({ rootAuthority, plan, identitySha256ForStat, codePrefix }) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || plan === null || typeof plan !== "object" || Array.isArray(plan) || typeof plan.name !== "string" || typeof identitySha256ForStat !== "function") fail(`${codePrefix}_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  const directory = path.join(rootAuthority.root, plan.name);
+  const observed = lstatIfPresent(directory, `${codePrefix}_UNREADABLE`, "RED_QUARANTINED");
+  if (!plan.intentObserved) {
+    if (observed !== null) fail(`${codePrefix}_UNJOURNALED`, "RED_QUARANTINED");
+    return true;
+  }
+  if (!plan.createdObserved) {
+    if (observed !== null) fail(`${codePrefix}_CREATION_UNCERTAIN`, "RED_QUARANTINED");
+    return true;
+  }
+  if (!SHA.test(plan.identitySha256)) fail(`${codePrefix}_IDENTITY_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  if (observed === null) return true;
+  if (!observed.isDirectory() || observed.isSymbolicLink() || observed.uid !== process.getuid() || (observed.mode & 0o777) !== 0o700 || fs.realpathSync(directory) !== directory || identitySha256ForStat(observed) !== plan.identitySha256) fail(`${codePrefix}_IDENTITY_DRIFT`, "RED_QUARANTINED");
+  const rechecked = fs.lstatSync(directory);
+  if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), checkpointClaimStableIdentity(rechecked)) || identitySha256ForStat(rechecked) !== plan.identitySha256) fail(`${codePrefix}_IDENTITY_DRIFT`, "RED_QUARANTINED");
+  return true;
+}
+
+function reconcileHostBindingReattemptOwnedChildDirectory({ rootAuthority, plan, identitySha256ForStat, codePrefix }) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || plan === null || typeof plan !== "object" || Array.isArray(plan) || typeof plan.name !== "string" || plan.name.length < 1 || plan.name.includes(path.sep) || typeof plan.intentObserved !== "boolean" || typeof plan.createdObserved !== "boolean" || typeof identitySha256ForStat !== "function" || typeof codePrefix !== "string") fail(`${String(codePrefix || "HOST_BINDING_REATTEMPT_OWNED_CHILD")}_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  const directory = path.join(rootAuthority.root, plan.name);
+  const observed = lstatIfPresent(directory, `${codePrefix}_UNREADABLE`, "RED_QUARANTINED");
+  if (!plan.intentObserved) {
+    if (observed !== null) fail(`${codePrefix}_UNJOURNALED`, "RED_QUARANTINED");
+    return proveHostBindingReattemptOwnedChildAbsentDurably(rootAuthority, plan.name, codePrefix);
+  }
+  if (!plan.createdObserved) {
+    if (observed !== null) fail(`${codePrefix}_CREATION_UNCERTAIN`, "RED_QUARANTINED");
+    return proveHostBindingReattemptOwnedChildAbsentDurably(rootAuthority, plan.name, codePrefix);
+  }
+  if (!SHA.test(plan.identitySha256)) fail(`${codePrefix}_IDENTITY_AUTHORITY_INVALID`, "RED_QUARANTINED");
+  if (observed === null) return proveHostBindingReattemptOwnedChildAbsentDurably(rootAuthority, plan.name, codePrefix);
+  const before = assertEmptyOwnedReattemptDirectory(directory, codePrefix);
+  if (identitySha256ForStat(before) !== plan.identitySha256) fail(`${codePrefix}_IDENTITY_DRIFT`, "RED_QUARANTINED");
+  let fd = null;
+  try {
+    fd = fs.openSync(directory, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | (fs.constants.O_NOFOLLOW ?? 0));
+    const opened = fs.fstatSync(fd);
+    const pathRecheck = fs.lstatSync(directory);
+    if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(opened)) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(pathRecheck)) || identitySha256ForStat(opened) !== plan.identitySha256) fail(`${codePrefix}_IDENTITY_DRIFT`, "RED_QUARANTINED");
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, `${codePrefix}_ROOT`);
+    fs.rmdirSync(directory);
+    const heldAfter = fs.fstatSync(fd);
+    if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(heldAfter)) || lstatIfPresent(directory, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_ABSENCE_UNKNOWN`, "RED_QUARANTINED");
+    fs.fsyncSync(rootAuthority.rootFd);
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, `${codePrefix}_ROOT`);
+    if (lstatIfPresent(directory, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_ABSENCE_DRIFT`, "RED_QUARANTINED");
+  } finally {
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, `${codePrefix}_CLOSE_UNCERTAIN`);
+      if (closeError !== null) throw closeError;
+    }
+  }
+  return true;
+}
+
 const ownedDirectory0700 = Object.freeze({ kind: "directory", modes: Object.freeze([0o700]) });
 const ownedFile0600 = Object.freeze({ kind: "file", modes: Object.freeze([0o600]) });
 const checkpointAliasFile0600 = Object.freeze({ kind: "file", modes: Object.freeze([0o600]), aliasGroup: "construction-checkpoint" });
 const CONSTRUCTION_NEW_JOURNAL_INVENTORY = Object.freeze({ "journal.v1.jsonl": ownedFile0600 });
 const CONSTRUCTION_EXISTING_JOURNAL_INVENTORY = Object.freeze({ "construction-checkpoint.v1.json": ownedFile0600, "journal.v1.jsonl": ownedFile0600 });
 const CONSTRUCTION_CHECKPOINT_INVENTORY = Object.freeze({ "construction-checkpoint.v1.json": ownedFile0600 });
+const REATTEMPT_CHECKPOINT_INVENTORY = Object.freeze({ "checkpoint.v2.json": ownedFile0600 });
+const REATTEMPT_JOURNAL_INVENTORY = Object.freeze({ "journal.v2.jsonl": ownedFile0600 });
+const REATTEMPT_CHECKPOINT_CLAIM_INVENTORY = Object.freeze({
+  "checkpoint-claim.v2.jsonl": ownedFile0600,
+  "checkpoint.v2.json": checkpointAliasFile0600,
+  [`.checkpoint.v2.json.${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.tmp`]: checkpointAliasFile0600,
+});
+const REATTEMPT_CHECKPOINT_AND_CLAIM_INVENTORY = Object.freeze({
+  "checkpoint-claim.v2.jsonl": ownedFile0600,
+  "checkpoint.v2.json": ownedFile0600,
+});
+const REATTEMPT_CHECKPOINT_AND_JOURNAL_INVENTORY = Object.freeze({
+  "checkpoint.v2.json": ownedFile0600,
+  "journal.v2.jsonl": ownedFile0600,
+});
+const REATTEMPT_EXECUTION_DELETE_INVENTORY = Object.freeze({
+  "checkpoint.v2.json": ownedFile0600,
+  "journal.v2.jsonl": ownedFile0600,
+  "blocked-supervisor-pids": ownedDirectory0700,
+  home: ownedDirectory0700,
+  "docker-config": ownedDirectory0700,
+  tmp: ownedDirectory0700,
+  "publication-capsule.v2.stage": ownedFile0600,
+  "publication-public-receipt.v2.stage": Object.freeze({ kind: "file", modes: Object.freeze([0o644]) }),
+});
 const CONSTRUCTION_CHECKPOINT_CLEANUP_INVENTORY = Object.freeze({
   "construction-checkpoint.v1.json": checkpointAliasFile0600,
   [`.construction-checkpoint.v1.json.${HOST_BINDING_AUTHORITY.constructionRunId}.tmp`]: checkpointAliasFile0600,
@@ -558,6 +790,9 @@ export function parsePhysicalRunnerArguments(argv) {
   if (argv.length === 1 && argv[0] === "construct-physical-adapters") return Object.freeze({ mode: "construct-physical-adapters" });
   if (argv.length === 1 && argv[0] === "finalize-host-binding") return Object.freeze({ mode: "finalize-host-binding" });
   if (argv.length === 3 && argv[0] === "cleanup-construction" && argv[1] === "--construction-packet-sha" && argv[2] === PHYSICAL_AUTHORITY.constructionPacketSha256) return Object.freeze({ mode: "cleanup-construction", constructionPacketSha256: argv[2] });
+  if (argv.length === 7 && argv[0] === "prepare-host-binding-reattempt" && argv[1] === "--validation-receipt" && argv[3] === "--authority-audit-receipt" && argv[5] === "--host-audit-receipt" && [argv[2], argv[4], argv[6]].every((value) => BASE64URL_CANONICAL_JSON.test(value))) return Object.freeze({ mode: "prepare-host-binding-reattempt", validationReceipt: argv[2], authorityAuditReceipt: argv[4], hostAuditReceipt: argv[6] });
+  if (argv.length === 7 && argv[0] === "finalize-host-binding-reattempt" && argv[1] === "--checkpoint-sha" && argv[3] === "--activation-card-sha" && argv[5] === "--activation-grant-sha" && [argv[2], argv[4], argv[6]].every((value) => SHA.test(value))) return Object.freeze({ mode: "finalize-host-binding-reattempt", checkpointSha256: argv[2], activationCardSha256: argv[4], activationGrantSha256: argv[6] });
+  if (argv.length === 3 && argv[0] === "cleanup-host-binding-reattempt" && argv[1] === "--packet-sha" && argv[2] === HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256) return Object.freeze({ mode: "cleanup-host-binding-reattempt", packetSha256: argv[2] });
   if (argv.length === 7 && ["execute-core-retry", "cleanup-core-retry"].includes(argv[0]) && argv[1] === "--manifest-sha" && argv[3] === "--execution-grant" && argv[5] === "--host-binding-id" && SHA.test(argv[2]) && argv[2] === argv[4] && ID.test(argv[6])) return Object.freeze({ mode: argv[0], manifestSha256: argv[2], executionGrantSha256: argv[4], hostBindingId: argv[6] });
   fail("PHYSICAL_RUNNER_ARGUMENTS_DENIED", "RED");
 }
@@ -606,6 +841,55 @@ function phaseAChangedPathStatuses() {
 function committedChangedPaths(fromHead = PHYSICAL_AUTHORITY.approvedProposalHead, toHead = "HEAD") {
   const output = gitRaw(["diff", "--name-only", "-z", `${fromHead}..${toHead}`]);
   return output.split("\0").filter(Boolean);
+}
+function assertExactReattemptNameStatus(fromHead, toHead, expected, codePrefix) {
+  const entries = parseNameStatus(gitRaw(["diff", "--name-status", "-z", `${fromHead}..${toHead}`]));
+  if (entries.length !== expected.size) fail(`${codePrefix}_COUNT_INVALID`, "RED");
+  const observed = new Map();
+  for (const entry of entries) {
+    if (entry.from !== null || !["A", "M"].includes(entry.status) || observed.has(entry.path)) fail(`${codePrefix}_STATUS_INVALID`, "RED");
+    observed.set(entry.path, entry.status);
+  }
+  for (const [relativePath, status] of expected) if (observed.get(relativePath) !== status) fail(`${codePrefix}_MISMATCH:${relativePath}`, "RED");
+  return Object.freeze(entries.map((entry) => Object.freeze({ path: entry.path, status: entry.status })).sort((left, right) => Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8"))));
+}
+function verifyHostBindingReattemptAuthorityCore(expectedPublicReceiptSha256 = null, expectedPublicReceiptLinkCount = null) {
+  if ((expectedPublicReceiptSha256 === null) !== (expectedPublicReceiptLinkCount === null) || (expectedPublicReceiptSha256 !== null && (!SHA.test(expectedPublicReceiptSha256) || ![1, 2].includes(expectedPublicReceiptLinkCount)))) fail("HOST_BINDING_REATTEMPT_POST_RECEIPT_AUTHORITY_INVALID", "RED");
+  if (fileSha(REATTEMPT_PACKET_PATH) !== HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 || fileSha(REATTEMPT_REVIEW_PATH) !== HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256) fail("HOST_BINDING_REATTEMPT_APPROVAL_BYTES_DRIFT", "RED");
+  if (deriveHostBindingReattemptRunId(HOST_BINDING_REATTEMPT_AUTHORITY) !== HOST_BINDING_REATTEMPT_AUTHORITY.runId) fail("HOST_BINDING_REATTEMPT_RUN_ID_DRIFT", "RED");
+  if (git(["branch", "--show-current"]) !== "codex/r4-gate-a-build") fail("HOST_BINDING_REATTEMPT_BRANCH_DRIFT", "RED");
+  if (git(["rev-parse", `${HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead}^{tree}`]) !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree || git(["rev-parse", `${HOST_BINDING_REATTEMPT_AUTHORITY.proposalParentHead}^{tree}`]) !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalParentTree) fail("HOST_BINDING_REATTEMPT_PROPOSAL_TREE_DRIFT", "RED");
+  const proposalLine = git(["rev-list", "--parents", "-n", "1", HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead]).split(" ");
+  if (proposalLine.length !== 2 || proposalLine[0] !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead || proposalLine[1] !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalParentHead) fail("HOST_BINDING_REATTEMPT_PROPOSAL_PARENT_DRIFT", "RED");
+  assertExactReattemptNameStatus(HOST_BINDING_REATTEMPT_AUTHORITY.proposalParentHead, HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead, REATTEMPT_PROPOSAL_PATHS, "HOST_BINDING_REATTEMPT_PROPOSAL_WORKSET");
+  if (git(["merge-base", HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead, "HEAD"]) !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead) fail("HOST_BINDING_REATTEMPT_PROPOSAL_NOT_ANCESTOR", "RED");
+  if (expectedPublicReceiptSha256 === null) {
+    if (gitRaw(["status", "--porcelain=v1", "--untracked-files=all"]) !== "") fail("HOST_BINDING_REATTEMPT_REPOSITORY_NOT_CLEAN", "RED");
+  } else {
+    const relativeReceiptPath = path.relative(REPOSITORY_ROOT, REATTEMPT_PUBLIC_RECEIPT_PATH);
+    if (relativeReceiptPath === "" || path.isAbsolute(relativeReceiptPath) || relativeReceiptPath === ".." || relativeReceiptPath.startsWith(`..${path.sep}`) || gitRaw(["diff", "--name-only", "-z"]) !== "" || gitRaw(["diff", "--cached", "--name-only", "-z"]) !== "" || gitRaw(["ls-files", "--others", "--exclude-standard", "-z"]) !== `${relativeReceiptPath}\0`) fail("HOST_BINDING_REATTEMPT_POST_RECEIPT_WORKTREE_DRIFT", "RED");
+    const receipt = fs.lstatSync(REATTEMPT_PUBLIC_RECEIPT_PATH);
+    if (!receipt.isFile() || receipt.isSymbolicLink() || receipt.uid !== process.getuid() || receipt.nlink !== expectedPublicReceiptLinkCount || (receipt.mode & 0o777) !== 0o644 || fileSha(relativeReceiptPath) !== expectedPublicReceiptSha256) fail("HOST_BINDING_REATTEMPT_POST_RECEIPT_FILE_DRIFT", "RED");
+  }
+  const implementationHead = git(["rev-parse", "HEAD"]);
+  const implementationTree = git(["rev-parse", "HEAD^{tree}"]);
+  if (implementationHead === HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead || !GIT.test(implementationHead) || !GIT.test(implementationTree)) fail("HOST_BINDING_REATTEMPT_IMPLEMENTATION_IDENTITY_INVALID", "RED");
+  const changed = assertExactReattemptNameStatus(HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead, implementationHead, REATTEMPT_IMPLEMENTATION_PATHS, "HOST_BINDING_REATTEMPT_IMPLEMENTATION_WORKSET");
+  const worksetLines = changed.map(({ path: relativePath }) => `${fileSha(relativePath)}  ${relativePath}\n`).join("");
+  return Object.freeze({
+    implementationHead,
+    implementationTree,
+    changedPaths: changed,
+    changedPathCount: changed.length,
+    worksetAggregateSha256: sha256(Buffer.from(worksetLines, "utf8")),
+    runId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+  });
+}
+export function verifyHostBindingReattemptAuthority() { return verifyHostBindingReattemptAuthorityCore(); }
+function verifyHostBindingReattemptAuthorityAfterPublicReceipt(checkpoint, expectedPublicReceiptSha256, expectedPublicReceiptLinkCount) {
+  const authority = verifyHostBindingReattemptAuthorityCore(expectedPublicReceiptSha256, expectedPublicReceiptLinkCount);
+  if (checkpoint === null || typeof checkpoint !== "object" || authority.implementationHead !== checkpoint.implementationHead || authority.implementationTree !== checkpoint.implementationTree || authority.changedPathCount !== checkpoint.worksetPathCount || authority.worksetAggregateSha256 !== checkpoint.worksetAggregateSha256) fail("HOST_BINDING_REATTEMPT_POST_RECEIPT_CHECKPOINT_DRIFT", "RED");
+  return authority;
 }
 export function verifyPhaseAAuthority() {
   if (fileSha(PACKET_PATH) !== PHYSICAL_AUTHORITY.constructionPacketSha256 || fileSha(REVIEW_PATH) !== PHYSICAL_AUTHORITY.constructionOwnerReviewSha256) fail("PHYSICAL_APPROVAL_BYTES_DRIFT", "RED");
@@ -954,7 +1238,15 @@ function constructionProcessResources(id) {
   if (id === "feeder-spawn") return ["macos-feeder-group", "candidate-pipe", "completion-pipe", "direct-ready-pipe", "direct-release-pipe"];
   return ["macos-process-group"];
 }
-export function validateConstructionJournalForCleanup(records) {
+export function validateConstructionJournalForCleanup(records, {
+  inputOpenCommandFrame = "fixed-owner-input-open-v1\n",
+  inputOpenCommandShapeSha256 = null,
+  publicationTerminalCode = "PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW",
+  capsuleRootIdentityRequired = false,
+  ownedDirectoryIdentityRequired = false,
+} = {}) {
+  if (typeof inputOpenCommandFrame !== "string" || !inputOpenCommandFrame.endsWith("\n") || inputOpenCommandFrame.slice(0, -1).includes("\n") || (inputOpenCommandShapeSha256 !== null && !SHA.test(inputOpenCommandShapeSha256)) || typeof publicationTerminalCode !== "string" || !/^[A-Z][A-Z0-9_]{0,95}$/u.test(publicationTerminalCode) || typeof capsuleRootIdentityRequired !== "boolean" || typeof ownedDirectoryIdentityRequired !== "boolean") fail("CONSTRUCTION_JOURNAL_VALIDATION_OPTIONS_INVALID", "RED");
+  const expectedInputOpenCommandShapeSha256 = inputOpenCommandShapeSha256 ?? sha256(Buffer.from(inputOpenCommandFrame));
   const processStates = new Map();
   let publicationHostBindingId = null;
   let capsuleTargetAbsent = false;
@@ -966,15 +1258,23 @@ export function validateConstructionJournalForCleanup(records) {
   let capsuleExpectedSha256 = null;
   let receiptExpectedSha256 = null;
   let publicationComplete = false;
+  let capsuleRootIntent = false;
+  let capsuleRootCreated = false;
+  let capsuleRootIdentitySha256 = null;
   let ownerInputOpenIntent = false;
   let fakeMatrixIntent = false;
   let fakeMatrixObserved = false;
   let slotRootIntent = false;
   let slotRootObserved = false;
+  let slotRootIdentitySha256 = null;
+  const environmentDirectoryPlans = HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.map((spec) => ({ name: spec.name, environmentKey: spec.environmentKey, ownedResource: spec.ownedResource, intentObserved: false, createdObserved: false, identitySha256: null }));
+  let environmentDirectoryCursor = 0;
+  let pendingEnvironmentDirectoryName = null;
   const observedInspectorIds = new Set();
   const allowedNonProcessEvents = new Set([
     "fake-matrix-intent", "fake-matrix-observed", "input-open-intent",
     "intent:blocked-start-slot-root", "observed:blocked-start-slot-root",
+    "capsule-root-create-intent", "capsule-root-created",
     "capsule-target-absent", "public-receipt-target-absent", "capsule-publication-intent",
     "capsule-stage-ready", "public-receipt-publication-intent", "public-receipt-stage-ready", "capsule-published",
   ]);
@@ -987,6 +1287,7 @@ export function validateConstructionJournalForCleanup(records) {
   const constructionUnstartedSupervisorStarts = new Map();
   const constructionUnstartedDirectGateIntents = new Set();
   for (const record of records) {
+    if (ownedDirectoryIdentityRequired && pendingEnvironmentDirectoryName !== null && record.event !== `environment-directory-created:${pendingEnvironmentDirectoryName}`) fail("CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_PAIR_INTERRUPTED", "RED_QUARANTINED");
     if (fakeMatrixIntent && !fakeMatrixObserved && record.event !== "fake-matrix-observed") {
       if (["intent:blocked-start-slot-root", "observed:blocked-start-slot-root"].includes(record.event)) {
         const shape = sha256(Buffer.from("r4-gate-b-blocked-start-slot-root.v1\n", "utf8"));
@@ -1050,21 +1351,47 @@ export function validateConstructionJournalForCleanup(records) {
       }
       fail("CONSTRUCTION_JOURNAL_PHASE_A_EVENT_INVALID", "RED_QUARANTINED");
     }
+    const environmentDirectoryMatch = /^(environment-directory-create-intent|environment-directory-created):([a-z][a-z0-9-]*)$/u.exec(record.event);
+    if (environmentDirectoryMatch !== null) {
+      if (!ownedDirectoryIdentityRequired || !ownerInputOpenIntent || !slotRootObserved || record.lane !== "host-binding" || record.hostBindingId !== null || record.processGroupId !== null || environmentDirectoryCursor >= environmentDirectoryPlans.length) fail("CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_PHASE_INVALID", "RED_QUARANTINED");
+      const [, phase, directoryName] = environmentDirectoryMatch;
+      const spec = HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS[environmentDirectoryCursor];
+      const plan = environmentDirectoryPlans[environmentDirectoryCursor];
+      if (directoryName !== spec.name || canonicalJson(record.ownedResources) !== canonicalJson([spec.ownedResource]) || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_ORDER_INVALID", "RED_QUARANTINED");
+      if (phase === "environment-directory-create-intent") {
+        if (pendingEnvironmentDirectoryName !== null || plan.intentObserved || plan.createdObserved || record.commandShapeSha256 !== hostBindingReattemptEnvironmentDirectoryIntentSha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, spec.name) || record.terminalCode !== null) fail("CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_INTENT_INVALID", "RED_QUARANTINED");
+        plan.intentObserved = true;
+        pendingEnvironmentDirectoryName = spec.name;
+      } else {
+        if (pendingEnvironmentDirectoryName !== spec.name || !plan.intentObserved || plan.createdObserved || !SHA.test(record.commandShapeSha256) || record.terminalCode !== "CREATED") fail("CONSTRUCTION_JOURNAL_ENVIRONMENT_DIRECTORY_CREATED_INVALID", "RED_QUARANTINED");
+        plan.createdObserved = true;
+        plan.identitySha256 = record.commandShapeSha256;
+        pendingEnvironmentDirectoryName = null;
+        environmentDirectoryCursor += 1;
+      }
+      continue;
+    }
     if (record.lane === "host-binding" && record.event.startsWith("intent:")) {
       const id = record.event.slice("intent:".length);
       if (HOST_INSPECTOR_COMMAND_IDS.has(id)) {
-        if (!ownerInputOpenIntent || !slotRootObserved || publicationHostBindingId !== null || rememberedIntent.has(id) || record.hostBindingId !== null || record.processGroupId !== null || record.terminalCode !== null || record.cleanupState !== "required" || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["inspector-process-group"])) fail("CONSTRUCTION_JOURNAL_INSPECTOR_INTENT_INVALID", "RED_QUARANTINED");
+        if (!ownerInputOpenIntent || !slotRootObserved || ownedDirectoryIdentityRequired && (pendingEnvironmentDirectoryName !== null || environmentDirectoryCursor !== environmentDirectoryPlans.length) || publicationHostBindingId !== null || rememberedIntent.has(id) || record.hostBindingId !== null || record.processGroupId !== null || record.terminalCode !== null || record.cleanupState !== "required" || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["inspector-process-group"])) fail("CONSTRUCTION_JOURNAL_INSPECTOR_INTENT_INVALID", "RED_QUARANTINED");
         rememberedIntent.set(id, Object.freeze({ hash: record.commandShapeSha256, sequence: record.sequence }));
         unstartedSupervisorStarts.set(id, Object.freeze({ startSequence: record.sequence, family: "host-inspector", logicalId: id, commandShapeSha256: record.commandShapeSha256 }));
         continue;
       }
     }
-    const processPhaseMatch = record.lane === "host-binding" ? /^(started|terminal|observed|cleanup-observed-absent):(.+)$/u.exec(record.event) : null;
+    const processPhaseMatch = record.lane === "host-binding" ? /^(started|terminal|observed|cleanup-observed-absent|not-started):(.+)$/u.exec(record.event) : null;
     if (processPhaseMatch !== null && HOST_INSPECTOR_COMMAND_IDS.has(processPhaseMatch[2])) {
       const [phase, id] = record.event.split(":", 2);
       const expectedIntent = rememberedIntent.get(id);
       const expectedHash = expectedIntent?.hash;
-      if (!HOST_INSPECTOR_COMMAND_IDS.has(id) || expectedHash === undefined || record.hostBindingId !== null || record.commandShapeSha256 !== expectedHash || !Number.isSafeInteger(record.processGroupId) || record.processGroupId <= 1 || canonicalJson(record.ownedResources) !== canonicalJson(["inspector-process-group"])) fail("CONSTRUCTION_JOURNAL_INSPECTOR_SEQUENCE_INVALID", "RED_QUARANTINED");
+      if (!HOST_INSPECTOR_COMMAND_IDS.has(id) || expectedHash === undefined || record.hostBindingId !== null || record.commandShapeSha256 !== expectedHash || canonicalJson(record.ownedResources) !== canonicalJson(["inspector-process-group"])) fail("CONSTRUCTION_JOURNAL_INSPECTOR_SEQUENCE_INVALID", "RED_QUARANTINED");
+      if (phase === "not-started") {
+        if (consumedInspectorIntents.has(id) || record.processGroupId !== null || record.terminalCode !== "NOT_STARTED" || record.cleanupState !== "observed-absent") fail("CONSTRUCTION_JOURNAL_INSPECTOR_NOT_STARTED_INVALID", "RED_QUARANTINED");
+        consumedInspectorIntents.add(id); unstartedSupervisorStarts.delete(id);
+        continue;
+      }
+      if (!Number.isSafeInteger(record.processGroupId) || record.processGroupId <= 1) fail("CONSTRUCTION_JOURNAL_INSPECTOR_SEQUENCE_INVALID", "RED_QUARANTINED");
       let state = processStates.get(record.processGroupId);
       if (phase === "started") {
         if (consumedInspectorIntents.has(id) || state !== undefined || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_INSPECTOR_DUPLICATE_START", "RED_QUARANTINED");
@@ -1115,23 +1442,33 @@ export function validateConstructionJournalForCleanup(records) {
     }
     if (fakeMatrixIntent || fakeMatrixObserved) fail("CONSTRUCTION_JOURNAL_PHASE_MIXED", "RED_QUARANTINED");
     if (record.event === "input-open-intent") {
-      if (ownerInputOpenIntent || records[0] !== record || record.lane !== "host-binding" || record.hostBindingId !== null || record.commandShapeSha256 !== sha256(Buffer.from("fixed-owner-input-open-v1\n")) || canonicalJson(record.ownedResources) !== canonicalJson(["owner-input-envelope"]) || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_INPUT_INTENT_INVALID", "RED_QUARANTINED");
+      if (ownerInputOpenIntent || records[0] !== record || record.lane !== "host-binding" || record.hostBindingId !== null || record.commandShapeSha256 !== expectedInputOpenCommandShapeSha256 || canonicalJson(record.ownedResources) !== canonicalJson(["owner-input-envelope"]) || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_INPUT_INTENT_INVALID", "RED_QUARANTINED");
       ownerInputOpenIntent = true;
       continue;
     }
     if (["intent:blocked-start-slot-root", "observed:blocked-start-slot-root"].includes(record.event)) {
       const shape = sha256(Buffer.from("r4-gate-b-blocked-start-slot-root.v1\n", "utf8"));
       const isIntent = record.event.startsWith("intent:");
-      if (!ownerInputOpenIntent || record.lane !== "host-binding" || record.hostBindingId !== null || record.commandShapeSha256 !== shape || canonicalJson(record.ownedResources) !== canonicalJson(["blocked-start-slot-root"]) || record.cleanupState !== "required" || (isIntent ? slotRootIntent || slotRootObserved || record.terminalCode !== null : !slotRootIntent || slotRootObserved || record.terminalCode !== "CREATED")) fail("CONSTRUCTION_JOURNAL_SLOT_ROOT_INVALID", "RED_QUARANTINED");
-      if (isIntent) slotRootIntent = true; else slotRootObserved = true;
+      const shapeValid = isIntent || !ownedDirectoryIdentityRequired ? record.commandShapeSha256 === shape : SHA.test(record.commandShapeSha256);
+      if (!ownerInputOpenIntent || record.lane !== "host-binding" || record.hostBindingId !== null || !shapeValid || canonicalJson(record.ownedResources) !== canonicalJson(["blocked-start-slot-root"]) || record.cleanupState !== "required" || (isIntent ? slotRootIntent || slotRootObserved || record.terminalCode !== null : !slotRootIntent || slotRootObserved || record.terminalCode !== "CREATED")) fail("CONSTRUCTION_JOURNAL_SLOT_ROOT_INVALID", "RED_QUARANTINED");
+      if (isIntent) slotRootIntent = true;
+      else { slotRootObserved = true; slotRootIdentitySha256 = ownedDirectoryIdentityRequired ? record.commandShapeSha256 : null; }
       continue;
     }
-    if (["capsule-target-absent", "public-receipt-target-absent", "capsule-publication-intent", "capsule-stage-ready", "public-receipt-publication-intent", "public-receipt-stage-ready", "capsule-published"].includes(record.event)) {
+    if (["capsule-root-create-intent", "capsule-root-created", "capsule-target-absent", "public-receipt-target-absent", "capsule-publication-intent", "capsule-stage-ready", "public-receipt-publication-intent", "public-receipt-stage-ready", "capsule-published"].includes(record.event)) {
       if (record.lane !== "host-binding" || record.processGroupId !== null || !ID.test(record.hostBindingId)) fail("CONSTRUCTION_JOURNAL_PUBLICATION_ID_INVALID", "RED_QUARANTINED");
       if (publicationHostBindingId !== null && publicationHostBindingId !== record.hostBindingId) fail("CONSTRUCTION_JOURNAL_PUBLICATION_ID_DRIFT", "RED_QUARANTINED");
       publicationHostBindingId = record.hostBindingId;
+      if (record.event === "capsule-root-create-intent") {
+        if (!capsuleRootIdentityRequired || capsuleRootIntent || capsuleRootCreated || capsuleTargetAbsent || observedInspectorIds.size !== HOST_INSPECTOR_COMMAND_IDS.size || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule-root"]) || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_CAPSULE_ROOT_INTENT_INVALID", "RED_QUARANTINED");
+        capsuleRootIntent = true;
+      }
+      if (record.event === "capsule-root-created") {
+        if (!capsuleRootIdentityRequired || !capsuleRootIntent || capsuleRootCreated || capsuleTargetAbsent || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule-root"]) || record.terminalCode !== "CREATED" || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_CAPSULE_ROOT_CREATED_INVALID", "RED_QUARANTINED");
+        capsuleRootCreated = true; capsuleRootIdentitySha256 = record.commandShapeSha256;
+      }
       if (record.event === "capsule-target-absent") {
-        if (capsuleTargetAbsent || capsuleIntent || receiptTargetAbsent || observedInspectorIds.size !== HOST_INSPECTOR_COMMAND_IDS.size || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule"]) || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_CAPSULE_TARGET_INVALID", "RED_QUARANTINED");
+        if (capsuleTargetAbsent || capsuleIntent || receiptTargetAbsent || observedInspectorIds.size !== HOST_INSPECTOR_COMMAND_IDS.size || (capsuleRootIdentityRequired && !capsuleRootCreated) || !SHA.test(record.commandShapeSha256) || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule"]) || record.terminalCode !== null || record.cleanupState !== "required") fail("CONSTRUCTION_JOURNAL_CAPSULE_TARGET_INVALID", "RED_QUARANTINED");
         capsuleTargetAbsent = true;
         capsuleExpectedSha256 = record.commandShapeSha256;
       }
@@ -1157,7 +1494,7 @@ export function validateConstructionJournalForCleanup(records) {
         receiptStageReady = true;
       }
       if (record.event === "capsule-published") {
-        if (!capsuleStageReady || !receiptStageReady || publicationComplete || record.commandShapeSha256 !== capsuleExpectedSha256 || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule", "public-receipt"]) || record.terminalCode !== "PHYSICAL_ADAPTERS_CONSTRUCTED_HOST_BOUND_YELLOW" || record.cleanupState !== "retain-capsule") fail("CONSTRUCTION_JOURNAL_PUBLICATION_COMMIT_INVALID", "RED_QUARANTINED");
+        if (!capsuleStageReady || !receiptStageReady || publicationComplete || record.commandShapeSha256 !== capsuleExpectedSha256 || canonicalJson(record.ownedResources) !== canonicalJson(["host-binding-capsule", "public-receipt"]) || record.terminalCode !== publicationTerminalCode || record.cleanupState !== "retain-capsule") fail("CONSTRUCTION_JOURNAL_PUBLICATION_COMMIT_INVALID", "RED_QUARANTINED");
         publicationComplete = true;
       }
       continue;
@@ -1177,6 +1514,13 @@ export function validateConstructionJournalForCleanup(records) {
     receiptExpectedSha256,
     capsuleStageReady,
     receiptStageReady,
+    capsuleRootIntent,
+    capsuleRootCreated,
+    capsuleRootIdentitySha256,
+    slotRootIntent,
+    slotRootObserved,
+    slotRootIdentitySha256,
+    environmentDirectoryPlans: Object.freeze(environmentDirectoryPlans.map((plan) => Object.freeze({ ...plan }))),
     removeOwnerInput: ownerInputOpenIntent,
     unstartedSupervisorStarts: Object.freeze([
       ...[...unstartedSupervisorStarts.values()].map((start) => Object.freeze({ ...start, lane: "host-binding", ownedResources: Object.freeze(["inspector-process-group"]) })),
@@ -1206,9 +1550,9 @@ function removeExactPublishedFile(target, expectedMode, expectedSha256 = null) {
   fs.unlinkSync(target);
   fsyncDirectory(path.dirname(target));
 }
-function constructionPublicationStagePath(kind, constructionRoot = CONSTRUCTION_ROOT) {
-  if (!new Set(["capsule", "public-receipt"]).has(kind)) fail("PUBLICATION_STAGE_KIND_INVALID", "RED");
-  return path.join(constructionRoot, `publication-${kind}.v1.stage`);
+function constructionPublicationStagePath(kind, constructionRoot = CONSTRUCTION_ROOT, publicationVersion = "v1") {
+  if (!new Set(["capsule", "public-receipt"]).has(kind) || !new Set(["v1", "v2"]).has(publicationVersion)) fail("PUBLICATION_STAGE_KIND_INVALID", "RED");
+  return path.join(constructionRoot, `publication-${kind}.${publicationVersion}.stage`);
 }
 function assertPublicationFile(stat, expectedMode, code, allowedLinks = [1]) {
   if (!stat.isFile() || stat.isSymbolicLink() || stat.uid !== process.getuid() || !allowedLinks.includes(stat.nlink) || (stat.mode & 0o777) !== expectedMode || stat.size < 1 || stat.size > 2_097_152) fail(code, "RED_QUARANTINED");
@@ -1291,13 +1635,14 @@ function observeExactPublishedFile(target, expectedMode, expectedSha256, expecte
     return true;
   } finally { bytes.fill(0); trailing.fill(0); fs.closeSync(fd); }
 }
-async function atomicPublishConstructionFile(target, bytes, { mode, kind, parent, journal, hostBindingId, stageEvent, stageResource, constructionRoot = CONSTRUCTION_ROOT }) {
+async function atomicPublishConstructionFile(target, bytes, { mode, kind, parent, journal, hostBindingId, stageEvent, stageResource, constructionRoot = CONSTRUCTION_ROOT, publicationVersion = "v1", temporaryRunId = HOST_BINDING_AUTHORITY.constructionRunId }) {
   if (!Buffer.isBuffer(bytes) || bytes.length < 1) fail("TRACKED_WRITE_BYTES_INVALID", "RED");
   if (typeof journal?.append !== "function" || !ID.test(hostBindingId) || !new Set(["capsule-stage-ready", "public-receipt-stage-ready"]).has(stageEvent) || typeof stageResource !== "string") fail("TRACKED_WRITE_STAGE_AUTHORITY_INVALID", "RED");
   if (path.dirname(target) !== parent) fail("TRACKED_WRITE_PARENT_MISMATCH", "RED");
   requirePathEntryAbsent(target, "TRACKED_WRITE_TARGET_PREEXISTS", "RED");
-  const temporary = path.join(parent, `.${path.basename(target)}.${HOST_BINDING_AUTHORITY.constructionRunId}.tmp`);
-  const stage = constructionPublicationStagePath(kind, constructionRoot);
+  if (!ID.test(temporaryRunId) || !new Set(["v1", "v2"]).has(publicationVersion)) fail("TRACKED_WRITE_VERSION_AUTHORITY_INVALID", "RED");
+  const temporary = path.join(parent, `.${path.basename(target)}.${temporaryRunId}.tmp`);
+  const stage = constructionPublicationStagePath(kind, constructionRoot, publicationVersion);
   requirePathEntryAbsent(temporary, "TRACKED_WRITE_TEMP_PREEXISTS", "RED_QUARANTINED");
   requirePathEntryAbsent(stage, "TRACKED_WRITE_STAGE_PREEXISTS", "RED_QUARANTINED");
   let fd = null;
@@ -1518,24 +1863,68 @@ function observeCurrentNodeExecutable(expected = null) {
     return observed;
   } finally { block.fill(0); fs.closeSync(fd); }
 }
-function prepareBlockedSupervisor(root, expectedNodeBinding = null) {
+function hostBindingReattemptOwnedDirectoryIdentitySha256(directoryName, ownedResource, stat) {
+  if (typeof directoryName !== "string" || !/^[a-z][a-z0-9-]*$/u.test(directoryName) || typeof ownedResource !== "string" || !/^[a-z][a-z0-9-]*$/u.test(ownedResource) || stat === null || typeof stat !== "object" || typeof stat.isDirectory !== "function" || !stat.isDirectory() || (typeof stat.isSymbolicLink === "function" && stat.isSymbolicLink()) || stat.uid !== process.getuid() || (stat.mode & 0o777) !== 0o700) fail("HOST_BINDING_REATTEMPT_OWNED_DIRECTORY_IDENTITY_INVALID", "RED_QUARANTINED");
+  return sha256(Buffer.from(canonicalJson({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_owned_directory_identity.v2",
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    directoryName,
+    ownedResource,
+    device: String(stat.dev),
+    inode: String(stat.ino),
+    mode: stat.mode & 0o7777,
+    uid: stat.uid,
+    gid: stat.gid,
+  }), "utf8"));
+}
+function hostBindingReattemptSlotRootIdentitySha256(stat) {
+  return hostBindingReattemptOwnedDirectoryIdentitySha256("blocked-supervisor-pids", "blocked-start-slot-root", stat);
+}
+function assertBlockedSupervisorSlotRootCurrent(prepared) {
+  const stat = fs.lstatSync(prepared.pidRoot);
+  if (!stat.isDirectory() || stat.isSymbolicLink() || stat.uid !== process.getuid() || (stat.mode & 0o777) !== 0o700 || fs.realpathSync(prepared.pidRoot) !== prepared.pidRoot) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_UNSAFE", "RED_QUARANTINED");
+  if (prepared.slotRootIdentitySha256 !== null && hostBindingReattemptSlotRootIdentitySha256(stat) !== prepared.slotRootIdentitySha256) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+  return stat;
+}
+function prepareBlockedSupervisor(root, expectedNodeBinding = null, expectedSlotRootIdentitySha256 = null) {
   const pidRoot = path.join(root, "blocked-supervisor-pids");
   if (!fs.existsSync(pidRoot)) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_NOT_PREPARED", "RED");
   const pidRootStat = fs.lstatSync(pidRoot);
   if (!pidRootStat.isDirectory() || pidRootStat.isSymbolicLink() || pidRootStat.uid !== process.getuid() || (pidRootStat.mode & 0o777) !== 0o700 || fs.realpathSync(pidRoot) !== pidRoot) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_UNSAFE", "RED");
+  if (expectedSlotRootIdentitySha256 !== null && (!SHA.test(expectedSlotRootIdentitySha256) || hostBindingReattemptSlotRootIdentitySha256(pidRootStat) !== expectedSlotRootIdentitySha256)) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
   const nodeBinding = observeCurrentNodeExecutable(expectedNodeBinding);
   const runId = path.basename(root);
   if (!/^[A-Za-z0-9._-]+$/u.test(runId)) fail("BLOCKED_SUPERVISOR_RUN_ID_INVALID", "RED");
-  return Object.freeze({ pidRoot, supervisorSha256: BLOCKED_SUPERVISOR_SHA256, nodeBinding, runId });
+  return Object.freeze({ pidRoot, supervisorSha256: BLOCKED_SUPERVISOR_SHA256, nodeBinding, runId, slotRootIdentitySha256: expectedSlotRootIdentitySha256 });
 }
-async function prepareBlockedStartSlotRoot(root, journal, lane) {
+async function prepareBlockedStartSlotRoot(root, journal, lane, identityRequired = false) {
   const pidRoot = path.join(root, "blocked-supervisor-pids");
   const commandShapeSha256 = sha256(Buffer.from("r4-gate-b-blocked-start-slot-root.v1\n", "utf8"));
   await journal.append({ lane, event: "intent:blocked-start-slot-root", commandShapeSha256, ownedResources: ["blocked-start-slot-root"], cleanupState: "required" });
-  if (fs.existsSync(pidRoot)) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_PREEXISTS", "RED_QUARANTINED");
-  mkdirOwned0700(pidRoot);
-  await journal.append({ lane, event: "observed:blocked-start-slot-root", commandShapeSha256, ownedResources: ["blocked-start-slot-root"], terminalCode: "CREATED", cleanupState: "required" });
-  return pidRoot;
+  if (!identityRequired) {
+    if (fs.existsSync(pidRoot)) fail("BLOCKED_SUPERVISOR_SLOT_ROOT_PREEXISTS", "RED_QUARANTINED");
+    mkdirOwned0700(pidRoot);
+    await journal.append({ lane, event: "observed:blocked-start-slot-root", commandShapeSha256, ownedResources: ["blocked-start-slot-root"], terminalCode: "CREATED", cleanupState: "required" });
+    return pidRoot;
+  }
+  let authority = null;
+  let primaryError = null;
+  let identitySha256 = null;
+  try {
+    authority = createExclusiveOwnedRoot0700(pidRoot, root, "BLOCKED_SUPERVISOR_SLOT_ROOT");
+    identitySha256 = hostBindingReattemptSlotRootIdentitySha256(fs.fstatSync(authority.rootFd));
+    await journal.append({ lane, event: "observed:blocked-start-slot-root", commandShapeSha256: identitySha256, ownedResources: ["blocked-start-slot-root"], terminalCode: "CREATED", cleanupState: "required" });
+    assertExactOwnedRootAuthorityCurrent(authority, "BLOCKED_SUPERVISOR_SLOT_ROOT");
+  } catch (error) {
+    primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("BLOCKED_SUPERVISOR_SLOT_ROOT_CREATE_FAILED", "RED_QUARANTINED");
+  } finally {
+    if (authority !== null && !authority.state.closed) {
+      try { closeExactOwnedRootAuthority(authority, "BLOCKED_SUPERVISOR_SLOT_ROOT_CLOSE_UNCERTAIN"); }
+      catch (closeError) { primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError); }
+    }
+  }
+  if (primaryError !== null) throw primaryError;
+  return Object.freeze({ pidRoot, identitySha256 });
 }
 function readSupervisorReadySlot(slotPath, startId, releaseAuthoritySha256 = null) {
   const stat = fs.lstatSync(slotPath);
@@ -1565,8 +1954,8 @@ function removeObservedSupervisorSlot(slotPath, startId, releaseAuthoritySha256,
   fsyncDirectory(path.dirname(slotPath));
   return true;
 }
-function createProductionBlockedProcessPort(root, expectedNodeBinding = null, auditDiscardFileDescriptors = null, constructionFaultPoint = null) {
-  const prepared = prepareBlockedSupervisor(root, expectedNodeBinding);
+function createProductionBlockedProcessPort(root, expectedNodeBinding = null, auditDiscardFileDescriptors = null, constructionFaultPoint = null, expectedSlotRootIdentitySha256 = null) {
+  const prepared = prepareBlockedSupervisor(root, expectedNodeBinding, expectedSlotRootIdentitySha256);
   if (auditDiscardFileDescriptors !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-blocked-start-"))) || !Array.isArray(auditDiscardFileDescriptors) || auditDiscardFileDescriptors.length !== 2 || auditDiscardFileDescriptors.some((fd) => !Number.isSafeInteger(fd) || fd < 0))) fail("BLOCKED_SUPERVISOR_AUDIT_FD_AUTHORITY_INVALID", "RED");
   const constructionFaultPoints = new Set(["after-slot-open", "before-slot-fstat", "after-slot-fstat", "before-slot-fsync", "after-slot-fsync", "before-parent-fsync", "after-parent-fsync", "before-spawn", "after-spawn", "before-slot-close", "after-slot-close", "before-ready", "after-ready"]);
   if (constructionFaultPoint !== null && (!(root === CONSTRUCTION_ROOT || root.startsWith(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-blocked-start-"))) || !constructionFaultPoints.has(constructionFaultPoint))) fail("BLOCKED_SUPERVISOR_FAULT_AUTHORITY_INVALID", "RED");
@@ -1581,6 +1970,7 @@ function createProductionBlockedProcessPort(root, expectedNodeBinding = null, au
     nodeBinding: prepared.nodeBinding,
     async start({ family, logicalId, startSequence, commandShapeSha256, executable, argv, cwd, environment, stdio = ["pipe", "pipe", "pipe"], targetStdioCount = 3 }) {
       if (!["host-inspector", "codex", "postgres", "macos", "cleanup"].includes(family) || typeof logicalId !== "string" || !/^[A-Za-z0-9-]+$/u.test(logicalId) || !Number.isSafeInteger(startSequence) || startSequence < 0 || !SHA.test(commandShapeSha256) || !path.isAbsolute(executable) || path.normalize(executable) !== executable || !Array.isArray(argv) || argv.some((item) => typeof item !== "string" || item.includes("\0")) || !path.isAbsolute(cwd) || path.normalize(cwd) !== cwd || environment === null || typeof environment !== "object" || Array.isArray(environment) || Object.entries(environment).some(([key, value]) => typeof key !== "string" || typeof value !== "string" || key.includes("\0") || value.includes("\0")) || !Array.isArray(stdio) || stdio.length !== 3 || targetStdioCount !== 3) fail("BLOCKED_SUPERVISOR_START_SHAPE_INVALID", "RED");
+      assertBlockedSupervisorSlotRootCurrent(prepared);
       observeCurrentNodeExecutable(prepared.nodeBinding);
       const copiedArgv = Object.freeze(argv.map((item) => `${item}`));
       const copiedEnvironment = Object.freeze(Object.fromEntries(Object.entries(environment).sort(([left], [right]) => Buffer.from(left, "utf8").compare(Buffer.from(right, "utf8"))).map(([key, value]) => [key, `${value}`])));
@@ -1620,6 +2010,7 @@ function createProductionBlockedProcessPort(root, expectedNodeBinding = null, au
         for (const stream of streams) try { stream?.destroy?.(); } catch { /* bounded group cleanup remains authoritative */ }
       };
       try {
+        assertBlockedSupervisorSlotRootCurrent(prepared);
         slotFd = fs.openSync(slotPath, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | (fs.constants.O_NOFOLLOW ?? 0), 0o600);
         slotCreated = true;
         injectConstructionFault("after-slot-open");
@@ -1632,11 +2023,13 @@ function createProductionBlockedProcessPort(root, expectedNodeBinding = null, au
         injectConstructionFault("after-slot-fsync");
         injectConstructionFault("before-parent-fsync");
         fsyncDirectory(path.dirname(slotPath));
+        assertBlockedSupervisorSlotRootCurrent(prepared);
         injectConstructionFault("after-parent-fsync");
         const afterDurable = fs.fstatSync(slotFd);
         if (afterDurable.dev !== slotIdentity.dev || afterDurable.ino !== slotIdentity.ino || afterDurable.size !== 0) fail("BLOCKED_SUPERVISOR_CREATED_SLOT_DRIFT", "RED_QUARANTINED");
         const wrapperStdio = [...stdio, ...(auditDiscardFileDescriptors ?? ["ignore", "ignore"]), slotFd, "pipe"];
         injectConstructionFault("before-spawn");
+        assertBlockedSupervisorSlotRootCurrent(prepared);
         child = spawn(process.execPath, ["--input-type=module", "--eval", BLOCKED_SUPERVISOR_SOURCE], { cwd: root, env: { FORME_R4_BLOCKED_START_ID: startId, FORME_R4_BLOCKED_RELEASE_AUTHORITY: releaseAuthoritySha256 }, shell: false, detached: true, stdio: wrapperStdio });
         logicalStartObserved = true;
         injectConstructionFault("after-spawn");
@@ -1651,6 +2044,7 @@ function createProductionBlockedProcessPort(root, expectedNodeBinding = null, au
         if (ready === false || ready === null || ready.pid !== child.pid) fail("BLOCKED_SUPERVISOR_READY_MISSING", "RED");
         readySlotIdentity = ready;
         injectConstructionFault("after-ready");
+        assertBlockedSupervisorSlotRootCurrent(prepared);
         observeCurrentNodeExecutable(prepared.nodeBinding);
         let released = false;
         const control = child.stdio[6];
@@ -1749,12 +2143,49 @@ async function recoverUnstartedBlockedSupervisors(root, starts, journal = null) 
     if (ready === false || ready === null) { allAbsent = false; continue; }
     const absent = groupExists(ready.pid) === false || await stopAndProveGroupAbsent(ready.pid);
     if (!absent) { allAbsent = false; continue; }
-    removeObservedSupervisorSlot(slotPath, startId, ready.releaseAuthoritySha256, ready.pid, ready);
+    const readyBeforeAppend = readSupervisorReadySlot(slotPath, startId, ready.releaseAuthoritySha256);
+    if (readyBeforeAppend === false || readyBeforeAppend === null || readyBeforeAppend.pid !== ready.pid || readyBeforeAppend.startId !== ready.startId || readyBeforeAppend.releaseAuthoritySha256 !== ready.releaseAuthoritySha256 || readyBeforeAppend.device !== ready.device || readyBeforeAppend.inode !== ready.inode) fail("BLOCKED_SUPERVISOR_SLOT_IDENTITY_DRIFT", "RED_QUARANTINED");
     if (journal !== null) {
       await journal.append({ lane: start.lane, event: `cleanup-observed-absent:${start.logicalId}`, commandShapeSha256: start.commandShapeSha256, processGroupId: ready.pid, ownedResources: start.ownedResources, terminalCode: "ABSENT", cleanupState: "observed-absent" });
     }
+    removeObservedSupervisorSlot(slotPath, startId, ready.releaseAuthoritySha256, ready.pid, readyBeforeAppend);
   }
   return allAbsent;
+}
+function hostBindingReattemptSupervisorSlotAuthorities(records) {
+  const intents = new Map();
+  const authorities = new Map();
+  for (const record of records) {
+    if (record.lane === "host-binding" && record.event.startsWith("intent:")) {
+      const logicalId = record.event.slice("intent:".length);
+      if (HOST_INSPECTOR_COMMAND_IDS.has(logicalId)) intents.set(logicalId, Object.freeze({ logicalId, startSequence: record.sequence, family: "host-inspector", commandShapeSha256: record.commandShapeSha256 }));
+      continue;
+    }
+    const match = record.lane === "host-binding" ? /^(started|cleanup-observed-absent):(.+)$/u.exec(record.event) : null;
+    if (match === null || !HOST_INSPECTOR_COMMAND_IDS.has(match[2])) continue;
+    const intent = intents.get(match[2]);
+    if (intent === undefined || !Number.isSafeInteger(record.processGroupId) || record.processGroupId <= 1) fail("HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_JOURNAL_INVALID", "RED_QUARANTINED");
+    const prior = authorities.get(record.processGroupId);
+    if (prior === undefined) authorities.set(record.processGroupId, Object.freeze({ ...intent, processGroupId: record.processGroupId }));
+    else if (prior.logicalId !== intent.logicalId || prior.startSequence !== intent.startSequence || prior.commandShapeSha256 !== intent.commandShapeSha256) fail("HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_JOURNAL_DRIFT", "RED_QUARANTINED");
+  }
+  return Object.freeze([...authorities.values()]);
+}
+function removeRecoveredHostBindingReattemptSupervisorSlots(root, records, expectedSlotRootIdentitySha256) {
+  if (!SHA.test(expectedSlotRootIdentitySha256)) fail("HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT_IDENTITY_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const slotRoot = path.join(root, "blocked-supervisor-pids");
+  if (lstatIfPresent(slotRoot, "HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT_UNREADABLE", "RED_QUARANTINED") === null) return true;
+  const slotRootStat = fs.lstatSync(slotRoot);
+  if (!slotRootStat.isDirectory() || slotRootStat.isSymbolicLink() || slotRootStat.uid !== process.getuid() || (slotRootStat.mode & 0o777) !== 0o700 || fs.realpathSync(slotRoot) !== slotRoot || hostBindingReattemptSlotRootIdentitySha256(slotRootStat) !== expectedSlotRootIdentitySha256) fail("HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT_UNSAFE", "RED_QUARANTINED");
+  for (const authority of hostBindingReattemptSupervisorSlotAuthorities(records)) {
+    const startId = blockedStartId({ runId: path.basename(root), startSequence: authority.startSequence, family: authority.family, logicalId: authority.logicalId, commandShapeSha256: authority.commandShapeSha256 });
+    const slotPath = supervisorSlotPath(root, startId);
+    if (lstatIfPresent(slotPath, "HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_UNREADABLE", "RED_QUARANTINED") === null) continue;
+    const ready = readSupervisorReadySlot(slotPath, startId);
+    if (ready === false || ready === null || ready.pid !== authority.processGroupId) fail("HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_AUTHORITY_DRIFT", "RED_QUARANTINED");
+    removeObservedSupervisorSlot(slotPath, startId, ready.releaseAuthoritySha256, authority.processGroupId, ready);
+  }
+  return true;
 }
 function appendBounded(prior, chunk, limit) {
   if (prior.length > limit) return prior;
@@ -5396,6 +5827,1836 @@ export function writeFinalConstructionCheckpoint(input) {
   }
 }
 
+const REATTEMPT_CHECKPOINT_CLAIM_EVENTS = Object.freeze(["checkpoint-publication-intent", "checkpoint-stage-ready", "checkpoint-link-observed", "checkpoint-published"]);
+function reattemptCheckpointClaimRecord({ sequence, previousRecordSha256, event, checkpointSha256, rootIdentity, journalIdentity, publicationIdentity, terminalCode }) {
+  return Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_checkpoint_claim.v2",
+    sequence,
+    previousRecordSha256,
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    event,
+    checkpointSha256,
+    rootIdentity,
+    journalIdentity,
+    publicationIdentity,
+    terminalCode,
+  });
+}
+function sameCheckpointClaimIdentity(left, right) { return canonicalJson(left) === canonicalJson(right); }
+function assertReattemptCheckpointPublication(publication, checkpointSha256, expectedNlink, priorIdentity, code) {
+  if (publication === null || typeof publication !== "object" || publication.sha256 !== checkpointSha256 || publication.identity === null || typeof publication.identity !== "object") fail(code, "RED_QUARANTINED");
+  const identity = checkpointClaimFullIdentity(publication.identity);
+  if (identity.size < 1 || identity.size > 262_144 || identity.mode !== 0o600 || identity.uid !== process.getuid() || identity.nlink !== expectedNlink) fail(code, "RED_QUARANTINED");
+  if (priorIdentity !== null && !sameCheckpointClaimIdentity(checkpointClaimFileIdentity(identity), checkpointClaimFileIdentity(priorIdentity))) fail(code, "RED_QUARANTINED");
+  return identity;
+}
+export function createHostBindingReattemptCheckpointClaim({ rootAuthority, checkpointPath = path.join(rootAuthority?.root ?? "", "checkpoint.v2.json"), checkpointSha256 }) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || checkpointPath !== path.join(rootAuthority.root, "checkpoint.v2.json") || !SHA.test(checkpointSha256)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const journalPath = path.join(rootAuthority.root, "checkpoint-claim.v2.jsonl");
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ROOT");
+  let fd = null;
+  try { fd = fs.openSync(journalPath, fs.constants.O_RDWR | fs.constants.O_CREAT | fs.constants.O_EXCL | (fs.constants.O_NOFOLLOW ?? 0), 0o600); }
+  catch (error) {
+    if (error?.code === "EEXIST") fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PREEXISTS", "RED_QUARANTINED");
+    throw error;
+  }
+  let journalStableIdentity = null;
+  let rootStableIdentity = null;
+  let sequence = 0;
+  let previous = null;
+  let phase = 0;
+  let stageIdentity = null;
+  let finalPublication = null;
+  let closed = false;
+  let poisoned = false;
+  let commitStarted = false;
+  const records = [];
+  const closeDescriptor = (code) => {
+    if (closed) return;
+    const owned = fd; fd = null; closed = true;
+    const closeError = closeCheckpointClaimDescriptor(owned, code);
+    if (closeError !== null) throw closeError;
+  };
+  const assertJournalIdentity = (code) => {
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, `${code}_ROOT`);
+    const opened = fs.fstatSync(fd);
+    const observed = fs.lstatSync(journalPath);
+    if (!opened.isFile() || !observed.isFile() || observed.isSymbolicLink() || opened.nlink !== 1 || observed.nlink !== 1 || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(opened), journalStableIdentity) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), journalStableIdentity)) fail(code, "RED_QUARANTINED");
+  };
+  const append = (event, publicationIdentity, terminalCode) => {
+    if (closed || poisoned || event !== REATTEMPT_CHECKPOINT_CLAIM_EVENTS[sequence]) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_APPEND_STATE_INVALID", "RED_QUARANTINED");
+    const record = reattemptCheckpointClaimRecord({ sequence, previousRecordSha256: previous, event, checkpointSha256, rootIdentity: rootStableIdentity, journalIdentity: journalStableIdentity, publicationIdentity, terminalCode });
+    const bytes = Buffer.from(`${canonicalJson(record)}\n`, "utf8");
+    try {
+      assertJournalIdentity("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_APPEND_DRIFT");
+      writeAll(fd, bytes);
+      fs.fsyncSync(fd);
+      assertJournalIdentity("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_APPEND_DRIFT");
+      previous = sha256(bytes);
+      sequence += 1;
+      records.push(record);
+      return record;
+    } catch (error) { poisoned = true; throw error; }
+    finally { bytes.fill(0); }
+  };
+  try {
+    const created = fs.fstatSync(fd);
+    const observed = fs.lstatSync(journalPath);
+    journalStableIdentity = checkpointClaimStableIdentity(created);
+    rootStableIdentity = checkpointClaimStableIdentity(fs.fstatSync(rootAuthority.rootFd));
+    if (!created.isFile() || !observed.isFile() || observed.isSymbolicLink() || created.uid !== process.getuid() || created.nlink !== 1 || observed.nlink !== 1 || (created.mode & 0o777) !== 0o600 || created.size !== 0 || !sameCheckpointClaimIdentity(journalStableIdentity, checkpointClaimStableIdentity(observed))) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_CREATE_DRIFT", "RED_QUARANTINED");
+    fs.fchmodSync(fd, 0o600);
+    fs.fsyncSync(fd);
+    fs.fsyncSync(rootAuthority.rootFd);
+    append(REATTEMPT_CHECKPOINT_CLAIM_EVENTS[0], null, null);
+  } catch (error) {
+    let cleanupError = null;
+    try {
+      if (journalStableIdentity !== null) {
+        const opened = fs.fstatSync(fd); const observed = fs.lstatSync(journalPath);
+        if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(opened), journalStableIdentity) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), journalStableIdentity)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FACTORY_DRIFT", "RED_QUARANTINED");
+        fs.unlinkSync(journalPath); fs.fsyncSync(rootAuthority.rootFd);
+      }
+    } catch (cleanupFailure) { cleanupError = cleanupFailure; }
+    try { closeDescriptor("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FACTORY_CLOSE_FAILED"); }
+    catch (closeError) { cleanupError = selectPhysicalRunnerTerminalError(cleanupError, closeError, null); }
+    throw selectPhysicalRunnerTerminalError(error, cleanupError, null);
+  }
+  return Object.freeze({
+    path: journalPath,
+    records() { return Object.freeze([...records]); },
+    onTemporaryDurable(publication) {
+      if (phase !== 0) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_STAGE_ORDER_INVALID", "RED_QUARANTINED");
+      stageIdentity = assertReattemptCheckpointPublication(publication, checkpointSha256, 1, null, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_STAGE_INVALID");
+      append(REATTEMPT_CHECKPOINT_CLAIM_EVENTS[1], stageIdentity, "STAGED"); phase = 1;
+    },
+    onLinkDurable(publication) {
+      if (phase !== 1) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_LINK_ORDER_INVALID", "RED_QUARANTINED");
+      const identity = assertReattemptCheckpointPublication(publication, checkpointSha256, 2, stageIdentity, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_LINK_INVALID");
+      append(REATTEMPT_CHECKPOINT_CLAIM_EVENTS[2], identity, "LINKED"); phase = 2;
+    },
+    onPublishedDurable(publication) {
+      if (phase !== 2) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLISH_ORDER_INVALID", "RED_QUARANTINED");
+      const identity = assertReattemptCheckpointPublication(publication, checkpointSha256, 1, stageIdentity, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLISH_INVALID");
+      append(REATTEMPT_CHECKPOINT_CLAIM_EVENTS[3], identity, "PUBLISHED"); phase = 3;
+      finalPublication = Object.freeze({ sha256: checkpointSha256, identity });
+    },
+    commit() {
+      if (phase !== 3 || finalPublication === null || closed || poisoned) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_STATE_INVALID", "RED_QUARANTINED");
+      commitStarted = true;
+      let finalFd = null;
+      let primaryError = null;
+      let journalUnlinked = false;
+      const expectedJournalBytes = Buffer.from(records.map((record) => `${canonicalJson(record)}\n`).join(""), "utf8");
+      const assertFinal = (code) => {
+        const openedBefore = fs.fstatSync(finalFd); const observedBefore = fs.lstatSync(checkpointPath);
+        if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(openedBefore), finalPublication.identity) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(observedBefore), finalPublication.identity)) fail(code, "RED_QUARANTINED");
+        const observedBytes = readCheckpointClaimDescriptorBytes(finalFd, openedBefore.size, `${code}_SHORT_READ`);
+        try {
+          const openedAfter = fs.fstatSync(finalFd); const observedAfter = fs.lstatSync(checkpointPath);
+          if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(openedAfter), finalPublication.identity) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(observedAfter), finalPublication.identity) || sha256(observedBytes) !== checkpointSha256) fail(code, "RED_QUARANTINED");
+        } finally { observedBytes.fill(0); }
+      };
+      try {
+        assertJournalIdentity("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_JOURNAL_DRIFT");
+        const journalBytes = readCheckpointClaimDescriptorBytes(fd, fs.fstatSync(fd).size, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_JOURNAL_SHORT_READ");
+        try { if (!journalBytes.equals(expectedJournalBytes)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_JOURNAL_DRIFT", "RED_QUARANTINED"); }
+        finally { journalBytes.fill(0); }
+        finalFd = fs.openSync(checkpointPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+        assertFinal("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_FINAL_DRIFT");
+        assertJournalIdentity("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_JOURNAL_DRIFT");
+        fs.unlinkSync(journalPath); journalUnlinked = true;
+        const heldJournal = fs.fstatSync(fd);
+        if (heldJournal.nlink !== 0 || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(heldJournal), journalStableIdentity) || lstatIfPresent(journalPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_ABSENCE_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_UNLINK_INVALID", "RED_QUARANTINED");
+        fs.fsyncSync(rootAuthority.rootFd);
+        assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_ROOT");
+        assertFinal("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_FINAL_DRIFT");
+      } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_UNCERTAIN", "RED_QUARANTINED"); }
+      finally {
+        expectedJournalBytes.fill(0);
+        const finalCloseError = finalFd === null ? null : closeCheckpointClaimDescriptor(finalFd, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_FINAL_CLOSE_FAILED");
+        let journalCloseError = null;
+        try { closeDescriptor("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_COMMIT_JOURNAL_CLOSE_FAILED"); }
+        catch (error) { journalCloseError = error; }
+        if (journalUnlinked) closed = true;
+        primaryError = selectPhysicalRunnerTerminalError(primaryError, finalCloseError, journalCloseError);
+      }
+      if (primaryError !== null) throw primaryError;
+      return finalPublication;
+    },
+    abortIfArtifactsAbsent() {
+      if (commitStarted || closed) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_STATE_INVALID", "RED_QUARANTINED");
+      const temporaryPath = privateWriteTemporaryPath(checkpointPath, HOST_BINDING_REATTEMPT_AUTHORITY.runId);
+      if (lstatIfPresent(checkpointPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_FINAL_UNREADABLE") !== null || lstatIfPresent(temporaryPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_TEMP_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_ARTIFACT_PRESENT", "RED_QUARANTINED");
+      assertJournalIdentity("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_JOURNAL_DRIFT");
+      fs.unlinkSync(journalPath);
+      const held = fs.fstatSync(fd);
+      if (held.nlink !== 0 || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(held), journalStableIdentity) || lstatIfPresent(journalPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_ABSENCE_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_UNLINK_INVALID", "RED_QUARANTINED");
+      fs.fsyncSync(rootAuthority.rootFd);
+      closeDescriptor("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ABORT_CLOSE_FAILED");
+    },
+    closeForRecovery() { if (!closed) closeDescriptor("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_CLOSE_FAILED"); },
+    commitStarted() { return commitStarted; },
+  });
+}
+
+function parseHostBindingReattemptCheckpointClaimBytes(bytes, rootAuthority, journalIdentity, { allowTornTail = true } = {}) {
+  if (!Buffer.isBuffer(bytes) || bytes.length < 1 || bytes.includes(0x00) || bytes.includes(0x0d)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FRAME_INVALID", "RED_QUARANTINED");
+  let authenticatedLength = bytes.length;
+  let tornTail = false;
+  if (bytes.at(-1) !== 0x0a) {
+    if (!allowTornTail) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_TORN", "RED_QUARANTINED");
+    authenticatedLength = bytes.lastIndexOf(0x0a) + 1;
+    if (authenticatedLength <= 0) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ZERO_PREFIX", "RED_QUARANTINED");
+    tornTail = true;
+  }
+  const text = bytes.subarray(0, authenticatedLength).toString("utf8");
+  if (Buffer.byteLength(text, "utf8") !== authenticatedLength || !text.endsWith("\n")) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_UTF8_INVALID", "RED_QUARANTINED");
+  const lines = text.slice(0, -1).split("\n");
+  if (lines.length < 1 || lines.length > REATTEMPT_CHECKPOINT_CLAIM_EVENTS.length) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECORD_COUNT_INVALID", "RED_QUARANTINED");
+  const keys = new Set(["schemaVersion", "sequence", "previousRecordSha256", "reattemptRunId", "event", "checkpointSha256", "rootIdentity", "journalIdentity", "publicationIdentity", "terminalCode"]);
+  const terminals = [null, "STAGED", "LINKED", "PUBLISHED"];
+  const expectedRootIdentity = checkpointClaimStableIdentity(fs.fstatSync(rootAuthority.rootFd));
+  const records = [];
+  let previous = null;
+  let checkpointSha256 = null;
+  let publicationFileIdentity = null;
+  for (const [sequence, line] of lines.entries()) {
+    let strict;
+    try { strict = parseStrictJson(line); } catch { fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JSON_INVALID", "RED_QUARANTINED"); }
+    if (canonicalJson(strict) !== line) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_NOT_CANONICAL", "RED_QUARANTINED");
+    const record = JSON.parse(line);
+    if (record === null || typeof record !== "object" || Array.isArray(record) || Object.keys(record).sort().join("\n") !== [...keys].sort().join("\n")) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECORD_SHAPE_INVALID", "RED_QUARANTINED");
+    if (record.schemaVersion !== "r4_gate_b_host_binding_reattempt_checkpoint_claim.v2" || record.sequence !== sequence || record.previousRecordSha256 !== previous || record.reattemptRunId !== HOST_BINDING_REATTEMPT_AUTHORITY.runId || record.event !== REATTEMPT_CHECKPOINT_CLAIM_EVENTS[sequence] || !SHA.test(record.checkpointSha256) || record.terminalCode !== terminals[sequence] || !sameCheckpointClaimIdentity(record.rootIdentity, expectedRootIdentity) || !sameCheckpointClaimIdentity(record.journalIdentity, journalIdentity)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECORD_INVALID", "RED_QUARANTINED");
+    if (sequence === 0) {
+      if (record.publicationIdentity !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_INTENT_IDENTITY_INVALID", "RED_QUARANTINED");
+      checkpointSha256 = record.checkpointSha256;
+    } else {
+      if (record.checkpointSha256 !== checkpointSha256 || record.publicationIdentity === null || typeof record.publicationIdentity !== "object" || Array.isArray(record.publicationIdentity)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLICATION_IDENTITY_INVALID", "RED_QUARANTINED");
+      const fullIdentity = checkpointClaimFullIdentity(record.publicationIdentity);
+      const expectedNlink = sequence === 2 ? 2 : 1;
+      if (!Number.isSafeInteger(fullIdentity.size) || fullIdentity.size < 1 || fullIdentity.size > 262_144 || fullIdentity.mode !== 0o600 || fullIdentity.uid !== process.getuid() || fullIdentity.nlink !== expectedNlink) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLICATION_IDENTITY_INVALID", "RED_QUARANTINED");
+      const fileIdentity = checkpointClaimFileIdentity(fullIdentity);
+      if (publicationFileIdentity !== null && !sameCheckpointClaimIdentity(fileIdentity, publicationFileIdentity)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLICATION_IDENTITY_DRIFT", "RED_QUARANTINED");
+      publicationFileIdentity = fileIdentity;
+    }
+    const recordBytes = Buffer.from(`${line}\n`, "utf8");
+    try { previous = sha256(recordBytes); } finally { recordBytes.fill(0); }
+    records.push(Object.freeze(record));
+  }
+  return Object.freeze({ records: Object.freeze(records), checkpointSha256, publicationFileIdentity, authenticatedLength, tornTail });
+}
+
+export function readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority, allowTornTail = true } = {}) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || typeof allowTornTail !== "boolean") fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_READ_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const journalPath = path.join(rootAuthority.root, "checkpoint-claim.v2.jsonl");
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_READ_ROOT");
+  let fd = null;
+  let bytes = Buffer.alloc(0);
+  let result = null;
+  let primaryError = null;
+  try {
+    const before = fs.lstatSync(journalPath);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== 0o600 || before.size < 1 || before.size > 1_048_576) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FILE_UNSAFE", "RED_QUARANTINED");
+    fd = fs.openSync(journalPath, fs.constants.O_RDWR | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_SHORT_READ");
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(journalPath);
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(opened)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(after))) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_IDENTITY_DRIFT", "RED_QUARANTINED");
+    const parsed = parseHostBindingReattemptCheckpointClaimBytes(bytes, rootAuthority, checkpointClaimStableIdentity(before), { allowTornTail });
+    if (parsed.tornTail) {
+      fs.ftruncateSync(fd, parsed.authenticatedLength); fs.fsyncSync(fd); fs.fsyncSync(rootAuthority.rootFd);
+      const repairedFd = fs.fstatSync(fd); const repairedPath = fs.lstatSync(journalPath);
+      if (repairedFd.size !== parsed.authenticatedLength || repairedPath.size !== parsed.authenticatedLength || repairedFd.dev !== before.dev || repairedFd.ino !== before.ino || repairedPath.dev !== before.dev || repairedPath.ino !== before.ino) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_REPAIR_DRIFT", "RED_QUARANTINED");
+    }
+    result = Object.freeze({ journalPath, journalIdentity: checkpointClaimStableIdentity(before), records: parsed.records, checkpointSha256: parsed.checkpointSha256, publicationFileIdentity: parsed.publicationFileIdentity, tornTailRepaired: parsed.tornTail });
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_READ_FAILED", "RED_QUARANTINED"); }
+  finally {
+    bytes.fill(0);
+    const closeError = fd === null ? null : closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_READ_CLOSE_UNCERTAIN");
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+  }
+  if (primaryError !== null) throw primaryError;
+  return result;
+}
+
+export function reconcileHostBindingReattemptCheckpointClaimForCleanup(authenticated, checkpointPath = path.join(authenticated?.rootAuthority?.root ?? "", "checkpoint.v2.json")) {
+  const { rootAuthority, journalPath, journalIdentity, records, checkpointSha256, publicationFileIdentity } = authenticated ?? {};
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || journalPath !== path.join(rootAuthority.root, "checkpoint-claim.v2.jsonl") || checkpointPath !== path.join(rootAuthority.root, "checkpoint.v2.json") || !Array.isArray(records) || records.length < 1 || records.length > 4 || !SHA.test(checkpointSha256) || journalIdentity === null || typeof journalIdentity !== "object") fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const temporaryPath = privateWriteTemporaryPath(checkpointPath, HOST_BINDING_REATTEMPT_AUTHORITY.runId);
+  const names = fs.readdirSync(rootAuthority.root).sort();
+  const allowedNames = new Set([path.basename(journalPath), path.basename(checkpointPath), path.basename(temporaryPath)]);
+  if (names.some((name) => !allowedNames.has(name))) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_UNKNOWN_RESIDUE", "RED_QUARANTINED");
+  let journalFd = null;
+  let candidateFd = null;
+  let expectedJournalBytes = Buffer.alloc(0);
+  let candidateBytes = Buffer.alloc(0);
+  let primaryError = null;
+  let cleanupDurable = false;
+  try {
+    expectedJournalBytes = Buffer.from(records.map((record) => `${canonicalJson(record)}\n`).join(""), "utf8");
+    journalFd = fs.openSync(journalPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    const assertJournalCurrent = () => {
+      const opened = fs.fstatSync(journalFd); const observed = fs.lstatSync(journalPath);
+      if (!opened.isFile() || !observed.isFile() || observed.isSymbolicLink() || opened.nlink !== 1 || observed.nlink !== 1 || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(opened), journalIdentity) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), journalIdentity) || opened.size !== expectedJournalBytes.length || observed.size !== expectedJournalBytes.length) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_DRIFT", "RED_QUARANTINED");
+      const observedBytes = readCheckpointClaimDescriptorBytes(journalFd, opened.size, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_SHORT_READ");
+      try { if (!observedBytes.equals(expectedJournalBytes)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_DRIFT", "RED_QUARANTINED"); }
+      finally { observedBytes.fill(0); }
+    };
+    assertJournalCurrent();
+    const finalStat = lstatIfPresent(checkpointPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FINAL_UNREADABLE");
+    const temporaryStat = lstatIfPresent(temporaryPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_TEMP_UNREADABLE");
+    const aliasesAbsent = finalStat === null && temporaryStat === null;
+    if (records.length === 1) {
+      if (!aliasesAbsent) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_INTENT_RESIDUE_INVALID", "RED_QUARANTINED");
+    } else if (aliasesAbsent) {
+      if (publicationFileIdentity === null || typeof publicationFileIdentity !== "object") fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PUBLICATION_AUTHORITY_MISSING", "RED_QUARANTINED");
+    } else {
+      const pair = finalStat !== null && temporaryStat !== null;
+      const finalOnly = finalStat !== null && temporaryStat === null;
+      const temporaryOnly = finalStat === null && temporaryStat !== null;
+      const permitted = records.length === 2 ? pair || finalOnly || temporaryOnly : records.length === 3 ? pair || finalOnly : finalOnly;
+      if (!permitted) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_PHASE_RESIDUE_INVALID", "RED_QUARANTINED");
+      const selectedPath = finalStat !== null ? checkpointPath : temporaryPath;
+      const selectedStat = finalStat ?? temporaryStat;
+      const selectedFileIdentity = checkpointClaimFileIdentity(selectedStat);
+      if (!selectedStat.isFile() || selectedStat.isSymbolicLink() || selectedStat.uid !== process.getuid() || (selectedStat.mode & 0o777) !== 0o600 || selectedStat.size < 1 || selectedStat.size > 262_144 || !sameCheckpointClaimIdentity(selectedFileIdentity, publicationFileIdentity) || (pair ? selectedStat.nlink !== 2 || finalStat.dev !== temporaryStat.dev || finalStat.ino !== temporaryStat.ino || temporaryStat.nlink !== 2 : selectedStat.nlink !== 1)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FILE_INVALID", "RED_QUARANTINED");
+      candidateFd = fs.openSync(selectedPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+      candidateBytes = readCheckpointClaimDescriptorBytes(candidateFd, selectedStat.size, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_CANDIDATE_SHORT_READ");
+      const candidateOpened = fs.fstatSync(candidateFd); const candidateObserved = fs.lstatSync(selectedPath);
+      if (!sameCheckpointClaimIdentity(checkpointClaimFileIdentity(candidateOpened), publicationFileIdentity) || !sameCheckpointClaimIdentity(checkpointClaimFileIdentity(candidateObserved), publicationFileIdentity) || sha256(candidateBytes) !== checkpointSha256) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_CANDIDATE_DRIFT", "RED_QUARANTINED");
+      const aliases = [temporaryPath, checkpointPath].filter((candidate) => lstatIfPresent(candidate, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_UNREADABLE") !== null);
+      assertJournalCurrent();
+      for (const [index, alias] of aliases.entries()) {
+        const beforeUnlink = fs.lstatSync(alias);
+        if (!sameCheckpointClaimIdentity(checkpointClaimFileIdentity(beforeUnlink), publicationFileIdentity) || beforeUnlink.dev !== selectedStat.dev || beforeUnlink.ino !== selectedStat.ino || beforeUnlink.nlink !== aliases.length - index) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_DRIFT", "RED_QUARANTINED");
+        fs.unlinkSync(alias);
+      }
+      if (fs.fstatSync(candidateFd).nlink !== 0) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_UNLINK_INVALID", "RED_QUARANTINED");
+    }
+    assertJournalCurrent();
+    fs.fsyncSync(rootAuthority.rootFd);
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_ABSENCE_ROOT");
+    if (lstatIfPresent(checkpointPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_FINAL_ABSENCE_UNREADABLE") !== null || lstatIfPresent(temporaryPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_TEMP_ABSENCE_UNREADABLE") !== null || canonicalJson(stableHostBindingReattemptRootNames(rootAuthority)) !== canonicalJson([path.basename(journalPath)])) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_ABSENCE_DRIFT", "RED_QUARANTINED");
+    if (candidateFd !== null && fs.fstatSync(candidateFd).nlink !== 0) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_ALIAS_UNLINK_INVALID", "RED_QUARANTINED");
+    assertJournalCurrent();
+    fs.unlinkSync(journalPath);
+    if (fs.fstatSync(journalFd).nlink !== 0 || lstatIfPresent(journalPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_ABSENCE_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_UNLINK_INVALID", "RED_QUARANTINED");
+    fs.fsyncSync(rootAuthority.rootFd);
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_ROOT");
+    if (stableHostBindingReattemptRootNames(rootAuthority).length !== 0) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_RESIDUE", "RED_QUARANTINED");
+    cleanupDurable = true;
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_UNCERTAIN", "RED_QUARANTINED"); }
+  finally {
+    expectedJournalBytes.fill(0); candidateBytes.fill(0);
+    const candidateCloseError = candidateFd === null ? null : closeCheckpointClaimDescriptor(candidateFd, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_CANDIDATE_CLOSE_UNCERTAIN");
+    const journalCloseError = journalFd === null ? null : closeCheckpointClaimDescriptor(journalFd, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_JOURNAL_CLOSE_UNCERTAIN");
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, candidateCloseError, journalCloseError);
+  }
+  if (primaryError !== null) throw primaryError;
+  if (!cleanupDurable) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_CLAIM_RECOVERY_INCOMPLETE", "RED_QUARANTINED");
+  removeExactEmptyOwnedRoot(rootAuthority);
+  return Object.freeze({ rootAbsent: true, claimRecovered: true });
+}
+
+const HOST_BINDING_REATTEMPT_NO_INPUT_SENTINEL = Object.freeze({
+  snapshot: () => Object.freeze({ directoryListCalls: 0, statCalls: 0, openCalls: 0, readCalls: 0, removeCalls: 0, presenceObservations: 0 }),
+});
+function assertHostBindingReattemptNoInputAccess(sentinel, code = "HOST_BINDING_REATTEMPT_PREPARE_INPUT_ACCESS") {
+  if (sentinel === null || typeof sentinel !== "object" || Array.isArray(sentinel) || typeof sentinel.snapshot !== "function") fail(`${code}_SENTINEL_INVALID`, "RED");
+  const snapshot = sentinel.snapshot();
+  exactObject(snapshot, new Set(["directoryListCalls", "statCalls", "openCalls", "readCalls", "removeCalls", "presenceObservations"]), `${code}_SENTINEL_SHAPE`);
+  if (Object.values(snapshot).some((value) => value !== 0)) fail(code, "RED");
+  return true;
+}
+function normalizeHostBindingReattemptPrepareArguments(input) {
+  exactObject(input, new Set(["mode", "validationReceipt", "authorityAuditReceipt", "hostAuditReceipt"]), "HOST_BINDING_REATTEMPT_PREPARE_ARGUMENT_SHAPE");
+  if (input.mode !== "prepare-host-binding-reattempt" || ![input.validationReceipt, input.authorityAuditReceipt, input.hostAuditReceipt].every((value) => BASE64URL_CANONICAL_JSON.test(value))) fail("HOST_BINDING_REATTEMPT_PREPARE_ARGUMENT_INVALID", "RED");
+  return input;
+}
+function normalizeHostBindingReattemptRuntime(runtime) {
+  if (runtime === null || typeof runtime !== "object" || !Array.isArray(runtime.files) || !Number.isSafeInteger(runtime.fileCount) || runtime.fileCount !== runtime.files.length || !SHA.test(runtime.aggregateSha256)) fail("HOST_BINDING_REATTEMPT_RUNTIME_INVENTORY_INVALID", "RED");
+  return runtime;
+}
+function createHostBindingReattemptCheckpoint({ authority, validationReceipt, authorityAuditReceipt, hostAuditReceipt, runtime, hashFile }) {
+  if (authority === null || typeof authority !== "object" || authority.changedPathCount !== 12 || !GIT.test(authority.implementationHead) || !GIT.test(authority.implementationTree) || !SHA.test(authority.worksetAggregateSha256) || typeof hashFile !== "function") fail("HOST_BINDING_REATTEMPT_CHECKPOINT_AUTHORITY_INVALID", "RED");
+  const checkpoint = Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_checkpoint.v2",
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    ...HOST_BINDING_REATTEMPT_HISTORY,
+    reattemptPacketSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256,
+    reattemptOwnerReviewSha256: HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256,
+    approvedProposalHead: HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead,
+    approvedProposalTree: HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree,
+    implementationHead: authority.implementationHead,
+    implementationTree: authority.implementationTree,
+    physicalRunnerSha256: hashFile("scripts/r4-gate-b-physical-runner.mjs"),
+    hostBindingModuleSha256: hashFile("scripts/r4-gate-b-host-binding.mjs"),
+    physicalPortSha256: hashFile("scripts/r4-gate-b-physical-port.mjs"),
+    runnerContractSha256: hashFile("schemas/r4/gate-b-core/physical-runner-contract.json"),
+    codexProfileSha256: hashFile("schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb"),
+    runtimeDependencyCount: runtime.fileCount,
+    runtimeDependencyAggregateSha256: runtime.aggregateSha256,
+    runtimeDependencies: runtime.files,
+    worksetPathCount: authority.changedPathCount,
+    worksetAggregateSha256: authority.worksetAggregateSha256,
+    validationAggregateSha256: validationReceipt.value.validationAggregateSha256,
+    validationReceiptSha256: validationReceipt.sha256,
+    authorityAuditReceiptSha256: authorityAuditReceipt.sha256,
+    hostAuditReceiptSha256: hostAuditReceipt.sha256,
+    priorHostBindingAttempts: HOST_BINDING_REATTEMPT_AUTHORITY.priorHostBindingAttempts,
+    additionalHostBindingAttemptCeiling: HOST_BINDING_REATTEMPT_AUTHORITY.additionalHostBindingAttemptCeiling,
+    hostBindingReattemptPreparationGrant: HOST_BINDING_REATTEMPT_AUTHORITY.preparationGrant,
+    hostBindingAttemptGrant: HOST_BINDING_REATTEMPT_AUTHORITY.hostBindingAttemptGrant,
+    retryExecutionGrant: HOST_BINDING_REATTEMPT_AUTHORITY.retryExecutionGrant,
+    firstProviderCallGrant: HOST_BINDING_REATTEMPT_AUTHORITY.firstProviderCallGrant,
+  });
+  for (const key of ["physicalRunnerSha256", "hostBindingModuleSha256", "physicalPortSha256", "runnerContractSha256", "codexProfileSha256"]) if (!SHA.test(checkpoint[key])) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_RUNTIME_HASH_INVALID", "RED");
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", checkpoint, "HOST_BINDING_REATTEMPT_CHECKPOINT_SCHEMA_INVALID");
+  return checkpoint;
+}
+function readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath, expectedSha256 = null }) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || checkpointPath !== path.join(rootAuthority.root, "checkpoint.v2.json") || (expectedSha256 !== null && !SHA.test(expectedSha256))) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_READ_AUTHORITY_INVALID", "RED_QUARANTINED");
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_READ_ROOT");
+  let fd = null;
+  let bytes = Buffer.alloc(0);
+  let value = null;
+  let observedSha256 = null;
+  let primaryError = null;
+  try {
+    const before = fs.lstatSync(checkpointPath);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== 0o600 || before.size < 1 || before.size > 262_144) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_FILE_UNSAFE", "RED_QUARANTINED");
+    fd = fs.openSync(checkpointPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_CHECKPOINT_SHORT_READ");
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(checkpointPath);
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_READ_ROOT");
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(opened), checkpointClaimFullIdentity(before)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(after), checkpointClaimFullIdentity(before)) || bytes.at(-1) !== 0x0a || bytes.subarray(0, -1).includes(0x0a) || bytes.includes(0x00) || bytes.includes(0x0d)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_FRAME_INVALID", "RED_QUARANTINED");
+    const checkpointText = bytes.subarray(0, -1).toString("utf8");
+    let strictValue;
+    try { strictValue = parseStrictJson(checkpointText); }
+    catch { fail("HOST_BINDING_REATTEMPT_CHECKPOINT_JSON_INVALID", "RED_QUARANTINED"); }
+    if (canonicalJson(strictValue) !== checkpointText) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_NOT_CANONICAL", "RED_QUARANTINED");
+    value = JSON.parse(checkpointText);
+    validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", value, "HOST_BINDING_REATTEMPT_CHECKPOINT_SCHEMA_INVALID");
+    observedSha256 = sha256(bytes);
+    if (expectedSha256 !== null && observedSha256 !== expectedSha256) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_HASH_MISMATCH", "RED");
+  } catch (error) {
+    primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CHECKPOINT_READ_FAILED", "RED_QUARANTINED");
+    if (primaryError !== error) primaryError.cause = error;
+  }
+  finally {
+    bytes.fill(0);
+    const closeError = fd === null ? null : closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_CHECKPOINT_CLOSE_UNCERTAIN");
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+  }
+  if (primaryError !== null) throw primaryError;
+  return Object.freeze({ checkpoint: Object.freeze(value), checkpointSha256: observedSha256 });
+}
+export function createHostBindingReattemptActivationCard(checkpoint, checkpointSha256) {
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", checkpoint, "HOST_BINDING_REATTEMPT_CHECKPOINT_SCHEMA_INVALID");
+  if (!SHA.test(checkpointSha256) || sha256(Buffer.from(`${canonicalJson(checkpoint)}\n`, "utf8")) !== checkpointSha256) fail("HOST_BINDING_REATTEMPT_ACTIVATION_CARD_CHECKPOINT_MISMATCH", "RED");
+  const attemptId = deriveHostBindingReattemptAttemptId({
+    reattemptPacketSha256: checkpoint.reattemptPacketSha256,
+    reattemptOwnerReviewSha256: checkpoint.reattemptOwnerReviewSha256,
+    approvedProposalHead: checkpoint.approvedProposalHead,
+    implementationHead: checkpoint.implementationHead,
+    checkpointSha256,
+  });
+  const card = Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_activation_card.v2",
+    reattemptPacketSha256: checkpoint.reattemptPacketSha256,
+    reattemptOwnerReviewSha256: checkpoint.reattemptOwnerReviewSha256,
+    approvedProposalHead: checkpoint.approvedProposalHead,
+    approvedProposalTree: checkpoint.approvedProposalTree,
+    implementationHead: checkpoint.implementationHead,
+    implementationTree: checkpoint.implementationTree,
+    checkpointSha256,
+    worksetAggregateSha256: checkpoint.worksetAggregateSha256,
+    validationReceiptSha256: checkpoint.validationReceiptSha256,
+    authorityAuditReceiptSha256: checkpoint.authorityAuditReceiptSha256,
+    hostAuditReceiptSha256: checkpoint.hostAuditReceiptSha256,
+    attemptId,
+    priorHostBindingAttempts: 1,
+    additionalHostBindingAttemptCeiling: 1,
+    attemptOrdinal: 2,
+    hostBindingInputAccessed: false,
+    hostBindingInputPresenceObserved: false,
+    dockerReadOnlyCliCalls: 0,
+    localDockerUnixSocketRequests: 0,
+    macosReadOnlyInspectionCalls: 0,
+    dockerMutationCalls: 0,
+    credentialsRead: 0,
+    realPhysicalEffects: 0,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    signingCalls: 0,
+    keychainCalls: 0,
+    localAuthenticationCalls: 0,
+    retryExecutions: 0,
+    providerCalls: 0,
+    externalRuntimeNetworkCalls: 0,
+    futureDockerReadOnlyCliCeiling: 3,
+    futureLocalDockerUnixSocketRequestCeiling: 2,
+    futureMacosReadOnlyInspectionCeiling: 9,
+    checkpointRetained: true,
+    reattemptJournalAbsent: true,
+    blockedSupervisorPidRecordsAbsent: true,
+    ownedTemporaryResourcesAbsent: true,
+    processGroupsAbsent: true,
+    hostBindingCapsulePresent: false,
+    hostBindingPublicReceiptPresent: false,
+    consumedAttemptTombstonePresent: false,
+    cleanupStatus: "GREEN",
+    hostBindingReattemptPreparationGrant: "APPROVED",
+    hostBindingAttemptGrant: "NOT_REQUESTED",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+    status: "WAITING_OWNER_ACTIVATION",
+    aggregateVerdict: "YELLOW",
+  });
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", card, "HOST_BINDING_REATTEMPT_ACTIVATION_CARD_SCHEMA_INVALID");
+  return card;
+}
+function removeExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath, publication }) {
+  if (publication === null || typeof publication !== "object" || !SHA.test(publication.sha256)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_AUTHORITY_INVALID", "RED_QUARANTINED");
+  let fd = null;
+  let bytes = Buffer.alloc(0);
+  try {
+    assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_ROOT");
+    const before = fs.lstatSync(checkpointPath);
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(publication.identity))) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_IDENTITY_DRIFT", "RED_QUARANTINED");
+    fd = fs.openSync(checkpointPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_SHORT_READ");
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(checkpointPath);
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(opened), checkpointClaimFullIdentity(publication.identity)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(after), checkpointClaimFullIdentity(publication.identity)) || sha256(bytes) !== publication.sha256) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_DRIFT", "RED_QUARANTINED");
+    fs.unlinkSync(checkpointPath);
+    const held = fs.fstatSync(fd);
+    if (held.nlink !== 0 || lstatIfPresent(checkpointPath, "HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_ABSENCE_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_UNLINK_INVALID", "RED_QUARANTINED");
+    fs.fsyncSync(rootAuthority.rootFd);
+  } catch (error) {
+    if (error instanceof PhysicalRunnerError) throw error;
+    fail("HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_FAILED", "RED_QUARANTINED");
+  } finally {
+    bytes.fill(0);
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_CHECKPOINT_ROLLBACK_CLOSE_UNCERTAIN");
+      if (closeError !== null) throw closeError;
+    }
+  }
+}
+export function prepareHostBindingReattempt(input, {
+  reattemptRoot = REATTEMPT_ROOT,
+  rootAnchor = REPOSITORY_ROOT,
+  consumedAttemptPath = REATTEMPT_CONSUMED_PATH,
+  publicReceiptPath = REATTEMPT_PUBLIC_RECEIPT_PATH,
+  capsuleRoot = REATTEMPT_CAPSULE_ROOT,
+  authorityVerifier = verifyHostBindingReattemptAuthority,
+  receiptDecoder = decodeHostBindingReattemptEvidenceReceipt,
+  runtimeInventory = runtimeDependencyInventory,
+  hashFile = fileSha,
+  activationCardFactory = createHostBindingReattemptActivationCard,
+  checkpointClaimFactory = createHostBindingReattemptCheckpointClaim,
+  checkpointWriter = atomicWritePrivateFile,
+  inputAccessSentinel = HOST_BINDING_REATTEMPT_NO_INPUT_SENTINEL,
+} = {}) {
+  const parsed = normalizeHostBindingReattemptPrepareArguments(input);
+  const production = reattemptRoot === REATTEMPT_ROOT;
+  if (![reattemptRoot, rootAnchor, consumedAttemptPath, publicReceiptPath, capsuleRoot].every((value) => typeof value === "string" && path.isAbsolute(value) && path.normalize(value) === value) || typeof authorityVerifier !== "function" || typeof receiptDecoder !== "function" || typeof runtimeInventory !== "function" || typeof hashFile !== "function" || typeof activationCardFactory !== "function" || typeof checkpointClaimFactory !== "function" || typeof checkpointWriter !== "function") fail("HOST_BINDING_REATTEMPT_PREPARE_CONTROLLER_AUTHORITY_INVALID", "RED");
+  if (production && (rootAnchor !== REPOSITORY_ROOT || consumedAttemptPath !== REATTEMPT_CONSUMED_PATH || publicReceiptPath !== REATTEMPT_PUBLIC_RECEIPT_PATH || capsuleRoot !== REATTEMPT_CAPSULE_ROOT || authorityVerifier !== verifyHostBindingReattemptAuthority || receiptDecoder !== decodeHostBindingReattemptEvidenceReceipt || runtimeInventory !== runtimeDependencyInventory || hashFile !== fileSha || activationCardFactory !== createHostBindingReattemptActivationCard || checkpointClaimFactory !== createHostBindingReattemptCheckpointClaim || checkpointWriter !== atomicWritePrivateFile || inputAccessSentinel !== HOST_BINDING_REATTEMPT_NO_INPUT_SENTINEL)) fail("HOST_BINDING_REATTEMPT_PREPARE_PRODUCTION_OVERRIDE_DENIED", "RED");
+  assertHostBindingReattemptNoInputAccess(inputAccessSentinel);
+  let rootAuthority = null;
+  let checkpointClaim = null;
+  let checkpointPublication = null;
+  let retained = false;
+  let primaryError = null;
+  try {
+    const authority = authorityVerifier();
+    const binding = Object.freeze({ implementationHead: authority.implementationHead, implementationTree: authority.implementationTree });
+    const validationReceipt = receiptDecoder(parsed.validationReceipt, "validation", binding);
+    const authorityAuditReceipt = receiptDecoder(parsed.authorityAuditReceipt, "authority-audit", binding);
+    const hostAuditReceipt = receiptDecoder(parsed.hostAuditReceipt, "host-audit", binding);
+    const runtime = normalizeHostBindingReattemptRuntime(runtimeInventory());
+    const checkpoint = createHostBindingReattemptCheckpoint({ authority, validationReceipt, authorityAuditReceipt, hostAuditReceipt, runtime, hashFile });
+    requirePathEntryAbsent(consumedAttemptPath, "HOST_BINDING_REATTEMPT_ATTEMPT_ALREADY_CONSUMED", "RED");
+    requirePathEntryAbsent(publicReceiptPath, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PREEXISTS", "RED");
+    requirePathEntryAbsent(capsuleRoot, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_PREEXISTS", "RED");
+    requirePathEntryAbsent(reattemptRoot, "HOST_BINDING_REATTEMPT_ROOT_PREEXISTS", "RED_QUARANTINED");
+    ensureOwnedPrivateDirectory(path.dirname(reattemptRoot), rootAnchor);
+    rootAuthority = createExclusiveOwnedRoot0700(reattemptRoot, rootAnchor, "HOST_BINDING_REATTEMPT_ROOT");
+    const checkpointPath = path.join(reattemptRoot, "checkpoint.v2.json");
+    const checkpointBytes = Buffer.from(`${canonicalJson(checkpoint)}\n`, "utf8");
+    try {
+      const checkpointSha256 = sha256(checkpointBytes);
+      checkpointClaim = checkpointClaimFactory({ rootAuthority, checkpointPath, checkpointSha256 });
+      checkpointPublication = checkpointWriter(checkpointPath, checkpointBytes, 0o600, {
+        anchor: rootAnchor,
+        temporaryRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+        onTemporaryDurable: checkpointClaim.onTemporaryDurable,
+        onLinkDurable: checkpointClaim.onLinkDurable,
+        onPublishedDurable: checkpointClaim.onPublishedDurable,
+      });
+      const reopened = readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath, expectedSha256: checkpointSha256 });
+      if (canonicalJson(reopened.checkpoint) !== canonicalJson(checkpoint)) fail("HOST_BINDING_REATTEMPT_CHECKPOINT_REOPEN_DRIFT", "RED");
+      const stableAuthority = authorityVerifier();
+      if (stableAuthority.implementationHead !== authority.implementationHead || stableAuthority.implementationTree !== authority.implementationTree || stableAuthority.worksetAggregateSha256 !== authority.worksetAggregateSha256) fail("HOST_BINDING_REATTEMPT_IMPLEMENTATION_DRIFT", "RED");
+      const card = activationCardFactory(checkpoint, checkpointSha256);
+      checkpointClaim.commit();
+      assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_CHECKPOINT_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+      assertHostBindingReattemptNoInputAccess(inputAccessSentinel);
+      closeExactOwnedRootAuthority(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT_AUTHORITY_CLOSE_FAILED");
+      rootAuthority = null;
+      retained = true;
+      return card;
+    } finally { checkpointBytes.fill(0); }
+  } catch (error) {
+    primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_PREPARE_UNCONTROLLED", "RED");
+  } finally {
+    if (!retained && rootAuthority !== null && !rootAuthority.state.closed) {
+      let cleanupError = null;
+      try {
+        if (checkpointClaim?.commitStarted() === true) {
+          checkpointClaim.closeForRecovery();
+          closeExactOwnedRootAuthority(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT_AUTHORITY_CLOSE_FAILED");
+        } else {
+          if (checkpointPublication !== null) removeExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath: path.join(reattemptRoot, "checkpoint.v2.json"), publication: checkpointPublication });
+          checkpointClaim?.abortIfArtifactsAbsent();
+          removeExactEmptyOwnedRoot(rootAuthority);
+        }
+      } catch (error) {
+        cleanupError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_PREPARE_CLEANUP_FAILED", "RED_QUARANTINED");
+        try { checkpointClaim?.closeForRecovery(); }
+        catch (closeError) { cleanupError = selectPhysicalRunnerTerminalError(cleanupError, null, closeError); }
+        if (!rootAuthority.state.closed) {
+          try { closeExactOwnedRootAuthority(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT_AUTHORITY_CLOSE_FAILED"); rootAuthority = null; }
+          catch (closeError) { cleanupError = selectPhysicalRunnerTerminalError(cleanupError, null, closeError); }
+        }
+      }
+      primaryError = selectPhysicalRunnerTerminalError(primaryError, cleanupError, null);
+    }
+  }
+  assertHostBindingReattemptNoInputAccess(inputAccessSentinel);
+  throw primaryError;
+}
+
+function hostBindingReattemptJournalRecord(sequence, previousRecordSha256, partial) {
+  return Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_journal.v2",
+    sequence,
+    previousRecordSha256,
+    runId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    manifestSha256: null,
+    hostBindingId: partial.hostBindingId ?? null,
+    lane: partial.lane,
+    event: partial.event,
+    commandShapeSha256: partial.commandShapeSha256 ?? null,
+    processGroupId: partial.processGroupId ?? null,
+    ownedResources: partial.ownedResources ?? [],
+    terminalCode: partial.terminalCode ?? null,
+    cleanupState: partial.cleanupState ?? "required",
+  });
+}
+function validateHostBindingReattemptJournalRecord(record, sequence, previousRecordSha256) {
+  const keys = new Set(["schemaVersion", "sequence", "previousRecordSha256", "runId", "manifestSha256", "hostBindingId", "lane", "event", "commandShapeSha256", "processGroupId", "ownedResources", "terminalCode", "cleanupState"]);
+  if (record === null || typeof record !== "object" || Array.isArray(record) || Object.keys(record).sort().join("\n") !== [...keys].sort().join("\n")) fail("HOST_BINDING_REATTEMPT_JOURNAL_RECORD_SHAPE", "RED_QUARANTINED");
+  if (record.schemaVersion !== "r4_gate_b_host_binding_reattempt_journal.v2" || record.sequence !== sequence || record.previousRecordSha256 !== previousRecordSha256 || record.runId !== HOST_BINDING_REATTEMPT_AUTHORITY.runId || record.manifestSha256 !== null || (record.hostBindingId !== null && !ID.test(record.hostBindingId)) || typeof record.lane !== "string" || typeof record.event !== "string" || (record.commandShapeSha256 !== null && !SHA.test(record.commandShapeSha256)) || (record.processGroupId !== null && (!Number.isSafeInteger(record.processGroupId) || record.processGroupId <= 1)) || !Array.isArray(record.ownedResources) || record.ownedResources.some((value) => typeof value !== "string") || (record.terminalCode !== null && typeof record.terminalCode !== "string") || !["required", "observed-absent", "quarantined", "retain-capsule"].includes(record.cleanupState)) fail("HOST_BINDING_REATTEMPT_JOURNAL_RECORD_INVALID", "RED_QUARANTINED");
+  return record;
+}
+export function createHostBindingReattemptJournal(rootAuthority) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed) fail("HOST_BINDING_REATTEMPT_JOURNAL_AUTHORITY_INVALID", "RED_QUARANTINED");
+  assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_CHECKPOINT_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+  const journalPath = path.join(rootAuthority.root, "journal.v2.jsonl");
+  let fd = null;
+  let identity = null;
+  try {
+    fd = fs.openSync(journalPath, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | (fs.constants.O_NOFOLLOW ?? 0), 0o600);
+    fs.fchmodSync(fd, 0o600);
+    identity = fs.fstatSync(fd);
+    const observed = fs.lstatSync(journalPath);
+    if (!identity.isFile() || !observed.isFile() || observed.isSymbolicLink() || identity.uid !== process.getuid() || identity.nlink !== 1 || (identity.mode & 0o777) !== 0o600 || identity.size !== 0 || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(identity), checkpointClaimFullIdentity(observed))) fail("HOST_BINDING_REATTEMPT_JOURNAL_CREATE_IDENTITY_INVALID", "RED_QUARANTINED");
+    fs.fsyncSync(fd);
+    fs.fsyncSync(rootAuthority.rootFd);
+    assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_CHECKPOINT_AND_JOURNAL_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+  } catch (error) {
+    let cleanupError = null;
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_JOURNAL_CREATE_CLOSE_UNCERTAIN");
+      fd = null;
+      cleanupError = closeError;
+    }
+    if (identity !== null) {
+      try {
+        const observed = fs.lstatSync(journalPath);
+        if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(observed), checkpointClaimFullIdentity(identity))) fail("HOST_BINDING_REATTEMPT_JOURNAL_CREATE_CLEANUP_DRIFT", "RED_QUARANTINED");
+        fs.unlinkSync(journalPath); fs.fsyncSync(rootAuthority.rootFd);
+      } catch (cleanupFailure) { cleanupError = selectPhysicalRunnerTerminalError(cleanupError, cleanupFailure, null); }
+    }
+    throw selectPhysicalRunnerTerminalError(error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_JOURNAL_CREATE_FAILED", "RED"), cleanupError, null);
+  }
+  let sequence = 0;
+  let previous = null;
+  let poisoned = false;
+  let closed = false;
+  const raw = [];
+  const records = [];
+  return Object.freeze({
+    path: journalPath,
+    async append(partial) {
+      if (closed) fail("HOST_BINDING_REATTEMPT_JOURNAL_CLOSED", "RED_QUARANTINED");
+      if (poisoned) fail("HOST_BINDING_REATTEMPT_JOURNAL_POISONED", "RED_QUARANTINED");
+      const record = hostBindingReattemptJournalRecord(sequence, previous, partial);
+      validateHostBindingReattemptJournalRecord(record, sequence, previous);
+      const bytes = Buffer.from(`${canonicalJson(record)}\n`, "utf8");
+      try {
+        assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_JOURNAL_ROOT");
+        writeAll(fd, bytes); fs.fsyncSync(fd);
+        const opened = fs.fstatSync(fd); const observed = fs.lstatSync(journalPath);
+        if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(opened), checkpointClaimStableIdentity(identity)) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), checkpointClaimStableIdentity(identity)) || opened.nlink !== 1 || observed.nlink !== 1) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_DRIFT", "RED_QUARANTINED");
+        previous = sha256(bytes); sequence += 1; raw.push(Buffer.from(bytes)); records.push(record);
+        return record;
+      } catch (error) { poisoned = true; throw error; }
+      finally { bytes.fill(0); }
+    },
+    close() {
+      if (!closed) {
+        closed = true;
+        const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_JOURNAL_CLOSE_UNCERTAIN"); fd = null;
+        if (closeError !== null) throw closeError;
+      }
+    },
+    zeroize() { for (const bytes of raw) bytes.fill(0); },
+    records() { return Object.freeze([...records]); },
+    aggregateSha256() { if (poisoned) fail("HOST_BINDING_REATTEMPT_JOURNAL_POISONED", "RED_QUARANTINED"); return sha256(Buffer.concat(raw)); },
+  });
+}
+function parseHostBindingReattemptJournalBytes(bytes, { allowTornTail = false, expectedTombstoneSha256 } = {}) {
+  if (!SHA.test(expectedTombstoneSha256)) fail("HOST_BINDING_REATTEMPT_JOURNAL_TOMBSTONE_AUTHORITY_INVALID", "RED_QUARANTINED");
+  if (!Buffer.isBuffer(bytes) || bytes.length < 1 || bytes.includes(0x00) || bytes.includes(0x0d)) fail("HOST_BINDING_REATTEMPT_JOURNAL_FRAME_INVALID", "RED_QUARANTINED");
+  let authenticatedLength = bytes.length;
+  let tornTail = false;
+  if (bytes.at(-1) !== 0x0a) {
+    if (!allowTornTail) fail("HOST_BINDING_REATTEMPT_JOURNAL_TORN", "RED_QUARANTINED");
+    authenticatedLength = bytes.lastIndexOf(0x0a) + 1;
+    if (authenticatedLength <= 0) fail("HOST_BINDING_REATTEMPT_JOURNAL_ZERO_PREFIX", "RED_QUARANTINED");
+    tornTail = true;
+  }
+  const text = bytes.subarray(0, authenticatedLength).toString("utf8");
+  if (Buffer.byteLength(text, "utf8") !== authenticatedLength || !text.endsWith("\n")) fail("HOST_BINDING_REATTEMPT_JOURNAL_UTF8_INVALID", "RED_QUARANTINED");
+  const records = [];
+  let previous = null;
+  for (const [sequence, line] of text.slice(0, -1).split("\n").entries()) {
+    if (line.length < 2) fail("HOST_BINDING_REATTEMPT_JOURNAL_EMPTY_RECORD", "RED_QUARANTINED");
+    let strictRecord;
+    try { strictRecord = parseStrictJson(line); } catch { fail("HOST_BINDING_REATTEMPT_JOURNAL_JSON_INVALID", "RED_QUARANTINED"); }
+    if (canonicalJson(strictRecord) !== line) fail("HOST_BINDING_REATTEMPT_JOURNAL_NOT_CANONICAL", "RED_QUARANTINED");
+    const record = JSON.parse(line);
+    validateHostBindingReattemptJournalRecord(record, sequence, previous);
+    const recordBytes = Buffer.from(`${line}\n`, "utf8");
+    try { previous = sha256(recordBytes); } finally { recordBytes.fill(0); }
+    records.push(Object.freeze(record));
+  }
+  const first = records[0];
+  if (first === undefined || first.sequence !== 0 || first.previousRecordSha256 !== null || first.lane !== "host-binding" || first.event !== "input-open-intent" || first.hostBindingId !== null || first.commandShapeSha256 !== expectedTombstoneSha256 || first.processGroupId !== null || canonicalJson(first.ownedResources) !== canonicalJson(["owner-input-envelope"]) || first.terminalCode !== null || first.cleanupState !== "required") fail("HOST_BINDING_REATTEMPT_JOURNAL_DOMAIN_INVALID", "RED_QUARANTINED");
+  validateConstructionJournalForCleanup(records, { inputOpenCommandFrame: "fixed-owner-input-open-v2\n", inputOpenCommandShapeSha256: expectedTombstoneSha256, publicationTerminalCode: "HOST_BOUND_YELLOW", capsuleRootIdentityRequired: true, ownedDirectoryIdentityRequired: true });
+  return Object.freeze({ records: Object.freeze(records), authenticatedLength, tornTail });
+}
+export function readHostBindingReattemptJournalForCleanup({ rootAuthority, authenticatedTombstone, allowTornTail = true } = {}) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || !authenticatedHostBindingReattemptTombstones.has(authenticatedTombstone) || !SHA.test(authenticatedTombstone.tombstoneSha256)) fail("HOST_BINDING_REATTEMPT_JOURNAL_READ_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const expectedTombstoneSha256 = authenticatedTombstone.tombstoneSha256;
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_JOURNAL_READ_ROOT");
+  const journalPath = path.join(rootAuthority.root, "journal.v2.jsonl");
+  let fd = null;
+  let bytes = Buffer.alloc(0);
+  let result = null;
+  let primaryError = null;
+  let closeFaultCode = null;
+  try {
+    const before = fs.lstatSync(journalPath);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== 0o600 || before.size > 16_777_216) fail("HOST_BINDING_REATTEMPT_JOURNAL_FILE_UNSAFE", "RED_QUARANTINED");
+    fd = fs.openSync(journalPath, fs.constants.O_RDWR | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_JOURNAL_SHORT_READ");
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(journalPath);
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(opened), checkpointClaimFullIdentity(before)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(after), checkpointClaimFullIdentity(before))) fail("HOST_BINDING_REATTEMPT_JOURNAL_IDENTITY_DRIFT", "RED_QUARANTINED");
+    const parsed = before.size === 0 ? Object.freeze({ records: Object.freeze([]), authenticatedLength: 0, tornTail: false }) : parseHostBindingReattemptJournalBytes(bytes, { allowTornTail, expectedTombstoneSha256 });
+    if (parsed.tornTail) {
+      fs.ftruncateSync(fd, parsed.authenticatedLength); fs.fsyncSync(fd); fs.fsyncSync(rootAuthority.rootFd);
+      const repairedFd = fs.fstatSync(fd); const repairedPath = fs.lstatSync(journalPath);
+      if (repairedFd.size !== parsed.authenticatedLength || repairedPath.size !== parsed.authenticatedLength || repairedFd.dev !== before.dev || repairedFd.ino !== before.ino || repairedPath.dev !== before.dev || repairedPath.ino !== before.ino) fail("HOST_BINDING_REATTEMPT_JOURNAL_REPAIR_DRIFT", "RED_QUARANTINED");
+    }
+    result = Object.freeze({ journalPath, records: parsed.records, tornTailRepaired: parsed.tornTail });
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_JOURNAL_READ_FAILED", "RED_QUARANTINED"); }
+  finally {
+    bytes.fill(0);
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_JOURNAL_READ_CLOSE_UNCERTAIN");
+      if (closeError !== null) closeFaultCode = closeError.code;
+    }
+  }
+  if (primaryError !== null) throw primaryError;
+  const authenticated = Object.freeze({ ...result, rootAuthority, tombstoneSha256: expectedTombstoneSha256, journalReadCloseFaultCode: closeFaultCode });
+  authenticatedHostBindingReattemptJournals.add(authenticated);
+  return authenticated;
+}
+export function openAuthenticatedHostBindingReattemptJournalForAppend({ rootAuthority, authenticatedJournal, authenticatedTombstone }) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || !authenticatedHostBindingReattemptJournals.has(authenticatedJournal) || authenticatedJournal.rootAuthority !== rootAuthority || authenticatedJournal.journalReadCloseFaultCode !== null || !authenticatedHostBindingReattemptTombstones.has(authenticatedTombstone) || authenticatedJournal.tombstoneSha256 !== authenticatedTombstone.tombstoneSha256 || !Array.isArray(authenticatedJournal.records) || authenticatedJournal.records.length < 1) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const { journalPath, records } = authenticatedJournal;
+  const expectedTombstoneSha256 = authenticatedTombstone.tombstoneSha256;
+  observeHostBindingReattemptPublicationPlan(records, expectedTombstoneSha256);
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_JOURNAL_APPEND_ROOT");
+  const expectedBytes = Buffer.from(records.map((record) => `${canonicalJson(record)}\n`).join(""), "utf8");
+  let fd = null;
+  try {
+    const before = fs.lstatSync(journalPath);
+    fd = fs.openSync(journalPath, fs.constants.O_RDWR | fs.constants.O_APPEND | (fs.constants.O_NOFOLLOW ?? 0));
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(journalPath);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== 0o600 || before.size !== expectedBytes.length || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(opened)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(after))) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_DRIFT", "RED_QUARANTINED");
+    const observedBytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_JOURNAL_APPEND_SHORT_READ");
+    try {
+      const openedAfterRead = fs.fstatSync(fd); const pathAfterRead = fs.lstatSync(journalPath);
+      if (!observedBytes.equals(expectedBytes) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(openedAfterRead)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(pathAfterRead))) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_DRIFT", "RED_QUARANTINED");
+    } finally { observedBytes.fill(0); }
+  } catch (error) {
+    expectedBytes.fill(0);
+    const closeError = fd === null ? null : closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_JOURNAL_APPEND_CLOSE_UNCERTAIN");
+    const primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_OPEN_FAILED", "RED_QUARANTINED");
+    throw selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+  }
+  expectedBytes.fill(0);
+  let sequence = records.length;
+  let previousBytes = Buffer.from(`${canonicalJson(records.at(-1))}\n`, "utf8");
+  let previous = sha256(previousBytes); previousBytes.fill(0);
+  let poisoned = false;
+  let closed = false;
+  const durableRecords = [...records];
+  return Object.freeze({
+    async append(partial) {
+      if (closed || poisoned) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_POISONED", "RED_QUARANTINED");
+      const record = hostBindingReattemptJournalRecord(sequence, previous, partial);
+      validateHostBindingReattemptJournalRecord(record, sequence, previous);
+      observeHostBindingReattemptPublicationPlan([...durableRecords, record], expectedTombstoneSha256);
+      const bytes = Buffer.from(`${canonicalJson(record)}\n`, "utf8");
+      try {
+        assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_JOURNAL_APPEND_ROOT");
+        writeAll(fd, bytes); fs.fsyncSync(fd);
+        const expectedSize = durableRecords.reduce((sum, value) => sum + Buffer.byteLength(`${canonicalJson(value)}\n`, "utf8"), 0) + bytes.length;
+        const opened = fs.fstatSync(fd); const observed = fs.lstatSync(journalPath);
+        if (opened.size !== expectedSize || observed.size !== expectedSize || opened.dev !== observed.dev || opened.ino !== observed.ino || opened.nlink !== 1 || observed.nlink !== 1) fail("HOST_BINDING_REATTEMPT_JOURNAL_APPEND_DRIFT", "RED_QUARANTINED");
+        previous = sha256(bytes); sequence += 1; durableRecords.push(record); return record;
+      } catch (error) { poisoned = true; throw error; }
+      finally { bytes.fill(0); }
+    },
+    records() { return Object.freeze([...durableRecords]); },
+    close() {
+      if (!closed) {
+        closed = true;
+        const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_JOURNAL_APPEND_CLOSE_UNCERTAIN"); fd = null;
+        if (closeError !== null) throw closeError;
+      }
+    },
+  });
+}
+
+function expectedHostBindingReattemptTombstoneBindings(checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, attemptId) {
+  return Object.freeze({
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    reattemptPacketSha256: HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256,
+    reattemptOwnerReviewSha256: HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256,
+    approvedProposalHead: HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead,
+    approvedProposalTree: HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree,
+    implementationHead: checkpoint.implementationHead,
+    implementationTree: checkpoint.implementationTree,
+    checkpointSha256,
+    activationCardSha256,
+    activationGrantSha256,
+    attemptId,
+  });
+}
+const HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_KEYS = new Set(["reattemptRunId", "reattemptPacketSha256", "reattemptOwnerReviewSha256", "approvedProposalHead", "approvedProposalTree", "implementationHead", "implementationTree", "checkpointSha256", "activationCardSha256", "activationGrantSha256", "attemptId"]);
+function hostBindingReattemptTombstoneBindingsFromValue(tombstone) {
+  if (tombstone === null || typeof tombstone !== "object" || Array.isArray(tombstone)) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_SOURCE_INVALID", "RED_QUARANTINED");
+  return Object.freeze(Object.fromEntries([...HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_KEYS].map((key) => [key, tombstone[key]])));
+}
+export function readHostBindingReattemptConsumedAttempt({ consumedAttemptPath, expectedBindings = null }) {
+  if (typeof consumedAttemptPath !== "string" || !path.isAbsolute(consumedAttemptPath) || path.normalize(consumedAttemptPath) !== consumedAttemptPath || (expectedBindings !== null && (typeof expectedBindings !== "object" || Array.isArray(expectedBindings)))) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_READ_AUTHORITY_INVALID", "RED_QUARANTINED");
+  if (expectedBindings !== null) exactObject(expectedBindings, HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_KEYS, "HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_AUTHORITY_INVALID");
+  const parent = path.dirname(consumedAttemptPath);
+  const parentChain = snapshotStructuralDirectoryChain(parent, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_UNSAFE");
+  const chain = snapshotNoSymlinkPathChain(consumedAttemptPath, "HOST_BINDING_REATTEMPT_TOMBSTONE_PATH_UNSAFE");
+  let fd = null;
+  let parentFd = null;
+  let parentIdentity = null;
+  let bytes = Buffer.alloc(0);
+  let value = null;
+  let observedSha256 = null;
+  let primaryError = null;
+  let durabilityEstablished = false;
+  const assertParentCurrent = () => {
+    assertStructuralDirectoryChainStable(parentChain, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_DRIFT");
+    const opened = fs.fstatSync(parentFd, { bigint: true });
+    const observed = fs.lstatSync(parent, { bigint: true });
+    if (!opened.isDirectory() || !observed.isDirectory() || observed.isSymbolicLink() || !sameStructuralDirectoryIdentity(parentIdentity, structuralDirectoryIdentity(opened)) || !sameStructuralDirectoryIdentity(parentIdentity, structuralDirectoryIdentity(observed))) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_DRIFT", "RED_QUARANTINED");
+  };
+  try {
+    parentFd = fs.openSync(parent, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | (fs.constants.O_NOFOLLOW ?? 0));
+    parentIdentity = structuralDirectoryIdentity(fs.fstatSync(parentFd, { bigint: true }));
+    assertParentCurrent();
+    const before = fs.lstatSync(consumedAttemptPath);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== 0o600 || before.size < 1 || before.size > 65_536) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_FILE_UNSAFE", "RED_QUARANTINED");
+    fd = fs.openSync(consumedAttemptPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, "HOST_BINDING_REATTEMPT_TOMBSTONE_SHORT_READ");
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(consumedAttemptPath);
+    assertNoSymlinkPathChainStable(chain, "HOST_BINDING_REATTEMPT_TOMBSTONE_PATH_DRIFT");
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(opened), checkpointClaimFullIdentity(before)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(after), checkpointClaimFullIdentity(before)) || bytes.at(-1) !== 0x0a || bytes.subarray(0, -1).includes(0x0a) || bytes.includes(0x00) || bytes.includes(0x0d)) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_FRAME_INVALID", "RED_QUARANTINED");
+    const text = bytes.subarray(0, -1).toString("utf8");
+    let strictValue;
+    try { strictValue = parseStrictJson(text); } catch { fail("HOST_BINDING_REATTEMPT_TOMBSTONE_JSON_INVALID", "RED_QUARANTINED"); }
+    if (canonicalJson(strictValue) !== text) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_NOT_CANONICAL", "RED_QUARANTINED");
+    value = JSON.parse(text);
+    validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", value, "HOST_BINDING_REATTEMPT_TOMBSTONE_SCHEMA_INVALID");
+    if (value.schemaVersion !== "r4_gate_b_host_binding_consumed_attempt.v2") fail("HOST_BINDING_REATTEMPT_TOMBSTONE_KIND_INVALID", "RED_QUARANTINED");
+    if (expectedBindings !== null) for (const [key, expected] of Object.entries(expectedBindings)) if (value[key] !== expected) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_DRIFT", "RED_QUARANTINED");
+    observedSha256 = sha256(bytes);
+    assertParentCurrent();
+    fs.fsyncSync(parentFd);
+    durabilityEstablished = true;
+    assertParentCurrent();
+    const finalOpened = fs.fstatSync(fd); const finalObserved = fs.lstatSync(consumedAttemptPath);
+    assertNoSymlinkPathChainStable(chain, "HOST_BINDING_REATTEMPT_TOMBSTONE_PATH_DRIFT");
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(finalOpened), checkpointClaimFullIdentity(before)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(finalObserved), checkpointClaimFullIdentity(before))) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_DURABILITY_DRIFT", "RED_QUARANTINED");
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_TOMBSTONE_READ_FAILED", "RED_QUARANTINED"); }
+  finally {
+    bytes.fill(0);
+    const fileCloseError = fd === null ? null : closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_TOMBSTONE_CLOSE_UNCERTAIN");
+    const parentCloseError = parentFd === null ? null : closeCheckpointClaimDescriptor(parentFd, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_CLOSE_UNCERTAIN");
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, null, selectPhysicalRunnerTerminalError(fileCloseError, null, parentCloseError));
+  }
+  if (primaryError !== null && durabilityEstablished && primaryError.tombstoneObservation === undefined) {
+    let present = null;
+    try { present = fs.lstatSync(consumedAttemptPath) === null ? null : true; }
+    catch (error) { if (error?.code === "ENOENT") present = null; }
+    primaryError.tombstoneObservation = hostBindingReattemptTombstoneObservation(present === true ? "PRESENT_UNAUTHENTICATED" : "PRESENCE_UNKNOWN", true, present);
+  }
+  if (primaryError !== null) throw primaryError;
+  const authenticated = Object.freeze({ tombstone: Object.freeze(value), tombstoneSha256: observedSha256 });
+  if (expectedBindings !== null) authenticatedHostBindingReattemptTombstones.add(authenticated);
+  return authenticated;
+}
+
+function hostBindingReattemptTombstoneObservation(status, attemptConsumed, present, tombstoneSha256 = null) {
+  return Object.freeze({ consumedAttemptTombstoneStatus: status, attemptConsumed, tombstoneSha256, consumedAttemptTombstonePresent: present });
+}
+
+function reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings, expectedTombstoneSha256 }) {
+  try {
+    const authenticated = readHostBindingReattemptConsumedAttempt({ consumedAttemptPath, expectedBindings });
+    if (authenticated.tombstoneSha256 !== expectedTombstoneSha256) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_RUNTIME_DRIFT", "RED_QUARANTINED");
+    return authenticated;
+  } catch (error) {
+    const cause = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_TOMBSTONE_RUNTIME_REAUTH_FAILED", "RED_QUARANTINED");
+    const primary = selectPhysicalRunnerTerminalError(cause, new PhysicalRunnerError("HOST_BINDING_REATTEMPT_TOMBSTONE_RUNTIME_REAUTH_FAILED", "RED_QUARANTINED"), null);
+    if (primary.tombstoneObservation === undefined) {
+      let present = null;
+      try { present = fs.lstatSync(consumedAttemptPath) === null ? null : true; }
+      catch (observationError) { if (observationError?.code !== "ENOENT") present = null; }
+      primary.tombstoneObservation = hostBindingReattemptTombstoneObservation(present === true ? "PRESENT_UNAUTHENTICATED" : "PRESENCE_UNKNOWN", true, present);
+    }
+    throw primary;
+  }
+}
+
+function rejectHostBindingReattemptTombstoneCollision(consumedAttemptPath, expectedBindings = null) {
+  const first = lstatIfPresent(consumedAttemptPath, "HOST_BINDING_REATTEMPT_TOMBSTONE_PRESENCE_UNREADABLE", "RED_QUARANTINED");
+  if (first === null) return;
+  let observation = null;
+  try {
+    const authenticated = readHostBindingReattemptConsumedAttempt({ consumedAttemptPath, expectedBindings });
+    if (expectedBindings === null) assertIntrinsicHostBindingReattemptTombstone(authenticated);
+    observation = hostBindingReattemptTombstoneObservation("AUTHENTICATED", true, true, authenticated.tombstoneSha256);
+  } catch (error) {
+    if (error?.tombstoneObservation !== undefined) observation = error.tombstoneObservation;
+    else {
+      const second = lstatIfPresent(consumedAttemptPath, "HOST_BINDING_REATTEMPT_TOMBSTONE_PRESENCE_UNREADABLE", "RED_QUARANTINED");
+      observation = second === null
+        ? hostBindingReattemptTombstoneObservation("PRESENCE_UNKNOWN", false, null)
+        : hostBindingReattemptTombstoneObservation("PRESENT_UNAUTHENTICATED", false, true);
+    }
+  }
+  const error = new PhysicalRunnerError("HOST_BINDING_REATTEMPT_ATTEMPT_ALREADY_CONSUMED", observation.consumedAttemptTombstoneStatus === "AUTHENTICATED" ? "RED" : "RED_QUARANTINED");
+  error.tombstoneObservation = observation;
+  throw error;
+}
+const hostBindingReattemptNow = () => new Date();
+export function createPermanentHostBindingReattemptConsumedAttempt({ consumedAttemptPath, rootAnchor, checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, attemptId, now = hostBindingReattemptNow }) {
+  if (typeof consumedAttemptPath !== "string" || !path.isAbsolute(consumedAttemptPath) || path.normalize(consumedAttemptPath) !== consumedAttemptPath || typeof rootAnchor !== "string" || !path.isAbsolute(rootAnchor) || path.normalize(rootAnchor) !== rootAnchor || typeof now !== "function") fail("HOST_BINDING_REATTEMPT_TOMBSTONE_CREATE_AUTHORITY_INVALID", "RED");
+  const consumedAtValue = now();
+  if (!(consumedAtValue instanceof Date) || !Number.isFinite(consumedAtValue.getTime())) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_TIME_INVALID", "RED");
+  const bindings = expectedHostBindingReattemptTombstoneBindings(checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, attemptId);
+  const tombstone = Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_consumed_attempt.v2",
+    ...bindings,
+    attemptOrdinal: 2,
+    priorHostBindingAttempts: 1,
+    cumulativeHostBindingAttemptCeiling: 2,
+    consumedAt: consumedAtValue.toISOString(),
+    hostBindingInputPreparedByOwner: true,
+    inputOpenIntent: true,
+    attemptConsumed: true,
+    bodyFree: true,
+    permanent: true,
+    purgeAuthorized: false,
+    retentionPolicy: "PERMANENT_NO_PURGE_NO_REVIVAL",
+    hostBindingAttemptGrant: "APPROVED_ONCE",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+  });
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", tombstone, "HOST_BINDING_REATTEMPT_TOMBSTONE_SCHEMA_INVALID");
+  const bytes = Buffer.from(`${canonicalJson(tombstone)}\n`, "utf8");
+  const expectedTombstoneSha256 = sha256(bytes);
+  const tombstoneParent = path.dirname(consumedAttemptPath);
+  let fd = null;
+  let parentFd = null;
+  let parentChain = null;
+  let parentIdentity = null;
+  let created = false;
+  let createdIdentity = null;
+  let durable = false;
+  let primaryError = null;
+  const assertParentCurrent = () => {
+    assertStructuralDirectoryChainStable(parentChain, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_DRIFT");
+    const opened = fs.fstatSync(parentFd); const observed = fs.lstatSync(tombstoneParent);
+    if (!opened.isDirectory() || !observed.isDirectory() || observed.isSymbolicLink() || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(opened), parentIdentity) || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(observed), parentIdentity)) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_DRIFT", "RED_QUARANTINED");
+  };
+  try {
+    ensureOwnedPrivateDirectory(tombstoneParent, rootAnchor);
+    parentChain = snapshotStructuralDirectoryChain(tombstoneParent, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_UNSAFE");
+    const parentBefore = fs.lstatSync(tombstoneParent);
+    if (!parentBefore.isDirectory() || parentBefore.isSymbolicLink() || parentBefore.uid !== process.getuid() || (parentBefore.mode & 0o777) !== 0o700) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_UNSAFE", "RED_QUARANTINED");
+    parentFd = fs.openSync(tombstoneParent, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | (fs.constants.O_NOFOLLOW ?? 0));
+    parentIdentity = checkpointClaimStableIdentity(fs.fstatSync(parentFd));
+    assertParentCurrent();
+    rejectHostBindingReattemptTombstoneCollision(consumedAttemptPath, bindings);
+    try { fd = fs.openSync(consumedAttemptPath, fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | (fs.constants.O_NOFOLLOW ?? 0), 0o600); }
+    catch (error) {
+      if (error?.code === "EEXIST") rejectHostBindingReattemptTombstoneCollision(consumedAttemptPath, bindings);
+      throw error;
+    }
+    created = true;
+    createdIdentity = fs.fstatSync(fd);
+    fs.fchmodSync(fd, 0o600); writeAll(fd, bytes); fs.fsyncSync(fd);
+    const written = fs.fstatSync(fd); const observed = fs.lstatSync(consumedAttemptPath);
+    if (!written.isFile() || !observed.isFile() || observed.isSymbolicLink() || written.uid !== process.getuid() || written.nlink !== 1 || (written.mode & 0o777) !== 0o600 || written.size !== bytes.length || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(written), checkpointClaimFullIdentity(observed))) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_WRITE_DRIFT", "RED_QUARANTINED");
+    assertParentCurrent();
+    fs.fsyncSync(parentFd);
+    durable = true;
+    assertParentCurrent();
+    const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_TOMBSTONE_CLOSE_UNCERTAIN"); fd = null;
+    if (closeError !== null) throw closeError;
+    const reopened = readHostBindingReattemptConsumedAttempt({ consumedAttemptPath, expectedBindings: bindings });
+    if (reopened.tombstoneSha256 !== expectedTombstoneSha256) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_REOPEN_DRIFT", "RED_QUARANTINED");
+    assertParentCurrent();
+    const parentCloseError = closeCheckpointClaimDescriptor(parentFd, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_CLOSE_UNCERTAIN"); parentFd = null;
+    if (parentCloseError !== null) throw parentCloseError;
+    const createdResult = Object.freeze({ ...reopened, created: true });
+    authenticatedHostBindingReattemptTombstones.add(createdResult);
+    return createdResult;
+  } catch (error) {
+    primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError(created ? "HOST_BINDING_REATTEMPT_TOMBSTONE_DURABILITY_UNCERTAIN" : "HOST_BINDING_REATTEMPT_TOMBSTONE_CREATE_FAILED", created ? "RED_QUARANTINED" : "RED");
+    if (created && !durable) {
+      let rollbackComplete = false;
+      try {
+        createdIdentity ??= fd === null ? null : fs.fstatSync(fd);
+        if (createdIdentity === null) throw new Error("TOMBSTONE_IDENTITY_UNAVAILABLE");
+        const observed = fs.lstatSync(consumedAttemptPath);
+        if (!observed.isFile() || observed.isSymbolicLink() || observed.dev !== createdIdentity.dev || observed.ino !== createdIdentity.ino || observed.uid !== process.getuid()) throw new Error("TOMBSTONE_IDENTITY_DRIFT");
+        fs.unlinkSync(consumedAttemptPath);
+        if (fd !== null && fs.fstatSync(fd).nlink !== 0) throw new Error("TOMBSTONE_UNLINK_NOT_HELD");
+        if (lstatIfPresent(consumedAttemptPath, "HOST_BINDING_REATTEMPT_TOMBSTONE_ROLLBACK_ABSENCE_UNREADABLE") !== null) throw new Error("TOMBSTONE_ROLLBACK_NOT_ABSENT");
+        assertParentCurrent();
+        fs.fsyncSync(parentFd);
+        assertParentCurrent();
+        rollbackComplete = true; created = false;
+      } catch { primaryError = selectPhysicalRunnerTerminalError(primaryError, new PhysicalRunnerError("HOST_BINDING_REATTEMPT_TOMBSTONE_ROLLBACK_UNCERTAIN", "RED_QUARANTINED"), null); }
+      if (rollbackComplete) primaryError.tombstoneObservation = hostBindingReattemptTombstoneObservation("ABSENT", false, false);
+    }
+    if (primaryError.tombstoneObservation === undefined) {
+      let residueStatus = "PRESENCE_UNKNOWN";
+      let residuePresent = null;
+      try {
+        const residue = fs.lstatSync(consumedAttemptPath);
+        if (createdIdentity === null || residue.isFile() && !residue.isSymbolicLink() && residue.dev === createdIdentity.dev && residue.ino === createdIdentity.ino) { residueStatus = "PRESENT_UNAUTHENTICATED"; residuePresent = true; }
+      } catch (observationError) {
+        if (observationError?.code === "ENOENT" && !created && !durable) { residueStatus = "ABSENT"; residuePresent = false; }
+        else residuePresent = null;
+      }
+      primaryError.tombstoneObservation = hostBindingReattemptTombstoneObservation(residueStatus, durable, residuePresent);
+    }
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_TOMBSTONE_CLOSE_UNCERTAIN");
+      fd = null;
+      primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+    }
+    throw primaryError;
+  } finally {
+    bytes.fill(0);
+    let descriptorCloseError = null;
+    if (fd !== null) {
+      const closeError = closeCheckpointClaimDescriptor(fd, "HOST_BINDING_REATTEMPT_TOMBSTONE_CLOSE_UNCERTAIN");
+      fd = null;
+      descriptorCloseError = closeError;
+    }
+    if (parentFd !== null) {
+      const parentCloseError = closeCheckpointClaimDescriptor(parentFd, "HOST_BINDING_REATTEMPT_TOMBSTONE_PARENT_CLOSE_UNCERTAIN");
+      parentFd = null;
+      descriptorCloseError = selectPhysicalRunnerTerminalError(descriptorCloseError, null, parentCloseError);
+    }
+    if (descriptorCloseError !== null) throw selectPhysicalRunnerTerminalError(primaryError, null, descriptorCloseError);
+  }
+}
+
+function hostBindingReattemptCapsuleRootIdentitySha256(stat, hostBindingId) {
+  if (!ID.test(hostBindingId) || stat === null || typeof stat !== "object") fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_INVALID", "RED_QUARANTINED");
+  return sha256(Buffer.from(canonicalJson({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_capsule_root_identity.v2",
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    hostBindingId,
+    device: String(stat.dev),
+    inode: String(stat.ino),
+    mode: stat.mode & 0o7777,
+    uid: stat.uid,
+    gid: stat.gid,
+  }), "utf8"));
+}
+async function createExclusiveHostBindingReattemptCapsuleRoot({ capsuleRoot, rootAnchor, hostBindingId, journal }) {
+  let authority = null;
+  let identitySha256 = null;
+  let primaryError = null;
+  try {
+    authority = createExclusiveOwnedRoot0700(capsuleRoot, rootAnchor, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+    identitySha256 = hostBindingReattemptCapsuleRootIdentitySha256(fs.fstatSync(authority.rootFd), hostBindingId);
+    await journal.append({ lane: "host-binding", event: "capsule-root-created", hostBindingId, commandShapeSha256: identitySha256, ownedResources: ["host-binding-capsule-root"], terminalCode: "CREATED", cleanupState: "required" });
+    assertExactOwnedRootAuthorityCurrent(authority, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_CREATE_FAILED", "RED_QUARANTINED"); }
+  finally {
+    if (authority !== null && !authority.state.closed) {
+      try { closeExactOwnedRootAuthority(authority, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_CLOSE_UNCERTAIN"); }
+      catch (closeError) { primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError); }
+    }
+  }
+  if (primaryError !== null) throw primaryError;
+  return identitySha256;
+}
+function assertEmptyOwnedReattemptDirectory(directory, code) {
+  const before = fs.lstatSync(directory);
+  if (!before.isDirectory() || before.isSymbolicLink() || before.uid !== process.getuid() || (before.mode & 0o777) !== 0o700 || fs.realpathSync(directory) !== directory) fail(`${code}_UNSAFE`, "RED_QUARANTINED");
+  const first = fs.readdirSync(directory, { encoding: "buffer" });
+  const second = fs.readdirSync(directory, { encoding: "buffer" });
+  const after = fs.lstatSync(directory);
+  if (first.length !== 0 || second.length !== 0 || !sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(after))) fail(`${code}_NOT_EMPTY_OR_DRIFT`, "RED_QUARANTINED");
+  return before;
+}
+function observeExactReattemptCapsuleRoot(directory, expectedIdentitySha256, hostBindingId) {
+  const before = lstatIfPresent(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNREADABLE", "RED_QUARANTINED");
+  if (before === null) {
+    proveHostBindingReattemptPathAbsentDurably(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+    return false;
+  }
+  if (!before.isDirectory() || before.isSymbolicLink() || before.uid !== process.getuid() || (before.mode & 0o777) !== 0o700 || fs.realpathSync(directory) !== directory) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNSAFE", "RED_QUARANTINED");
+  const after = fs.lstatSync(directory);
+  if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(after)) || hostBindingReattemptCapsuleRootIdentitySha256(before, hostBindingId) !== expectedIdentitySha256) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+  return true;
+}
+function removeExactEmptyReattemptDirectory(directory, expectedIdentitySha256, hostBindingId) {
+  const observed = lstatIfPresent(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNREADABLE", "RED_QUARANTINED");
+  if (observed === null) {
+    proveHostBindingReattemptPathAbsentDurably(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+    return;
+  }
+  const before = assertEmptyOwnedReattemptDirectory(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+  if (hostBindingReattemptCapsuleRootIdentitySha256(before, hostBindingId) !== expectedIdentitySha256) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+  const rechecked = fs.lstatSync(directory);
+  if (!sameCheckpointClaimIdentity(checkpointClaimStableIdentity(before), checkpointClaimStableIdentity(rechecked))) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+  fs.rmdirSync(directory);
+  proveHostBindingReattemptPathAbsentDurably(directory, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+}
+function hostBindingReattemptJournalSha256(records) {
+  const bytes = Buffer.from(records.map((record) => `${canonicalJson(record)}\n`).join(""), "utf8");
+  try { return sha256(bytes); } finally { bytes.fill(0); }
+}
+function proveHostBindingReattemptInputAbsent(inputPath) {
+  if (typeof inputPath !== "string" || !path.isAbsolute(inputPath) || path.normalize(inputPath) !== inputPath) fail("HOST_BINDING_REATTEMPT_INPUT_ABSENCE_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const parent = path.dirname(inputPath);
+  const parentChain = snapshotNoSymlinkPathChain(parent, "HOST_BINDING_REATTEMPT_INPUT_PARENT_UNSAFE");
+  const parentStat = fs.lstatSync(parent);
+  if (!parentStat.isDirectory() || parentStat.isSymbolicLink() || parentStat.uid !== process.getuid() || (parentStat.mode & 0o777) !== 0o700) fail("HOST_BINDING_REATTEMPT_INPUT_PARENT_UNSAFE", "RED_QUARANTINED");
+  const observed = lstatIfPresent(inputPath, "HOST_BINDING_REATTEMPT_INPUT_ABSENCE_UNREADABLE", "RED_QUARANTINED");
+  if (observed !== null) fail("HOST_BINDING_REATTEMPT_INPUT_PRESENT_WITHOUT_CAPTURED_IDENTITY", "RED_QUARANTINED");
+  fsyncDirectory(parent);
+  assertNoSymlinkPathChainStable(parentChain, "HOST_BINDING_REATTEMPT_INPUT_PARENT_DRIFT");
+  if (lstatIfPresent(inputPath, "HOST_BINDING_REATTEMPT_INPUT_ABSENCE_UNREADABLE", "RED_QUARANTINED") !== null) fail("HOST_BINDING_REATTEMPT_INPUT_ABSENCE_DRIFT", "RED_QUARANTINED");
+  return true;
+}
+function observeHostBindingReattemptPublicationPlan(records, expectedTombstoneSha256) {
+  if (!SHA.test(expectedTombstoneSha256)) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_JOURNAL_BINDING_INVALID", "RED_QUARANTINED");
+  return validateConstructionJournalForCleanup(records, { inputOpenCommandFrame: "fixed-owner-input-open-v2\n", inputOpenCommandShapeSha256: expectedTombstoneSha256, publicationTerminalCode: "HOST_BOUND_YELLOW", capsuleRootIdentityRequired: true, ownedDirectoryIdentityRequired: true });
+}
+async function cleanupHostBindingReattemptAuthenticated({
+  rootAuthority,
+  checkpointSha256,
+  authenticatedJournal,
+  authenticatedTombstone,
+  consumedAttemptPath,
+  expectedTombstoneBindings,
+  retainCompletePublication,
+  inputPath,
+  capsuleRoot,
+  publicReceiptPath,
+  inputAbsenceProver = proveHostBindingReattemptInputAbsent,
+  recoverUnstarted = recoverUnstartedBlockedSupervisors,
+  stopProcessGroup = stopAndProveGroupAbsent,
+} = {}) {
+  if (!exactOwnedRootAuthorities.has(rootAuthority) || rootAuthority.state.closed || !SHA.test(checkpointSha256) || !authenticatedHostBindingReattemptJournals.has(authenticatedJournal) || authenticatedJournal.rootAuthority !== rootAuthority || !authenticatedHostBindingReattemptTombstones.has(authenticatedTombstone) || authenticatedJournal.tombstoneSha256 !== authenticatedTombstone.tombstoneSha256 || !SHA.test(authenticatedTombstone.tombstoneSha256) || expectedTombstoneBindings === null || typeof expectedTombstoneBindings !== "object" || Array.isArray(expectedTombstoneBindings) || typeof retainCompletePublication !== "boolean" || ![consumedAttemptPath, inputPath, capsuleRoot, publicReceiptPath].every((value) => typeof value === "string" && path.isAbsolute(value) && path.normalize(value) === value) || typeof inputAbsenceProver !== "function" || typeof recoverUnstarted !== "function" || typeof stopProcessGroup !== "function") fail("HOST_BINDING_REATTEMPT_CLEANUP_AUTHORITY_INVALID", "RED_QUARANTINED");
+  exactObject(expectedTombstoneBindings, HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_KEYS, "HOST_BINDING_REATTEMPT_CLEANUP_TOMBSTONE_BINDING_AUTHORITY_INVALID");
+  if (authenticatedJournal.journalReadCloseFaultCode !== null) fail(authenticatedJournal.journalReadCloseFaultCode, "RED_QUARANTINED");
+  const expectedTombstoneSha256 = authenticatedTombstone.tombstoneSha256;
+  const records = authenticatedJournal.records;
+  const tombstone = authenticatedTombstone.tombstone;
+  for (const [key, expected] of Object.entries(expectedTombstoneBindings)) if (tombstone[key] !== expected) fail("HOST_BINDING_REATTEMPT_CLEANUP_TOMBSTONE_BINDING_DRIFT", "RED_QUARANTINED");
+  if (tombstone.checkpointSha256 !== checkpointSha256 || tombstone.reattemptRunId !== HOST_BINDING_REATTEMPT_AUTHORITY.runId || tombstone.reattemptPacketSha256 !== HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 || tombstone.reattemptOwnerReviewSha256 !== HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256 || tombstone.approvedProposalHead !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead || tombstone.approvedProposalTree !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree || deriveHostBindingReattemptAttemptId({ reattemptPacketSha256: tombstone.reattemptPacketSha256, reattemptOwnerReviewSha256: tombstone.reattemptOwnerReviewSha256, approvedProposalHead: tombstone.approvedProposalHead, implementationHead: tombstone.implementationHead, checkpointSha256 }) !== tombstone.attemptId) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_CLEANUP_BINDING_DRIFT", "RED_QUARANTINED");
+  assertHostBindingReattemptActivationGrantHash({ activationCardSha256: tombstone.activationCardSha256, checkpointSha256, implementationHead: tombstone.implementationHead, implementationTree: tombstone.implementationTree }, tombstone.activationGrantSha256);
+  let durableRecords = [...records];
+  let plan = records.length === 0 ? Object.freeze({
+    unresolvedProcessGroups: Object.freeze([]), unresolvedProcesses: Object.freeze([]), unstartedSupervisorStarts: Object.freeze([]), unstartedDirectGateIntents: 0,
+    publicationHostBindingId: null, publicationComplete: false, removePartialPublication: false, capsuleExpectedSha256: null, receiptExpectedSha256: null, capsuleStageReady: false, receiptStageReady: false,
+    capsuleRootIntent: false, capsuleRootCreated: false, capsuleRootIdentitySha256: null,
+    slotRootIntent: false, slotRootObserved: false, slotRootIdentitySha256: null,
+    environmentDirectoryPlans: Object.freeze(HOST_BINDING_ENVIRONMENT_DIRECTORY_SPECS.map((spec) => Object.freeze({ name: spec.name, environmentKey: spec.environmentKey, ownedResource: spec.ownedResource, intentObserved: false, createdObserved: false, identitySha256: null }))),
+    removeOwnerInput: false,
+  }) : observeHostBindingReattemptPublicationPlan(records, expectedTombstoneSha256);
+  const slotRootPlan = Object.freeze({ name: "blocked-supervisor-pids", ownedResource: "blocked-start-slot-root", intentObserved: plan.slotRootIntent, createdObserved: plan.slotRootObserved, identitySha256: plan.slotRootIdentitySha256 });
+  assertHostBindingReattemptOwnedChildAuthorityForCleanup({ rootAuthority, plan: slotRootPlan, identitySha256ForStat: hostBindingReattemptSlotRootIdentitySha256, codePrefix: "HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT" });
+  for (const directoryPlan of plan.environmentDirectoryPlans) {
+    assertHostBindingReattemptOwnedChildAuthorityForCleanup({
+      rootAuthority,
+      plan: directoryPlan,
+      identitySha256ForStat: (stat) => hostBindingReattemptEnvironmentDirectoryIdentitySha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, directoryPlan.name, stat),
+      codePrefix: `HOST_BINDING_REATTEMPT_ENVIRONMENT_${directoryPlan.name.replace(/-/gu, "_").toUpperCase()}`,
+    });
+  }
+  if (plan.unstartedSupervisorStarts.length !== 0 || plan.unresolvedProcesses.length !== 0) {
+    const recoveryJournal = openAuthenticatedHostBindingReattemptJournalForAppend({ rootAuthority, authenticatedJournal, authenticatedTombstone });
+    let recoveryError = null;
+    let clean = plan.unstartedDirectGateIntents === 0;
+    try {
+      if (plan.unstartedSupervisorStarts.length !== 0 && !await recoverUnstarted(rootAuthority.root, plan.unstartedSupervisorStarts, recoveryJournal)) clean = false;
+      for (const processEntry of plan.unresolvedProcesses) {
+        if (!await stopProcessGroup(processEntry.processGroupId)) { clean = false; continue; }
+        await recoveryJournal.append({ lane: processEntry.lane, event: `cleanup-observed-absent:${processEntry.logicalId}`, commandShapeSha256: processEntry.commandShapeSha256, processGroupId: processEntry.processGroupId, ownedResources: processEntry.ownedResources, terminalCode: "ABSENT", cleanupState: "observed-absent" });
+      }
+      durableRecords = [...recoveryJournal.records()];
+      if (!clean) recoveryError = new PhysicalRunnerError("HOST_BINDING_REATTEMPT_PROCESS_GROUP_ABSENCE_UNKNOWN", "RED_QUARANTINED");
+    } catch (error) {
+      recoveryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_PROCESS_GROUP_RECOVERY_FAILED", "RED_QUARANTINED");
+    } finally {
+      try { recoveryJournal.close(); }
+      catch (closeError) { recoveryError = selectPhysicalRunnerTerminalError(recoveryError, null, closeError); }
+    }
+    if (recoveryError !== null) throw recoveryError;
+    plan = observeHostBindingReattemptPublicationPlan(durableRecords, expectedTombstoneSha256);
+    if (plan.unstartedSupervisorStarts.length !== 0 || plan.unstartedDirectGateIntents !== 0 || plan.unresolvedProcesses.length !== 0) fail("HOST_BINDING_REATTEMPT_PROCESS_GROUP_RECOVERY_INCOMPLETE", "RED_QUARANTINED");
+  } else if (plan.unstartedDirectGateIntents !== 0) fail("HOST_BINDING_REATTEMPT_DIRECT_GATE_ABSENCE_UNKNOWN", "RED_QUARANTINED");
+  if (plan.slotRootObserved) removeRecoveredHostBindingReattemptSupervisorSlots(rootAuthority.root, durableRecords, plan.slotRootIdentitySha256);
+  inputAbsenceProver(inputPath);
+  const hostBindingId = plan.publicationHostBindingId;
+  const retain = retainCompletePublication && plan.publicationComplete;
+  if (retainCompletePublication && !plan.publicationComplete) fail("HOST_BINDING_REATTEMPT_PUBLICATION_INCOMPLETE", "RED_QUARANTINED");
+  if (hostBindingId !== null) {
+    const capsulePath = path.join(capsuleRoot, `${hostBindingId}.json`);
+    const capsuleTemporaryPath = path.join(capsuleRoot, `.${hostBindingId}.json.${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.tmp`);
+    const publicTemporaryPath = path.join(path.dirname(publicReceiptPath), `.${path.basename(publicReceiptPath)}.${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.tmp`);
+    const capsuleRootPresent = !plan.capsuleRootCreated || retain || observeExactReattemptCapsuleRoot(capsuleRoot, plan.capsuleRootIdentitySha256, hostBindingId);
+    if (capsuleRootPresent) reconcileConstructionPublication({ finalPath: capsulePath, temporaryPath: capsuleTemporaryPath, stagePath: constructionPublicationStagePath("capsule", rootAuthority.root, "v2"), expectedMode: 0o600, expectedSha256: plan.capsuleExpectedSha256, retain, externalLinksAuthorized: plan.capsuleStageReady });
+    reconcileConstructionPublication({ finalPath: publicReceiptPath, temporaryPath: publicTemporaryPath, stagePath: constructionPublicationStagePath("public-receipt", rootAuthority.root, "v2"), expectedMode: 0o644, expectedSha256: plan.receiptExpectedSha256, retain, externalLinksAuthorized: plan.receiptStageReady });
+    if (retain) {
+      const capsuleNames = fs.readdirSync(capsuleRoot, { encoding: "buffer" });
+      if (capsuleNames.length !== 1 || !capsuleNames[0].equals(Buffer.from(`${hostBindingId}.json`, "utf8"))) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_INVENTORY_INVALID", "RED_QUARANTINED");
+      const capsuleRootStat = fs.lstatSync(capsuleRoot);
+      if (hostBindingReattemptCapsuleRootIdentitySha256(capsuleRootStat, hostBindingId) !== plan.capsuleRootIdentitySha256) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_IDENTITY_DRIFT", "RED_QUARANTINED");
+    } else if (plan.capsuleRootCreated) removeExactEmptyReattemptDirectory(capsuleRoot, plan.capsuleRootIdentitySha256, hostBindingId);
+    else if (plan.capsuleRootIntent && lstatIfPresent(capsuleRoot, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_CAPSULE_ROOT_CREATION_UNCERTAIN", "RED_QUARANTINED");
+  } else {
+    if (lstatIfPresent(capsuleRoot, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_UNREADABLE") !== null || lstatIfPresent(publicReceiptPath, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_UNREADABLE") !== null) fail("HOST_BINDING_REATTEMPT_UNJOURNALED_PUBLICATION", "RED_QUARANTINED");
+  }
+  for (const [kind, expectedSha256] of [["capsule", plan.capsuleExpectedSha256], ["public-receipt", plan.receiptExpectedSha256]]) {
+    const stagePath = constructionPublicationStagePath(kind, rootAuthority.root, "v2");
+    if (lstatIfPresent(stagePath, "HOST_BINDING_REATTEMPT_STAGE_UNREADABLE") !== null) {
+      if (!SHA.test(expectedSha256)) fail("HOST_BINDING_REATTEMPT_STAGE_HASH_AUTHORITY_MISSING", "RED_QUARANTINED");
+      removeExactPublishedFile(stagePath, kind === "capsule" ? 0o600 : 0o644, expectedSha256);
+    }
+  }
+  proveHostBindingReattemptPathAbsentDurably(hostBindingReattemptPublicReceiptTemporaryPath(publicReceiptPath), "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_TEMP");
+  proveHostBindingReattemptPathAbsentDurably(constructionPublicationStagePath("capsule", rootAuthority.root, "v2"), "HOST_BINDING_REATTEMPT_CAPSULE_STAGE");
+  proveHostBindingReattemptPathAbsentDurably(constructionPublicationStagePath("public-receipt", rootAuthority.root, "v2"), "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_STAGE");
+  if (!retain) {
+    proveHostBindingReattemptPathAbsentDurably(capsuleRoot, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT");
+    proveHostBindingReattemptPathAbsentDurably(publicReceiptPath, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT");
+  }
+  reconcileHostBindingReattemptOwnedChildDirectory({ rootAuthority, plan: slotRootPlan, identitySha256ForStat: hostBindingReattemptSlotRootIdentitySha256, codePrefix: "HOST_BINDING_REATTEMPT_SUPERVISOR_SLOT_ROOT" });
+  for (const directoryPlan of plan.environmentDirectoryPlans) {
+    reconcileHostBindingReattemptOwnedChildDirectory({
+      rootAuthority,
+      plan: directoryPlan,
+      identitySha256ForStat: (stat) => hostBindingReattemptEnvironmentDirectoryIdentitySha256(HOST_BINDING_REATTEMPT_AUTHORITY.runId, directoryPlan.name, stat),
+      codePrefix: `HOST_BINDING_REATTEMPT_ENVIRONMENT_${directoryPlan.name.replace(/-/gu, "_").toUpperCase()}`,
+    });
+  }
+  reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings: expectedTombstoneBindings, expectedTombstoneSha256 });
+  removeExactPublishedFile(path.join(rootAuthority.root, "checkpoint.v2.json"), 0o600, checkpointSha256);
+  const journalPath = path.join(rootAuthority.root, "journal.v2.jsonl");
+  if (lstatIfPresent(journalPath, "HOST_BINDING_REATTEMPT_JOURNAL_UNREADABLE") !== null) {
+    if (durableRecords.length === 0) {
+      const journal = fs.lstatSync(journalPath);
+      if (!journal.isFile() || journal.isSymbolicLink() || journal.uid !== process.getuid() || journal.nlink !== 1 || (journal.mode & 0o777) !== 0o600 || journal.size !== 0) fail("HOST_BINDING_REATTEMPT_EMPTY_JOURNAL_UNSAFE", "RED_QUARANTINED");
+      removeExactPublishedFile(journalPath, 0o600, sha256(Buffer.alloc(0)));
+    } else removeExactPublishedFile(journalPath, 0o600, hostBindingReattemptJournalSha256(durableRecords));
+  }
+  removeExactEmptyOwnedRoot(rootAuthority);
+  const cleanupResult = Object.freeze({
+    cleanupStatus: "GREEN",
+    reattemptRunRootAbsent: true,
+    reattemptJournalAbsent: true,
+    processGroupsAbsent: true,
+    hostBindingInputRemovedOrAbsent: true,
+    publicationStatus: retain ? "PUBLISHED" : "ABSENT",
+    hostBindingId: retain ? hostBindingId : null,
+    capsuleSha256: retain ? plan.capsuleExpectedSha256 : null,
+    publicReceiptSha256: retain ? plan.receiptExpectedSha256 : null,
+  });
+  return cleanupResult;
+}
+
+function stableHostBindingReattemptRootNames(rootAuthority) {
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT");
+  const first = fs.readdirSync(rootAuthority.root, { encoding: "buffer" }).sort((left, right) => Buffer.compare(left, right));
+  const second = fs.readdirSync(rootAuthority.root, { encoding: "buffer" }).sort((left, right) => Buffer.compare(left, right));
+  if (first.length !== second.length || first.some((entry, index) => !entry.equals(second[index]))) fail("HOST_BINDING_REATTEMPT_ROOT_INVENTORY_DRIFT", "RED_QUARANTINED");
+  const names = first.map((entry) => {
+    const text = entry.toString("utf8");
+    if (!entry.equals(Buffer.from(text, "utf8"))) fail("HOST_BINDING_REATTEMPT_ROOT_NAME_INVALID", "RED_QUARANTINED");
+    return text;
+  });
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT");
+  return Object.freeze(names);
+}
+
+function assertStableHostBindingReattemptExecutionInventory(rootAuthority) {
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT");
+  const before = observeExactOwnedRootInventory(rootAuthority, REATTEMPT_EXECUTION_DELETE_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+  const after = observeExactOwnedRootInventory(rootAuthority, REATTEMPT_EXECUTION_DELETE_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+  if (!sameExactOwnedRootInventory(before, after)) fail("HOST_BINDING_REATTEMPT_ROOT_INVENTORY_DRIFT", "RED_QUARANTINED");
+  const names = before.entries.map((entry) => entry.name);
+  if (!names.includes("checkpoint.v2.json") || !names.includes("journal.v2.jsonl")) fail("HOST_BINDING_REATTEMPT_CLEANUP_ROOT_INVENTORY_INVALID", "RED_QUARANTINED");
+  assertExactOwnedRootAuthorityCurrent(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT");
+  return Object.freeze(names);
+}
+
+function assertIntrinsicHostBindingReattemptTombstone(authenticated) {
+  const { tombstone, tombstoneSha256 } = authenticated ?? {};
+  if (tombstone === null || typeof tombstone !== "object" || !SHA.test(tombstoneSha256) || tombstone.reattemptRunId !== HOST_BINDING_REATTEMPT_AUTHORITY.runId || tombstone.reattemptPacketSha256 !== HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 || tombstone.reattemptOwnerReviewSha256 !== HOST_BINDING_REATTEMPT_AUTHORITY.ownerReviewSha256 || tombstone.approvedProposalHead !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalHead || tombstone.approvedProposalTree !== HOST_BINDING_REATTEMPT_AUTHORITY.proposalTree || deriveHostBindingReattemptAttemptId({ reattemptPacketSha256: tombstone.reattemptPacketSha256, reattemptOwnerReviewSha256: tombstone.reattemptOwnerReviewSha256, approvedProposalHead: tombstone.approvedProposalHead, implementationHead: tombstone.implementationHead, checkpointSha256: tombstone.checkpointSha256 }) !== tombstone.attemptId) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_INTRINSIC_BINDING_DRIFT", "RED_QUARANTINED");
+  assertHostBindingReattemptActivationGrantHash({ activationCardSha256: tombstone.activationCardSha256, checkpointSha256: tombstone.checkpointSha256, implementationHead: tombstone.implementationHead, implementationTree: tombstone.implementationTree }, tombstone.activationGrantSha256);
+  return authenticated;
+}
+
+function cleanupHostBindingReattemptPreAdmissionRoot(rootAuthority) {
+  const names = stableHostBindingReattemptRootNames(rootAuthority);
+  if (names.length === 0) {
+    removeExactEmptyOwnedRoot(rootAuthority);
+    return Object.freeze({ rootAbsent: true, checkpointRemoved: false, emptyJournalRemoved: false, claimRecovered: false });
+  }
+  if (names.includes("checkpoint-claim.v2.jsonl")) {
+    const authenticatedClaim = readHostBindingReattemptCheckpointClaimForCleanup({ rootAuthority });
+    return reconcileHostBindingReattemptCheckpointClaimForCleanup({ ...authenticatedClaim, rootAuthority });
+  }
+  const allowed = new Set(["checkpoint.v2.json", "journal.v2.jsonl"]);
+  if (names.some((name) => !allowed.has(name)) || !names.includes("checkpoint.v2.json")) fail("HOST_BINDING_REATTEMPT_PREADMISSION_RESIDUE_UNAUTHORIZED", "RED_QUARANTINED");
+  assertClosedExactOwnedRootInventory(rootAuthority, names.length === 1 ? REATTEMPT_CHECKPOINT_INVENTORY : REATTEMPT_CHECKPOINT_AND_JOURNAL_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+  const checkpointPath = path.join(rootAuthority.root, "checkpoint.v2.json");
+  const reopened = readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath });
+  if (names.includes("journal.v2.jsonl")) {
+    const journalPath = path.join(rootAuthority.root, "journal.v2.jsonl");
+    const journal = fs.lstatSync(journalPath);
+    if (!journal.isFile() || journal.isSymbolicLink() || journal.uid !== process.getuid() || journal.nlink !== 1 || (journal.mode & 0o777) !== 0o600 || journal.size !== 0) fail("HOST_BINDING_REATTEMPT_PREADMISSION_JOURNAL_NOT_EMPTY", "RED_QUARANTINED");
+    removeExactPublishedFile(journalPath, 0o600, sha256(Buffer.alloc(0)));
+  }
+  removeExactPublishedFile(checkpointPath, 0o600, reopened.checkpointSha256);
+  removeExactEmptyOwnedRoot(rootAuthority);
+  return Object.freeze({ rootAbsent: true, checkpointRemoved: true, emptyJournalRemoved: names.includes("journal.v2.jsonl"), claimRecovered: false });
+}
+
+function hostBindingReattemptTombstoneExpectedBindings(checkpoint, tombstone) {
+  const checkpointSha256 = tombstone.checkpointSha256;
+  const activationCard = createHostBindingReattemptActivationCard(checkpoint, checkpointSha256);
+  const activationCardSha256 = sha256(Buffer.from(canonicalJson(activationCard), "utf8"));
+  if (activationCardSha256 !== tombstone.activationCardSha256) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_CARD_BINDING_DRIFT", "RED_QUARANTINED");
+  const expectedBindings = expectedHostBindingReattemptTombstoneBindings(checkpoint, checkpointSha256, activationCardSha256, tombstone.activationGrantSha256, tombstone.attemptId);
+  for (const [key, expected] of Object.entries(expectedBindings)) if (tombstone[key] !== expected) fail("HOST_BINDING_REATTEMPT_TOMBSTONE_BINDING_DRIFT", "RED_QUARANTINED");
+  return expectedBindings;
+}
+
+function proveHostBindingReattemptRootAbsent(reattemptRoot) {
+  const parent = path.dirname(reattemptRoot);
+  const chain = snapshotNoSymlinkPathChain(parent, "HOST_BINDING_REATTEMPT_ROOT_PARENT_UNSAFE");
+  if (lstatIfPresent(reattemptRoot, "HOST_BINDING_REATTEMPT_ROOT_ABSENCE_UNREADABLE", "RED_QUARANTINED") !== null) fail("HOST_BINDING_REATTEMPT_ROOT_NOT_ABSENT", "RED_QUARANTINED");
+  fsyncDirectory(parent);
+  assertNoSymlinkPathChainStable(chain, "HOST_BINDING_REATTEMPT_ROOT_PARENT_DRIFT");
+  if (lstatIfPresent(reattemptRoot, "HOST_BINDING_REATTEMPT_ROOT_ABSENCE_UNREADABLE", "RED_QUARANTINED") !== null) fail("HOST_BINDING_REATTEMPT_ROOT_ABSENCE_DRIFT", "RED_QUARANTINED");
+  return true;
+}
+
+function readExactHostBindingReattemptJsonArtifact(target, mode, maximumBytes, schemaPath, expectedSchemaVersion, codePrefix) {
+  const chain = snapshotNoSymlinkPathChain(target, `${codePrefix}_PATH_UNSAFE`);
+  let fd = null;
+  let bytes = Buffer.alloc(0);
+  let primaryError = null;
+  let result = null;
+  try {
+    const before = fs.lstatSync(target);
+    if (!before.isFile() || before.isSymbolicLink() || before.uid !== process.getuid() || before.nlink !== 1 || (before.mode & 0o777) !== mode || before.size < 1 || before.size > maximumBytes) fail(`${codePrefix}_FILE_UNSAFE`, "RED_QUARANTINED");
+    fd = fs.openSync(target, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+    bytes = readCheckpointClaimDescriptorBytes(fd, before.size, `${codePrefix}_SHORT_READ`);
+    const opened = fs.fstatSync(fd); const after = fs.lstatSync(target);
+    assertNoSymlinkPathChainStable(chain, `${codePrefix}_PATH_DRIFT`);
+    if (!sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(opened)) || !sameCheckpointClaimIdentity(checkpointClaimFullIdentity(before), checkpointClaimFullIdentity(after)) || bytes.at(-1) !== 0x0a || bytes.subarray(0, -1).includes(0x0a) || bytes.includes(0x00) || bytes.includes(0x0d)) fail(`${codePrefix}_FRAME_INVALID`, "RED_QUARANTINED");
+    const text = bytes.subarray(0, -1).toString("utf8");
+    let strict;
+    try { strict = parseStrictJson(text); } catch { fail(`${codePrefix}_JSON_INVALID`, "RED_QUARANTINED"); }
+    if (canonicalJson(strict) !== text) fail(`${codePrefix}_NOT_CANONICAL`, "RED_QUARANTINED");
+    const value = JSON.parse(text);
+    validateSchema(schemaPath, value, `${codePrefix}_SCHEMA_INVALID`);
+    if (value.schemaVersion !== expectedSchemaVersion) fail(`${codePrefix}_VERSION_INVALID`, "RED_QUARANTINED");
+    result = Object.freeze({ value: Object.freeze(value), sha256: sha256(bytes) });
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError(`${codePrefix}_READ_FAILED`, "RED_QUARANTINED"); }
+  finally {
+    bytes.fill(0);
+    const closeError = fd === null ? null : closeCheckpointClaimDescriptor(fd, `${codePrefix}_CLOSE_UNCERTAIN`);
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+  }
+  if (primaryError !== null) throw primaryError;
+  return result;
+}
+
+function proveHostBindingReattemptPathAbsentDurably(target, codePrefix) {
+  if (typeof target !== "string" || !path.isAbsolute(target) || path.normalize(target) !== target || typeof codePrefix !== "string" || !/^[A-Z0-9_]+$/u.test(codePrefix)) fail("HOST_BINDING_REATTEMPT_ABSENCE_AUTHORITY_INVALID", "RED_QUARANTINED");
+  const parent = path.dirname(target);
+  const parentChain = snapshotStructuralDirectoryChain(parent, `${codePrefix}_PARENT_UNSAFE`);
+  let parentFd = null;
+  let primaryError = null;
+  try {
+    const before = fs.lstatSync(parent, { bigint: true });
+    if (!before.isDirectory() || before.isSymbolicLink()) fail(`${codePrefix}_PARENT_UNSAFE`, "RED_QUARANTINED");
+    parentFd = fs.openSync(parent, fs.constants.O_RDONLY | fs.constants.O_DIRECTORY | (fs.constants.O_NOFOLLOW ?? 0));
+    const opened = fs.fstatSync(parentFd, { bigint: true });
+    if (!sameStructuralDirectoryIdentity(structuralDirectoryIdentity(before), structuralDirectoryIdentity(opened))) fail(`${codePrefix}_PARENT_DRIFT`, "RED_QUARANTINED");
+    assertStructuralDirectoryChainStable(parentChain, `${codePrefix}_PARENT_DRIFT`);
+    if (lstatIfPresent(target, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_NOT_ABSENT`, "RED_QUARANTINED");
+    fs.fsyncSync(parentFd);
+    const finalOpened = fs.fstatSync(parentFd, { bigint: true }); const finalPath = fs.lstatSync(parent, { bigint: true });
+    assertStructuralDirectoryChainStable(parentChain, `${codePrefix}_PARENT_DRIFT`);
+    if (!sameStructuralDirectoryIdentity(structuralDirectoryIdentity(before), structuralDirectoryIdentity(finalOpened)) || !sameStructuralDirectoryIdentity(structuralDirectoryIdentity(before), structuralDirectoryIdentity(finalPath)) || lstatIfPresent(target, `${codePrefix}_ABSENCE_UNREADABLE`, "RED_QUARANTINED") !== null) fail(`${codePrefix}_ABSENCE_DRIFT`, "RED_QUARANTINED");
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError(`${codePrefix}_ABSENCE_PROOF_FAILED`, "RED_QUARANTINED"); }
+  finally {
+    const closeError = parentFd === null ? null : closeCheckpointClaimDescriptor(parentFd, `${codePrefix}_PARENT_CLOSE_UNCERTAIN`);
+    primaryError = selectPhysicalRunnerTerminalError(primaryError, null, closeError);
+  }
+  if (primaryError !== null) throw primaryError;
+  return true;
+}
+
+function hostBindingReattemptPublicReceiptTemporaryPath(publicReceiptPath) {
+  return path.join(path.dirname(publicReceiptPath), `.${path.basename(publicReceiptPath)}.${HOST_BINDING_REATTEMPT_AUTHORITY.runId}.tmp`);
+}
+
+function observeHostBindingReattemptSurvivingPublication({ capsuleRoot, publicReceiptPath, authenticatedTombstone }) {
+  const capsuleRootStat = lstatIfPresent(capsuleRoot, "HOST_BINDING_REATTEMPT_SURVIVING_CAPSULE_ROOT_UNREADABLE", "RED_QUARANTINED");
+  const receiptStat = lstatIfPresent(publicReceiptPath, "HOST_BINDING_REATTEMPT_SURVIVING_RECEIPT_UNREADABLE", "RED_QUARANTINED");
+  if (capsuleRootStat === null && receiptStat === null) {
+    proveHostBindingReattemptPathAbsentDurably(capsuleRoot, "HOST_BINDING_REATTEMPT_SURVIVING_CAPSULE_ROOT");
+    proveHostBindingReattemptPathAbsentDurably(publicReceiptPath, "HOST_BINDING_REATTEMPT_SURVIVING_RECEIPT");
+    proveHostBindingReattemptPathAbsentDurably(hostBindingReattemptPublicReceiptTemporaryPath(publicReceiptPath), "HOST_BINDING_REATTEMPT_SURVIVING_RECEIPT_TEMP");
+    return Object.freeze({ publicationStatus: "ABSENT", hostBindingId: null, capsuleSha256: null, publicReceiptSha256: null, expiresAt: null });
+  }
+  if (capsuleRootStat === null || receiptStat === null || !capsuleRootStat.isDirectory() || capsuleRootStat.isSymbolicLink() || capsuleRootStat.uid !== process.getuid() || (capsuleRootStat.mode & 0o777) !== 0o700 || fs.realpathSync(capsuleRoot) !== capsuleRoot) fail("HOST_BINDING_REATTEMPT_SURVIVING_PUBLICATION_PARTIAL", "RED_QUARANTINED");
+  const first = fs.readdirSync(capsuleRoot, { encoding: "buffer" }); const second = fs.readdirSync(capsuleRoot, { encoding: "buffer" });
+  if (first.length !== 1 || second.length !== 1 || !first[0].equals(second[0])) fail("HOST_BINDING_REATTEMPT_SURVIVING_CAPSULE_INVENTORY_INVALID", "RED_QUARANTINED");
+  const capsuleName = first[0].toString("utf8");
+  const match = /^([0-9a-f]{32})\.json$/u.exec(capsuleName);
+  if (match === null || !first[0].equals(Buffer.from(capsuleName, "utf8"))) fail("HOST_BINDING_REATTEMPT_SURVIVING_CAPSULE_NAME_INVALID", "RED_QUARANTINED");
+  const capsule = readExactHostBindingReattemptJsonArtifact(path.join(capsuleRoot, capsuleName), 0o600, 2_097_152, "schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json", "r4_gate_b_host_binding_reattempt_capsule.v2", "HOST_BINDING_REATTEMPT_SURVIVING_CAPSULE");
+  const receipt = readExactHostBindingReattemptJsonArtifact(publicReceiptPath, 0o644, 1_048_576, "schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json", "r4_gate_b_host_binding_reattempt_public_receipt.v2", "HOST_BINDING_REATTEMPT_SURVIVING_RECEIPT");
+  const tombstone = authenticatedTombstone.tombstone;
+  for (const value of [capsule.value, receipt.value]) if (value.reattemptRunId !== tombstone.reattemptRunId || value.attemptId !== tombstone.attemptId || value.hostBindingId !== match[1] || value.implementationHead !== tombstone.implementationHead || value.implementationTree !== tombstone.implementationTree || value.checkpointSha256 !== tombstone.checkpointSha256 || value.activationCardSha256 !== tombstone.activationCardSha256 || value.activationGrantSha256 !== tombstone.activationGrantSha256 || value.consumedAttemptTombstoneSha256 !== authenticatedTombstone.tombstoneSha256) fail("HOST_BINDING_REATTEMPT_SURVIVING_PUBLICATION_BINDING_DRIFT", "RED_QUARANTINED");
+  const createdAtMilliseconds = Date.parse(capsule.value.createdAt);
+  const expiresAtMilliseconds = Date.parse(capsule.value.expiresAt);
+  if (receipt.value.hostBindingCapsuleSha256 !== capsule.sha256 || receipt.value.createdAt !== capsule.value.createdAt || receipt.value.expiresAt !== capsule.value.expiresAt || receipt.value.runtimeDependencyAggregateSha256 !== capsule.value.runtimeDependencyAggregateSha256 || !Number.isFinite(createdAtMilliseconds) || !Number.isFinite(expiresAtMilliseconds) || expiresAtMilliseconds - createdAtMilliseconds !== 259_200_000) fail("HOST_BINDING_REATTEMPT_SURVIVING_PUBLICATION_PAIR_DRIFT", "RED_QUARANTINED");
+  proveHostBindingReattemptPathAbsentDurably(hostBindingReattemptPublicReceiptTemporaryPath(publicReceiptPath), "HOST_BINDING_REATTEMPT_SURVIVING_RECEIPT_TEMP");
+  return Object.freeze({ publicationStatus: "PUBLISHED", hostBindingId: match[1], capsuleSha256: capsule.sha256, publicReceiptSha256: receipt.sha256, expiresAt: capsule.value.expiresAt });
+}
+
+export async function cleanupHostBindingReattempt(input, {
+  reattemptRoot = REATTEMPT_ROOT,
+  rootAnchor = REPOSITORY_ROOT,
+  consumedAttemptPath = REATTEMPT_CONSUMED_PATH,
+  inputPath = REATTEMPT_INPUT_PATH,
+  capsuleRoot = REATTEMPT_CAPSULE_ROOT,
+  publicReceiptPath = REATTEMPT_PUBLIC_RECEIPT_PATH,
+  inputAbsenceProver = proveHostBindingReattemptInputAbsent,
+  recoverUnstarted = recoverUnstartedBlockedSupervisors,
+  stopProcessGroup = stopAndProveGroupAbsent,
+} = {}) {
+  exactObject(input, new Set(["mode", "packetSha256"]), "HOST_BINDING_REATTEMPT_CLEANUP_ARGUMENT_SHAPE");
+  if (input.mode !== "cleanup-host-binding-reattempt" || input.packetSha256 !== HOST_BINDING_REATTEMPT_AUTHORITY.packetSha256 || ![reattemptRoot, rootAnchor, consumedAttemptPath, inputPath, capsuleRoot, publicReceiptPath].every((value) => typeof value === "string" && path.isAbsolute(value) && path.normalize(value) === value) || typeof inputAbsenceProver !== "function" || typeof recoverUnstarted !== "function" || typeof stopProcessGroup !== "function") fail("HOST_BINDING_REATTEMPT_CLEANUP_ARGUMENT_INVALID", "RED");
+  const production = reattemptRoot === REATTEMPT_ROOT;
+  if (production && (rootAnchor !== REPOSITORY_ROOT || consumedAttemptPath !== REATTEMPT_CONSUMED_PATH || inputPath !== REATTEMPT_INPUT_PATH || capsuleRoot !== REATTEMPT_CAPSULE_ROOT || publicReceiptPath !== REATTEMPT_PUBLIC_RECEIPT_PATH || inputAbsenceProver !== proveHostBindingReattemptInputAbsent || recoverUnstarted !== recoverUnstartedBlockedSupervisors || stopProcessGroup !== stopAndProveGroupAbsent)) fail("HOST_BINDING_REATTEMPT_CLEANUP_PRODUCTION_OVERRIDE_DENIED", "RED");
+  const tombstoneStat = lstatIfPresent(consumedAttemptPath, "HOST_BINDING_REATTEMPT_TOMBSTONE_PRESENCE_UNREADABLE", "RED_QUARANTINED");
+  const rootStat = lstatIfPresent(reattemptRoot, "HOST_BINDING_REATTEMPT_ROOT_UNREADABLE", "RED_QUARANTINED");
+  if (rootStat === null) {
+    proveHostBindingReattemptRootAbsent(reattemptRoot);
+    if (tombstoneStat === null) return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "ABSENT" });
+    const observed = assertIntrinsicHostBindingReattemptTombstone(readHostBindingReattemptConsumedAttempt({ consumedAttemptPath }));
+    inputAbsenceProver(inputPath);
+    const survivingPublication = observeHostBindingReattemptSurvivingPublication({ capsuleRoot, publicReceiptPath, authenticatedTombstone: observed });
+    return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "AUTHENTICATED", consumedAttemptTombstoneSha256: observed.tombstoneSha256, ...survivingPublication });
+  }
+  let rootAuthority = openExactOwnedRootAuthority({ root: reattemptRoot, anchor: rootAnchor, codePrefix: "HOST_BINDING_REATTEMPT_ROOT" });
+  let primaryError = null;
+  try {
+    if (tombstoneStat === null) {
+      const preAdmissionNames = stableHostBindingReattemptRootNames(rootAuthority);
+      if (preAdmissionNames.length === 0 || preAdmissionNames.includes("journal.v2.jsonl")) {
+        const ambiguity = new PhysicalRunnerError("HOST_BINDING_REATTEMPT_TOMBSTONE_ABSENT_ROOT_AMBIGUOUS", "RED_QUARANTINED");
+        ambiguity.tombstoneObservation = hostBindingReattemptTombstoneObservation("PRESENCE_UNKNOWN", true, null);
+        throw ambiguity;
+      }
+      const cleanup = cleanupHostBindingReattemptPreAdmissionRoot(rootAuthority); rootAuthority = null;
+      return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", ...cleanup, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "ABSENT" });
+    }
+    const intrinsic = assertIntrinsicHostBindingReattemptTombstone(readHostBindingReattemptConsumedAttempt({ consumedAttemptPath }));
+    const intrinsicBindings = hostBindingReattemptTombstoneBindingsFromValue(intrinsic.tombstone);
+    const tailNames = stableHostBindingReattemptRootNames(rootAuthority);
+    if (tailNames.length === 0) {
+      inputAbsenceProver(inputPath);
+      const survivingPublication = observeHostBindingReattemptSurvivingPublication({ capsuleRoot, publicReceiptPath, authenticatedTombstone: intrinsic });
+      reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings: intrinsicBindings, expectedTombstoneSha256: intrinsic.tombstoneSha256 });
+      removeExactEmptyOwnedRoot(rootAuthority); rootAuthority = null;
+      return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "AUTHENTICATED", consumedAttemptTombstoneSha256: intrinsic.tombstoneSha256, ...survivingPublication });
+    }
+    if (tailNames.length === 1 && tailNames[0] === "checkpoint.v2.json") {
+      inputAbsenceProver(inputPath);
+      const survivingPublication = observeHostBindingReattemptSurvivingPublication({ capsuleRoot, publicReceiptPath, authenticatedTombstone: intrinsic });
+      assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_CHECKPOINT_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+      const tailCheckpointPath = path.join(reattemptRoot, "checkpoint.v2.json");
+      const tailCheckpoint = readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath: tailCheckpointPath, expectedSha256: intrinsic.tombstone.checkpointSha256 });
+      const expectedBindings = hostBindingReattemptTombstoneExpectedBindings(tailCheckpoint.checkpoint, intrinsic.tombstone);
+      reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings, expectedTombstoneSha256: intrinsic.tombstoneSha256 });
+      removeExactPublishedFile(tailCheckpointPath, 0o600, tailCheckpoint.checkpointSha256);
+      removeExactEmptyOwnedRoot(rootAuthority); rootAuthority = null;
+      return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "AUTHENTICATED", consumedAttemptTombstoneSha256: intrinsic.tombstoneSha256, ...survivingPublication });
+    }
+    if (tailNames.length === 1 && tailNames[0] === "journal.v2.jsonl") {
+      assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_JOURNAL_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+      inputAbsenceProver(inputPath);
+      let authenticatedTombstone = reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings: intrinsicBindings, expectedTombstoneSha256: intrinsic.tombstoneSha256 });
+      const authenticatedJournal = readHostBindingReattemptJournalForCleanup({ rootAuthority, authenticatedTombstone });
+      if (authenticatedJournal.journalReadCloseFaultCode !== null) fail(authenticatedJournal.journalReadCloseFaultCode, "RED_QUARANTINED");
+      const plan = authenticatedJournal.records.length === 0 ? null : observeHostBindingReattemptPublicationPlan(authenticatedJournal.records, authenticatedTombstone.tombstoneSha256);
+      if (plan !== null && (plan.unresolvedProcessGroups.length !== 0 || plan.unresolvedProcesses.length !== 0 || plan.unstartedSupervisorStarts.length !== 0 || plan.unstartedDirectGateIntents !== 0)) fail("HOST_BINDING_REATTEMPT_JOURNAL_ONLY_TAIL_NOT_CLOSED", "RED_QUARANTINED");
+      const survivingPublication = observeHostBindingReattemptSurvivingPublication({ capsuleRoot, publicReceiptPath, authenticatedTombstone });
+      if (survivingPublication.publicationStatus !== (plan?.publicationComplete === true ? "PUBLISHED" : "ABSENT")) fail("HOST_BINDING_REATTEMPT_JOURNAL_ONLY_PUBLICATION_DRIFT", "RED_QUARANTINED");
+      authenticatedTombstone = reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings: intrinsicBindings, expectedTombstoneSha256: intrinsic.tombstoneSha256 });
+      const journalSha256 = authenticatedJournal.records.length === 0 ? sha256(Buffer.alloc(0)) : hostBindingReattemptJournalSha256(authenticatedJournal.records);
+      removeExactPublishedFile(path.join(reattemptRoot, "journal.v2.jsonl"), 0o600, journalSha256);
+      removeExactEmptyOwnedRoot(rootAuthority); rootAuthority = null;
+      return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputAccessed: false, consumedAttemptTombstoneStatus: "AUTHENTICATED", consumedAttemptTombstoneSha256: authenticatedTombstone.tombstoneSha256, ...survivingPublication });
+    }
+    assertStableHostBindingReattemptExecutionInventory(rootAuthority);
+    const checkpointPath = path.join(reattemptRoot, "checkpoint.v2.json");
+    const reopened = readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath, expectedSha256: intrinsic.tombstone.checkpointSha256 });
+    const expectedBindings = hostBindingReattemptTombstoneExpectedBindings(reopened.checkpoint, intrinsic.tombstone);
+    const authenticatedTombstone = readHostBindingReattemptConsumedAttempt({ consumedAttemptPath, expectedBindings });
+    const authenticatedJournal = readHostBindingReattemptJournalForCleanup({ rootAuthority, authenticatedTombstone });
+    const plan = authenticatedJournal.records.length === 0 ? null : observeHostBindingReattemptPublicationPlan(authenticatedJournal.records, authenticatedTombstone.tombstoneSha256);
+    const cleanup = await cleanupHostBindingReattemptAuthenticated({ rootAuthority, checkpointSha256: reopened.checkpointSha256, authenticatedJournal, authenticatedTombstone, consumedAttemptPath, expectedTombstoneBindings: expectedBindings, retainCompletePublication: plan?.publicationComplete === true, inputPath, capsuleRoot, publicReceiptPath, inputAbsenceProver, recoverUnstarted, stopProcessGroup });
+    rootAuthority = null;
+    return Object.freeze({ schemaVersion: "r4_gate_b_host_binding_reattempt_cleanup.v2", status: "GREEN", ...cleanup, consumedAttemptTombstoneStatus: "AUTHENTICATED", consumedAttemptTombstoneSha256: authenticatedTombstone.tombstoneSha256 });
+  } catch (error) { primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CLEANUP_UNCONTROLLED", "RED_QUARANTINED"); throw primaryError; }
+  finally {
+    if (rootAuthority !== null && !rootAuthority.state.closed) {
+      try { closeExactOwnedRootAuthority(rootAuthority, "HOST_BINDING_REATTEMPT_CLEANUP_ROOT_CLOSE_UNCERTAIN"); }
+      catch (closeError) { if (primaryError === null) throw closeError; }
+    }
+  }
+}
+
+function assertHostBindingReattemptCheckpointBindingsCurrent(checkpoint, authority, runtimeInventory, hashFile) {
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", checkpoint, "HOST_BINDING_REATTEMPT_CHECKPOINT_SCHEMA_INVALID");
+  if (authority.implementationHead !== checkpoint.implementationHead || authority.implementationTree !== checkpoint.implementationTree || authority.changedPathCount !== checkpoint.worksetPathCount || authority.worksetAggregateSha256 !== checkpoint.worksetAggregateSha256) fail("HOST_BINDING_REATTEMPT_IMPLEMENTATION_DRIFT", "RED");
+  const runtime = normalizeHostBindingReattemptRuntime(runtimeInventory());
+  if (runtime.fileCount !== checkpoint.runtimeDependencyCount || runtime.aggregateSha256 !== checkpoint.runtimeDependencyAggregateSha256 || canonicalJson(runtime.files) !== canonicalJson(checkpoint.runtimeDependencies)) fail("HOST_BINDING_REATTEMPT_RUNTIME_DRIFT", "RED");
+  const hashes = Object.freeze({
+    physicalRunnerSha256: hashFile("scripts/r4-gate-b-physical-runner.mjs"),
+    hostBindingModuleSha256: hashFile("scripts/r4-gate-b-host-binding.mjs"),
+    physicalPortSha256: hashFile("scripts/r4-gate-b-physical-port.mjs"),
+    runnerContractSha256: hashFile("schemas/r4/gate-b-core/physical-runner-contract.json"),
+    codexProfileSha256: hashFile("schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb"),
+  });
+  for (const [key, value] of Object.entries(hashes)) if (checkpoint[key] !== value) fail("HOST_BINDING_REATTEMPT_IMPLEMENTATION_HASH_DRIFT", "RED");
+  return authority;
+}
+
+function assertHostBindingReattemptCheckpointCurrent(checkpoint, {
+  authorityVerifier = verifyHostBindingReattemptAuthority,
+  runtimeInventory = runtimeDependencyInventory,
+  hashFile = fileSha,
+} = {}) {
+  return assertHostBindingReattemptCheckpointBindingsCurrent(checkpoint, authorityVerifier(), runtimeInventory, hashFile);
+}
+
+function assertHostBindingReattemptCheckpointCurrentAfterPublicReceipt(checkpoint, expectedPublicReceiptSha256, expectedPublicReceiptLinkCount) {
+  return assertHostBindingReattemptCheckpointBindingsCurrent(checkpoint, verifyHostBindingReattemptAuthorityAfterPublicReceipt(checkpoint, expectedPublicReceiptSha256, expectedPublicReceiptLinkCount), runtimeDependencyInventory, fileSha);
+}
+
+function createHostBindingReattemptProductionProcessPort(root, slotRootIdentitySha256) { return createProductionBlockedProcessPort(root, null, null, null, slotRootIdentitySha256); }
+function createHostBindingReattemptProductionInspector({ root, processPort, journal }) {
+  return createProcessHostInspector({ root, processPort, journal: (entry) => journal.append({ ...entry, ownedResources: entry.ownedResources ?? ["inspector-process-group"], cleanupState: entry.cleanupState ?? "required" }) });
+}
+
+function normalizeHostBindingReattemptTerminalStatus(error, cleanupQuarantined, success) {
+  if (success && error === null && !cleanupQuarantined) return "HOST_BOUND_YELLOW";
+  const verdict = String(error?.verdict ?? "RED");
+  if (cleanupQuarantined || verdict.includes("QUARANTINED")) return "RED_QUARANTINED";
+  if (verdict.includes("YELLOW")) return "YELLOW_NO_RETRY";
+  return "RED";
+}
+
+export function createHostBindingReattemptTerminalResult({ checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, attemptId, terminalError = null, tombstoneObservation, inputObservation, hostObservation, cleanupObservation = null, publication = null, success = false, cleanupQuarantined = false }) {
+  if (checkpoint === null || typeof checkpoint !== "object" || !SHA.test(checkpointSha256) || !SHA.test(activationCardSha256) || !SHA.test(activationGrantSha256) || !ID.test(attemptId)) fail("HOST_BINDING_REATTEMPT_TERMINAL_AUTHORITY_INVALID", "RED");
+  const tombstone = tombstoneObservation ?? Object.freeze({ consumedAttemptTombstoneStatus: "ABSENT", attemptConsumed: false, tombstoneSha256: null, consumedAttemptTombstonePresent: false });
+  const input = inputObservation ?? Object.freeze({ accessed: false, openCalls: 0, removedOrAbsent: false });
+  const host = mergeHostInspectionObservations(hostObservation);
+  const cleanup = cleanupObservation ?? Object.freeze({ reattemptRunRootAbsent: false, reattemptJournalAbsent: false, processGroupsAbsent: false, hostBindingInputRemovedOrAbsent: input.removedOrAbsent, publicationStatus: publication === null ? "ABSENT" : "QUARANTINED" });
+  const status = normalizeHostBindingReattemptTerminalStatus(terminalError, cleanupQuarantined, success);
+  const published = status === "HOST_BOUND_YELLOW";
+  const quarantinedPublication = status === "RED_QUARANTINED" && publication !== null && cleanup.publicationStatus !== "ABSENT";
+  const result = Object.freeze({
+    schemaVersion: "r4_gate_b_host_binding_reattempt_terminal.v2",
+    status,
+    reasonCode: published ? "HOST_BOUND" : String(terminalError?.code ?? "HOST_BINDING_REATTEMPT_TERMINAL_RED").replace(/[^A-Z0-9_]/gu, "_").slice(0, 96),
+    reattemptRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId,
+    attemptId,
+    attemptOrdinal: 2,
+    implementationHead: checkpoint.implementationHead,
+    implementationTree: checkpoint.implementationTree,
+    checkpointSha256,
+    activationCardSha256,
+    activationGrantSha256,
+    hostBindingInputPreparedByOwner: true,
+    attemptConsumed: tombstone.attemptConsumed,
+    consumedAttemptTombstoneStatus: tombstone.consumedAttemptTombstoneStatus,
+    consumedAttemptTombstoneSha256: tombstone.tombstoneSha256,
+    consumedAttemptTombstonePresent: tombstone.consumedAttemptTombstonePresent,
+    hostBindingInputAccessed: input.accessed,
+    hostBindingInputOpenCalls: input.openCalls,
+    hostBindingInputRemoved: input.removedOrAbsent || cleanup.hostBindingInputRemovedOrAbsent === true,
+    dockerReadOnlyCliCalls: host.dockerCliStarts,
+    localDockerUnixSocketRequests: host.localDockerUnixSocketRequests,
+    macosReadOnlyInspectionCalls: host.macosInspectorStarts,
+    dockerMutationCalls: 0,
+    credentialsRead: 0,
+    realPhysicalEffects: 0,
+    realCodexCalls: 0,
+    sandboxExecCalls: 0,
+    signingCalls: 0,
+    keychainCalls: 0,
+    localAuthenticationCalls: 0,
+    retryExecutions: 0,
+    providerCalls: 0,
+    externalRuntimeNetworkCalls: 0,
+    publicationStatus: published ? "PUBLISHED" : quarantinedPublication ? "QUARANTINED" : "ABSENT",
+    hostBindingId: published || quarantinedPublication ? publication.hostBindingId : null,
+    hostBindingCapsuleSha256: published || quarantinedPublication ? publication.capsuleSha256 : null,
+    hostBindingPublicReceiptSha256: published || quarantinedPublication ? publication.publicReceiptSha256 : null,
+    hostBindingExpiresAt: published || quarantinedPublication ? publication.expiresAt : null,
+    reattemptRunRootAbsent: cleanup.reattemptRunRootAbsent === true,
+    reattemptJournalAbsent: cleanup.reattemptJournalAbsent === true,
+    processGroupsAbsent: cleanup.processGroupsAbsent === true,
+    cleanupStatus: cleanupQuarantined ? "RED_QUARANTINED" : "GREEN",
+    hostBindingAttemptGrant: "APPROVED_ONCE",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+    nextGate: published ? "WAITING_RETRY_APPROVAL" : "STOPPED",
+    aggregateVerdict: status === "HOST_BOUND_YELLOW" || status.includes("YELLOW") ? "YELLOW" : "RED",
+  });
+  validateSchema("schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", result, "HOST_BINDING_REATTEMPT_TERMINAL_SCHEMA_INVALID");
+  return result;
+}
+
+export async function finalizeHostBindingReattemptOnce(input, {
+  reattemptRoot = REATTEMPT_ROOT,
+  rootAnchor = REPOSITORY_ROOT,
+  consumedAttemptPath = REATTEMPT_CONSUMED_PATH,
+  inputPath = REATTEMPT_INPUT_PATH,
+  capsuleRoot = REATTEMPT_CAPSULE_ROOT,
+  publicReceiptPath = REATTEMPT_PUBLIC_RECEIPT_PATH,
+  authorityVerifier = verifyHostBindingReattemptAuthority,
+  runtimeInventory = runtimeDependencyInventory,
+  hashFile = fileSha,
+  inputConsumer = readAndConsumeHostBindingReattemptInput,
+  tombstoneFactory = createPermanentHostBindingReattemptConsumedAttempt,
+  journalFactory = createHostBindingReattemptJournal,
+  processPortFactory = createHostBindingReattemptProductionProcessPort,
+  inspectorFactory = createHostBindingReattemptProductionInspector,
+  hostFinalizer = finalizeHostBindingReattempt,
+  inputAbsenceProver = proveHostBindingReattemptInputAbsent,
+  recoverUnstarted = recoverUnstartedBlockedSupervisors,
+  stopProcessGroup = stopAndProveGroupAbsent,
+  now = hostBindingReattemptNow,
+} = {}) {
+  exactObject(input, new Set(["mode", "checkpointSha256", "activationCardSha256", "activationGrantSha256"]), "HOST_BINDING_REATTEMPT_FINALIZE_ARGUMENT_SHAPE");
+  if (input.mode !== "finalize-host-binding-reattempt" || ![input.checkpointSha256, input.activationCardSha256, input.activationGrantSha256].every((value) => SHA.test(value)) || ![reattemptRoot, rootAnchor, consumedAttemptPath, inputPath, capsuleRoot, publicReceiptPath].every((value) => typeof value === "string" && path.isAbsolute(value) && path.normalize(value) === value) || ![authorityVerifier, runtimeInventory, hashFile, inputConsumer, tombstoneFactory, journalFactory, processPortFactory, inspectorFactory, hostFinalizer, inputAbsenceProver, recoverUnstarted, stopProcessGroup, now].every((value) => typeof value === "function")) fail("HOST_BINDING_REATTEMPT_FINALIZE_ARGUMENT_INVALID", "RED");
+  const production = reattemptRoot === REATTEMPT_ROOT;
+  if (production && (rootAnchor !== REPOSITORY_ROOT || consumedAttemptPath !== REATTEMPT_CONSUMED_PATH || inputPath !== REATTEMPT_INPUT_PATH || capsuleRoot !== REATTEMPT_CAPSULE_ROOT || publicReceiptPath !== REATTEMPT_PUBLIC_RECEIPT_PATH || authorityVerifier !== verifyHostBindingReattemptAuthority || runtimeInventory !== runtimeDependencyInventory || hashFile !== fileSha || inputConsumer !== readAndConsumeHostBindingReattemptInput || tombstoneFactory !== createPermanentHostBindingReattemptConsumedAttempt || journalFactory !== createHostBindingReattemptJournal || processPortFactory !== createHostBindingReattemptProductionProcessPort || inspectorFactory !== createHostBindingReattemptProductionInspector || hostFinalizer !== finalizeHostBindingReattempt || inputAbsenceProver !== proveHostBindingReattemptInputAbsent || recoverUnstarted !== recoverUnstartedBlockedSupervisors || stopProcessGroup !== stopAndProveGroupAbsent || now !== hostBindingReattemptNow)) fail("HOST_BINDING_REATTEMPT_FINALIZE_PRODUCTION_OVERRIDE_DENIED", "RED");
+  rejectHostBindingReattemptTombstoneCollision(consumedAttemptPath);
+  let rootAuthority = null;
+  let checkpoint = null;
+  let activationCardSha256 = input.activationCardSha256;
+  let attemptId = null;
+  let journal = null;
+  let authenticatedTombstone = null;
+  let tombstoneObservation = Object.freeze({ consumedAttemptTombstoneStatus: "ABSENT", attemptConsumed: false, tombstoneSha256: null, consumedAttemptTombstonePresent: false });
+  let inputObservation = Object.freeze({ accessed: false, openCalls: 0, removedOrAbsent: false });
+  let inspector = null;
+  let hostObservation = null;
+  let hostResult = null;
+  let publication = null;
+  let publicationCandidate = null;
+  let receiptParent = null;
+  let receiptParentChain = null;
+  let primaryError = null;
+  let finalizationError = null;
+  let cleanupError = null;
+  let cleanupObservation = null;
+  let successCandidate = false;
+  try {
+    rootAuthority = openExactOwnedRootAuthority({ root: reattemptRoot, anchor: rootAnchor, codePrefix: "HOST_BINDING_REATTEMPT_ROOT" });
+    assertClosedExactOwnedRootInventory(rootAuthority, REATTEMPT_CHECKPOINT_INVENTORY, "HOST_BINDING_REATTEMPT_ROOT");
+    const reopened = readExactHostBindingReattemptCheckpoint({ rootAuthority, checkpointPath: path.join(reattemptRoot, "checkpoint.v2.json"), expectedSha256: input.checkpointSha256 });
+    checkpoint = reopened.checkpoint;
+    assertHostBindingReattemptCheckpointCurrent(checkpoint, { authorityVerifier, runtimeInventory, hashFile });
+    const card = createHostBindingReattemptActivationCard(checkpoint, reopened.checkpointSha256);
+    activationCardSha256 = sha256(Buffer.from(canonicalJson(card), "utf8"));
+    if (activationCardSha256 !== input.activationCardSha256) fail("HOST_BINDING_REATTEMPT_ACTIVATION_CARD_HASH_MISMATCH", "RED");
+    assertHostBindingReattemptActivationGrantHash({ activationCardSha256, checkpointSha256: reopened.checkpointSha256, implementationHead: checkpoint.implementationHead, implementationTree: checkpoint.implementationTree }, input.activationGrantSha256);
+    receiptParent = production ? assertExistingRepoDirectory(path.dirname(publicReceiptPath), "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_UNSAFE") : ensureOwnedPrivateDirectory(path.dirname(publicReceiptPath), rootAnchor);
+    receiptParentChain = snapshotStructuralDirectoryChain(receiptParent, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_UNSAFE");
+    requirePathEntryAbsent(publicReceiptPath, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PREEXISTS", "RED");
+    requirePathEntryAbsent(capsuleRoot, "HOST_BINDING_REATTEMPT_CAPSULE_ROOT_PREEXISTS", "RED");
+    attemptId = card.attemptId;
+    journal = journalFactory(rootAuthority);
+    authenticatedTombstone = tombstoneFactory({ consumedAttemptPath, rootAnchor, checkpoint, checkpointSha256: reopened.checkpointSha256, activationCardSha256, activationGrantSha256: input.activationGrantSha256, attemptId, now });
+    tombstoneObservation = Object.freeze({ consumedAttemptTombstoneStatus: "AUTHENTICATED", attemptConsumed: true, tombstoneSha256: authenticatedTombstone.tombstoneSha256, consumedAttemptTombstonePresent: true });
+    await journal.append({ lane: "host-binding", event: "input-open-intent", commandShapeSha256: authenticatedTombstone.tombstoneSha256, ownedResources: ["owner-input-envelope"], cleanupState: "required" });
+    const ownerInput = inputConsumer(inputPath, { onInputObservation(observation) { inputObservation = observation; } });
+    const slotRoot = await prepareBlockedStartSlotRoot(reattemptRoot, journal, "host-binding", true);
+    const processPort = processPortFactory(reattemptRoot, slotRoot.identitySha256);
+    inspector = inspectorFactory({ root: reattemptRoot, processPort, journal });
+    hostResult = await hostFinalizer({ repositoryRoot: rootAnchor, reattemptRoot, checkpoint, checkpointSha256: reopened.checkpointSha256, activationCardSha256, activationGrantSha256: input.activationGrantSha256, consumedAttemptTombstoneSha256: authenticatedTombstone.tombstoneSha256, attemptId, ownerInput, inspector, now });
+    publicationCandidate = Object.freeze({ hostBindingId: hostResult.hostBindingId, capsuleSha256: hostResult.capsuleSha256, publicReceiptSha256: hostResult.publicReceiptSha256, expiresAt: hostResult.expiresAt });
+    hostObservation = inspector?.snapshot?.() ?? null;
+    assertHostBindingReattemptCheckpointCurrent(checkpoint, { authorityVerifier, runtimeInventory, hashFile });
+    await journal.append({ lane: "host-binding", event: "capsule-root-create-intent", hostBindingId: hostResult.hostBindingId, commandShapeSha256: sha256(Buffer.from("r4-gate-b-host-binding-reattempt-capsule-root-v2\n", "utf8")), ownedResources: ["host-binding-capsule-root"], cleanupState: "required" });
+    await createExclusiveHostBindingReattemptCapsuleRoot({ capsuleRoot, rootAnchor, hostBindingId: hostResult.hostBindingId, journal });
+    const capsulePath = path.join(capsuleRoot, `${hostResult.hostBindingId}.json`);
+    requirePathEntryAbsent(capsulePath, "HOST_BINDING_REATTEMPT_CAPSULE_TARGET_PREEXISTS", "RED");
+    await journal.append({ lane: "host-binding", event: "capsule-target-absent", hostBindingId: hostResult.hostBindingId, commandShapeSha256: hostResult.capsuleSha256, ownedResources: ["host-binding-capsule"], cleanupState: "required" });
+    await journal.append({ lane: "host-binding", event: "capsule-publication-intent", hostBindingId: hostResult.hostBindingId, commandShapeSha256: hostResult.capsuleSha256, ownedResources: ["host-binding-capsule"], cleanupState: "required" });
+    await atomicPublishConstructionFile(capsulePath, hostResult.capsuleBytes, { mode: 0o600, kind: "capsule", parent: capsuleRoot, journal, hostBindingId: hostResult.hostBindingId, stageEvent: "capsule-stage-ready", stageResource: "host-binding-capsule-stage", constructionRoot: reattemptRoot, publicationVersion: "v2", temporaryRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId });
+    observeExactPublishedFile(capsulePath, 0o600, hostResult.capsuleSha256, hostResult.capsuleBytes, 2_097_152, 2);
+    if (receiptParent === null || receiptParentChain === null) fail("HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_AUTHORITY_MISSING", "RED_QUARANTINED");
+    assertStructuralDirectoryChainStable(receiptParentChain, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_DRIFT");
+    if (production) assertExistingRepoDirectory(receiptParent, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_UNSAFE");
+    else ensureOwnedPrivateDirectory(receiptParent, rootAnchor);
+    assertStructuralDirectoryChainStable(receiptParentChain, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PARENT_DRIFT");
+    requirePathEntryAbsent(publicReceiptPath, "HOST_BINDING_REATTEMPT_PUBLIC_RECEIPT_PREEXISTS", "RED");
+    await journal.append({ lane: "host-binding", event: "public-receipt-target-absent", hostBindingId: hostResult.hostBindingId, commandShapeSha256: hostResult.publicReceiptSha256, ownedResources: ["public-receipt"], cleanupState: "required" });
+    await journal.append({ lane: "host-binding", event: "public-receipt-publication-intent", hostBindingId: hostResult.hostBindingId, commandShapeSha256: hostResult.publicReceiptSha256, ownedResources: ["public-receipt"], cleanupState: "required" });
+    await atomicPublishConstructionFile(publicReceiptPath, hostResult.publicReceiptBytes, { mode: 0o644, kind: "public-receipt", parent: receiptParent, journal, hostBindingId: hostResult.hostBindingId, stageEvent: "public-receipt-stage-ready", stageResource: "public-receipt-stage", constructionRoot: reattemptRoot, publicationVersion: "v2", temporaryRunId: HOST_BINDING_REATTEMPT_AUTHORITY.runId });
+    observeExactPublishedFile(publicReceiptPath, 0o644, hostResult.publicReceiptSha256, hostResult.publicReceiptBytes, 1_048_576, 2);
+    if (production) assertHostBindingReattemptCheckpointCurrentAfterPublicReceipt(checkpoint, hostResult.publicReceiptSha256, 2);
+    else assertHostBindingReattemptCheckpointCurrent(checkpoint, { authorityVerifier, runtimeInventory, hashFile });
+    await journal.append({ lane: "host-binding", event: "capsule-published", hostBindingId: hostResult.hostBindingId, commandShapeSha256: hostResult.capsuleSha256, ownedResources: ["host-binding-capsule", "public-receipt"], terminalCode: "HOST_BOUND_YELLOW", cleanupState: "retain-capsule" });
+    publication = Object.freeze({ hostBindingId: hostResult.hostBindingId, capsuleSha256: hostResult.capsuleSha256, publicReceiptSha256: hostResult.publicReceiptSha256, expiresAt: hostResult.expiresAt });
+    successCandidate = true;
+  } catch (error) {
+    if (error?.inputObservation !== undefined) inputObservation = error.inputObservation;
+    if (error?.tombstoneObservation !== undefined) tombstoneObservation = error.tombstoneObservation;
+    hostObservation = mergeHostInspectionObservations(error?.partialObservation, inspector?.snapshot?.(), hostObservation);
+    primaryError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_UNCONTROLLED", "RED");
+  } finally {
+    if (journal !== null) {
+      try { journal.close(); } catch { finalizationError = new PhysicalRunnerError("HOST_BINDING_REATTEMPT_JOURNAL_CLOSE_UNCERTAIN", "RED_QUARANTINED"); }
+      try { journal.zeroize(); } catch { finalizationError = selectPhysicalRunnerTerminalError(finalizationError, null, new PhysicalRunnerError("HOST_BINDING_REATTEMPT_JOURNAL_ZEROIZATION_FAILED", "RED")); }
+    }
+    if (rootAuthority !== null && !rootAuthority.state.closed) {
+      try {
+        if (authenticatedTombstone !== null) {
+          const expectedBindings = expectedHostBindingReattemptTombstoneBindings(checkpoint, input.checkpointSha256, activationCardSha256, input.activationGrantSha256, attemptId);
+          authenticatedTombstone = reauthenticateHostBindingReattemptConsumedAttemptForCleanup({ consumedAttemptPath, expectedBindings, expectedTombstoneSha256: authenticatedTombstone.tombstoneSha256 });
+          tombstoneObservation = hostBindingReattemptTombstoneObservation("AUTHENTICATED", true, true, authenticatedTombstone.tombstoneSha256);
+          const authenticatedJournal = readHostBindingReattemptJournalForCleanup({ rootAuthority, authenticatedTombstone });
+          cleanupObservation = await cleanupHostBindingReattemptAuthenticated({ rootAuthority, checkpointSha256: input.checkpointSha256, authenticatedJournal, authenticatedTombstone, consumedAttemptPath, expectedTombstoneBindings: expectedBindings, retainCompletePublication: successCandidate, inputPath, capsuleRoot, publicReceiptPath, inputAbsenceProver, recoverUnstarted, stopProcessGroup });
+          rootAuthority = null;
+        } else if (tombstoneObservation.consumedAttemptTombstoneStatus === "ABSENT") {
+          cleanupObservation = cleanupHostBindingReattemptPreAdmissionRoot(rootAuthority); rootAuthority = null;
+          cleanupObservation = Object.freeze({ ...cleanupObservation, reattemptRunRootAbsent: true, reattemptJournalAbsent: true, processGroupsAbsent: true, hostBindingInputRemovedOrAbsent: false, publicationStatus: "ABSENT" });
+        }
+      } catch (error) {
+        cleanupError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_CLEANUP_UNCONTROLLED", "RED_QUARANTINED");
+        if (error?.tombstoneObservation !== undefined) tombstoneObservation = error.tombstoneObservation;
+        if (error?.cleanupObservation !== undefined) cleanupObservation = error.cleanupObservation;
+      }
+    }
+    if (rootAuthority !== null && !rootAuthority.state.closed) {
+      try { closeExactOwnedRootAuthority(rootAuthority, "HOST_BINDING_REATTEMPT_ROOT_CLOSE_UNCERTAIN"); }
+      catch (closeError) { finalizationError = selectPhysicalRunnerTerminalError(finalizationError, null, closeError); }
+    }
+  }
+  let terminalError = selectPhysicalRunnerTerminalError(primaryError, cleanupError, finalizationError);
+  let cleanupQuarantined = cleanupError !== null || finalizationError !== null || authenticatedTombstone === null && tombstoneObservation.consumedAttemptTombstoneStatus !== "ABSENT" || String(terminalError?.verdict ?? "").includes("QUARANTINED");
+  let terminalResult = null;
+  try {
+    if (successCandidate && terminalError === null && publication !== null && cleanupObservation?.cleanupStatus === "GREEN") {
+      try {
+        const capsulePath = path.join(capsuleRoot, `${publication.hostBindingId}.json`);
+        observeExactPublishedFile(capsulePath, 0o600, publication.capsuleSha256, hostResult.capsuleBytes, 2_097_152);
+        observeExactPublishedFile(publicReceiptPath, 0o644, publication.publicReceiptSha256, hostResult.publicReceiptBytes, 1_048_576);
+        if (production) assertHostBindingReattemptCheckpointCurrentAfterPublicReceipt(checkpoint, publication.publicReceiptSha256, 1);
+        else assertHostBindingReattemptCheckpointCurrent(checkpoint, { authorityVerifier, runtimeInventory, hashFile });
+      } catch (error) {
+        const postcheckError = error instanceof PhysicalRunnerError || error instanceof HostBindingError ? error : new PhysicalRunnerError("HOST_BINDING_REATTEMPT_POST_CLEANUP_REVALIDATION_FAILED", "RED_QUARANTINED");
+        terminalError = selectPhysicalRunnerTerminalError(terminalError, null, postcheckError);
+        cleanupQuarantined = true;
+      }
+    }
+    terminalResult = checkpoint !== null && attemptId !== null ? createHostBindingReattemptTerminalResult({ checkpoint, checkpointSha256: input.checkpointSha256, activationCardSha256, activationGrantSha256: input.activationGrantSha256, attemptId, terminalError, tombstoneObservation, inputObservation, hostObservation, cleanupObservation, publication: publicationCandidate, success: successCandidate && terminalError === null, cleanupQuarantined }) : null;
+  } finally {
+    hostResult?.capsuleBytes?.fill(0);
+    hostResult?.publicReceiptBytes?.fill(0);
+  }
+  if (terminalError !== null) {
+    if (terminalResult !== null) terminalError.terminalResult = terminalResult;
+    throw terminalError;
+  }
+  if (terminalResult === null) fail("HOST_BINDING_REATTEMPT_TERMINAL_RESULT_MISSING", "RED");
+  return terminalResult;
+}
+
 export async function preparePhaseBHostBindingPreInput({
   constructionRoot = CONSTRUCTION_ROOT,
   checkpointReader = readCheckpoint,
@@ -5608,15 +7869,23 @@ async function run(argv) {
   if (parsed.mode === "construct-physical-adapters") return await constructPhysicalAdapters();
   if (parsed.mode === "finalize-host-binding") return await finalizeHostBindingOnce();
   if (parsed.mode === "cleanup-construction") return await cleanupConstruction();
+  if (parsed.mode === "prepare-host-binding-reattempt") return prepareHostBindingReattempt(parsed);
+  if (parsed.mode === "finalize-host-binding-reattempt") return await finalizeHostBindingReattemptOnce(parsed);
+  if (parsed.mode === "cleanup-host-binding-reattempt") return await cleanupHostBindingReattempt(parsed);
   if (parsed.mode === "cleanup-core-retry") return await cleanupCoreRetry(parsed);
   if (parsed.mode === "execute-core-retry") return await executeCoreRetry(parsed);
   fail("PHYSICAL_RUNNER_MODE_UNREACHABLE", "RED");
 }
 
+export function physicalRunnerDirectErrorBody(error) {
+  if (error?.terminalResult !== undefined) return error.terminalResult;
+  return Object.freeze({ schemaVersion: "r4_gate_b_physical_runner_error.v1", code: error?.code ?? "PHYSICAL_RUNNER_UNCONTROLLED", verdict: error?.verdict ?? "RED", ...(error?.hostInspection === undefined ? {} : { hostInspection: error.hostInspection }) });
+}
+
 const direct = process.argv[1] ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false;
 if (direct) {
   run(process.argv.slice(2)).then((result) => process.stdout.write(`${canonicalJson(result)}\n`)).catch((error) => {
-    const body = { schemaVersion: "r4_gate_b_physical_runner_error.v1", code: error?.code ?? "PHYSICAL_RUNNER_UNCONTROLLED", verdict: error?.verdict ?? "RED", ...(error?.hostInspection === undefined ? {} : { hostInspection: error.hostInspection }) };
+    const body = physicalRunnerDirectErrorBody(error);
     process.stdout.write(`${canonicalJson(body)}\n`);
     process.exitCode = 1;
   });

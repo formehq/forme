@@ -21,6 +21,7 @@ const retryConstructionMode = process.argv.includes("--retry-construction");
 const coreConstructionMode = process.argv.includes("--core-construction");
 const physicalConstructionMode = process.argv.includes("--physical-construction") || process.argv.includes("--physical-construction-final");
 const physicalConstructionFinalMode = process.argv.includes("--physical-construction-final");
+const hostBindingReattemptMode = process.argv.includes("--host-binding-reattempt");
 const files = {
   packet: "docs/R4-TECHNICAL-CONTROL-PACKET.md",
   verification: "docs/R4-GATE-A-VERIFICATION.md",
@@ -859,9 +860,143 @@ docs/DECISIONS.md
   };
 }
 
+let hostBindingReattempt = null;
+if (hostBindingReattemptMode) {
+  const proposalParentHead = "b160d03af447bcb51e84030cb1fa15b9711947f0";
+  const proposalParentTree = "a5161d692726e65db6df4e34b41885d2d8d3e18f";
+  const proposalHead = "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d";
+  const proposalTree = "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e";
+  const packetSha256 = "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3";
+  const ownerReviewSha256 = "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445";
+  const runDigestSha256 = "sha256:5cf5b31b5adfceac7fda4d5319db895778e84b189c1aaf3f9f994d9553c1fd90";
+  const runId = "5cf5b31b5adfceac7fda4d5319db8957";
+  const packetPath = "docs/R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md";
+  const ownerReviewPath = "docs/R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md";
+  const expectedProposalPaths = new Map([[packetPath, "M"], [ownerReviewPath, "M"]]);
+  const expectedImplementationPaths = new Map([
+    ["schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json", "A"],
+    ["schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json", "A"],
+    ["schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json", "A"],
+    ["schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json", "A"],
+    ["schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json", "A"],
+    ["schemas/r4/gate-b-core/artifact-index.json", "M"],
+    ["schemas/r4/gate-b-core/physical-runner-contract.json", "M"],
+    ["scripts/r4-doc-audit.mjs", "M"],
+    ["scripts/r4-gate-b-host-binding.mjs", "M"],
+    ["scripts/r4-gate-b-physical-runner.mjs", "M"],
+    ["test/r4-gate-b-core/host-binding.test.ts", "M"],
+    ["test/r4-gate-b-core/physical-runner.test.ts", "M"],
+  ]);
+  const gitEnvironment = { PATH: "/usr/bin:/bin:/usr/sbin:/sbin", GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1" };
+  const git = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, encoding: "utf8", maxBuffer: 16_777_216 }).trim();
+  const gitBytes = (arguments_) => execFileSync("/usr/bin/git", arguments_, { cwd: root, env: gitEnvironment, maxBuffer: 16_777_216 });
+  const gitBlob = (head, relativePath) => gitBytes(["cat-file", "blob", `${head}:${relativePath}`]);
+  const parseNameStatus = (from, to) => {
+    const bytes = gitBytes(["diff", "--name-status", "-z", `${from}..${to}`, "--"]);
+    if (bytes.length > 0 && bytes.at(-1) !== 0x00) throw new Error("Host Binding reattempt name-status frame drift");
+    const fields = bytes.toString("utf8").split("\0").filter(Boolean);
+    const entries = [];
+    for (let index = 0; index < fields.length;) {
+      const statusFrame = fields[index++];
+      const status = statusFrame.slice(0, 1);
+      if (!["A", "M"].includes(status) || statusFrame !== status || index >= fields.length) throw new Error(`Host Binding reattempt denied name-status:${statusFrame}`);
+      const relativePath = fields[index++];
+      if (Buffer.from(relativePath, "utf8").includes(0x00) || entries.some((entry) => entry.path === relativePath)) throw new Error(`Host Binding reattempt invalid path frame:${relativePath}`);
+      entries.push(Object.freeze({ path: relativePath, status }));
+    }
+    return entries;
+  };
+  const assertExactStatus = (entries, expected, label) => {
+    if (entries.length !== expected.size) throw new Error(`${label} count drift:${entries.length}`);
+    for (const { path: relativePath, status } of entries) if (expected.get(relativePath) !== status) throw new Error(`${label} status/path drift:${status}:${relativePath}`);
+    for (const [relativePath, status] of expected) if (!entries.some((entry) => entry.path === relativePath && entry.status === status)) throw new Error(`${label} missing:${status}:${relativePath}`);
+  };
+  if (git(["rev-parse", `${proposalParentHead}^{tree}`]) !== proposalParentTree || git(["rev-parse", `${proposalHead}^{tree}`]) !== proposalTree) throw new Error("Host Binding reattempt proposal tree drift");
+  const proposalLine = git(["rev-list", "--parents", "-n", "1", proposalHead]).split(" ");
+  if (proposalLine.length !== 2 || proposalLine[0] !== proposalHead || proposalLine[1] !== proposalParentHead) throw new Error("Host Binding reattempt proposal parent drift");
+  assertExactStatus(parseNameStatus(proposalParentHead, proposalHead), expectedProposalPaths, "Host Binding reattempt P1-to-P2");
+  if (`sha256:${sha256(readFileSync(join(root, packetPath)))}` !== packetSha256 || `sha256:${sha256(readFileSync(join(root, ownerReviewPath)))}` !== ownerReviewSha256) throw new Error("Host Binding reattempt approval byte drift");
+  const runPreimage = `r4-gate-b-host-binding-reattempt-v2\n${packetSha256}\n${ownerReviewSha256}\n${proposalHead}\n${proposalTree}\n`;
+  const observedRunDigestSha256 = `sha256:${sha256(Buffer.from(runPreimage, "utf8"))}`;
+  if (observedRunDigestSha256 !== runDigestSha256 || observedRunDigestSha256.slice(7, 39) !== runId) throw new Error("Host Binding reattempt run identity drift");
+  if (git(["merge-base", proposalHead, "HEAD"]) !== proposalHead || git(["status", "--porcelain=v1", "--untracked-files=all"]) !== "") throw new Error("Host Binding reattempt implementation is not one clean P2 descendant");
+  const implementationHead = git(["rev-parse", "HEAD"]);
+  const implementationTree = git(["rev-parse", "HEAD^{tree}"]);
+  if (implementationHead === proposalHead) throw new Error("Host Binding reattempt implementation J is absent");
+  const implementationEntries = parseNameStatus(proposalHead, implementationHead);
+  assertExactStatus(implementationEntries, expectedImplementationPaths, "Host Binding reattempt P2-to-J");
+  implementationEntries.sort((left, right) => Buffer.compare(Buffer.from(left.path, "utf8"), Buffer.from(right.path, "utf8")));
+  const worksetLines = implementationEntries.map(({ path: relativePath }) => `sha256:${sha256(gitBlob(implementationHead, relativePath))}  ${relativePath}\n`).join("");
+  const worksetAggregateSha256 = `sha256:${sha256(Buffer.from(worksetLines, "utf8"))}`;
+
+  const schemaPaths = [
+    "schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json",
+    "schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json",
+  ];
+  const schemas = Object.fromEntries(schemaPaths.map((relativePath) => [relativePath, JSON.parse(text(relativePath))]));
+  for (const [relativePath, schema] of Object.entries(schemas)) {
+    new Ajv2020({ strict: true, strictSchema: true, allErrors: true, validateFormats: false }).compile(schema);
+    const serialized = JSON.stringify(schema);
+    if (serialized.includes("r4_gate_b_host_binding_capsule.v1") || serialized.includes("r4_gate_b_host_binding_public_receipt.v1") || serialized.includes("r4_gate_b_host_binding_input.v1")) throw new Error(`Host Binding reattempt v1 schema fallback:${relativePath}`);
+  }
+  const checkpointSchema = schemas["schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json"];
+  const evidenceSchema = schemas["schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json"];
+  if (checkpointSchema.properties.schemaVersion.const !== "r4_gate_b_host_binding_reattempt_checkpoint.v2" || checkpointSchema.properties.reattemptRunId.const !== runId || checkpointSchema.required.length !== 50) throw new Error("Host Binding reattempt checkpoint gate drift");
+  for (const key of ["implementationHead", "implementationTree", "worksetAggregateSha256", "validationReceiptSha256", "authorityAuditReceiptSha256", "hostAuditReceiptSha256"]) if (!checkpointSchema.required.includes(key)) throw new Error(`Host Binding reattempt checkpoint current-J binding missing:${key}`);
+  const activationCard = evidenceSchema.$defs.activationCard;
+  const activationGrant = evidenceSchema.$defs.activationGrant;
+  const consumedAttempt = evidenceSchema.$defs.consumedAttempt;
+  if (activationCard.properties.schemaVersion.const !== "r4_gate_b_host_binding_activation_card.v2" || activationCard.required.length !== 50 || activationGrant.properties.schemaVersion.const !== "r4_gate_b_host_binding_activation_grant.v2" || consumedAttempt.properties.schemaVersion.const !== "r4_gate_b_host_binding_consumed_attempt.v2") throw new Error("Host Binding reattempt checkpoint/Card schema gate drift");
+  for (const key of ["implementationHead", "implementationTree", "checkpointSha256", "worksetAggregateSha256", "validationReceiptSha256", "authorityAuditReceiptSha256", "hostAuditReceiptSha256", "hostBindingInputAccessed", "hostBindingInputPresenceObserved", "consumedAttemptTombstonePresent", "status"]) if (!activationCard.required.includes(key)) throw new Error(`Host Binding reattempt Activation Card binding missing:${key}`);
+  for (const forbidden of ["createdAt", "expiresAt", "privateSalt", "path", "body", "identity"]) if (Object.keys(activationCard.properties).some((key) => key.toLowerCase().includes(forbidden.toLowerCase()))) throw new Error(`Host Binding reattempt Activation Card leaks or varies:${forbidden}`);
+  const expectedGrantKeys = ["activationCardSha256", "attemptOrdinal", "checkpointSha256", "firstProviderCallGrant", "hostBindingAttemptGrant", "hostBindingInputPreparedByOwner", "implementationHead", "implementationTree", "retryExecutionGrant", "schemaVersion"].sort();
+  if (JSON.stringify([...activationGrant.required].sort()) !== JSON.stringify(expectedGrantKeys) || activationGrant.properties.hostBindingInputPreparedByOwner.const !== true || activationGrant.properties.hostBindingAttemptGrant.const !== "APPROVED_ONCE") throw new Error("Host Binding reattempt Activation Grant frame drift");
+  if (consumedAttempt.properties.permanent.const !== true || consumedAttempt.properties.purgeAuthorized.const !== false || consumedAttempt.properties.retentionPolicy.const !== "PERMANENT_NO_PURGE_NO_REVIVAL") throw new Error("Host Binding reattempt consumed-attempt authority drift");
+
+  const contract = JSON.parse(text("schemas/r4/gate-b-core/physical-runner-contract.json"));
+  const reattempt = contract.hostBindingReattempt;
+  if (reattempt?.status !== "PREPARATION_GRANTED_HOST_ACTIVATION_NOT_REQUESTED" || reattempt.authority?.reattemptPacketSha256 !== packetSha256 || reattempt.authority?.reattemptOwnerReviewSha256 !== ownerReviewSha256 || reattempt.authority?.approvedProposalHead !== proposalHead || reattempt.authority?.approvedProposalTree !== proposalTree || reattempt.runIdentity?.digestSha256 !== runDigestSha256 || reattempt.runIdentity?.runId !== runId) throw new Error("Host Binding reattempt runner contract authority drift");
+  if (reattempt.implementationWorkset?.pathCount !== 12 || reattempt.implementationWorkset?.addedPathCount !== 5 || reattempt.implementationWorkset?.modifiedPathCount !== 7 || reattempt.implementationWorkset?.deletedPathCount !== 0 || reattempt.implementationWorkset?.renamedPathCount !== 0 || reattempt.implementationWorkset?.copiedPathCount !== 0) throw new Error("Host Binding reattempt runner contract workset drift");
+  if (reattempt.localState?.gatePGreenRootInventory?.join("\n") !== "checkpoint.v2.json" || reattempt.attempt?.tombstonePermanent !== true || reattempt.attempt?.tombstonePurgePath !== false || reattempt.attempt?.tombstoneMayReviveAttempt !== false || reattempt.attempt?.capsuleTtlSeconds !== 259200 || reattempt.activation?.hostBindingInputPreparedByOwner !== true) throw new Error("Host Binding reattempt checkpoint/Card/tombstone contract drift");
+  if (reattempt.authority.hostBindingReattemptPreparationGrant !== "APPROVED" || reattempt.authority.hostBindingAttemptGrant !== "NOT_REQUESTED" || reattempt.authority.retryExecutionGrant !== "NOT_REQUESTED" || reattempt.authority.firstProviderCallGrant !== "NOT_REQUESTED" || reattempt.stop?.gateP !== "WAITING_OWNER_ACTIVATION" || reattempt.stop?.retryAutomatic !== false || reattempt.stop?.providerAutomatic !== false) throw new Error("Host Binding reattempt grant or STOP drift");
+
+  const artifactIndexPath = "schemas/r4/gate-b-core/artifact-index.json";
+  const artifactIndex = JSON.parse(text(artifactIndexPath));
+  const actualArtifacts = filesBelow("schemas/r4/gate-b-core").filter((relativePath) => relativePath !== artifactIndexPath);
+  if (JSON.stringify(actualArtifacts) !== JSON.stringify(artifactIndex.files.map((entry) => entry.path))) throw new Error("Host Binding reattempt artifact index path drift");
+  const artifactLines = artifactIndex.files.map((entry) => {
+    const actual = `sha256:${sha256(readFileSync(join(root, entry.path)))}`;
+    if (entry.sha256 !== actual) throw new Error(`Host Binding reattempt artifact hash drift:${entry.path}`);
+    return `${actual.slice(7)}  ${entry.path}\n`;
+  }).join("");
+  if (artifactIndex.fileCount !== 34 || artifactIndex.aggregateSha256 !== `sha256:${sha256(artifactLines)}` || artifactIndex.status !== "HOST_BINDING_REATTEMPT_PREPARATION_GRANTED_HOST_ACTIVATION_NOT_REQUESTED") throw new Error("Host Binding reattempt artifact index aggregate/status drift");
+  if (artifactIndex.hostBindingReattemptPacketSha256 !== packetSha256 || artifactIndex.hostBindingReattemptOwnerReviewSha256 !== ownerReviewSha256 || artifactIndex.approvedReattemptProposalHead !== proposalHead || artifactIndex.approvedReattemptProposalTree !== proposalTree || artifactIndex.hostBindingReattemptPreparationGrant !== "APPROVED" || artifactIndex.hostBindingAttemptGrant !== "NOT_REQUESTED" || artifactIndex.retryExecutionGrant !== "NOT_REQUESTED" || artifactIndex.firstProviderCallTestGrant !== "NOT_REQUESTED") throw new Error("Host Binding reattempt artifact index authority drift");
+  hostBindingReattempt = {
+    schemaVersion: "r4_gate_b_host_binding_reattempt_static_audit.v2",
+    proposalHead,
+    implementationHead,
+    implementationTree,
+    changedPathCount: implementationEntries.length,
+    addedPathCount: implementationEntries.filter((entry) => entry.status === "A").length,
+    modifiedPathCount: implementationEntries.filter((entry) => entry.status === "M").length,
+    worksetAggregateSha256,
+    artifactCount: actualArtifacts.length,
+    checkpointCardGate: "CURRENT_IMPLEMENTATION_AND_THREE_RECEIPTS_REQUIRED",
+    hostBindingInputObserved: false,
+    hostBindingReattemptPreparationGrant: "APPROVED",
+    hostBindingAttemptGrant: "NOT_REQUESTED",
+    retryExecutionGrant: "NOT_REQUESTED",
+    firstProviderCallGrant: "NOT_REQUESTED",
+    status: "passed",
+  };
+}
+
 const report = {
   schemaVersion: "r4_gate_document_audit.v1",
-  mode: physicalConstructionMode ? (physicalConstructionFinalMode ? "physical-construction-final" : "physical-construction-phase-a") : finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
+  mode: hostBindingReattemptMode ? "host-binding-reattempt" : physicalConstructionMode ? (physicalConstructionFinalMode ? "physical-construction-final" : "physical-construction-phase-a") : finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
   approvedPacketSha256: `sha256:${packetHash}`,
   crosswalkRowCount: actualRows.length,
   localLinksChecked: Object.values(documents).reduce(
@@ -872,6 +1007,7 @@ const report = {
   ...(retryConstruction === null ? {} : { retryConstruction }),
   ...(coreConstruction === null ? {} : { coreConstruction }),
   ...(physicalConstruction === null ? {} : { physicalConstruction }),
+  ...(hostBindingReattempt === null ? {} : { hostBindingReattempt }),
   status: "passed",
 };
 
