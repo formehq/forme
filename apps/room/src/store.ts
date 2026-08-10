@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import {
+  assertOpaqueId,
   canonicalSha256,
   createProjectionReadViewV1,
   isThirdPlaceDiscoverable,
@@ -46,6 +47,8 @@ import {
   SYNTHETIC_PUBLIC_ROOM_OPERATOR_BINDING_ID,
   SYNTHETIC_PUBLIC_ROOM_OPERATOR_SECRET,
 } from "./synthetic-fixtures.ts";
+
+export const SYNTHETIC_DEFAULT_ENTITY_ID = "entity_forme000000000000000000000000";
 
 export interface StoredOperationResult {
   requestHash: `sha256:${string}`;
@@ -171,6 +174,7 @@ function eventBodyAvailable(eventType: string): boolean {
 
 export class SyntheticPresenceStore implements HostedPresenceStore {
   #clock: () => Date;
+  #seedEntityId: string;
   #counter = 100;
   #rooms = new Map<string, StoredRoom>();
   #projections = new Map<string, StoredProjection>();
@@ -188,8 +192,14 @@ export class SyntheticPresenceStore implements HostedPresenceStore {
   #publicAccepted = new Map<string, Map<string, string>>();
   #tail: Promise<void> = Promise.resolve();
 
-  constructor(clock: () => Date = () => new Date()) {
+  constructor(
+    clock: () => Date = () => new Date(),
+    options: { readonly seedEntityId?: string } = {},
+  ) {
     this.#clock = clock;
+    const seedEntityId = options.seedEntityId ?? SYNTHETIC_DEFAULT_ENTITY_ID;
+    assertOpaqueId(seedEntityId, "entity", "$synthetic.seedEntityId");
+    this.#seedEntityId = seedEntityId;
     this.#seed();
   }
 
@@ -620,7 +630,7 @@ export class SyntheticPresenceStore implements HostedPresenceStore {
     const now = this.now();
     const freshUntil = timestampAfter(now, 24 * 60 * 60 * 1000);
     const expiresAt = timestampAfter(now, 7 * 24 * 60 * 60 * 1000);
-    const entityId = "entity_forme000000000000000000000000";
+    const entityId = this.#seedEntityId;
     const publicProjectionId = "proj_formepublic00000000000000000000";
     const privateProjectionId = "proj_formeprivate0000000000000000000";
     const publicRoom: RoomV1 = {

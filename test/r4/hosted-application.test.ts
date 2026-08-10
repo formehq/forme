@@ -454,3 +454,18 @@ test("J5 Private Room returns no body without its exact Room + Projection Grant"
     404,
   );
 });
+
+test("SyntheticPresenceStore optionally seeds both fixed synthetic Rooms with one exact supplied Entity", () => {
+  const seedEntityId = "entity_roomhandoff000000000000000001";
+  const store = new SyntheticPresenceStore(
+    () => new Date(T0),
+    { seedEntityId },
+  );
+  assert.equal(store.room(PUBLIC_ROOM_ID)?.room.entityId, seedEntityId);
+  assert.equal(store.room(PRIVATE_ROOM_ID)?.room.entityId, seedEntityId);
+  assert.equal(store.projection(PUBLIC_PROJECTION_ID)?.projection.entityId, seedEntityId);
+  assert.equal(store.projection(PRIVATE_PROJECTION_ID)?.projection.entityId, seedEntityId);
+
+  const defaultStore = new SyntheticPresenceStore(() => new Date(T0));
+  assert.equal(defaultStore.room(PUBLIC_ROOM_ID)?.room.entityId, "entity_forme000000000000000000000000");
+});

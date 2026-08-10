@@ -1,5 +1,11 @@
 import { Fragment, createElement, type ComponentType, type ReactNode } from "react";
 import { notFound } from "next/navigation.js";
+import type {
+  ProjectionCapsuleV1,
+  ProjectionClaimV1,
+  ProjectionLifecycleV1,
+  ProjectionReadViewV1,
+} from "../../../packages/r4-protocol/src/index.ts";
 import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
 import { coreOperationDefinition } from "./core-policy.ts";
 
@@ -15,47 +21,79 @@ interface GuestAskProps {
   };
 }
 
-export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
-  return async function ProjectionPage({ params }: ProjectionPageProps) {
-  const { projectionId } = await params;
-  let projection: Record<string, unknown>;
-  let lifecycle: Record<string, unknown>;
-  let warning: unknown;
-  try {
-    const result = await hostedApplication().runCore({
-      definition: coreOperationDefinition("projection.read"),
-      params: { projectionId },
-      body: {},
-      authorization: null,
-      syntheticActor: null,
-      idempotencyKey: null,
-      expectedVersion: null,
-    });
-    const view = result.body.view as Record<string, unknown>;
-    projection = view.projection as Record<string, unknown>;
-    lifecycle = view.lifecycle as Record<string, unknown>;
-    warning = view.warning;
-  } catch (error) {
-    if (error instanceof HostedRuntimeUnavailable) {
-      return createElement("p", { className: "error" }, "Hosted Room is not provisioned; this build fails closed outside explicit synthetic mode.");
-    }
-    notFound();
-  }
+const CLAIM_SECTIONS = [
+  { slot: "becoming", label: "Vision & Becoming" },
+  { slot: "now", label: "Now" },
+  { slot: "nextMove", label: "Next Move" },
+  { slot: "tensions", label: "Tensions" },
+  { slot: "openTo", label: "Open To" },
+] as const satisfies ReadonlyArray<{ slot: ProjectionClaimV1["slot"]; label: string }>;
 
+function renderStringList(label: string, values: readonly string[], key: string): ReactNode {
+  return createElement(Fragment, { key },
+    createElement("h3", null, label),
+    createElement("ul", null, ...values.map((value, index) => createElement("li", { key: `${key}-${index}` }, value))),
+  );
+}
+
+function renderClaimSections(claims: readonly ProjectionClaimV1[]): ReactNode[] {
+  return CLAIM_SECTIONS.flatMap(({ slot, label }) => {
+    const sectionClaims = claims.filter((claim) => claim.slot === slot);
+    if (sectionClaims.length === 0) return [];
+    return [createElement("section", { key: slot, "aria-labelledby": `projection-${slot}` },
+      createElement("p", { className: "eyebrow" }, label),
+      createElement("h2", { id: `projection-${slot}` }, label),
+      ...sectionClaims.map((claim, index) => createElement(Fragment, { key: `${slot}-${index}` },
+        createElement("p", { className: "projectionBody" }, claim.text),
+        claim.uncertainty === null
+          ? null
+          : createElement("div", { className: "notice" },
+            createElement("p", null, `What remains uncertain: ${claim.uncertainty}`),
+          ),
+      )),
+    )];
+  });
+}
+
+function renderBoundary(projection: ProjectionCapsuleV1): ReactNode {
+  return createElement("aside", { className: "card cardWide", "aria-labelledby": "projection-boundary", key: "boundary" },
+    createElement("p", { className: "eyebrow" }, "Interaction boundary"),
+    createElement("h2", { id: "projection-boundary" }, "Boundary"),
+    createElement("h3", null, "What this Projection can do"),
+    createElement("p", null, projection.agencyStatement),
+    createElement("h3", null, "What this does not commit"),
+    createElement("p", null, projection.nonCommitmentStatement),
+    renderStringList("Supported interactions", projection.supportedInteractions, "supported-interactions"),
+    createElement("h3", null, "Expected response latency"),
+    createElement("p", null, projection.expectedResponseLatency),
+    renderStringList("Allowed topics", projection.allowedTopics, "allowed-topics"),
+    renderStringList("Unavailable topics", projection.unavailableTopics, "unavailable-topics"),
+    createElement("h3", null, "Freshness and expiry"),
+    createElement("dl", { className: "consentFacts" },
+      createElement("dt", null, "Fresh until"),
+      createElement("dd", null, createElement("time", { dateTime: projection.freshUntil }, projection.freshUntil)),
+      createElement("dt", null, "Expires at"),
+      createElement("dd", null, createElement("time", { dateTime: projection.expiresAt }, projection.expiresAt)),
+    ),
+  );
+}
+
+export function renderProjectionArticle(
+  view: Pick<ProjectionReadViewV1, "projection" | "lifecycle" | "warning">,
+  GuestAsk: ComponentType<GuestAskProps>,
+): ReactNode {
+  const { projection, lifecycle, warning } = view;
   const children: ReactNode[] = [
     createElement("p", { className: "eyebrow", key: "eyebrow" }, "Public Projection · shallow snapshot"),
-    createElement("h1", { key: "title" }, String(projection.title)),
-    createElement("p", { key: "summary" }, String(projection.thirdPlaceSummary)),
+    createElement("h1", { key: "title" }, projection.title),
+    createElement("p", { key: "summary" }, projection.thirdPlaceSummary),
     createElement("div", { className: "meta", key: "meta" },
-      createElement("span", { className: `pill ${lifecycle.ownerState === "published_fresh" ? "pillLive" : "pillWarn"}` }, String(lifecycle.ownerState)),
-      createElement("span", { className: "pill" }, String(lifecycle.curationState)),
+      createElement("span", { className: `pill ${lifecycle.ownerState === "published_fresh" ? "pillLive" : "pillWarn"}` }, lifecycle.ownerState),
+      createElement("span", { className: "pill" }, lifecycle.curationState),
     ),
-    warning ? createElement("div", { className: "notice", key: "warning" }, createElement("p", null, String(warning))) : null,
-    ...(projection.claims as Array<Record<string, unknown>>).map((claim, index) => createElement(
-      "p",
-      { className: "projectionBody", key: `${String(claim.slot)}-${index}` },
-      String(claim.text),
-    )),
+    warning ? createElement("div", { className: "notice", key: "warning" }, createElement("p", null, warning)) : null,
+    ...renderClaimSections(projection.claims),
+    renderBoundary(projection),
   ];
   if (lifecycle.ownerState === "published_fresh" && lifecycle.curationState === "admitted" && warning === null) {
     children.push(createElement(Fragment, { key: "ask" },
@@ -64,13 +102,38 @@ export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
       createElement("h2", null, "Send one private signal"),
       createElement(GuestAsk, {
         projection: {
-          projectionId: String(projection.projectionId),
-          version: Number(lifecycle.version),
-          supportedInteractions: projection.supportedInteractions as Array<"ask" | "seed" | "resonance">,
+          projectionId: projection.projectionId,
+          version: lifecycle.version,
+          supportedInteractions: [...projection.supportedInteractions],
         },
       }),
     ));
   }
-    return createElement("article", { className: "projection" }, ...children);
+  return createElement("article", { className: "projection" }, ...children);
+}
+
+export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
+  return async function ProjectionPage({ params }: ProjectionPageProps) {
+    const { projectionId } = await params;
+    let view: Pick<ProjectionReadViewV1, "projection" | "lifecycle" | "warning">;
+    try {
+      const result = await hostedApplication().runCore({
+        definition: coreOperationDefinition("projection.read"),
+        params: { projectionId },
+        body: {},
+        authorization: null,
+        syntheticActor: null,
+        idempotencyKey: null,
+        expectedVersion: null,
+      });
+      view = result.body.view as unknown as ProjectionReadViewV1;
+    } catch (error) {
+      if (error instanceof HostedRuntimeUnavailable) {
+        return createElement("p", { className: "error" }, "Hosted Room is not provisioned; this build fails closed outside explicit synthetic mode.");
+      }
+      notFound();
+    }
+
+    return renderProjectionArticle(view, GuestAsk);
   };
 }

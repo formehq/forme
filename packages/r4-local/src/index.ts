@@ -12,6 +12,7 @@ export * from "./ledger.ts";
 export * from "./lock.ts";
 export * from "./projection.ts";
 export * from "./projection-review.ts";
+export * from "./projection-room-handoff.ts";
 export * from "./protected-root.ts";
 export * from "./publication.ts";
 export * from "./publication-operation.ts";
