@@ -1,4 +1,8 @@
-import { canonicalJson } from "../../r4-protocol/src/index.ts";
+import {
+  canonicalJson,
+  validateHostedPublicationDeliveryV1,
+  validateRoomEventAckV1,
+} from "../../r4-protocol/src/index.ts";
 
 export const CORE_ROOM_API_ACTIONS = [
   "third_place.list", "projection.read", "public_encounter.issue", "interaction.create",
@@ -193,4 +197,371 @@ export function buildCoreHostedHttpPlan(
     body = canonicalJson(input.request);
   }
   return Object.freeze({ schemaVersion: "forme.room.core-http-plan.v1", action, method: shape.method, url, headers: Object.freeze(headers), body });
+}
+
+/**
+ * The production local connector is intentionally narrower than the synthetic
+ * Core inventory. It covers only the #67 public Projection/knock walking slice.
+ * Fresh, Response, Grant, Private Room, notification, Controller, and Curator
+ * operations have no production connector route here.
+ */
+export const PRODUCTION_PUBLIC_ROOM_OPERATOR_ACTIONS = [
+  "room_operator.status",
+  "room_operator.sync",
+  "room_operator.pull",
+  "room_operator.ack",
+  "room_operator.projection.deliver",
+  "room_operator.local_purge.receipt",
+] as const;
+
+export type ProductionPublicRoomOperatorAction = typeof PRODUCTION_PUBLIC_ROOM_OPERATOR_ACTIONS[number];
+
+interface ProductionShape {
+  readonly method: Method;
+  readonly path: string;
+  readonly mutating: boolean;
+  readonly expectedVersion: boolean;
+  readonly required: readonly string[];
+}
+
+const PRODUCTION_PUBLIC_ROOM_OPERATOR_SHAPES: Readonly<Record<ProductionPublicRoomOperatorAction, ProductionShape>> = {
+  "room_operator.status": {
+    method: "GET",
+    path: "/room-operator/status",
+    mutating: false,
+    expectedVersion: false,
+    required: ["roomId"],
+  },
+  "room_operator.sync": {
+    method: "POST",
+    path: "/room-operator/sync",
+    mutating: true,
+    expectedVersion: false,
+    required: ["roomId", "afterSequence"],
+  },
+  "room_operator.pull": {
+    method: "POST",
+    path: "/room-operator/interactions/:interactionId/pull",
+    mutating: true,
+    expectedVersion: true,
+    required: [],
+  },
+  "room_operator.ack": {
+    method: "POST",
+    path: "/room-operator/events/ack",
+    mutating: true,
+    expectedVersion: false,
+    required: ["schemaVersion", "roomId", "eventId", "sequence", "eventHash", "idempotencyKey"],
+  },
+  "room_operator.projection.deliver": {
+    method: "POST",
+    path: "/room-operator/projections/deliver",
+    mutating: true,
+    expectedVersion: true,
+    required: ["delivery"],
+  },
+  "room_operator.local_purge.receipt": {
+    method: "POST",
+    path: "/room-operator/interactions/:interactionId/local-purge",
+    mutating: true,
+    expectedVersion: true,
+    required: ["localBytesAbsent"],
+  },
+};
+
+export interface ProductionPublicRoomOperatorInputV1 {
+  readonly schemaVersion: "forme.room.production-public-operator-input.v1";
+  /** Selects one exact public Room binding from the injected credential vault. */
+  readonly roomId: string;
+  readonly pathParams: Readonly<Record<string, string>>;
+  readonly request: Readonly<Record<string, unknown>>;
+  readonly idempotencyKey: string | null;
+  readonly expectedVersion: number | null;
+}
+
+export interface ProductionHostedHttpPlanV1 {
+  readonly schemaVersion: "forme.room.production-http-plan.v1";
+  readonly action: ProductionPublicRoomOperatorAction | "room.pair.exchange";
+  readonly networkDirection: "outbound_only";
+  readonly redirectPolicy: "error";
+  readonly method: Method;
+  readonly url: string;
+  readonly headers: Readonly<Record<string, string>>;
+  readonly body: string | null;
+  /** Sensitive bytes are supplied only through the injected transport lane. */
+  readonly sensitiveBody: "pairing_exchange" | null;
+}
+
+export interface ProductionPairingExchangeInputV1 {
+  readonly schemaVersion: "forme.room.production-pairing-exchange-input.v1";
+  /** Local bootstrap intent; the returned binding must independently confirm it. */
+  readonly roomId: string;
+  readonly pairingId: string;
+  readonly pairingCode: string;
+  readonly idempotencyKey: string;
+  readonly expectedVersion: number;
+}
+
+const ROOM_ID = /^room_[A-Za-z0-9_-]{16,128}$/u;
+const INTERACTION_ID = /^interaction_[A-Za-z0-9_-]{16,128}$/u;
+const PAIRING_ID = /^pairing_[A-Za-z0-9_-]{16,128}$/u;
+const IDEMPOTENCY_KEY = /^(?:[A-Fa-f0-9]{32,256}|[A-Za-z0-9_-]{22,256})$/u;
+
+function productionDeny(code: string): never {
+  throw new Error(code);
+}
+
+function productionRoomId(value: unknown): string {
+  if (typeof value !== "string" || !ROOM_ID.test(value)) productionDeny("PRODUCTION_ROOM_ID_INVALID");
+  return value;
+}
+
+function productionIdempotencyKey(value: unknown): string {
+  if (typeof value !== "string" || !IDEMPOTENCY_KEY.test(value)) {
+    productionDeny("PRODUCTION_ROOM_IDEMPOTENCY_KEY_INVALID");
+  }
+  return value;
+}
+
+function productionExpectedVersion(value: unknown): number {
+  if (!Number.isSafeInteger(value) || Number(value) < 1) productionDeny("PRODUCTION_ROOM_EXPECTED_VERSION_INVALID");
+  return Number(value);
+}
+
+export function fixedProductionHttpsOrigin(value: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(value);
+  } catch {
+    productionDeny("PRODUCTION_ROOM_ORIGIN_INVALID");
+  }
+  if (
+    parsed.protocol !== "https:"
+    || parsed.username !== ""
+    || parsed.password !== ""
+    || parsed.pathname !== "/"
+    || parsed.search !== ""
+    || parsed.hash !== ""
+    || parsed.hostname.length === 0
+  ) productionDeny("PRODUCTION_ROOM_ORIGIN_INVALID");
+  if (value !== parsed.origin && value !== `${parsed.origin}/`) productionDeny("PRODUCTION_ROOM_ORIGIN_INVALID");
+  return parsed.origin;
+}
+
+function productionAction(value: string): ProductionPublicRoomOperatorAction {
+  if (!(PRODUCTION_PUBLIC_ROOM_OPERATOR_ACTIONS as readonly string[]).includes(value)) {
+    productionDeny("PRODUCTION_ROOM_ACTION_NOT_ALLOWED");
+  }
+  return value as ProductionPublicRoomOperatorAction;
+}
+
+function productionPathParams(shape: ProductionShape, value: unknown): Readonly<Record<string, string>> {
+  const params = record(value, "Production Room pathParams");
+  const required = [...shape.path.matchAll(/:([^/]+)/gu)].map((match) => match[1] ?? "");
+  exactKeys(params, required, [], "Production Room pathParams");
+  for (const [key, pathValue] of Object.entries(params)) {
+    if (typeof pathValue !== "string" || !/^[A-Za-z0-9_-]{1,160}$/u.test(pathValue)) {
+      productionDeny("PRODUCTION_ROOM_PATH_PARAMETER_INVALID");
+    }
+    if (key === "interactionId" && !INTERACTION_ID.test(pathValue)) {
+      productionDeny("PRODUCTION_ROOM_PATH_PARAMETER_INVALID");
+    }
+  }
+  return Object.freeze({ ...params } as Record<string, string>);
+}
+
+export function parseProductionPublicRoomOperatorInput(actionValue: string, value: unknown): {
+  readonly action: ProductionPublicRoomOperatorAction;
+  readonly input: ProductionPublicRoomOperatorInputV1;
+} {
+  const action = productionAction(actionValue);
+  const shape = PRODUCTION_PUBLIC_ROOM_OPERATOR_SHAPES[action];
+  const outer = record(value, "Production Room input");
+  exactKeys(
+    outer,
+    ["schemaVersion", "roomId", "pathParams", "request", "idempotencyKey", "expectedVersion"],
+    [],
+    "Production Room input",
+  );
+  if (outer.schemaVersion !== "forme.room.production-public-operator-input.v1") {
+    productionDeny("PRODUCTION_ROOM_INPUT_SCHEMA_INVALID");
+  }
+  const roomId = productionRoomId(outer.roomId);
+  const pathParams = productionPathParams(shape, outer.pathParams);
+  const rawRequest = record(outer.request, "Production Room request");
+  exactKeys(rawRequest, shape.required, [], "Production Room request");
+
+  let request: Readonly<Record<string, unknown>> = Object.freeze({ ...rawRequest });
+  if (action === "room_operator.status" || action === "room_operator.sync") {
+    if (rawRequest.roomId !== roomId) productionDeny("PRODUCTION_ROOM_BINDING_MISMATCH");
+  }
+  if (action === "room_operator.sync") {
+    if (!Number.isSafeInteger(rawRequest.afterSequence) || Number(rawRequest.afterSequence) < 0) {
+      productionDeny("PRODUCTION_ROOM_CURSOR_INVALID");
+    }
+  }
+  if (action === "room_operator.ack") {
+    let ack;
+    try {
+      ack = validateRoomEventAckV1(rawRequest);
+    } catch {
+      productionDeny("PRODUCTION_ROOM_ACK_INVALID");
+    }
+    if (ack.roomId !== roomId) productionDeny("PRODUCTION_ROOM_BINDING_MISMATCH");
+    request = Object.freeze({ ...ack });
+  }
+  if (action === "room_operator.local_purge.receipt" && rawRequest.localBytesAbsent !== true) {
+    productionDeny("PRODUCTION_ROOM_LOCAL_PURGE_ATTESTATION_INVALID");
+  }
+  if (action === "room_operator.projection.deliver") {
+    let delivery;
+    try {
+      delivery = validateHostedPublicationDeliveryV1(rawRequest.delivery);
+    } catch {
+      productionDeny("PRODUCTION_ROOM_PROJECTION_DELIVERY_INVALID");
+    }
+    if (
+      delivery.artifactClass !== "projection"
+      || delivery.projection === null
+      || delivery.response !== null
+      || delivery.projection.roomId !== roomId
+      || delivery.attestation.roomId !== roomId
+    ) productionDeny("PRODUCTION_ROOM_PROJECTION_DELIVERY_INVALID");
+    request = Object.freeze({ delivery });
+  }
+
+  const idempotencyKey = outer.idempotencyKey === null ? null : productionIdempotencyKey(outer.idempotencyKey);
+  const expectedVersion = outer.expectedVersion === null ? null : productionExpectedVersion(outer.expectedVersion);
+  if ((idempotencyKey !== null) !== shape.mutating) productionDeny("PRODUCTION_ROOM_IDEMPOTENCY_MISMATCH");
+  if ((expectedVersion !== null) !== shape.expectedVersion) productionDeny("PRODUCTION_ROOM_EXPECTED_VERSION_MISMATCH");
+  if (action === "room_operator.ack" && request.idempotencyKey !== idempotencyKey) {
+    productionDeny("PRODUCTION_ROOM_ACK_IDEMPOTENCY_MISMATCH");
+  }
+
+  return Object.freeze({
+    action,
+    input: Object.freeze({
+      schemaVersion: "forme.room.production-public-operator-input.v1",
+      roomId,
+      pathParams,
+      request,
+      idempotencyKey,
+      expectedVersion,
+    }),
+  });
+}
+
+function buildProductionPlan(input: {
+  readonly fixedOrigin: string;
+  readonly action: ProductionPublicRoomOperatorAction | "room.pair.exchange";
+  readonly method: Method;
+  readonly relativePath: string;
+  readonly request: Readonly<Record<string, unknown>>;
+  readonly idempotencyKey: string;
+  readonly expectedVersion: number | null;
+  readonly sensitiveBody?: "pairing_exchange" | null;
+}): ProductionHostedHttpPlanV1 {
+  const origin = fixedProductionHttpsOrigin(input.fixedOrigin);
+  const headers: Record<string, string> = { Accept: "application/json" };
+  if (input.idempotencyKey !== "") headers["Idempotency-Key"] = productionIdempotencyKey(input.idempotencyKey);
+  if (input.expectedVersion !== null) headers["If-Match"] = String(productionExpectedVersion(input.expectedVersion));
+  let url = `${origin}/api/v1${input.relativePath}`;
+  let body: string | null = null;
+  if (input.method === "GET") {
+    const query = new URLSearchParams();
+    for (const [key, requestValue] of Object.entries(input.request).sort(([left], [right]) => left.localeCompare(right))) {
+      if (typeof requestValue !== "string" && typeof requestValue !== "number") {
+        productionDeny("PRODUCTION_ROOM_GET_VALUE_INVALID");
+      }
+      query.set(key, String(requestValue));
+    }
+    const encoded = query.toString();
+    if (encoded !== "") url += `?${encoded}`;
+  } else if ((input.sensitiveBody ?? null) === null) {
+    headers["Content-Type"] = "application/json";
+    body = canonicalJson(input.request);
+  } else {
+    headers["Content-Type"] = "application/json";
+  }
+  return Object.freeze({
+    schemaVersion: "forme.room.production-http-plan.v1",
+    action: input.action,
+    networkDirection: "outbound_only",
+    redirectPolicy: "error",
+    method: input.method,
+    url,
+    headers: Object.freeze(headers),
+    body,
+    sensitiveBody: input.sensitiveBody ?? null,
+  });
+}
+
+export function buildProductionPublicRoomOperatorHttpPlan(
+  fixedOrigin: string,
+  actionValue: string,
+  value: unknown,
+): ProductionHostedHttpPlanV1 {
+  const parsed = parseProductionPublicRoomOperatorInput(actionValue, value);
+  const shape = PRODUCTION_PUBLIC_ROOM_OPERATOR_SHAPES[parsed.action];
+  let relativePath = shape.path;
+  for (const [key, pathValue] of Object.entries(parsed.input.pathParams)) {
+    relativePath = relativePath.replace(`:${key}`, encodeURIComponent(pathValue));
+  }
+  if (relativePath.includes(":")) productionDeny("PRODUCTION_ROOM_PATH_PARAMETER_INVALID");
+  return buildProductionPlan({
+    fixedOrigin,
+    action: parsed.action,
+    method: shape.method,
+    relativePath,
+    request: parsed.input.request,
+    idempotencyKey: parsed.input.idempotencyKey ?? "",
+    expectedVersion: parsed.input.expectedVersion,
+    sensitiveBody: null,
+  });
+}
+
+export function parseProductionPairingExchangeInput(value: unknown): ProductionPairingExchangeInputV1 {
+  const input = record(value, "Production Room pairing input");
+  exactKeys(
+    input,
+    ["schemaVersion", "roomId", "pairingId", "pairingCode", "idempotencyKey", "expectedVersion"],
+    [],
+    "Production Room pairing input",
+  );
+  if (input.schemaVersion !== "forme.room.production-pairing-exchange-input.v1") {
+    productionDeny("PRODUCTION_ROOM_PAIRING_INPUT_INVALID");
+  }
+  if (typeof input.pairingId !== "string" || !PAIRING_ID.test(input.pairingId)) {
+    productionDeny("PRODUCTION_ROOM_PAIRING_INPUT_INVALID");
+  }
+  if (
+    typeof input.pairingCode !== "string"
+    || input.pairingCode.length < 16
+    || Buffer.byteLength(input.pairingCode, "utf8") > 128
+  ) productionDeny("PRODUCTION_ROOM_PAIRING_INPUT_INVALID");
+  return Object.freeze({
+    schemaVersion: "forme.room.production-pairing-exchange-input.v1",
+    roomId: productionRoomId(input.roomId),
+    pairingId: input.pairingId,
+    pairingCode: input.pairingCode,
+    idempotencyKey: productionIdempotencyKey(input.idempotencyKey),
+    expectedVersion: productionExpectedVersion(input.expectedVersion),
+  });
+}
+
+export function buildProductionPairingExchangeHttpPlan(
+  fixedOrigin: string,
+  value: unknown,
+): ProductionHostedHttpPlanV1 {
+  const input = parseProductionPairingExchangeInput(value);
+  return buildProductionPlan({
+    fixedOrigin,
+    action: "room.pair.exchange",
+    method: "POST",
+    relativePath: `/pairings/${encodeURIComponent(input.pairingId)}/exchange`,
+    request: Object.freeze({}),
+    idempotencyKey: input.idempotencyKey,
+    expectedVersion: input.expectedVersion,
+    sensitiveBody: "pairing_exchange",
+  });
 }
