@@ -395,6 +395,80 @@ test("#67 slice A rebinds approved wording and exact approval remains delivery-f
   assert.doesNotMatch(sourceCode, /apps\/room|node:https|node:http|fetch\s*\(/u);
 });
 
+test("#67 Owner CLI prepares, previews, and exactly approves one delivery-free Room handoff", (context) => {
+  const workspace = makeApprovedProjection();
+  context.after(() => removeWorkspace(workspace));
+  const sourcePreparedAt = new Date();
+  const source = prepareLocalProjection({
+    workspaceRoot: workspace,
+    ownerWording: {
+      becoming: ["A project can keep meaning while its Owner is away."],
+      now: ["The public Presence path is ready for one exact Room-bound content review."],
+      nextMove: ["Review one publication-stable Projection before any external activation."],
+      tensions: ["Enough public context must not expose private project sources."],
+      openTo: ["Questions about the Forme vision and bounded Presence."],
+      boundary: {
+        supportedInteractions: ["ask", "resonance"],
+        allowedTopics: ["Forme vision", "controlled Presence"],
+        unavailableTopics: ["private Twin sources", "Owner commitments"],
+        expectedResponseLatency: "Asynchronous and Owner-reviewed.",
+        agencyStatement: "This Projection cannot act for the Owner.",
+        nonCommitmentStatement: "A question grants no access, promise, or publication authority.",
+      },
+    },
+    title: "Forme — Living Project Twin CLI review",
+    summary: "Long-lived project meaning without an AI substitute for the Owner.",
+    now: sourcePreparedAt,
+  });
+  approveLocalProjection({
+    workspaceRoot: workspace,
+    confirmation: `APPROVE ${source.candidate.manifest.reviewHash}`,
+    now: new Date(sourcePreparedAt.getTime() + 1),
+  });
+
+  const publishAt = new Date(Date.now() + 60 * 60 * 1_000).toISOString();
+  const cli = ["--import", "./scripts/deny-external-network.mjs", "src/cli.ts", "projection", "room"];
+  const prepareOutput = execFileSync(process.execPath, [
+    ...cli,
+    "prepare",
+    "--workspace", workspace,
+    "--room", TARGET_ROOM,
+    "--publish-at", publishAt,
+  ], { cwd: resolve("."), encoding: "utf8" });
+  assert.match(prepareOutput, /LOCAL CEREMONY ONLY — NO DELIVERY — NO ROOM MUTATION — NOT PUBLISHED/u);
+  const match = prepareOutput.match(/APPROVE PUBLICATION (sha256:[a-f0-9]{64})/u);
+  assert.ok(match?.[1]);
+
+  const previewOutput = execFileSync(process.execPath, [
+    ...cli,
+    "preview",
+    "--workspace", workspace,
+  ], { cwd: resolve("."), encoding: "utf8" });
+  assert.match(previewOutput, new RegExp(`Publication review hash: ${match[1]}`));
+  assert.match(previewOutput, /Status: READY_FOR_OWNER_REVIEW/u);
+
+  const approvedOutput = execFileSync(process.execPath, [
+    ...cli,
+    "approve",
+    "--workspace", workspace,
+  ], {
+    cwd: resolve("."),
+    encoding: "utf8",
+    input: `APPROVE PUBLICATION ${match[1]}\n`,
+  });
+  assert.match(approvedOutput, /Status: APPROVED_CURRENT/u);
+  assert.match(approvedOutput, /Exact publication content approved locally; delivery remains unauthorized/u);
+  const approved = previewLocalRoomHandoff({ workspaceRoot: workspace });
+  assert.equal(approved.status, "APPROVED_CURRENT");
+  assert.deepEqual([
+    approved.approval?.receipt.roomMutationCalls,
+    approved.approval?.receipt.networkCalls,
+    approved.approval?.receipt.providerCalls,
+    approved.approval?.receipt.hostBindingCalls,
+    approved.approval?.receipt.publicationCalls,
+  ], [0, 0, 0, 0, 0]);
+});
+
 test("#67 schedule closes unapproved handoffs and the historical phase-only review is never publishable", (context) => {
   const workspace = makeApprovedProjection();
   context.after(() => removeWorkspace(workspace));
