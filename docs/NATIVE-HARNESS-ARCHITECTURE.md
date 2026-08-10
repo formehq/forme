@@ -8,11 +8,14 @@
   Packet v0.2 is reconciled and independently audited at
   `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; the five-part
   Gate B Demo-critical Core correction is Owner-approved, with an explicit
-  transient-candidate exception and separate zero-call diagnostic; the exact
-  Correction Construction Packet is the active proposal gate and no physical
-  Retry/provider/production authority is open**
-- Updated: 2026-08-07
-- Active gate: [GitHub #52](https://github.com/formehq/forme/issues/52)
+  transient-candidate exception and separate zero-call diagnostic. Physical
+  construction is complete, but Host Binding attempts 1 and 2 are consumed
+  Yellow and produced no valid capsule; Retry/provider/production authority is
+  closed. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
+  Codex slice, not the #67 Public Room/knock product gate**
+- Updated: 2026-08-10
+- Active product gate: [GitHub #67](https://github.com/formehq/forme/issues/67)
+- Native runtime enabler: [GitHub #71](https://github.com/formehq/forme/issues/71)
 - Related review:
   [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md)
 - Historical lineage:

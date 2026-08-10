@@ -1,38 +1,42 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-08
-- Active gate: **R4 Gate A remains technically complete. The first Gate B
-  attempt stopped Red/cleaned; repo-only Retry Construction returned
-  Yellow/cleaned. The Owner then approved and authorized the narrower
-  Demo-critical Core Construction. It completed at published review HEAD
-  `0e6a1a2` with 381 Node and 19 Swift tests Green, zero real physical effects,
-  and an honest non-approvable Yellow Manifest. The later Physical Adapter
-  Construction is built and fake-validated at final implementation `I`
-  `92c6c3f`. Its one approved Host Binding attempt was consumed and stopped
-  Yellow before inspectors because a supplied binding path was symlinked. The
-  input was removed, cleanup is Green, no capsule/public receipt exists, and
-  Retry Execution and First Provider-Call remain `NOT_REQUESTED`.**
-- Active issue: [#52 — Forme Third Place + Room: controlled social presence](https://github.com/formehq/forme/issues/52)
-- P0 implementation: **R1, R2, and R3 owner-accepted. R4 design is closed;
-  Gate A is technically implemented and verified. The corrected PostgreSQL
-  Core/race mechanism, Codex zero-call containment, transient macOS helper and
-  unified physical runner are now constructed and fake-validated. They have
-  not run physically: the sole Host Binding attempt stopped on input identity
-  before any of the planned 3 Docker CLI, 2 local Docker socket or 9 macOS
-  inspector starts. R4 is not Owner-accepted or Done, and Gate C is
-  unexecuted.**
+- Updated: 2026-08-10
+- Active gate: **R4 Controlled Presence remains Building. #66 local Projection
+  review is Owner-accepted and PR #72 is integrated into the R4 branch. #67 is
+  offline Technical Review Green on Draft PR #73; the next product outcome is a
+  publication-stable successor Projection followed by one separately approved
+  real Public Room and bounded Guest knock. Host Binding is historical setup
+  evidence and is not the #67 product gate.**
+- Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
+- P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
+  repository mechanisms are closed/implemented. #66 proved current Twin →
+  bounded local Projection → exact local Owner approval → restart recovery.
+  #67 has proved the Room-bound handoff, offline Public Core rehearsal and rich
+  visitor surface only. No production PostgreSQL migration, Gate C deployment,
+  Room mutation, publication, Curator admission, real Guest data, public
+  traffic, Fresh Provider session, or Response delivery has run. R4 is not
+  Owner-accepted or Done.**
+- Host status: **attempt 1 and attempt 2 are both consumed Yellow history.
+  Attempt 2 was bound to implementation `J` `7ae4a24` / tree `a40045c` and
+  stopped `YELLOW_NO_RETRY / HOST_BINDING_INCOMPLETE_YELLOW` before any Docker
+  CLI, local Docker socket, or macOS inspector start (`0 / 0 / 0`). Cleanup is
+  Green; no capsule/public receipt exists; Retry Execution and First
+  Provider-Call remain `NOT_REQUESTED`. #71 may turn this prerequisite into a
+  bounded Setup/Doctor before #68, but it cannot make R4 Done.**
+- Branch status: **R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 merged
+  only into `codex/r4-gate-a-build` at `87e5979`; current #67 work is `eabfe82`
+  on Draft PR #73. Integration Draft PR #65 currently has one Red Linux CI
+  check while PR #73 is Green, so the integration line is not merge-ready.**
 - First real workspace: **Forme repo — owner confirmed**
-- Delivery: **hard feature freeze 2026-08-16; P0 complete and repeatable
-  2026-08-18; Demo Day Wednesday, 2026-08-19**
-- Next action: Owner reads the
-  [`Physical Adapter Construction Report`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md),
-  non-approvable
-  [`Physical Retry Execution Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
-  and its
-  [`low-load Owner Review`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md).
-  The approved Construction/Host Binding grant is consumed. No Host Binding
-  re-run, physical Retry or provider call is active or requested; any successor
-  attempt requires a new exact gate.
+- Delivery: **P0 complete and repeatable 2026-08-24; Demo Day Tuesday,
+  2026-08-25. R4 remains schedule-at-risk and R5 starts only after the real R4
+  chain is stable.**
+- Next action: **reconcile publication-stable Owner Frame / Now / Next wording,
+  prepare the successor local Projection and Room-bound review, then return for
+  exact publication and Gate C activation decisions.** The accepted #66 review
+  `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
+  deploy, Room creation, publication, Curator admission, real Guest knock,
+  Retry, or Provider call is active or implied.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -55,7 +59,7 @@ R2 Cognition              ✓ DONE · OWNER ACCEPTED 2026-07-18
   ↓
 R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
-R4 Controlled Presence    ← GATE A ✓ · ADAPTERS BUILT · HOST BINDING YELLOW/CLEAN · RETRY CLOSED
+R4 Controlled Presence    ← #66 ACCEPTED · #67 OFFLINE TECH REVIEW · REAL ENCOUNTER OPEN
   ↓
 R5 Demo hardening         clean run → privacy → recovery → rehearsal
 ```
@@ -247,6 +251,47 @@ Current truth:
   public receipt was produced, no re-run occurred, and the returned
   [`Physical Retry Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
   is non-approvable;
+- on 2026-08-09 the Owner approved the lean Host Binding Reattempt Envelope
+  v0.2 at `sha256:ee713295…6daf3`, its Review at
+  `sha256:670338ba…e445`, and implementation-preparation grant bound to proposal
+  `af5396b` / tree `b7aabaa`. Final implementation `J` `7ae4a24` / tree
+  `a40045c` then produced Activation Card `sha256:4be3de82…15af6`. The Owner
+  activated exactly attempt ordinal 2 while keeping Retry Execution and First
+  Provider-Call `NOT_REQUESTED`. Attempt 2 stopped
+  `YELLOW_NO_RETRY / HOST_BINDING_INCOMPLETE_YELLOW` before any inspector start,
+  with Docker CLI/local socket/macOS starts `0 / 0 / 0`, no capsule or public
+  receipt and Green cleanup. The attempt is consumed and grants no retry;
+- the Owner-approved Forme GitHub Project Management Envelope v1 now permits
+  routine issue, Project, milestone, label, PR-metadata and priority maintenance
+  inside the existing R4/R5 Vision. It grants no authority to change product
+  Vision, merge, deploy, publish, call a Provider, widen privacy/permissions or
+  spend. GitHub now tracks #66–#70 as the R4 product sequence and #71 as a
+  time-boxed Host Setup/Doctor enabler rather than a product milestone;
+- on 2026-08-10 #66 completed Owner Experience Acceptance for the real local
+  Projection at exact review hash `sha256:45414f18…1480`, Twin revision 29 /
+  `sha256:c527b65f…dfd4`, and immutable receipt
+  `receipt_57a7c38df5120a590996dad29040b72e`. Restart revalidation remained
+  `APPROVED_CURRENT`, and Room/network/Provider/Host/publication effects all
+  remained zero. PR #72 subsequently merged into the R4 integration branch at
+  `87e5979`, not into `main`. That accepted review contains phase-specific
+  #66/#67 wording, so #67 hard-denies it as a publication source and requires a
+  publication-stable successor plus a new exact publication approval;
+- on 2026-08-10 #67 reached offline Technical Review on Draft PR #73 at
+  `eabfe82`. Its 319 deny-network R4 tests, typecheck, no-server-AI check and
+  independent audits are Green. The implementation proves a local Room-bound
+  reapproval, immutable receipt/recovery, offline public Projection → independent
+  curation → one 24-hour/one-use knock → private durable Interaction → local
+  pull rehearsal, and the visitor-facing Vision/Now/Next/Tensions/Open To/
+  Boundary structure. It has made zero production Room/database, deploy,
+  publication, Curator, real Guest, Provider, Host, email or spend effects. #67
+  remains In Progress until one separately authorized real encounter passes
+  Owner Experience Acceptance;
+- the current production Public Core gap is explicit: active code has not run a
+  production PostgreSQL migration or Gate C deployment/provisioning, has not
+  created a real Room or public capability, and has not carried real Guest data.
+  Host Setup/Doctor #71 is relevant to the later #68 Fresh local Codex/provider
+  boundary, not a prerequisite for choosing #67 public meaning or reviewing its
+  successor Projection;
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
@@ -1039,10 +1084,14 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 - [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
   — owner-approved Hybrid encounter, Third Place, identity, and P0/P1 boundary
 - [`R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md)
-  — final `I`, fake-validation, sole Host Binding attempt and Green cleanup evidence
+  — final `I`, fake-validation, historical attempt-1 Yellow and Green cleanup evidence
 - [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
-  — current non-approvable Retry boundary after the Yellow Host Binding result
+  — historical non-approvable Retry boundary after attempt 1; later attempts also opened no Retry
 - [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md)
   — low-load return surface with Retry and provider authority closed
+- [`R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md`](./R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md)
+  — immutable v0.2 attempt-2 preparation/activation envelope
+- [`R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md`](./R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md)
+  — immutable review; the later approval and Yellow result are recorded in `DECISIONS.md`
 - [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map

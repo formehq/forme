@@ -1,18 +1,15 @@
 # Product
 
-- Status: owner-approved product frame, privacy-first P human-boundary
-  interpretation, R4 public/private Room correction, and T2 Room control
-  contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
-  approved; the recommended T4 public/admission/lifecycle contract approved;
-  the full recommended T5 async/deletion/retention/P0-cut contract
-  Owner-approved, with four Guest continuation presets; reconciled Technical
-  Control Packet v0.2 is independently audited, hashed, and Owner-approved;
-  Gate A repository-only implementation is current; the five-part Gate B
-  Demo-critical Core scope correction is Owner-approved and its exact
-  Construction Packet is the active proposal gate
-- Updated: 2026-08-07
-- MVP complete: 2026-08-18
-- Demo Day: 2026-08-19 (Wednesday)
+- Status: owner-approved product frame and R4 P/T1–T5/NH1/NH2 contracts;
+  reconciled Technical Control Packet v0.2 and Gate A repository mechanisms are
+  complete. #66 local Projection review is Owner-accepted; #67 is offline
+  Technical Review Green and still lacks production Public Core activation and
+  one real Guest knock. Both Host Binding attempts are consumed Yellow history,
+  not the Controlled Presence milestone. R4 remains Building, is not on `main`,
+  and is not Owner-accepted or Done
+- Updated: 2026-08-10
+- MVP complete: 2026-08-24
+- Demo Day: 2026-08-25 (Tuesday)
 
 ## Highest vision
 

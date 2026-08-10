@@ -2,42 +2,41 @@
 
 Forme explores a controllable digital counterpart that extends an entity across **Continuity, Cognition, Agency, and Presence** without taking away the owner's authorship.
 
-The August 19 MVP is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection.
+The August 25 MVP demo is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection.
 
 ## Current state
 
 This repository is an owner-controlled rebuild started on 2026-07-17.
 
-- MVP complete and repeatable: **2026-08-18**
-- Demo Day: **2026-08-19 (Wednesday)**
-- Current gate: **R4 Gate B Physical Adapter Construction is built and
-  fake-validated at final implementation `I` `92c6c3f`; its sole approved Host
-  Binding attempt returned an honest Yellow before any inspector started.**
-  One supplied binding path was symlinked before inspection. The fixed input
-  was consumed and removed; all 3 Docker CLI, 2 local Docker socket and 9 macOS
-  inspector start counts remained zero. Cleanup is Green, no capsule or public
-  receipt was created, and physical, Retry and provider effects all remained
-  zero. The returned Physical Retry Manifest is non-approvable, and no Retry
-  occurred. R4 is not Owner-accepted or Done.
-- Product implementation: **R1–R3 Owner-accepted; R4 Gate A technically
-  implemented under the exact Owner-approved Packet**
-  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  The Gate A build remains synthetic/local: no provider call, real Guest data,
-  external email, production migration, hosted/production mutation,
-  deployment, production secret, public traffic, or spend occurred. The first
-  Gate B attempt is preserved as Red/cleaned evidence. The later approved Core
-  Construction completed at published review HEAD `0e6a1a2` with 381 Node and
-  19 Swift tests Green, zero real Docker/PostgreSQL/Codex/signing/Keychain/LA
-  effects, and Yellow evidence
-  `sha256:8153a74a2d3f1724ffb3a71c7dc694b21dee5fd3e89731d82c910864819c3d09`.
-  Physical Adapter Construction is now frozen at final implementation
-  `92c6c3f8896494aed699671a04a93a09fb59087d` and fake-validated. The one
-  approved Host-Binding / Adapter Construction grant was consumed; its Host
-  Binding phase stopped Yellow on the pre-inspector symlink check and cleaned
-  Green without a capsule or public receipt. Retry Execution and the first
-  provider-call grant remain `NOT_REQUESTED`.
+- MVP complete and repeatable: **2026-08-24**
+- Demo Day: **2026-08-25 (Tuesday)**
+- Current gate: **R4 Controlled Presence is Building on the real product
+  sequence, not on Host Binding.** R1–R3 are Owner-accepted. #66 completed one
+  real-Twin, local-only Projection review and Owner acceptance; PR #72 is
+  integrated into the R4 integration branch. #67 has an offline Technical
+  Review Green on Draft PR #73 for Room-bound reapproval, deterministic public
+  Room/knock rehearsal, restart recovery, and the richer visitor surface. It
+  has not created or mutated a production Room, deployed, published, admitted a
+  Projection, handled real Guest data, or run a real public knock. R4 is not
+  Owner-accepted or Done.
+- Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
+  R4 integration branch is at PR #72 merge commit `87e5979`, and current #67
+  work is commit `eabfe82` on Draft PR #73. The main integration Draft PR #65
+  currently has one Red Linux CI check, while PR #73 is Green; this mismatch
+  must be resolved before any merge to `main`.
+- Host truth: Host Binding attempts 1 and 2 are consumed Yellow history. Attempt
+  2 stopped `YELLOW_NO_RETRY / HOST_BINDING_INCOMPLETE_YELLOW` before any Docker
+  CLI, local Docker socket, or macOS inspector start (`0 / 0 / 0`), produced no
+  Host capsule or public receipt, and cleaned Green. Retry Execution and the
+  first provider-call grant remain `NOT_REQUESTED`. Host Setup/Doctor is tracked
+  in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
+  product milestone or a substitute for a real encounter.
+- Production gap: the current Public Core is repository/offline proof only. No
+  production PostgreSQL migration, Gate C deployment/provisioning, production
+  Room mutation, public traffic, external email, Provider call, production
+  secret, or spend has occurred.
 
-Planning lives in milestone [`MVP Rebuild — Demo 2026-08-19`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and active R4 issue [#52](https://github.com/formehq/forme/issues/52).
+Planning lives in milestone [`MVP Rebuild`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 
@@ -45,36 +44,20 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 
 1. [`docs/PRODUCT.md`](./docs/PRODUCT.md) — highest vision, MVP vision, and scope
 2. [`docs/CONTROL.md`](./docs/CONTROL.md) — current state, owner gates, and definition of done
-3. [`docs/NATIVE-HARNESS-ARCHITECTURE.md`](./docs/NATIVE-HARNESS-ARCHITECTURE.md)
+3. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — current #66–#71 sequence, dates, and cut rules
+4. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — confirmed decisions and latest state receipts
+5. [`docs/NATIVE-HARNESS-ARCHITECTURE.md`](./docs/NATIVE-HARNESS-ARCHITECTURE.md)
    — the approved Harness/Forme carrier and authority-boundary contract
-4. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner-approved
+6. [`docs/AGENCY-TRUST.md`](./docs/AGENCY-TRUST.md) — the Owner-approved
    privacy-first P boundary and proposed delegation/application guidance
-5. [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md) —
+7. [`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md) —
    exact repository evidence, five synthetic journeys, and honest later-gate
    conditions
-6. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md) —
-   final implementation, fake-validation, sole Host Binding attempt and cleanup evidence
-7. [`docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md`](./docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md) —
-   current non-approvable Physical Retry boundary after the Yellow Host Binding return
-8. [`docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md) —
-   low-load review of the returned result; it requests neither Retry nor provider authority
-9. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md) —
-   immutable low-load review for the consumed Construction and Host Binding grant
-10. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md) —
-   immutable approved workset, host-binding, physical-adapter and evidence boundary
-11. [`docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md) —
-   Owner-approved five-part successor direction
-12. [`docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md`](./docs/R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md) —
-   low-load record of the current non-approvable Yellow result
-13. [`docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md`](./docs/R4-GATE-B-CORE-CONSTRUCTION-REPORT.md) —
-   exact repository/fake evidence and the remaining physical gaps
-14. [`docs/R4-GATE-B-EXECUTION-REPORT.md`](./docs/R4-GATE-B-EXECUTION-REPORT.md) —
-   why the first Gate B attempt stopped Red and what cleanup proved
-15. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
+8. [`docs/R4-TECHNICAL-OWNER-REVIEW.md`](./docs/R4-TECHNICAL-OWNER-REVIEW.md) —
    approved R4 mental model, technical cards, and walkthrough contracts
-16. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — dates, slices, and cut rules
-17. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-18. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — short decision record
+9. [`docs/README.md`](./docs/README.md) — complete map of frozen Gate B/Host
+   history, including both Host Binding attempt envelopes
+10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
@@ -178,7 +161,7 @@ npm run forme -- action-execute --workspace . --approval apr_...
 npm run forme -- action-rollback --workspace . --receipt eff_...
 ```
 
-## R4 Controlled Presence — Gate A Technical Review
+## R4 Controlled Presence — Building
 
 The Owner approved the Hybrid Hero Encounter, curated Forme Third Place,
 Manual and minimal Agent Guest paths, separate Owner publication and Curator
@@ -235,22 +218,25 @@ is the reconciled, independently audited v0.2 approval object at
 `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
 The Owner approved that exact hash on 2026-08-03. The resulting Gate A
 implementation and evidence remain technically complete; see
-[`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md). The next
-Manifest was approved, but the first attempt stopped Red and cleaned; see the
-[`Gate B Execution Report`](./docs/R4-GATE-B-EXECUTION-REPORT.md). The later
-Core and Physical Adapter Construction stages are also complete. The current
-[`Physical Adapter Construction Report`](./docs/R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md)
-records final implementation `I` `92c6c3f`, fake validation, and the sole
-approved Host Binding attempt: it stopped Yellow before inspectors when one
-supplied binding path was symlinked, consumed and removed its input, and
-cleaned Green with zero physical effects and no capsule/public receipt. The
-[`Physical Retry Execution Manifest`](./docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
-is non-approvable, and its
-[`Owner Review`](./docs/R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md)
-requests neither Retry Execution nor a first provider call. Provider/model calls, real
-Guest-data handling, external email, schema migration, deployment, spend,
-production action, secrets, and public traffic remain unauthorized unless a
-later exact gate explicitly grants them.
+[`docs/R4-GATE-A-VERIFICATION.md`](./docs/R4-GATE-A-VERIFICATION.md). The first
+Gate B attempt remains Red/cleaned history, and both later Host Binding attempts
+remain consumed Yellow history. Attempt 2 used frozen implementation `J`
+`7ae4a24`, stopped before any Host inspector start, produced no capsule/public
+receipt, and cleaned Green. It did not open Retry or Provider authority.
+
+The active product path is now #66–#70. #66 completed local Projection Owner
+acceptance at review hash
+`sha256:45414f18e70b0c5e7f3a2f6980b1596835952663dfea2d25d87605b8283d1480`
+and PR #72 was integrated into the R4 branch. That exact phase-specific review
+is intentionally not reusable as publication authority. #67 is offline
+Technical Review Green on Draft PR #73; a publication-stable successor Owner
+Frame, a new Room-bound exact publication approval, production Public Core /
+Gate C activation, and one real Guest knock still remain. Host Setup/Doctor #71
+belongs before the later Fresh local Codex/provider slice, not before #67's
+product meaning review. Provider/model calls, real Guest-data handling,
+external email, production schema migration, deployment, spend, production
+action, secrets, and public traffic remain unauthorized unless a later exact
+gate explicitly grants them.
 
 ## Forme R3 managed action
 

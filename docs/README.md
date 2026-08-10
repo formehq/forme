@@ -2,9 +2,19 @@
 
 The repository keeps a deliberately small decision surface.
 
+Current execution truth (2026-08-10): R0–R3 are Done and Owner-accepted. #66
+local Projection review is Owner-accepted and PR #72 is integrated into the R4
+branch. #67 is offline Technical Review Green on Draft PR #73, with no
+production Room/database mutation, deployment, publication, admission, real
+Guest data or Provider call. R4 remains Building and is not on `main`; Draft
+integration PR #65 currently has one Red Linux CI check. Host Binding attempts
+1 and 2 are consumed Yellow history and #71 treats Setup/Doctor as a bounded
+enabler for the later Fresh local Codex slice, not as the #67 product milestone.
+The current target is repeatable-ready 2026-08-24 and Demo Day 2026-08-25.
+
 | Document | Question it answers |
 |---|---|
-| [`PRODUCT.md`](./PRODUCT.md) | What is Forme, and what must the August 19 MVP prove? |
+| [`PRODUCT.md`](./PRODUCT.md) | What is Forme, and what must the August 25 MVP demo prove? |
 | [`CONTROL.md`](./CONTROL.md) | What is happening now, who decides, and when must work stop? |
 | [`ROADMAP.md`](./ROADMAP.md) | What are the gates, deadlines, and feature cut rules? |
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Which boundaries must survive implementation choices? |
@@ -28,14 +38,16 @@ The repository keeps a deliberately small decision surface.
 | [`R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-PACKET.md) | Immutable Owner-approved Core Construction boundary: repository-only Demo-critical Core with fake physical adapters; no Retry or Provider authority. |
 | [`R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md`](./R4-GATE-B-CORE-CORRECTION-CONSTRUCTION-OWNER-REVIEW.md) | Immutable low-load review for the approved Core Construction grant. |
 | [`R4-GATE-B-CORE-CONSTRUCTION-REPORT.md`](./R4-GATE-B-CORE-CONSTRUCTION-REPORT.md) | Published construction evidence: 381 Node and 19 Swift tests, zero physical effects, exact artifact hashes, and an honest Yellow result. |
-| [`R4-GATE-B-CORE-EXECUTION-MANIFEST.md`](./R4-GATE-B-CORE-EXECUTION-MANIFEST.md) | Current non-approvable Yellow Manifest: records the constructed Core boundary and the physical/host-binding gaps that prevent Retry. |
-| [`R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md`](./R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md) | Low-load review of the current Yellow return; it requests no execution, provider, deploy, merge, or spend grant. |
+| [`R4-GATE-B-CORE-EXECUTION-MANIFEST.md`](./R4-GATE-B-CORE-EXECUTION-MANIFEST.md) | Historical non-approvable Core-stage Yellow Manifest: records the constructed Core boundary and the then-open physical/host-binding gaps. |
+| [`R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md`](./R4-GATE-B-CORE-EXECUTION-OWNER-REVIEW.md) | Historical low-load review of that Core-stage Yellow return; it requested no execution, provider, deploy, merge, or spend grant. |
 | [`R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md) | Owner-approved five-part direction: local-only host binding, one unified physical runner, corrected PostgreSQL race semantics, explicit Codex causal limit, and a transient macOS mechanism. Its approval authorized exact Packet preparation only. |
 | [`R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-OWNER-REVIEW.md) | Immutable low-load review for the approved and consumed Physical Adapter Construction + one Host Binding grant; Retry/provider authority stayed closed. |
 | [`R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-CONSTRUCTION-PACKET.md) | Immutable approved workset and authority for fake-tested physical adapters and exactly one post-checkpoint read-only Host Binding attempt. |
-| [`R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md) | Current result: final implementation `I` `92c6c3f` built/fake-validated; the sole Host Binding attempt stopped Yellow before inspectors on a symlinked supplied path, then cleaned Green with zero physical effects and no capsule/public receipt. |
-| [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md) | Current non-approvable Physical Retry Manifest: no valid Host Binding capsule exists, and Retry/provider grants remain `NOT_REQUESTED`. |
+| [`R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md) | Historical attempt-1 result: final implementation `I` `92c6c3f` built/fake-validated; the first Host Binding attempt stopped Yellow before inspectors on a symlinked supplied path, then cleaned Green with zero physical effects and no capsule/public receipt. |
+| [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md) | Historical post-attempt-1 non-approvable Physical Retry Manifest. No later attempt produced a valid Host Binding capsule, and Retry/provider grants remain `NOT_REQUESTED`. |
 | [`R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md) | Low-load review of the Yellow/clean return; it requests no Retry, provider, deploy, merge, public-traffic, or spend authority. |
+| [`R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md`](./R4-GATE-B-HOST-BINDING-REATTEMPT-PACKET.md) | Immutable approved v0.2 preparation/activation envelope for implementation `J` and exactly one attempt ordinal 2; its embedded proposal status remains historical. |
+| [`R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md`](./R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md) | Immutable low-load review for v0.2. The later approval, Activation Card, consumed Yellow attempt-2 result, and zero effects are recorded in `DECISIONS.md` and `CONTROL.md`, not by rewriting this frozen review. |
 | [`reference/architecture-understanding-contract-v0.1.md`](./reference/architecture-understanding-contract-v0.1.md) | Reference only: owner-authored rebuild map retained for shared understanding and historical open questions. |
 | [`reference/design-lineage.md`](./reference/design-lineage.md) | Reference only: how the early effects, cognitive-organ model, and harness exploration became the current Living Project Twin architecture. |
 | [`research/agent-runtime-strategy-2026-07-15.md`](./research/agent-runtime-strategy-2026-07-15.md) | Research and durable boundary guidance: what Codex/OpenCode own, what Forme owns, and how adapters should deepen without forks or forced parity. |

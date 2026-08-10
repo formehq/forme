@@ -1,50 +1,36 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-08
-- MVP complete and repeatable: 2026-08-18
-- Demo Day: 2026-08-19 (Wednesday)
+- Updated: 2026-08-10
+- MVP complete and repeatable: 2026-08-24
+- Demo Day: 2026-08-25 (Tuesday)
 - Scope model: P0 committed, P1 conditional, P2 post-demo
-- Current gate: R3 is owner-accepted; the privacy-first/minimum-friction P
-  human-boundary model, R4 product target, T1 public/private Room correction,
-  T2 Room control contract, and NH1/NH2 architecture contract are
-  owner-approved; the Fresh Native Response Session exact T3 contract and T4
-  public lifecycle contract and full T5 async / deletion / retention / P0-cut
-  contract are also owner-approved; four bounded continuation presets are
-  fixed—24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted 7d/10. The first
-  Control Packet v0.1 is superseded; reconciled v0.2 passed independent audits
-  at `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  The Owner approved those exact bytes on 2026-08-03. Gate A repository-only
-  implementation and Technical Review are complete. The Owner later approved
-  Gate B Manifest
-  `sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa`,
-  but its first attempt stopped
-  Red/cleaned after a real Codex-home read-scope violation. The Owner then
-  approved the construction-only Retry Packet
-  `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`.
-  Retry Construction completed at `d6374ed` with Green offline/static lanes,
-  Green cleanup and a Yellow aggregate verdict. Its Retry Execution Manifest
-  is explicitly not recommended. A later read-only review found that the next
-  correction must choose a truthful Demo-critical semantic cut rather than
-  merely wire three physical adapters. The Owner approved that five-part scope
-  correction and the exact Core Construction Packet. Core Construction then
-  completed at published review HEAD `0e6a1a2`: 381 Node and 19 Swift tests
-  passed, every real physical/provider effect remained zero, and the returned
-  Manifest is intentionally non-approvable Yellow. The Owner approved the
-  five-part
-  [`Physical Adapter + Host Binding Decision Brief`](./R4-GATE-B-PHYSICAL-ADAPTER-HOST-BINDING-DECISION-BRIEF.md)
-  at `sha256:89a4f1b…a3f2`, then approved exact Construction Packet
-  `sha256:7ad7fd34…69d06` and low-load Review `sha256:27c64b28…41ff9`.
-  That consumed grant produced final implementation `I` `92c6c3f` / tree
-  `cf2ce55`: the unified runner and physical adapters are built and
-  fake-validated. Its exactly one Host Binding attempt stopped Yellow before
-  inspectors because a supplied binding path was symlinked. The input was
-  consumed/removed, all planned 3 Docker CLI / 2 local-socket / 9 macOS start
-  counts stayed zero, cleanup is Green, and no capsule/public receipt exists.
-  The resulting Physical Retry Manifest is non-approvable; Retry Execution
-  remains `NOT_REQUESTED` and no Retry occurred.
-  Provider calls, real Guest data, production migration, deployment, spend,
-  production Room mutation, external email, production secrets, and public
-  traffic remain unauthorized
+- Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
+  repository mechanisms are complete. #66 local Projection review is Done and
+  Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
+  Technical Review Green on Draft PR #73 and remains In Progress until one
+  real Public Room / bounded Guest knock passes Owner Experience Acceptance.
+  #68 Fresh local Codex candidate, #69 exact Response delivery, #70 bounded
+  continuation and #71 Setup/Doctor remain open. Host Binding attempts 1 and 2
+  are consumed Yellow history; attempt 2 stopped before all Host inspectors at
+  `0 / 0 / 0`, produced no capsule/receipt and cleaned Green. It is not #67's
+  critical path. Retry Execution and First Provider-Call remain
+  `NOT_REQUESTED`.
+- Production truth: Public Core is repository/offline proof only. No production
+  PostgreSQL migration, Gate C deployment/provisioning, production Room
+  mutation, public publication/admission, real Guest data, Provider call,
+  external email, production secret, public traffic or spend has occurred.
+  The accepted #66 phase-specific review `sha256:45414f18…1480` is not
+  publishable; #67 first needs publication-stable Owner wording and a new exact
+  Room-bound publication approval.
+- Active Demo-critical execution claim: the August 25 walking slice proves one
+  public `24h / 1 Interaction` continuation and a negative Private-Room boundary.
+  The positive Private Room/Grant path, the `3d/2`, `7d/3`, and `7d/10` presets,
+  email, Agent Guest and other Full surfaces remain the approved post-demo
+  architecture target. Demo-critical Green must not be called Full Green.
+- Integration truth: R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 was
+  merged only into `codex/r4-gate-a-build` at `87e5979`; #67 is `eabfe82` on
+  Draft PR #73. Integration Draft PR #65 currently has one Red Linux CI check
+  while PR #73 is Green.
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -55,10 +41,18 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–14 | one curated Third Place with a public Forme Project Room, one public knock, a bounded Private Room path, one reviewed continuation, an optional body-free response-ready email notice, and one minimum Native Workbench → Forme call | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → optional notice → response → 1/2/3/10-Interaction bounded Grant lifecycle passes owner acceptance |
-| R5 — Demo hardening | Aug 15–18 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
+| R4 — Controlled Presence | Aug 5–21 | Demo-critical execution: one curated Third Place with one public Forme Project Room, one public knock, one reviewed Response, one public 24h/1 continuation, a negative Private-Room boundary, and one minimum Native Workbench → Forme call. The complete Private/notification/multi-preset target below remains post-demo | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → exact Response → 24h/1 continuation passes Owner acceptance and is labeled Demo-critical rather than Full Green |
+| R5 — Demo hardening | Aug 22–24 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
 
-R3 is Done and owner-accepted for the MVP. It satisfied bounded execution, recovery, rollback, the recommendation-first owner surface, and one independent positive usefulness case. In Career CASE-02 the owner found all three proposals useful, least preferred the no-correction baseline, and judged the rich manual-correction baseline and zero-source-body Forme output extremely close with only a slight A1 lean. The closeout did not turn that recommendation into Career policy: ship/closure weighting remains unresolved, B was invalidated without approval or effect, and general recommendation accuracy remains unproven. The R4 Social Presence product target, T1 public/private Room correction, T2 Room control contract, NH1/NH2 architecture contract, Fresh Native Response Session exact T3 contract, T4 public lifecycle contract, and full T5 contract are owner-approved. Gate A is technically implemented and verified. The first Gate B attempt is Red/cleaned; Retry Construction is Yellow/cleaned and proves the earlier repository/offline mechanism, not runtime readiness. The five-part Core-versus-Full scope decision and exact Core Construction grant are approved, and Core Construction is built/repository-verified. The successor Physical Adapter + Host Binding grant was also approved and consumed: final `I` `92c6c3f` is built/fake-validated, but its sole Host Binding attempt returned Yellow on a pre-inspector symlink check, removed the input and cleaned Green with zero physical effects and no capsule/public receipt. The current Physical Retry Manifest is non-approvable. No physical Retry has started.
+R3 is Done and Owner-accepted for the MVP. The R4 Social Presence product
+target, T1/T2, NH1/NH2 and exact T3/T4/T5 contracts remain Owner-approved.
+Gate A is implemented and verified. Gate B/Core/physical construction and two
+Host Binding attempts remain bounded technical history; neither Yellow attempt
+produced a valid Host capsule or opened Retry/Provider authority. The product
+line has moved to #66–#70: #66 is Owner-accepted, #67 is offline Technical
+Review Green, and the complete real encounter remains unproven. #71 is a
+time-boxed local prerequisite for the later Fresh Codex slice, not a replacement
+for the Controlled Presence experience. R5 has not started.
 
 ## R4 owner-approved product target — Gate A Technical Review complete
 
@@ -158,9 +152,17 @@ approved Room Operator envelope.
 - **Jul 25:** if R1 is not owner-accepted, all P1 work pauses.
 - **Jul 31:** if R2 is not owner-accepted, no optional feature starts.
 - **Aug 4:** if R3 is incomplete, reduce the action to one Forme-owned artifact; do not broaden effectors.
-- **Aug 14:** unfinished P1 work leaves the demo.
-- **Aug 16:** hard feature freeze; only blockers, privacy, reliability, and rehearsal remain.
-- **Aug 18:** release candidate only.
+- **Now:** all P1 work remains out; one active R4 product slice plus at most one
+  time-boxed enabler.
+- **Aug 20:** the Public Core, Fresh candidate and exact Response path through
+  #69 must be stable; cut optional email, visual flourish and implementation
+  depth before weakening the chain or a control boundary.
+- **Aug 21:** #70 proves the one public 24h/1 continuation and negative Private
+  boundary, completing the Demo-critical R4 chain or triggering the declared
+  fallback instead of hidden scope expansion.
+- **Aug 22:** R5 and hard feature freeze begin; only blockers, privacy,
+  reliability and rehearsal remain.
+- **Aug 24:** release candidate only and repeatable-ready.
 
 ## Dependency order
 
@@ -199,8 +201,16 @@ Native Harness role clarification
   → Physical Adapter + Host Binding Decision Brief [Owner approved ✓]
   → exact successor Construction Packet + Review [Owner approved ✓]
   → Physical Adapter Construction [built/fake-validated at I ✓]
-  → one Host Binding attempt [YELLOW · input consumed · cleanup GREEN]
-  → Physical Retry Manifest [non-approvable · Retry not requested]
+  → Host Binding attempt 1 [YELLOW · input consumed · cleanup GREEN]
+  → lean reattempt J + Activation Card [approved/activated ✓]
+  → Host Binding attempt 2 [YELLOW_NO_RETRY · 0/0/0 · cleanup GREEN]
+  → #66 local Projection [Owner accepted ✓ · PR #72 integrated]
+  → #67 offline Room/knock rehearsal [Technical Review ✓ · Draft PR #73]
+  → publication-stable successor + Room-bound exact approval [next]
+  → Gate C production Public Core + one real knock [not requested]
+  → #68 Fresh candidate → #69 exact Response
+  → #70 public 24h/1 continuation + negative Private boundary [open]
+  → R4 Owner Experience Acceptance
 ```
 
 Full mailbox automation, any server-side AI, open-ended interactive projection,
@@ -209,27 +219,22 @@ approved R4 product target admits only one curated Third Place, one Forme
 Project Room as the required public resident, one bounded Private Room access
 path over the same Twin, Manual and Agent Guest entry paths, bounded capsule
 exchange, one optional lightweight Guest Capsule, and typed external signals.
-Gate A repository code/docs, synthetic/local tests, and evidence remain
-complete. The first approved Gate B attempt is preserved as Red/cleaned.
-Retry Construction is preserved as Yellow/cleaned: it built and verified the
-offline runner, but physical review found that PostgreSQL semantic completion,
-real Codex diagnostic containment and macOS candidate-protection scope require
-an Owner cut before another Packet. That cut and its exact Core Construction
-were approved; the resulting repository/fake Core is now published as Yellow.
-The approved direction keeps one real hero encounter exact, turns the remaining
-host/physical work into one controlled runner, and corrects the race model to
-match current Core semantics. Its exact Construction Packet was approved and
-consumed. Final `I` is built/fake-validated, but the sole Host Binding attempt
-stopped Yellow before inspectors on a symlinked supplied path. The input was
-removed, cleanup is Green, all physical/Retry/provider effects remained zero,
-and no valid capsule or public receipt exists. See the
-[`Construction Report`](./R4-GATE-B-PHYSICAL-ADAPTER-CONSTRUCTION-REPORT.md),
-non-approvable
-[`Physical Retry Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
-and returned
-[`Owner Review`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md).
-Real execution, First Provider-Call Test Grant, production durable writes,
-public actions, and spend remain separate later decisions.
+Gate A and the later offline/Core mechanisms remain complete technical
+evidence. The first Gate B execution is Red/cleaned history; Retry Construction,
+Core Construction and Physical Adapter Construction are Yellow/offline history.
+Both Host Binding attempts are consumed Yellow and produced no valid capsule or
+public receipt. They do not block #67's product meaning/review and do not grant
+Retry or Provider authority.
+
+The current walking slice starts from #66's accepted local content mechanism,
+but not from its phase-specific accepted bytes. #67 requires a publication-
+stable successor, a new exact Room-bound approval, then a separate Gate C
+envelope for production Public Core setup, deployment, publication, Curator
+admission and one real knock. #71 is sequenced before #68 only if the Fresh
+local Codex path still needs local Host Setup/Doctor. Real execution, Provider
+calls, production durable writes, public actions and spend remain separate
+later decisions. R4 cannot enter Owner Acceptance until the full public request
+→ local review → exact Response → bounded continuation story is experienced.
 
 ## Progress rule
 

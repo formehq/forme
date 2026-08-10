@@ -572,6 +572,8 @@ traffic or write, public behavior, or spend.
 
 ## 2026-08-03 — Demo schedule extended seven days
 
+**Status:** superseded by the 2026-08-10 schedule decision below.
+
 **Decision:** internal feature freeze moves to 2026-08-16, the MVP must be
 complete and repeatable on 2026-08-18, and Demo Day moves to Wednesday,
 2026-08-19. Product scope and authority gates remain unchanged.
@@ -826,3 +828,124 @@ the non-approvable
 [`Physical Retry Execution Manifest`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-MANIFEST.md)
 and its returned
 [`Owner Review`](./R4-GATE-B-PHYSICAL-RETRY-EXECUTION-OWNER-REVIEW.md).
+
+## 2026-08-09 — Host Binding Reattempt v0.2 approved; attempt 2 returned Yellow without inspectors
+
+**Decision:** approve the exact R4 Gate B Host Binding Reattempt Envelope v0.2
+at
+`sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3`,
+its Owner Review at
+`sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445`,
+and the preparation grant bound to proposal `af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d`
+/ tree `b7aabaac66156f6d169be1547cc6caa2ea4e8a4e`. Host Binding Attempt,
+Retry Execution and First Provider-Call Test remained `NOT_REQUESTED` during
+preparation. Final implementation `J`
+`7ae4a241117b842eb5d5de49061e7178dde4aec3` / tree
+`a40045cad65c8875953f720ad6c9a192ad670458` then produced Activation Card
+`sha256:4be3de82061ad3dd10219ad8020b00c0e6f9f19795899bef6bde363026015af6`.
+The Owner activated that exact Card for one read-only Host Binding attempt with
+`attemptOrdinal=2`; Retry Execution and First Provider-Call Test remained
+`NOT_REQUESTED`.
+
+**Reason:** the prior one-shot grant was consumed and could not be silently
+reused for the post-portability executable bytes. The lean v0.2 envelope bound
+one final implementation and one Owner-supplied input while retaining a hard
+stop before Retry or Provider authority. Host Binding remained a prerequisite
+check, not the Controlled Presence product outcome.
+
+**Effect:** attempt 2 terminated
+`YELLOW_NO_RETRY / HOST_BINDING_INCOMPLETE_YELLOW` before any Docker CLI, local
+Docker socket, or macOS inspector started (`0 / 0 / 0`). It produced no Host
+capsule or body-free public receipt and cleanup is Green. Attempt 2 is consumed;
+there is no automatic retry. No Retry, Provider, Guest, Room, deploy, public
+traffic or spend effect occurred.
+
+## 2026-08-09 — GitHub project management envelope approved; Host work demoted to an enabler
+
+**Decision:** approve Forme GitHub Project Management Envelope v1. Within the
+existing R4/R5 Vision and scope, Codex may maintain Issues, Project, Milestones,
+labels, PR metadata, task decomposition and priority, and may synchronize
+already approved and audited implementation facts. It may not change product
+Vision, merge a PR, deploy, publish publicly, call a Provider, widen privacy or
+permission boundaries, or create spend. Scope change, external effect and Owner
+Experience Acceptance remain Owner decisions.
+
+**Reason:** project control should keep each implementation attached to the one
+Living Project Twin story without returning routine task bookkeeping to the
+Owner. Host Binding had accumulated disproportionate project weight even though
+it is a local prerequisite rather than the R4 user outcome.
+
+**Effect:** #66–#70 now express the R4 product sequence: local Projection,
+Public Room/knock, Fresh candidate, exact Response delivery, and bounded
+continuation. #71 tracks a time-boxed Setup/Doctor enabler. Host work is not the
+#67 critical path and cannot substitute for one real public encounter.
+
+## 2026-08-10 — #66 local Projection Owner acceptance completed; PR #72 integrated outside main
+
+**Decision:** accept the #66 local Projection experience for exact review hash
+`sha256:45414f18e70b0c5e7f3a2f6980b1596835952663dfea2d25d87605b8283d1480`,
+Twin revision 29 at
+`sha256:c527b65fa55f7db852776002114f7a22e93a6b178e3c68e076baaa5a400ddfd4`,
+and immutable local receipt `receipt_57a7c38df5120a590996dad29040b72e`.
+Restart reconstruction returned `APPROVED_CURRENT` with the same bindings. The
+Owner separately approved PR #72, which merged at
+`87e59791fef320f0b437d59f4acb9fa9a7d8344b` into
+`codex/r4-gate-a-build`, not into `main`.
+
+**Reason:** the Owner experienced and accepted a truthful, bounded public-content
+shape with Vision & Becoming, Now, Next Move, Tensions, Open To and explicit
+interaction boundaries. The local review proves content review and restart
+continuity without conflating those semantics with publication authority.
+
+**Effect:** #66 is Done. Its approval remains
+`publicationAuthorized=false` and `roomMutationAuthorized=false`; all Room,
+network, Provider, Host Binding and publication counters were zero. Its exact
+copy refers to #66/#67 as temporary phases, so it is explicitly non-publishable
+and cannot be reused by #67. A publication-stable successor and a new exact
+Room-bound publication approval are required.
+
+## 2026-08-10 — #67 offline Technical Review Green; production Public Core and Owner encounter remain open
+
+**Decision:** treat commit `eabfe82a2cc58f8fd87558e5504d4515af9f9f88`
+on Draft PR #73 as offline Technical Review evidence for #67 only. It proves the
+local approved-Projection → Room-bound reapproval seam, immutable local
+receipt/recovery, an in-process Public Core rehearsal through independent
+curation and one 24-hour/one-use knock to durable local pull, and the richer
+visitor rendering. It does not prove production publication or complete #67.
+
+**Reason:** synthetic/fake closure is the safe first proof layer, but the R4
+Definition of Done still requires one real visitor encounter and Owner
+Experience Acceptance. The project must not rename offline mechanism evidence
+as Presence.
+
+**Effect:** 319 deny-network R4 tests, typecheck, the no-server-AI check and
+independent audits are Green on PR #73. No production PostgreSQL migration,
+Gate C deployment/provisioning, Room creation or mutation, publication,
+Curator admission, real Guest data, public traffic, Provider, Host, external
+email, production secret or spend occurred. #67 remains In Progress. `main`
+remains `7c1f7bd00e7307fa3695386ed7f55b52db88c97b`; the R4 work is stacked on
+Draft integration PR #65, whose current Linux `verify` check is Red while PR
+#73 is Green. The current delivery target is repeatable-ready on 2026-08-24 and
+Demo Day on Tuesday, 2026-08-25; R5 begins only after the real R4 chain is
+stable.
+
+## 2026-08-10 — August 25 schedule and Demo-critical R4 execution cut confirmed
+
+**Decision:** move repeatable-ready to 2026-08-24 and Demo Day to Tuesday,
+2026-08-25. Continue the already approved Demo-critical Core claim: the live
+August story must include one real public Room, one public knock, one Fresh
+local Response candidate, one exact Owner-approved Response, one public
+`24h / 1 Interaction` continuation and a negative Private-Room boundary. It
+does not require the positive Private Room/Grant path, notification email,
+Agent Guest, or the `3d/2`, `7d/3`, and `7d/10` continuation presets.
+
+**Reason:** the additional calendar time is for completing the same connected
+Presence story and rehearsing it, not for restoring every Full surface or
+building a general Room platform. The product keeps all four MVP dimensions
+while reducing depth inside R4.
+
+**Effect:** R4 runs through 2026-08-21 and R5 hardening runs 2026-08-22 through
+2026-08-24. The positive Private/notification/multi-preset surfaces remain the
+approved post-demo architecture target. Demo-critical Green must never be
+reported as Full Green. This decision changes no privacy, Provider, deployment,
+publication, merge or spend authority; those exact gates remain closed.
