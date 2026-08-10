@@ -10,7 +10,7 @@ import {
   type ProjectionCapsuleV1,
   type ProjectionClaimV1,
 } from "../../r4-protocol/src/index.ts";
-import type { ActionProposalRecord, ReflectionRecord, TwinRevision } from "../../../src/types.ts";
+import type { ActionProposalRecord, EffectReceipt, ReflectionRecord, TwinRevision } from "../../../src/types.ts";
 
 export type ProjectionClaimSelection =
   | { slot: ProjectionClaimV1["slot"]; source: "owner_frame"; field: "activeIntent" | "nextMove" }
@@ -55,6 +55,52 @@ export interface ReviewedProjectionDraft {
   approval: ArtifactApprovalV1;
 }
 
+export interface LocalProjectionProfileInputV1 {
+  readonly schemaVersion: "local_projection_profile_input.v1";
+  readonly workspaceName: string;
+  readonly title?: string;
+  readonly summary?: string;
+  readonly openTo: string;
+  readonly tension?: string;
+  readonly becomingReflectionId?: string;
+  readonly effectProposalId?: string;
+  readonly preparedAt: string;
+}
+
+export interface LocalProjectionOwnerWordingV1 {
+  readonly becoming: readonly string[];
+  readonly now: readonly string[];
+  readonly nextMove: readonly string[];
+  readonly tensions: readonly string[];
+  readonly openTo: readonly string[];
+  readonly boundary: {
+    readonly supportedInteractions: readonly ("ask" | "seed" | "resonance")[];
+    readonly allowedTopics: readonly string[];
+    readonly unavailableTopics: readonly string[];
+    readonly expectedResponseLatency: string;
+    readonly agencyStatement: string;
+    readonly nonCommitmentStatement: string;
+  };
+}
+
+export interface LocalProjectionProfileInputV2 {
+  readonly schemaVersion: "local_projection_profile_input.v2";
+  readonly workspaceName: string;
+  readonly title?: string;
+  readonly summary?: string;
+  readonly ownerWording: LocalProjectionOwnerWordingV1;
+  readonly becomingReflectionId?: string;
+  readonly effectProposalId?: string;
+  readonly preparedAt: string;
+}
+
+export type LocalProjectionProfileInput = LocalProjectionProfileInputV1 | LocalProjectionProfileInputV2;
+
+export interface CompiledLocalProjectionProfile extends CompiledProjectionDraft {
+  readonly profileInput: LocalProjectionProfileInput;
+  readonly profileInputHash: `sha256:${string}`;
+}
+
 function sourceReference(kind: string, id: string): string {
   return `src_${canonicalSha256({ kind, id }).slice(7, 39)}`;
 }
@@ -71,6 +117,116 @@ function actionProposal(revision: TwinRevision, proposalId: string): ActionPropo
   const proposal = revision.agency.proposals.find((item) => item.proposal.proposalId === proposalId);
   if (!proposal) throw new Error("Projection R3 effect source not found");
   return proposal;
+}
+
+function verifiedEffectLineage(
+  revision: TwinRevision,
+  record: ActionProposalRecord,
+): { execution: EffectReceipt; rollback: EffectReceipt | null } | null {
+  if (revision.schemaVersion !== "3" || record.effectPlan === null || record.effectPlanHash === null || record.approvalId === null) {
+    return null;
+  }
+  if (revision.agency.proposals.filter((item) => item.proposal.proposalId === record.proposal.proposalId).length !== 1) {
+    return null;
+  }
+  const plan = record.effectPlan;
+  if (
+    canonicalSha256(record.proposal) !== record.proposalHash
+    || canonicalSha256(plan) !== record.effectPlanHash
+    || plan.proposalId !== record.proposal.proposalId
+    || plan.actionKind !== record.proposal.actionKind
+    || plan.baseTwinRevision !== record.proposal.baseTwinRevision
+    || record.admittedRevision !== record.proposal.baseTwinRevision + 1
+    || plan.correctedReflectionId !== record.correctedReflectionId
+  ) return null;
+  const matchingCorrections = revision.cognition.corrections.filter((item) => item.correctionId === record.correctionId);
+  const correction = matchingCorrections[0];
+  const matchingCorrected = revision.cognition.reflections.filter((item) => item.reflectionId === record.correctedReflectionId);
+  const corrected = matchingCorrected[0];
+  const matchingTargets = revision.cognition.reflections.filter((item) => item.reflectionId === correction?.targetReflectionId);
+  const target = matchingTargets[0];
+  if (
+    matchingCorrections.length !== 1
+    || !correction
+    || correction.authority !== "owner"
+    || correction.correctedReflectionId !== record.correctedReflectionId
+    || matchingCorrected.length !== 1
+    || !corrected
+    || corrected.status !== "corrected"
+    || corrected.authoredBy !== "owner"
+    || corrected.claim !== correction.correctionText
+    || corrected.createdAt !== correction.correctedAt
+    || corrected.baseTwinRevision !== correction.baseTwinRevision
+    || correction.baseTwinRevision >= record.proposal.baseTwinRevision
+    || corrected.supersedesReflectionId !== correction.targetReflectionId
+    || corrected.supersededByReflectionId !== null
+    || matchingTargets.length !== 1
+    || !target
+    || target.status !== "superseded"
+    || target.supersededByReflectionId !== corrected.reflectionId
+  ) return null;
+  const matchingRuntimeReceipts = revision.agency.runtimeReceipts.filter((item) => item.receiptId === record.runtimeReceiptId);
+  const runtimeReceipt = matchingRuntimeReceipts[0];
+  if (
+    matchingRuntimeReceipts.length !== 1
+    || !runtimeReceipt
+    || runtimeReceipt.packetHash !== record.packetHash
+    || runtimeReceipt.proposalHash !== record.proposalHash
+    || runtimeReceipt.baseTwinRevision !== record.proposal.baseTwinRevision
+    || runtimeReceipt.validationResult !== "accepted"
+    || runtimeReceipt.completedAt !== record.createdAt
+    || runtimeReceipt.audit.toolEventCount !== 0
+    || !runtimeReceipt.audit.turnCompleted
+  ) return null;
+  const matchingApprovals = revision.agency.approvals.filter((item) => item.approvalId === record.approvalId);
+  const approval = matchingApprovals[0];
+  if (
+    matchingApprovals.length !== 1
+    || !approval
+    || approval.authority !== "owner"
+    || approval.status !== "consumed"
+    || approval.proposalId !== record.proposal.proposalId
+    || approval.proposalHash !== record.proposalHash
+    || approval.effectPlanHash !== record.effectPlanHash
+    || approval.baseTwinRevision !== record.admittedRevision
+  ) return null;
+  if (new Set(record.effectReceiptIds).size !== record.effectReceiptIds.length) return null;
+  const receipts = record.effectReceiptIds.map((receiptId) => (
+    revision.agency.effectReceipts.filter((receipt) => receipt.receiptId === receiptId)
+  ));
+  if (receipts.some((matches) => matches.length !== 1)) return null;
+  const boundReceipts = receipts.map((matches) => matches[0]) as EffectReceipt[];
+  if (boundReceipts.some((receipt) => (
+    receipt.proposalId !== record.proposal.proposalId
+    || receipt.approvalId !== approval.approvalId
+    || receipt.effectPlanHash !== record.effectPlanHash
+    || receipt.effectId !== plan.effectId
+    || receipt.targetPath !== plan.targetPath
+    || receipt.resultTwinRevision !== receipt.baseTwinRevision + 1
+  ))) return null;
+  const execution = boundReceipts.find((receipt) => receipt.operation === "execute" && receipt.status === "succeeded");
+  const rollback = boundReceipts.find((receipt) => receipt.operation === "rollback" && receipt.status === "succeeded") ?? null;
+  if (
+    !execution
+    || execution.baseTwinRevision !== approval.baseTwinRevision + 1
+    || execution.expectedBeforeHash !== plan.beforeFileHash
+    || execution.expectedAfterHash !== plan.afterFileHash
+    || execution.observedHash !== execution.expectedAfterHash
+    || approval.consumedAt !== execution.completedAt
+  ) return null;
+  if (record.status === "executed") {
+    return boundReceipts.length === 1 && rollback === null ? { execution, rollback } : null;
+  }
+  if (
+    record.status !== "rolled-back"
+    || boundReceipts.length !== 2
+    || !rollback
+    || rollback.baseTwinRevision !== execution.resultTwinRevision
+    || rollback.expectedBeforeHash !== plan.afterFileHash
+    || rollback.expectedAfterHash !== plan.beforeFileHash
+    || rollback.observedHash !== rollback.expectedAfterHash
+  ) return null;
+  return { execution, rollback };
 }
 
 function effectIsStillCurrent(revision: TwinRevision, record: ActionProposalRecord): boolean {
@@ -102,6 +258,275 @@ function rolledBackHistoryIsVerified(revision: TwinRevision, record: ActionPropo
     && execution.observedHash === execution.expectedAfterHash
     && rollback.observedHash === rollback.expectedAfterHash,
   );
+}
+
+function eligibleEffect(revision: TwinRevision, record: ActionProposalRecord): boolean {
+  return effectIsStillCurrent(revision, record) || rolledBackHistoryIsVerified(revision, record);
+}
+
+function localProfileEffectEligible(revision: TwinRevision, record: ActionProposalRecord): boolean {
+  const lineage = verifiedEffectLineage(revision, record);
+  if (!lineage) return false;
+  if (record.status === "rolled-back") return lineage.rollback !== null;
+  if (record.status !== "executed" || lineage.rollback !== null) return false;
+  const currentTarget = revision.evidence.find((evidence) => evidence.relativePath === lineage.execution.targetPath);
+  return currentTarget?.contentHash === lineage.execution.expectedAfterHash;
+}
+
+function latestByCreatedAt<T extends { createdAt: string }>(values: readonly T[]): T | undefined {
+  return [...values].sort((left, right) => (
+    right.createdAt.localeCompare(left.createdAt) || JSON.stringify(right).localeCompare(JSON.stringify(left))
+  ))[0];
+}
+
+function requirePublicText(value: string, label: string, maximumBytes: number): string {
+  const normalized = value.trim().normalize("NFC");
+  if (normalized.length === 0 || Buffer.byteLength(normalized, "utf8") > maximumBytes) {
+    throw new Error(`${label} must be non-empty and at most ${maximumBytes} UTF-8 bytes`);
+  }
+  return normalized;
+}
+
+function requirePublicTextArray(
+  values: readonly string[],
+  label: string,
+  minimumItems: number,
+  maximumItems: number,
+  maximumBytes = 8 * 1_024,
+): readonly string[] {
+  if (!Array.isArray(values) || values.length < minimumItems || values.length > maximumItems) {
+    throw new Error(`${label} must contain between ${minimumItems} and ${maximumItems} items`);
+  }
+  const normalized = values.map((value, index) => requirePublicText(value, `${label}[${index}]`, maximumBytes));
+  if (new Set(normalized).size !== normalized.length) {
+    throw new Error(`${label} contains a duplicate after public-text normalization`);
+  }
+  return normalized;
+}
+
+function normalizeOwnerWording(value: LocalProjectionOwnerWordingV1): LocalProjectionOwnerWordingV1 {
+  const becoming = requirePublicTextArray(value.becoming, "Owner wording becoming", 1, 8);
+  const now = requirePublicTextArray(value.now, "Owner wording now", 0, 4);
+  const nextMove = requirePublicTextArray(value.nextMove, "Owner wording nextMove", 0, 3);
+  const tensions = requirePublicTextArray(value.tensions, "Owner wording tensions", 1, 4);
+  const openTo = requirePublicTextArray(value.openTo, "Owner wording openTo", 1, 4);
+  const supportedInteractions = value.boundary.supportedInteractions;
+  if (
+    !Array.isArray(supportedInteractions)
+    || supportedInteractions.length < 1
+    || supportedInteractions.length > 3
+    || supportedInteractions.some((item) => item !== "ask" && item !== "seed" && item !== "resonance")
+    || new Set(supportedInteractions).size !== supportedInteractions.length
+  ) throw new Error("Owner wording supportedInteractions must contain one to three unique supported interaction types");
+  const selectionCount = becoming.length + now.length + nextMove.length + tensions.length + openTo.length + 4;
+  if (selectionCount > 20) throw new Error("Local Projection owner wording and causal basis exceed 20 claims");
+  return {
+    becoming,
+    now,
+    nextMove,
+    tensions,
+    openTo,
+    boundary: {
+      supportedInteractions: [...supportedInteractions],
+      allowedTopics: requirePublicTextArray(value.boundary.allowedTopics, "Owner wording allowedTopics", 1, 8),
+      unavailableTopics: requirePublicTextArray(value.boundary.unavailableTopics, "Owner wording unavailableTopics", 1, 8),
+      expectedResponseLatency: requirePublicText(value.boundary.expectedResponseLatency, "Owner wording expectedResponseLatency", 8 * 1_024),
+      agencyStatement: requirePublicText(value.boundary.agencyStatement, "Owner wording agencyStatement", 8 * 1_024),
+      nonCommitmentStatement: requirePublicText(value.boundary.nonCommitmentStatement, "Owner wording nonCommitmentStatement", 8 * 1_024),
+    },
+  };
+}
+
+function requirePublicScalarText(value: string, label: string, maximumScalars: number): string {
+  const normalized = value.trim().normalize("NFC");
+  if (normalized.length === 0 || [...normalized].length > maximumScalars) {
+    throw new Error(`${label} must be non-empty and at most ${maximumScalars} Unicode characters`);
+  }
+  return normalized;
+}
+
+function localId(prefix: string, seed: unknown): string {
+  return `${prefix}_${canonicalSha256(seed).slice("sha256:".length, "sha256:".length + 32)}`;
+}
+
+/**
+ * #66's application profile over the lower-level Projection compiler. It
+ * preserves the protocol's multi-claim slots while requiring one complete
+ * public-facing five-section view and the R1 -> R2 -> R3 causal floor.
+ */
+export function compileLocalProjectionProfile(input: {
+  revision: TwinRevision;
+  twinRevisionHash: `sha256:${string}`;
+  profile: LocalProjectionProfileInput;
+}): CompiledLocalProjectionProfile {
+  if (input.revision.schemaVersion !== "3") {
+    throw new Error("Local Projection review requires the current R1-R3 Twin");
+  }
+  const workspaceName = requirePublicScalarText(input.profile.workspaceName, "Workspace name", 200);
+  const ownerWording = input.profile.schemaVersion === "local_projection_profile_input.v2"
+    ? normalizeOwnerWording(input.profile.ownerWording)
+    : null;
+  const openTo = input.profile.schemaVersion === "local_projection_profile_input.v1"
+    ? requirePublicText(input.profile.openTo, "Open To", 8 * 1_024)
+    : null;
+  const eligibleEffects = input.revision.agency.proposals.filter((item) => localProfileEffectEligible(input.revision, item));
+  const effect = input.profile.effectProposalId
+    ? eligibleEffects.find((item) => item.proposal.proposalId === input.profile.effectProposalId)
+    : input.profile.becomingReflectionId
+      ? latestByCreatedAt(eligibleEffects.filter((item) => item.correctedReflectionId === input.profile.becomingReflectionId))
+      : latestByCreatedAt(eligibleEffects);
+  if (!effect || !localProfileEffectEligible(input.revision, effect)) {
+    throw new Error("Local Projection needs one verified current or rolled-back R3 effect");
+  }
+  const correctedReflectionId = input.profile.becomingReflectionId ?? effect.correctedReflectionId;
+  if (effect.correctedReflectionId !== correctedReflectionId) {
+    throw new Error("Local Projection R2 meaning and R3 effect do not belong to one causal chain");
+  }
+  const corrected = input.revision.cognition.reflections.find((item) => item.reflectionId === correctedReflectionId);
+  if (!corrected || corrected.status !== "corrected" || corrected.authoredBy !== "owner") {
+    throw new Error("Local Projection needs the active Owner-corrected Reflection that governed its R3 effect");
+  }
+  let tensionSelections: ProjectionClaimSelection[] = [];
+  if (input.profile.schemaVersion === "local_projection_profile_input.v1") {
+    const seenUnresolved = new Set<string>();
+    const unresolvedSources = input.revision.ownerFrame.unresolved
+      .map((value, index) => ({ text: value.trim(), index }))
+      .filter(({ text }) => {
+        if (!text || seenUnresolved.has(text)) return false;
+        seenUnresolved.add(text);
+        return true;
+      });
+    tensionSelections = input.profile.tension
+      ? [{ slot: "tensions", source: "projection_owner_wording", text: requirePublicText(input.profile.tension, "Tension", 8 * 1_024) }]
+      : unresolvedSources
+        .slice(0, 3)
+        .map(({ index }) => ({ slot: "tensions", source: "owner_unresolved", index }));
+    if (tensionSelections.length === 0) {
+      throw new Error("Local Projection needs one current unresolved item or explicit --tension wording");
+    }
+  }
+  const preparedMillis = Date.parse(input.profile.preparedAt);
+  if (!Number.isFinite(preparedMillis) || new Date(preparedMillis).toISOString() !== input.profile.preparedAt) {
+    throw new Error("Projection preparation time must be exact UTC RFC 3339");
+  }
+  const selections: ProjectionClaimSelection[] = ownerWording
+    ? [
+      ...ownerWording.becoming.map((text): ProjectionClaimSelection => ({ slot: "becoming", source: "projection_owner_wording", text })),
+      ...ownerWording.now.map((text): ProjectionClaimSelection => ({ slot: "now", source: "projection_owner_wording", text })),
+      { slot: "now", source: "reflection", reflectionId: corrected.reflectionId },
+      { slot: "now", source: "owner_frame", field: "activeIntent" },
+      { slot: "now", source: "r3_effect", proposalId: effect.proposal.proposalId },
+      ...ownerWording.nextMove.map((text): ProjectionClaimSelection => ({ slot: "nextMove", source: "projection_owner_wording", text })),
+      { slot: "nextMove", source: "owner_frame", field: "nextMove" },
+      ...ownerWording.tensions.map((text): ProjectionClaimSelection => ({ slot: "tensions", source: "projection_owner_wording", text })),
+      ...ownerWording.openTo.map((text): ProjectionClaimSelection => ({ slot: "openTo", source: "projection_owner_wording", text })),
+    ]
+    : [
+      { slot: "becoming", source: "reflection", reflectionId: corrected.reflectionId },
+      { slot: "now", source: "owner_frame", field: "activeIntent" },
+      { slot: "now", source: "r3_effect", proposalId: effect.proposal.proposalId },
+      { slot: "nextMove", source: "owner_frame", field: "nextMove" },
+      ...tensionSelections,
+      { slot: "openTo", source: "projection_owner_wording", text: openTo as string },
+    ];
+  const profileInput: LocalProjectionProfileInput = input.profile.schemaVersion === "local_projection_profile_input.v2"
+    ? {
+      schemaVersion: "local_projection_profile_input.v2",
+      workspaceName,
+      ownerWording: ownerWording as LocalProjectionOwnerWordingV1,
+      becomingReflectionId: corrected.reflectionId,
+      effectProposalId: effect.proposal.proposalId,
+      preparedAt: input.profile.preparedAt,
+      ...(input.profile.title === undefined ? {} : { title: requirePublicScalarText(input.profile.title, "Projection title", 120) }),
+      ...(input.profile.summary === undefined ? {} : { summary: requirePublicText(input.profile.summary, "Projection summary", 512) }),
+    }
+    : {
+      schemaVersion: "local_projection_profile_input.v1",
+      workspaceName,
+      openTo: openTo as string,
+      becomingReflectionId: corrected.reflectionId,
+      effectProposalId: effect.proposal.proposalId,
+      preparedAt: input.profile.preparedAt,
+      ...(input.profile.title === undefined ? {} : { title: requirePublicScalarText(input.profile.title, "Projection title", 120) }),
+      ...(input.profile.summary === undefined ? {} : { summary: requirePublicText(input.profile.summary, "Projection summary", 512) }),
+      ...(input.profile.tension === undefined ? {} : { tension: requirePublicText(input.profile.tension, "Tension", 8 * 1_024) }),
+    };
+  const policy = {
+    schemaVersion: "r4.local-projection-review-policy.v1",
+    audience: "future_public_project_room",
+    localOnly: true,
+    roomMutationAuthorized: false,
+    publicationAuthorized: false,
+    requiredSlots: ["becoming", "now", "nextMove", "tensions", "openTo"],
+    requiredBasisClasses: ["owner_frame", "owner_corrected_reflection", "r3_effect"],
+  } as const;
+  const seed = {
+    schemaVersion: "r4.local-projection-review-seed.v1",
+    twinRevisionHash: input.twinRevisionHash,
+    profileInput,
+    selections,
+    policy,
+  };
+  const title = profileInput.title ?? `${workspaceName} — Project Projection`;
+  if ([...title].length > 120) {
+    throw new Error("Default Projection title exceeds 120 Unicode characters; provide a shorter --title");
+  }
+  const draft = compileProjectionDraft({
+    revision: input.revision,
+    twinRevisionHash: input.twinRevisionHash,
+    draft: {
+      roomId: localId("room", { ...seed, role: "local-review-only" }),
+      projectionId: localId("proj", { ...seed, role: "projection" }),
+      entityId: localId("entity", { workspaceId: input.revision.workspaceId }),
+      basisId: localId("basis", { ...seed, role: "basis" }),
+      publicationAttestationId: localId("att", { ...seed, role: "not-published" }),
+      ownerDecisionId: localId("decision", { ...seed, role: "future-owner-review" }),
+      title,
+      thirdPlaceSummary: profileInput.summary ?? `A current, Owner-reviewed view of ${workspaceName}: ${input.revision.ownerFrame.activeIntent}`,
+      selections,
+      supportedInteractions: ownerWording?.boundary.supportedInteractions ?? ["ask"],
+      allowedTopics: ownerWording ? [...ownerWording.boundary.allowedTopics] : ["project direction", "current work", "bounded collaboration"],
+      unavailableTopics: ownerWording ? [...ownerWording.boundary.unavailableTopics] : ["private source bodies", "secrets, credentials, and unpublished personal context"],
+      expectedResponseLatency: ownerWording?.boundary.expectedResponseLatency ?? "Asynchronous and Owner-reviewed",
+      visualThemeToken: "forme_project_twin_v1",
+      agencyStatement: ownerWording?.boundary.agencyStatement ?? "This Projection may describe the project, but it cannot act, publish, or commit the Owner.",
+      nonCommitmentStatement: ownerWording?.boundary.nonCommitmentStatement ?? "Questions are welcome; nothing here grants private access or creates an Owner commitment.",
+      projectionPolicyGeneration: 1,
+      projectionPolicyHash: canonicalSha256(policy),
+      publishedAt: profileInput.preparedAt,
+      freshUntil: new Date(preparedMillis + 23 * 60 * 60 * 1_000).toISOString(),
+      expiresAt: new Date(preparedMillis + 24 * 60 * 60 * 1_000).toISOString(),
+    },
+  });
+  const publicTexts = [
+    draft.capsule.title,
+    draft.capsule.thirdPlaceSummary,
+    draft.capsule.expectedResponseLatency,
+    draft.capsule.agencyStatement,
+    draft.capsule.nonCommitmentStatement,
+    ...draft.capsule.claims.flatMap((claim) => [claim.text, claim.uncertainty ?? ""]),
+    ...draft.capsule.allowedTopics,
+    ...draft.capsule.unavailableTopics,
+  ];
+  if (publicTexts.some((value) => /[\u007f-\u009f\u2028\u2029\u206a-\u206f]|\p{Bidi_Control}/u.test(value))) {
+    throw new Error("Local Projection public text contains an unsafe terminal control character");
+  }
+  const slots = new Set(draft.capsule.claims.map((claim) => claim.slot));
+  for (const required of policy.requiredSlots) {
+    if (!slots.has(required)) throw new Error(`Local Projection is missing required section:${required}`);
+  }
+  const sourceKinds = new Set(draft.basis.claims.map((claim) => claim.sourceKind));
+  for (const required of policy.requiredBasisClasses) {
+    if (!sourceKinds.has(required)) throw new Error(`Local Projection is missing causal basis:${required}`);
+  }
+  return {
+    ...draft,
+    profileInput,
+    profileInputHash: canonicalSha256({
+      ...profileInput,
+      preparedAt: null,
+    }),
+  };
 }
 
 function claimFromSelection(revision: TwinRevision, selection: ProjectionClaimSelection): {
