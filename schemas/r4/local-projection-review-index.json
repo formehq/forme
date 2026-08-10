@@ -2,14 +2,20 @@
   "schemaVersion": "r4.local-projection-review-index.v1",
   "status": "LOCAL_ONLY_OWNER_REVIEW_NO_PUBLICATION_AUTHORITY",
   "schemaPath": "schemas/r4/local-projection-review.schema.json",
-  "schemaSha256": "sha256:2e4b68aa4191822d0748c450c0247d85f6db4bdefcd51d308bda96a9a5578f61",
+  "schemaSha256": "sha256:f0cea056db349155cfe2c9c65e425023f13b289412babd3518add4b62005344a",
   "protocolSchemaPath": "schemas/r4/protocol.schema.json",
   "protocolSchemaSha256": "sha256:e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af",
-  "formatCount": 7,
+  "formatCount": 8,
   "formats": [
     {
       "schemaVersion": "local_projection_profile_input.v1",
       "definition": "#/$defs/LocalProjectionProfileInputV1",
+      "locationPattern": "^workspace/\\.forme/r4/projections/candidates/candidate_[a-f0-9]{32}/input\\.json$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "local_projection_profile_input.v2",
+      "definition": "#/$defs/LocalProjectionProfileInputV2",
       "locationPattern": "^workspace/\\.forme/r4/projections/candidates/candidate_[a-f0-9]{32}/input\\.json$",
       "immutable": true
     },

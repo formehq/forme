@@ -358,6 +358,166 @@ test("#66 prepares all five public sections from the real R1→R2→R3 Twin and 
   }), /not approvable:APPROVED_EXPIRED/u);
 });
 
+test("#66 v2 preserves repeatable Owner wording, exact boundaries, and local-only approval across restart", (context) => {
+  const fixture = makeR3Fixture();
+  context.after(() => removeWorkspace(fixture.workspace));
+  const ownerWording = {
+    becoming: [
+      "Projects should keep their meaning when their Owner steps away.",
+      "Forme keeps that continuity without becoming an AI substitute for the Owner.",
+    ],
+    now: [
+      "Continuity, Cognition, and bounded Agency have been Owner-accepted.",
+      "Controlled Presence is now under exact local review.",
+    ],
+    nextMove: [
+      "Accept one understandable local Projection.",
+      "Authorize a real Room only through a later, separate decision.",
+    ],
+    tensions: [
+      "Give visitors enough context without exposing private project material.",
+      "Let the project feel present without speaking for its Owner.",
+    ],
+    openTo: [
+      "Questions about durable project continuity.",
+      "Relevant counterexamples and adjacent research.",
+    ],
+    boundary: {
+      supportedInteractions: ["ask", "resonance"],
+      allowedTopics: ["Forme vision", "controlled project presence"],
+      unavailableTopics: ["private Twin sources", "Owner commitments"],
+      expectedResponseLatency: "Asynchronous and Owner-reviewed.",
+      agencyStatement: "This Projection can describe the project, but it cannot act for the Owner.",
+      nonCommitmentStatement: "A question creates no promise, publication authority, or private access.",
+    },
+  } as const;
+  const cliPrepared = execFileSync(process.execPath, [
+    "--import", "./scripts/deny-external-network.mjs", "src/cli.ts", "projection", "prepare",
+    "--workspace", fixture.workspace,
+    "--title", "Forme — A Living Project Twin",
+    "--summary", "A project can keep its meaning while its Owner is away, without taking the Owner's voice or authority.",
+    "--becoming", ownerWording.becoming[0],
+    "--becoming", ownerWording.becoming[1],
+    "--now-wording", ownerWording.now[0],
+    "--now-wording", ownerWording.now[1],
+    "--next-wording", ownerWording.nextMove[0],
+    "--next-wording", ownerWording.nextMove[1],
+    "--tension", ownerWording.tensions[0],
+    "--tension", ownerWording.tensions[1],
+    "--open-to", ownerWording.openTo[0],
+    "--open-to", ownerWording.openTo[1],
+    "--interaction", ownerWording.boundary.supportedInteractions[0],
+    "--interaction", ownerWording.boundary.supportedInteractions[1],
+    "--allowed-topic", ownerWording.boundary.allowedTopics[0],
+    "--allowed-topic", ownerWording.boundary.allowedTopics[1],
+    "--unavailable-topic", ownerWording.boundary.unavailableTopics[0],
+    "--unavailable-topic", ownerWording.boundary.unavailableTopics[1],
+    "--response-latency", ownerWording.boundary.expectedResponseLatency,
+    "--agency-statement", ownerWording.boundary.agencyStatement,
+    "--non-commitment", ownerWording.boundary.nonCommitmentStatement,
+  ], {
+    cwd: resolve("."),
+    encoding: "utf8",
+    env: { ...process.env, FORME_DENY_NETWORK: "1" },
+  });
+  assert.match(cliPrepared, /READY_FOR_OWNER_REVIEW/u);
+  assert.match(cliPrepared, /### Vision & Becoming/u);
+
+  const first = previewLocalProjection({ workspaceRoot: fixture.workspace, now: currentTime() });
+  assert.equal(first.candidate.input.schemaVersion, "local_projection_profile_input.v2");
+  if (first.candidate.input.schemaVersion !== "local_projection_profile_input.v2") {
+    throw new Error("CLI did not persist a v2 Projection profile");
+  }
+  assert.deepEqual(first.candidate.input.ownerWording, ownerWording);
+  const claimTexts = (slot: "becoming" | "now" | "nextMove" | "tensions" | "openTo"): string[] => (
+    first.candidate.capsule.claims.filter((claim) => claim.slot === slot).map((claim) => claim.text)
+  );
+  assert.deepEqual(claimTexts("becoming"), ownerWording.becoming);
+  assert.deepEqual(claimTexts("now").slice(0, ownerWording.now.length), ownerWording.now);
+  assert.deepEqual(claimTexts("nextMove").slice(0, ownerWording.nextMove.length), ownerWording.nextMove);
+  assert.deepEqual(claimTexts("tensions"), ownerWording.tensions);
+  assert.deepEqual(claimTexts("openTo"), ownerWording.openTo);
+  assert.deepEqual(
+    first.candidate.capsule.claims.map((claim) => claim.slot),
+    [
+      "becoming", "becoming",
+      "now", "now", "now", "now", "now",
+      "nextMove", "nextMove", "nextMove",
+      "tensions", "tensions",
+      "openTo", "openTo",
+    ],
+  );
+  const ownerClaims = first.candidate.basis.claims.filter((claim) => claim.sourceKind === "projection_owner_wording");
+  assert.deepEqual(ownerClaims.map((claim) => claim.claimText), [
+    ...ownerWording.becoming,
+    ...ownerWording.now,
+    ...ownerWording.nextMove,
+    ...ownerWording.tensions,
+    ...ownerWording.openTo,
+  ]);
+  assert.ok(ownerClaims.every((claim) => (
+    claim.sourceKind === "projection_owner_wording"
+    && claim.attribution === "owner_confirmed"
+    && claim.transformationClass === "owner_edited"
+  )));
+  assert.ok(new Set(first.candidate.basis.claims.map((claim) => claim.sourceKind)).has("owner_frame"));
+  assert.ok(new Set(first.candidate.basis.claims.map((claim) => claim.sourceKind)).has("owner_corrected_reflection"));
+  assert.ok(new Set(first.candidate.basis.claims.map((claim) => claim.sourceKind)).has("r3_effect"));
+  assert.deepEqual(first.candidate.capsule.supportedInteractions, ownerWording.boundary.supportedInteractions);
+  assert.deepEqual(first.candidate.capsule.allowedTopics, ownerWording.boundary.allowedTopics);
+  assert.deepEqual(first.candidate.capsule.unavailableTopics, ownerWording.boundary.unavailableTopics);
+  assert.equal(first.candidate.capsule.expectedResponseLatency, ownerWording.boundary.expectedResponseLatency);
+  assert.equal(first.candidate.capsule.agencyStatement, ownerWording.boundary.agencyStatement);
+  assert.equal(first.candidate.capsule.nonCommitmentStatement, ownerWording.boundary.nonCommitmentStatement);
+  const exactReviewEnvelope = {
+    schemaVersion: "local_projection_exact_review.v1",
+    capsule: first.candidate.capsule,
+    basis: first.candidate.basis,
+  };
+  assert.equal(canonicalSha256(exactReviewEnvelope), first.candidate.manifest.reviewHash);
+  assert.ok(first.preview.includes(canonicalJson(exactReviewEnvelope)));
+
+  const idempotent = prepareLocalProjection({
+    workspaceRoot: fixture.workspace,
+    ownerWording,
+    title: "Forme — A Living Project Twin",
+    summary: "A project can keep its meaning while its Owner is away, without taking the Owner's voice or authority.",
+    now: currentTime(500),
+  });
+  assert.equal(idempotent.candidate.manifest.reviewHash, first.candidate.manifest.reviewHash);
+  const approved = approveLocalProjection({
+    workspaceRoot: fixture.workspace,
+    confirmation: `APPROVE ${first.candidate.manifest.reviewHash}`,
+    now: currentTime(1_000),
+  });
+  assert.equal(approved.status, "APPROVED_CURRENT");
+  assert.deepEqual([
+    approved.approval?.receipt.roomCalls,
+    approved.approval?.receipt.networkCalls,
+    approved.approval?.receipt.providerCalls,
+    approved.approval?.receipt.hostBindingCalls,
+    approved.approval?.receipt.publicationCalls,
+  ], [0, 0, 0, 0, 0]);
+  assert.equal(approved.approval?.approval.publicationAuthorized, false);
+  assert.equal(approved.approval?.approval.roomMutationAuthorized, false);
+
+  const stateRoot = join(fixture.workspace, ".forme");
+  const beforeRestart = exactStateSnapshot(stateRoot);
+  const restarted = execFileSync(process.execPath, [
+    "--import", "./scripts/deny-external-network.mjs", "src/cli.ts", "projection", "preview",
+    "--workspace", fixture.workspace,
+  ], {
+    cwd: resolve("."),
+    encoding: "utf8",
+    env: { ...process.env, FORME_DENY_NETWORK: "1" },
+  });
+  assert.match(restarted, /APPROVED_CURRENT/u);
+  assert.match(restarted, /### Vision & Becoming/u);
+  assert.match(restarted, new RegExp(first.candidate.manifest.reviewHash));
+  assert.deepEqual(exactStateSnapshot(stateRoot), beforeRestart, "restart preview must have no external or local write effect");
+  assert.doesNotMatch(allStateText(fixture.workspace), new RegExp(PRIVATE_CANARY));
+});
+
 test("#66 marks an approved candidate stale after a real Twin change and rejects the old hash", (context) => {
   const fixture = makeR3Fixture();
   context.after(() => removeWorkspace(fixture.workspace));
@@ -549,6 +709,10 @@ test("#66 recovers candidate and approval staging without inventing partial Owne
   assert.match(cliRecovery, /READY_FOR_OWNER_REVIEW/u);
   const recoveredAfterHardExit = previewLocalProjection({ workspaceRoot: fixture.workspace, now: staleLockNow });
   assert.equal(recoveredAfterHardExit?.status, "READY_FOR_OWNER_REVIEW");
+  assert.equal(recoveredAfterHardExit?.candidate.input.schemaVersion, "local_projection_profile_input.v1");
+  if (recoveredAfterHardExit?.candidate.input.schemaVersion !== "local_projection_profile_input.v1") {
+    throw new Error("legacy fault recovery did not preserve its v1 Projection profile");
+  }
   assert.equal(recoveredAfterHardExit?.candidate.input.openTo, staleLockOpenTo);
   const reviewRoot = join(fixture.workspace, ".forme", "r4", "projections");
   assert.equal(existsSync(join(reviewRoot, "LOCK")), false);

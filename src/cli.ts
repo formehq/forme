@@ -45,6 +45,8 @@ const ALLOWED_OPTIONS: Record<string, Set<string>> = {
   "action-rollback": new Set(["--workspace", "--receipt"]),
   "projection-prepare": new Set([
     "--workspace", "--title", "--summary", "--open-to", "--tension", "--becoming-reflection", "--effect",
+    "--becoming", "--now-wording", "--next-wording", "--interaction", "--allowed-topic", "--unavailable-topic",
+    "--response-latency", "--agency-statement", "--non-commitment",
   ]),
   "projection-preview": new Set(["--workspace"]),
   "projection-approve": new Set(["--workspace"]),
@@ -85,6 +87,21 @@ function required(options: ParsedOptions, name: string): string {
   const value = option(options, name);
   if (!value) throw new Error(`${name} is required`);
   return value;
+}
+
+function requiredValues(options: ParsedOptions, name: string): string[] {
+  const found = values(options, name);
+  if (found.length === 0) throw new Error(`${name} is required at least once`);
+  return found;
+}
+
+function projectionInteractions(options: ParsedOptions): ("ask" | "seed" | "resonance")[] {
+  return requiredValues(options, "--interaction").map((value) => {
+    if (value !== "ask" && value !== "seed" && value !== "resonance") {
+      throw new Error("--interaction must be ask, seed, or resonance");
+    }
+    return value;
+  });
 }
 
 function contextSelection(options: ParsedOptions): ContextSelection {
@@ -182,7 +199,19 @@ function help(): string {
     "  --receipt <id>            successful eff_ execution receipt to roll back",
     "",
     "R4 local Projection options:",
-    "  projection prepare --open-to <text> [--title/--summary/--tension <text>]",
+    "  projection prepare --open-to <text> [--title/--summary/--tension <text>]  legacy v1",
+    "  projection prepare --becoming <text> ...                              Owner wording v2",
+    "    --becoming <text>          repeatable Vision & Becoming claim (at least one)",
+    "    --now-wording <text>       repeatable current-state claim",
+    "    --next-wording <text>      repeatable next-move claim",
+    "    --tension <text>           repeatable live tension (at least one)",
+    "    --open-to <text>           repeatable invitation (at least one)",
+    "    --interaction <ask|seed|resonance>  repeatable supported interaction (at least one)",
+    "    --allowed-topic <text>     repeatable public topic (at least one)",
+    "    --unavailable-topic <text> repeatable unavailable topic (at least one)",
+    "    --response-latency <text>  exact expected response latency",
+    "    --agency-statement <text>  exact public agency boundary",
+    "    --non-commitment <text>    exact public non-commitment boundary",
     "  projection preview",
     "  projection approve        reads exact `APPROVE sha256:<hash>` from stdin",
     "  projection recover --lock-pid <pid>  explicitly recover one dead writer",
@@ -205,15 +234,49 @@ try {
     const options = projectionOptions(action, projectionArgs);
     const workspaceRoot = resolve(option(options, "--workspace") ?? process.cwd());
     if (action === "prepare") {
-      const view = prepareLocalProjection({
+      const title = option(options, "--title");
+      const summary = option(options, "--summary");
+      const becomingReflectionId = option(options, "--becoming-reflection");
+      const effectProposalId = option(options, "--effect");
+      const common = {
         workspaceRoot,
-        openTo: required(options, "--open-to"),
-        ...(option(options, "--title") === undefined ? {} : { title: option(options, "--title") }),
-        ...(option(options, "--summary") === undefined ? {} : { summary: option(options, "--summary") }),
-        ...(option(options, "--tension") === undefined ? {} : { tension: option(options, "--tension") }),
-        ...(option(options, "--becoming-reflection") === undefined ? {} : { becomingReflectionId: option(options, "--becoming-reflection") }),
-        ...(option(options, "--effect") === undefined ? {} : { effectProposalId: option(options, "--effect") }),
-      });
+        ...(title === undefined ? {} : { title }),
+        ...(summary === undefined ? {} : { summary }),
+        ...(becomingReflectionId === undefined ? {} : { becomingReflectionId }),
+        ...(effectProposalId === undefined ? {} : { effectProposalId }),
+      };
+      const becoming = values(options, "--becoming");
+      if (becoming.length === 0) {
+        const v2OnlyOption = [
+          "--now-wording", "--next-wording", "--interaction", "--allowed-topic", "--unavailable-topic",
+          "--response-latency", "--agency-statement", "--non-commitment",
+        ].find((name) => options.has(name));
+        if (v2OnlyOption) throw new Error(`${v2OnlyOption} requires at least one --becoming`);
+      }
+      const view = becoming.length > 0
+        ? prepareLocalProjection({
+          ...common,
+          ownerWording: {
+            becoming,
+            now: values(options, "--now-wording"),
+            nextMove: values(options, "--next-wording"),
+            tensions: requiredValues(options, "--tension"),
+            openTo: requiredValues(options, "--open-to"),
+            boundary: {
+              supportedInteractions: projectionInteractions(options),
+              allowedTopics: requiredValues(options, "--allowed-topic"),
+              unavailableTopics: requiredValues(options, "--unavailable-topic"),
+              expectedResponseLatency: required(options, "--response-latency"),
+              agencyStatement: required(options, "--agency-statement"),
+              nonCommitmentStatement: required(options, "--non-commitment"),
+            },
+          },
+        })
+        : prepareLocalProjection({
+          ...common,
+          openTo: required(options, "--open-to"),
+          ...(option(options, "--tension") === undefined ? {} : { tension: option(options, "--tension") }),
+        });
       process.stdout.write(view.preview);
     } else if (action === "preview") {
       process.stdout.write(previewLocalProjection({ workspaceRoot }).preview);

@@ -29,6 +29,7 @@ import {
 import {
   compileLocalProjectionProfile,
   type LocalProjectionProfileInput,
+  type LocalProjectionOwnerWordingV1,
 } from "./projection.ts";
 import { readVerifiedCurrentTwin } from "./twin-snapshot.ts";
 
@@ -414,16 +415,18 @@ function readCanonicalFile(path: string, label: string): unknown {
 
 function validateProfileInput(value: unknown): LocalProjectionProfileInput {
   const input = record(value, "Projection profile input");
-  const required = ["schemaVersion", "workspaceName", "openTo", "becomingReflectionId", "effectProposalId", "preparedAt"];
-  const optional = ["title", "summary", "tension"];
+  const isV1 = input.schemaVersion === "local_projection_profile_input.v1";
+  const isV2 = input.schemaVersion === "local_projection_profile_input.v2";
+  if (!isV1 && !isV2) throw new Error("Projection profile input schema version is invalid");
+  const required = isV1
+    ? ["schemaVersion", "workspaceName", "openTo", "becomingReflectionId", "effectProposalId", "preparedAt"]
+    : ["schemaVersion", "workspaceName", "ownerWording", "becomingReflectionId", "effectProposalId", "preparedAt"];
+  const optional = isV1 ? ["title", "summary", "tension"] : ["title", "summary"];
   const keys = Object.keys(input);
   if (required.some((key) => !keys.includes(key)) || keys.some((key) => !required.includes(key) && !optional.includes(key))) {
     throw new Error("Projection profile input has an unknown or missing field");
   }
-  if (input.schemaVersion !== "local_projection_profile_input.v1") {
-    throw new Error("Projection profile input schema version is invalid");
-  }
-  for (const key of ["workspaceName", "openTo", "becomingReflectionId", "effectProposalId", "preparedAt", ...optional]) {
+  for (const key of ["workspaceName", "becomingReflectionId", "effectProposalId", "preparedAt", ...optional, ...(isV1 ? ["openTo"] : [])]) {
     if (input[key] !== undefined && (typeof input[key] !== "string" || (input[key] as string).length === 0)) {
       throw new Error(`Projection profile input ${key} is invalid`);
     }
@@ -434,8 +437,7 @@ function validateProfileInput(value: unknown): LocalProjectionProfileInput {
   };
   const byteLimits: Readonly<Record<string, number>> = {
     summary: 512,
-    openTo: 8 * 1_024,
-    tension: 8 * 1_024,
+    ...(isV1 ? { openTo: 8 * 1_024, tension: 8 * 1_024 } : {}),
   };
   for (const [key, maximum] of Object.entries(scalarLimits)) {
     const item = input[key];
@@ -449,6 +451,63 @@ function validateProfileInput(value: unknown): LocalProjectionProfileInput {
     if (item === undefined) continue;
     if (typeof item !== "string" || item.trim() !== item || item.normalize("NFC") !== item || Buffer.byteLength(item, "utf8") > maximum) {
       throw new Error(`Projection profile input ${key} is not canonical public text`);
+    }
+  }
+  if (isV2) {
+    const ownerWording = record(input.ownerWording, "Projection owner wording");
+    exactKeys(ownerWording, ["becoming", "now", "nextMove", "tensions", "openTo", "boundary"], "Projection owner wording");
+    const publicTextArray = (
+      candidate: unknown,
+      label: string,
+      minimum: number,
+      maximum: number,
+    ): readonly string[] => {
+      if (!Array.isArray(candidate) || candidate.length < minimum || candidate.length > maximum) {
+        throw new Error(`${label} must contain between ${minimum} and ${maximum} items`);
+      }
+      for (const item of candidate) {
+        if (
+          typeof item !== "string"
+          || item.length === 0
+          || item.trim() !== item
+          || item.normalize("NFC") !== item
+          || Buffer.byteLength(item, "utf8") > 8 * 1_024
+        ) throw new Error(`${label} is not canonical public text`);
+      }
+      if (new Set(candidate).size !== candidate.length) throw new Error(`${label} contains a normalized duplicate`);
+      return candidate;
+    };
+    const becoming = publicTextArray(ownerWording.becoming, "Projection owner wording becoming", 1, 8);
+    const now = publicTextArray(ownerWording.now, "Projection owner wording now", 0, 4);
+    const nextMove = publicTextArray(ownerWording.nextMove, "Projection owner wording nextMove", 0, 3);
+    const tensions = publicTextArray(ownerWording.tensions, "Projection owner wording tensions", 1, 4);
+    const openTo = publicTextArray(ownerWording.openTo, "Projection owner wording openTo", 1, 4);
+    if (becoming.length + now.length + nextMove.length + tensions.length + openTo.length + 4 > 20) {
+      throw new Error("Projection owner wording and causal basis exceed 20 claims");
+    }
+    const boundary = record(ownerWording.boundary, "Projection owner wording boundary");
+    exactKeys(boundary, [
+      "supportedInteractions", "allowedTopics", "unavailableTopics", "expectedResponseLatency",
+      "agencyStatement", "nonCommitmentStatement",
+    ], "Projection owner wording boundary");
+    if (
+      !Array.isArray(boundary.supportedInteractions)
+      || boundary.supportedInteractions.length < 1
+      || boundary.supportedInteractions.length > 3
+      || boundary.supportedInteractions.some((item) => item !== "ask" && item !== "seed" && item !== "resonance")
+      || new Set(boundary.supportedInteractions).size !== boundary.supportedInteractions.length
+    ) throw new Error("Projection owner wording supportedInteractions is invalid");
+    publicTextArray(boundary.allowedTopics, "Projection owner wording allowedTopics", 1, 8);
+    publicTextArray(boundary.unavailableTopics, "Projection owner wording unavailableTopics", 1, 8);
+    for (const key of ["expectedResponseLatency", "agencyStatement", "nonCommitmentStatement"] as const) {
+      const item = boundary[key];
+      if (
+        typeof item !== "string"
+        || item.length === 0
+        || item.trim() !== item
+        || item.normalize("NFC") !== item
+        || Buffer.byteLength(item, "utf8") > 8 * 1_024
+      ) throw new Error(`Projection owner wording ${key} is not canonical public text`);
     }
   }
   localId(input.becomingReflectionId, "ref", "Projection becoming Reflection ID");
@@ -879,7 +938,7 @@ function renderPreview(
     "",
   ];
   const slotLabels = {
-    becoming: "Becoming",
+    becoming: candidate.input.schemaVersion === "local_projection_profile_input.v2" ? "Vision & Becoming" : "Becoming",
     now: "Now",
     nextMove: "Next Move",
     tensions: "Tensions",
@@ -959,10 +1018,11 @@ function buildView(workspaceRoot: string, paths: ReturnType<typeof reviewPaths>,
 
 export function prepareLocalProjection(input: {
   workspaceRoot: string;
-  openTo: string;
+  openTo?: string;
   title?: string;
   summary?: string;
   tension?: string;
+  ownerWording?: LocalProjectionOwnerWordingV1;
   becomingReflectionId?: string;
   effectProposalId?: string;
   now?: Date;
@@ -973,17 +1033,34 @@ export function prepareLocalProjection(input: {
     recoverStages(paths);
     const twin = readVerifiedCurrentTwin(workspaceRoot);
     const now = input.now ?? new Date();
-    const requestedProfile: LocalProjectionProfileInput = {
-      schemaVersion: "local_projection_profile_input.v1",
-      workspaceName: twin.contract.name,
-      openTo: input.openTo,
-      preparedAt: now.toISOString(),
-      ...(input.title === undefined ? {} : { title: input.title }),
-      ...(input.summary === undefined ? {} : { summary: input.summary }),
-      ...(input.tension === undefined ? {} : { tension: input.tension }),
-      ...(input.becomingReflectionId === undefined ? {} : { becomingReflectionId: input.becomingReflectionId }),
-      ...(input.effectProposalId === undefined ? {} : { effectProposalId: input.effectProposalId }),
-    };
+    if (input.ownerWording !== undefined && (input.openTo !== undefined || input.tension !== undefined)) {
+      throw new Error("Owner wording v2 is mutually exclusive with legacy openTo/tension input");
+    }
+    if (input.ownerWording === undefined && input.openTo === undefined) {
+      throw new Error("Local Projection prepare requires legacy openTo or ownerWording");
+    }
+    const requestedProfile: LocalProjectionProfileInput = input.ownerWording === undefined
+      ? {
+        schemaVersion: "local_projection_profile_input.v1",
+        workspaceName: twin.contract.name,
+        openTo: input.openTo as string,
+        preparedAt: now.toISOString(),
+        ...(input.title === undefined ? {} : { title: input.title }),
+        ...(input.summary === undefined ? {} : { summary: input.summary }),
+        ...(input.tension === undefined ? {} : { tension: input.tension }),
+        ...(input.becomingReflectionId === undefined ? {} : { becomingReflectionId: input.becomingReflectionId }),
+        ...(input.effectProposalId === undefined ? {} : { effectProposalId: input.effectProposalId }),
+      }
+      : {
+        schemaVersion: "local_projection_profile_input.v2",
+        workspaceName: twin.contract.name,
+        ownerWording: input.ownerWording,
+        preparedAt: now.toISOString(),
+        ...(input.title === undefined ? {} : { title: input.title }),
+        ...(input.summary === undefined ? {} : { summary: input.summary }),
+        ...(input.becomingReflectionId === undefined ? {} : { becomingReflectionId: input.becomingReflectionId }),
+        ...(input.effectProposalId === undefined ? {} : { effectProposalId: input.effectProposalId }),
+      };
     if (existsSync(paths.current)) {
       const existing = currentCandidate(paths);
       const desiredMeaning = canonicalSha256({
