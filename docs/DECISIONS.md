@@ -907,7 +907,9 @@ Room-bound publication approval are required.
 ## 2026-08-10 — #67 offline Technical Review Green; production Public Core and Owner encounter remain open
 
 **Decision:** treat commit `eabfe82a2cc58f8fd87558e5504d4515af9f9f88`
-on Draft PR #73 as offline Technical Review evidence for #67 only. It proves the
+as the initial offline Technical Review evidence for #67 only. The stacked
+Draft PR #73 now carries that proof at
+`5e93196033166d7f2cd64e23ba3750ed88bd9740`. It proves the
 local approved-Projection → Room-bound reapproval seam, immutable local
 receipt/recovery, an in-process Public Core rehearsal through independent
 curation and one 24-hour/one-use knock to durable local pull, and the richer
@@ -918,16 +920,18 @@ Definition of Done still requires one real visitor encounter and Owner
 Experience Acceptance. The project must not rename offline mechanism evidence
 as Presence.
 
-**Effect:** 319 deny-network R4 tests, typecheck, the no-server-AI check and
-independent audits are Green on PR #73. No production PostgreSQL migration,
+**Effect:** the original 319 deny-network R4 tests, typecheck, no-server-AI
+check and independent audits remain valid evidence. The current stacked full
+check is Green at 45/45 + 339/339 + 145/145. No production PostgreSQL migration,
 Gate C deployment/provisioning, Room creation or mutation, publication,
 Curator admission, real Guest data, public traffic, Provider, Host, external
 email, production secret or spend occurred. #67 remains In Progress. `main`
-remains `7c1f7bd00e7307fa3695386ed7f55b52db88c97b`; the R4 work is stacked on
-Draft integration PR #65, whose current Linux `verify` check is Red while PR
-#73 is Green. The current delivery target is repeatable-ready on 2026-08-24 and
-Demo Day on Tuesday, 2026-08-25; R5 begins only after the real R4 chain is
-stable.
+remains `7c1f7bd00e7307fa3695386ed7f55b52db88c97b`. Draft integration PR #65
+is at `cbadd8a`, Draft PR #73 at `5e93196`, and the public-only boundary
+foundation on Draft PR #75 at `09401a0`; all three are CLEAN / CI Green and
+unmerged. PR #74 is merged and repaired only the deterministic Linux
+inode-reuse fixture. None of these facts constitutes production activation or
+Owner Experience Acceptance.
 
 ## 2026-08-10 — August 25 schedule and Demo-critical R4 execution cut confirmed
 
@@ -949,3 +953,27 @@ while reducing depth inside R4.
 approved post-demo architecture target. Demo-critical Green must never be
 reported as Full Green. This decision changes no privacy, Provider, deployment,
 publication, merge or spend authority; those exact gates remain closed.
+
+## 2026-08-10 — August 25 reframed as Progress / Vision Sharing; current R4 scope preserved
+
+**Decision:** August 25 is a Progress / Vision Sharing checkpoint, not a hard
+deadline for a complete or repeatable MVP. Remove the date-driven Aug 20–24
+cut/freeze sequence. Continue the already selected #67 → #68 → #69 → #70
+walking slice without dropping a link merely to fit the sharing date.
+Completion remains gate-driven: passing tests establishes Technical Review,
+and the real causal experience becomes Done only through Owner Experience
+Acceptance.
+
+**Reason:** the sharing is now primarily an honest account of the product
+Vision and the state actually reached. Preserving the connected Presence story
+is more important than manufacturing date-shaped completion or presenting
+offline mechanisms as a real encounter.
+
+**Effect:** this supersedes the hard completion, cut and R5 calendar windows in
+the immediately preceding schedule decision; it changes no product, privacy,
+schema, Provider, deployment, publication, merge, external-effect or spend
+authority. It does not restore the positive Private Room/Grant path, optional
+email, Agent Guest, `3d/2`, `7d/3`, `7d/10`, or other Full surfaces to the
+current R4/R5 execution scope. Those remain approved architecture/future scope
+unless the Owner opens a separate scope decision. R5 begins after real R4 Owner
+Experience Acceptance, not automatically on a calendar date.

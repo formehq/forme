@@ -3,10 +3,12 @@
 - Updated: 2026-08-10
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and PR #72 is integrated into the R4 branch. #67 is
-  offline Technical Review Green on Draft PR #73; the next product outcome is a
-  publication-stable successor Projection followed by one separately approved
-  real Public Room and bounded Guest knock. Host Binding is historical setup
-  evidence and is not the #67 product gate.**
+  offline Technical Review Green on Draft PR #73, with the public-only boundary
+  foundation on Draft PR #75. The Durable Public Core Construction Packet is
+  now an approval candidate; its exact hash, independent audit and Owner
+  approval are the next gate. Publication-stable successor approval, Gate C
+  and one real Public Room / bounded Guest knock follow separately. Host
+  Binding is historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
   repository mechanisms are closed/implemented. #66 proved current Twin →
@@ -24,16 +26,18 @@
   Provider-Call remain `NOT_REQUESTED`. #71 may turn this prerequisite into a
   bounded Setup/Doctor before #68, but it cannot make R4 Done.**
 - Branch status: **R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 merged
-  only into `codex/r4-gate-a-build` at `87e5979`; current #67 work is `eabfe82`
-  on Draft PR #73. Integration Draft PR #65 currently has one Red Linux CI
-  check while PR #73 is Green, so the integration line is not merge-ready.**
+  into the stacked R4 line. Integration Draft PR #65 is at `cbadd8a`, Draft PR
+  #73 at `5e93196`, and Draft PR #75 at `09401a0`; all three are CLEAN / CI
+  Green and remain unmerged. PR #74 is merged and changed only the deterministic
+  Linux inode-reuse fixture.**
 - First real workspace: **Forme repo — owner confirmed**
-- Delivery: **P0 complete and repeatable 2026-08-24; Demo Day Tuesday,
-  2026-08-25. R4 remains schedule-at-risk and R5 starts only after the real R4
-  chain is stable.**
-- Next action: **reconcile publication-stable Owner Frame / Now / Next wording,
-  prepare the successor local Projection and Room-bound review, then return for
-  exact publication and Gate C activation decisions.** The accepted #66 review
+- Delivery: **August 25 is a Progress / Vision Sharing checkpoint, not a
+  complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
+  Technical Review plus Owner Experience Acceptance—not the date—defines Done.
+  R5 starts only after the real R4 chain is accepted.**
+- Next action: **freeze, audit and request exact Owner approval for the
+  [`Durable Public Core Construction Packet`](./R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
+  before any durable state/schema implementation.** The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
@@ -42,7 +46,7 @@ This is the owner's single re-entry page. Read it before implementation details.
 
 ## Product claim
 
-The August MVP is one Living Project Twin for one real project:
+The current MVP is one Living Project Twin for one real project:
 
 > It remembers where the project is, notices what it is becoming, acts once within explicit and reversible trust, and produces one controlled collaborator projection.
 
@@ -61,7 +65,7 @@ R3 Bounded Agency         ✓ DONE · OWNER ACCEPTED 2026-07-20
   ↓
 R4 Controlled Presence    ← #66 ACCEPTED · #67 OFFLINE TECH REVIEW · REAL ENCOUNTER OPEN
   ↓
-R5 Demo hardening         clean run → privacy → recovery → rehearsal
+R5 Hardening              after R4 Owner Acceptance → privacy → recovery → rehearsal
 ```
 
 Current truth:
@@ -276,9 +280,13 @@ Current truth:
   `87e5979`, not into `main`. That accepted review contains phase-specific
   #66/#67 wording, so #67 hard-denies it as a publication source and requires a
   publication-stable successor plus a new exact publication approval;
-- on 2026-08-10 #67 reached offline Technical Review on Draft PR #73 at
-  `eabfe82`. Its 319 deny-network R4 tests, typecheck, no-server-AI check and
-  independent audits are Green. The implementation proves a local Room-bound
+- on 2026-08-10 #67 reached offline Technical Review on Draft PR #73. Its
+  initial `eabfe82` evidence remains valid and its current head is `5e93196`.
+  Draft PR #75 at `09401a0` adds the public-only production-boundary foundation
+  without a durable application/store or real adapter. The full current check
+  is Green at 45/45 + 339/339 + 145/145, and PR #65 at `cbadd8a`, #73 and #75
+  are all CLEAN / CI Green and unmerged. PR #74 is merged as a fixture-only
+  repair. The implementation proves a local Room-bound
   reapproval, immutable receipt/recovery, offline public Projection → independent
   curation → one 24-hour/one-use knock → private durable Interaction → local
   pull rehearsal, and the visitor-facing Vision/Now/Next/Tensions/Open To/
@@ -295,7 +303,7 @@ Current truth:
 - the real R3 path completed proposal, exact approval, execution, retry, restart, and rollback through Twin revisions 21–25;
 - CASE-01 did not establish R3 usefulness, but independent Career CASE-02 provided sufficient MVP product evidence: the owner found all three proposals useful, and the correction-aware Forme output contributed real decision scaffolding without historical source bodies or manual correction reconstruction. This does not establish general recommendation accuracy. The evidence lives in [`VALIDATION.md`](./VALIDATION.md).
 - the private local `forme-r3v-knowledge-lab` contains one provenance-preserving, stably redacted CCS note at two real historical time points. The owner approved one exact 36,230-byte visibility packet and the B-arm Forme Reflection was admitted at lab Twin revision 3;
-- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. At that point, the next R3-V gate was the owner-facing output contract rather than another effect; R3, T5, and exact R4 Packet approval have since closed, and Gate A is current.
+- the first call produced zero tool events and no source changes. The owner correction became active at lab Twin revision 4: the original inference is `superseded`, one dependent output is invalidated, and later packets automatically carry the corrected meaning. The approved A0/A1/B comparison completed with zero tool events in all arms. The owner preferred T/A0, saw M/A1 as a useful editable layer, and least preferred Q/B because it returned too much classification work. B's proposal was never approved or executed and is invalidated at lab Twin revision 7. At that point, the next R3-V gate was the owner-facing output contract rather than another effect; R3, T5 and the exact R4 Packet have since closed, Gate A is historical Green evidence, and #67 is the current product gate.
 - CASE-02 local extraction was owner-approved with manifest `sha256:0db3f411ba9ffe9b24cba791d6e402cf55a196e8b5f4edbfaff0576114738920`. The two immutable Career blobs became 4,607- and 12,108-byte redacted snapshots under one stable mapping; 139 replacement operations, exact hashes, provenance, and residual re-identification risk are recorded. The original source-vault path remains unmodified.
 - The existing CASE-01 Twin cannot safely admit Career because its immutable source contract allowlists CCS only. Rather than rewrite historical contract hashes or contaminate CASE-02, the lab prepared a fresh local Career workspace gate `sha256:4526ffd973be31210dd30b31a25c72fd1238e42cd71e5c0c581c5eb8a2818871`. That gate creates no model authority; after approval, a separately owner-approved exact ContextPacket hash is still required.
 - The owner approved that setup gate. `/Users/zaynw/Documents/Projects/forme-r3v2-career-lab` contains a no-remote Twin with only `README.md` and the redacted Career path allowlisted. Exact ContextPacket `sha256:007835b6a5c07688467544b06312d16358e616f338cd1f60fd4761868ae71041` produced one zero-tool inferred Reflection at revision 2. The owner corrected its causal over-weighting without a model call: revision 3 preserves the original as `superseded`, admits owner-authored Reflection `ref_711fd70d727e4ecf74f19005590eda09`, records correction `cor_e48ac14130ab657777b006908a16719b`, and invalidates one dependent output. Under approved comparison gate `sha256:5d5114c24de0681267cb0c4509b456d017bcc29a2a7b39efcbc8d1045378dece`, one A0, one A1, and one B call completed with zero tool events. The owner found all three useful, leaned slightly toward A1, and least preferred A0's no-correction closure-only recommendation, then clarified that A1 and B are too close to separate confidently because the real ship/closure balance remains unresolved. B carried the combined corrected direction automatically with zero source bodies and no manual reconstruction. The R3 closeout advanced the Career Twin to revision 5 and invalidated B through `ainv_6c8069a54d2bba64d6f21c4ca5031283`; approvals, effects, source changes, and additional model calls remained zero.
@@ -890,7 +898,7 @@ The owner explicitly approved all five recommendations:
 
 Implementation is authorized only inside these decisions. Any arbitrary path or patch, new runtime visibility or tool, Git or network authority, external action, delegated approval, multi-action plan, generalized effector, or weaker staleness/rollback rule returns to a new Owner stop gate.
 
-## Approved R4 Technical Control Packet — Gate A boundary
+## Approved R4 Technical Control Packet — lineage and current boundary
 
 - Status: **product target owner-approved on 2026-07-25; T1 public/private Room
   correction owner-approved on 2026-07-26; P human-boundary interpretation
@@ -903,10 +911,13 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   and explicitly Owner-selected trusted 7d/10; Technical Control Packet v0.2
   is reconciled and independently audited at exact SHA-256
   `e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`,
-  was Owner-approved on 2026-08-03; Gate A is now implemented and Green for
-  Gate B review. R4 remains outside Owner Acceptance/Done; the exact Gate B
-  Manifest is pending Owner approval and remains unexecuted**
-- Schedule fallback floor: a collaborator can understand what the project is,
+  was Owner-approved on 2026-08-03; Gate A is implemented and remains Green
+  historical evidence. Later bounded Gate B/Core/Host construction and attempts
+  are also historical evidence. R4 remains outside Owner Acceptance/Done; the
+  current gate is exact approval of the prepared #67 Durable Public Core
+  Construction Packet, before any schema implementation or production
+  activation authority**
+- Honest sharing fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.
 - Approved outcome: one publicly viewable, curator-admitted Forme Third Place
@@ -1067,8 +1078,8 @@ If a change is only an internal refactor, the report says explicitly: **no owner
 
 ## Detailed references
 
-- [`PRODUCT.md`](./PRODUCT.md) — product vision, constitutional floor, and Demo Day acceptance story
-- [`ROADMAP.md`](./ROADMAP.md) — R0–R5 schedule, dependencies, and cut rules
+- [`PRODUCT.md`](./PRODUCT.md) — product vision, constitutional floor, and MVP acceptance story
+- [`ROADMAP.md`](./ROADMAP.md) — R0–R5 sequence, dependencies, and scope-protection rules
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — durable boundaries between Forme and agent runtimes
 - [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) —
   Owner-approved Native Harness role and NH1/NH2 decision record
@@ -1093,5 +1104,5 @@ If a change is only an internal refactor, the report says explicitly: **no owner
   — immutable v0.2 attempt-2 preparation/activation envelope
 - [`R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md`](./R4-GATE-B-HOST-BINDING-REATTEMPT-OWNER-REVIEW.md)
   — immutable review; the later approval and Yellow result are recorded in `DECISIONS.md`
-- [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — execution deadline
+- [GitHub milestone #11](https://github.com/formehq/forme/milestone/11) — MVP progress tracking
 - [GitHub epic #47](https://github.com/formehq/forme/issues/47) — complete P0 and P1 issue map

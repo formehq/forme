@@ -2,28 +2,32 @@
 
 Forme explores a controllable digital counterpart that extends an entity across **Continuity, Cognition, Agency, and Presence** without taking away the owner's authorship.
 
-The August 25 MVP demo is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection.
+The MVP is a **Living Project Twin** for one real project. It must remember where the project is, notice what it is becoming, act once within an explicit and reversible trust boundary, and produce one controlled collaborator projection. August 25 is a Progress / Vision Sharing checkpoint for this work, not the deadline that decides whether the MVP is complete.
 
 ## Current state
 
 This repository is an owner-controlled rebuild started on 2026-07-17.
 
-- MVP complete and repeatable: **2026-08-24**
-- Demo Day: **2026-08-25 (Tuesday)**
+- Completion: **gate-driven; Technical Review plus Owner Experience Acceptance,
+  with no date-based substitute**
+- Progress / Vision Sharing: **2026-08-25 (Tuesday)** — share the truthful state
+  reached by then; a complete or repeatable MVP is not required for the sharing
 - Current gate: **R4 Controlled Presence is Building on the real product
   sequence, not on Host Binding.** R1–R3 are Owner-accepted. #66 completed one
   real-Twin, local-only Projection review and Owner acceptance; PR #72 is
   integrated into the R4 integration branch. #67 has an offline Technical
   Review Green on Draft PR #73 for Room-bound reapproval, deterministic public
-  Room/knock rehearsal, restart recovery, and the richer visitor surface. It
-  has not created or mutated a production Room, deployed, published, admitted a
-  Projection, handled real Guest data, or run a real public knock. R4 is not
-  Owner-accepted or Done.
+  Room/knock rehearsal, restart recovery, and the richer visitor surface.
+  Draft PR #75 adds the public-only production-boundary foundation, but no
+  durable production application/store or real adapter. #67 has not created or
+  mutated a production Room, deployed, published, admitted a Projection,
+  handled real Guest data, or run a real public knock. R4 is not Owner-accepted
+  or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
-  R4 integration branch is at PR #72 merge commit `87e5979`, and current #67
-  work is commit `eabfe82` on Draft PR #73. The main integration Draft PR #65
-  currently has one Red Linux CI check, while PR #73 is Green; this mismatch
-  must be resolved before any merge to `main`.
+  current Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`, and PR #75
+  at `09401a0`. All three are CLEAN / CI Green and remain unmerged. PR #74 is
+  merged and changed only the deterministic Linux inode-reuse test fixture; it
+  did not change product behavior or #67 authority.
 - Host truth: Host Binding attempts 1 and 2 are consumed Yellow history. Attempt
   2 stopped `YELLOW_NO_RETRY / HOST_BINDING_INCOMPLETE_YELLOW` before any Docker
   CLI, local Docker socket, or macOS inspector start (`0 / 0 / 0`), produced no
@@ -36,7 +40,7 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
 
-Planning lives in milestone [`MVP Rebuild`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
+Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
 The previous implementation remains available at [`archive/v0-prototype-2026-07-17`](https://github.com/formehq/forme/tree/archive/v0-prototype-2026-07-17) and tag [`v0-prototype-final-2026-07-17`](https://github.com/formehq/forme/tree/v0-prototype-final-2026-07-17). It is a reference and parts library, not the default architecture.
 
@@ -44,7 +48,8 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 
 1. [`docs/PRODUCT.md`](./docs/PRODUCT.md) — highest vision, MVP vision, and scope
 2. [`docs/CONTROL.md`](./docs/CONTROL.md) — current state, owner gates, and definition of done
-3. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — current #66–#71 sequence, dates, and cut rules
+3. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — current #66–#71 sequence,
+   dependency order, and scope-protection rules
 4. [`docs/DECISIONS.md`](./docs/DECISIONS.md) — confirmed decisions and latest state receipts
 5. [`docs/NATIVE-HARNESS-ARCHITECTURE.md`](./docs/NATIVE-HARNESS-ARCHITECTURE.md)
    — the approved Harness/Forme carrier and authority-boundary contract
@@ -224,19 +229,23 @@ remain consumed Yellow history. Attempt 2 used frozen implementation `J`
 `7ae4a24`, stopped before any Host inspector start, produced no capsule/public
 receipt, and cleaned Green. It did not open Retry or Provider authority.
 
-The active product path is now #66–#70. #66 completed local Projection Owner
+The active product path is #66–#70. #66 completed local Projection Owner
 acceptance at review hash
 `sha256:45414f18e70b0c5e7f3a2f6980b1596835952663dfea2d25d87605b8283d1480`
 and PR #72 was integrated into the R4 branch. That exact phase-specific review
 is intentionally not reusable as publication authority. #67 is offline
-Technical Review Green on Draft PR #73; a publication-stable successor Owner
-Frame, a new Room-bound exact publication approval, production Public Core /
-Gate C activation, and one real Guest knock still remain. Host Setup/Doctor #71
-belongs before the later Fresh local Codex/provider slice, not before #67's
-product meaning review. Provider/model calls, real Guest-data handling,
-external email, production schema migration, deployment, spend, production
-action, secrets, and public traffic remain unauthorized unless a later exact
-gate explicitly grants them.
+Technical Review Green on Draft PR #73 at `5e93196`; Draft PR #75 at `09401a0`
+adds only the public-only production boundary foundation. The exact
+[`Durable Public Core Construction Packet`](./docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
+is now an approval candidate; independent audit, exact hash and Owner approval
+are the next gate before implementation. A hash-pinned Gate C decision,
+publication-stable successor approval and one real Guest knock follow later.
+Host Setup/Doctor #71 belongs before the later Fresh local
+Codex/provider slice, not before #67's product meaning review. Provider/model
+calls, real Guest-data handling, external email, production schema migration,
+deployment, spend, production action, secrets, and public traffic remain
+unauthorized unless a later exact gate explicitly grants them. August 25 does
+not waive any of these gates or trigger a further cut to #67–#70.
 
 ## Forme R3 managed action
 

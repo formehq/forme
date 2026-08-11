@@ -1,36 +1,43 @@
 # MVP rebuild roadmap
 
 - Updated: 2026-08-10
-- MVP complete and repeatable: 2026-08-24
-- Demo Day: 2026-08-25 (Tuesday)
-- Scope model: P0 committed, P1 conditional, P2 post-demo
+- Completion: gate-driven through Technical Review and Owner Experience
+  Acceptance; there is no calendar-date substitute for Done
+- Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
+  reached by then; complete/repeatable MVP delivery is not required that day
+- Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
 - Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
-  Technical Review Green on Draft PR #73 and remains In Progress until one
-  real Public Room / bounded Guest knock passes Owner Experience Acceptance.
-  #68 Fresh local Codex candidate, #69 exact Response delivery, #70 bounded
-  continuation and #71 Setup/Doctor remain open. Host Binding attempts 1 and 2
-  are consumed Yellow history; attempt 2 stopped before all Host inspectors at
-  `0 / 0 / 0`, produced no capsule/receipt and cleaned Green. It is not #67's
-  critical path. Retry Execution and First Provider-Call remain
-  `NOT_REQUESTED`.
+  Technical Review Green on Draft PR #73, and Draft PR #75 adds the public-only
+  production-boundary foundation. #67 remains In Progress until the narrow
+  durable Public Core, later activation and one real Public Room / bounded
+  Guest knock pass their gates and Owner Experience Acceptance. #68 Fresh local
+  Codex candidate, #69 exact Response delivery, #70 bounded continuation and
+  #71 Setup/Doctor remain open. Host Binding attempts 1 and 2 are consumed
+  Yellow history; attempt 2 stopped before all Host inspectors at `0 / 0 / 0`,
+  produced no capsule/receipt and cleaned Green. It is not #67's critical path.
+  Retry Execution and First Provider-Call remain `NOT_REQUESTED`.
 - Production truth: Public Core is repository/offline proof only. No production
   PostgreSQL migration, Gate C deployment/provisioning, production Room
   mutation, public publication/admission, real Guest data, Provider call,
   external email, production secret, public traffic or spend has occurred.
   The accepted #66 phase-specific review `sha256:45414f18…1480` is not
-  publishable; #67 first needs publication-stable Owner wording and a new exact
-  Room-bound publication approval.
-- Active Demo-critical execution claim: the August 25 walking slice proves one
-  public `24h / 1 Interaction` continuation and a negative Private-Room boundary.
-  The positive Private Room/Grant path, the `3d/2`, `7d/3`, and `7d/10` presets,
-  email, Agent Guest and other Full surfaces remain the approved post-demo
-  architecture target. Demo-critical Green must not be called Full Green.
+  publishable. The walking-slice-specific Durable Public Core Construction
+  Packet is now an approval candidate; implementation still requires its exact
+  hash/audit/Owner gate. Activation later requires publication-stable Owner
+  wording and a new exact Room-bound publication approval.
+- Active R4 execution claim: the current #67–#70 walking slice proves one
+  public `24h / 1 Interaction` continuation and a negative Private-Room
+  boundary. It will not be cut merely to fit the August 25 sharing. The
+  positive Private Room/Grant path, the `3d/2`, `7d/3`, and `7d/10` presets,
+  email, Agent Guest and other Full surfaces remain outside the current R4/R5
+  scope. Demo-critical Green must not be called Full Green.
 - Integration truth: R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 was
-  merged only into `codex/r4-gate-a-build` at `87e5979`; #67 is `eabfe82` on
-  Draft PR #73. Integration Draft PR #65 currently has one Red Linux CI check
-  while PR #73 is Green.
+  merged into the stacked R4 line. Draft PR #65 is at `cbadd8a`, Draft PR #73
+  at `5e93196`, and Draft PR #75 at `09401a0`; all three are CLEAN / CI Green
+  and unmerged. PR #74 is merged and changes only the deterministic Linux
+  inode-reuse test fixture, not product behavior or #67 authority.
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
 ## Gates
@@ -41,8 +48,8 @@
 | R1 — Continuity | Jul 21–25 | connect one project, preserve bounded evidence and durable state, reconstruct a useful view | real restart demo accepted by owner |
 | R2 — Cognition | Jul 26–31 | one multi-timepoint Reflection with uncertainty, correction, and invalidation | owner judges it more valuable than a summary |
 | R3 — Bounded Agency | Aug 1–4 | one corrected-revision proposal, approval, typed effect, receipt, verification, rollback | real artifact changes and rolls back safely |
-| R4 — Controlled Presence | Aug 5–21 | Demo-critical execution: one curated Third Place with one public Forme Project Room, one public knock, one reviewed Response, one public 24h/1 continuation, a negative Private-Room boundary, and one minimum Native Workbench → Forme call. The complete Private/notification/multi-preset target below remains post-demo | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → exact Response → 24h/1 continuation passes Owner acceptance and is labeled Demo-critical rather than Full Green |
-| R5 — Demo hardening | Aug 22–24 | clean install/run, privacy sweep, failure rehearsal, three-minute story | release candidate repeats reliably; no new features |
+| R4 — Controlled Presence | Current · dependency-driven | Demo-critical execution: one curated Third Place with one public Forme Project Room, one public knock, one reviewed Response, one public 24h/1 continuation, a negative Private-Room boundary, and one minimum Native Workbench → Forme call. The complete Private/notification/multi-preset target below remains outside the current R4/R5 scope | a normal Codex session retrieves durable Twin orientation/body-free typed status; one separate fresh/non-resumed response session dynamically searches only a sanitized read-only snapshot of current eligible Forme files plus typed body/path-free Twin orientation and returns an Owner-approved draft; excluded-root, secret, write, network, connector, and cross-Room canaries stay inaccessible; public request → local review → exact Response → 24h/1 continuation passes Owner acceptance and is labeled Demo-critical rather than Full Green |
+| R5 — Hardening | After R4 Owner Experience Acceptance | clean install/run, privacy sweep, failure rehearsal, and repeatable story | release candidate repeats reliably; no new features |
 
 R3 is Done and Owner-accepted for the MVP. The R4 Social Presence product
 target, T1/T2, NH1/NH2 and exact T3/T4/T5 contracts remain Owner-approved.
@@ -54,7 +61,7 @@ Review Green, and the complete real encounter remains unproven. #71 is a
 time-boxed local prerequisite for the later Fresh Codex slice, not a replacement
 for the Controlled Presence experience. R5 has not started.
 
-## R4 owner-approved product target — Gate A Technical Review complete
+## R4 owner-approved product target — current #67–#70 execution path
 
 The approved R4 target is one publicly viewable but curator-admitted Forme
 Third Place containing the Forme Project Room. A Manual Guest can browse and
@@ -131,7 +138,9 @@ fixed at `sha256:e417836b…adfff5`, and Owner-approved on 2026-08-03. It grants
 only Gate A repository work. Exact runtime/schema/migration validation and
 production deployment remain separate later gates.
 
-The cut order is:
+For the frozen Full architecture target only, if the Owner later opens a
+separate scope-change decision, the protection order remains. This is not the
+current execution scope and does not restore its positive Private path:
 
 1. preserve the deterministic versioned Projection Capsule and revocation/freshness contract;
 2. preserve one real public Room inside the curated Third Place, one public
@@ -147,22 +156,23 @@ The cut order is:
 Owner-attributed content. It does not mean cutting routine agency inside the
 approved Room Operator envelope.
 
-## Cut rules
+## Current scope and scheduling rules
 
-- **Jul 25:** if R1 is not owner-accepted, all P1 work pauses.
-- **Jul 31:** if R2 is not owner-accepted, no optional feature starts.
-- **Aug 4:** if R3 is incomplete, reduce the action to one Forme-owned artifact; do not broaden effectors.
 - **Now:** all P1 work remains out; one active R4 product slice plus at most one
   time-boxed enabler.
-- **Aug 20:** the Public Core, Fresh candidate and exact Response path through
-  #69 must be stable; cut optional email, visual flourish and implementation
-  depth before weakening the chain or a control boundary.
-- **Aug 21:** #70 proves the one public 24h/1 continuation and negative Private
-  boundary, completing the Demo-critical R4 chain or triggering the declared
-  fallback instead of hidden scope expansion.
-- **Aug 22:** R5 and hard feature freeze begin; only blockers, privacy,
-  reliability and rehearsal remain.
-- **Aug 24:** release candidate only and repeatable-ready.
+- **No date-driven cut:** preserve the complete current #67 → #68 → #69 → #70
+  causal slice. August 25 does not authorize dropping a link or weakening a
+  control boundary.
+- **No scope restoration by implication:** positive Private Room/Grant,
+  optional email, Agent Guest, additional continuation presets and other Full
+  surfaces remain outside the current R4/R5 execution scope unless the Owner
+  opens a separate scope decision.
+- **R5 starts by dependency, not date:** begin hardening only after the real R4
+  chain reaches Owner Experience Acceptance; until then, tests remain
+  Technical Review evidence.
+- **August 25:** present an honest Progress / Vision Sharing at whatever gate
+  is actually complete. Do not relabel offline proof as real Presence or a
+  partial chain as Done.
 
 ## Dependency order
 
@@ -205,8 +215,11 @@ Native Harness role clarification
   → lean reattempt J + Activation Card [approved/activated ✓]
   → Host Binding attempt 2 [YELLOW_NO_RETRY · 0/0/0 · cleanup GREEN]
   → #66 local Projection [Owner accepted ✓ · PR #72 integrated]
-  → #67 offline Room/knock rehearsal [Technical Review ✓ · Draft PR #73]
-  → publication-stable successor + Room-bound exact approval [next]
+  → #67 offline Room/knock rehearsal [Technical Review ✓ · PR #73 `5e93196`]
+  → public-only boundary foundation [Technical Review ✓ · PR #75 `09401a0`]
+  → Durable Public Core Construction Packet [approval candidate · exact Owner gate next]
+  → walking-slice-specific durable Public Core application/store [not authorized]
+  → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
   → #68 Fresh candidate → #69 exact Response
   → #70 public 24h/1 continuation + negative Private boundary [open]
@@ -227,14 +240,18 @@ public receipt. They do not block #67's product meaning/review and do not grant
 Retry or Provider authority.
 
 The current walking slice starts from #66's accepted local content mechanism,
-but not from its phase-specific accepted bytes. #67 requires a publication-
-stable successor, a new exact Room-bound approval, then a separate Gate C
-envelope for production Public Core setup, deployment, publication, Curator
-admission and one real knock. #71 is sequenced before #68 only if the Fresh
-local Codex path still needs local Host Setup/Doctor. Real execution, Provider
-calls, production durable writes, public actions and spend remain separate
-later decisions. R4 cannot enter Owner Acceptance until the full public request
-→ local review → exact Response → bounded continuation story is experienced.
+but not from its phase-specific accepted bytes. A narrowly scoped Durable
+Public Core Construction Packet is prepared as an approval candidate; its
+exact hash, audit and separate Owner decision are next because implementation
+touches durable state/schema. Only after that construction is Green may a
+hash-pinned Gate C cover production setup, deployment, publication, Curator
+admission and one real knock; activation also requires a publication-stable
+successor and new exact Room-bound approval. #71 is sequenced before #68 only
+if the Fresh local Codex path still needs local Host Setup/Doctor. Real
+execution, Provider calls, production durable writes, public actions and spend
+remain separate later decisions. R4 cannot enter Owner Acceptance until the
+full public request → local review → exact Response → bounded continuation
+story is experienced. August 25 changes none of these gates.
 
 ## Progress rule
 

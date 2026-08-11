@@ -8,12 +8,21 @@
   Packet v0.2 is reconciled and independently audited at
   `sha256:e417836b…adfff5` and was Owner-approved on 2026-08-03; the five-part
   Gate B Demo-critical Core correction is Owner-approved, with an explicit
-  transient-candidate exception and separate zero-call diagnostic. Physical
-  construction is complete, but Host Binding attempts 1 and 2 are consumed
-  Yellow and produced no valid capsule; Retry/provider/production authority is
-  closed. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
+  transient-candidate exception and separate zero-call diagnostic. The Gate B
+  host-adapter construction is complete as historical fake-validated evidence,
+  but Host Binding attempts 1 and 2 are consumed Yellow and produced no valid
+  capsule; Retry/provider/production authority is
+  closed. #67 is now offline Technical Review Green on Draft PR #73 at
+  `5e93196`, with a public-only boundary foundation on Draft PR #75 at
+  `09401a0`; those two and integration Draft PR #65 at `cbadd8a` are CLEAN / CI
+  Green and unmerged. PR #74 is merged as a deterministic Linux fixture-only
+  repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-10
+- Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
+  a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
+  cut merely to meet that date; previously excluded Full extras remain outside
+  the current R4/R5 scope.**
 - Active product gate: [GitHub #67](https://github.com/formehq/forme/issues/67)
 - Native runtime enabler: [GitHub #71](https://github.com/formehq/forme/issues/71)
 - Related review:
@@ -47,8 +56,11 @@ session authority 的影响。它们仍不是批准某个 Codex session 现在�
 notification-only email、四档 Owner-selected continuation、30-day
 Interaction / 7-day Response / 7-day isolated candidate ceilings，以及
 session-root cleanup、删除与 offline reconciliation 规则都已固定。随后
-Control Packet v0.2 已完成重写、独立审计、exact hash 与 Owner 批准；当前是
-只允许 repository-only synthetic/local 工作的 Gate A。
+Control Packet v0.2 已完成重写、独立审计、exact hash 与 Owner 批准；它最初
+授权的 Gate A repository-only 工作以及后续有边界的 Gate B/Host 尝试现在都
+属于历史证据。#67 Durable Public Core Construction Packet 已准备为 approval
+candidate；任何 schema implementation、production adapter、部署或真实访客作用
+仍需后续精确 Gate。
 
 ## Why this clarification exists
 
@@ -87,8 +99,8 @@ than pretending it had always been settled.
 
 The Owner approved the exact 2026-08-07 Correction Scope Decision Brief at
 `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
-It preserves the Full Native Harness architecture while narrowing the August
-physical claim:
+It preserves the Full Native Harness architecture while narrowing the active
+MVP physical claim:
 
 - the real Codex Retry first runs a separate zero-call diagnostic profile. A
   clean result proves only safe staging, initialize-only wire containment and
@@ -98,7 +110,8 @@ physical claim:
   transient candidate path. Forme intentionally persists zero candidate-body
   bytes; process exit, cancel, expiry, crash or restart discards it. Persistent
   candidate recovery, later/offline review, edit/replacement, Data Protection
-  Keychain/access group and production signing remain post-demo; and
+  Keychain/access group and production signing remain outside the current
+  R4/R5 scope as future Full-target work; and
 - the controlling Desktop Agent is a disclosed procedural boundary. The child
   must be kernel constrained, but no claim is made that the current Agent
   process itself is kernel-sandboxed.
@@ -209,7 +222,7 @@ the smallest useful part of each:
    event, schedule, threshold, or Room signal causes Forme to start or wake a
    suitable Harness run with an exact context and capability envelope.
 
-This is the long-term architecture menu, not a P0 parity list. August proves
+This is the long-term architecture menu, not a P0 parity list. The current MVP proves
 only one minimum Codex-facing interactive path needed by the walking slice; it
 does not require every adapter surface, the triggered direction, or a live
 OpenCode path.
@@ -380,7 +393,7 @@ Agents use shared CLI/API contracts.
 The Owner approved option 1 on 2026-07-29. This chooses the primary local
 carrier. It does not itself grant files, shell, tools, provider visibility, or
 implementation authority. CLI/API/MCP/Skill/Plugin/adapter are long-term
-integration surface families, not a P0 parity requirement: August needs only
+integration surface families, not a P0 parity requirement: the current MVP needs only
 one minimum Codex-facing proof, while a live OpenCode path remains P1.
 
 ## NH2 — What is ordinary Workspace work versus a Forme-authoritative effect? — approved
@@ -419,7 +432,7 @@ guarantees?
 
 ### Recommended effect
 
-Use option 1 for the August MVP. It preserves the existing R3 guarantee for
+Use option 1 for the current MVP. It preserves the existing R3 guarantee for
 actions that Forme claims as its own while allowing the Owner to use a mature
 Harness normally. The later Harness-native physical-execution path inside
 option 1 still requires its own implementation/evaluation gate after native

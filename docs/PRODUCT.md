@@ -3,13 +3,18 @@
 - Status: owner-approved product frame and R4 P/T1–T5/NH1/NH2 contracts;
   reconciled Technical Control Packet v0.2 and Gate A repository mechanisms are
   complete. #66 local Projection review is Owner-accepted; #67 is offline
-  Technical Review Green and still lacks production Public Core activation and
-  one real Guest knock. Both Host Binding attempts are consumed Yellow history,
-  not the Controlled Presence milestone. R4 remains Building, is not on `main`,
-  and is not Owner-accepted or Done
+  Technical Review Green on Draft PR #73 at `5e93196`, with the public-only
+  production-boundary foundation on Draft PR #75 at `09401a0`; it still lacks
+  a durable Public Core application/store, production activation and one real
+  Guest knock. Draft PR #65 at `cbadd8a`, #73 and #75 are CLEAN / CI Green and
+  unmerged; PR #74 is merged. Both Host Binding attempts are consumed Yellow
+  history, not the Controlled Presence milestone. R4 remains Building, is not
+  on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-10
-- MVP complete: 2026-08-24
-- Demo Day: 2026-08-25 (Tuesday)
+- Completion: gate-driven through Technical Review and Owner Experience
+  Acceptance; no calendar date makes the MVP Done
+- Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful
+  state reached by then rather than requiring a complete/repeatable MVP
 
 ## Highest vision
 
@@ -23,7 +28,7 @@ Forme extends an entity across four dimensions:
 
 Its deepest claim is not an AI clone. It is that human agency need not exist only while a person remembers, focuses, and is online.
 
-Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the August MVP scope.
+Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the current MVP scope.
 
 ### Harness-native product shape
 
@@ -33,7 +38,7 @@ MCP, plugins, subagents, and runtime interaction. Forme contributes the durable
 semantic spine that survives the workbench: Twin identity and state, evidence,
 corrections, authority, receipts, projection, and continuity.
 
-The August MVP narrowed entity count, scope, and effect depth. R2/R3
+The current MVP narrows entity count, scope, and effect depth. R2/R3
 additionally used a packet-only, no-tools run to prove exact visibility of
 Forme-selected content and semantic/effect admission. That run remains a valid
 **Managed Privacy Run**, not the permanent definition of every Forme Agent.
@@ -85,14 +90,14 @@ On 2026-08-07 the Owner approved all five recommendations in
 [`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
 at
 `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
-The active August physical proof is now one truthful public Hero Encounter:
+The active MVP physical proof is one truthful public Hero Encounter:
 real Demo-critical PostgreSQL semantics, a separate real-Codex zero-call
 diagnostic, and—only after later grants—a transient one-shot candidate review
 path. Unimplemented Full operations are absent from the active API/Web/CLI,
 not exposed as `503` placeholders.
 
 This is an explicit MVP proof/claim amendment. The original Full target remains
-the post-demo architecture target, but Core success does not prove its full
+a future architecture target outside the current R4/R5 scope, but Core success does not prove its full
 45-operation surface, Private Room, notification, Agent derivative, Direct
 Invite, persistent candidate or production identity/deployment path. In Core,
 an unpublished candidate intentionally persists zero bytes and cannot survive
@@ -178,7 +183,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - first additional curator-invited Third Place resident after the required
   public-resident P0 is green.
 
-### P2 — after Demo Day
+### P2 — outside the current R4/R5 scope
 
 - generalized mailbox and longer-lived Relationship Capsules;
 - Agent-to-Agent or Twin-to-Twin interaction beyond the bounded R4 exchange;
@@ -188,7 +193,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — Packet approved, Gate A next
+## Owner-approved R4 product target — #67 Durable Public Core Packet approval next
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -275,7 +280,8 @@ repository-only work. Exact machine schemas/runtime/migrations remain a
 separately hashed Gate B manifest; production deployment, real external
 writes, and spend remain a separate Production Deployment & Provisioning
 Grant.
-The versioned static projection remains the schedule fallback floor.
+The versioned static projection remains the honest sharing fallback floor if
+the real encounter has not yet crossed its later gates.
 
 The agency-first recalibration and approved T2 contract are recorded
 in [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).
