@@ -1,6 +1,6 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-10
+- Updated: 2026-08-11
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; there is no calendar-date substitute for Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
@@ -10,8 +10,9 @@
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
   Technical Review Green on Draft PR #73, and Draft PR #75 adds the public-only
-  production-boundary foundation. #67 remains In Progress until the narrow
-  durable Public Core, later activation and one real Public Room / bounded
+  production-boundary foundation. The narrow durable Public Core Construction
+  is Technical Review Green at Stage-A `bcd4259`; #67 remains In Progress until
+  later activation and one real Public Room / bounded
   Guest knock pass their gates and Owner Experience Acceptance. #68 Fresh local
   Codex candidate, #69 exact Response delivery, #70 bounded continuation and
   #71 Setup/Doctor remain open. Host Binding attempts 1 and 2 are consumed
@@ -23,9 +24,11 @@
   mutation, public publication/admission, real Guest data, Provider call,
   external email, production secret, public traffic or spend has occurred.
   The accepted #66 phase-specific review `sha256:45414f18…1480` is not
-  publishable. The walking-slice-specific Durable Public Core Construction
-  Packet is now an approval candidate; implementation still requires its exact
-  hash/audit/Owner gate. Activation later requires publication-stable Owner
+  publishable. The Owner approved the exact walking-slice-specific Durable
+  Public Core Construction Packet/Review on 2026-08-10 and Addendum A on
+  2026-08-11. Repository-only Construction is Technical Review Green, with the
+  application and durable persistence facts true and the other four readiness
+  facts false. Activation later requires publication-stable Owner
   wording and a new exact Room-bound publication approval.
 - Active R4 execution claim: the current #67–#70 walking slice proves one
   public `24h / 1 Interaction` continuation and a negative Private-Room
@@ -35,8 +38,9 @@
   scope. Demo-critical Green must not be called Full Green.
 - Integration truth: R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 was
   merged into the stacked R4 line. Draft PR #65 is at `cbadd8a`, Draft PR #73
-  at `5e93196`, and Draft PR #75 at `09401a0`; all three are CLEAN / CI Green
-  and unmerged. PR #74 is merged and changes only the deterministic Linux
+  at `5e93196`, and Draft PR #75 at `09401a0`. Construction Stage A is
+  `bcd4259`; Draft PR #76 remains unmerged and its current remote/CI state is
+  recorded in PR metadata. PR #74 is merged and changes only the deterministic Linux
   inode-reuse test fixture, not product behavior or #67 authority.
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
@@ -217,8 +221,8 @@ Native Harness role clarification
   → #66 local Projection [Owner accepted ✓ · PR #72 integrated]
   → #67 offline Room/knock rehearsal [Technical Review ✓ · PR #73 `5e93196`]
   → public-only boundary foundation [Technical Review ✓ · PR #75 `09401a0`]
-  → Durable Public Core Construction Packet [approval candidate · exact Owner gate next]
-  → walking-slice-specific durable Public Core application/store [not authorized]
+  → Durable Public Core Construction Packet [Owner approved ✓ · PR #76]
+  → walking-slice-specific durable Public Core application/store [Technical Review ✓ · Stage A `bcd4259`]
   → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
   → #68 Fresh candidate → #69 exact Response
@@ -241,10 +245,10 @@ Retry or Provider authority.
 
 The current walking slice starts from #66's accepted local content mechanism,
 but not from its phase-specific accepted bytes. A narrowly scoped Durable
-Public Core Construction Packet is prepared as an approval candidate; its
-exact hash, audit and separate Owner decision are next because implementation
-touches durable state/schema. Only after that construction is Green may a
-hash-pinned Gate C cover production setup, deployment, publication, Curator
+Public Core Construction Packet and Review are exactly Owner-approved;
+Addendum A is approved, and the repository-only durable application/store is
+Technical Review Green at Stage-A `bcd4259`. The hash-pinned Gate C Card remains
+non-approvable until a production-wiring successor can cover setup, deployment, publication, Curator
 admission and one real knock; activation also requires a publication-stable
 successor and new exact Room-bound approval. #71 is sequenced before #68 only
 if the Fresh local Codex path still needs local Host Setup/Doctor. Real

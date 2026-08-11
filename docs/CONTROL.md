@@ -1,20 +1,24 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-10
+- Updated: 2026-08-11
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and PR #72 is integrated into the R4 branch. #67 is
   offline Technical Review Green on Draft PR #73, with the public-only boundary
-  foundation on Draft PR #75. The Durable Public Core Construction Packet is
-  now an approval candidate; its exact hash, independent audit and Owner
-  approval are the next gate. Publication-stable successor approval, Gate C
+  foundation on Draft PR #75. The Owner approved the exact Durable Public Core
+  Construction Packet and Review on 2026-08-10 and Addendum A on 2026-08-11.
+  Repository-only Construction is Technical Review Green at Stage-A
+  `bcd4259`; application and durable persistence are constructed, while vault,
+  transport, traffic and Gate C readiness remain false. A publication-stable
+  successor approval, Gate C
   and one real Public Room / bounded Guest knock follow separately. Host
   Binding is historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
   repository mechanisms are closed/implemented. #66 proved current Twin →
   bounded local Projection → exact local Owner approval → restart recovery.
-  #67 has proved the Room-bound handoff, offline Public Core rehearsal and rich
-  visitor surface only. No production PostgreSQL migration, Gate C deployment,
+  #67 has proved the Room-bound handoff, offline Public Core rehearsal, rich
+  visitor surface and repository-only durable application/persistence
+  construction. No production PostgreSQL migration, Gate C deployment,
   Room mutation, publication, Curator admission, real Guest data, public
   traffic, Fresh Provider session, or Response delivery has run. R4 is not
   Owner-accepted or Done.**
@@ -27,17 +31,19 @@
   bounded Setup/Doctor before #68, but it cannot make R4 Done.**
 - Branch status: **R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 merged
   into the stacked R4 line. Integration Draft PR #65 is at `cbadd8a`, Draft PR
-  #73 at `5e93196`, and Draft PR #75 at `09401a0`; all three are CLEAN / CI
-  Green and remain unmerged. PR #74 is merged and changed only the deterministic
+  #73 at `5e93196`, and Draft PR #75 at `09401a0`. Construction Stage A is
+  `bcd4259`; Draft PR #76 remains unmerged and its remote/CI readback belongs in
+  PR metadata. PR #74 is merged and changed only the deterministic
   Linux inode-reuse fixture.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **August 25 is a Progress / Vision Sharing checkpoint, not a
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **freeze, audit and request exact Owner approval for the
-  [`Durable Public Core Construction Packet`](./R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
-  before any durable state/schema implementation.** The accepted #66 review
+- Next action: **prepare and independently review a separately authorized
+  production-wiring successor for the hash-pinned, non-approvable
+  [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md); do not activate
+  it.** Repository-only Construction has stopped at Technical Review. The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
@@ -282,10 +288,9 @@ Current truth:
   publication-stable successor plus a new exact publication approval;
 - on 2026-08-10 #67 reached offline Technical Review on Draft PR #73. Its
   initial `eabfe82` evidence remains valid and its current head is `5e93196`.
-  Draft PR #75 at `09401a0` adds the public-only production-boundary foundation
-  without a durable application/store or real adapter. The full current check
-  is Green at 45/45 + 339/339 + 145/145, and PR #65 at `cbadd8a`, #73 and #75
-  are all CLEAN / CI Green and unmerged. PR #74 is merged as a fixture-only
+  Draft PR #75 at `09401a0` adds the public-only production-boundary foundation.
+  Stage-A `bcd4259` now adds the audited repository-only application and durable
+  persistence adapters, with vault/transport/traffic/Gate C still false. PR #74 is merged as a fixture-only
   repair. The implementation proves a local Room-bound
   reapproval, immutable receipt/recovery, offline public Projection → independent
   curation → one 24-hour/one-use knock → private durable Interaction → local
@@ -914,9 +919,9 @@ Implementation is authorized only inside these decisions. Any arbitrary path or 
   was Owner-approved on 2026-08-03; Gate A is implemented and remains Green
   historical evidence. Later bounded Gate B/Core/Host construction and attempts
   are also historical evidence. R4 remains outside Owner Acceptance/Done; the
-  current gate is exact approval of the prepared #67 Durable Public Core
-  Construction Packet, before any schema implementation or production
-  activation authority**
+  current gate is the post-Construction #67 production-wiring/Gate C proposal;
+  repository-only Construction is Technical Review Green, and production
+  activation authority remains absent**
 - Honest sharing fallback floor: a collaborator can understand what the project is,
   where it is going, and what remains with the owner through a current static
   projection that exposes no private source by default.

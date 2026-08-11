@@ -18,14 +18,20 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   integrated into the R4 integration branch. #67 has an offline Technical
   Review Green on Draft PR #73 for Room-bound reapproval, deterministic public
   Room/knock rehearsal, restart recovery, and the richer visitor surface.
-  Draft PR #75 adds the public-only production-boundary foundation, but no
-  durable production application/store or real adapter. #67 has not created or
+  Draft PR #75 adds the public-only production-boundary foundation. The Owner
+  approved Draft PR #76's exact Durable Public Core Construction Packet on
+  2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is now
+  Technical Review Green at Stage-A `bcd4259`: the application and durable
+  persistence adapters are constructed, while vault, transport, traffic and
+  Gate C readiness remain false. #67 has not created or
   mutated a production Room, deployed, published, admitted a Projection,
   handled real Guest data, or run a real public knock. R4 is not Owner-accepted
   or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
-  current Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`, and PR #75
-  at `09401a0`. All three are CLEAN / CI Green and remain unmerged. PR #74 is
+  current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
+  and PR #75 at `09401a0`. Construction Stage A is `bcd4259`; Draft PR #76
+  remains the unmerged proposal surface, with its current remote head and CI
+  recorded in PR metadata rather than self-bound here. PR #74 is
   merged and changed only the deterministic Linux inode-reuse test fixture; it
   did not change product behavior or #67 authority.
 - Host truth: Host Binding attempts 1 and 2 are consumed Yellow history. Attempt
@@ -237,8 +243,10 @@ is intentionally not reusable as publication authority. #67 is offline
 Technical Review Green on Draft PR #73 at `5e93196`; Draft PR #75 at `09401a0`
 adds only the public-only production boundary foundation. The exact
 [`Durable Public Core Construction Packet`](./docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
-is now an approval candidate; independent audit, exact hash and Owner approval
-are the next gate before implementation. A hash-pinned Gate C decision,
+and its Owner Review were exactly approved on 2026-08-10; Addendum A was
+approved on 2026-08-11. Repository-only Construction is Technical Review Green
+at Stage-A `bcd4259`, with exact machine evidence and a non-approvable Gate C
+Card. A separately approved Gate C decision,
 publication-stable successor approval and one real Guest knock follow later.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model

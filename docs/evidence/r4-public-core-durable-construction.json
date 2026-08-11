@@ -1,0 +1,221 @@
+{
+  "schemaVersion": "r4_public_core_durable_construction_evidence.v1",
+  "status": "TECHNICAL_REVIEW_GREEN_GATE_C_NOT_REQUESTED",
+  "generatedAt": "2026-08-11T08:04:04Z",
+  "authority": {
+    "packetSha256": "sha256:f5d6c77c4ae21d57a8fe551ed49916ec8b06fc215ac018b7a71ead19c1c48a31",
+    "ownerReviewSha256": "sha256:8272df04a9374ca04be3f212cd0bc8b123d138953224c24a66d13d08912887ff",
+    "packetBaselineHead": "4841c32f07d3e6810cb023387cefa0562b85b777",
+    "packetBaselineTree": "abc24d75345637886f3252caf3d8eeec7c6ec6be",
+    "approvedWrapperHead": "d81e6fd3e1de9737d6c6dcf93fe642907654eec8",
+    "approvedWrapperTree": "4910018a05b5b9d91bc3b3b2463698300e156a2a",
+    "constructionAddendumA": {
+      "authorityId": "R4_67_DURABLE_PUBLIC_CORE_CONSTRUCTION_ADDENDUM_A_2026_08_11",
+      "status": "APPROVED",
+      "addedWorksetPaths": ["test/r4/public-core-config.test.ts"],
+      "indexedArtifactCount": 16,
+      "permittedTrueFacts": [
+        "productionApplicationAdapterConstructed",
+        "durablePersistenceAdapterConstructed"
+      ],
+      "requiredFalseFacts": [
+        "credentialVaultAdapterConstructed",
+        "transportAdapterConstructed",
+        "trafficReady",
+        "gateCReady"
+      ]
+    },
+    "constructionGrant": "APPROVED",
+    "gateCGrant": "NOT_REQUESTED",
+    "migrationExecutionGrant": "NOT_REQUESTED",
+    "publicationGrant": "NOT_REQUESTED",
+    "providerGrant": "NOT_REQUESTED"
+  },
+  "implementationBaseline": {
+    "head": "bcd4259130627067e1e7cf1974513801545cda35",
+    "tree": "7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31",
+    "branch": "codex/r4-durable-public-core-packet",
+    "packageLockSha256": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812"
+  },
+  "constructionBoundary": {
+    "productionApplicationAdapterConstructed": true,
+    "durablePersistenceAdapterConstructed": true,
+    "credentialVaultAdapterConstructed": false,
+    "transportAdapterConstructed": false,
+    "trafficReady": false,
+    "gateCReady": false
+  },
+  "surface": {
+    "policyId": "r4_public_room_knock_core.v1",
+    "readCount": 4,
+    "mutationCount": 16,
+    "allowedActions": [
+      "third_place.list",
+      "projection.read",
+      "public_encounter.issue",
+      "interaction.create",
+      "interaction.read",
+      "interaction.delete",
+      "room.pair.exchange",
+      "room.create",
+      "room.pair",
+      "room.binding.revoke",
+      "room.mode.set",
+      "projection.revoke",
+      "curation.admit",
+      "curation.unlist",
+      "room_operator.status",
+      "room_operator.sync",
+      "room_operator.pull",
+      "room_operator.ack",
+      "room_operator.projection.deliver",
+      "room_operator.local_purge.receipt"
+    ],
+    "unavailableCount": 25
+  },
+  "dataModel": {
+    "schemaName": "forme_r4_public_core",
+    "tableCount": 14,
+    "tables": [
+      "installation",
+      "rooms",
+      "projections",
+      "pairing_challenges",
+      "room_bindings",
+      "public_encounters",
+      "interactions",
+      "rate_events",
+      "room_events",
+      "mutation_receipts",
+      "event_acks",
+      "encryption_nonces",
+      "purge_jobs",
+      "retention_health"
+    ],
+    "migrationApplied": false
+  },
+  "faultEvidence": {
+    "mutationCount": 16,
+    "boundariesPerMutation": 6,
+    "boundaryCaseCount": 96,
+    "mandatoryCatalogCount": 13,
+    "mandatoryCatalogIds": [
+      "room_and_encounter_singleton_collisions",
+      "pair_revoke_exchange_replay_expiry_and_clearing",
+      "projection_delivery_successor_revoke_and_curation_races",
+      "encounter_terminal_races",
+      "interaction_single_encounter_and_terminal_races",
+      "delete_pull_loss_and_terminal_precedence",
+      "sync_append_and_retained_floor",
+      "ack_duplicate_and_wrong_hash",
+      "janitor_read_delete_and_revoke_races",
+      "crypto_nonce_tamper_unknown_key_and_aad",
+      "restart_reopen_and_committed_response_loss",
+      "wrong_authority_shape_and_expected_version",
+      "exact_rate_and_pool_boundaries"
+    ],
+    "allPassed": true
+  },
+  "validation": [
+    {
+      "laneId": "focused_public_core_deny_network",
+      "name": "focused public-core deny-network tests",
+      "status": "PASS",
+      "denyNetwork": true,
+      "commands": [
+        "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-config.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-races.test.ts test/r4/public-core-retention.test.ts"
+      ],
+      "countUnit": "commands",
+      "commandCount": 1,
+      "passedCommandCount": 1,
+      "failedCommandCount": 0,
+      "nodeTestResults": [
+        { "commandIndex": 0, "countUnit": "node_tests", "total": 218, "passed": 218, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 }
+      ]
+    },
+    {
+      "laneId": "typescript_checks",
+      "name": "TypeScript checks",
+      "status": "PASS",
+      "denyNetwork": false,
+      "commands": ["npm run typecheck"],
+      "countUnit": "commands",
+      "commandCount": 1,
+      "passedCommandCount": 1,
+      "failedCommandCount": 0,
+      "nodeTestResults": []
+    },
+    {
+      "laneId": "historical_r4_gate_b_regression",
+      "name": "historical R4 and Gate-B regression",
+      "status": "PASS",
+      "denyNetwork": true,
+      "commands": [
+        "npm run test:r4:offline",
+        "npm run test:r4:gate-b-core",
+        "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts"
+      ],
+      "countUnit": "commands",
+      "commandCount": 3,
+      "passedCommandCount": 3,
+      "failedCommandCount": 0,
+      "nodeTestResults": [
+        { "commandIndex": 0, "countUnit": "node_tests", "total": 550, "passed": 550, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 },
+        { "commandIndex": 1, "countUnit": "node_tests", "total": 145, "passed": 145, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 },
+        { "commandIndex": 2, "countUnit": "node_tests", "total": 45, "passed": 45, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 }
+      ]
+    },
+    {
+      "laneId": "static_boundary_and_docs_audit",
+      "name": "static SQL, no-server-AI, docs and unauthorized-path audits",
+      "status": "PASS",
+      "denyNetwork": false,
+      "commands": [
+        "npm --workspace @forme/room run check:no-ai",
+        "npm run r4:docs:audit",
+        "git diff --check",
+        "node --input-type=module -e 'import {readFileSync} from \"node:fs\";import Ajv2020 from \"ajv/dist/2020.js\";import addFormats from \"ajv-formats\";const s=JSON.parse(readFileSync(\"schemas/r4/public-core/construction-evidence.schema.json\",\"utf8\"));const e=JSON.parse(readFileSync(\"docs/evidence/r4-public-core-durable-construction.json\",\"utf8\"));const a=new Ajv2020({strict:true,strictSchema:true,allErrors:true,validateFormats:true});addFormats(a,{mode:\"full\"});const v=a.compile(s);if(!v(e))throw new Error(a.errorsText(v.errors));'",
+        "node --input-type=module -e 'import{readFileSync}from \"node:fs\";import{createHash}from \"node:crypto\";import{execFileSync}from \"node:child_process\";const H=b=>\"sha256:\"+createHash(\"sha256\").update(b).digest(\"hex\"),R=p=>readFileSync(p),J=p=>JSON.parse(R(p)),E=J(\"docs/evidence/r4-public-core-durable-construction.json\"),I=J(\"schemas/r4/public-core/artifact-index.json\"),P=I.artifacts.map(x=>x.path),S=[...P].sort((a,b)=>Buffer.compare(Buffer.from(a),Buffer.from(b))),X=[\"apps/room/src/public-core-application.ts\",\"apps/room/src/public-core-crypto.ts\",\"apps/room/src/public-core-policy.ts\",\"apps/room/src/public-core-postgres.ts\",\"apps/room/src/public-core-retention.ts\",\"apps/room/src/public-core-store.ts\",\"schemas/r4/public-core/construction-evidence.schema.json\",\"schemas/r4/public-core/rollback.sql\",\"schemas/r4/public-core/schema.sql\",\"schemas/r4/public-core/verify.sql\",\"test/r4/public-core-application.test.ts\",\"test/r4/public-core-config.test.ts\",\"test/r4/public-core-postgres.test.ts\",\"test/r4/public-core-privacy.test.ts\",\"test/r4/public-core-races.test.ts\",\"test/r4/public-core-retention.test.ts\"];if(I.fileCount!==16||JSON.stringify(P)!==JSON.stringify(S)||JSON.stringify(P)!==JSON.stringify(X))throw new Error(\"artifact_inventory\");const h=E.implementationBaseline.head,t=execFileSync(\"git\",[\"rev-parse\",`${h}^{tree}`],{encoding:\"utf8\"}).trim();if(t!==E.implementationBaseline.tree||h!==I.implementationBaseline.head||t!==I.implementationBaseline.tree||h!==E.independentAudit.implementationHead||t!==E.independentAudit.implementationTree)throw new Error(\"stage_a_binding\");const D=execFileSync(\"git\",[\"diff\",\"--name-only\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8\",h],{encoding:\"utf8\"}).trim().split(\"\\n\").filter(Boolean);if(JSON.stringify(D)!==JSON.stringify(P))throw new Error(\"stage_a_workset\");const Z=[];for(const a of I.artifacts){const b=execFileSync(\"git\",[\"show\",`${h}:${a.path}`]),d=H(b);if(a.sha256!==d)throw new Error(`artifact_hash:${a.path}`);Z.push(Buffer.concat([Buffer.from(a.path),Buffer.from([0]),Buffer.from(d.slice(7)),Buffer.from(\"\\n\")]));}if(I.aggregate.sha256!==H(Buffer.concat(Z)))throw new Error(\"artifact_aggregate\");const ih=H(R(\"schemas/r4/public-core/artifact-index.json\"));if(E.artifacts.artifactIndexSha256!==ih||E.independentAudit.artifactIndexSha256!==ih)throw new Error(\"index_binding\");for(const[k,p]of[[\"schemaSha256\",\"schemas/r4/public-core/schema.sql\"],[\"verifySha256\",\"schemas/r4/public-core/verify.sql\"],[\"rollbackSha256\",\"schemas/r4/public-core/rollback.sql\"]])if(E.artifacts[k]!==H(execFileSync(\"git\",[\"show\",`${h}:${p}`])))throw new Error(`sql_hash:${k}`);if(JSON.stringify(E.authority.constructionAddendumA)!==JSON.stringify(I.authority.constructionAddendumA))throw new Error(\"addendum_binding\");if(E.independentAudit.summaryText.endsWith(\"\\n\")||H(Buffer.from(E.independentAudit.summaryText))!==E.independentAudit.summarySha256)throw new Error(\"audit_summary\");if(H(execFileSync(\"git\",[\"show\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8:docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md\"]))!==E.authority.packetSha256||H(execFileSync(\"git\",[\"show\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8:docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-OWNER-REVIEW.md\"]))!==E.authority.ownerReviewSha256)throw new Error(\"authority_hash\");if(H(execFileSync(\"git\",[\"show\",`${h}:package-lock.json`]))!==E.implementationBaseline.packageLockSha256)throw new Error(\"package_lock\");const m=Buffer.from([\"PENDING\",\"FINAL\",\"FREEZE\"].join(\"_\")+\"_\");for(const p of[\"schemas/r4/public-core/artifact-index.json\",\"docs/evidence/r4-public-core-durable-construction.json\",\"docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-REPORT.md\",\"docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md\"])if(R(p).includes(m))throw new Error(`pending_marker:${p}`);'"
+      ],
+      "countUnit": "commands",
+      "commandCount": 5,
+      "passedCommandCount": 5,
+      "failedCommandCount": 0,
+      "nodeTestResults": []
+    }
+  ],
+  "effectAudit": {
+    "databaseProcesses": 0,
+    "databaseMutations": 0,
+    "runtimeNetworkCalls": 0,
+    "roomMutations": 0,
+    "publicationCalls": 0,
+    "realGuestBytes": 0,
+    "providerCalls": 0,
+    "externalMessages": 0,
+    "secretInstalls": 0,
+    "deployments": 0,
+    "spendUsd": 0,
+    "merges": 0,
+    "sourceControlProposalBranches": 1,
+    "draftProposalPrs": 1
+  },
+  "artifacts": {
+    "artifactIndexSha256": "sha256:b655e87a4ee809e99d86887e95a94642d1430b0f1d2bc6f6c16751808bea4ef1",
+    "schemaSha256": "sha256:869c6c3e0853a8de20a3c4973601877fca854a911dec68b2546da9ff420b5db2",
+    "verifySha256": "sha256:9c19d3cd55945421176d9c24e268734e4c7a146e004eb3c0cba32ac65ee517e4",
+    "rollbackSha256": "sha256:526f8dcb99aa330b2b2666a9e0df3c959caa05ab012fdf33afcdca277d2acd2e"
+  },
+  "independentAudit": {
+    "scope": "STAGE_A_IMPLEMENTATION_COMMIT_AND_FINALIZED_ARTIFACT_INDEX_ONLY",
+    "implementationHead": "bcd4259130627067e1e7cf1974513801545cda35",
+    "implementationTree": "7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31",
+    "artifactIndexSha256": "sha256:b655e87a4ee809e99d86887e95a94642d1430b0f1d2bc6f6c16751808bea4ef1",
+    "blockerCount": 0,
+    "importantCount": 0,
+    "status": "PASS",
+    "summaryEncoding": "UTF-8 exact text without trailing LF",
+    "summaryText": "Independent Stage-A audit PASS: 0 blockers, 0 important findings. Commit bcd4259130627067e1e7cf1974513801545cda35 / tree 7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31 is the direct child of frozen wrapper d81e6fd3e1de9737d6c6dcf93fe642907654eec8 and changes exactly the 16 authorized indexed paths. All 16 ordered Git-blob SHA-256 values and aggregate sha256:c825306a5e20e910e6fdd811d1d3599b59e317baaa18b46c98ba13b8c0c3e44f match artifact index sha256:b655e87a4ee809e99d86887e95a94642d1430b0f1d2bc6f6c16751808bea4ef1. Addendum A is bound exactly: production application and durable persistence constructed=true; credential vault, transport, trafficReady and gateCReady=false; action-aware public_single/closed guards pass. The evidence schema compiles under strict Ajv 2020 and fixes exact validation commands, command counts and Node-test counts. Its sole amend delta makes the pending-marker check construct the marker at runtime, so the schema no longer self-matches. Focused deny-network tests pass 218/218, TypeScript checks pass, and exact regression lanes pass 550/550, 145/145 and 45/45. Static review found no runtime/route/driver activation or forbidden effect in this audited scope.",
+    "summarySha256": "sha256:64ad203d66be7f815280741be8a094505a5df6b3f1a98d38e2f199646cb35cc0"
+  }
+}

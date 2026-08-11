@@ -977,3 +977,78 @@ email, Agent Guest, `3d/2`, `7d/3`, `7d/10`, or other Full surfaces to the
 current R4/R5 execution scope. Those remain approved architecture/future scope
 unless the Owner opens a separate scope decision. R5 begins after real R4 Owner
 Experience Acceptance, not automatically on a calendar date.
+
+## 2026-08-10 — R4 #67 Durable Public Core repository construction approved
+
+**Decision:** approve the exact Durable Public Core Construction Packet
+`sha256:f5d6c77c4ae21d57a8fe551ed49916ec8b06fc215ac018b7a71ead19c1c48a31`
+and Owner Review
+`sha256:8272df04a9374ca04be3f212cd0bc8b123d138953224c24a66d13d08912887ff`,
+bound to Packet baseline `4841c32f07d3e6810cb023387cefa0562b85b777` /
+tree `abc24d75345637886f3252caf3d8eeec7c6ec6be` and frozen wrapper
+`d81e6fd3e1de9737d6c6dcf93fe642907654eec8` / tree
+`4910018a05b5b9d91bc3b3b2463698300e156a2a`.
+
+**Authorized outcome:** construct only the one-Room / 20-action / 14-table
+injected durable Public Core application/store, proposed SQL/schema, and
+synthetic/ephemeral deny-network evidence in the Packet's exact workset.
+Maintain the same exact proposal branch and Draft PR #76; do not merge.
+
+**Still closed:** migration execution, real database or Room mutation,
+product/runtime/data-plane network, vault or secret installation, runtime/API
+route activation, deployment, publication/admission, real Guest data,
+Provider/email, traffic, merge and spend. Construction must stop at Technical
+Review plus a hash-pinned proposed Gate C Card; it cannot make #67 or R4 Done.
+
+## 2026-08-11 — R4 #67 Durable Public Core Construction Addendum A approved
+
+**Decision:** extend the exact Durable Public Core Construction workset by one
+test file only: `test/r4/public-core-config.test.ts`. That test may change the
+expected `productionApplicationAdapterConstructed` and
+`durablePersistenceAdapterConstructed` facts to `true` and must cover the
+action-aware `public_single` / `closed` Room guard. The existing construction
+evidence schema, machine evidence, artifact index and this decision record may
+record the Addendum; the config test becomes the sixteenth indexed artifact.
+
+**Reason:** the repository-only application and durable persistence adapters
+have now been constructed and independently reviewed, while the previously
+frozen config test still asserted their pre-construction state. Addendum A
+allows the evidence boundary to state that narrow fact without turning
+constructed code into activated infrastructure.
+
+**Effect:** exactly two construction facts may become `true`. The credential
+vault adapter, transport adapter, `trafficReady` and `gateCReady` facts remain
+`false`. Runtime and route wiring, a database driver, migration execution,
+database or Room mutation, product/runtime/data-plane network, real Guest data,
+publication/admission, vault or secret installation, deployment, Provider,
+merge and spend remain unauthorized. The stop point remains Technical Review
+and a hash-pinned, non-approvable Gate C Card; #67 and R4 remain open.
+
+## 2026-08-11 — R4 #67 Durable Public Core Construction reached Technical Review Green
+
+**Decision:** record repository-only Construction as Technical Review Green at
+Stage-A commit `bcd4259130627067e1e7cf1974513801545cda35` / tree
+`7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31`. The 16-artifact aggregate is
+`sha256:c825306a5e20e910e6fdd811d1d3599b59e317baaa18b46c98ba13b8c0c3e44f`;
+machine evidence is
+`sha256:864e94151e5bc3864f154d089da7590501dbee7eedb62e61f980118d2e0a4dc5`;
+the Construction Report is
+`sha256:452c1c17a6cbd8a0dfab56a29654a94088978b9f483c6e837a319426dcbea657`;
+and the non-approvable Gate C Card is
+`sha256:dcc2fb79a96d37eba8b1b0fb276a9ee0b01a436501520e224650cabeaf2e73f6`.
+
+**Reason:** the exact one-Room / 20-action / 14-table application, durable
+persistence, proposed SQL, crypto, retention and synthetic fault/race evidence
+passed the frozen validation matrix and independent Stage-A/index review with
+zero Blocker and zero Important findings. Addendum A reconciles the two
+constructed facts without changing activation authority.
+
+**Effect:** application and durable persistence construction are `true`;
+credential vault, transport, `trafficReady` and `gateCReady` remain `false`.
+No PostgreSQL process or migration, driver, runtime/route activation, database
+or Room mutation, product/runtime/data-plane network call,
+publication/admission, real Guest byte, secret install, deployment,
+product/runtime Provider/email call, merge or spend occurred.
+#67 and R4 remain open; the next artifact is a separately authorized and
+independently reviewed production-wiring successor, not activation of the
+current Card.

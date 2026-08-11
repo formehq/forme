@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "r4_public_core_artifact_index.v1",
+  "status": "STAGE_A_ARTIFACTS_FROZEN",
+  "scope": "R4 #67 Durable Public Core repository-only construction artifacts",
+  "authority": {
+    "packetSha256": "sha256:f5d6c77c4ae21d57a8fe551ed49916ec8b06fc215ac018b7a71ead19c1c48a31",
+    "ownerReviewSha256": "sha256:8272df04a9374ca04be3f212cd0bc8b123d138953224c24a66d13d08912887ff",
+    "approvedWrapperHead": "d81e6fd3e1de9737d6c6dcf93fe642907654eec8",
+    "approvedWrapperTree": "4910018a05b5b9d91bc3b3b2463698300e156a2a",
+    "constructionAddendumA": {
+      "authorityId": "R4_67_DURABLE_PUBLIC_CORE_CONSTRUCTION_ADDENDUM_A_2026_08_11",
+      "status": "APPROVED",
+      "addedWorksetPaths": ["test/r4/public-core-config.test.ts"],
+      "indexedArtifactCount": 16,
+      "permittedTrueFacts": [
+        "productionApplicationAdapterConstructed",
+        "durablePersistenceAdapterConstructed"
+      ],
+      "requiredFalseFacts": [
+        "credentialVaultAdapterConstructed",
+        "transportAdapterConstructed",
+        "trafficReady",
+        "gateCReady"
+      ]
+    }
+  },
+  "implementationBaseline": {
+    "head": "bcd4259130627067e1e7cf1974513801545cda35",
+    "tree": "7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31"
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, one NUL byte, lowercase 64-character artifact digest without the sha256 prefix, then one LF byte",
+    "sourceBytes": "Git blob bytes from implementationBaseline.head",
+    "input": "concatenation of exactly the ordered artifact records below",
+    "selfReferenceRule": "this index, its aggregate digest, construction evidence, report, Gate C card, and status-only documentation are excluded",
+    "sha256": "sha256:c825306a5e20e910e6fdd811d1d3599b59e317baaa18b46c98ba13b8c0c3e44f"
+  },
+  "fileCount": 16,
+  "artifacts": [
+    {
+      "path": "apps/room/src/public-core-application.ts",
+      "class": "application",
+      "sha256": "sha256:1d66ae7edfa72f8faa41a41374d22933424ce288310d4986b3645979911c1f37"
+    },
+    {
+      "path": "apps/room/src/public-core-crypto.ts",
+      "class": "application",
+      "sha256": "sha256:f57652a206fc5a8fe5ee106a908ef5e02ea5ae4d8ad88dc5837e0b91549c115b"
+    },
+    {
+      "path": "apps/room/src/public-core-policy.ts",
+      "class": "application",
+      "sha256": "sha256:680152e5a0cd8fcb12d829151e811428a75d9d325cbfa885b07108cb49a7a83a"
+    },
+    {
+      "path": "apps/room/src/public-core-postgres.ts",
+      "class": "application",
+      "sha256": "sha256:7d243abcee34128a2471720c3308eba2269b94b245a31d5f2e9265f3895c895d"
+    },
+    {
+      "path": "apps/room/src/public-core-retention.ts",
+      "class": "application",
+      "sha256": "sha256:a3c9a614c905b8365a3f1af3fae156290e0633c9260cf126eab33d3c15527d03"
+    },
+    {
+      "path": "apps/room/src/public-core-store.ts",
+      "class": "application",
+      "sha256": "sha256:99b86c05049e47890f3944e70f45bbc7bfbbbae5af20b38076dd9f55b0b1d58f"
+    },
+    {
+      "path": "schemas/r4/public-core/construction-evidence.schema.json",
+      "class": "contract_schema",
+      "sha256": "sha256:2060c6330d4293cc2ecfbca1e1d0a6c4d6b8d6e0921696589ca2874aa52988f0"
+    },
+    {
+      "path": "schemas/r4/public-core/rollback.sql",
+      "class": "proposed_sql",
+      "sha256": "sha256:526f8dcb99aa330b2b2666a9e0df3c959caa05ab012fdf33afcdca277d2acd2e"
+    },
+    {
+      "path": "schemas/r4/public-core/schema.sql",
+      "class": "proposed_sql",
+      "sha256": "sha256:869c6c3e0853a8de20a3c4973601877fca854a911dec68b2546da9ff420b5db2"
+    },
+    {
+      "path": "schemas/r4/public-core/verify.sql",
+      "class": "proposed_sql",
+      "sha256": "sha256:9c19d3cd55945421176d9c24e268734e4c7a146e004eb3c0cba32ac65ee517e4"
+    },
+    {
+      "path": "test/r4/public-core-application.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:63971ba854a90d24762aa50eeab32bbb244a64f33f5ef7a6894a6361ec22807b"
+    },
+    {
+      "path": "test/r4/public-core-config.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:125a5e7bb4bca11d6bab5de0eaa4357692fd116d77cb67620a6fe12294d205a9"
+    },
+    {
+      "path": "test/r4/public-core-postgres.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:fa1c3950f3fc16d44c9ffc3455bda34acb7cd71b22c08ad85263c33d6dda2a41"
+    },
+    {
+      "path": "test/r4/public-core-privacy.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:61ad08d8b64627af60549bdfb5d678274351b54022abf35a54761ddf548c9175"
+    },
+    {
+      "path": "test/r4/public-core-races.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:7e658dd5963828c3d5d9bc1e6c2ddec0988e7b2d0bbf04816be203ccb43fb69e"
+    },
+    {
+      "path": "test/r4/public-core-retention.test.ts",
+      "class": "construction_test",
+      "sha256": "sha256:f89cd24bbfd94cd4c0f5073725eaa6ec0e691a50692c0e2dfa3a8abe44a91ecc"
+    }
+  ],
+  "excluded": [
+    "schemas/r4/public-core/artifact-index.json",
+    "docs/evidence/r4-public-core-durable-construction.json",
+    "docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-REPORT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "README.md",
+    "docs/PRODUCT.md",
+    "docs/CONTROL.md",
+    "docs/ROADMAP.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md"
+  ]
+}

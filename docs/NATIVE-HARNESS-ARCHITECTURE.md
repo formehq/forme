@@ -14,11 +14,13 @@
   capsule; Retry/provider/production authority is
   closed. #67 is now offline Technical Review Green on Draft PR #73 at
   `5e93196`, with a public-only boundary foundation on Draft PR #75 at
-  `09401a0`; those two and integration Draft PR #65 at `cbadd8a` are CLEAN / CI
-  Green and unmerged. PR #74 is merged as a deterministic Linux fixture-only
+  `09401a0`; the Owner-approved Durable Public Core Construction and Addendum A
+  are Technical Review Green at Stage-A `bcd4259`. Draft PR #76 remains
+  unmerged; vault, transport, traffic and Gate C readiness remain false. PR #74
+  is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
-- Updated: 2026-08-10
+- Updated: 2026-08-11
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside
@@ -58,9 +60,10 @@ Interaction / 7-day Response / 7-day isolated candidate ceilings，以及
 session-root cleanup、删除与 offline reconciliation 规则都已固定。随后
 Control Packet v0.2 已完成重写、独立审计、exact hash 与 Owner 批准；它最初
 授权的 Gate A repository-only 工作以及后续有边界的 Gate B/Host 尝试现在都
-属于历史证据。#67 Durable Public Core Construction Packet 已准备为 approval
-candidate；任何 schema implementation、production adapter、部署或真实访客作用
-仍需后续精确 Gate。
+属于历史证据。#67 Durable Public Core Construction Packet/Review 与 Addendum A
+已由 Owner 精确批准；repository-only application 与 durable persistence
+Construction 已在 Stage-A `bcd4259` 达到 Technical Review Green。Vault、
+transport、traffic、Gate C、部署与真实访客作用仍需后续精确 Gate。
 
 ## Why this clarification exists
 
