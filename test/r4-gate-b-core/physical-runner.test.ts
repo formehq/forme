@@ -3021,7 +3021,12 @@ test("checkpoint claim recovery authenticates and holds the journal before alias
       const fixture = buildStageCrash("claim-recovery-journal-replacement");
       const authenticated = readConstructionJournalForCleanup({ constructionRoot: fixture.fixtureRoot, journalPath: fixture.journalPath, checkpointPath: fixture.checkpointPath, rootAuthority: fixture.authority });
       const journalBytes = fs.readFileSync(fixture.journalPath);
-      fs.unlinkSync(fixture.journalPath); fs.writeFileSync(fixture.journalPath, journalBytes, { flag: "wx", mode: 0o600 }); journalBytes.fill(0);
+      const originalJournalFd = fs.openSync(fixture.journalPath, fs.constants.O_RDONLY | (fs.constants.O_NOFOLLOW ?? 0));
+      try {
+        const originalJournalIdentity = asIdentity(fs.fstatSync(originalJournalFd));
+        fs.unlinkSync(fixture.journalPath); fs.writeFileSync(fixture.journalPath, journalBytes, { flag: "wx", mode: 0o600 });
+        assert.notDeepEqual(asIdentity(fs.lstatSync(fixture.journalPath)), originalJournalIdentity);
+      } finally { fs.closeSync(originalJournalFd); journalBytes.fill(0); }
       assert.throws(() => reconcileCheckpointOwnershipJournalForCleanup(authenticated, fixture.checkpointPath), /CONSTRUCTION_CHECKPOINT_CLAIM_JOURNAL_DRIFT/u);
       assert.equal(fs.readFileSync(fixture.temporaryPath).equals(bytes), true);
       closeExactOwnedRootAuthority(fixture.authority); fs.rmSync(fixture.fixtureParent, { recursive: true, force: true });
