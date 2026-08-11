@@ -7,7 +7,8 @@ import {
 /**
  * The target production slice for #67 stops after one durable public knock
  * reaches the Owner. This file defines that future allowlist; the construction
- * boundary below separately records that no traffic-capable adapter exists yet.
+ * boundary below separately records which repository-only adapters exist and
+ * that none of them is wired for traffic yet.
  * The target is intentionally narrower than the historical Gate B Core-32
  * surface, which also rehearsed future Response and Grant mechanics.
  */
@@ -16,8 +17,8 @@ export const PUBLIC_CORE_POLICY_ID = "r4_public_room_knock_core.v1" as const;
 /** Construction truth for this slice; none of these can be inferred from config alone. */
 export const PUBLIC_CORE_CONSTRUCTION_BOUNDARY = Object.freeze({
   schemaVersion: "r4_public_core_construction_boundary.v1" as const,
-  productionApplicationAdapterConstructed: false as const,
-  durablePersistenceAdapterConstructed: false as const,
+  productionApplicationAdapterConstructed: true as const,
+  durablePersistenceAdapterConstructed: true as const,
   credentialVaultAdapterConstructed: false as const,
   transportAdapterConstructed: false as const,
   trafficReady: false as const,
@@ -174,6 +175,12 @@ export interface PublicCoreRoomScope {
   readonly capabilityKind: "public_encounter" | "room_pairing" | "room_operator" | null;
 }
 
+export interface PublicCoreActionRoomScope {
+  readonly roomKind: "third_place_public";
+  readonly interactionMode: "public_single" | "closed";
+  readonly capabilityKind: "public_encounter" | "room_pairing" | "room_operator" | null;
+}
+
 /**
  * A second, below-routing guard for any operation that has resolved a Room.
  * Callers omit capabilityKind for Controller/Curator reads and mutations.
@@ -198,6 +205,48 @@ export function assertPublicCoreRoomScope(input: PublicCoreRoomScopeInput): Publ
   return Object.freeze({
     roomKind: "third_place_public",
     interactionMode: "public_single",
+    capabilityKind,
+  });
+}
+
+/**
+ * Action-aware construction guard. A closed public Room remains reachable for
+ * direct reads and exact closure/recovery operations; only issuing a new
+ * encounter or accepting a new Interaction requires open public intake.
+ */
+export function assertPublicCoreRoomScopeForAction(
+  action: string,
+  input: PublicCoreRoomScopeInput,
+): PublicCoreActionRoomScope {
+  assertPublicCoreAction(action);
+  const keys = Object.keys(input);
+  if (keys.some((key) => !["roomKind", "interactionMode", "capabilityKind"].includes(key))) {
+    fail("R4_PUBLIC_CORE_SCOPE_INVALID");
+  }
+  if (
+    input.roomKind !== "third_place_public"
+    || (input.interactionMode !== "public_single" && input.interactionMode !== "closed")
+  ) {
+    fail("R4_PUBLIC_CORE_SCOPE_UNAVAILABLE");
+  }
+  const capabilityKind = input.capabilityKind ?? null;
+  if (
+    capabilityKind !== null
+    && capabilityKind !== "public_encounter"
+    && capabilityKind !== "room_pairing"
+    && capabilityKind !== "room_operator"
+  ) {
+    fail("R4_PUBLIC_CORE_SCOPE_UNAVAILABLE");
+  }
+  if (
+    (action === "public_encounter.issue" || action === "interaction.create")
+    && input.interactionMode !== "public_single"
+  ) {
+    fail("R4_PUBLIC_CORE_INTAKE_CLOSED");
+  }
+  return Object.freeze({
+    roomKind: "third_place_public",
+    interactionMode: input.interactionMode,
     capabilityKind,
   });
 }

@@ -24,6 +24,7 @@ import {
   PublicCorePolicyError,
   assertPublicCoreAction,
   assertPublicCoreRoomScope,
+  assertPublicCoreRoomScopeForAction,
 } from "../../apps/room/src/public-core-policy.ts";
 import { OPERATION_INVENTORY } from "../../apps/room/src/operation-inventory.ts";
 
@@ -435,8 +436,8 @@ test("production Access resolver fails closed on verifier, claim, role, lane, an
 test("#67 production action policy is exactly public-only and rejects all Full/Fresh/Response/Grant/Private/email operations", () => {
   assert.deepEqual(PUBLIC_CORE_CONSTRUCTION_BOUNDARY, {
     schemaVersion: "r4_public_core_construction_boundary.v1",
-    productionApplicationAdapterConstructed: false,
-    durablePersistenceAdapterConstructed: false,
+    productionApplicationAdapterConstructed: true,
+    durablePersistenceAdapterConstructed: true,
     credentialVaultAdapterConstructed: false,
     transportAdapterConstructed: false,
     trafficReady: false,
@@ -483,6 +484,59 @@ test("#67 production action policy is exactly public-only and rejects all Full/F
     interactionMode: "public_single",
     capabilityKind: "public_encounter",
   });
+
+  assert.deepEqual(assertPublicCoreRoomScopeForAction("public_encounter.issue", {
+    roomKind: "third_place_public",
+    interactionMode: "public_single",
+    capabilityKind: "public_encounter",
+  }), {
+    roomKind: "third_place_public",
+    interactionMode: "public_single",
+    capabilityKind: "public_encounter",
+  });
+  for (const action of [
+    "projection.read",
+    "interaction.read",
+    "interaction.delete",
+    "room.mode.set",
+    "projection.revoke",
+    "room_operator.sync",
+    "room_operator.ack",
+    "room_operator.local_purge.receipt",
+  ] as const) {
+    assert.deepEqual(assertPublicCoreRoomScopeForAction(action, {
+      roomKind: "third_place_public",
+      interactionMode: "closed",
+      capabilityKind: action.startsWith("room_operator.") ? "room_operator" : null,
+    }), {
+      roomKind: "third_place_public",
+      interactionMode: "closed",
+      capabilityKind: action.startsWith("room_operator.") ? "room_operator" : null,
+    });
+  }
+  for (const action of ["public_encounter.issue", "interaction.create"] as const) {
+    assert.throws(
+      () => assertPublicCoreRoomScopeForAction(action, {
+        roomKind: "third_place_public",
+        interactionMode: "closed",
+        capabilityKind: "public_encounter",
+      }),
+      (error: unknown) => {
+        assert.ok(error instanceof PublicCorePolicyError);
+        assert.equal(error.code, "R4_PUBLIC_CORE_INTAKE_CLOSED");
+        return true;
+      },
+    );
+  }
+  for (const scope of [
+    { roomKind: "private_grant_only", interactionMode: "invite_only", capabilityKind: "grant" },
+    { roomKind: "third_place_public", interactionMode: "invite_only", capabilityKind: null },
+  ]) {
+    assert.throws(
+      () => assertPublicCoreRoomScopeForAction("projection.read", scope),
+      PublicCorePolicyError,
+    );
+  }
   for (const scope of [
     { roomKind: "private_grant_only", interactionMode: "invite_only", capabilityKind: "grant" },
     { roomKind: "third_place_public", interactionMode: "public_single", capabilityKind: "grant" },

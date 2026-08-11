@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/public-core/construction-evidence.v1.json",
+  "title": "R4 #67 Durable Public Core Construction Evidence V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "implementationBaseline",
+    "constructionBoundary",
+    "surface",
+    "dataModel",
+    "faultEvidence",
+    "validation",
+    "effectAudit",
+    "artifacts",
+    "independentAudit"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4_public_core_durable_construction_evidence.v1"
+    },
+    "status": {
+      "const": "TECHNICAL_REVIEW_GREEN_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packetSha256",
+        "ownerReviewSha256",
+        "packetBaselineHead",
+        "packetBaselineTree",
+        "approvedWrapperHead",
+        "approvedWrapperTree",
+        "constructionAddendumA",
+        "constructionGrant",
+        "gateCGrant",
+        "migrationExecutionGrant",
+        "publicationGrant",
+        "providerGrant"
+      ],
+      "properties": {
+        "packetSha256": {
+          "const": "sha256:f5d6c77c4ae21d57a8fe551ed49916ec8b06fc215ac018b7a71ead19c1c48a31"
+        },
+        "ownerReviewSha256": {
+          "const": "sha256:8272df04a9374ca04be3f212cd0bc8b123d138953224c24a66d13d08912887ff"
+        },
+        "packetBaselineHead": {
+          "const": "4841c32f07d3e6810cb023387cefa0562b85b777"
+        },
+        "packetBaselineTree": {
+          "const": "abc24d75345637886f3252caf3d8eeec7c6ec6be"
+        },
+        "approvedWrapperHead": {
+          "const": "d81e6fd3e1de9737d6c6dcf93fe642907654eec8"
+        },
+        "approvedWrapperTree": {
+          "const": "4910018a05b5b9d91bc3b3b2463698300e156a2a"
+        },
+        "constructionAddendumA": {
+          "const": {
+            "authorityId": "R4_67_DURABLE_PUBLIC_CORE_CONSTRUCTION_ADDENDUM_A_2026_08_11",
+            "status": "APPROVED",
+            "addedWorksetPaths": ["test/r4/public-core-config.test.ts"],
+            "indexedArtifactCount": 16,
+            "permittedTrueFacts": [
+              "productionApplicationAdapterConstructed",
+              "durablePersistenceAdapterConstructed"
+            ],
+            "requiredFalseFacts": [
+              "credentialVaultAdapterConstructed",
+              "transportAdapterConstructed",
+              "trafficReady",
+              "gateCReady"
+            ]
+          }
+        },
+        "constructionGrant": { "const": "APPROVED" },
+        "gateCGrant": { "const": "NOT_REQUESTED" },
+        "migrationExecutionGrant": { "const": "NOT_REQUESTED" },
+        "publicationGrant": { "const": "NOT_REQUESTED" },
+        "providerGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "implementationBaseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "branch", "packageLockSha256"],
+      "properties": {
+        "head": { "$ref": "#/$defs/gitObject" },
+        "tree": { "$ref": "#/$defs/gitObject" },
+        "branch": { "const": "codex/r4-durable-public-core-packet" },
+        "packageLockSha256": {
+          "const": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812"
+        }
+      }
+    },
+    "constructionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productionApplicationAdapterConstructed",
+        "durablePersistenceAdapterConstructed",
+        "credentialVaultAdapterConstructed",
+        "transportAdapterConstructed",
+        "trafficReady",
+        "gateCReady"
+      ],
+      "properties": {
+        "productionApplicationAdapterConstructed": { "const": true },
+        "durablePersistenceAdapterConstructed": { "const": true },
+        "credentialVaultAdapterConstructed": { "const": false },
+        "transportAdapterConstructed": { "const": false },
+        "trafficReady": { "const": false },
+        "gateCReady": { "const": false }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policyId", "readCount", "mutationCount", "allowedActions", "unavailableCount"],
+      "properties": {
+        "policyId": { "const": "r4_public_room_knock_core.v1" },
+        "readCount": { "const": 4 },
+        "mutationCount": { "const": 16 },
+        "allowedActions": {
+          "type": "array",
+          "minItems": 20,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "prefixItems": [
+            { "const": "third_place.list" },
+            { "const": "projection.read" },
+            { "const": "public_encounter.issue" },
+            { "const": "interaction.create" },
+            { "const": "interaction.read" },
+            { "const": "interaction.delete" },
+            { "const": "room.pair.exchange" },
+            { "const": "room.create" },
+            { "const": "room.pair" },
+            { "const": "room.binding.revoke" },
+            { "const": "room.mode.set" },
+            { "const": "projection.revoke" },
+            { "const": "curation.admit" },
+            { "const": "curation.unlist" },
+            { "const": "room_operator.status" },
+            { "const": "room_operator.sync" },
+            { "const": "room_operator.pull" },
+            { "const": "room_operator.ack" },
+            { "const": "room_operator.projection.deliver" },
+            { "const": "room_operator.local_purge.receipt" }
+          ],
+          "items": false
+        },
+        "unavailableCount": { "const": 25 }
+      }
+    },
+    "dataModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaName", "tableCount", "tables", "migrationApplied"],
+      "properties": {
+        "schemaName": { "const": "forme_r4_public_core" },
+        "tableCount": { "const": 14 },
+        "tables": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "installation" },
+            { "const": "rooms" },
+            { "const": "projections" },
+            { "const": "pairing_challenges" },
+            { "const": "room_bindings" },
+            { "const": "public_encounters" },
+            { "const": "interactions" },
+            { "const": "rate_events" },
+            { "const": "room_events" },
+            { "const": "mutation_receipts" },
+            { "const": "event_acks" },
+            { "const": "encryption_nonces" },
+            { "const": "purge_jobs" },
+            { "const": "retention_health" }
+          ],
+          "items": false,
+          "minItems": 14,
+          "maxItems": 14
+        },
+        "migrationApplied": { "const": false }
+      }
+    },
+    "faultEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mutationCount",
+        "boundariesPerMutation",
+        "boundaryCaseCount",
+        "mandatoryCatalogCount",
+        "mandatoryCatalogIds",
+        "allPassed"
+      ],
+      "properties": {
+        "mutationCount": { "const": 16 },
+        "boundariesPerMutation": { "const": 6 },
+        "boundaryCaseCount": { "const": 96 },
+        "mandatoryCatalogCount": { "const": 13 },
+        "mandatoryCatalogIds": {
+          "type": "array",
+          "minItems": 13,
+          "maxItems": 13,
+          "uniqueItems": true,
+          "prefixItems": [
+            { "const": "room_and_encounter_singleton_collisions" },
+            { "const": "pair_revoke_exchange_replay_expiry_and_clearing" },
+            { "const": "projection_delivery_successor_revoke_and_curation_races" },
+            { "const": "encounter_terminal_races" },
+            { "const": "interaction_single_encounter_and_terminal_races" },
+            { "const": "delete_pull_loss_and_terminal_precedence" },
+            { "const": "sync_append_and_retained_floor" },
+            { "const": "ack_duplicate_and_wrong_hash" },
+            { "const": "janitor_read_delete_and_revoke_races" },
+            { "const": "crypto_nonce_tamper_unknown_key_and_aad" },
+            { "const": "restart_reopen_and_committed_response_loss" },
+            { "const": "wrong_authority_shape_and_expected_version" },
+            { "const": "exact_rate_and_pool_boundaries" }
+          ],
+          "items": false
+        },
+        "allPassed": { "const": true }
+      }
+    },
+    "validation": {
+      "const": [
+        {
+          "laneId": "focused_public_core_deny_network",
+          "name": "focused public-core deny-network tests",
+          "status": "PASS",
+          "denyNetwork": true,
+          "commands": [
+            "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-config.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-races.test.ts test/r4/public-core-retention.test.ts"
+          ],
+          "countUnit": "commands",
+          "commandCount": 1,
+          "passedCommandCount": 1,
+          "failedCommandCount": 0,
+          "nodeTestResults": [
+            { "commandIndex": 0, "countUnit": "node_tests", "total": 218, "passed": 218, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 }
+          ]
+        },
+        {
+          "laneId": "typescript_checks",
+          "name": "TypeScript checks",
+          "status": "PASS",
+          "denyNetwork": false,
+          "commands": ["npm run typecheck"],
+          "countUnit": "commands",
+          "commandCount": 1,
+          "passedCommandCount": 1,
+          "failedCommandCount": 0,
+          "nodeTestResults": []
+        },
+        {
+          "laneId": "historical_r4_gate_b_regression",
+          "name": "historical R4 and Gate-B regression",
+          "status": "PASS",
+          "denyNetwork": true,
+          "commands": [
+            "npm run test:r4:offline",
+            "npm run test:r4:gate-b-core",
+            "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts"
+          ],
+          "countUnit": "commands",
+          "commandCount": 3,
+          "passedCommandCount": 3,
+          "failedCommandCount": 0,
+          "nodeTestResults": [
+            { "commandIndex": 0, "countUnit": "node_tests", "total": 550, "passed": 550, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 },
+            { "commandIndex": 1, "countUnit": "node_tests", "total": 145, "passed": 145, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 },
+            { "commandIndex": 2, "countUnit": "node_tests", "total": 45, "passed": 45, "failed": 0, "cancelled": 0, "skipped": 0, "todo": 0 }
+          ]
+        },
+        {
+          "laneId": "static_boundary_and_docs_audit",
+          "name": "static SQL, no-server-AI, docs and unauthorized-path audits",
+          "status": "PASS",
+          "denyNetwork": false,
+          "commands": [
+            "npm --workspace @forme/room run check:no-ai",
+            "npm run r4:docs:audit",
+            "git diff --check",
+            "node --input-type=module -e 'import {readFileSync} from \"node:fs\";import Ajv2020 from \"ajv/dist/2020.js\";import addFormats from \"ajv-formats\";const s=JSON.parse(readFileSync(\"schemas/r4/public-core/construction-evidence.schema.json\",\"utf8\"));const e=JSON.parse(readFileSync(\"docs/evidence/r4-public-core-durable-construction.json\",\"utf8\"));const a=new Ajv2020({strict:true,strictSchema:true,allErrors:true,validateFormats:true});addFormats(a,{mode:\"full\"});const v=a.compile(s);if(!v(e))throw new Error(a.errorsText(v.errors));'",
+            "node --input-type=module -e 'import{readFileSync}from \"node:fs\";import{createHash}from \"node:crypto\";import{execFileSync}from \"node:child_process\";const H=b=>\"sha256:\"+createHash(\"sha256\").update(b).digest(\"hex\"),R=p=>readFileSync(p),J=p=>JSON.parse(R(p)),E=J(\"docs/evidence/r4-public-core-durable-construction.json\"),I=J(\"schemas/r4/public-core/artifact-index.json\"),P=I.artifacts.map(x=>x.path),S=[...P].sort((a,b)=>Buffer.compare(Buffer.from(a),Buffer.from(b))),X=[\"apps/room/src/public-core-application.ts\",\"apps/room/src/public-core-crypto.ts\",\"apps/room/src/public-core-policy.ts\",\"apps/room/src/public-core-postgres.ts\",\"apps/room/src/public-core-retention.ts\",\"apps/room/src/public-core-store.ts\",\"schemas/r4/public-core/construction-evidence.schema.json\",\"schemas/r4/public-core/rollback.sql\",\"schemas/r4/public-core/schema.sql\",\"schemas/r4/public-core/verify.sql\",\"test/r4/public-core-application.test.ts\",\"test/r4/public-core-config.test.ts\",\"test/r4/public-core-postgres.test.ts\",\"test/r4/public-core-privacy.test.ts\",\"test/r4/public-core-races.test.ts\",\"test/r4/public-core-retention.test.ts\"];if(I.fileCount!==16||JSON.stringify(P)!==JSON.stringify(S)||JSON.stringify(P)!==JSON.stringify(X))throw new Error(\"artifact_inventory\");const h=E.implementationBaseline.head,t=execFileSync(\"git\",[\"rev-parse\",`${h}^{tree}`],{encoding:\"utf8\"}).trim();if(t!==E.implementationBaseline.tree||h!==I.implementationBaseline.head||t!==I.implementationBaseline.tree||h!==E.independentAudit.implementationHead||t!==E.independentAudit.implementationTree)throw new Error(\"stage_a_binding\");const D=execFileSync(\"git\",[\"diff\",\"--name-only\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8\",h],{encoding:\"utf8\"}).trim().split(\"\\n\").filter(Boolean);if(JSON.stringify(D)!==JSON.stringify(P))throw new Error(\"stage_a_workset\");const Z=[];for(const a of I.artifacts){const b=execFileSync(\"git\",[\"show\",`${h}:${a.path}`]),d=H(b);if(a.sha256!==d)throw new Error(`artifact_hash:${a.path}`);Z.push(Buffer.concat([Buffer.from(a.path),Buffer.from([0]),Buffer.from(d.slice(7)),Buffer.from(\"\\n\")]));}if(I.aggregate.sha256!==H(Buffer.concat(Z)))throw new Error(\"artifact_aggregate\");const ih=H(R(\"schemas/r4/public-core/artifact-index.json\"));if(E.artifacts.artifactIndexSha256!==ih||E.independentAudit.artifactIndexSha256!==ih)throw new Error(\"index_binding\");for(const[k,p]of[[\"schemaSha256\",\"schemas/r4/public-core/schema.sql\"],[\"verifySha256\",\"schemas/r4/public-core/verify.sql\"],[\"rollbackSha256\",\"schemas/r4/public-core/rollback.sql\"]])if(E.artifacts[k]!==H(execFileSync(\"git\",[\"show\",`${h}:${p}`])))throw new Error(`sql_hash:${k}`);if(JSON.stringify(E.authority.constructionAddendumA)!==JSON.stringify(I.authority.constructionAddendumA))throw new Error(\"addendum_binding\");if(E.independentAudit.summaryText.endsWith(\"\\n\")||H(Buffer.from(E.independentAudit.summaryText))!==E.independentAudit.summarySha256)throw new Error(\"audit_summary\");if(H(execFileSync(\"git\",[\"show\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8:docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md\"]))!==E.authority.packetSha256||H(execFileSync(\"git\",[\"show\",\"d81e6fd3e1de9737d6c6dcf93fe642907654eec8:docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-OWNER-REVIEW.md\"]))!==E.authority.ownerReviewSha256)throw new Error(\"authority_hash\");if(H(execFileSync(\"git\",[\"show\",`${h}:package-lock.json`]))!==E.implementationBaseline.packageLockSha256)throw new Error(\"package_lock\");const m=Buffer.from([\"PENDING\",\"FINAL\",\"FREEZE\"].join(\"_\")+\"_\");for(const p of[\"schemas/r4/public-core/artifact-index.json\",\"docs/evidence/r4-public-core-durable-construction.json\",\"docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-REPORT.md\",\"docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md\"])if(R(p).includes(m))throw new Error(`pending_marker:${p}`);'"
+          ],
+          "countUnit": "commands",
+          "commandCount": 5,
+          "passedCommandCount": 5,
+          "failedCommandCount": 0,
+          "nodeTestResults": []
+        }
+      ]
+    },
+    "effectAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "databaseProcesses",
+        "databaseMutations",
+        "runtimeNetworkCalls",
+        "roomMutations",
+        "publicationCalls",
+        "realGuestBytes",
+        "providerCalls",
+        "externalMessages",
+        "secretInstalls",
+        "deployments",
+        "spendUsd",
+        "merges",
+        "sourceControlProposalBranches",
+        "draftProposalPrs"
+      ],
+      "properties": {
+        "databaseProcesses": { "const": 0 },
+        "databaseMutations": { "const": 0 },
+        "runtimeNetworkCalls": { "const": 0 },
+        "roomMutations": { "const": 0 },
+        "publicationCalls": { "const": 0 },
+        "realGuestBytes": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "externalMessages": { "const": 0 },
+        "secretInstalls": { "const": 0 },
+        "deployments": { "const": 0 },
+        "spendUsd": { "const": 0 },
+        "merges": { "const": 0 },
+        "sourceControlProposalBranches": { "const": 1 },
+        "draftProposalPrs": { "const": 1 }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactIndexSha256", "schemaSha256", "verifySha256", "rollbackSha256"],
+      "properties": {
+        "artifactIndexSha256": { "$ref": "#/$defs/sha256" },
+        "schemaSha256": { "$ref": "#/$defs/sha256" },
+        "verifySha256": { "$ref": "#/$defs/sha256" },
+        "rollbackSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "independentAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "implementationHead",
+        "implementationTree",
+        "artifactIndexSha256",
+        "blockerCount",
+        "importantCount",
+        "status",
+        "summaryEncoding",
+        "summaryText",
+        "summarySha256"
+      ],
+      "properties": {
+        "scope": {
+          "const": "STAGE_A_IMPLEMENTATION_COMMIT_AND_FINALIZED_ARTIFACT_INDEX_ONLY"
+        },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "artifactIndexSha256": { "$ref": "#/$defs/sha256" },
+        "blockerCount": { "const": 0 },
+        "importantCount": { "const": 0 },
+        "status": { "const": "PASS" },
+        "summaryEncoding": { "const": "UTF-8 exact text without trailing LF" },
+        "summaryText": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "summarySha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "gitObject": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    }
+  }
+}
