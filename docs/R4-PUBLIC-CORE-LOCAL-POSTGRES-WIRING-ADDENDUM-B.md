@@ -207,11 +207,16 @@ That future approval permits repository-local, offline construction only:
 - obtain independent review with exactly zero Blocker and zero Important
   findings.
 
+The existing Codex development/control channel used by the Owner to direct and
+review this work is explicitly disclosed and is not a product/runtime effect
+or a repository command's network authority. Phase 1 grants no additional
+external connector, package, source-control or product data-plane call.
+
 Even after that exact approval, Phase 1 permits:
 
 | Effect | Maximum |
 |---|---:|
-| npm or other external network | `0` |
+| Repository command / package / source-control external network | `0` |
 | Docker CLI calls / Docker daemon access | `0 / 0` |
 | OCI inspect or pull | `0` |
 | PostgreSQL connection / database identity | `0 / 0` |
@@ -220,7 +225,7 @@ Even after that exact approval, Phase 1 permits:
 | Production migration or database mutation | `0` |
 | Runtime, route, Vault, HTTPS or traffic activation | `0` |
 | Real Room, Projection, Curator or Guest data | `0` |
-| Provider/model/email messages | `0` |
+| Product/runtime Provider/model/email messages | `0` |
 | Merge / release / spend | `0 / 0 / US$0` |
 
 Phase 1 must stop after the new SQL hashes and frozen Stage A bindings exist
