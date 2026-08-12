@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_artifact_index.v1",
+  "status": "STAGE_A_19_ARTIFACTS_FROZEN_PHYSICAL_REBIND_REQUIRED",
+  "scope": "R4 #67 Local PostgreSQL Wiring Addenda B/C Phase 1 committed repository artifacts",
+  "authority": {
+    "constructionPacketSha256": "sha256:be32f425fb3d5e4fa1b4fae611fadbb65d4eaf097b65ecc90a8ea6395cbe1258",
+    "constructionOwnerReviewSha256": "sha256:4f050d5b79fe860d2989eed8a0b6607aa815de1e2a94cf8fae8b941701815aca",
+    "constructionWrapperHead": "c878a5a534868482672838d39290e3f12e9d3b7f",
+    "constructionWrapperTree": "d917fb7d2c9ade9b2d8acae5f5e7d4893e0c84c5",
+    "addendumBSha256": "sha256:a85dcd2c893e2290f15b0082b93ae0163a1012bb210c00f908ec08747c17415f",
+    "addendumBOwnerReviewSha256": "sha256:ce7acc0ff9c45af9286595449ebce32ec893d70e9092d0be654a20a7bab96eb2",
+    "addendumBWrapperHead": "1db7b30f38ca6322a3b0ad4be6d537af9cf781e8",
+    "addendumBWrapperTree": "1270bbc9beae9c446c83bbfc220e5906800890e3",
+    "addendumCSha256": "sha256:6efa791732a7f3b28e728c39bd182a73286e23d6fecba90f5be39924ff133d5d",
+    "addendumCOwnerReviewSha256": "sha256:2aaa4d1243e2813b4030a37bae2cd7f14b41ca29c3814f4bce70c4c0161f65b7",
+    "addendumCProposalHead": "ba61f7434071b759195fd3389b84092b96f3bb0c",
+    "addendumCProposalTree": "091258d78908a1a2e99542e1a5b835e84b5d3512",
+    "addendumCWrapperHead": "deb12a045f5d84281bc9da0f110e049748949970",
+    "addendumCWrapperTree": "4b9028a942d4ac436527586aee64fbc23ec3488d"
+  },
+  "implementationBaseline": {
+    "head": "bc0b52023bb19d4e41fc4daa4a1e232961e1a19b",
+    "tree": "d5cb758467d06bfd7f17b6ae6a34664e659e1e3d",
+    "parentHead": "deb12a045f5d84281bc9da0f110e049748949970",
+    "parentTree": "4b9028a942d4ac436527586aee64fbc23ec3488d"
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, one NUL byte, the sha256-prefixed lowercase 64-character artifact digest, one NUL byte, the decimal Git-blob byte count, then one LF byte",
+    "sourceBytes": "Git blob bytes from implementationBaseline.head",
+    "input": "concatenation of exactly the ordered artifact records below",
+    "selfReferenceRule": "this index and every Stage B evidence, report, Card and status document are excluded",
+    "sha256": "sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417"
+  },
+  "fileCount": 19,
+  "addedFileCount": 6,
+  "modifiedFileCount": 13,
+  "artifacts": [
+    {
+      "path": "apps/room/package.json",
+      "class": "dependency_manifest",
+      "gitStatus": "M",
+      "byteCount": 744,
+      "sha256": "sha256:830099c32fd1803ac97a53a9b646baa2d8f33950acaa9fb3a4f0e12635ecbe37"
+    },
+    {
+      "path": "apps/room/src/public-core-application.ts",
+      "class": "application",
+      "gitStatus": "M",
+      "byteCount": 45874,
+      "sha256": "sha256:b45e2565c3f033402d1e9d96830aa7d5a4b47af15601cc70904355098ec1f8a1"
+    },
+    {
+      "path": "apps/room/src/public-core-crypto.ts",
+      "class": "crypto",
+      "gitStatus": "M",
+      "byteCount": 27902,
+      "sha256": "sha256:dd3924ca9767766f92acbe959e360c5b3c7ce2df33cb533743e288e8cf824443"
+    },
+    {
+      "path": "apps/room/src/public-core-pg-executor.ts",
+      "class": "pg_executor",
+      "gitStatus": "A",
+      "byteCount": 29172,
+      "sha256": "sha256:0f02bbb0c823f08f60b0173eac8442ef2f38792ffe3d4c6ef1802ef8da830709"
+    },
+    {
+      "path": "apps/room/src/public-core-postgres-application-store.ts",
+      "class": "application_store_bridge",
+      "gitStatus": "A",
+      "byteCount": 55555,
+      "sha256": "sha256:135935f85894c1b09c9bedbbc9fdd3fcf9a55710d9afaa18a776a87ac7547805"
+    },
+    {
+      "path": "apps/room/src/public-core-postgres.ts",
+      "class": "postgres_store",
+      "gitStatus": "M",
+      "byteCount": 222790,
+      "sha256": "sha256:5137fe38631e5478e7ac62108cb466a1370659c096c3c750d3e46022377cbf13"
+    },
+    {
+      "path": "package-lock.json",
+      "class": "dependency_lock",
+      "gitStatus": "M",
+      "byteCount": 54332,
+      "sha256": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f"
+    },
+    {
+      "path": "schemas/r4/public-core/rollback.sql",
+      "class": "proposed_sql",
+      "gitStatus": "M",
+      "byteCount": 16618,
+      "sha256": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4"
+    },
+    {
+      "path": "schemas/r4/public-core/schema.sql",
+      "class": "proposed_sql",
+      "gitStatus": "M",
+      "byteCount": 61806,
+      "sha256": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8"
+    },
+    {
+      "path": "schemas/r4/public-core/verify.sql",
+      "class": "proposed_sql",
+      "gitStatus": "M",
+      "byteCount": 45794,
+      "sha256": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd"
+    },
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "local_physical_runner",
+      "gitStatus": "A",
+      "byteCount": 198491,
+      "sha256": "sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1"
+    },
+    {
+      "path": "test/r4-gate-b-core/macos-core-adapter.test.ts",
+      "class": "successor_overlay_test",
+      "gitStatus": "M",
+      "byteCount": 17004,
+      "sha256": "sha256:105581cfa5b3ad43ba0c793f6672df705766bfbeb77b676540b70294ae5bc3a1"
+    },
+    {
+      "path": "test/r4-gate-b-core/physical-runner.test.ts",
+      "class": "successor_overlay_test",
+      "gitStatus": "M",
+      "byteCount": 320111,
+      "sha256": "sha256:a33d6fbb6728f1d8b06b1b1ec68cc064cb4958596c5cdff12882d7931994c205"
+    },
+    {
+      "path": "test/r4/public-core-application.test.ts",
+      "class": "construction_test",
+      "gitStatus": "M",
+      "byteCount": 42783,
+      "sha256": "sha256:9085a10426bf5276b97dc96583901c616d372006490e10451eeb3155eaf093f5"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "construction_test",
+      "gitStatus": "A",
+      "byteCount": 24144,
+      "sha256": "sha256:b32f58555d599843cd475d19e4fd432bf65e23ed58fbb43960c599fe97e278f3"
+    },
+    {
+      "path": "test/r4/public-core-pg-executor.test.ts",
+      "class": "construction_test",
+      "gitStatus": "A",
+      "byteCount": 25517,
+      "sha256": "sha256:c4971eb604df591112ccef5296f93e22c72ecf78b411b710c77ab1e93410f821"
+    },
+    {
+      "path": "test/r4/public-core-postgres-application-store.test.ts",
+      "class": "construction_test",
+      "gitStatus": "A",
+      "byteCount": 21934,
+      "sha256": "sha256:ecc4d179f972cad33239ae8035fed80ace25404d2a21d45a716be2ede173fbab"
+    },
+    {
+      "path": "test/r4/public-core-postgres.test.ts",
+      "class": "construction_test",
+      "gitStatus": "M",
+      "byteCount": 105645,
+      "sha256": "sha256:c9ce2791de8a2642d46d8f3c08eefb3d186c2b50ef369f737d01cc941cbd9d4d"
+    },
+    {
+      "path": "test/r4/public-core-privacy.test.ts",
+      "class": "construction_test",
+      "gitStatus": "M",
+      "byteCount": 18996,
+      "sha256": "sha256:cd04165345e5af58064a636c10234a0ffc14ac40b5c7646ee91f43b0cd023c7b"
+    }
+  ],
+  "excludedStageBPaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md",
+    "docs/ROADMAP.md",
+    "docs/evidence/r4-public-core-local-postgres-wiring.json",
+    "schemas/r4/public-core/local-postgres-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-wiring-evidence.schema.json"
+  ],
+  "historicalArtifactsNotRebound": [
+    "docs/evidence/r4-gate-b-physical-adapter-construction.json",
+    "docs/evidence/r4-public-core-durable-construction.json",
+    "schemas/r4/gate-b-core/artifact-index.json",
+    "schemas/r4/public-core/artifact-index.json"
+  ]
+}

@@ -6,10 +6,15 @@
   offline Technical Review Green on Draft PR #73, with the public-only boundary
   foundation on Draft PR #75. The Owner approved the exact Durable Public Core
   Construction Packet and Review on 2026-08-10 and Addendum A on 2026-08-11.
-  Repository-only Construction is Technical Review Green at Stage-A
-  `bcd4259`; application and durable persistence are constructed, while vault,
-  transport, traffic and Gate C readiness remain false. A publication-stable
-  successor approval, Gate C
+  The Local PostgreSQL Wiring Packet and Addenda B/C have now reached the exact
+  repository-only stop `INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED` at Stage-A
+  `bc0b520`. Application, durable persistence, the concrete `pg` executor and
+  the 20-method application-store bridge are constructed; no target
+  PostgreSQL catalog was observed. Vault, HTTPS transport, production pool,
+  migration, runtime route, traffic and Gate C readiness remain false. A
+  separately approved Physical Rebind, publication-stable successor approval,
+  Gate C
   and one real Public Room / bounded Guest knock follow separately. Host
   Binding is historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
@@ -17,8 +22,9 @@
   repository mechanisms are closed/implemented. #66 proved current Twin →
   bounded local Projection → exact local Owner approval → restart recovery.
   #67 has proved the Room-bound handoff, offline Public Core rehearsal, rich
-  visitor surface and repository-only durable application/persistence
-  construction. No production PostgreSQL migration, Gate C deployment,
+  visitor surface and repository-only application/persistence/driver-bridge
+  construction. No disposable PostgreSQL rehearsal, production PostgreSQL
+  migration, Gate C deployment,
   Room mutation, publication, Curator admission, real Guest data, public
   traffic, Fresh Provider session, or Response delivery has run. R4 is not
   Owner-accepted or Done.**
@@ -34,16 +40,20 @@
   #73 at `5e93196`, and Draft PR #75 at `09401a0`. Construction Stage A is
   `bcd4259`; Draft PR #76 remains unmerged and its remote/CI readback belongs in
   PR metadata. PR #74 is merged and changed only the deterministic
-  Linux inode-reuse fixture.**
+  Linux inode-reuse fixture. Local PostgreSQL Wiring Stage A is `bc0b520`; no
+  fresh remote or CI status is claimed here.**
 - First real workspace: **Forme repo — owner confirmed**
 - Delivery: **August 25 is a Progress / Vision Sharing checkpoint, not a
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
 - Next action: **prepare and independently review a separately authorized
-  production-wiring successor for the hash-pinned, non-approvable
-  [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md); do not activate
-  it.** Repository-only Construction has stopped at Technical Review. The accepted #66 review
+  Physical Rebind for the frozen
+  [`Local PostgreSQL Wiring Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+  and hash-pinned, non-approvable
+  [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md); do not execute or
+  activate either downstream gate.** Repository-only Construction has stopped
+  at Technical Review. The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
@@ -289,8 +299,11 @@ Current truth:
 - on 2026-08-10 #67 reached offline Technical Review on Draft PR #73. Its
   initial `eabfe82` evidence remains valid and its current head is `5e93196`.
   Draft PR #75 at `09401a0` adds the public-only production-boundary foundation.
-  Stage-A `bcd4259` now adds the audited repository-only application and durable
-  persistence adapters, with vault/transport/traffic/Gate C still false. PR #74 is merged as a fixture-only
+  The durable-construction snapshot at `bcd4259` remains historical Green; the
+  current Local PostgreSQL Wiring Stage-A `bc0b520` adds the audited concrete
+  executor, 20-method bridge and corrected static SQL contract. No target
+  PostgreSQL was observed, and vault/HTTPS transport/production pool and
+  migration/runtime route/traffic/Gate C remain false. PR #74 is merged as a fixture-only
   repair. The implementation proves a local Room-bound
   reapproval, immutable receipt/recovery, offline public Projection → independent
   curation → one 24-hour/one-use knock → private durable Interaction → local

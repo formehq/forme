@@ -10,8 +10,11 @@
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
   Technical Review Green on Draft PR #73, and Draft PR #75 adds the public-only
-  production-boundary foundation. The narrow durable Public Core Construction
-  is Technical Review Green at Stage-A `bcd4259`; #67 remains In Progress until
+  production-boundary foundation. The later Local PostgreSQL Wiring Packet and
+  Addenda B/C are repository-only Technical Review Green at Stage-A `bc0b520`,
+  with exact stop `INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`; #67 remains In
+  Progress until
   later activation and one real Public Room / bounded
   Guest knock pass their gates and Owner Experience Acceptance. #68 Fresh local
   Codex candidate, #69 exact Response delivery, #70 bounded continuation and
@@ -19,16 +22,21 @@
   Yellow history; attempt 2 stopped before all Host inspectors at `0 / 0 / 0`,
   produced no capsule/receipt and cleaned Green. It is not #67's critical path.
   Retry Execution and First Provider-Call remain `NOT_REQUESTED`.
-- Production truth: Public Core is repository/offline proof only. No production
-  PostgreSQL migration, Gate C deployment/provisioning, production Room
+- Production truth: Public Core is repository/offline proof only. The concrete
+  `pg` executor and application-store bridge are constructed, and the committed
+  static catalog contract is `14 / 207 / 172 / 44`; no target PostgreSQL
+  catalog has been observed and no disposable local rehearsal has run. No
+  production PostgreSQL migration, Gate C deployment/provisioning, production Room
   mutation, public publication/admission, real Guest data, Provider call,
   external email, production secret, public traffic or spend has occurred.
   The accepted #66 phase-specific review `sha256:45414f18…1480` is not
   publishable. The Owner approved the exact walking-slice-specific Durable
   Public Core Construction Packet/Review on 2026-08-10 and Addendum A on
   2026-08-11. Repository-only Construction is Technical Review Green, with the
-  application and durable persistence facts true and the other four readiness
-  facts false. Activation later requires publication-stable Owner
+  application and durable persistence facts true. Local wiring adds the
+  constructed executor and bridge without making the vault, HTTPS transport,
+  production pool/migration, runtime route, traffic or Gate C facts true.
+  Activation later requires publication-stable Owner
   wording and a new exact Room-bound publication approval.
 - Active R4 execution claim: the current #67–#70 walking slice proves one
   public `24h / 1 Interaction` continuation and a negative Private-Room
@@ -39,8 +47,9 @@
 - Integration truth: R4 is not on `main`. `main` remains `7c1f7bd`; PR #72 was
   merged into the stacked R4 line. Draft PR #65 is at `cbadd8a`, Draft PR #73
   at `5e93196`, and Draft PR #75 at `09401a0`. Construction Stage A is
-  `bcd4259`; Draft PR #76 remains unmerged and its current remote/CI state is
-  recorded in PR metadata. PR #74 is merged and changes only the deterministic Linux
+  `bcd4259`; the current Local PostgreSQL Wiring Stage A is `bc0b520`. Draft PR
+  #76 remains unmerged and its current remote/CI state is recorded in PR
+  metadata. PR #74 is merged and changes only the deterministic Linux
   inode-reuse test fixture, not product behavior or #67 authority.
 - GitHub: [milestone #11](https://github.com/formehq/forme/milestone/11) · [parent epic #47](https://github.com/formehq/forme/issues/47)
 
@@ -223,6 +232,8 @@ Native Harness role clarification
   → public-only boundary foundation [Technical Review ✓ · PR #75 `09401a0`]
   → Durable Public Core Construction Packet [Owner approved ✓ · PR #76]
   → walking-slice-specific durable Public Core application/store [Technical Review ✓ · Stage A `bcd4259`]
+  → Local PostgreSQL Wiring + interaction-type correction [repository Technical Review ✓ · Stage A `bc0b520`]
+  → Physical Rebind proposal and Owner approval [required · not requested]
   → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
   → #68 Fresh candidate → #69 exact Response
@@ -246,9 +257,13 @@ Retry or Provider authority.
 The current walking slice starts from #66's accepted local content mechanism,
 but not from its phase-specific accepted bytes. A narrowly scoped Durable
 Public Core Construction Packet and Review are exactly Owner-approved;
-Addendum A is approved, and the repository-only durable application/store is
-Technical Review Green at Stage-A `bcd4259`. The hash-pinned Gate C Card remains
-non-approvable until a production-wiring successor can cover setup, deployment, publication, Curator
+Addendum A and the Local PostgreSQL Wiring Packet/Addenda B/C are approved.
+The repository-only executor/bridge and corrected static SQL contract are
+Technical Review Green at Stage-A `bc0b520`, as recorded in the
+[`Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md).
+The hash-pinned [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+remains non-approvable. Physical Rebind comes first; later production inputs
+must still cover setup, deployment, publication, Curator
 admission and one real knock; activation also requires a publication-stable
 successor and new exact Room-bound approval. #71 is sequenced before #68 only
 if the Fresh local Codex path still needs local Host Setup/Doctor. Real

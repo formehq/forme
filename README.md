@@ -20,16 +20,21 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Room/knock rehearsal, restart recovery, and the richer visitor surface.
   Draft PR #75 adds the public-only production-boundary foundation. The Owner
   approved Draft PR #76's exact Durable Public Core Construction Packet on
-  2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is now
-  Technical Review Green at Stage-A `bcd4259`: the application and durable
-  persistence adapters are constructed, while vault, transport, traffic and
-  Gate C readiness remain false. #67 has not created or
+  2026-08-10 and Addendum A on 2026-08-11. The later Local PostgreSQL Wiring
+  Packet plus Addenda B/C have now reached repository-only Technical Review
+  Green at Stage-A `bc0b520`: the application, durable persistence, concrete
+  `pg` executor and 20-method application-store bridge are constructed. The
+  committed SQL catalog contract is `14 / 207 / 172 / 44`, but it has not been
+  observed in PostgreSQL. Physical Rebind is the next separately approved
+  gate; vault, HTTPS transport, production pool/migration, runtime route,
+  traffic and Gate C readiness remain false. #67 has not created or
   mutated a production Room, deployed, published, admitted a Projection,
   handled real Guest data, or run a real public knock. R4 is not Owner-accepted
   or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
-  and PR #75 at `09401a0`. Construction Stage A is `bcd4259`; Draft PR #76
+  and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
+  Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
   merged and changed only the deterministic Linux inode-reuse test fixture; it
@@ -41,8 +46,9 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   first provider-call grant remain `NOT_REQUESTED`. Host Setup/Doctor is tracked
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
-- Production gap: the current Public Core is repository/offline proof only. No
-  production PostgreSQL migration, Gate C deployment/provisioning, production
+- Production gap: the current Public Core is repository/offline proof only.
+  The disposable local PostgreSQL rehearsal has not run. No production
+  PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
 
@@ -69,6 +75,9 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 9. [`docs/README.md`](./docs/README.md) — complete map of frozen Gate B/Host
    history, including both Host Binding attempt envelopes
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
+11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+    and [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+    — the current Phase-1 evidence, exact stop and inputs still required
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
@@ -244,9 +253,13 @@ Technical Review Green on Draft PR #73 at `5e93196`; Draft PR #75 at `09401a0`
 adds only the public-only production boundary foundation. The exact
 [`Durable Public Core Construction Packet`](./docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
 and its Owner Review were exactly approved on 2026-08-10; Addendum A was
-approved on 2026-08-11. Repository-only Construction is Technical Review Green
-at Stage-A `bcd4259`, with exact machine evidence and a non-approvable Gate C
-Card. A separately approved Gate C decision,
+approved on 2026-08-11. That durable-construction snapshot remains historical
+Green at `bcd4259`. The current Local PostgreSQL Wiring successor is
+repository-only Technical Review Green at `bc0b520`, with exact
+[machine-backed evidence](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
+A separately approved Physical Rebind must precede any local PostgreSQL
+rehearsal; a later Gate C decision,
 publication-stable successor approval and one real Guest knock follow later.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model

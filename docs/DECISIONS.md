@@ -1052,3 +1052,52 @@ product/runtime Provider/email call, merge or spend occurred.
 #67 and R4 remain open; the next artifact is a separately authorized and
 independently reviewed production-wiring successor, not activation of the
 current Card.
+
+## 2026-08-11 — R4 #67 Local PostgreSQL Wiring Phase 1 reached its exact stop
+
+**Decision:** record the Owner-approved Local PostgreSQL Wiring Construction
+Packet `sha256:be32f425fb3d5e4fa1b4fae611fadbb65d4eaf097b65ecc90a8ea6395cbe1258`
+and Review `sha256:4f050d5b79fe860d2989eed8a0b6607aa815de1e2a94cf8fae8b941701815aca`,
+Addendum B `sha256:a85dcd2c893e2290f15b0082b93ae0163a1012bb210c00f908ec08747c17415f`
+and Review `sha256:ce7acc0ff9c45af9286595449ebce32ec893d70e9092d0be654a20a7bab96eb2`,
+and Addendum C `sha256:6efa791732a7f3b28e728c39bd182a73286e23d6fecba90f5be39924ff133d5d`
+and Review `sha256:2aaa4d1243e2813b4030a37bae2cd7f14b41ca29c3814f4bce70c4c0161f65b7`.
+Their last authority wrapper is `deb12a045f5d84281bc9da0f110e049748949970` /
+tree `4b9028a942d4ac436527586aee64fbc23ec3488d`.
+
+**Result:** exact Stage A `bc0b52023bb19d4e41fc4daa4a1e232961e1a19b` /
+tree `d5cb758467d06bfd7f17b6ae6a34664e659e1e3d` freezes 19 artifacts
+(6 added / 13 modified) with aggregate
+`sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417`.
+The application, durable persistence, concrete `pg` executor and 20-method
+application-store bridge are constructed. The corrected committed static SQL
+contract is 14 tables / 207 columns / 172 constraints / 44 indexes, including
+`interactions.interaction_type text NOT NULL` with its exact three-value check.
+It is not a target PostgreSQL observation.
+
+Machine evidence `sha256:37a6ce9b39279281dc9a94e9ee166bf4c8b1ee70caefd3168ef556c8ff8f539d`
+validates against schema
+`sha256:9bc0d1dbf3a1a74a272e17e4f1ad6bce9d0c33b65bcf7d4ae9fc00567f76902f`;
+the 19-artifact index is
+`sha256:6e63d94ce473e5d8386c46860a3e398b8331f8955003437576710c49ebe759d9`.
+The [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+is `sha256:060e6d05e91101ee95786600698b699c3796758083a2d862a23d3c907ca9ef14`;
+the successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+is `sha256:b63aa612206af85671af44cdad1fac2727e6c0c3fc96459636f59cec8359f5bb`.
+
+**Validation and boundary:** focused, runner, complete Public Core, full offline,
+current-successor Gate-B candidate and spine lanes pass 85/85, 66/66, 318/318,
+638/638, 145/145 and 45/45 respectively; TypeScript and static checks pass;
+independent Stage-A/index audit reports 0 Blocker / 0 Important. The Gate-B
+145/145 result proves four exact pre-effect successor-lock denials and does not
+rebind historical Gate-B authority or change its Yellow state. No repository
+command/package/source-control external network, Docker/OCI, PostgreSQL/SQL,
+product data-plane, production/runtime/real-data, product Provider/model/email,
+deployment/publication/admission, push/PR, merge/release or spend effect
+occurred in Phase 1.
+
+**Stop:** `INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN /
+PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`. The current runner
+still binds the prior 17-path wrapper and cannot physically consume this
+19-path state. Physical Rebind requires a new exact Packet, Review and Owner
+approval. Gate C, #67 Done and R4 Done remain false.

@@ -1,118 +1,186 @@
-# R4 #67 Public Core Gate C Activation Card
+# R4 #67 Public Core Gate C Activation Card — Local PostgreSQL Successor
 
-- Status: **`PROPOSED_NOT_APPROVABLE_INPUTS_REQUIRED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_PHYSICAL_REBIND_REQUIRED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-11
 - Scope: **#67 only — one durable public Room through one bounded knock reaching the local Owner**
-- Construction implementation HEAD / tree:
-  `bcd4259130627067e1e7cf1974513801545cda35` /
-  `7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31`
-- Construction artifact aggregate:
-  `sha256:c825306a5e20e910e6fdd811d1d3599b59e317baaa18b46c98ba13b8c0c3e44f`
-- Construction evidence / report:
-  `sha256:864e94151e5bc3864f154d089da7590501dbee7eedb62e61f980118d2e0a4dc5` /
-  `sha256:452c1c17a6cbd8a0dfab56a29654a94088978b9f483c6e837a319426dcbea657`
-- Independent Stage-A/index audit summary SHA-256:
-  `sha256:64ad203d66be7f815280741be8a094505a5df6b3f1a98d38e2f199646cb35cc0`
+- Predecessor Gate C Card SHA-256:
+  `sha256:dcc2fb79a96d37eba8b1b0fb276a9ee0b01a436501520e224650cabeaf2e73f6`
+- Local PostgreSQL Stage-A implementation `J` / tree:
+  `bc0b52023bb19d4e41fc4daa4a1e232961e1a19b` /
+  `d5cb758467d06bfd7f17b6ae6a34664e659e1e3d`
+- Exact 19-artifact aggregate `G19`:
+  `sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417`
+- Physical Rebind Approval: **NOT_REQUESTED**
 - Gate C Activation Grant: **NOT_REQUESTED**
-- Migration Execution Grant: **NOT_REQUESTED**
-- Deployment / runtime-route activation grants: **NOT_REQUESTED**
-- Room mutation / publication / Curator admission grants: **NOT_REQUESTED**
-- Real Guest / traffic grants: **NOT_REQUESTED**
-- Provider / email / external-message grants: **NOT_REQUESTED**
-- Merge / public-release / spend grants: **NOT_REQUESTED**
+- Migration, deployment, runtime/route, publication, real Guest, Provider,
+  merge, release and spend grants: **NOT_REQUESTED**
 
-This Card is a requirements and stop object, not an approval request. It
-contains no secret, credential, private path, Guest body or production value.
-It grants nothing, and no shortened or implied approval may activate it.
+This successor Card records the repository-only Local PostgreSQL Wiring result
+and the remaining activation requirements. It is a stop object, not an
+approval request. It grants no repository mutation, Physical Rebind, Docker,
+OCI, PostgreSQL, SQL, runtime, route, Vault, HTTPS, traffic, Room, Projection,
+Curator, Guest, Provider, model, email, deployment, publication, admission,
+merge, release or spend authority.
 
-The Card does not contain its own SHA-256 or the commit/tree that contains its
-final bytes. A future activation request must bind the frozen Card SHA-256,
-containing HEAD/tree and every exact input below in a separate Owner approval.
+The Card intentionally contains neither its own SHA-256 nor the future Stage-B
+commit/tree that will contain its final bytes. Neither value can be inferred
+from this document. Any later approval must bind the frozen Card SHA-256 and
+its containing commit/tree externally and explicitly.
 
-## Frozen authority lineage
+## Frozen successor bindings
 
-| Authority | Binding |
+| Artifact or authority | Exact binding |
 |---|---|
-| R4 Technical Control Packet v0.2 | `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5` |
-| Durable Construction Packet | `sha256:f5d6c77c4ae21d57a8fe551ed49916ec8b06fc215ac018b7a71ead19c1c48a31` |
-| Durable Construction Owner Review | `sha256:8272df04a9374ca04be3f212cd0bc8b123d138953224c24a66d13d08912887ff` |
-| Packet baseline HEAD / tree | `4841c32f07d3e6810cb023387cefa0562b85b777` / `abc24d75345637886f3252caf3d8eeec7c6ec6be` |
-| Approved wrapper HEAD / tree | `d81e6fd3e1de9737d6c6dcf93fe642907654eec8` / `4910018a05b5b9d91bc3b3b2463698300e156a2a` |
-| Addendum A | `APPROVED` — config test is artifact 12 of 16; readiness is exactly 2 constructed / 4 false |
-| Stage-A Construction HEAD / tree | `bcd4259130627067e1e7cf1974513801545cda35` / `7e6c3236c06d63f06e93e8a4d1b69fe0a20bca31` |
-| Proposed SQL / verify / rollback | `sha256:869c6c3e0853a8de20a3c4973601877fca854a911dec68b2546da9ff420b5db2` / `sha256:9c19d3cd55945421176d9c24e268734e4c7a146e004eb3c0cba32ac65ee517e4` / `sha256:526f8dcb99aa330b2b2666a9e0df3c959caa05ab012fdf33afcdca277d2acd2e` |
+| Predecessor Gate C Card | `sha256:dcc2fb79a96d37eba8b1b0fb276a9ee0b01a436501520e224650cabeaf2e73f6` |
+| Local PostgreSQL Wiring Construction Packet | `sha256:be32f425fb3d5e4fa1b4fae611fadbb65d4eaf097b65ecc90a8ea6395cbe1258` |
+| Construction Owner Review | `sha256:4f050d5b79fe860d2989eed8a0b6607aa815de1e2a94cf8fae8b941701815aca` |
+| Addendum B / Owner Review | `sha256:a85dcd2c893e2290f15b0082b93ae0163a1012bb210c00f908ec08747c17415f` / `sha256:ce7acc0ff9c45af9286595449ebce32ec893d70e9092d0be654a20a7bab96eb2` |
+| Addendum C / Owner Review | `sha256:6efa791732a7f3b28e728c39bd182a73286e23d6fecba90f5be39924ff133d5d` / `sha256:2aaa4d1243e2813b4030a37bae2cd7f14b41ca29c3814f4bce70c4c0161f65b7` |
+| Addendum C frozen wrapper HEAD / tree | `deb12a045f5d84281bc9da0f110e049748949970` / `4b9028a942d4ac436527586aee64fbc23ec3488d` |
+| Stage-A implementation `J` / tree | `bc0b52023bb19d4e41fc4daa4a1e232961e1a19b` / `d5cb758467d06bfd7f17b6ae6a34664e659e1e3d` |
+| 19-artifact aggregate `G19` | `sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417` |
+| 19-artifact index | `sha256:6e63d94ce473e5d8386c46860a3e398b8331f8955003437576710c49ebe759d9` |
+| Evidence schema | `sha256:9bc0d1dbf3a1a74a272e17e4f1ad6bce9d0c33b65bcf7d4ae9fc00567f76902f` |
+| Machine evidence | `sha256:37a6ce9b39279281dc9a94e9ee166bf4c8b1ee70caefd3168ef556c8ff8f539d` |
+| Construction Report | `sha256:060e6d05e91101ee95786600698b699c3796758083a2d862a23d3c907ca9ef14` |
+| `package-lock.json` | `sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f` |
+| Local PostgreSQL runner | `sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1` |
+| `schema.sql` / `verify.sql` / `rollback.sql` | `sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8` / `sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd` / `sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4` |
 
-Any changed implementation, dependency, SQL, production configuration,
-deployment artifact, publication artifact, actor, window, command or audit
-invalidates the future activation surface and requires newly frozen bytes.
+Machine-readable bindings are in the
+[19-artifact index](../schemas/r4/public-core/local-postgres-artifact-index.json),
+[evidence schema](../schemas/r4/public-core/local-postgres-wiring-evidence.schema.json)
+and [Phase-1 evidence](./evidence/r4-public-core-local-postgres-wiring.json).
+The human-readable result is the
+[Local PostgreSQL Wiring Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md).
 
-## What Construction can establish
+Any changed implementation, dependency, SQL, catalog, runner, production
+configuration, deployment artifact, publication artifact, actor, window,
+command or audit invalidates the future activation surface and requires newly
+frozen bytes.
 
-Construction establishes only:
+## What repository construction established
 
-- the exact 4-read / 16-mutation public-only application surface;
-- action-specific durable store and PostgreSQL transaction plans;
-- proposed 14-table SQL, verify and rollback bytes;
-- injected AEAD, keyed-digest, deletion and retention behavior;
-- offline fault, race, idempotency and privacy evidence; and
-- zero real database, product/runtime/data-plane network, Room, publication,
-  Guest and spend effects.
+The exact Stage-A bytes establish:
 
-Construction cannot establish a real driver or pool, a migrated database,
-credential vault, HTTPS transport, origin trust, runtime route, deployment,
-traffic safety, real Presence or Owner Experience Acceptance.
+- the existing exact 4-read / 16-mutation public-only application surface;
+- an action-specific concrete `pg` executor and application-store bridge;
+- a 145-file, 15-package import closure bound to the approved lock;
+- proposed SQL for exactly 14 tables, 207 columns, 172 constraints and 44
+  indexes under `forme_r4_public_core`;
+- `interactions.interaction_type text NOT NULL` with exact allowed values
+  `ask`, `seed` and `resonance`;
+- action-aware `public_single` / `closed` guards;
+- injected AEAD, keyed-digest, deletion, retention, restart and replay logic;
+  and
+- offline fake, fault, race, idempotency, privacy and successor-candidate
+  regression evidence.
+
+The application adapter, durable persistence adapter, concrete executor and
+application-store bridge are constructed repository artifacts. No local or
+target PostgreSQL server was contacted, no SQL was executed, and no production
+driver pool, runtime route or traffic path was configured.
 
 ## Readiness facts that remain closed
 
-| Fact | Gate C Card state |
+| Fact | Current successor state |
 |---|---:|
-| Credential vault adapter constructed | `false` |
+| Production application adapter constructed | `true` |
+| Durable persistence adapter constructed | `true` |
+| Concrete PostgreSQL executor constructed | `true` |
+| Application-store bridge constructed | `true` |
+| Disposable local PostgreSQL rehearsal exercised | `false` |
+| Target PostgreSQL observed | `false` |
+| Target catalog verified as 14 / 207 / 172 / 44 | `false` |
+| Production driver/pool configured | `false` |
+| Production migration applied | `false` |
+| Credential Vault adapter constructed | `false` |
 | HTTPS transport adapter constructed | `false` |
-| Production driver/pool wired | `false` |
-| Proposed migration applied | `false` |
+| Runtime/API route active | `false` |
 | Production route active | `false` |
 | Traffic ready | `false` |
 | Gate C ready | `false` |
 | Real Room / Projection / Curator receipt | absent / absent / absent |
 | Real Guest Interaction | absent |
 
+The committed runner still binds the prior 17-path Addendum B workset and
+wrapper. It cannot accept `J` or `G19` for physical execution. A separately
+frozen and approved Physical Rebind must bind the exact 19-path commit, current
+SQL hashes, catalog counts and runner bytes before any Docker or PostgreSQL
+effect. Physical Rebind is not implicit in Technical Review Green.
+
+## Obsolete physical bindings
+
+The following predecessor bindings are historical evidence only and are
+invalid for any future physical grant:
+
+| Obsolete binding | Value |
+|---|---|
+| `schema.sql` | `sha256:869c6c3e0853a8de20a3c4973601877fca854a911dec68b2546da9ff420b5db2` |
+| `verify.sql` | `sha256:9c19d3cd55945421176d9c24e268734e4c7a146e004eb3c0cba32ac65ee517e4` |
+| `rollback.sql` | `sha256:526f8dcb99aa330b2b2666a9e0df3c959caa05ab012fdf33afcdca277d2acd2e` |
+| Stage-A workset | 14 paths |
+| Catalog | 14 tables / 206 columns / 171 constraints / 44 indexes |
+
+No pending, recreated or amended grant may use these values. The successor
+bindings do not amend an old one-use grant in place.
+
 ## Inputs required before an activation-ready successor
 
 Every item below must be exact and hash-pinned. References replace secret
 values; raw secrets never enter this Card, config, diagnostics or logs.
 
-### 1. Production artifact and runtime
+### 1. Physical Rebind and disposable local rehearsal
 
-- `REQUIRED_UNSET_PRODUCTION_WIRING_HEAD_AND_TREE`
-- exact PostgreSQL driver name, version, integrity and dependency-lock hash;
+- exact Physical Rebind Packet and Owner Review hashes, proposal lineage and
+  frozen wrapper HEAD/tree;
+- a one-use grant binding `J`, its tree, `G19`, the current runner, lock, import
+  closure, all three current SQL hashes and catalog 14 / 207 / 172 / 44;
+- exact Docker CLI/socket identity, pinned OCI digest and `linux/arm64`
+  platform manifest already admitted by the construction contract;
+- exact local-only network, container, volume and disposable database names;
+- one bounded apply / read-only verify / restart-reopen / rollback rehearsal;
+- body-free receipts proving cleanup and absence of every owned resource; and
+- independent zero-Blocker/zero-Important review of the resulting physical
+  evidence.
+
+This step must stop after the disposable local rehearsal. It cannot confer
+production database, runtime, route, publication, traffic or Gate C authority.
+
+### 2. Production artifact and runtime
+
+- a future successor must supply an exact production-wiring HEAD/tree; no such
+  binding exists in this Card;
+- exact PostgreSQL driver/pool configuration and dependency binding;
 - exact runtime/API-route wiring preserving the 20 allowed / 25 unavailable
   operation partition;
 - OCI registry/repository/image digest and SBOM hash;
 - exact Compose service/network names, deploy command and health command; and
 - production-wiring tests and independent zero-Blocker/zero-Important audits.
 
-### 2. PostgreSQL and recovery
+### 3. PostgreSQL and recovery
 
 - exact account, host, cluster, database, schema and server version;
 - migrator, application and verifier roles plus exact grants;
 - pool size, timeouts, TLS verification and connection policy;
 - DSN reference, never a raw DSN;
-- preflight, one migration command and exact read-only verify command;
+- preflight, one migration command and the exact read-only verification for
+  14 tables, 207 columns, 172 constraints and 44 indexes;
 - backup horizon, backup receipt and current restore evidence; and
 - compatible image rollback command plus the separately bounded empty-state
   SQL rollback command.
 
-### 3. Vault, crypto and local binding
+### 4. Vault, crypto and local binding
 
-- database URL, body-encryption key, capability-pepper and publication-verifier
-  references and versions;
+- database URL, body-encryption key, capability-pepper and
+  publication-verifier references and versions;
 - hosted secret resolver and access identity;
-- local exact-Room credential-vault adapter;
+- local exact-Room credential-Vault adapter;
 - key/credential rotation and revocation commands; and
 - evidence that raw key, credential, capability and body bytes cannot enter
   config serialization, receipts, events, errors or named logs.
 
-### 4. Edge, identity and HTTPS transport
+### 5. Edge, identity and HTTPS transport
 
 - exact public origin and Cloudflare account/zone/hostname;
 - Access issuer, distinct control/approve audiences, distinct
@@ -120,12 +188,12 @@ values; raw secrets never enter this Card, config, diagnostics or logs.
 - exact per-hostname Tunnel or origin-only protection mechanism;
 - Caddy listener, upstream route, source allowlist and proxy-header stripping;
 - origin-boundary and Access-assertion verifier material references;
-- fixed-origin HTTPS transport, TLS, timeout, redirect and response-size policy;
-  and
+- fixed-origin HTTPS transport, TLS, timeout, redirect and response-size
+  policy; and
 - direct-origin, other-customer, forged-header and wrong-audience negative
   evidence.
 
-### 5. Operations, retention and incident response
+### 6. Operations, retention and incident response
 
 - exact application rate and WAF values;
 - hourly janitor schedule and retention-health alert;
@@ -135,7 +203,7 @@ values; raw secrets never enter this Card, config, diagnostics or logs.
 - independent edge kill switch and application closure commands; and
 - exact incremental infrastructure spend ceiling.
 
-### 6. Room, publication and actors
+### 7. Room, publication and actors
 
 - exact installation, Third Place, entity and public Room IDs;
 - Room creation in `closed` mode;
@@ -145,10 +213,10 @@ values; raw secrets never enter this Card, config, diagnostics or logs.
 - exact capsule, basis, payload, public-content, policy, Twin-revision,
   publication approval and receipt hashes plus publication/fresh/expiry times;
 - a new Room-bound exact Owner publication approval; and
-- a separate Curator approve-lane action and durable admission receipt, even if
-  the same human holds both P0 roles.
+- a separate Curator approve-lane action and durable admission receipt, even
+  if the same human holds both P0 roles.
 
-### 7. One real Guest window
+### 8. One real Guest window
 
 - one designated consenting real collaborator represented in shared evidence
   only by an opaque/hash-bound identifier;
@@ -156,75 +224,83 @@ values; raw secrets never enter this Card, config, diagnostics or logs.
 - exact approved data classes and retention/deletion disposition;
 - activation start, end and timezone;
 - intended evidence: public understanding plus one private bounded knock;
-- physical exposure ceiling: either the existing approved rate/pool ceiling is
-  explicitly accepted, or a separately constructed one-window global latch is
-  approved; “one Guest” must not be presented as a current hard runtime cap;
-  and
+- physical exposure ceiling: either the existing approved rate/pool ceiling
+  is explicitly accepted, or a separately constructed one-window global latch
+  is approved; “one Guest” is not a current hard runtime cap; and
 - no promised Response, Provider processing or email under #67.
 
 ## Future staged execution — not authorized by this Card
 
-An activation-ready successor may authorize these stages under one exact
-Owner-approved envelope. Each stage stops on mismatch; later authority is not
-inferred from an earlier successful stage.
+An activation-ready successor may request the following stages under an exact
+Owner-approved envelope. Every stage stops on mismatch; later authority is not
+inferred from an earlier success.
 
-1. **Zero-effect admission:** recompute all hashes, verify the clean exact
-   deployment artifact, references, audits, backup/restore evidence and
+1. **Physical Rebind rehearsal:** under its own approval, consume one exact
+   local-only grant, rehearse apply/verify/restart/rollback against a disposable
+   PostgreSQL instance, prove cleanup, publish body-free evidence, and stop.
+2. **Zero-effect production admission:** recompute all hashes; verify the clean
+   exact deployment artifact, references, audits, backup/restore evidence and
    rehearsed disable paths. Failure leaves all external effect counts zero.
-2. **Closed provisioning:** deny public ingress, create the backup, execute one
-   exact migration, run read-only verification for 14 tables, one installation,
-   one retention-health row and zero Rooms, deploy the pinned image, then pass
+3. **Closed provisioning:** deny public ingress, create the backup, execute one
+   exact migration, verify 14 / 207 / 172 / 44 plus one installation, one
+   retention-health row and zero Rooms, deploy the pinned image, then pass
    health, janitor, privacy and edge-negative checks.
-3. **Closed Room bootstrap:** create one `third_place_public` Room in `closed`,
-   complete one pairing/exchange, and verify one current exact-Room binding.
-   No public encounter or Guest byte exists.
-4. **Closed publication:** revalidate the current Twin, exact successor,
+4. **Closed Room bootstrap:** create one `third_place_public` Room in `closed`,
+   complete one pairing/exchange and verify one current exact-Room binding. No
+   public encounter or Guest byte exists.
+5. **Closed publication:** revalidate the current Twin, exact successor,
    approval, policy and time bounds; deliver only those bytes; record the Owner
    publication and separate Curator admission; keep intake closed while public
    rendering, Agent JSON and private-canary absence are verified.
-5. **Bounded intake:** open `public_single` only for the exact window; the
+6. **Bounded intake:** open `public_single` only for the exact window; the
    designated real Guest reads and submits the bounded private knock; close
    intake immediately after the accepted Interaction or at the deadline.
-6. **Local arrival and stop:** permit only exact sync, pull and ACK into the
+7. **Local arrival and stop:** permit only exact sync, pull and ACK into the
    local Owner lane, apply the approved retain/delete disposition, produce
-   body-free receipts, and stop at #67 Owner/Guest Experience Review.
+   body-free receipts and stop at #67 Owner/Guest Experience Review.
 
 ## Disable and rollback contract
 
 Before intake opens, both disable paths must have exact commands, named actors,
 expected body-free output and a successful rehearsal receipt:
 
-1. an edge kill switch that denies public ingress even when the app or database
-   is unhealthy; and
+1. an edge kill switch that denies public ingress even when the application or
+   database is unhealthy; and
 2. application closure that changes `public_single → closed`, followed where
    required by unlist/revoke and Room-binding revoke.
 
-The proposed `rollback.sql` first performs exact catalog, external-dependency
-and empty-state preflight checks. It explicitly breaks only the two declared
-internal dependency cycles, then drops the schema objects in reverse order with
-`RESTRICT`; it never uses `CASCADE`. It may be authorized only before any Room
-or real Guest data exists. After Room bootstrap or any real Guest byte, normal
-rollback must close ingress, restore a schema-compatible pinned image, preserve
-evidence, and use typed delete/revoke/purge operations. Destruction of
-production data requires a new explicit Owner grant.
+The current `rollback.sql` first proves the exact 14-table / 207-column /
+172-constraint / 44-index catalog, external-dependency boundary and empty-state
+preconditions. It explicitly breaks only the two declared internal dependency
+cycles, then drops schema objects in reverse order with `RESTRICT`; it never
+uses `CASCADE`. It may be authorized only before any Room or real Guest data
+exists.
 
-Any fault after Guest intake consumes the approved activation attempt. No
-silent retry, second Guest, reopened window or repeated publication is implied.
+After Room bootstrap or any real Guest byte, normal rollback must close
+ingress, restore a schema-compatible pinned image, preserve evidence, and use
+typed delete/revoke/purge operations. Destruction of production data requires
+a new explicit Owner grant. Any fault after Guest intake consumes the approved
+activation attempt; no silent retry, second Guest, reopened window or repeated
+publication is implied.
 
 ## Zero-effect authority of these bytes
 
 | Effect | Authorized now |
 |---|---:|
-| Dependency or production-wiring mutation | 0 |
-| Migration / database process / database mutation | 0 / 0 / 0 |
-| Deployment / route activation / public traffic | 0 / 0 / 0 |
-| Secret or credential installation | 0 |
-| Room create/pair/mode/revoke actions | 0 |
-| Projection delivery/publication/admission | 0 |
+| Further repository or dependency mutation | 0 |
+| Physical Rebind grants or executions | 0 / 0 |
+| Docker CLI / daemon calls | 0 / 0 |
+| OCI inspect / pulls | 0 / 0 |
+| PostgreSQL connections / database identities | 0 / 0 |
+| SQL apply / verify / rollback | 0 / 0 / 0 |
+| Production or remote database effects | 0 |
+| Deployment / runtime / route / Vault / HTTPS activation | 0 / 0 / 0 / 0 / 0 |
+| Public traffic / Gate C activation | 0 / 0 |
+| Room create / pair / mode / revoke actions | 0 / 0 / 0 / 0 |
+| Projection delivery / publication / admission | 0 / 0 / 0 |
 | Real Guest records or bytes | 0 |
-| Product/runtime Provider or model calls | 0 |
-| Email or external messages | 0 |
-| Merge or public release | 0 |
+| Product/runtime Provider / model / email | 0 / 0 / 0 |
+| Push / PR / merge / release | 0 / 0 / 0 / 0 |
 | Spend | US$0 |
 
 ## Experience boundary
@@ -242,10 +318,13 @@ Acceptance or R4 Done.
 
 ## Stop
 
-Do not approve or activate this version. Construction evidence is frozen and
-Technical Review is Green; the next step is to prepare and independently review
-a production-wiring successor containing every required exact input above. The
-later Owner decision must name that successor Card SHA-256, its containing
-HEAD/tree, production artifact, Projection approval, actors, activation window,
-disable/rollback commands, effect ceilings and spend. Until then, all Gate C
-effects remain `NOT_REQUESTED`.
+Do not approve or activate this Card. Current work stops exactly at:
+
+`INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN / PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
+
+The next possible physical step is a separately proposed, hash-pinned Physical
+Rebind Packet and Owner Review. Even successful local rehearsal must stop and
+cannot request or imply Gate C. A later Gate C decision must separately bind a
+new activation-ready Card SHA-256, its containing HEAD/tree, every production
+input, exact Projection approval, actors, activation window, disable/rollback
+commands, effect ceilings and spend.

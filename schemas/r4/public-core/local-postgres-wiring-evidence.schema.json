@@ -1,0 +1,564 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-wiring-evidence.schema.json",
+  "title": "R4 #67 Local PostgreSQL Wiring Phase 1 Evidence V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "stageA",
+    "constructionBoundary",
+    "catalogContract",
+    "gateBCandidateRegression",
+    "validation",
+    "effectAudit",
+    "documentationScope",
+    "artifacts",
+    "obsoleteBindings",
+    "independentAudit",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4_public_core_local_postgres_wiring_evidence.v1"
+    },
+    "status": {
+      "const": "INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN_PHYSICAL_REBIND_APPROVAL_REQUIRED_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "const": "2026-08-12T03:28:27Z"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructionPacketSha256",
+        "constructionOwnerReviewSha256",
+        "constructionPacketProposalHead",
+        "constructionPacketProposalTree",
+        "constructionWrapperHead",
+        "constructionWrapperTree",
+        "addendumBSha256",
+        "addendumBOwnerReviewSha256",
+        "addendumBProposalHead",
+        "addendumBProposalTree",
+        "addendumBWrapperHead",
+        "addendumBWrapperTree",
+        "addendumCSha256",
+        "addendumCOwnerReviewSha256",
+        "addendumCProposalHead",
+        "addendumCProposalTree",
+        "addendumCWrapperHead",
+        "addendumCWrapperTree",
+        "constructionGrant",
+        "addendumBPhase1Grant",
+        "addendumCPhase1Grant",
+        "physicalRebindGrant",
+        "gateCGrant",
+        "migrationExecutionGrant",
+        "publicationGrant",
+        "providerGrant"
+      ],
+      "properties": {
+        "constructionPacketSha256": { "const": "sha256:be32f425fb3d5e4fa1b4fae611fadbb65d4eaf097b65ecc90a8ea6395cbe1258" },
+        "constructionOwnerReviewSha256": { "const": "sha256:4f050d5b79fe860d2989eed8a0b6607aa815de1e2a94cf8fae8b941701815aca" },
+        "constructionPacketProposalHead": { "const": "fd3abebec02a762d3e318ddba4415389dfd625a6" },
+        "constructionPacketProposalTree": { "const": "9f2c226d0e12d6c5747ec3b693c6ac51c7bb2b27" },
+        "constructionWrapperHead": { "const": "c878a5a534868482672838d39290e3f12e9d3b7f" },
+        "constructionWrapperTree": { "const": "d917fb7d2c9ade9b2d8acae5f5e7d4893e0c84c5" },
+        "addendumBSha256": { "const": "sha256:a85dcd2c893e2290f15b0082b93ae0163a1012bb210c00f908ec08747c17415f" },
+        "addendumBOwnerReviewSha256": { "const": "sha256:ce7acc0ff9c45af9286595449ebce32ec893d70e9092d0be654a20a7bab96eb2" },
+        "addendumBProposalHead": { "const": "4313bd94e2a81761b4b25824b5eb82aa6396b6be" },
+        "addendumBProposalTree": { "const": "67233cc1ff81ec5c73b15cfcaa44fb9424d35d83" },
+        "addendumBWrapperHead": { "const": "1db7b30f38ca6322a3b0ad4be6d537af9cf781e8" },
+        "addendumBWrapperTree": { "const": "1270bbc9beae9c446c83bbfc220e5906800890e3" },
+        "addendumCSha256": { "const": "sha256:6efa791732a7f3b28e728c39bd182a73286e23d6fecba90f5be39924ff133d5d" },
+        "addendumCOwnerReviewSha256": { "const": "sha256:2aaa4d1243e2813b4030a37bae2cd7f14b41ca29c3814f4bce70c4c0161f65b7" },
+        "addendumCProposalHead": { "const": "ba61f7434071b759195fd3389b84092b96f3bb0c" },
+        "addendumCProposalTree": { "const": "091258d78908a1a2e99542e1a5b835e84b5d3512" },
+        "addendumCWrapperHead": { "const": "deb12a045f5d84281bc9da0f110e049748949970" },
+        "addendumCWrapperTree": { "const": "4b9028a942d4ac436527586aee64fbc23ec3488d" },
+        "constructionGrant": { "const": "APPROVED" },
+        "addendumBPhase1Grant": { "const": "APPROVED" },
+        "addendumCPhase1Grant": { "const": "APPROVED" },
+        "physicalRebindGrant": { "const": "NOT_REQUESTED" },
+        "gateCGrant": { "const": "NOT_REQUESTED" },
+        "migrationExecutionGrant": { "const": "NOT_REQUESTED" },
+        "publicationGrant": { "const": "NOT_REQUESTED" },
+        "providerGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "stageA": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "head",
+        "tree",
+        "parentHead",
+        "parentTree",
+        "branch",
+        "fileCount",
+        "addedFileCount",
+        "modifiedFileCount",
+        "deletedFileCount",
+        "renamedFileCount",
+        "artifactAggregateSha256",
+        "runnerCore17ArtifactAggregateSha256"
+      ],
+      "properties": {
+        "head": { "const": "bc0b52023bb19d4e41fc4daa4a1e232961e1a19b" },
+        "tree": { "const": "d5cb758467d06bfd7f17b6ae6a34664e659e1e3d" },
+        "parentHead": { "const": "deb12a045f5d84281bc9da0f110e049748949970" },
+        "parentTree": { "const": "4b9028a942d4ac436527586aee64fbc23ec3488d" },
+        "branch": { "const": "codex/r4-public-core-local-postgres-wiring" },
+        "fileCount": { "const": 19 },
+        "addedFileCount": { "const": 6 },
+        "modifiedFileCount": { "const": 13 },
+        "deletedFileCount": { "const": 0 },
+        "renamedFileCount": { "const": 0 },
+        "artifactAggregateSha256": { "const": "sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417" },
+        "runnerCore17ArtifactAggregateSha256": { "const": "sha256:e15040bcdd69a5f9b49c76b80db4bf40aaeca295de446adeaa5f7aec33be8c3e" }
+      }
+    },
+    "constructionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "productionApplicationAdapterConstructed",
+        "durablePersistenceAdapterConstructed",
+        "concretePgExecutorConstructed",
+        "applicationStoreBridgeConstructed",
+        "credentialVaultAdapterConstructed",
+        "httpsTransportAdapterConstructed",
+        "disposableLocalPostgresRehearsalExercised",
+        "targetPostgresObserved",
+        "productionDriverPoolConfigured",
+        "productionMigrationApplied",
+        "runtimeApiRouteActive",
+        "trafficReady",
+        "gateCReady",
+        "currentRunnerPhysicalRebindCompatibleWithAddendumC",
+        "currentRunnerStageAPathCountBinding",
+        "currentRunnerAuthorityWrapperHead",
+        "physicalRebindApprovalRequired"
+      ],
+      "properties": {
+        "productionApplicationAdapterConstructed": { "const": true },
+        "durablePersistenceAdapterConstructed": { "const": true },
+        "concretePgExecutorConstructed": { "const": true },
+        "applicationStoreBridgeConstructed": { "const": true },
+        "credentialVaultAdapterConstructed": { "const": false },
+        "httpsTransportAdapterConstructed": { "const": false },
+        "disposableLocalPostgresRehearsalExercised": { "const": false },
+        "targetPostgresObserved": { "const": false },
+        "productionDriverPoolConfigured": { "const": false },
+        "productionMigrationApplied": { "const": false },
+        "runtimeApiRouteActive": { "const": false },
+        "trafficReady": { "const": false },
+        "gateCReady": { "const": false },
+        "currentRunnerPhysicalRebindCompatibleWithAddendumC": { "const": false },
+        "currentRunnerStageAPathCountBinding": { "const": 17 },
+        "currentRunnerAuthorityWrapperHead": { "const": "1db7b30f38ca6322a3b0ad4be6d537af9cf781e8" },
+        "physicalRebindApprovalRequired": { "const": true }
+      }
+    },
+    "catalogContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaName",
+        "tableCount",
+        "columnCount",
+        "constraintCount",
+        "indexCount",
+        "catalogContractSha256",
+        "interactionTypeColumn",
+        "interactionTypeNullable",
+        "interactionTypeDefault",
+        "interactionTypeConstraint",
+        "interactionTypeAllowedValues",
+        "committedStaticContractBound",
+        "targetPostgresCatalogVerified"
+      ],
+      "properties": {
+        "schemaName": { "const": "forme_r4_public_core" },
+        "tableCount": { "const": 14 },
+        "columnCount": { "const": 207 },
+        "constraintCount": { "const": 172 },
+        "indexCount": { "const": 44 },
+        "catalogContractSha256": { "const": "sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4" },
+        "interactionTypeColumn": { "const": "interactions.interaction_type text NOT NULL" },
+        "interactionTypeNullable": { "const": false },
+        "interactionTypeDefault": { "const": null },
+        "interactionTypeConstraint": { "const": "ck_interactions__type" },
+        "interactionTypeAllowedValues": { "const": ["ask", "seed", "resonance"] },
+        "committedStaticContractBound": { "const": true },
+        "targetPostgresCatalogVerified": { "const": false }
+      }
+    },
+    "gateBCandidateRegression": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification",
+        "command",
+        "denyNetwork",
+        "total",
+        "passed",
+        "failed",
+        "expectedPreEffectDenialCount",
+        "coreImmutableHashDenialCount",
+        "coreImmutableHashDenialCode",
+        "physicalPackageLockDenialCount",
+        "physicalPackageLockDenialCode",
+        "physicalPackageLockDenialVerdict",
+        "successorPackageLockSha256",
+        "historicalPackageLockSha256",
+        "historicalProductionScriptsRebound",
+        "historicalArtifactIndexesOrEvidenceRebound",
+        "historicalCoreStatus",
+        "historicalHostStatus",
+        "historicalPhysicalConstructionGreenClaimed"
+      ],
+      "properties": {
+        "classification": { "const": "CURRENT_SUCCESSOR_WORKTREE_CANDIDATE_REGRESSION_ONLY" },
+        "command": { "const": "npm run test:r4:gate-b-core" },
+        "denyNetwork": { "const": true },
+        "total": { "const": 145 },
+        "passed": { "const": 145 },
+        "failed": { "const": 0 },
+        "expectedPreEffectDenialCount": { "const": 4 },
+        "coreImmutableHashDenialCount": { "const": 1 },
+        "coreImmutableHashDenialCode": { "const": "CORE_PREFLIGHT_IMMUTABLE_HASH_DRIFT" },
+        "physicalPackageLockDenialCount": { "const": 3 },
+        "physicalPackageLockDenialCode": { "const": "PHYSICAL_IMMUTABLE_DRIFT:package-lock.json" },
+        "physicalPackageLockDenialVerdict": { "const": "RED" },
+        "successorPackageLockSha256": { "const": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f" },
+        "historicalPackageLockSha256": { "const": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812" },
+        "historicalProductionScriptsRebound": { "const": false },
+        "historicalArtifactIndexesOrEvidenceRebound": { "const": false },
+        "historicalCoreStatus": { "const": "CORE_REPOSITORY_REVIEWABLE_YELLOW" },
+        "historicalHostStatus": { "const": "HOST_BINDING_INCOMPLETE_YELLOW" },
+        "historicalPhysicalConstructionGreenClaimed": { "const": false }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testLanes", "checkLanes"],
+      "properties": {
+        "testLanes": {
+          "const": [
+            {
+              "laneId": "focused_public_core_non_runner_deny_network",
+              "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-pg-executor.test.ts test/r4/public-core-postgres-application-store.test.ts",
+              "denyNetwork": true,
+              "total": 85,
+              "passed": 85,
+              "failed": 0,
+              "status": "PASS"
+            },
+            {
+              "laneId": "local_postgres_runner_fake_deny_network",
+              "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-local-postgres.test.ts",
+              "denyNetwork": true,
+              "total": 66,
+              "passed": 66,
+              "failed": 0,
+              "status": "PASS"
+            },
+            {
+              "laneId": "public_core_deny_network",
+              "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-*.test.ts",
+              "denyNetwork": true,
+              "total": 318,
+              "passed": 318,
+              "failed": 0,
+              "status": "PASS"
+            },
+            {
+              "laneId": "r4_offline_regression",
+              "command": "npm run test:r4:offline",
+              "denyNetwork": true,
+              "total": 638,
+              "passed": 638,
+              "failed": 0,
+              "status": "PASS"
+            },
+            {
+              "laneId": "gate_b_core_successor_candidate_regression",
+              "command": "npm run test:r4:gate-b-core",
+              "denyNetwork": true,
+              "total": 145,
+              "passed": 145,
+              "failed": 0,
+              "status": "PASS"
+            },
+            {
+              "laneId": "spine_regression",
+              "command": "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts",
+              "denyNetwork": true,
+              "total": 45,
+              "passed": 45,
+              "failed": 0,
+              "status": "PASS"
+            }
+          ]
+        },
+        "checkLanes": {
+          "const": [
+            {
+              "laneId": "typescript",
+              "command": "npm run typecheck",
+              "status": "PASS"
+            },
+            {
+              "laneId": "runner_node_check",
+              "command": "node --check scripts/r4-public-core-local-postgres.mjs",
+              "status": "PASS"
+            },
+            {
+              "laneId": "hosted_room_no_server_ai",
+              "command": "npm --workspace @forme/room run check:no-ai",
+              "status": "PASS"
+            },
+            {
+              "laneId": "legacy_r4_document_audit",
+              "command": "npm run r4:docs:audit",
+              "status": "PASS"
+            },
+            {
+              "laneId": "stage_a_diff_check",
+              "command": "git diff --check deb12a045f5d84281bc9da0f110e049748949970..bc0b52023bb19d4e41fc4daa4a1e232961e1a19b",
+              "status": "PASS"
+            }
+          ]
+        }
+      }
+    },
+    "effectAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositoryCommandExternalNetworkCalls",
+        "packageManagerExternalNetworkCalls",
+        "sourceControlExternalNetworkCalls",
+        "dockerCliCalls",
+        "dockerDaemonCalls",
+        "ociInspectCalls",
+        "ociPulls",
+        "postgresConnections",
+        "databaseIdentities",
+        "sqlApplyRuns",
+        "sqlVerifyRuns",
+        "sqlRollbackRuns",
+        "productDataPlaneNetworkCalls",
+        "productionRemoteDatabaseEffects",
+        "runtimeActivations",
+        "routeActivations",
+        "vaultActivations",
+        "httpsActivations",
+        "trafficActivations",
+        "realRoomBytes",
+        "realProjectionBytes",
+        "realCuratorBytes",
+        "realGuestBytes",
+        "productProviderCalls",
+        "productModelCalls",
+        "productEmailMessages",
+        "deployments",
+        "publications",
+        "admissions",
+        "gateCActivations",
+        "pushes",
+        "pullRequestsCreatedOrUpdated",
+        "merges",
+        "releases",
+        "spendUsd"
+      ],
+      "properties": {
+        "repositoryCommandExternalNetworkCalls": { "const": 0 },
+        "packageManagerExternalNetworkCalls": { "const": 0 },
+        "sourceControlExternalNetworkCalls": { "const": 0 },
+        "dockerCliCalls": { "const": 0 },
+        "dockerDaemonCalls": { "const": 0 },
+        "ociInspectCalls": { "const": 0 },
+        "ociPulls": { "const": 0 },
+        "postgresConnections": { "const": 0 },
+        "databaseIdentities": { "const": 0 },
+        "sqlApplyRuns": { "const": 0 },
+        "sqlVerifyRuns": { "const": 0 },
+        "sqlRollbackRuns": { "const": 0 },
+        "productDataPlaneNetworkCalls": { "const": 0 },
+        "productionRemoteDatabaseEffects": { "const": 0 },
+        "runtimeActivations": { "const": 0 },
+        "routeActivations": { "const": 0 },
+        "vaultActivations": { "const": 0 },
+        "httpsActivations": { "const": 0 },
+        "trafficActivations": { "const": 0 },
+        "realRoomBytes": { "const": 0 },
+        "realProjectionBytes": { "const": 0 },
+        "realCuratorBytes": { "const": 0 },
+        "realGuestBytes": { "const": 0 },
+        "productProviderCalls": { "const": 0 },
+        "productModelCalls": { "const": 0 },
+        "productEmailMessages": { "const": 0 },
+        "deployments": { "const": 0 },
+        "publications": { "const": 0 },
+        "admissions": { "const": 0 },
+        "gateCActivations": { "const": 0 },
+        "pushes": { "const": 0 },
+        "pullRequestsCreatedOrUpdated": { "const": 0 },
+        "merges": { "const": 0 },
+        "releases": { "const": 0 },
+        "spendUsd": { "const": 0 }
+      }
+    },
+    "documentationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legacyR4DocsAuditPassed",
+        "legacyR4DocsAuditScope",
+        "stageBCommittedBlobAuditRequired",
+        "wholeRepositoryDocumentationCurrentClaimed",
+        "outOfWorksetCurrentStatusDocuments"
+      ],
+      "properties": {
+        "legacyR4DocsAuditPassed": { "const": true },
+        "legacyR4DocsAuditScope": { "const": "LEGACY_GATE_A_AND_GATE_B_DOCUMENTS_ONLY" },
+        "stageBCommittedBlobAuditRequired": { "const": true },
+        "wholeRepositoryDocumentationCurrentClaimed": { "const": false },
+        "outOfWorksetCurrentStatusDocuments": {
+          "const": [
+            "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+            "docs/PRODUCT.md",
+            "docs/README.md"
+          ]
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactIndexSha256",
+        "evidenceSchemaSha256",
+        "stageAArtifactAggregateSha256",
+        "runnerCore17ArtifactAggregateSha256",
+        "packageLockSha256",
+        "pgImportClosureSha256",
+        "pgImportClosureFileCount",
+        "runnerSha256",
+        "runnerTestSha256",
+        "schemaSqlSha256",
+        "verifySqlSha256",
+        "rollbackSqlSha256",
+        "gateBCoreOverlayTestSha256",
+        "gateBPhysicalOverlayTestSha256"
+      ],
+      "properties": {
+        "artifactIndexSha256": { "const": "sha256:6e63d94ce473e5d8386c46860a3e398b8331f8955003437576710c49ebe759d9" },
+        "evidenceSchemaSha256": {
+          "description": "Computed from this schema's final bytes and bound by evidence; it cannot be a const here without self-reference.",
+          "$ref": "#/$defs/sha256"
+        },
+        "stageAArtifactAggregateSha256": { "const": "sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417" },
+        "runnerCore17ArtifactAggregateSha256": { "const": "sha256:e15040bcdd69a5f9b49c76b80db4bf40aaeca295de446adeaa5f7aec33be8c3e" },
+        "packageLockSha256": { "const": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f" },
+        "pgImportClosureSha256": { "const": "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4" },
+        "pgImportClosureFileCount": { "const": 145 },
+        "runnerSha256": { "const": "sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1" },
+        "runnerTestSha256": { "const": "sha256:b32f58555d599843cd475d19e4fd432bf65e23ed58fbb43960c599fe97e278f3" },
+        "schemaSqlSha256": { "const": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8" },
+        "verifySqlSha256": { "const": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd" },
+        "rollbackSqlSha256": { "const": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4" },
+        "gateBCoreOverlayTestSha256": { "const": "sha256:105581cfa5b3ad43ba0c793f6672df705766bfbeb77b676540b70294ae5bc3a1" },
+        "gateBPhysicalOverlayTestSha256": { "const": "sha256:a33d6fbb6728f1d8b06b1b1ec68cc064cb4958596c5cdff12882d7931994c205" }
+      }
+    },
+    "obsoleteBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaSqlSha256",
+        "verifySqlSha256",
+        "rollbackSqlSha256",
+        "stageAPathCount",
+        "catalogColumnCount",
+        "catalogConstraintCount",
+        "validForPhysicalExecution"
+      ],
+      "properties": {
+        "schemaSqlSha256": { "const": "sha256:869c6c3e0853a8de20a3c4973601877fca854a911dec68b2546da9ff420b5db2" },
+        "verifySqlSha256": { "const": "sha256:9c19d3cd55945421176d9c24e268734e4c7a146e004eb3c0cba32ac65ee517e4" },
+        "rollbackSqlSha256": { "const": "sha256:526f8dcb99aa330b2b2666a9e0df3c959caa05ab012fdf33afcdca277d2acd2e" },
+        "stageAPathCount": { "const": 14 },
+        "catalogColumnCount": { "const": 206 },
+        "catalogConstraintCount": { "const": 171 },
+        "validForPhysicalExecution": { "const": false }
+      }
+    },
+    "independentAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "implementationHead",
+        "implementationTree",
+        "artifactAggregateSha256",
+        "blockerCount",
+        "importantCount",
+        "status",
+        "earlierParallelGateBObservation",
+        "finalStandaloneGateBObservation",
+        "earlierParallelObservationAcceptedAsFinalEvidence"
+      ],
+      "properties": {
+        "scope": { "const": "STAGE_A_COMMITTED_BYTES_AND_19_ARTIFACT_INDEX" },
+        "implementationHead": { "const": "bc0b52023bb19d4e41fc4daa4a1e232961e1a19b" },
+        "implementationTree": { "const": "d5cb758467d06bfd7f17b6ae6a34664e659e1e3d" },
+        "artifactAggregateSha256": { "const": "sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417" },
+        "blockerCount": { "const": 0 },
+        "importantCount": { "const": 0 },
+        "status": { "const": "PASS" },
+        "earlierParallelGateBObservation": { "const": "144_PASS_1_HISTORICAL_TIMING_FAILURE" },
+        "finalStandaloneGateBObservation": { "const": "145_PASS_0_FAILURE" },
+        "earlierParallelObservationAcceptedAsFinalEvidence": { "const": false }
+      }
+    },
+    "stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exact",
+        "physicalRebindAutomatic",
+        "dockerAutomatic",
+        "postgresAutomatic",
+        "sqlAutomatic",
+        "gateCAutomatic",
+        "providerAutomatic",
+        "mergeAutomatic"
+      ],
+      "properties": {
+        "exact": { "const": "INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN / PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED" },
+        "physicalRebindAutomatic": { "const": false },
+        "dockerAutomatic": { "const": false },
+        "postgresAutomatic": { "const": false },
+        "sqlAutomatic": { "const": false },
+        "gateCAutomatic": { "const": false },
+        "providerAutomatic": { "const": false },
+        "mergeAutomatic": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
