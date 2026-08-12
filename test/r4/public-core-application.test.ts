@@ -240,6 +240,55 @@ function storeDouble(
   ].map((name) => [name, fallback]).concat([["listThirdPlace", listThirdPlace]])) as unknown as PublicCoreApplicationStoreV1;
 }
 
+test("application accepts SQL-created closed Rooms while room.create cannot select public_single", async () => {
+  const roomId = `room_${"c".repeat(32)}`;
+  const store = storeDouble(async () => ({
+    status: 200,
+    body: { schemaVersion: "r4_public_core_third_place_list.v1", residents: [] },
+    recovered: false,
+  })) as unknown as Record<string, unknown>;
+  let createCalls = 0;
+  store.createRoom = async (_context: unknown, input: unknown) => {
+    createCalls += 1;
+    assert.deepEqual(input, { entityId: ENTITY_ID, label: "Closed SQL Room" });
+    return {
+      status: 201,
+      body: {
+        schemaVersion: "r4_public_core_room_created.v1",
+        roomId,
+        roomVersion: 1,
+        roomMode: "closed",
+      },
+      recovered: false,
+    };
+  };
+  const base: PublicCoreOperationInputV1 = {
+    schemaVersion: "r4_public_core_operation_input.v1",
+    action: "room.create",
+    actorClass: "controller",
+    actorScopeDigest: ACTOR_SCOPE,
+    params: {},
+    body: { entityId: ENTITY_ID, roomKind: "third_place_public", label: "Closed SQL Room" },
+    authorizationSecret: null,
+    idempotencyKey: "closed_sql_room_create_00000000000000000001",
+    expectedVersion: null,
+  };
+  const result = await new PublicCoreApplicationV1(store as unknown as PublicCoreApplicationStoreV1).run(base);
+  assert.equal(result.body.roomMode, "closed");
+  assert.equal(createCalls, 1);
+
+  await errorCode(
+    new PublicCoreApplicationV1(store as unknown as PublicCoreApplicationStoreV1).run({
+      ...base,
+      idempotencyKey: "closed_sql_room_create_00000000000000000002",
+      body: { ...base.body, interactionMode: "public_single" },
+    }),
+    "invalid_request_shape",
+    400,
+  );
+  assert.equal(createCalls, 1, "room.create mode selection must fail before the store");
+});
+
 const PUBLIC_LIST_INPUT: PublicCoreOperationInputV1 = Object.freeze({
   schemaVersion: "r4_public_core_operation_input.v1",
   action: "third_place.list",

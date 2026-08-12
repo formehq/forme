@@ -1,7 +1,8 @@
 -- R4 #67 Durable Public Core proposed schema.
 --
 -- CONSTRUCTION ONLY: these bytes are intentionally not wired to a driver and
--- must not be applied before the separately hash-pinned Gate C grant.
+-- must not be applied before the separately hash-pinned Physical Rebind grant.
+-- Gate C is not requested.
 
 BEGIN;
 
@@ -432,6 +433,7 @@ CREATE TABLE forme_r4_public_core.interactions (
   installation_id text NOT NULL,
   encounter_id text NOT NULL,
   origin_projection_id text NOT NULL,
+  interaction_type text NOT NULL,
   request_ciphertext jsonb NULL,
   guest_capsule_ciphertext jsonb NULL,
   request_plaintext_bytes integer NOT NULL,
@@ -481,6 +483,9 @@ CREATE TABLE forme_r4_public_core.interactions (
   ),
   CONSTRAINT ck_interactions__state CHECK (
     state IN ('accepted', 'seen_locally', 'interaction_deleted', 'origin_revoked', 'interaction_expired')
+  ),
+  CONSTRAINT ck_interactions__type CHECK (
+    interaction_type IN ('ask', 'seed', 'resonance')
   ),
   CONSTRAINT ck_interactions__retention CHECK (
     created_at < body_expires_at
@@ -1136,7 +1141,7 @@ BEGIN
   EXECUTE pg_catalog.format(
     'COMMENT ON SCHEMA forme_r4_public_core IS %L',
     'r4.public-core.catalog-manifest.v2:contract-sha256:' ||
-      '2eebb5f582d67b35d11f49b69edeff5fcecf39ee24cfa15b4575b794b5f14559' ||
+      'a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4' ||
       ':catalog-md5:' || manifest_digest
   );
 END

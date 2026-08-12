@@ -36,7 +36,7 @@ const NOW = "2026-08-10T12:00:00.000Z";
 const HOUR = "2026-08-10T12:00:00.000Z";
 const DAY = "2026-08-10T00:00:00.000Z";
 const RATE_EXPIRES = "2026-08-11T12:59:00.000Z";
-const ENCOUNTER_EXPIRES = "2026-08-11T11:59:00.000Z";
+const ENCOUNTER_EXPIRES = "2026-08-11T12:00:00.000Z";
 const BODY_EXPIRES = "2026-09-09T11:59:00.000Z";
 const PAIR_EXPIRES = "2026-08-10T12:10:00.000Z";
 const BINDING_EXPIRES = "2026-09-09T12:00:00.000Z";
@@ -172,8 +172,9 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
       ...event,
     };
     case "interaction.create": return {
-      encounterId: IDS.encounter,
       interactionId: IDS.interaction,
+      interactionType: "ask" as const,
+      projectionId: IDS.projection,
       acceptRateEventId: IDS.rateAccept,
       dayWindowStart: DAY,
       rateExpiresAt: RATE_EXPIRES,
@@ -227,13 +228,13 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
     };
     case "curation.admit":
     case "curation.unlist": return { projectionId: IDS.projection, ...event };
-    case "room_operator.sync": return { bindingId: IDS.binding, afterSequence: 2 };
-    case "room_operator.pull": return { bindingId: IDS.binding, interactionId: IDS.interaction, ...event };
+    case "room_operator.sync": return { bindingCredentialDigest: hmac("8"), afterSequence: 2 };
+    case "room_operator.pull": return { bindingCredentialDigest: hmac("8"), interactionId: IDS.interaction, ...event };
     case "room_operator.ack": return {
-      ackId: IDS.ack, bindingId: IDS.binding, eventId: IDS.event, sequence: 3, eventHash: sha("3"),
+      ackId: IDS.ack, bindingCredentialDigest: hmac("8"), eventId: IDS.event, sequence: 3, eventHash: sha("3"),
     };
     case "room_operator.projection.deliver": return {
-      bindingId: IDS.binding,
+      bindingCredentialDigest: hmac("8"),
       projectionId: IDS.projection,
       capsuleCiphertext: encrypted("projections", "capsule_ciphertext", IDS.projection),
       payloadHash: sha("7"),
@@ -249,7 +250,7 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
       ...event,
     };
     case "room_operator.local_purge.receipt": return {
-      bindingId: IDS.binding, interactionId: IDS.interaction, ...event,
+      bindingCredentialDigest: hmac("8"), interactionId: IDS.interaction, ...event,
     };
   }
 }
@@ -294,6 +295,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
   pullGuestHash: `sha256:${string}` | null = sha("d");
   pullExpiresAt = BODY_EXPIRES;
   pullTombstoneExpiresAt = TOMBSTONE_EXPIRES;
+  pullProjectionId = IDS.projection;
+  pullOriginProjectionHash = sha("7");
+  pullInteractionType: "ask" | "seed" | "resonance" = "ask";
+  pullConsentHash = sha("5");
+  pullAcceptedAt = NOW;
   localPurgeReceivedAt: string | null = null;
   syncFloor = 1;
   syncHighWater = 5;
@@ -341,6 +347,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: this.pullGuestHash,
       pullExpiresAt: this.pullExpiresAt,
       pullTombstoneExpiresAt: this.pullTombstoneExpiresAt,
+      pullProjectionId: this.pullProjectionId,
+      pullOriginProjectionHash: this.pullOriginProjectionHash,
+      pullInteractionType: this.pullInteractionType,
+      pullConsentHash: this.pullConsentHash,
+      pullAcceptedAt: this.pullAcceptedAt,
       localPurgeReceivedAt: this.localPurgeReceivedAt,
     };
     const transaction: PublicCoreSqlTransactionV1 = Object.freeze({
@@ -392,6 +403,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: string | null;
       pullExpiresAt: string;
       pullTombstoneExpiresAt: string;
+      pullProjectionId: string;
+      pullOriginProjectionHash: string;
+      pullInteractionType: ExecutingFakeSqlExecutor["pullInteractionType"];
+      pullConsentHash: string;
+      pullAcceptedAt: string;
       localPurgeReceivedAt: string | null;
     },
   ): PublicCoreSqlQueryResultV1 {
@@ -533,6 +549,12 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
         request_field_version: domain.pullRequestFieldVersion,
         guest_capsule_field_version: domain.pullGuestFieldVersion,
         body_expires_at: domain.pullExpiresAt,
+        origin_projection_id: domain.pullProjectionId,
+        origin_projection_payload_hash: domain.pullOriginProjectionHash,
+        interaction_type: domain.pullInteractionType,
+        consent_hash: domain.pullConsentHash,
+        created_at: domain.pullAcceptedAt,
+        local_purge_received_at: domain.localPurgeReceivedAt,
       }] };
     }
     if (statement.statementId === "room_operator.pull.terminal.recovery.read") {
@@ -608,6 +630,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: string | null;
       pullExpiresAt: string;
       pullTombstoneExpiresAt: string;
+      pullProjectionId: string;
+      pullOriginProjectionHash: string;
+      pullInteractionType: "ask" | "seed" | "resonance";
+      pullConsentHash: string;
+      pullAcceptedAt: string;
       localPurgeReceivedAt: string | null;
     },
     receipts: Map<string, ReceiptState>,
@@ -704,6 +731,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: "seen_locally",
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullExpiresAt,
         };
       }
@@ -722,6 +756,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: domain.pullState,
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullTombstoneExpiresAt,
         };
       }
@@ -745,6 +786,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: "interaction_expired",
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullTombstoneExpiresAt,
         };
       }
@@ -786,6 +834,9 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       third_place_id: "thirdplace_forme_public_core_v1",
       room_id: IDS.room,
       projection_id: IDS.projection,
+      capsule_ciphertext: encrypted("projections", "capsule_ciphertext", IDS.projection).envelope,
+      capsule_plaintext_bytes: 12,
+      capsule_field_version: 1,
       payload_hash: sha("7"),
       lifecycle_version: 1,
       fresh_until: FRESH_UNTIL,
@@ -838,6 +889,9 @@ function thirdPlacePortRow(): Record<string, unknown> {
     third_place_id: "thirdplace_forme_public_core_v1",
     room_id: IDS.room,
     projection_id: IDS.projection,
+    capsule_ciphertext: encrypted("projections", "capsule_ciphertext", IDS.projection).envelope,
+    capsule_plaintext_bytes: 12,
+    capsule_field_version: 1,
     payload_hash: sha("7"),
     lifecycle_version: 1,
     fresh_until: FRESH_UNTIL,
@@ -1071,7 +1125,11 @@ test("executor rows are owned snapshots and ciphertext envelopes are exact seven
     payload_hash: sha("7"),
     owner_state: "published_fresh",
     curation_state: "admitted",
+    interaction_mode: "public_single",
+    current: true,
+    body_readable: true,
     lifecycle_version: 1,
+    published_at: NOW,
     fresh_until: FRESH_UNTIL,
     expires_at: PROJECTION_EXPIRES,
   };
@@ -1872,6 +1930,7 @@ test("pull receipt recovery binds request and guest field versions, hashes and e
   await executeAction(store, "room_operator.pull");
 
   executor.pullVersion += 1;
+  executor.localPurgeReceivedAt = NOW;
   const lifecycleReplay = await executeAction(
     store,
     "room_operator.pull",
@@ -2274,8 +2333,8 @@ test("verify is read-only and rollback refuses durable rows, seed drift, and une
   assert.match(VERIFY, /pg_catalog\.pg_get_constraintdef/u);
   assert.match(VERIFY, /WHEN '_text' THEN 'text\[\]'/u);
   assert.match(VERIFY, /WHEN '_int8' THEN 'bigint\[\]'/u);
-  assert.match(ROLLBACK, /\) <> 206 OR \(/u);
-  assert.match(ROLLBACK, /\) <> 171 OR EXISTS \(/u);
+  assert.match(ROLLBACK, /\) <> 207 OR \(/u);
+  assert.match(ROLLBACK, /\) <> 172 OR EXISTS \(/u);
   assert.match(SCHEMA, /r4\.public-core\.catalog-manifest\.v2:contract-sha256:/u);
   assert.match(VERIFY, /uq_interactions__consumed_lineage/u);
   assert.match(VERIFY, /\) <> 15 THEN/u);

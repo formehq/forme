@@ -90,6 +90,16 @@ import {
 
 const root = path.resolve(import.meta.dirname, "../..");
 const hashFrame = (value: string) => `sha256:${createHash("sha256").update(value, "utf8").digest("hex")}`;
+const APPROVED_SUCCESSOR_PACKAGE_LOCK_SHA256 = "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f";
+const HISTORICAL_PHYSICAL_PACKAGE_LOCK_SHA256 = "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812";
+const currentPackageLockBytes = fs.readFileSync(path.join(root, "package-lock.json"));
+const currentPackageLockSha256 = `sha256:${createHash("sha256").update(currentPackageLockBytes).digest("hex")}`;
+currentPackageLockBytes.fill(0);
+const physicalRunnerSource = fs.readFileSync(path.join(root, "scripts/r4-gate-b-physical-runner.mjs"), "utf8");
+const historicalPhysicalPackageLockBindings = Array.from(
+  physicalRunnerSource.matchAll(/^\s*"package-lock\.json": "(sha256:[a-f0-9]{64})",$/gmu),
+  (match) => match[1],
+);
 const syntheticHostBindingReattemptOutput = ({ checkpoint, checkpointSha256, activationCardSha256, activationGrantSha256, consumedAttemptTombstoneSha256, attemptId, hostBindingId = "c".repeat(32) }: { checkpoint: Record<string, any>; checkpointSha256: string; activationCardSha256: string; activationGrantSha256: string; consumedAttemptTombstoneSha256: string; attemptId: string; hostBindingId?: string }) => {
   const digest = (value: string) => hashFrame(`synthetic-reattempt:${value}\n`);
   const identity = (index: number) => Object.freeze({ logicalName: `tool-${index}`, path: `/synthetic/tool-${index}`, sha256: digest(`tool-${index}`), size: 1, mode: 0o755, uid: 501, gid: 20, device: "1", inode: String(index + 1), nlink: 1, mtimeMilliseconds: 1 });
@@ -112,6 +122,16 @@ const isPostOutputAuthorityFailure = (error: unknown) => error instanceof Error
   && (error.code === "PHYSICAL_BRANCH_DRIFT" || error.code.startsWith("PHYSICAL_PHASE_A_WORKSET_ESCAPE:"))
   && "verdict" in error
   && error.verdict === "RED";
+const isExactSuccessorPackageLockFailure = (error: unknown) => error instanceof Error
+  && "code" in error
+  && error.code === "PHYSICAL_IMMUTABLE_DRIFT:package-lock.json"
+  && "verdict" in error
+  && error.verdict === "RED";
+const assertExactSuccessorPackageLockBoundary = () => {
+  assert.equal(currentPackageLockSha256, APPROVED_SUCCESSOR_PACKAGE_LOCK_SHA256);
+  assert.deepEqual(historicalPhysicalPackageLockBindings, [HISTORICAL_PHYSICAL_PACKAGE_LOCK_SHA256]);
+  assert.equal(isPostOutputAuthorityFailure(Object.assign(new Error("successor lock fixture"), { code: "PHYSICAL_IMMUTABLE_DRIFT:package-lock.json", verdict: "RED" })), false);
+};
 const isUnsupportedNodeRuntimeFailure = (error: unknown) => error instanceof Error
   && "code" in error
   && error.code === "BLOCKED_SUPERVISOR_NODE_FILE_UNSAFE"
@@ -3581,9 +3601,10 @@ test("terminal selection preserves first-cause code and escalates to the stronge
   assert.equal(selectPhysicalRunnerTerminalError(primaryYellowQuarantined, null, null), primaryYellowQuarantined);
 });
 
-test("post-output Construction entry fails before journal creation or cleanup effects", async () => {
+test("exact successor package-lock denies Construction entry before root or physical effects", async () => {
+  assertExactSuccessorPackageLockBoundary();
   assert.equal(fs.existsSync(constructionRoot), false);
-  await assert.rejects(constructPhysicalAdapters(), isPostOutputAuthorityFailure);
+  await assert.rejects(constructPhysicalAdapters(), isExactSuccessorPackageLockFailure);
   assert.equal(fs.existsSync(constructionRoot), false);
   assert.equal((await cleanupConstruction()).constructionRunRootAbsent, true);
 });
@@ -4128,8 +4149,10 @@ test("construction journal recovery authenticates only a complete prefix and rej
   } finally { fs.rmSync(corruptRoot, { recursive: true, force: true }); }
 });
 
-test("Phase A authority remains strict after output publication and in detached CI", () => {
-  assert.throws(verifyPhaseAAuthority, isPostOutputAuthorityFailure);
+test("Phase A authority denies the exact successor package-lock before construction-root effects", () => {
+  assertExactSuccessorPackageLockBoundary();
+  assert.equal(fs.existsSync(constructionRoot), false);
+  assert.throws(verifyPhaseAAuthority, isExactSuccessorPackageLockFailure);
   assert.equal(fs.existsSync(constructionRoot), false);
 });
 
@@ -4179,7 +4202,8 @@ test("final checkpoint writer maps four exact flat receipt hashes into the schem
   assert.equal(schema.properties.approvedDecisionBriefSha256.const, "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2");
 });
 
-test("C-layer preserves the historical Host result without rerunning or rebinding Construction", async () => {
+test("C-layer preserves historical Host Yellow and zero-call truth while the successor lock denies Construction before effects", async () => {
+  assertExactSuccessorPackageLockBoundary();
   const evidence = JSON.parse(fs.readFileSync(path.join(root, "docs/evidence/r4-gate-b-physical-adapter-construction.json"), "utf8"));
   assert.equal(evidence.implementationHead, "92c6c3f8896494aed699671a04a93a09fb59087d");
   assert.equal(evidence.implementationTree, "cf2ce5567c601fff1ad709e565dde41cf9c3540d");
@@ -4192,7 +4216,7 @@ test("C-layer preserves the historical Host result without rerunning or rebindin
   assert.equal(evidence.retryExecutionGrant, "NOT_REQUESTED");
   assert.equal(evidence.firstProviderCallGrant, "NOT_REQUESTED");
   assert.equal(fs.existsSync(constructionRoot), false);
-  await assert.rejects(constructPhysicalAdapters(), isPostOutputAuthorityFailure);
+  await assert.rejects(constructPhysicalAdapters(), isExactSuccessorPackageLockFailure);
   assert.equal(fs.existsSync(constructionRoot), false);
 });
 

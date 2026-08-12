@@ -15,6 +15,7 @@ import {
   assertPublicCoreAction,
   type PublicCoreActionName,
 } from "./public-core-policy.ts";
+import { authenticPublicCorePostgresApplicationStoreErrorDetails } from "./public-core-postgres-application-store.ts";
 import {
   PUBLIC_CORE_PLAINTEXT_BYTE_CEILINGS,
   PUBLIC_CORE_ROOM_EVENT_CONTRACT,
@@ -549,7 +550,12 @@ function validateStoreResponse(
       contract(typeof body.retentionWriteStop === "boolean"); break;
     case "room.create":
       contract(status === 201); contractExact(body, ["schemaVersion", "roomId", "roomVersion", "roomMode"]);
-      contract(body.schemaVersion === "r4_public_core_room_created.v1" && body.roomMode === "public_single" && body.roomVersion === 1); contractId(body.roomId, "room"); contractVersion(body.roomVersion); break;
+      contract(
+        body.schemaVersion === "r4_public_core_room_created.v1"
+        && (body.roomMode === "public_single" || body.roomMode === "closed")
+        && body.roomVersion === 1,
+      );
+      contractId(body.roomId, "room"); contractVersion(body.roomVersion); break;
     case "room.pair":
       if (status === 201) {
         contractExact(body, ["schemaVersion", "pairingId", "pairingCode", "expiresAt", "version"]); contract(body.schemaVersion === "r4_public_core_pairing_issued.v1");
@@ -736,9 +742,16 @@ export class PublicCoreApplicationV1 {
     } catch (error) {
       let details: Readonly<{ status: number; code: string }> | null = null;
       try {
-        details = authenticPublicCoreStoreErrorDetails(error);
+        details = authenticPublicCorePostgresApplicationStoreErrorDetails(error);
       } catch {
         details = null;
+      }
+      if (details === null) {
+        try {
+          details = authenticPublicCoreStoreErrorDetails(error);
+        } catch {
+          details = null;
+        }
       }
       if (details !== null) fail(details.status, details.code);
       if (error === STORE_CONTRACT_REJECTED || error === OWNED_SNAPSHOT_REJECTED) fail(503, "public_core_store_contract_invalid");

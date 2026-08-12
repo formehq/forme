@@ -1,5 +1,6 @@
 -- R4 #67 Durable Public Core proposed rollback.
--- Never execute without the separately approved Gate C target and rollback grant.
+-- Never execute without the separately approved Physical Rebind target and
+-- rollback grant. Gate C is not requested.
 -- The guard refuses teardown after any durable use; only the exact two install
 -- seeds created by schema.sql are eligible for removal.
 
@@ -13,7 +14,7 @@ DECLARE
   actual_catalog_manifest text;
   stored_catalog_manifest text;
   expected_catalog_contract_sha256 constant text :=
-    'sha256:2eebb5f582d67b35d11f49b69edeff5fcecf39ee24cfa15b4575b794b5f14559';
+    'sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4';
   expected_tables constant text[] := ARRAY[
     'encryption_nonces',
     'event_acks',
@@ -80,13 +81,13 @@ BEGIN
       JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
      WHERE n.nspname = 'forme_r4_public_core'
        AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
-  ) <> 206 OR (
+  ) <> 207 OR (
     SELECT count(*)
       FROM pg_catalog.pg_constraint c
       JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid
       JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
      WHERE n.nspname = 'forme_r4_public_core'
-  ) <> 171 OR EXISTS (
+  ) <> 172 OR EXISTS (
     SELECT 1
       FROM pg_catalog.pg_constraint c
       JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid

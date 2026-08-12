@@ -10,7 +10,7 @@ import { CORE_AGGREGATE_LANE_ORDER, parseRunnerArguments, runCoreConstructionDry
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
 import { CORE_CLEANUP_ORDER, buildCoreCleanupPlan, executeCoreCleanupPlanWithInjectedExecutor, validateCoreBodyFreeMarker } from "../../scripts/r4-gate-b-cleanup.mjs";
 // @ts-expect-error Construction scripts intentionally remain executable ESM.
-import { verifyCoreCorrectionImmutableBindings } from "../../scripts/r4-gate-b-preflight.mjs";
+import { CORE_APPROVED_PROPOSAL_HEAD, CORE_APPROVED_PROPOSAL_TREE, CORE_CORRECTION_OWNER_REVIEW_SHA256, CORE_CORRECTION_PACKET_SHA256, GateBPreflightError, PACKAGE_LOCK_SHA256, verifyCoreCorrectionImmutableBindings } from "../../scripts/r4-gate-b-preflight.mjs";
 
 test("Core macOS target is separate, fake-only and never upgrades the Full persistent lane", () => {
   const result = inspectCoreMacOSConstruction();
@@ -230,12 +230,22 @@ test("Core aggregate construction stays Yellow, serial, zero-effect and cleanup-
   assert.deepEqual(parseRunnerArguments(["dry-run-core"]), { mode: "dry-run-core" });
 });
 
-test("Core preflight binds the exact approved Packet, Owner Review and proposal lineage", () => {
-  const binding = verifyCoreCorrectionImmutableBindings();
-  assert.equal(binding.packetSha256, "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6");
-  assert.equal(binding.ownerReviewSha256, "sha256:2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299");
-  assert.equal(binding.approvedProposalHead, "5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e");
-  assert.equal(binding.approvedProposalTree, "15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f");
+test("Core preflight preserves historical bindings and rejects the exact successor lock before effects", () => {
+  const currentPackageLock = fs.readFileSync("package-lock.json");
+  assert.equal(
+    crypto.createHash("sha256").update(currentPackageLock).digest("hex"),
+    "8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f",
+  );
+  assert.equal(CORE_CORRECTION_PACKET_SHA256, "5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6");
+  assert.equal(CORE_CORRECTION_OWNER_REVIEW_SHA256, "2ad228be60be0730056a4c1195b2ce1be8db11ee9e308e4bc4559edc226bb299");
+  assert.equal(CORE_APPROVED_PROPOSAL_HEAD, "5ccfcf1aaea0f1c5f164e29d91237c6e1842df6e");
+  assert.equal(CORE_APPROVED_PROPOSAL_TREE, "15aa88dcd33719f9c8a0c9c0455d1c7ecdf8a60f");
+  assert.equal(PACKAGE_LOCK_SHA256, "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812");
+  assert.throws(
+    () => verifyCoreCorrectionImmutableBindings(),
+    (error: unknown) => error instanceof GateBPreflightError
+      && (error as { code?: unknown }).code === "CORE_PREFLIGHT_IMMUTABLE_HASH_DRIFT",
+  );
 });
 
 test("Core marker is body-free and its exact nine-step cleanup is idempotent under every fault", async () => {

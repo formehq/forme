@@ -20,7 +20,7 @@ export const PUBLIC_CORE_SQL_SCHEMA = "forme_r4_public_core" as const;
  * this independently of the mutable PostgreSQL schema comment.
  */
 export const PUBLIC_CORE_SQL_EXPECTED_CATALOG_CONTRACT_SHA256 =
-  "sha256:2eebb5f582d67b35d11f49b69edeff5fcecf39ee24cfa15b4575b794b5f14559" as const;
+  "sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4" as const;
 
 export const PUBLIC_CORE_SQL_TABLES = [
   "installation",
@@ -254,7 +254,7 @@ export interface PublicCoreReadInteractionSqlInputV1 extends PublicCoreListThird
 }
 
 export interface PublicCoreReadRoomOperatorStatusSqlInputV1 extends PublicCoreListThirdPlaceSqlInputV1 {
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
 }
 
 export interface PublicCoreIssueEncounterSqlInputV1 extends PublicCoreSqlEventInputV1 {
@@ -273,8 +273,9 @@ export interface PublicCoreIssueEncounterSqlInputV1 extends PublicCoreSqlEventIn
 }
 
 export interface PublicCoreCreateInteractionSqlInputV1 extends PublicCoreSqlEventInputV1 {
-  readonly encounterId: string;
   readonly interactionId: string;
+  readonly interactionType: "ask" | "seed" | "resonance";
+  readonly projectionId: string;
   readonly acceptRateEventId: string;
   readonly dayWindowStart: string;
   readonly rateExpiresAt: string;
@@ -335,25 +336,25 @@ export interface PublicCoreCurationSqlInputV1 extends PublicCoreSqlEventInputV1 
 }
 
 export interface PublicCoreSyncRoomOperatorSqlInputV1 {
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
   readonly afterSequence: number;
 }
 
 export interface PublicCorePullRoomOperatorSqlInputV1 extends PublicCoreSqlEventInputV1 {
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
   readonly interactionId: string;
 }
 
 export interface PublicCoreAckRoomOperatorSqlInputV1 {
   readonly ackId: string;
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
   readonly eventId: string;
   readonly sequence: number;
   readonly eventHash: PublicCoreSqlSha256V1;
 }
 
 export interface PublicCoreDeliverProjectionSqlInputV1 extends PublicCoreSqlEventInputV1 {
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
   readonly projectionId: string;
   readonly capsuleCiphertext: PublicCoreSqlEncryptedValueV1;
   readonly payloadHash: PublicCoreSqlSha256V1;
@@ -369,7 +370,7 @@ export interface PublicCoreDeliverProjectionSqlInputV1 extends PublicCoreSqlEven
 }
 
 export interface PublicCoreRecordLocalPurgeSqlInputV1 extends PublicCoreSqlEventInputV1 {
-  readonly bindingId: string;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1;
   readonly interactionId: string;
 }
 
@@ -386,6 +387,18 @@ export interface PublicCoreSqlBodyFreeResultV1 {
   readonly receiptId: string;
   readonly targetId: string;
   readonly targetVersion: number;
+  readonly recovered: boolean;
+}
+
+export interface PublicCoreSqlEncounterIssueResultV1 {
+  readonly kind: "encounter_issue";
+  readonly action: "public_encounter.issue";
+  readonly status: 201;
+  readonly code: "encounter_issued";
+  readonly receiptId: string;
+  readonly encounterId: string;
+  readonly encounterVersion: number;
+  readonly expiresAt: string;
   readonly recovered: boolean;
 }
 
@@ -468,6 +481,13 @@ export interface PublicCoreSqlPullResultV1 {
   readonly receiptId: string;
   readonly interactionId: string;
   readonly interactionVersion: number;
+  readonly projectionId: string;
+  readonly originProjectionHash: PublicCoreSqlSha256V1;
+  readonly interactionType: "ask" | "seed" | "resonance";
+  readonly consentHash: PublicCoreSqlSha256V1;
+  readonly interactionState: "seen_locally";
+  readonly acceptedAt: string;
+  readonly localPurgeReceivedAt: string | null;
   readonly requestCiphertext: Readonly<Record<string, unknown>>;
   readonly guestCapsuleCiphertext: Readonly<Record<string, unknown>> | null;
   readonly requestFieldVersion: number;
@@ -500,7 +520,9 @@ export interface PublicCoreSqlThirdPlaceRowV1 {
   readonly thirdPlaceId: string;
   readonly roomId: string;
   readonly projectionId: string;
+  readonly capsuleCiphertext: Readonly<Record<string, unknown>>;
   readonly payloadHash: PublicCoreSqlSha256V1;
+  readonly capsuleFieldVersion: number;
   readonly lifecycleVersion: number;
   readonly freshUntil: string;
   readonly expiresAt: string;
@@ -509,11 +531,16 @@ export interface PublicCoreSqlThirdPlaceRowV1 {
 export interface PublicCoreSqlProjectionRowV1 {
   readonly projectionId: string;
   readonly roomId: string;
-  readonly capsuleCiphertext: Readonly<Record<string, unknown>>;
+  readonly capsuleCiphertext: Readonly<Record<string, unknown>> | null;
   readonly payloadHash: PublicCoreSqlSha256V1;
-  readonly ownerState: "published_fresh" | "stale";
+  readonly capsuleFieldVersion: number;
+  readonly ownerState: "published_fresh" | "stale" | "superseded" | "revoked" | "expired";
   readonly curationState: "not_admitted" | "admitted" | "unlisted";
+  readonly interactionMode: "public_single" | "closed";
+  readonly current: boolean;
+  readonly bodyAvailable: boolean;
   readonly lifecycleVersion: number;
+  readonly publishedAt: string;
   readonly freshUntil: string;
   readonly expiresAt: string;
 }
@@ -522,18 +549,22 @@ export interface PublicCoreSqlInteractionRowV1 {
   readonly interactionId: string;
   readonly roomId: string;
   readonly originProjectionId: string;
-  readonly state: "accepted" | "seen_locally";
+  readonly originProjectionHash: PublicCoreSqlSha256V1;
+  readonly interactionType: "ask" | "seed" | "resonance";
+  readonly consentHash: PublicCoreSqlSha256V1;
+  readonly state: "accepted" | "seen_locally" | "interaction_deleted" | "interaction_expired" | "origin_revoked";
   readonly version: number;
-  readonly requestCiphertext: Readonly<Record<string, unknown>>;
-  readonly guestCapsuleCiphertext: Readonly<Record<string, unknown>> | null;
-  readonly requestHash: PublicCoreSqlSha256V1;
+  readonly acceptedAt: string;
   readonly bodyExpiresAt: string;
+  readonly bodyAvailable: boolean;
+  readonly localPurgeReceivedAt: string | null;
 }
 
 export interface PublicCoreSqlRoomOperatorStatusRowV1 {
   readonly roomId: string;
   readonly interactionMode: "public_single" | "closed";
   readonly roomVersion: number;
+  readonly currentProjectionId: string | null;
   readonly eventHighWater: number;
   readonly eventReplayFloor: number;
   readonly bindingId: string;
@@ -574,6 +605,7 @@ export interface PublicCoreSqlJanitorResultV1 {
 
 export type PublicCoreSqlMutationResultV1 =
   | PublicCoreSqlBodyFreeResultV1
+  | PublicCoreSqlEncounterIssueResultV1
   | PublicCoreSqlPairingIssueResultV1
   | PublicCoreSqlPairingExchangeResultV1
   | PublicCoreSqlSyncResultV1
@@ -748,8 +780,7 @@ function validateActionChronology(run: MutationRunV1): void {
       || dayStart !== Math.floor(requested / DAY_MS) * DAY_MS
       || rateExpiry < Math.max(hourStart + HOUR_MS, dayStart + DAY_MS, encounterExpiry)
       || rateExpiry > requested + 25 * HOUR_MS
-      || encounterExpiry <= requested
-      || encounterExpiry > requested + DAY_MS
+      || encounterExpiry !== requested + DAY_MS
     ) fail(400, "action_chronology_invalid");
   }
   if (run.context.action === "interaction.create") {
@@ -949,6 +980,28 @@ interface CallbackResultV1<T> {
 function localErrorMetadata(value: unknown): Readonly<{ status: number; code: string }> | null {
   if (!((typeof value === "object" && value !== null) || typeof value === "function")) return null;
   return LOCAL_ERROR_METADATA.get(value as object) ?? null;
+}
+
+/** Bridge membrane access; callers can inspect but cannot mint this brand. */
+export function authenticPublicCorePostgresErrorDetails(
+  error: unknown,
+): Readonly<{ status: number; code: string }> | null {
+  try {
+    const details = localErrorMetadata(error);
+    if (details === null || !Object.isFrozen(error)) return null;
+    const status = Object.getOwnPropertyDescriptor(error as object, "status");
+    const code = Object.getOwnPropertyDescriptor(error as object, "code");
+    if (
+      !status || !("value" in status) || status.writable !== false
+      || !Number.isSafeInteger(status.value) || status.value < 400 || status.value > 599
+      || !code || !("value" in code) || code.writable !== false
+      || typeof code.value !== "string" || !/^[A-Za-z0-9_]{1,128}$/u.test(code.value)
+      || status.value !== details.status || code.value !== details.code
+    ) return null;
+    return details;
+  } catch {
+    return null;
+  }
 }
 
 function prepareExecutor(executor: PublicCoreSqlExecutorV1): PreparedExecutorV1 {
@@ -1296,8 +1349,9 @@ function readStatement(
         statementId: "third_place.list.read",
         action,
         phase: "read",
-        text: `SELECT i.third_place_id, r.room_id, p.projection_id, p.payload_hash,
-                      p.lifecycle_version, p.fresh_until, p.expires_at
+        text: `SELECT i.third_place_id,r.room_id,p.projection_id,p.capsule_ciphertext,
+                      p.capsule_plaintext_bytes,p.capsule_field_version,p.payload_hash,
+                      p.lifecycle_version,p.fresh_until,p.expires_at
                  FROM ${PUBLIC_CORE_SQL_SCHEMA}.installation i
                  JOIN ${PUBLIC_CORE_SQL_SCHEMA}.rooms r ON r.installation_id=i.installation_id
                  JOIN ${PUBLIC_CORE_SQL_SCHEMA}.projections p
@@ -1308,7 +1362,8 @@ function readStatement(
         values: [input.roomId, input.requestedAt],
         rowExpectation: "zero_or_more",
         rowKeys: [
-          "third_place_id", "room_id", "projection_id", "payload_hash",
+          "third_place_id", "room_id", "projection_id", "capsule_ciphertext",
+          "capsule_plaintext_bytes", "capsule_field_version", "payload_hash",
           "lifecycle_version", "fresh_until", "expires_at",
         ],
       });
@@ -1318,21 +1373,21 @@ function readStatement(
         statementId: "projection.read.read",
         action,
         phase: "read",
-        text: `SELECT p.projection_id, p.room_id, p.capsule_ciphertext,
+        text: `SELECT p.projection_id,p.room_id,p.capsule_ciphertext,
                       p.capsule_plaintext_bytes,p.capsule_field_version,p.payload_hash,
-                      p.owner_state, p.curation_state, p.lifecycle_version,
-                      p.fresh_until, p.expires_at
+                      p.owner_state,p.curation_state,r.interaction_mode,p.current,p.body_readable,
+                      p.lifecycle_version,p.published_at,p.fresh_until,p.expires_at
                  FROM ${PUBLIC_CORE_SQL_SCHEMA}.projections p
-                WHERE p.room_id=$1 AND p.projection_id=$2 AND p.current
-                  AND p.body_readable AND p.capsule_ciphertext IS NOT NULL
-                  AND p.expires_at>$3 AND p.owner_state IN ('published_fresh','stale')`,
-        values: [value.roomId, value.projectionId, value.requestedAt],
+                 JOIN ${PUBLIC_CORE_SQL_SCHEMA}.rooms r ON r.room_id=p.room_id
+                WHERE p.room_id=$1 AND p.projection_id=$2`,
+        values: [value.roomId, value.projectionId],
         payloadClass: "ciphertext_only",
         rowExpectation: "zero_or_one",
         rowKeys: [
           "projection_id", "room_id", "capsule_ciphertext", "payload_hash",
           "capsule_plaintext_bytes", "capsule_field_version",
-          "owner_state", "curation_state", "lifecycle_version", "fresh_until", "expires_at",
+          "owner_state", "curation_state", "interaction_mode", "current", "body_readable", "lifecycle_version",
+          "published_at", "fresh_until", "expires_at",
         ],
       });
     }
@@ -1342,23 +1397,21 @@ function readStatement(
         statementId: "interaction.read.read",
         action,
         phase: "read",
-        text: `SELECT interaction_id,room_id,origin_projection_id,state,version,
-                      request_ciphertext,guest_capsule_ciphertext,request_plaintext_bytes,
-                      guest_capsule_plaintext_bytes,request_field_version,
-                      guest_capsule_field_version,request_hash,body_expires_at
+        text: `SELECT interaction_id,room_id,origin_projection_id,
+                      origin_projection_payload_hash,interaction_type,consent_hash,
+                      state,body_readable,version,created_at,body_expires_at,
+                      tombstone_expires_at,local_purge_received_at
                  FROM ${PUBLIC_CORE_SQL_SCHEMA}.interactions
                 WHERE room_id=$1 AND interaction_id=$2
                   AND ${constantTimeHmacPredicate("reply_secret_digest", "$3")}
-                  AND body_readable AND request_ciphertext IS NOT NULL
-                  AND body_expires_at>$4 AND state IN ('accepted','seen_locally')`,
+                  AND tombstone_expires_at>$4`,
         values: [value.roomId, value.interactionId, value.replySecretDigest, value.requestedAt],
-        payloadClass: "ciphertext_only",
+        payloadClass: "body_free",
         rowExpectation: "zero_or_one",
         rowKeys: [
-          "interaction_id", "room_id", "origin_projection_id", "state", "version",
-          "request_ciphertext", "guest_capsule_ciphertext", "request_plaintext_bytes",
-          "guest_capsule_plaintext_bytes", "request_field_version", "guest_capsule_field_version",
-          "request_hash", "body_expires_at",
+          "interaction_id", "room_id", "origin_projection_id", "origin_projection_payload_hash",
+          "interaction_type", "consent_hash", "state", "body_readable", "version", "created_at",
+          "body_expires_at", "tombstone_expires_at", "local_purge_received_at",
         ],
       });
     }
@@ -1368,20 +1421,28 @@ function readStatement(
         statementId: "room_operator.status.read",
         action,
         phase: "read",
-        text: `SELECT r.room_id,r.interaction_mode,r.version,r.event_high_water,
+        text: `SELECT r.room_id,r.interaction_mode,r.version,
+                      CASE WHEN p.current AND p.owner_state IN ('published_fresh','stale')
+                                  AND p.expires_at>$3
+                           THEN p.projection_id ELSE NULL END AS current_projection_id,
+                      r.event_high_water,
                       r.event_replay_floor,b.binding_id,b.version AS binding_version,
                       b.expires_at,h.last_successful_purge_at,
                       (h.last_successful_purge_at <= $3::timestamptz - interval '36 hours') AS write_stop
                  FROM ${PUBLIC_CORE_SQL_SCHEMA}.rooms r
                  JOIN ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings b
-                   ON b.room_id=r.room_id AND b.binding_id=$2
+                   ON b.room_id=r.room_id
+                  AND ${constantTimeHmacPredicate("b.credential_digest", "$2")}
+                 LEFT JOIN ${PUBLIC_CORE_SQL_SCHEMA}.projections p
+                   ON p.room_id=r.room_id AND p.projection_id=r.current_projection_id
                 CROSS JOIN ${PUBLIC_CORE_SQL_SCHEMA}.retention_health h
                 WHERE r.room_id=$1 AND r.active AND b.state='current' AND b.expires_at>$3`,
-        values: [value.roomId, value.bindingId, value.requestedAt],
+        values: [value.roomId, value.bindingCredentialDigest, value.requestedAt],
         rowExpectation: "zero_or_one",
         rowKeys: [
-          "room_id", "interaction_mode", "version", "event_high_water", "event_replay_floor",
-          "binding_id", "binding_version", "expires_at", "last_successful_purge_at", "write_stop",
+          "room_id", "interaction_mode", "version", "current_projection_id", "event_high_water",
+          "event_replay_floor", "binding_id", "binding_version", "expires_at",
+          "last_successful_purge_at", "write_stop",
         ],
       });
     }
@@ -1455,6 +1516,41 @@ function receiptLookupStatement(context: PublicCoreSqlMutationContextV1): Public
     values: [context.actorScopeDigest, context.action, context.idempotencyKey],
     rowExpectation: "exactly_one",
     rowKeys: RECEIPT_ROW_KEYS,
+  });
+}
+
+const ROOM_OPERATOR_MUTATION_ACTIONS = new Set<PublicCoreSqlMutationActionV1>([
+  "room_operator.sync",
+  "room_operator.pull",
+  "room_operator.ack",
+  "room_operator.projection.deliver",
+  "room_operator.local_purge.receipt",
+]);
+
+function roomOperatorReplayAuthorizationStatement(
+  run: MutationRunV1,
+): PublicCoreCanonicalSqlStatementV1 {
+  if (!ROOM_OPERATOR_MUTATION_ACTIONS.has(run.context.action)) {
+    fail(500, "sql_room_operator_authorization_action_invalid");
+  }
+  const input = run.input as
+    | PublicCoreSyncRoomOperatorSqlInputV1
+    | PublicCorePullRoomOperatorSqlInputV1
+    | PublicCoreAckRoomOperatorSqlInputV1
+    | PublicCoreDeliverProjectionSqlInputV1
+    | PublicCoreRecordLocalPurgeSqlInputV1;
+  return canonicalStatement({
+    statementId: `${run.context.action}.replay.binding_authorize`,
+    action: run.context.action,
+    phase: "precondition",
+    text: `SELECT binding_id,version
+             FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings
+            WHERE room_id=$1
+              AND ${constantTimeHmacPredicate("credential_digest", "$2")}
+              AND state='current' AND expires_at>$3`,
+    values: [run.context.roomId, input.bindingCredentialDigest, run.context.requestedAt],
+    rowExpectation: "exactly_one",
+    rowKeys: ["binding_id", "version"],
   });
 }
 
@@ -1640,9 +1736,11 @@ function parseReceipt(row: SqlRow): ReceiptRowV1 {
 interface LockIdentityV1 {
   readonly roomId: string;
   readonly bindingId: string | null;
+  readonly bindingCredentialDigest: PublicCoreSqlHmacSha256V1 | null;
   readonly pairingId: string | null;
   readonly projectionId: string | null;
   readonly encounterId: string | null;
+  readonly encounterSecretDigest: PublicCoreSqlHmacSha256V1 | null;
   readonly interactionId: string | null;
   readonly eventId: string | null;
   readonly eventSequence: number | null;
@@ -1712,12 +1810,20 @@ function lockStatement(
                  WHERE room_id=$1 ORDER BY pairing_id COLLATE "C" FOR UPDATE`;
         rowExpectation = "zero_or_more";
         rowKeys = ["pairing_id", "state", "version", "expires_at"];
+      } else if (action === "room.binding.revoke") {
+        text = `SELECT binding_id,room_id,state,version,expires_at
+                  FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings
+                 WHERE room_id=$1 AND binding_id=$2 FOR UPDATE`;
+        values = [identity.roomId, identity.bindingId];
+        rowKeys = ["binding_id", "room_id", "state", "version", "expires_at"];
       } else {
         text = `SELECT binding_id,room_id,state,version,expires_at
                   FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings
-                 WHERE room_id=$1 AND binding_id=$2 AND state='current' AND expires_at>$3
+                 WHERE room_id=$1
+                   AND ${constantTimeHmacPredicate("credential_digest", "$2")}
+                   AND state='current' AND expires_at>$3
                  FOR UPDATE`;
-        values = [identity.roomId, identity.bindingId, identity.requestedAt];
+        values = [identity.roomId, identity.bindingCredentialDigest, identity.requestedAt];
         rowKeys = ["binding_id", "room_id", "state", "version", "expires_at"];
       }
       break;
@@ -1732,15 +1838,22 @@ function lockStatement(
         rowExpectation = "zero_or_more";
         rowKeys = ["projection_id", "owner_state", "curation_state", "lifecycle_version"];
       } else if (["interaction.create", "room_operator.pull"].includes(action)) {
-        const joinColumn = action === "interaction.create" ? "e.encounter_id" : "x.interaction_id";
+        const joinColumn = action === "interaction.create"
+          ? constantTimeHmacPredicate("e.encounter_secret_digest", "$2")
+          : "x.interaction_id=$2";
         const joinTable = action === "interaction.create"
           ? `${PUBLIC_CORE_SQL_SCHEMA}.public_encounters e JOIN ${PUBLIC_CORE_SQL_SCHEMA}.projections p ON p.room_id=e.room_id AND p.projection_id=e.projection_id`
           : `${PUBLIC_CORE_SQL_SCHEMA}.interactions x JOIN ${PUBLIC_CORE_SQL_SCHEMA}.projections p ON p.room_id=x.room_id AND p.projection_id=x.origin_projection_id`;
         text = `SELECT p.projection_id,p.owner_state,p.curation_state,p.lifecycle_version
                   FROM ${joinTable}
-                 WHERE p.room_id=$1 AND ${joinColumn}=$2
+                 WHERE p.room_id=$1 AND ${joinColumn}
+                   ${action === "interaction.create" ? "AND p.projection_id=$3" : ""}
                  ORDER BY p.projection_id COLLATE "C" FOR UPDATE OF p`;
-        values = [identity.roomId, action === "interaction.create" ? identity.encounterId : identity.interactionId];
+        values = [
+          identity.roomId,
+          action === "interaction.create" ? identity.encounterSecretDigest : identity.interactionId,
+          ...(action === "interaction.create" ? [identity.projectionId] : []),
+        ];
         rowKeys = ["projection_id", "owner_state", "curation_state", "lifecycle_version"];
       } else {
         text = `SELECT projection_id,owner_state,curation_state,current,body_readable,
@@ -1779,10 +1892,15 @@ function lockStatement(
         values = [identity.roomId, identity.interactionId];
         rowKeys = ["encounter_id", "state", "version", "expires_at"];
       } else {
+        const projectionPredicate = action === "interaction.create" ? " AND projection_id=$3" : "";
         text = `SELECT encounter_id,state,version,expires_at,issuance_bucket_digest
                   FROM ${PUBLIC_CORE_SQL_SCHEMA}.public_encounters
-                 WHERE room_id=$1 AND encounter_id=$2 FOR UPDATE`;
-        values = [identity.roomId, identity.encounterId];
+                 WHERE room_id=$1
+                   AND ${constantTimeHmacPredicate("encounter_secret_digest", "$2")}
+                   ${projectionPredicate}
+                 FOR UPDATE`;
+        values = [identity.roomId, identity.encounterSecretDigest,
+          ...(action === "interaction.create" ? [identity.projectionId] : [])];
         rowKeys = ["encounter_id", "state", "version", "expires_at", "issuance_bucket_digest"];
       }
       break;
@@ -2046,7 +2164,9 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                $2,$2::timestamptz+interval '24 hours',count(prior.rate_event_id)::integer+1,$3
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.rooms r
           JOIN ${PUBLIC_CORE_SQL_SCHEMA}.public_encounters e
-            ON e.room_id=r.room_id AND e.encounter_id=$4
+            ON e.room_id=r.room_id
+           AND ${constantTimeHmacPredicate("e.encounter_secret_digest", "$4")}
+           AND e.projection_id=$21
           LEFT JOIN ${PUBLIC_CORE_SQL_SCHEMA}.rate_events prior
             ON prior.room_id=r.room_id AND prior.bucket_kind='interaction_accept_day'
            AND prior.bucket_digest=e.issuance_bucket_digest AND prior.window_start=$2
@@ -2059,18 +2179,19 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
       ), accepted AS (
         INSERT INTO ${PUBLIC_CORE_SQL_SCHEMA}.interactions
           (interaction_id,room_id,installation_id,encounter_id,origin_projection_id,
-           request_ciphertext,guest_capsule_ciphertext,request_plaintext_bytes,
+           interaction_type,request_ciphertext,guest_capsule_ciphertext,request_plaintext_bytes,
            guest_capsule_plaintext_bytes,request_field_version,guest_capsule_field_version,
            request_hash,guest_capsule_hash,consent_hash,origin_projection_payload_hash,
            reply_secret_digest,delete_secret_digest,created_at,body_expires_at,tombstone_expires_at)
-        SELECT $7,e.room_id,e.installation_id,e.encounter_id,e.projection_id,$8,$9,$10,$11,$12,
-               $13,$14,$15,$16,p.payload_hash,$17,$18,$6,$19,$19::timestamptz+interval '7 days'
+        SELECT $7,e.room_id,e.installation_id,e.encounter_id,e.projection_id,$8,$9,$10,$11,$12,$13,
+               $14,$15,$16,$17,p.payload_hash,$18,$19,$6,$20,$20::timestamptz+interval '7 days'
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.public_encounters e
           JOIN ${PUBLIC_CORE_SQL_SCHEMA}.projections p
             ON p.room_id=e.room_id AND p.projection_id=e.projection_id
           JOIN accepted_rate rate ON true
-         WHERE e.room_id=$5 AND e.encounter_id=$4 AND e.state='issued'
-           AND ${constantTimeHmacPredicate("e.encounter_secret_digest", "$20")}
+         WHERE e.room_id=$5 AND e.state='issued'
+           AND ${constantTimeHmacPredicate("e.encounter_secret_digest", "$4")}
+           AND e.projection_id=$21
            AND p.current AND p.body_readable AND p.owner_state='published_fresh'
            AND p.curation_state='admitted' AND p.fresh_until>$6 AND p.expires_at>$6
         RETURNING interaction_id,encounter_id,room_id,version
@@ -2084,7 +2205,8 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
           FROM accepted a JOIN consumed c ON c.encounter_id=a.encounter_id`;
       values = [
         input.acceptRateEventId, input.dayWindowStart, input.rateExpiresAt,
-        input.encounterId, context.roomId, context.requestedAt, input.interactionId,
+        input.encounterSecretDigest, context.roomId, context.requestedAt, input.interactionId,
+        input.interactionType,
         input.requestCiphertext.envelope,
         input.guestCapsuleCiphertext?.envelope ?? null,
         input.requestCiphertext.plaintextBytes,
@@ -2093,7 +2215,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
         input.guestCapsuleCiphertext?.fieldVersion ?? 1,
         input.requestBodyHash, input.guestCapsuleBodyHash, input.consentHash,
         input.replySecretDigest, input.deleteSecretDigest, input.bodyExpiresAt,
-        input.encounterSecretDigest,
+        input.projectionId,
       ];
       payloadClass = "ciphertext_only";
       break;
@@ -2386,13 +2508,16 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
       const input = run.input as PublicCorePullRoomOperatorSqlInputV1;
       text = `WITH candidate AS (
         SELECT x.interaction_id,x.room_id,x.installation_id,x.state,x.body_readable,x.version,
+               x.origin_projection_id,x.origin_projection_payload_hash,x.interaction_type,
+               x.consent_hash,x.created_at,x.local_purge_received_at,
                x.request_ciphertext,x.guest_capsule_ciphertext,x.request_hash,x.guest_capsule_hash,
                x.request_plaintext_bytes,x.guest_capsule_plaintext_bytes,
                x.request_field_version,x.guest_capsule_field_version,
                x.body_expires_at,x.tombstone_expires_at
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.interactions x
           JOIN ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings b
-            ON b.room_id=x.room_id AND b.binding_id=$5
+            ON b.room_id=x.room_id
+           AND ${constantTimeHmacPredicate("b.credential_digest", "$5")}
            AND b.state='current' AND b.expires_at>$1
          WHERE x.room_id=$2 AND x.interaction_id=$3 AND x.version=$4
       ), expired AS (
@@ -2405,6 +2530,9 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
         RETURNING x.interaction_id AS target_id,x.room_id,x.installation_id,
                   x.version AS target_version,'terminal'::text AS pull_outcome,
                   'interaction_expired'::text AS terminal_state,
+                  x.origin_projection_id,x.origin_projection_payload_hash,x.interaction_type,
+                  x.consent_hash,x.state AS interaction_state,x.created_at,
+                  x.local_purge_received_at,
                   x.request_ciphertext,x.guest_capsule_ciphertext,x.request_hash,x.guest_capsule_hash,
                   x.request_plaintext_bytes,x.guest_capsule_plaintext_bytes,
                   x.request_field_version,x.guest_capsule_field_version,
@@ -2425,6 +2553,9 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
            AND c.body_readable AND c.request_ciphertext IS NOT NULL AND c.body_expires_at>$1
         RETURNING x.interaction_id AS target_id,x.version AS target_version,
                   'body'::text AS pull_outcome,NULL::text AS terminal_state,
+                  x.origin_projection_id,x.origin_projection_payload_hash,x.interaction_type,
+                  x.consent_hash,x.state AS interaction_state,x.created_at,
+                  x.local_purge_received_at,
                   x.request_ciphertext,x.guest_capsule_ciphertext,x.request_hash,x.guest_capsule_hash,
                   x.request_plaintext_bytes,x.guest_capsule_plaintext_bytes,
                   x.request_field_version,x.guest_capsule_field_version,
@@ -2432,6 +2563,9 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
       ), terminal AS (
         SELECT c.interaction_id AS target_id,c.version AS target_version,
                'terminal'::text AS pull_outcome,c.state AS terminal_state,
+               c.origin_projection_id,c.origin_projection_payload_hash,c.interaction_type,
+               c.consent_hash,c.state AS interaction_state,c.created_at,
+               c.local_purge_received_at,
                NULL::jsonb AS request_ciphertext,NULL::jsonb AS guest_capsule_ciphertext,
                c.request_hash,c.guest_capsule_hash,c.request_plaintext_bytes,
                c.guest_capsule_plaintext_bytes,c.request_field_version,
@@ -2441,26 +2575,32 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
          WHERE c.state IN ('interaction_deleted','origin_revoked','interaction_expired')
            AND c.tombstone_expires_at>$1
            AND NOT EXISTS (SELECT 1 FROM expired)
-      ) SELECT target_id,target_version,pull_outcome,terminal_state,request_ciphertext,
+      ) SELECT target_id,target_version,pull_outcome,terminal_state,origin_projection_id,
+               origin_projection_payload_hash,interaction_type,consent_hash,interaction_state,
+               created_at,local_purge_received_at,request_ciphertext,
                guest_capsule_ciphertext,request_hash,guest_capsule_hash,request_plaintext_bytes,
                guest_capsule_plaintext_bytes,request_field_version,guest_capsule_field_version,
                body_expires_at,source_expires_at
           FROM pulled
         UNION ALL
-        SELECT target_id,target_version,pull_outcome,terminal_state,request_ciphertext,
+        SELECT target_id,target_version,pull_outcome,terminal_state,origin_projection_id,
+               origin_projection_payload_hash,interaction_type,consent_hash,interaction_state,
+               created_at,local_purge_received_at,request_ciphertext,
                guest_capsule_ciphertext,request_hash,guest_capsule_hash,request_plaintext_bytes,
                guest_capsule_plaintext_bytes,request_field_version,guest_capsule_field_version,
                body_expires_at,source_expires_at
           FROM expired
         UNION ALL
-        SELECT target_id,target_version,pull_outcome,terminal_state,request_ciphertext,
+        SELECT target_id,target_version,pull_outcome,terminal_state,origin_projection_id,
+               origin_projection_payload_hash,interaction_type,consent_hash,interaction_state,
+               created_at,local_purge_received_at,request_ciphertext,
                guest_capsule_ciphertext,request_hash,guest_capsule_hash,request_plaintext_bytes,
                guest_capsule_plaintext_bytes,request_field_version,guest_capsule_field_version,
                body_expires_at,source_expires_at
           FROM terminal`;
       values = [
         context.requestedAt, context.roomId, input.interactionId,
-        context.expectedVersion, input.bindingId,
+        context.expectedVersion, input.bindingCredentialDigest,
       ];
       payloadClass = "ciphertext_only";
       break;
@@ -2469,14 +2609,18 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
       const input = run.input as PublicCoreAckRoomOperatorSqlInputV1;
       text = `INSERT INTO ${PUBLIC_CORE_SQL_SCHEMA}.event_acks
         (ack_id,room_id,installation_id,binding_id,event_id,sequence,event_hash,acked_at)
-        SELECT $1,e.room_id,e.installation_id,$2,e.event_id,e.sequence,e.event_hash,$3
+        SELECT $1,e.room_id,e.installation_id,b.binding_id,e.event_id,e.sequence,e.event_hash,$3
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_events e
+          JOIN ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings b
+            ON b.room_id=e.room_id
+           AND ${constantTimeHmacPredicate("b.credential_digest", "$2")}
+           AND b.state='current' AND b.expires_at>$3
          WHERE e.room_id=$4 AND e.event_id=$5 AND e.sequence=$6 AND e.event_hash=$7
         ON CONFLICT (binding_id,event_id,sequence,event_hash)
         DO UPDATE SET acked_at=${PUBLIC_CORE_SQL_SCHEMA}.event_acks.acked_at
         RETURNING ack_id AS target_id,1::bigint AS target_version`;
       values = [
-        input.ackId, input.bindingId, context.requestedAt, context.roomId,
+        input.ackId, input.bindingCredentialDigest, context.requestedAt, context.roomId,
         input.eventId, input.sequence, input.eventHash,
       ];
       break;
@@ -2505,7 +2649,9 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                'published_fresh','not_admitted',true,true,$13,$14,$15
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.rooms r
           JOIN ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings b
-            ON b.room_id=r.room_id AND b.binding_id=$16 AND b.state='current' AND b.expires_at>$1
+            ON b.room_id=r.room_id
+           AND ${constantTimeHmacPredicate("b.credential_digest", "$16")}
+           AND b.state='current' AND b.expires_at>$1
          WHERE r.room_id=$2 AND r.active AND r.version=$17
            AND $13::timestamptz<=$1 AND $13::timestamptz<$14
            AND $14::timestamptz<$15 AND $15::timestamptz<=$13::timestamptz+interval '7 days'
@@ -2528,7 +2674,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
         input.capsuleCiphertext.fieldVersion, input.payloadHash, input.basisHash,
         input.projectionPolicyHash, input.publicationApprovalId,
         input.publicationApprovalHash, input.publicationAttestationHash,
-        input.publishedAt, input.freshUntil, input.expiresAt, input.bindingId,
+        input.publishedAt, input.freshUntil, input.expiresAt, input.bindingCredentialDigest,
         context.expectedVersion, input.projectionPurgeJobId,
       ];
       payloadClass = "ciphertext_only";
@@ -2541,12 +2687,13 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                 FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_bindings b
                WHERE x.room_id=$2 AND x.interaction_id=$3
                  AND x.local_purge_received_at IS NULL AND x.version=$4
-                 AND b.room_id=x.room_id AND b.binding_id=$5
+                 AND b.room_id=x.room_id
+                 AND ${constantTimeHmacPredicate("b.credential_digest", "$5")}
                  AND b.state='current' AND b.expires_at>$1
               RETURNING x.interaction_id AS target_id,x.version AS target_version`;
       values = [
         context.requestedAt, context.roomId, input.interactionId,
-        context.expectedVersion, input.bindingId,
+        context.expectedVersion, input.bindingCredentialDigest,
       ];
       break;
     }
@@ -2574,6 +2721,8 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
           : action === "room_operator.pull"
             ? [
               "target_id", "target_version", "pull_outcome", "terminal_state",
+              "origin_projection_id", "origin_projection_payload_hash", "interaction_type",
+              "consent_hash", "interaction_state", "created_at", "local_purge_received_at",
               "request_ciphertext", "guest_capsule_ciphertext", "request_hash", "guest_capsule_hash",
               "request_plaintext_bytes", "guest_capsule_plaintext_bytes", "request_field_version",
               "guest_capsule_field_version", "body_expires_at", "source_expires_at",
@@ -2858,7 +3007,9 @@ function recoveryStatement(
       statementId: "room_operator.pull.recovery.read",
       action,
       phase: "recovery",
-      text: `SELECT interaction_id,state,body_readable,version,request_ciphertext,
+      text: `SELECT interaction_id,origin_projection_id,origin_projection_payload_hash,
+                    interaction_type,consent_hash,state,body_readable,version,created_at,
+                    local_purge_received_at,request_ciphertext,
                     guest_capsule_ciphertext,request_hash,guest_capsule_hash,
                     request_plaintext_bytes,guest_capsule_plaintext_bytes,
                     request_field_version,guest_capsule_field_version,body_expires_at
@@ -2868,7 +3019,9 @@ function recoveryStatement(
       payloadClass: "ciphertext_only",
       rowExpectation: "zero_or_one",
       rowKeys: [
-        "interaction_id", "state", "body_readable", "version", "request_ciphertext",
+        "interaction_id", "origin_projection_id", "origin_projection_payload_hash",
+        "interaction_type", "consent_hash", "state", "body_readable", "version", "created_at",
+        "local_purge_received_at", "request_ciphertext",
         "guest_capsule_ciphertext", "request_hash", "guest_capsule_hash", "request_plaintext_bytes",
         "guest_capsule_plaintext_bytes", "request_field_version", "guest_capsule_field_version",
         "body_expires_at",
@@ -3162,6 +3315,19 @@ async function recoverCommitted(
     });
   }
   if (receipt.recoveryKind === "body_free") {
+    if (receipt.action === "public_encounter.issue") {
+      return Object.freeze({
+        kind: "encounter_issue",
+        action: "public_encounter.issue",
+        status: 201,
+        code: "encounter_issued",
+        receiptId: receipt.receiptId,
+        encounterId: receipt.targetId,
+        encounterVersion: receipt.targetVersion,
+        expiresAt: addMilliseconds(receipt.createdAt, DAY_MS),
+        recovered,
+      });
+    }
     return Object.freeze({
       kind: "body_free",
       action: receipt.action,
@@ -3345,11 +3511,37 @@ async function recoverCommitted(
     if (Date.parse(currentExpiry) <= Date.parse(requestedAt)) {
       return terminalResult("room_operator.pull", receipt, "interaction_expired", true);
     }
-    if (!["accepted", "seen_locally"].includes(state)
+    if (state !== "seen_locally"
       || !rowBoolean(row, "body_readable")
       || row["request_ciphertext"] === null) {
       fail(503, "sql_pull_lifecycle_invalid");
     }
+    const projectionId = rowText(row, "origin_projection_id");
+    const originProjectionHash = rowText(row, "origin_projection_payload_hash");
+    const interactionType = rowText(row, "interaction_type");
+    const consentHash = rowText(row, "consent_hash");
+    const acceptedAt = rowText(row, "created_at");
+    const currentObjectVersion = rowNumber(row, "version");
+    const currentLocalPurgeReceivedAt = rowNullableText(row, "local_purge_received_at");
+    assertIdKind(projectionId, "proj", "sql_pull_projection_invalid");
+    assertSha(originProjectionHash, "sql_pull_origin_hash_invalid");
+    assertSha(consentHash, "sql_pull_consent_hash_invalid");
+    assertTime(acceptedAt, "sql_pull_accepted_at_invalid");
+    if (!["ask", "seed", "resonance"].includes(interactionType)) {
+      fail(503, "sql_pull_interaction_type_invalid");
+    }
+    if (currentLocalPurgeReceivedAt !== null) {
+      assertTime(currentLocalPurgeReceivedAt, "sql_pull_local_purge_invalid");
+    }
+    if (
+      Date.parse(acceptedAt) >= Date.parse(currentExpiry)
+      || currentObjectVersion < receipt.targetVersion
+      || currentObjectVersion > receipt.targetVersion + 1
+      || (currentObjectVersion === receipt.targetVersion + 1 && currentLocalPurgeReceivedAt === null)
+    ) fail(503, "sql_pull_receipt_view_invalid");
+    const localPurgeReceivedAt = currentObjectVersion === receipt.targetVersion
+      ? currentLocalPurgeReceivedAt
+      : null;
     const exactVersion = rowNumber(row, "request_field_version") === receipt.pullRequestFieldVersion;
     const exactHash = rowText(row, "request_hash") === receipt.pullBodyHash;
     const currentGuestFieldVersion = row["guest_capsule_ciphertext"] === null
@@ -3387,6 +3579,13 @@ async function recoverCommitted(
       receiptId: receipt.receiptId,
       interactionId: receipt.targetId,
       interactionVersion: receipt.targetVersion,
+      projectionId,
+      originProjectionHash,
+      interactionType: interactionType as PublicCoreSqlPullResultV1["interactionType"],
+      consentHash,
+      interactionState: "seen_locally",
+      acceptedAt,
+      localPurgeReceivedAt,
       requestCiphertext,
       guestCapsuleCiphertext,
       requestFieldVersion: receipt.pullRequestFieldVersion,
@@ -3462,7 +3661,7 @@ const INPUT_KEYS = Object.freeze({
     "eventId", "eventHash",
   ],
   "interaction.create": [
-    "encounterId", "interactionId", "acceptRateEventId", "dayWindowStart",
+    "interactionId", "interactionType", "projectionId", "acceptRateEventId", "dayWindowStart",
     "rateExpiresAt", "requestCiphertext", "guestCapsuleCiphertext", "requestBodyHash",
     "guestCapsuleBodyHash", "consentHash", "replySecretDigest", "deleteSecretDigest", "bodyExpiresAt",
     "encounterSecretDigest", "eventId", "eventHash",
@@ -3484,16 +3683,18 @@ const INPUT_KEYS = Object.freeze({
   "projection.revoke": ["projectionId", "projectionPurgeJobId", "eventId", "eventHash"],
   "curation.admit": ["projectionId", "eventId", "eventHash"],
   "curation.unlist": ["projectionId", "eventId", "eventHash"],
-  "room_operator.sync": ["bindingId", "afterSequence"],
-  "room_operator.pull": ["bindingId", "interactionId", "eventId", "eventHash"],
-  "room_operator.ack": ["ackId", "bindingId", "eventId", "sequence", "eventHash"],
+  "room_operator.sync": ["bindingCredentialDigest", "afterSequence"],
+  "room_operator.pull": ["bindingCredentialDigest", "interactionId", "eventId", "eventHash"],
+  "room_operator.ack": ["ackId", "bindingCredentialDigest", "eventId", "sequence", "eventHash"],
   "room_operator.projection.deliver": [
-    "bindingId", "projectionId", "capsuleCiphertext", "payloadHash", "basisHash",
+    "bindingCredentialDigest", "projectionId", "capsuleCiphertext", "payloadHash", "basisHash",
     "projectionPolicyHash", "publicationApprovalId", "publicationApprovalHash",
     "publicationAttestationHash", "publishedAt", "freshUntil", "expiresAt",
     "projectionPurgeJobId", "eventId", "eventHash",
   ],
-  "room_operator.local_purge.receipt": ["bindingId", "interactionId", "eventId", "eventHash"],
+  "room_operator.local_purge.receipt": [
+    "bindingCredentialDigest", "interactionId", "eventId", "eventHash",
+  ],
 }) satisfies Readonly<Record<PublicCoreSqlMutationActionV1, readonly string[]>>;
 
 const INPUT_ID_PREFIX = Object.freeze({
@@ -3549,6 +3750,9 @@ function validateMutationRun<A extends PublicCoreSqlMutationActionV1>(
   }
   if (action === "interaction.create") {
     const create = stableInput as PublicCoreCreateInteractionSqlInputV1;
+    if (!["ask", "seed", "resonance"].includes(create.interactionType)) {
+      fail(400, "interaction_type_invalid");
+    }
     if ((create.guestCapsuleCiphertext === null) !== (create.guestCapsuleBodyHash === null)) {
       fail(400, "guest_capsule_hash_contract_invalid");
     }
@@ -3569,9 +3773,11 @@ function lockIdentity(run: MutationRunV1): LockIdentityV1 {
   return Object.freeze({
     roomId: run.context.roomId,
     bindingId: text("bindingId"),
+    bindingCredentialDigest: text("bindingCredentialDigest") as PublicCoreSqlHmacSha256V1 | null,
     pairingId: text("pairingId"),
     projectionId: text("projectionId"),
     encounterId: text("encounterId"),
+    encounterSecretDigest: text("encounterSecretDigest") as PublicCoreSqlHmacSha256V1 | null,
     interactionId: text("interactionId"),
     eventId: text("eventId"),
     eventSequence: number("sequence"),
@@ -3612,6 +3818,9 @@ async function executeMutation(
           fail(409, "idempotency_conflict");
         }
         if (receipt.status === "committed") {
+          if (ROOM_OPERATOR_MUTATION_ACTIONS.has(run.context.action)) {
+            await query(transaction, roomOperatorReplayAuthorizationStatement(run));
+          }
           return await recoverCommitted(
             transaction,
             receipt,
@@ -3695,6 +3904,7 @@ function sanitizeReadRows(
     const roomId = rowText(row, "room_id");
     const projectionId = rowText(row, "projection_id");
     const payloadHash = rowText(row, "payload_hash");
+    const capsuleFieldVersion = rowNumber(row, "capsule_field_version");
     const lifecycleVersion = rowNumber(row, "lifecycle_version");
     const freshUntil = rowText(row, "fresh_until");
     const expiresAt = rowText(row, "expires_at");
@@ -3707,16 +3917,28 @@ function sanitizeReadRows(
     if (
       thirdPlaceId !== "thirdplace_forme_public_core_v1"
       || roomId !== input.roomId
+      || capsuleFieldVersion < 1
       || lifecycleVersion < 1
       || Date.parse(freshUntil) <= Date.parse(input.requestedAt)
       || Date.parse(expiresAt) <= Date.parse(input.requestedAt)
       || Date.parse(freshUntil) > Date.parse(expiresAt)
     ) fail(503, "sql_read_result_invalid");
+    const capsuleCiphertext = recoveredEncryptedEnvelope(
+      row, "capsule_ciphertext", "capsule_plaintext_bytes", "capsule_field_version",
+      Object.freeze({
+        table: "projections", column: "capsule_ciphertext",
+        roomId, rowId: projectionId,
+      }),
+      false,
+    );
+    if (capsuleCiphertext === null) fail(503, "sql_ciphertext_result_invalid");
     return Object.freeze({
       thirdPlaceId,
       roomId,
       projectionId,
+      capsuleCiphertext,
       payloadHash,
+      capsuleFieldVersion,
       lifecycleVersion,
       freshUntil,
       expiresAt,
@@ -3730,40 +3952,67 @@ function sanitizeReadRows(
     assertIdKind(projectionId, "proj", "sql_read_result_invalid");
     assertIdKind(roomId, "room", "sql_read_result_invalid");
     assertSha(payloadHash, "sql_read_result_invalid");
-    const ownerState = rowText(row, "owner_state");
+    const storedOwnerState = rowText(row, "owner_state");
     const curationState = rowText(row, "curation_state");
+    const interactionMode = rowText(row, "interaction_mode");
+    const storedCurrent = rowBoolean(row, "current");
+    const storedBodyReadable = rowBoolean(row, "body_readable");
+    const capsuleFieldVersion = rowNumber(row, "capsule_field_version");
     const lifecycleVersion = rowNumber(row, "lifecycle_version");
+    const publishedAt = rowText(row, "published_at");
     const freshUntil = rowText(row, "fresh_until");
     const expiresAt = rowText(row, "expires_at");
-    if (ownerState !== "published_fresh" && ownerState !== "stale") fail(503, "sql_read_result_invalid");
+    if (![
+      "published_fresh", "stale", "superseded", "revoked", "expired",
+    ].includes(storedOwnerState)) fail(503, "sql_read_result_invalid");
     if (!["not_admitted", "admitted", "unlisted"].includes(curationState)) fail(503, "sql_read_result_invalid");
-    if (projectionId !== readInput.projectionId || roomId !== readInput.roomId || lifecycleVersion < 1) {
+    if (interactionMode !== "public_single" && interactionMode !== "closed") fail(503, "sql_read_result_invalid");
+    if (projectionId !== readInput.projectionId || roomId !== readInput.roomId
+      || capsuleFieldVersion < 1 || lifecycleVersion < 1) {
       fail(503, "sql_read_result_invalid");
     }
+    assertTime(publishedAt, "sql_read_result_invalid");
     assertTime(freshUntil, "sql_read_result_invalid");
     assertTime(expiresAt, "sql_read_result_invalid");
     if (
-      Date.parse(expiresAt) <= Date.parse(readInput.requestedAt)
-      || Date.parse(freshUntil) > Date.parse(expiresAt)
-      || (ownerState === "published_fresh" && Date.parse(freshUntil) <= Date.parse(readInput.requestedAt))
+      Date.parse(publishedAt) >= Date.parse(freshUntil)
+      || Date.parse(freshUntil) >= Date.parse(expiresAt)
+      || Date.parse(expiresAt) - Date.parse(publishedAt) > 7 * DAY_MS
     ) fail(503, "sql_read_result_invalid");
-    const capsuleCiphertext = recoveredEncryptedEnvelope(
-      row, "capsule_ciphertext", "capsule_plaintext_bytes", "capsule_field_version",
-      Object.freeze({
-        table: "projections", column: "capsule_ciphertext",
-        roomId, rowId: projectionId,
-      }),
-      false,
-    );
-    if (capsuleCiphertext === null) fail(503, "sql_ciphertext_result_invalid");
+    const expiredNow = Date.parse(expiresAt) <= Date.parse(readInput.requestedAt);
+    const storedTerminal = ["superseded", "revoked", "expired"].includes(storedOwnerState);
+    const terminal = expiredNow || storedTerminal;
+    const ownerState = expiredNow && !storedTerminal ? "expired" : storedOwnerState;
+    const current = terminal ? false : storedCurrent;
+    const bodyAvailable = !terminal && storedBodyReadable;
+    if (
+      (!terminal && (!storedCurrent || !storedBodyReadable || row.capsule_ciphertext === null))
+      || (storedTerminal && (storedCurrent || storedBodyReadable || row.capsule_ciphertext !== null))
+    ) fail(503, "sql_read_result_invalid");
+    const capsuleCiphertext = bodyAvailable
+      ? recoveredEncryptedEnvelope(
+          row, "capsule_ciphertext", "capsule_plaintext_bytes", "capsule_field_version",
+          Object.freeze({
+            table: "projections", column: "capsule_ciphertext",
+            roomId, rowId: projectionId,
+          }),
+          false,
+        )
+      : null;
+    if (bodyAvailable && capsuleCiphertext === null) fail(503, "sql_ciphertext_result_invalid");
     return Object.freeze({
       projectionId,
       roomId,
       capsuleCiphertext,
       payloadHash,
-      ownerState,
+      capsuleFieldVersion,
+      ownerState: ownerState as PublicCoreSqlProjectionRowV1["ownerState"],
       curationState: curationState as PublicCoreSqlProjectionRowV1["curationState"],
+      interactionMode: interactionMode as PublicCoreSqlProjectionRowV1["interactionMode"],
+      current,
+      bodyAvailable,
       lifecycleVersion,
+      publishedAt,
       freshUntil,
       expiresAt,
     });
@@ -3773,51 +4022,61 @@ function sanitizeReadRows(
     const interactionId = rowText(row, "interaction_id");
     const roomId = rowText(row, "room_id");
     const originProjectionId = rowText(row, "origin_projection_id");
-    const state = rowText(row, "state");
-    const requestHash = rowText(row, "request_hash");
+    const originProjectionHash = rowText(row, "origin_projection_payload_hash");
+    const interactionType = rowText(row, "interaction_type");
+    const consentHash = rowText(row, "consent_hash");
+    const storedState = rowText(row, "state");
+    const storedBodyReadable = rowBoolean(row, "body_readable");
     const version = rowNumber(row, "version");
+    const acceptedAt = rowText(row, "created_at");
     const bodyExpiresAt = rowText(row, "body_expires_at");
-    if (state !== "accepted" && state !== "seen_locally") fail(503, "sql_read_result_invalid");
-    assertSha(requestHash, "sql_read_result_invalid");
+    const tombstoneExpiresAt = rowText(row, "tombstone_expires_at");
+    const localPurgeReceivedAt = rowNullableText(row, "local_purge_received_at");
+    if (![
+      "accepted", "seen_locally", "interaction_deleted", "interaction_expired", "origin_revoked",
+    ].includes(storedState)) fail(503, "sql_read_result_invalid");
+    if (!["ask", "seed", "resonance"].includes(interactionType)) fail(503, "sql_read_result_invalid");
+    assertSha(originProjectionHash, "sql_read_result_invalid");
+    assertSha(consentHash, "sql_read_result_invalid");
     assertIdKind(interactionId, "interaction", "sql_read_result_invalid");
     assertIdKind(roomId, "room", "sql_read_result_invalid");
     assertIdKind(originProjectionId, "proj", "sql_read_result_invalid");
+    assertTime(acceptedAt, "sql_read_result_invalid");
     assertTime(bodyExpiresAt, "sql_read_result_invalid");
+    assertTime(tombstoneExpiresAt, "sql_read_result_invalid");
+    if (localPurgeReceivedAt !== null) assertTime(localPurgeReceivedAt, "sql_read_result_invalid");
     if (
       interactionId !== readInput.interactionId
       || roomId !== readInput.roomId
       || version < 1
-      || Date.parse(bodyExpiresAt) <= Date.parse(readInput.requestedAt)
+      || Date.parse(acceptedAt) >= Date.parse(bodyExpiresAt)
+      || Date.parse(bodyExpiresAt) - Date.parse(acceptedAt) > 30 * DAY_MS
+      || Date.parse(tombstoneExpiresAt) <= Date.parse(bodyExpiresAt)
+      || Date.parse(tombstoneExpiresAt) <= Date.parse(readInput.requestedAt)
+      || (localPurgeReceivedAt !== null && Date.parse(localPurgeReceivedAt) < Date.parse(acceptedAt))
     ) {
       fail(503, "sql_read_result_invalid");
     }
-    const requestCiphertext = recoveredEncryptedEnvelope(
-      row, "request_ciphertext", "request_plaintext_bytes", "request_field_version",
-      Object.freeze({
-        table: "interactions", column: "request_ciphertext",
-        roomId, rowId: interactionId,
-      }),
-      false,
-    );
-    const guestCapsuleCiphertext = recoveredEncryptedEnvelope(
-      row, "guest_capsule_ciphertext", "guest_capsule_plaintext_bytes", "guest_capsule_field_version",
-      Object.freeze({
-        table: "interactions", column: "guest_capsule_ciphertext",
-        roomId, rowId: interactionId,
-      }),
-      true,
-    );
-    if (requestCiphertext === null) fail(503, "sql_ciphertext_result_invalid");
+    const hardExpired = Date.parse(bodyExpiresAt) <= Date.parse(readInput.requestedAt);
+    const storedTerminal = [
+      "interaction_deleted", "interaction_expired", "origin_revoked",
+    ].includes(storedState);
+    const state = hardExpired && !storedTerminal ? "interaction_expired" : storedState;
+    const bodyAvailable = !hardExpired && !storedTerminal;
+    if (storedBodyReadable !== !storedTerminal) fail(503, "sql_read_result_invalid");
     return Object.freeze({
       interactionId,
       roomId,
       originProjectionId,
-      state,
+      originProjectionHash,
+      interactionType: interactionType as PublicCoreSqlInteractionRowV1["interactionType"],
+      consentHash,
+      state: state as PublicCoreSqlInteractionRowV1["state"],
       version,
-      requestCiphertext,
-      guestCapsuleCiphertext,
-      requestHash,
+      acceptedAt,
       bodyExpiresAt,
+      bodyAvailable,
+      localPurgeReceivedAt,
     });
   }));
   return Object.freeze(rows.map((row) => {
@@ -3826,6 +4085,7 @@ function sanitizeReadRows(
     const bindingId = rowText(row, "binding_id");
     const interactionMode = rowText(row, "interaction_mode");
     const roomVersion = rowNumber(row, "version");
+    const currentProjectionId = rowNullableText(row, "current_projection_id");
     const eventHighWater = rowNumber(row, "event_high_water");
     const eventReplayFloor = rowNumber(row, "event_replay_floor");
     const bindingVersion = rowNumber(row, "binding_version");
@@ -3834,9 +4094,9 @@ function sanitizeReadRows(
     if (interactionMode !== "public_single" && interactionMode !== "closed") fail(503, "sql_read_result_invalid");
     assertTime(bindingExpiresAt, "sql_read_result_invalid");
     assertTime(lastSuccessfulPurgeAt, "sql_read_result_invalid");
+    if (currentProjectionId !== null) assertIdKind(currentProjectionId, "proj", "sql_read_result_invalid");
     if (
       roomId !== readInput.roomId
-      || bindingId !== readInput.bindingId
       || roomVersion < 1
       || bindingVersion < 1
       || eventHighWater < 0
@@ -3848,6 +4108,7 @@ function sanitizeReadRows(
       roomId,
       interactionMode,
       roomVersion,
+      currentProjectionId,
       eventHighWater,
       eventReplayFloor,
       bindingId,
@@ -4251,7 +4512,9 @@ export class PublicCorePostgresStoreV1 implements PublicCorePreparedSqlStoreV1 {
       assertIdKind(stableInput.interactionId, "interaction", "interaction_id_invalid");
       assertHmac(stableInput.replySecretDigest, "reply_secret_digest_invalid");
     }
-    if ("bindingId" in stableInput) assertIdKind(stableInput.bindingId, "binding", "binding_id_invalid");
+    if ("bindingCredentialDigest" in stableInput) {
+      assertHmac(stableInput.bindingCredentialDigest, "binding_credential_digest_invalid");
+    }
     return await executeTransaction(this.#executor,
       Object.freeze({ isolation: "read_committed" as const, readOnly: true }),
       async (transaction) => {
@@ -4280,7 +4543,9 @@ export class PublicCorePostgresStoreV1 implements PublicCorePreparedSqlStoreV1 {
   }
 
   async readRoomOperatorStatus(input: PublicCoreReadRoomOperatorStatusSqlInputV1): Promise<PublicCoreSqlReadResultV1> {
-    return await this.#read("room_operator.status", input, ["roomId", "bindingId", "requestedAt"]);
+    return await this.#read("room_operator.status", input, [
+      "roomId", "bindingCredentialDigest", "requestedAt",
+    ]);
   }
 
   async issuePublicEncounter(
