@@ -2,15 +2,27 @@
 
 The repository keeps a deliberately small decision surface.
 
-Current execution truth (2026-08-10): R0–R3 are Done and Owner-accepted. #66
+Current execution truth (2026-08-13): R0–R3 are Done and Owner-accepted. #66
 local Projection review is Owner-accepted and PR #72 is integrated into the R4
 branch. #67 is offline Technical Review Green on Draft PR #73, with no
 production Room/database mutation, deployment, publication, admission, real
-Guest data or Provider call. R4 remains Building and is not on `main`; Draft
-integration PR #65 currently has one Red Linux CI check. Host Binding attempts
-1 and 2 are consumed Yellow history and #71 treats Setup/Doctor as a bounded
-enabler for the later Fresh local Codex slice, not as the #67 product milestone.
-The current target is repeatable-ready 2026-08-24 and Demo Day 2026-08-25.
+Guest data or Provider call. Local PostgreSQL Wiring Stage A is `bc0b520`; the
+repository-only Physical Rebind is Technical Review Green at K `bcfe334` / L
+`beeb55b`, but no Docker, PostgreSQL or SQL rehearsal ran. The next gate is a
+separately approved one-use Physical Execution. R4 remains Building and is not
+on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
+and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
+August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
+
+Current Physical Rebind bindings: index
+`sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+schema
+`sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+evidence
+`sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+report
+`sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -21,6 +33,7 @@ The current target is repeatable-ready 2026-08-24 and Demo Day 2026-08-25.
 | [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) | Owner-approved NH1/NH2 and exact R4 Fresh Native Response Session T3 contracts: Native Harness Workbench default, Codex-first/OpenCode architectural target, and the two-class native-work/Forme-authority boundary. |
 | [`DECISIONS.md`](./DECISIONS.md) | Which important choices have been made, and why? |
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md) | What did repository-only Physical Rebind Effect 0 construct, validate and leave closed? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

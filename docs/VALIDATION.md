@@ -1,7 +1,16 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-04
+- Updated: 2026-08-13
+- Physical Rebind Effect-0 bindings: index
+  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+  schema
+  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  report
+  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -17,8 +26,13 @@
   The Owner then approved exact Retry Construction Packet
   `sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7`
   while keeping Retry Execution and First Provider-Call Test Grant
-  `NOT_REQUESTED`; construction has not started, and R4 is not Owner-accepted
-  or Done**
+  `NOT_REQUESTED`. Since that dated Gate-B state, #67 Local PostgreSQL Wiring
+  reached Stage A `bc0b520`, and the separately approved repository-only
+  Physical Rebind reached Technical Review Green at K `bcfe334` / L
+  `beeb55b`. Its exact validation totals are 139 / 85 / 391 / 711 / 145 / 45;
+  strict machine evidence and committed-byte audits are Green. No Docker,
+  PostgreSQL or SQL rehearsal occurred. One-use Physical Execution and Gate C
+  remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -1049,3 +1063,23 @@ For each meaningful owner demo, append one dated evidence round containing:
 6. the consequence for the next gate.
 
 Do not rewrite prior feedback to fit later architecture. Supersede it explicitly when new evidence changes the judgment.
+
+## Evidence round 22 — Local PostgreSQL Physical Rebind Effect 0
+
+- Case: repository-only rebind of the disposable-local-PostgreSQL runner from
+  the obsolete 17-path/Addendum-B-only topology to Stage A 19 + Stage B 9.
+- Owner experience: the Owner precisely approved Effect 0 only; one-use
+  Physical Execution and Gate C remained separate stops.
+- Technical evidence: K `bcfe3349e01a655c2d52d6abbca0038cc3bff6e2`, L
+  `beeb55b662372e2b4f2a16f8768c16905a7a9978`, machine evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`
+  and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md).
+  The exact deny-network totals are 139 / 85 / 391 / 711 / 145 / 45; strict
+  Ajv, typecheck, no-AI, docs regression, blob/hash-DAG and diff checks pass.
+- Product judgment: the physical runner is now an auditable future capability,
+  not an observed product path. This removes an implementation blocker but
+  does not prove the encounter or PostgreSQL experience.
+- Not proven: Docker/image/daemon facts, PostgreSQL 16.10, target catalog,
+  apply/restart/rollback, production pool/migration, runtime, traffic or Gate C.
+- Consequence: prepare a new one-use Physical Execution Card/Review and obtain
+  exact Owner approval before creating or consuming a pending grant.

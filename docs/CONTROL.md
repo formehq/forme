@@ -1,20 +1,22 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-11
+- Updated: 2026-08-13
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and PR #72 is integrated into the R4 branch. #67 is
   offline Technical Review Green on Draft PR #73, with the public-only boundary
   foundation on Draft PR #75. The Owner approved the exact Durable Public Core
   Construction Packet and Review on 2026-08-10 and Addendum A on 2026-08-11.
-  The Local PostgreSQL Wiring Packet and Addenda B/C have now reached the exact
-  repository-only stop `INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED` at Stage-A
-  `bc0b520`. Application, durable persistence, the concrete `pg` executor and
-  the 20-method application-store bridge are constructed; no target
-  PostgreSQL catalog was observed. Vault, HTTPS transport, production pool,
-  migration, runtime route, traffic and Gate C readiness remain false. A
-  separately approved Physical Rebind, publication-stable successor approval,
-  Gate C
+  The Local PostgreSQL Wiring Packet and Addenda B/C reached Stage-A
+  `bc0b520`; the separately approved Physical Rebind Effect-0 construction is
+  now frozen at K `bcfe334` and L `beeb55b`, with exact stop
+  `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  Application, persistence, `pg` executor, application-store bridge, v3
+  one-use authority, durable effect accounting and cleanup recovery are
+  constructed; no target PostgreSQL catalog was observed. Vault, HTTPS,
+  production pool/migration, runtime route, traffic and Gate C readiness
+  remain false. A separately approved one-use Physical Execution,
+  publication-stable successor approval, Gate C
   and one real Public Room / bounded Guest knock follow separately. Host
   Binding is historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
@@ -47,16 +49,26 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **prepare and independently review a separately authorized
-  Physical Rebind for the frozen
-  [`Local PostgreSQL Wiring Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
-  and hash-pinned, non-approvable
-  [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md); do not execute or
-  activate either downstream gate.** Repository-only Construction has stopped
-  at Technical Review. The accepted #66 review
+- Next action: **prepare and independently review a separate one-use Physical
+  Execution Card and Owner Review that bind the frozen
+  [`Physical Rebind Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
+  K/L and the external committed-M audit; do not create a pending grant or
+  execute Docker/PostgreSQL yet. The hash-pinned
+  [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
+  non-approvable; do not activate it.** Repository-only Construction has
+  stopped at Technical Review. The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
+- Current Physical Rebind bindings: index
+  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+  schema
+  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  report
+  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

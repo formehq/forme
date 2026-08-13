@@ -7,14 +7,25 @@
   production-boundary foundation on Draft PR #75 at `09401a0`. The Owner
   approved the exact Durable Public Core Construction Packet/Review on
   2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is
-  Technical Review Green at Stage-A `bcd4259`: application and durable
-  persistence are constructed, while vault, transport, traffic and Gate C
-  readiness remain false. Draft PR #76 remains unmerged; production activation
+  Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring is
+  frozen at `bc0b520`, and repository-only Physical Rebind is Technical Review
+  Green at K `bcfe334` / L `beeb55b`; target PostgreSQL, one-use execution,
+  vault, transport, traffic and Gate C remain false. Draft PR #76 remains
+  unmerged; production activation
   and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
   attempts are consumed Yellow
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
-- Updated: 2026-08-11
+- Updated: 2026-08-13
+- Physical Rebind Effect-0 bindings: index
+  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+  schema
+  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  report
+  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

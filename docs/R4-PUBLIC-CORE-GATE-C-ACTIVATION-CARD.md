@@ -1,7 +1,7 @@
 # R4 #67 Public Core Gate C Activation Card — Local PostgreSQL Successor
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_PHYSICAL_REBIND_REQUIRED_GATE_C_NOT_REQUESTED`**
-- Updated: 2026-08-11
+- Status: **`SUCCESSOR_NOT_APPROVABLE_ONE_USE_PHYSICAL_EXECUTION_REQUIRED_GATE_C_NOT_REQUESTED`**
+- Updated: 2026-08-13
 - Scope: **#67 only — one durable public Room through one bounded knock reaching the local Owner**
 - Predecessor Gate C Card SHA-256:
   `sha256:dcc2fb79a96d37eba8b1b0fb276a9ee0b01a436501520e224650cabeaf2e73f6`
@@ -10,14 +10,15 @@
   `d5cb758467d06bfd7f17b6ae6a34664e659e1e3d`
 - Exact 19-artifact aggregate `G19`:
   `sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417`
-- Physical Rebind Approval: **NOT_REQUESTED**
+- Physical Rebind Effect-0 Construction: **TECHNICAL_REVIEW_GREEN**
+- One-use Physical Execution Approval: **NOT_REQUESTED**
 - Gate C Activation Grant: **NOT_REQUESTED**
 - Migration, deployment, runtime/route, publication, real Guest, Provider,
   merge, release and spend grants: **NOT_REQUESTED**
 
-This successor Card records the repository-only Local PostgreSQL Wiring result
-and the remaining activation requirements. It is a stop object, not an
-approval request. It grants no repository mutation, Physical Rebind, Docker,
+This successor Card records Local PostgreSQL Wiring plus the repository-only
+Physical Rebind Effect-0 result and the remaining activation requirements. It is a stop object, not an
+approval request. It grants no repository mutation, one-use Physical Execution, Docker,
 OCI, PostgreSQL, SQL, runtime, route, Vault, HTTPS, traffic, Room, Projection,
 Curator, Guest, Provider, model, email, deployment, publication, admission,
 merge, release or spend authority.
@@ -43,8 +44,15 @@ its containing commit/tree externally and explicitly.
 | Evidence schema | `sha256:9bc0d1dbf3a1a74a272e17e4f1ad6bce9d0c33b65bcf7d4ae9fc00567f76902f` |
 | Machine evidence | `sha256:37a6ce9b39279281dc9a94e9ee166bf4c8b1ee70caefd3168ef556c8ff8f539d` |
 | Construction Report | `sha256:060e6d05e91101ee95786600698b699c3796758083a2d862a23d3c907ca9ef14` |
+| Physical Rebind Packet / Owner Review | `sha256:3478089d16059968b69974496701a636c5dd32e449fbb31907e652d523b673fa` / `sha256:9ce9a8dfedca0e85deabb9b490055eda9662e492d3b3b51cabeaab1ec2afc9bf` |
+| Rebound implementation `K` / tree | `bcfe3349e01a655c2d52d6abbca0038cc3bff6e2` / `c34372a7cd121f157ade1fa86841fdebc69bb4ed` |
+| Rebind evidence `L` / tree | `beeb55b662372e2b4f2a16f8768c16905a7a9978` / `10cb87830e37f8070320df09fb0b0dbdaef3268b` |
+| Rebound runner / test | `sha256:4fa4a5deb677b1d31145ad9017b1755183e8c43fcc0dad6a138e4ff789ae742d` / `sha256:20909c0a7237a474bf7ac0049baa6437dfcaa57afa817b5b73c6d0d0d064d13a` |
+| Physical Rebind artifact index | `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554` |
+| Physical Rebind evidence schema / evidence | `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27` / `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3` |
+| Physical Rebind Construction Report | `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e` |
 | `package-lock.json` | `sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f` |
-| Local PostgreSQL runner | `sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1` |
+| Phase-1 predecessor runner | `sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1` |
 | `schema.sql` / `verify.sql` / `rollback.sql` | `sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8` / `sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd` / `sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4` |
 
 Machine-readable bindings are in the
@@ -53,6 +61,11 @@ Machine-readable bindings are in the
 and [Phase-1 evidence](./evidence/r4-public-core-local-postgres-wiring.json).
 The human-readable result is the
 [Local PostgreSQL Wiring Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md).
+The current repository-only successor is the
+[Physical Rebind Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
+with [machine evidence](./evidence/r4-public-core-local-postgres-physical-rebind.json),
+[artifact index](../schemas/r4/public-core/local-postgres-physical-rebind-artifact-index.json)
+and [strict schema](../schemas/r4/public-core/local-postgres-physical-rebind-evidence.schema.json).
 
 Any changed implementation, dependency, SQL, catalog, runner, production
 configuration, deployment artifact, publication artifact, actor, window,
@@ -89,6 +102,7 @@ driver pool, runtime route or traffic path was configured.
 | Durable persistence adapter constructed | `true` |
 | Concrete PostgreSQL executor constructed | `true` |
 | Application-store bridge constructed | `true` |
+| Physical Rebind runner/evidence constructed | `true` |
 | Disposable local PostgreSQL rehearsal exercised | `false` |
 | Target PostgreSQL observed | `false` |
 | Target catalog verified as 14 / 207 / 172 / 44 | `false` |
@@ -103,11 +117,12 @@ driver pool, runtime route or traffic path was configured.
 | Real Room / Projection / Curator receipt | absent / absent / absent |
 | Real Guest Interaction | absent |
 
-The committed runner still binds the prior 17-path Addendum B workset and
-wrapper. It cannot accept `J` or `G19` for physical execution. A separately
-frozen and approved Physical Rebind must bind the exact 19-path commit, current
-SQL hashes, catalog counts and runner bytes before any Docker or PostgreSQL
-effect. Physical Rebind is not implicit in Technical Review Green.
+The committed runner now rejects the prior 17-path/Addendum-B-only topology and
+binds `J/G19`, Stage B, K/L, current SQL/catalog, v3 one-use authority and exact
+cleanup semantics. This is constructed capability only: no pending grant was
+created or consumed, and no Docker or PostgreSQL effect ran. A new Physical
+Execution Card, Owner Review and exact Owner approval must bind the final M
+commit/tree plus its external committed-byte audit before any physical effect.
 
 ## Obsolete physical bindings
 
@@ -130,7 +145,7 @@ bindings do not amend an old one-use grant in place.
 Every item below must be exact and hash-pinned. References replace secret
 values; raw secrets never enter this Card, config, diagnostics or logs.
 
-### 1. Physical Rebind and disposable local rehearsal
+### 1. One-use Physical Execution and disposable local rehearsal
 
 - exact Physical Rebind Packet and Owner Review hashes, proposal lineage and
   frozen wrapper HEAD/tree;
@@ -235,7 +250,7 @@ An activation-ready successor may request the following stages under an exact
 Owner-approved envelope. Every stage stops on mismatch; later authority is not
 inferred from an earlier success.
 
-1. **Physical Rebind rehearsal:** under its own approval, consume one exact
+1. **One-use Physical Execution rehearsal:** under its own later approval, consume one exact
    local-only grant, rehearse apply/verify/restart/rollback against a disposable
    PostgreSQL instance, prove cleanup, publish body-free evidence, and stop.
 2. **Zero-effect production admission:** recompute all hashes; verify the clean
@@ -288,7 +303,7 @@ publication is implied.
 | Effect | Authorized now |
 |---|---:|
 | Further repository or dependency mutation | 0 |
-| Physical Rebind grants or executions | 0 / 0 |
+| One-use Physical Execution grants or executions | 0 / 0 |
 | Docker CLI / daemon calls | 0 / 0 |
 | OCI inspect / pulls | 0 / 0 |
 | PostgreSQL connections / database identities | 0 / 0 |
@@ -320,10 +335,10 @@ Acceptance or R4 Done.
 
 Do not approve or activate this Card. Current work stops exactly at:
 
-`INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN / PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
 
-The next possible physical step is a separately proposed, hash-pinned Physical
-Rebind Packet and Owner Review. Even successful local rehearsal must stop and
+The next possible physical step is a separately proposed, hash-pinned one-use
+Physical Execution Card and Owner Review. Even successful local rehearsal must stop and
 cannot request or imply Gate C. A later Gate C decision must separately bind a
 new activation-ready Card SHA-256, its containing HEAD/tree, every production
 input, exact Projection approval, actors, activation window, disable/rollback

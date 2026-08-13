@@ -1101,3 +1101,48 @@ PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`. The current runner
 still binds the prior 17-path wrapper and cannot physically consume this
 19-path state. Physical Rebind requires a new exact Packet, Review and Owner
 approval. Gate C, #67 Done and R4 Done remain false.
+
+## 2026-08-13 — R4 #67 Physical Rebind Effect 0 reached Technical Review Green
+
+**Decision:** record the Owner-approved repository-only Physical Rebind
+construction at implementation K `bcfe3349e01a655c2d52d6abbca0038cc3bff6e2` /
+tree `c34372a7cd121f157ade1fa86841fdebc69bb4ed` and evidence L
+`beeb55b662372e2b4f2a16f8768c16905a7a9978` / tree
+`10cb87830e37f8070320df09fb0b0dbdaef3268b`.
+
+**Authority and artifacts:** Packet
+`sha256:3478089d16059968b69974496701a636c5dd32e449fbb31907e652d523b673fa`
+and Owner Review
+`sha256:9ce9a8dfedca0e85deabb9b490055eda9662e492d3b3b51cabeaab1ec2afc9bf`;
+artifact index
+`sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`;
+strict evidence schema
+`sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`;
+machine evidence
+`sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`;
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md)
+`sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`;
+successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+`sha256:e12b2fc8c86bb9c82d8df560f9feeb7ed75817bb14bfba342580cd2ec56f69a0`.
+Committed K/L audit summaries are
+`sha256:0d87de0d35468577eec9dde967f7c5d6d4b5db4b3442231e0254e329096ada00`
+and
+`sha256:bccef86f5103b56f5ea1672aa276cb9d0c41f6ae58e10b8ba193eebd1ce54d69`.
+
+**Validation:** exact deny-network lanes pass 139/139, 85/85, 391/391,
+711/711, 145/145 and 45/45. Runner syntax, TypeScript, no-server-AI, legacy
+documentation regression, strict Ajv/mutations, committed blob/hash-DAG and
+diff checks pass with 0 Blocker / 0 Important.
+
+**Effect:** the runner now rejects obsolete 17-path/14-artifact/v1/v2 authority
+and constructs the v3 one-use grant/receipt, durable effect ledger, bounded
+cleanup recovery and identity-drift stops. It does not prove a physical run.
+Repository-command/package/source-control network, Docker/OCI,
+PostgreSQL/database/SQL, product network/production/runtime/real-data,
+Provider/model/email, deploy/publication/admission, Gate C, push/PR,
+merge/release and spend effects are all zero.
+
+**Stop:** `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+A new Physical Execution Card, Owner Review and exact Owner approval must bind
+the final status commit and its external committed-byte audit before any
+pending grant or physical effect. #67 and R4 remain open.

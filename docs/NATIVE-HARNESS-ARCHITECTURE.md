@@ -15,12 +15,24 @@
   closed. #67 is now offline Technical Review Green on Draft PR #73 at
   `5e93196`, with a public-only boundary foundation on Draft PR #75 at
   `09401a0`; the Owner-approved Durable Public Core Construction and Addendum A
-  are Technical Review Green at Stage-A `bcd4259`. Draft PR #76 remains
-  unmerged; vault, transport, traffic and Gate C readiness remain false. PR #74
+  are Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring
+  Stage A is `bc0b520`, and the repository-only Physical Rebind construction
+  is Technical Review Green at K `bcfe334` / L `beeb55b`; one-use Physical
+  Execution, target PostgreSQL observation, vault, transport, traffic and Gate
+  C remain closed. Draft PR #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
-- Updated: 2026-08-11
+- Updated: 2026-08-13
+- Physical Rebind Effect-0 bindings: index
+  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+  schema
+  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  report
+  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside

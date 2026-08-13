@@ -21,19 +21,23 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Draft PR #75 adds the public-only production-boundary foundation. The Owner
   approved Draft PR #76's exact Durable Public Core Construction Packet on
   2026-08-10 and Addendum A on 2026-08-11. The later Local PostgreSQL Wiring
-  Packet plus Addenda B/C have now reached repository-only Technical Review
+  Packet plus Addenda B/C first reached repository-only Technical Review
   Green at Stage-A `bc0b520`: the application, durable persistence, concrete
   `pg` executor and 20-method application-store bridge are constructed. The
   committed SQL catalog contract is `14 / 207 / 172 / 44`, but it has not been
-  observed in PostgreSQL. Physical Rebind is the next separately approved
-  gate; vault, HTTPS transport, production pool/migration, runtime route,
-  traffic and Gate C readiness remain false. #67 has not created or
+  observed in PostgreSQL. The separately approved repository-only Physical
+  Rebind construction is now Technical Review Green at K `bcfe334` and L
+  `beeb55b`: the runner binds the 19/9 lineage, v3 one-use authority, durable
+  effect accounting and cleanup recovery. One-use Physical Execution approval
+  is the next separate gate; vault, HTTPS transport, production pool/migration,
+  runtime route, traffic and Gate C readiness remain false. #67 has not created or
   mutated a production Room, deployed, published, admitted a Projection,
   handled real Guest data, or run a real public knock. R4 is not Owner-accepted
   or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
+  Physical Rebind K/L are `bcfe334` / `beeb55b`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -47,10 +51,21 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
 - Production gap: the current Public Core is repository/offline proof only.
-  The disposable local PostgreSQL rehearsal has not run. No production
+  The disposable local PostgreSQL rehearsal has not run; Physical Rebind
+  construction made zero Docker/OCI/PostgreSQL/SQL effects. No production
   PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
+- Physical Rebind Effect-0 bindings: index
+  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+  schema
+  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  evidence
+  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  report
+  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
+  These prove repository construction only.
+- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -76,8 +91,10 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
    history, including both Host Binding attempt envelopes
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
 11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
-    and [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
-    — the current Phase-1 evidence, exact stop and inputs still required
+    and [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md)
+    — the Phase-1 and current Effect-0 evidence, exact stop and inputs still required
+12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+    — the current non-approvable activation boundary
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
