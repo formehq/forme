@@ -1,0 +1,1842 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-physical-rebind-evidence.schema.json",
+  "title": "R4 Public Core Local PostgreSQL Physical Rebind Effect-0 Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "lineage",
+    "workset",
+    "constructionBoundary",
+    "constructedPhysicalContract",
+    "catalogContract",
+    "validation",
+    "effectAudit",
+    "documentationScope",
+    "artifacts",
+    "audits",
+    "obsoleteBindings",
+    "readiness",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "r4_public_core_local_postgres_physical_rebind_evidence.v1"
+    },
+    "status": {
+      "type": "string",
+      "const": "LOCAL_POSTGRES_PHYSICAL_REBIND_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "type": "string",
+      "const": "2026-08-13T10:31:08Z"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "physicalRebindPacketSha256",
+        "physicalRebindOwnerReviewSha256",
+        "packetHead",
+        "packetTree",
+        "ownerReviewHead",
+        "ownerReviewTree",
+        "ownerApproval",
+        "effect0ConstructionGrant",
+        "oneUsePhysicalExecutionGrant",
+        "gateCGrant"
+      ],
+      "properties": {
+        "physicalRebindPacketSha256": {
+          "type": "string",
+          "const": "sha256:3478089d16059968b69974496701a636c5dd32e449fbb31907e652d523b673fa"
+        },
+        "physicalRebindOwnerReviewSha256": {
+          "type": "string",
+          "const": "sha256:9ce9a8dfedca0e85deabb9b490055eda9662e492d3b3b51cabeaab1ec2afc9bf"
+        },
+        "packetHead": {
+          "type": "string",
+          "const": "697334c169c9ec69d44ecb38529d7108839f886b"
+        },
+        "packetTree": {
+          "type": "string",
+          "const": "71c6b4197eed649814276a4536b6a40690eefd05"
+        },
+        "ownerReviewHead": {
+          "type": "string",
+          "const": "1d9d8ec7d419c90777295099d794ff04f8f476ce"
+        },
+        "ownerReviewTree": {
+          "type": "string",
+          "const": "257cc30066e669a456916033d5664fc135b7da3c"
+        },
+        "ownerApproval": {
+          "type": "string",
+          "const": "APPROVED_EXACT_EFFECT_0"
+        },
+        "effect0ConstructionGrant": {
+          "type": "string",
+          "const": "CONSUMED_BY_K_L_M_ONLY"
+        },
+        "oneUsePhysicalExecutionGrant": {
+          "type": "string",
+          "const": "NOT_REQUESTED"
+        },
+        "gateCGrant": {
+          "type": "string",
+          "const": "NOT_REQUESTED"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stageA",
+        "stageB",
+        "packet",
+        "ownerReview",
+        "implementation"
+      ],
+      "properties": {
+        "stageA": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "head",
+            "tree",
+            "parentHead",
+            "parentTree",
+            "exactDelta",
+            "artifactAggregateSha256"
+          ],
+          "properties": {
+            "head": {
+              "type": "string",
+              "const": "bc0b52023bb19d4e41fc4daa4a1e232961e1a19b"
+            },
+            "tree": {
+              "type": "string",
+              "const": "d5cb758467d06bfd7f17b6ae6a34664e659e1e3d"
+            },
+            "parentHead": {
+              "type": "string",
+              "const": "deb12a045f5d84281bc9da0f110e049748949970"
+            },
+            "parentTree": {
+              "type": "string",
+              "const": "4b9028a942d4ac436527586aee64fbc23ec3488d"
+            },
+            "exactDelta": {
+              "type": "string",
+              "const": "19_PATHS_6A_13M"
+            },
+            "artifactAggregateSha256": {
+              "type": "string",
+              "const": "sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417"
+            }
+          }
+        },
+        "stageB": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "head",
+            "tree",
+            "parentHead",
+            "parentTree",
+            "exactDelta",
+            "artifactAggregateSha256"
+          ],
+          "properties": {
+            "head": {
+              "type": "string",
+              "const": "2b49f6ad939993b9ff6a106fab327529a40fa20d"
+            },
+            "tree": {
+              "type": "string",
+              "const": "b40e967965d9d8878e21f2b5deff5df7aceed7f7"
+            },
+            "parentHead": {
+              "type": "string",
+              "const": "bc0b52023bb19d4e41fc4daa4a1e232961e1a19b"
+            },
+            "parentTree": {
+              "type": "string",
+              "const": "d5cb758467d06bfd7f17b6ae6a34664e659e1e3d"
+            },
+            "exactDelta": {
+              "type": "string",
+              "const": "9_PATHS_4A_5M"
+            },
+            "artifactAggregateSha256": {
+              "type": "string",
+              "const": "sha256:cb133cbd02585be9f71f8fc1b858d86a8401a82466df1d1a6ab4d705e387516b"
+            }
+          }
+        },
+        "packet": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "head",
+            "tree",
+            "parentHead",
+            "parentTree",
+            "exactDelta",
+            "artifactSha256"
+          ],
+          "properties": {
+            "head": {
+              "type": "string",
+              "const": "697334c169c9ec69d44ecb38529d7108839f886b"
+            },
+            "tree": {
+              "type": "string",
+              "const": "71c6b4197eed649814276a4536b6a40690eefd05"
+            },
+            "parentHead": {
+              "type": "string",
+              "const": "2b49f6ad939993b9ff6a106fab327529a40fa20d"
+            },
+            "parentTree": {
+              "type": "string",
+              "const": "b40e967965d9d8878e21f2b5deff5df7aceed7f7"
+            },
+            "exactDelta": {
+              "type": "string",
+              "const": "1_PATH_1A"
+            },
+            "artifactSha256": {
+              "type": "string",
+              "const": "sha256:3478089d16059968b69974496701a636c5dd32e449fbb31907e652d523b673fa"
+            }
+          }
+        },
+        "ownerReview": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "head",
+            "tree",
+            "parentHead",
+            "parentTree",
+            "exactDelta",
+            "artifactSha256"
+          ],
+          "properties": {
+            "head": {
+              "type": "string",
+              "const": "1d9d8ec7d419c90777295099d794ff04f8f476ce"
+            },
+            "tree": {
+              "type": "string",
+              "const": "257cc30066e669a456916033d5664fc135b7da3c"
+            },
+            "parentHead": {
+              "type": "string",
+              "const": "697334c169c9ec69d44ecb38529d7108839f886b"
+            },
+            "parentTree": {
+              "type": "string",
+              "const": "71c6b4197eed649814276a4536b6a40690eefd05"
+            },
+            "exactDelta": {
+              "type": "string",
+              "const": "1_PATH_1A"
+            },
+            "artifactSha256": {
+              "type": "string",
+              "const": "sha256:9ce9a8dfedca0e85deabb9b490055eda9662e492d3b3b51cabeaab1ec2afc9bf"
+            }
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "head",
+            "tree",
+            "parentHead",
+            "parentTree",
+            "exactDelta",
+            "artifactAggregateSha256"
+          ],
+          "properties": {
+            "head": {
+              "type": "string",
+              "const": "bcfe3349e01a655c2d52d6abbca0038cc3bff6e2"
+            },
+            "tree": {
+              "type": "string",
+              "const": "c34372a7cd121f157ade1fa86841fdebc69bb4ed"
+            },
+            "parentHead": {
+              "type": "string",
+              "const": "1d9d8ec7d419c90777295099d794ff04f8f476ce"
+            },
+            "parentTree": {
+              "type": "string",
+              "const": "257cc30066e669a456916033d5664fc135b7da3c"
+            },
+            "exactDelta": {
+              "type": "string",
+              "const": "2_PATHS_0A_2M_0D_0R"
+            },
+            "artifactAggregateSha256": {
+              "type": "string",
+              "const": "sha256:e1eb1cb173c67d43a451bb45fbe402786ccbee7e542f0f0f618760a1379e9920"
+            }
+          }
+        }
+      }
+    },
+    "workset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationCommitCount",
+        "evidenceCommitCount",
+        "statusCommitCount",
+        "totalCommitCount",
+        "implementationPathCount",
+        "evidencePathCount",
+        "statusPathCount",
+        "totalPathCount",
+        "addedPathCount",
+        "modifiedPathCount",
+        "implementationPaths",
+        "evidencePaths",
+        "statusPaths"
+      ],
+      "properties": {
+        "implementationCommitCount": {
+          "type": "number",
+          "const": 1
+        },
+        "evidenceCommitCount": {
+          "type": "number",
+          "const": 1
+        },
+        "statusCommitCount": {
+          "type": "number",
+          "const": 1
+        },
+        "totalCommitCount": {
+          "type": "number",
+          "const": 3
+        },
+        "implementationPathCount": {
+          "type": "number",
+          "const": 2
+        },
+        "evidencePathCount": {
+          "type": "number",
+          "const": 3
+        },
+        "statusPathCount": {
+          "type": "number",
+          "const": 10
+        },
+        "totalPathCount": {
+          "type": "number",
+          "const": 15
+        },
+        "addedPathCount": {
+          "type": "number",
+          "const": 4
+        },
+        "modifiedPathCount": {
+          "type": "number",
+          "const": 11
+        },
+        "implementationPaths": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "scripts/r4-public-core-local-postgres.mjs"
+            },
+            {
+              "type": "string",
+              "const": "test/r4/public-core-local-postgres.test.ts"
+            }
+          ],
+          "items": false
+        },
+        "evidencePaths": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "docs/evidence/r4-public-core-local-postgres-physical-rebind.json"
+            },
+            {
+              "type": "string",
+              "const": "schemas/r4/public-core/local-postgres-physical-rebind-artifact-index.json"
+            },
+            {
+              "type": "string",
+              "const": "schemas/r4/public-core/local-postgres-physical-rebind-evidence.schema.json"
+            }
+          ],
+          "items": false
+        },
+        "statusPaths": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "prefixItems": [
+            {
+              "type": "string",
+              "const": "README.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/CONTROL.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/DECISIONS.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/NATIVE-HARNESS-ARCHITECTURE.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/PRODUCT.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/README.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/ROADMAP.md"
+            },
+            {
+              "type": "string",
+              "const": "docs/VALIDATION.md"
+            }
+          ],
+          "items": false
+        }
+      }
+    },
+    "constructionBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runnerReboundToStageA19AndStageB9",
+        "grantV3Constructed",
+        "receiptV3Constructed",
+        "committedTopologyVerifierConstructed",
+        "durableWriteAheadEffectLedgerConstructed",
+        "exactCleanupRecoveryGuardConstructed",
+        "privateRootIdentityDriftGuardConstructed",
+        "disposableLocalPostgresRehearsalExercised",
+        "targetPostgresObserved",
+        "targetCatalogObserved",
+        "ownerApprovalReceiptCreated",
+        "pendingGrantCreated",
+        "pendingGrantConsumed",
+        "dockerCliInvoked",
+        "productionDriverPoolConfigured",
+        "productionMigrationApplied",
+        "runtimeApiRouteActive",
+        "trafficReady",
+        "gateCReady"
+      ],
+      "properties": {
+        "runnerReboundToStageA19AndStageB9": {
+          "type": "boolean",
+          "const": true
+        },
+        "grantV3Constructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "receiptV3Constructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "committedTopologyVerifierConstructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "durableWriteAheadEffectLedgerConstructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "exactCleanupRecoveryGuardConstructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "privateRootIdentityDriftGuardConstructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "disposableLocalPostgresRehearsalExercised": {
+          "type": "boolean",
+          "const": false
+        },
+        "targetPostgresObserved": {
+          "type": "boolean",
+          "const": false
+        },
+        "targetCatalogObserved": {
+          "type": "boolean",
+          "const": false
+        },
+        "ownerApprovalReceiptCreated": {
+          "type": "boolean",
+          "const": false
+        },
+        "pendingGrantCreated": {
+          "type": "boolean",
+          "const": false
+        },
+        "pendingGrantConsumed": {
+          "type": "boolean",
+          "const": false
+        },
+        "dockerCliInvoked": {
+          "type": "boolean",
+          "const": false
+        },
+        "productionDriverPoolConfigured": {
+          "type": "boolean",
+          "const": false
+        },
+        "productionMigrationApplied": {
+          "type": "boolean",
+          "const": false
+        },
+        "runtimeApiRouteActive": {
+          "type": "boolean",
+          "const": false
+        },
+        "trafficReady": {
+          "type": "boolean",
+          "const": false
+        },
+        "gateCReady": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "constructedPhysicalContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designOnly",
+        "grantSchemaVersion",
+        "receiptSchemaVersion",
+        "executionAuthoritySchemaVersion",
+        "maximumGrantLifetimeHours",
+        "maximumConstructionLifecycles",
+        "maximumCleanupRecoveryLifecycles",
+        "maximumDockerLifecycles",
+        "maximumImagePullAttempts",
+        "maximumCreatedDatabaseIdentities",
+        "maximumConcurrentPools",
+        "maximumConcurrentClients",
+        "maximumConcurrentTransactions",
+        "maximumInitialReadinessAttempts",
+        "maximumRestartReadinessAttempts",
+        "maximumOperationalPoolConstructions",
+        "maximumTotalPoolConstructions",
+        "maximumTotalConnectionAttempts",
+        "maximumSchemaApplies",
+        "maximumVerifies",
+        "maximumRollbacks",
+        "maximumDomainActionInvocations",
+        "maximumDistinctDomainActions",
+        "maximumContainerRestarts",
+        "maximumAdminCreateDatabaseStatements",
+        "distinctDomainActionSetSha256",
+        "postgresServerVersionNum",
+        "dockerCallCeilings"
+      ],
+      "properties": {
+        "designOnly": {
+          "type": "boolean",
+          "const": true
+        },
+        "grantSchemaVersion": {
+          "type": "string",
+          "const": "r4.public-core-local-postgres-grant.v3"
+        },
+        "receiptSchemaVersion": {
+          "type": "string",
+          "const": "r4.public-core-local-postgres-physical-result.v3"
+        },
+        "executionAuthoritySchemaVersion": {
+          "type": "string",
+          "const": "r4.public-core-local-postgres-execution-authority.v1"
+        },
+        "maximumGrantLifetimeHours": {
+          "type": "number",
+          "const": 24
+        },
+        "maximumConstructionLifecycles": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumCleanupRecoveryLifecycles": {
+          "type": "number",
+          "const": 2
+        },
+        "maximumDockerLifecycles": {
+          "type": "number",
+          "const": 3
+        },
+        "maximumImagePullAttempts": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumCreatedDatabaseIdentities": {
+          "type": "number",
+          "const": 2
+        },
+        "maximumConcurrentPools": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumConcurrentClients": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumConcurrentTransactions": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumInitialReadinessAttempts": {
+          "type": "number",
+          "const": 60
+        },
+        "maximumRestartReadinessAttempts": {
+          "type": "number",
+          "const": 60
+        },
+        "maximumOperationalPoolConstructions": {
+          "type": "number",
+          "const": 4
+        },
+        "maximumTotalPoolConstructions": {
+          "type": "number",
+          "const": 124
+        },
+        "maximumTotalConnectionAttempts": {
+          "type": "number",
+          "const": 124
+        },
+        "maximumSchemaApplies": {
+          "type": "number",
+          "const": 3
+        },
+        "maximumVerifies": {
+          "type": "number",
+          "const": 3
+        },
+        "maximumRollbacks": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumDomainActionInvocations": {
+          "type": "number",
+          "const": 23
+        },
+        "maximumDistinctDomainActions": {
+          "type": "number",
+          "const": 20
+        },
+        "maximumContainerRestarts": {
+          "type": "number",
+          "const": 1
+        },
+        "maximumAdminCreateDatabaseStatements": {
+          "type": "number",
+          "const": 1
+        },
+        "distinctDomainActionSetSha256": {
+          "type": "string",
+          "const": "sha256:3c4ecb56d801539e267ccda5ae57f80e552735a0a7cf8cff9232bb8c2541a21c"
+        },
+        "postgresServerVersionNum": {
+          "type": "number",
+          "const": 160010
+        },
+        "dockerCallCeilings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "version",
+            "image.inspect",
+            "image.pull",
+            "container.inspect",
+            "container.create",
+            "container.start",
+            "container.stop",
+            "container.rm",
+            "network.inspect",
+            "network.create",
+            "network.rm",
+            "volume.inspect",
+            "volume.create",
+            "volume.rm"
+          ],
+          "properties": {
+            "version": {
+              "type": "number",
+              "const": 3
+            },
+            "image.inspect": {
+              "type": "number",
+              "const": 2
+            },
+            "image.pull": {
+              "type": "number",
+              "const": 1
+            },
+            "container.inspect": {
+              "type": "number",
+              "const": 8
+            },
+            "container.create": {
+              "type": "number",
+              "const": 1
+            },
+            "container.start": {
+              "type": "number",
+              "const": 2
+            },
+            "container.stop": {
+              "type": "number",
+              "const": 4
+            },
+            "container.rm": {
+              "type": "number",
+              "const": 3
+            },
+            "network.inspect": {
+              "type": "number",
+              "const": 7
+            },
+            "network.create": {
+              "type": "number",
+              "const": 1
+            },
+            "network.rm": {
+              "type": "number",
+              "const": 3
+            },
+            "volume.inspect": {
+              "type": "number",
+              "const": 7
+            },
+            "volume.create": {
+              "type": "number",
+              "const": 1
+            },
+            "volume.rm": {
+              "type": "number",
+              "const": 3
+            }
+          }
+        }
+      }
+    },
+    "catalogContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "staticContractOnly",
+        "targetPostgresCatalogObserved",
+        "schemaName",
+        "tables",
+        "columns",
+        "constraints",
+        "indexes",
+        "catalogContractSha256"
+      ],
+      "properties": {
+        "staticContractOnly": {
+          "type": "boolean",
+          "const": true
+        },
+        "targetPostgresCatalogObserved": {
+          "type": "boolean",
+          "const": false
+        },
+        "schemaName": {
+          "type": "string",
+          "const": "forme_r4_public_core"
+        },
+        "tables": {
+          "type": "number",
+          "const": 14
+        },
+        "columns": {
+          "type": "number",
+          "const": 207
+        },
+        "constraints": {
+          "type": "number",
+          "const": 172
+        },
+        "indexes": {
+          "type": "number",
+          "const": 44
+        },
+        "catalogContractSha256": {
+          "type": "string",
+          "const": "sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4"
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "testLanes",
+        "checkLanes",
+        "committedBindingPositive",
+        "hostileGrantAndReceiptMutationGroups",
+        "lifecycleFaultCases",
+        "committedBytesOnly"
+      ],
+      "properties": {
+        "testLanes": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "prefixItems": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "local_postgres_runner_fake_deny_network"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-local-postgres.test.ts"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 139
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 139
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "focused_public_core_non_runner_deny_network"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-pg-executor.test.ts test/r4/public-core-postgres-application-store.test.ts"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 85
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 85
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "public_core_deny_network"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-*.test.ts"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 391
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 391
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "r4_offline_regression"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "npm run test:r4:offline"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 711
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 711
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "gate_b_core_successor_candidate_regression"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "npm run test:r4:gate-b-core"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 145
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 145
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "denyNetwork",
+                "total",
+                "passed",
+                "failed",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "spine_regression"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts"
+                },
+                "denyNetwork": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "total": {
+                  "type": "number",
+                  "const": 45
+                },
+                "passed": {
+                  "type": "number",
+                  "const": 45
+                },
+                "failed": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            }
+          ],
+          "items": false
+        },
+        "checkLanes": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "prefixItems": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "commandCount",
+                "failedCommandCount",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "runner_node_check"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "node --check scripts/r4-public-core-local-postgres.mjs"
+                },
+                "commandCount": {
+                  "type": "number",
+                  "const": 1
+                },
+                "failedCommandCount": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "commandCount",
+                "failedCommandCount",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "typescript"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "npm run typecheck"
+                },
+                "commandCount": {
+                  "type": "number",
+                  "const": 1
+                },
+                "failedCommandCount": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "commandCount",
+                "failedCommandCount",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "hosted_room_no_server_ai"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "npm --workspace @forme/room run check:no-ai"
+                },
+                "commandCount": {
+                  "type": "number",
+                  "const": 1
+                },
+                "failedCommandCount": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "commandCount",
+                "failedCommandCount",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "legacy_r4_document_audit"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "npm run r4:docs:audit"
+                },
+                "commandCount": {
+                  "type": "number",
+                  "const": 1
+                },
+                "failedCommandCount": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "laneId",
+                "command",
+                "commandCount",
+                "failedCommandCount",
+                "status"
+              ],
+              "properties": {
+                "laneId": {
+                  "type": "string",
+                  "const": "effect0_diff_check"
+                },
+                "command": {
+                  "type": "string",
+                  "const": "git diff --check"
+                },
+                "commandCount": {
+                  "type": "number",
+                  "const": 1
+                },
+                "failedCommandCount": {
+                  "type": "number",
+                  "const": 0
+                },
+                "status": {
+                  "type": "string",
+                  "const": "PASS"
+                }
+              }
+            }
+          ],
+          "items": false
+        },
+        "committedBindingPositive": {
+          "type": "boolean",
+          "const": true
+        },
+        "hostileGrantAndReceiptMutationGroups": {
+          "type": "number",
+          "const": 16
+        },
+        "lifecycleFaultCases": {
+          "type": "number",
+          "const": 38
+        },
+        "committedBytesOnly": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "effectAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repositoryCommandExternalNetworkCalls",
+        "packageManagerExternalNetworkCalls",
+        "sourceControlExternalNetworkCalls",
+        "dockerCliCalls",
+        "dockerDaemonCalls",
+        "ociInspectCalls",
+        "ociPulls",
+        "postgresProcesses",
+        "postgresConnections",
+        "databaseIdentities",
+        "sqlApplyRuns",
+        "sqlVerifyRuns",
+        "sqlRollbackRuns",
+        "domainStatementRuns",
+        "productDataPlaneNetworkCalls",
+        "productionRemoteDatabaseEffects",
+        "runtimeActivations",
+        "routeActivations",
+        "vaultActivations",
+        "httpsActivations",
+        "trafficActivations",
+        "realRoomBytes",
+        "realProjectionBytes",
+        "realCuratorBytes",
+        "realGuestBytes",
+        "productProviderCalls",
+        "productModelCalls",
+        "productEmailMessages",
+        "deployments",
+        "publications",
+        "admissions",
+        "gateCActivations",
+        "pushes",
+        "pullRequestsCreatedOrUpdated",
+        "merges",
+        "releases",
+        "spendUsd"
+      ],
+      "properties": {
+        "repositoryCommandExternalNetworkCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "packageManagerExternalNetworkCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "sourceControlExternalNetworkCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "dockerCliCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "dockerDaemonCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "ociInspectCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "ociPulls": {
+          "type": "number",
+          "const": 0
+        },
+        "postgresProcesses": {
+          "type": "number",
+          "const": 0
+        },
+        "postgresConnections": {
+          "type": "number",
+          "const": 0
+        },
+        "databaseIdentities": {
+          "type": "number",
+          "const": 0
+        },
+        "sqlApplyRuns": {
+          "type": "number",
+          "const": 0
+        },
+        "sqlVerifyRuns": {
+          "type": "number",
+          "const": 0
+        },
+        "sqlRollbackRuns": {
+          "type": "number",
+          "const": 0
+        },
+        "domainStatementRuns": {
+          "type": "number",
+          "const": 0
+        },
+        "productDataPlaneNetworkCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "productionRemoteDatabaseEffects": {
+          "type": "number",
+          "const": 0
+        },
+        "runtimeActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "routeActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "vaultActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "httpsActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "trafficActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "realRoomBytes": {
+          "type": "number",
+          "const": 0
+        },
+        "realProjectionBytes": {
+          "type": "number",
+          "const": 0
+        },
+        "realCuratorBytes": {
+          "type": "number",
+          "const": 0
+        },
+        "realGuestBytes": {
+          "type": "number",
+          "const": 0
+        },
+        "productProviderCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "productModelCalls": {
+          "type": "number",
+          "const": 0
+        },
+        "productEmailMessages": {
+          "type": "number",
+          "const": 0
+        },
+        "deployments": {
+          "type": "number",
+          "const": 0
+        },
+        "publications": {
+          "type": "number",
+          "const": 0
+        },
+        "admissions": {
+          "type": "number",
+          "const": 0
+        },
+        "gateCActivations": {
+          "type": "number",
+          "const": 0
+        },
+        "pushes": {
+          "type": "number",
+          "const": 0
+        },
+        "pullRequestsCreatedOrUpdated": {
+          "type": "number",
+          "const": 0
+        },
+        "merges": {
+          "type": "number",
+          "const": 0
+        },
+        "releases": {
+          "type": "number",
+          "const": 0
+        },
+        "spendUsd": {
+          "type": "number",
+          "const": 0
+        }
+      }
+    },
+    "documentationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legacyR4DocsAuditPassed",
+        "legacyR4DocsAuditScope",
+        "operationalCurrentStatusSurfacesCurrent",
+        "operationalStatusSurfaceCount",
+        "wholeRepositoryDocumentationCurrentClaimed",
+        "statusFreezeRequired"
+      ],
+      "properties": {
+        "legacyR4DocsAuditPassed": {
+          "type": "boolean",
+          "const": true
+        },
+        "legacyR4DocsAuditScope": {
+          "type": "string",
+          "const": "LEGACY_GATE_A_AND_GATE_B_DOCUMENTS_ONLY"
+        },
+        "operationalCurrentStatusSurfacesCurrent": {
+          "type": "boolean",
+          "const": false
+        },
+        "operationalStatusSurfaceCount": {
+          "type": "number",
+          "const": 9
+        },
+        "wholeRepositoryDocumentationCurrentClaimed": {
+          "type": "boolean",
+          "const": false
+        },
+        "statusFreezeRequired": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "physicalRebindArtifactIndexSha256",
+        "physicalRebindEvidenceSchemaSha256",
+        "implementationArtifactAggregateSha256",
+        "runnerSha256",
+        "runnerByteCount",
+        "runnerTestSha256",
+        "runnerTestByteCount",
+        "packageLockSha256",
+        "pgImportClosureSha256",
+        "pgImportClosureFileCount",
+        "pgImportClosurePackageCount",
+        "schemaSqlSha256",
+        "verifySqlSha256",
+        "rollbackSqlSha256"
+      ],
+      "properties": {
+        "physicalRebindArtifactIndexSha256": {
+          "type": "string",
+          "const": "sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554"
+        },
+        "physicalRebindEvidenceSchemaSha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "implementationArtifactAggregateSha256": {
+          "type": "string",
+          "const": "sha256:e1eb1cb173c67d43a451bb45fbe402786ccbee7e542f0f0f618760a1379e9920"
+        },
+        "runnerSha256": {
+          "type": "string",
+          "const": "sha256:4fa4a5deb677b1d31145ad9017b1755183e8c43fcc0dad6a138e4ff789ae742d"
+        },
+        "runnerByteCount": {
+          "type": "number",
+          "const": 365649
+        },
+        "runnerTestSha256": {
+          "type": "string",
+          "const": "sha256:20909c0a7237a474bf7ac0049baa6437dfcaa57afa817b5b73c6d0d0d064d13a"
+        },
+        "runnerTestByteCount": {
+          "type": "number",
+          "const": 117885
+        },
+        "packageLockSha256": {
+          "type": "string",
+          "const": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f"
+        },
+        "pgImportClosureSha256": {
+          "type": "string",
+          "const": "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4"
+        },
+        "pgImportClosureFileCount": {
+          "type": "number",
+          "const": 145
+        },
+        "pgImportClosurePackageCount": {
+          "type": "number",
+          "const": 15
+        },
+        "schemaSqlSha256": {
+          "type": "string",
+          "const": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8"
+        },
+        "verifySqlSha256": {
+          "type": "string",
+          "const": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd"
+        },
+        "rollbackSqlSha256": {
+          "type": "string",
+          "const": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4"
+        }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "committedK",
+        "candidateL",
+        "committedL",
+        "candidateM",
+        "committedM"
+      ],
+      "properties": {
+        "committedK": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "blockerCount",
+            "importantCount",
+            "summaryText",
+            "summarySha256"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "const": "PASS"
+            },
+            "blockerCount": {
+              "type": "number",
+              "const": 0
+            },
+            "importantCount": {
+              "type": "number",
+              "const": 0
+            },
+            "summaryText": {
+              "type": "string",
+              "const": "K committed-byte audit: PASS; HEAD bcfe3349e01a655c2d52d6abbca0038cc3bff6e2; tree c34372a7cd121f157ade1fa86841fdebc69bb4ed; parent 1d9d8ec7d419c90777295099d794ff04f8f476ce; exact delta 2M/0A/0D/0R; runner 365649 bytes sha256:4fa4a5deb677b1d31145ad9017b1755183e8c43fcc0dad6a138e4ff789ae742d; test 117885 bytes sha256:20909c0a7237a474bf7ac0049baa6437dfcaa57afa817b5b73c6d0d0d064d13a; G2 sha256:e1eb1cb173c67d43a451bb45fbe402786ccbee7e542f0f0f618760a1379e9920; validation 139/85/391/711/145/45 and five checks PASS; effects Docker/OCI/PostgreSQL/SQL/network/production/GateC=0; 0 Blocker/0 Important."
+            },
+            "summarySha256": {
+              "type": "string",
+              "const": "sha256:0d87de0d35468577eec9dde967f7c5d6d4b5db4b3442231e0254e329096ada00"
+            }
+          }
+        },
+        "candidateL": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "blockerCount",
+            "importantCount",
+            "latestByteOnly",
+            "committed",
+            "selfHashExcluded"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "const": "PASS"
+            },
+            "blockerCount": {
+              "type": "number",
+              "const": 0
+            },
+            "importantCount": {
+              "type": "number",
+              "const": 0
+            },
+            "latestByteOnly": {
+              "type": "boolean",
+              "const": true
+            },
+            "committed": {
+              "type": "boolean",
+              "const": false
+            },
+            "selfHashExcluded": {
+              "type": "boolean",
+              "const": true
+            }
+          }
+        },
+        "committedL": {
+          "type": "string",
+          "const": "PLANNED_NOT_RUN_AT_L"
+        },
+        "candidateM": {
+          "type": "string",
+          "const": "PLANNED_NOT_RUN_AT_L"
+        },
+        "committedM": {
+          "type": "string",
+          "const": "PLANNED_NOT_RUN_AT_L"
+        }
+      }
+    },
+    "obsoleteBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grantV1Accepted",
+        "grantV2Accepted",
+        "stageAPathCount17Accepted",
+        "oldArtifactPathCount14Accepted",
+        "catalogColumns206Accepted",
+        "catalogConstraints171Accepted",
+        "obsoleteSqlHashesAccepted",
+        "predecessorRunnerHashAccepted",
+        "predecessorRunnerTestHashAccepted"
+      ],
+      "properties": {
+        "grantV1Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "grantV2Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "stageAPathCount17Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "oldArtifactPathCount14Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "catalogColumns206Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "catalogConstraints171Accepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "obsoleteSqlHashesAccepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "predecessorRunnerHashAccepted": {
+          "type": "boolean",
+          "const": false
+        },
+        "predecessorRunnerTestHashAccepted": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runnerRebound",
+        "grantV3Constructed",
+        "receiptV3Constructed",
+        "effectCounterEnforced",
+        "cleanupRecoveryGuardEnforced",
+        "privateRootIdentityDriftGuardEnforced",
+        "physicalExecuted",
+        "targetPostgresObserved",
+        "targetCatalogObserved",
+        "physicalGreen",
+        "productRuntimeEffects",
+        "trafficReady",
+        "gateCReady"
+      ],
+      "properties": {
+        "runnerRebound": {
+          "type": "boolean",
+          "const": true
+        },
+        "grantV3Constructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "receiptV3Constructed": {
+          "type": "boolean",
+          "const": true
+        },
+        "effectCounterEnforced": {
+          "type": "boolean",
+          "const": true
+        },
+        "cleanupRecoveryGuardEnforced": {
+          "type": "boolean",
+          "const": true
+        },
+        "privateRootIdentityDriftGuardEnforced": {
+          "type": "boolean",
+          "const": true
+        },
+        "physicalExecuted": {
+          "type": "boolean",
+          "const": false
+        },
+        "targetPostgresObserved": {
+          "type": "boolean",
+          "const": false
+        },
+        "targetCatalogObserved": {
+          "type": "boolean",
+          "const": false
+        },
+        "physicalGreen": {
+          "type": "boolean",
+          "const": false
+        },
+        "productRuntimeEffects": {
+          "type": "boolean",
+          "const": false
+        },
+        "trafficReady": {
+          "type": "boolean",
+          "const": false
+        },
+        "gateCReady": {
+          "type": "boolean",
+          "const": false
+        }
+      }
+    },
+    "stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationEvidence",
+        "nextRequired",
+        "gateC"
+      ],
+      "properties": {
+        "implementationEvidence": {
+          "type": "string",
+          "const": "LOCAL_POSTGRES_PHYSICAL_REBIND_IMPLEMENTATION_EVIDENCE_GREEN"
+        },
+        "nextRequired": {
+          "type": "string",
+          "const": "STATUS_FREEZE_REQUIRED"
+        },
+        "gateC": {
+          "type": "string",
+          "const": "GATE_C_NOT_REQUESTED"
+        }
+      }
+    }
+  }
+}
