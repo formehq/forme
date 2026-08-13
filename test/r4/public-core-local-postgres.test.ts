@@ -633,6 +633,46 @@ test("historical wiring and Addenda B/C authority close through every exact sing
   });
 });
 
+test("failed physical authority and the APFS nlink correction close through exact committed steps", () => {
+  const failedCard = "421560cb6ac2fbbf52d104a5b71ade6347d9629f";
+  const failedReview = "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab";
+  const correctionAddendum = "04ad36bddbf7d2f62cdfc241f51a5cf817046aff";
+  const correctionReview = "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544";
+
+  assertHistoricalAuthorityStep({
+    head: failedCard,
+    parent: "42378b5a2a48493acf8edddcd05d19593cb05dd7",
+    tree: "2bb4bf20f4892af3f51887e7c7d4f2302b80169d",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD.md",
+    artifactSha256: "sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77",
+  });
+  assertHistoricalAuthorityStep({
+    head: failedReview,
+    parent: failedCard,
+    tree: "91f1a0aef6820bd4a145bc6d93acd0bbedc40992",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e",
+  });
+  assertHistoricalAuthorityStep({
+    head: correctionAddendum,
+    parent: failedReview,
+    tree: "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06",
+  });
+  assertHistoricalAuthorityStep({
+    head: correctionReview,
+    parent: correctionAddendum,
+    tree: "513bf389aebb03bfc86464693facd2257084b5e4",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6",
+  });
+});
+
 test("future physical engine is fully constructed but ordinary test entry remains fake-only", async () => {
   const source = await readFile(path.resolve("scripts/r4-public-core-local-postgres.mjs"), "utf8");
   assert.equal(source.includes("local_postgres_physical_engine_not_frozen"), false);
@@ -670,6 +710,9 @@ test("future physical engine is fully constructed but ordinary test entry remain
   assert.equal(source.includes('JOURNAL_DIRECTORY = "journal-v2"'), false);
   assert.equal(source.includes("maximumPhysicalAttempts"), false);
   assert.equal(source.includes("stageAPathCount: 17"), false);
+  assert.equal(source.includes("expectedRootNlink"), false);
+  assert.match(source, /gid: stat\.gid/u);
+  assert.match(source, /current\.gid !== identity\.gid/u);
   assert.equal(source.includes("r4.public-core-local-postgres-grant.v2"), false);
   assert.equal(source.includes("r4.public-core-local-postgres-physical-result.v2"), false);
   for (const denied of ["container\", \"run", "container\", \"exec", "image\", \"build", "system\", \"prune"]) {
@@ -873,11 +916,22 @@ test("the obsolete raw pending-grant writer is permanently fail-closed", () => {
 
 test("fake prepare constructs the exact two-entry v3 pending grant with zero physical effect", () => {
   const prepared = runLocalPostgresPrepareFakePlan();
-  assert.deepEqual(Object.keys(prepared).sort(), ["grant", "physicalEffects", "receipt", "rootEntries", "schemaVersion", "status"]);
+  assert.deepEqual(Object.keys(prepared).sort(), [
+    "grant", "physicalEffects", "receipt", "rootEntries", "rootNlinkWithPending",
+    "rootNlinkWithReceipt", "schemaVersion", "status",
+  ]);
   assert.equal(prepared.schemaVersion, "r4.public-core-local-postgres-prepare-fake-result.v1");
   assert.equal(prepared.status, "GREEN");
   assert.equal(prepared.physicalEffects, 0);
   assert.deepEqual(prepared.rootEntries, ["grant.pending.json", "owner-approval-receipt"]);
+  assert.ok(Number.isSafeInteger(prepared.rootNlinkWithReceipt));
+  assert.ok(Number.isSafeInteger(prepared.rootNlinkWithPending));
+  assert.ok(prepared.rootNlinkWithReceipt >= 2);
+  assert.ok(prepared.rootNlinkWithPending >= 2);
+  if (process.platform === "darwin") {
+    assert.equal(prepared.rootNlinkWithReceipt, 3, "APFS root with one receipt reports nlink 3");
+    assert.equal(prepared.rootNlinkWithPending, 4, "APFS root with receipt plus pending reports nlink 4");
+  }
   assert.deepEqual(Object.keys(prepared.receipt).sort(), [
     "executionAuthorityPayloadSha256", "observedAt", "ownerApprovalReceiptSha256", "pendingGrantSha256", "schemaVersion",
   ]);
@@ -894,6 +948,15 @@ test("fake prepare constructs the exact two-entry v3 pending grant with zero phy
     "prepare receipt digest is derived from the exact canonical bytes installed through the owned inode",
   );
   assert.equal(JSON.stringify(prepared).includes("R4 #67 local physical execution approved"), false);
+});
+
+test("prepare accepts the truthful filesystem link count but rejects an unauthorized link-count entry transition", () => {
+  const failed = runLocalPostgresPrepareFakePlan({ mutation: "root_nlink_drift" });
+  assert.equal(failed.status, "FAILED");
+  assert.equal(failed.code, "local_postgres_private_root_invalid");
+  assert.deepEqual(failed.rootEntries, ["owner-approval-receipt", "root-link-drift"]);
+  assert.equal(failed.rootEntries.includes("grant.pending.json"), false);
+  assert.equal(failed.physicalEffects, 0);
 });
 
 test("every pending O_EXCL writer failure removes its exact partial inode and retains only owner approval", () => {

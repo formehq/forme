@@ -54,6 +54,29 @@ const PHYSICAL_REBIND_PACKET_HEAD = "697334c169c9ec69d44ecb38529d7108839f886b";
 const PHYSICAL_REBIND_PACKET_TREE = "71c6b4197eed649814276a4536b6a40690eefd05";
 const PHYSICAL_REBIND_REVIEW_HEAD = "1d9d8ec7d419c90777295099d794ff04f8f476ce";
 const PHYSICAL_REBIND_REVIEW_TREE = "257cc30066e669a456916033d5664fc135b7da3c";
+const EFFECT0_IMPLEMENTATION_HEAD = "bcfe3349e01a655c2d52d6abbca0038cc3bff6e2";
+const EFFECT0_IMPLEMENTATION_TREE = "c34372a7cd121f157ade1fa86841fdebc69bb4ed";
+const EFFECT0_EVIDENCE_HEAD = "beeb55b662372e2b4f2a16f8768c16905a7a9978";
+const EFFECT0_EVIDENCE_TREE = "10cb87830e37f8070320df09fb0b0dbdaef3268b";
+const EFFECT0_STATUS_HEAD = "42378b5a2a48493acf8edddcd05d19593cb05dd7";
+const EFFECT0_STATUS_TREE = "67b65083ae26163eca0f7bce1faefa90721c749c";
+const EFFECT0_IMPLEMENTATION_AGGREGATE_SHA256 = "sha256:e1eb1cb173c67d43a451bb45fbe402786ccbee7e542f0f0f618760a1379e9920";
+const EFFECT0_ARTIFACT_INDEX_SHA256 = "sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554";
+const EFFECT0_EVIDENCE_SCHEMA_SHA256 = "sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27";
+const EFFECT0_EVIDENCE_SHA256 = "sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3";
+const EFFECT0_REPORT_SHA256 = "sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e";
+const FAILED_EXECUTION_CARD_HEAD = "421560cb6ac2fbbf52d104a5b71ade6347d9629f";
+const FAILED_EXECUTION_CARD_TREE = "2bb4bf20f4892af3f51887e7c7d4f2302b80169d";
+const FAILED_EXECUTION_CARD_SHA256 = "sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77";
+const FAILED_EXECUTION_REVIEW_HEAD = "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab";
+const FAILED_EXECUTION_REVIEW_TREE = "91f1a0aef6820bd4a145bc6d93acd0bbedc40992";
+const FAILED_EXECUTION_REVIEW_SHA256 = "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e";
+const APFS_NLINK_CORRECTION_ADDENDUM_HEAD = "04ad36bddbf7d2f62cdfc241f51a5cf817046aff";
+const APFS_NLINK_CORRECTION_ADDENDUM_TREE = "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8";
+const APFS_NLINK_CORRECTION_ADDENDUM_SHA256 = "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06";
+const APFS_NLINK_CORRECTION_REVIEW_HEAD = "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544";
+const APFS_NLINK_CORRECTION_REVIEW_TREE = "513bf389aebb03bfc86464693facd2257084b5e4";
+const APFS_NLINK_CORRECTION_REVIEW_SHA256 = "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6";
 const PACKAGE_LOCK_SHA256 = "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f";
 const PG_IMPORT_CLOSURE_SHA256 = "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4";
 const PG_IMPORT_CLOSURE_FILE_COUNT = 145;
@@ -141,12 +164,12 @@ const LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS = Object.freeze([
   "packages/r4-protocol/src/types.ts",
   "packages/r4-protocol/src/validation.ts",
 ]);
-const LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS = Object.freeze([
+const LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS = Object.freeze([
   "docs/evidence/r4-public-core-local-postgres-physical-rebind.json",
   "schemas/r4/public-core/local-postgres-physical-rebind-artifact-index.json",
   "schemas/r4/public-core/local-postgres-physical-rebind-evidence.schema.json",
 ]);
-const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
+const LOCAL_POSTGRES_EFFECT0_STATUS_PATHS = Object.freeze([
   "README.md", "docs/CONTROL.md", "docs/DECISIONS.md", "docs/README.md",
   "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
@@ -155,6 +178,20 @@ const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
 ]);
 const PHYSICAL_EXECUTION_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD.md";
 const PHYSICAL_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW.md";
+const APFS_NLINK_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-ADDENDUM.md";
+const APFS_NLINK_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-OWNER-REVIEW.md";
+const LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
+  "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json",
+]);
+const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md", "docs/README.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
 
 export const LOCAL_POSTGRES_PHASE1_AUTHORITY = Object.freeze({
   schemaVersion: "r4.public-core-local-postgres-phase1-authority.v3",
@@ -684,8 +721,8 @@ function privateDirectoryIdentity(directoryPath, stat = assertPrivateDirectory(d
     dev: stat.dev,
     ino: stat.ino,
     uid: stat.uid,
+    gid: stat.gid,
     mode: stat.mode,
-    nlink: stat.nlink,
   });
 }
 
@@ -697,7 +734,7 @@ function assertPrivateDirectoryIdentity(identity) {
   try { resolved = fs.realpathSync(identity.path); } catch { fail("local_postgres_private_root_invalid"); }
   const current = assertPrivateDirectory(identity.path);
   if (resolved !== identity.path || current.dev !== identity.dev || current.ino !== identity.ino
-    || current.uid !== identity.uid || current.mode !== identity.mode) {
+    || current.uid !== identity.uid || current.gid !== identity.gid || current.mode !== identity.mode) {
     fail("local_postgres_private_root_invalid");
   }
 }
@@ -1001,24 +1038,48 @@ export function validateLocalPostgresGrant(rawGrant, now = new Date()) {
 function verifySuccessorTopology(grant) {
   verifyHistoricalTopology();
   const lineage = grant.lineage;
-  exactCommitStep(PHYSICAL_REBIND_REVIEW_HEAD, lineage.rebindImplementationHead, lineage.rebindImplementationTree,
+  exactCommitStep(PHYSICAL_REBIND_REVIEW_HEAD, EFFECT0_IMPLEMENTATION_HEAD, EFFECT0_IMPLEMENTATION_TREE,
+    statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS), "local_postgres_rebind_implementation_binding_invalid");
+  exactCommitStep(EFFECT0_IMPLEMENTATION_HEAD, EFFECT0_EVIDENCE_HEAD, EFFECT0_EVIDENCE_TREE,
+    statusMap(LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS, new Set(LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS)), "local_postgres_rebind_evidence_binding_invalid");
+  exactCommitStep(EFFECT0_EVIDENCE_HEAD, EFFECT0_STATUS_HEAD, EFFECT0_STATUS_TREE,
+    statusMap(LOCAL_POSTGRES_EFFECT0_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
+  exactCommitStep(EFFECT0_STATUS_HEAD, FAILED_EXECUTION_CARD_HEAD, FAILED_EXECUTION_CARD_TREE,
+    new Map([[PHYSICAL_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
+  exactCommitStep(FAILED_EXECUTION_CARD_HEAD, FAILED_EXECUTION_REVIEW_HEAD, FAILED_EXECUTION_REVIEW_TREE,
+    new Map([[PHYSICAL_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
+  exactCommitStep(FAILED_EXECUTION_REVIEW_HEAD, APFS_NLINK_CORRECTION_ADDENDUM_HEAD, APFS_NLINK_CORRECTION_ADDENDUM_TREE,
+    new Map([[APFS_NLINK_CORRECTION_ADDENDUM_PATH, "A"]]), "local_postgres_apfs_nlink_correction_binding_invalid");
+  exactCommitStep(APFS_NLINK_CORRECTION_ADDENDUM_HEAD, APFS_NLINK_CORRECTION_REVIEW_HEAD, APFS_NLINK_CORRECTION_REVIEW_TREE,
+    new Map([[APFS_NLINK_CORRECTION_REVIEW_PATH, "A"]]), "local_postgres_apfs_nlink_correction_binding_invalid");
+  exactCommitStep(APFS_NLINK_CORRECTION_REVIEW_HEAD, lineage.rebindImplementationHead, lineage.rebindImplementationTree,
     statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS), "local_postgres_rebind_implementation_binding_invalid");
   exactCommitStep(lineage.rebindImplementationHead, lineage.rebindEvidenceHead, lineage.rebindEvidenceTree,
     statusMap(LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS, new Set(LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS)), "local_postgres_rebind_evidence_binding_invalid");
   exactCommitStep(lineage.rebindEvidenceHead, lineage.rebindStatusHead, lineage.rebindStatusTree,
-    statusMap(LOCAL_POSTGRES_REBIND_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
+    statusMap(LOCAL_POSTGRES_REBIND_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
   exactCommitStep(lineage.rebindStatusHead, lineage.executionCardHead, lineage.executionCardTree,
     new Map([[PHYSICAL_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
   exactCommitStep(lineage.executionCardHead, lineage.executionReviewHead, lineage.executionReviewTree,
     new Map([[PHYSICAL_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
   const implementation = artifactAggregate(lineage.rebindImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
-  if (implementation.aggregateSha256 !== lineage.rebindImplementationArtifactAggregateSha256
+  const effect0Implementation = artifactAggregate(EFFECT0_IMPLEMENTATION_HEAD, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
+  if (effect0Implementation.aggregateSha256 !== EFFECT0_IMPLEMENTATION_AGGREGATE_SHA256
+    || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[0]}`], true)) !== EFFECT0_EVIDENCE_SHA256
+    || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[1]}`], true)) !== EFFECT0_ARTIFACT_INDEX_SHA256
+    || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[2]}`], true)) !== EFFECT0_EVIDENCE_SCHEMA_SHA256
+    || sha256Bytes(runGit(["show", `${EFFECT0_STATUS_HEAD}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`], true)) !== EFFECT0_REPORT_SHA256
+    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_CARD_HEAD}:${PHYSICAL_EXECUTION_CARD_PATH}`], true)) !== FAILED_EXECUTION_CARD_SHA256
+    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_REVIEW_HEAD}:${PHYSICAL_EXECUTION_REVIEW_PATH}`], true)) !== FAILED_EXECUTION_REVIEW_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_NLINK_CORRECTION_ADDENDUM_HEAD}:${APFS_NLINK_CORRECTION_ADDENDUM_PATH}`], true)) !== APFS_NLINK_CORRECTION_ADDENDUM_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_NLINK_CORRECTION_REVIEW_HEAD}:${APFS_NLINK_CORRECTION_REVIEW_PATH}`], true)) !== APFS_NLINK_CORRECTION_REVIEW_SHA256
+    || implementation.aggregateSha256 !== lineage.rebindImplementationArtifactAggregateSha256
     || implementation.records[0].sha256 !== grant.artifacts.runnerSha256
     || implementation.records[1].sha256 !== grant.artifacts.runnerTestSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[0]}`], true)) !== grant.artifacts.physicalRebindEvidenceSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[1]}`], true)) !== grant.artifacts.physicalRebindArtifactIndexSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[2]}`], true)) !== grant.artifacts.physicalRebindEvidenceSchemaSha256
-    || sha256Bytes(runGit(["show", `${lineage.rebindStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`], true)) !== grant.artifacts.physicalRebindReportSha256
+    || sha256Bytes(runGit(["show", `${lineage.rebindStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`], true)) !== grant.artifacts.physicalRebindReportSha256
     || sha256Bytes(runGit(["show", `${lineage.executionCardHead}:${PHYSICAL_EXECUTION_CARD_PATH}`], true)) !== grant.authority.executionCardSha256
     || sha256Bytes(runGit(["show", `${lineage.executionReviewHead}:${PHYSICAL_EXECUTION_REVIEW_PATH}`], true)) !== grant.authority.executionReviewSha256) {
     fail("local_postgres_successor_binding_invalid");
@@ -1279,7 +1340,7 @@ function prepareLocalPostgresPendingGrantV3WithAdapters(input, adapters) {
   let privateRoot;
   try { privateRoot = fs.realpathSync(stable.privateRoot); } catch { fail("local_postgres_private_root_invalid"); }
   const rootStat = assertPrivateDirectory(privateRoot);
-  if (rootStat.nlink !== adapters.expectedRootNlink || privateRoot !== stable.privateRoot) fail("local_postgres_private_root_invalid");
+  if (privateRoot !== stable.privateRoot) fail("local_postgres_private_root_invalid");
   const rootIdentity = privateDirectoryIdentity(privateRoot, rootStat);
   assertPrivateDirectoryIdentity(rootIdentity);
   const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(privateRoot, stable.ownerApprovalReceiptPath);
@@ -1353,7 +1414,7 @@ export function prepareLocalPostgresPendingGrantV3(input) {
     input,
     Object.freeze({
       deriveExecutionAuthority, observeDockerCliIdentity, resolveSocketIdentity: resolveDockerSocketIdentity,
-      randomBytes: crypto.randomBytes, now: () => new Date(), expectedRootNlink: 2n,
+      randomBytes: crypto.randomBytes, now: () => new Date(),
       verifyBindings: verifyLocalPostgresCommittedBindings,
     }),
   );
@@ -1416,7 +1477,7 @@ export function runLocalPostgresPrepareFakePlan(input = Object.freeze({})) {
     "clock_expired", "topology_drift", "pending_open_failure", "pending_write_failure",
     "pending_file_fsync_failure", "pending_close_failure", "pending_directory_fsync_failure",
     "pending_post_install_root_failure", "pending_cleanup_failure",
-    "root_replacement_before_pending",
+    "root_replacement_before_pending", "root_nlink_drift",
   ]);
   const mutation = stable.mutation ?? null;
   if (!mutations.has(mutation)) fail("local_postgres_fake_fault_invalid");
@@ -1447,6 +1508,7 @@ export function runLocalPostgresPrepareFakePlan(input = Object.freeze({})) {
     }
     if (mutation === "receipt_hardlink") fs.linkSync(receiptPath, path.join(privateRoot, "receipt-link"));
     if (mutation === "unknown_entry") fs.writeFileSync(path.join(privateRoot, "unknown"), "x", { mode: 0o600, flag: "wx" });
+    const rootNlinkWithReceipt = Number(fs.lstatSync(privateRoot, { bigint: true }).nlink);
     const now = new Date("2026-08-12T18:00:00.000Z");
     const createdAt = mutation === "clock_expired" ? "2026-08-12T16:00:00.000Z" : now.toISOString();
     const expiresAt = mutation === "clock_expired" ? "2026-08-12T17:00:00.000Z" : "2026-08-12T19:00:00.000Z";
@@ -1465,12 +1527,12 @@ export function runLocalPostgresPrepareFakePlan(input = Object.freeze({})) {
         observeDockerCliIdentity: () => Object.freeze({ identity: cliIdentity, identitySha256: sha256Bytes(Buffer.from(canonicalJson(cliIdentity), "utf8")) }),
         resolveSocketIdentity: () => Object.freeze({ socketPath: socketIdentity.path, identity: socketIdentity, identitySha256: sha256Bytes(Buffer.from(canonicalJson(socketIdentity), "utf8")) }),
         randomBytes: () => Buffer.from("0123456789abcdef0123456789abcdef", "hex"), now: () => now,
-        expectedRootNlink: fs.lstatSync(privateRoot, { bigint: true }).nlink,
         verifyBindings: () => {
           if (mutation === "root_replacement_before_pending") {
             fs.renameSync(privateRoot, displacedRoot);
             fs.mkdirSync(privateRoot, { mode: 0o700 });
           }
+          if (mutation === "root_nlink_drift") fs.mkdirSync(path.join(privateRoot, "root-link-drift"), { mode: 0o700 });
           return Object.freeze({ fake: true });
         },
         pendingInstallHooks: Object.freeze({
@@ -1493,8 +1555,10 @@ export function runLocalPostgresPrepareFakePlan(input = Object.freeze({})) {
         && authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_private_file_invalid";
       const expectedRootReplacement = mutation === "root_replacement_before_pending"
         && authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_private_root_invalid";
+      const expectedRootLinkCountDrift = mutation === "root_nlink_drift"
+        && authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_private_root_invalid";
       if ((pendingFailureCheckpoint === null || authenticLocalPostgresRunnerErrorDetails(error)?.code !== "local_postgres_fake_injected_fault")
-        && !expectedPostInstall && !expectedCleanupFailure && !expectedRootReplacement) throw error;
+        && !expectedPostInstall && !expectedCleanupFailure && !expectedRootReplacement && !expectedRootLinkCountDrift) throw error;
       return Object.freeze({
         schemaVersion: "r4.public-core-local-postgres-prepare-fake-result.v1", status: "FAILED",
         code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_private_file_invalid",
@@ -1509,7 +1573,9 @@ export function runLocalPostgresPrepareFakePlan(input = Object.freeze({})) {
     const grant = readPrivateJson(path.join(privateRoot, "grant.pending.json"));
     return Object.freeze({
       schemaVersion: "r4.public-core-local-postgres-prepare-fake-result.v1", status: "GREEN",
-      receipt, grant, rootEntries: Object.freeze(fs.readdirSync(privateRoot).sort(binaryCompare)), physicalEffects: 0,
+      receipt, grant, rootEntries: Object.freeze(fs.readdirSync(privateRoot).sort(binaryCompare)),
+      rootNlinkWithReceipt, rootNlinkWithPending: Number(fs.lstatSync(privateRoot, { bigint: true }).nlink),
+      physicalEffects: 0,
     });
   } finally {
     try { fs.rmSync(privateRoot, { recursive: true, force: true }); } catch { /* fake-only residue is reported by callers */ }
