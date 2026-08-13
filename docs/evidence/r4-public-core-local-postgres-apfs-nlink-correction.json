@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_apfs_nlink_correction_evidence.v1",
+  "status": "LOCAL_POSTGRES_APFS_NLINK_CORRECTION_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_GATE_C_NOT_REQUESTED",
+  "generatedAt": "2026-08-13T23:54:48Z",
+  "authority": {
+    "correctionAddendumSha256": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06",
+    "correctionOwnerReviewSha256": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6",
+    "correctionAddendumHead": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff",
+    "correctionAddendumTree": "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8",
+    "correctionOwnerReviewHead": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544",
+    "correctionOwnerReviewTree": "513bf389aebb03bfc86464693facd2257084b5e4",
+    "authorityAuditSummarySha256": "sha256:e9206957b8af58e17156720065f6f84d3aa68aaafc351bc59eba2c3e5ac80f2f",
+    "ownerApproval": "APPROVED_EXACT_EIGHT_CHOICES",
+    "repositoryCorrectionGrant": "CONSUMED_BY_KC_LC_MC_ONLY",
+    "freshPhysicalExecutionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "failedExecutionReview": {
+      "head": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab",
+      "tree": "91f1a0aef6820bd4a145bc6d93acd0bbedc40992",
+      "parentHead": "421560cb6ac2fbbf52d104a5b71ade6347d9629f",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e"
+    },
+    "correctionAddendum": {
+      "head": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff",
+      "tree": "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8",
+      "parentHead": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06"
+    },
+    "correctionOwnerReview": {
+      "head": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544",
+      "tree": "513bf389aebb03bfc86464693facd2257084b5e4",
+      "parentHead": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6"
+    },
+    "implementation": {
+      "head": "18e3a325cceabdf5168b5ffb328ee2580b069a76",
+      "tree": "184d9a4147fbb9baea22b1303ca24a09c2687a79",
+      "parentHead": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544",
+      "parentTree": "513bf389aebb03bfc86464693facd2257084b5e4",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R",
+      "artifactAggregateSha256": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130"
+    }
+  },
+  "failedPrepareTruth": {
+    "executionCardSha256": "sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77",
+    "executionReviewSha256": "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e",
+    "executionPayloadSha256": "sha256:207e2c81a88cafd8b2802c8ec92bb9aa2d52d6142bf24cff82fd0d5a40f33eb3",
+    "executionPayloadByteCount": 5517,
+    "ownerApprovalReceiptSha256": "sha256:0652fe3ac3125335728788bacc3e1cc2cee4a0f4b2417db662fb0a898fd6dd2a",
+    "ownerApprovalReceiptByteCount": 863,
+    "observedFilesystem": "APFS",
+    "observedRootNlinkWithReceipt": 3,
+    "frozenExpectedRootNlink": 2,
+    "resultCode": "local_postgres_private_root_invalid",
+    "pendingGrantCreated": false,
+    "ownerApprovalConsumed": false,
+    "dockerCalls": 0,
+    "postgresConnections": 0,
+    "sqlRuns": 0
+  },
+  "workset": {
+    "implementationPathCount": 2,
+    "evidencePathCount": 3,
+    "statusPathCount": 10,
+    "totalPathCount": 15,
+    "addedPathCount": 4,
+    "modifiedPathCount": 11,
+    "totalCommitCount": 3,
+    "implementationPaths": [
+      "scripts/r4-public-core-local-postgres.mjs",
+      "test/r4/public-core-local-postgres.test.ts"
+    ],
+    "evidencePaths": [
+      "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
+      "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json"
+    ],
+    "statusPaths": [
+      "README.md",
+      "docs/CONTROL.md",
+      "docs/DECISIONS.md",
+      "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+      "docs/PRODUCT.md",
+      "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+      "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md",
+      "docs/README.md",
+      "docs/ROADMAP.md",
+      "docs/VALIDATION.md"
+    ]
+  },
+  "correctionContract": {
+    "fixedDirectoryNlinkEqualityRemoved": true,
+    "minimumStructurallyValidDirectoryNlink": 2,
+    "stableRootIdentityFields": ["path", "dev", "ino", "uid", "gid", "mode"],
+    "directoryNlinkExcludedFromStableIdentity": true,
+    "exactEntryMembraneRetained": true,
+    "portableFilesystemTestPassed": true,
+    "darwinObservedReceiptOnlyNlink": 3,
+    "hostileIdentityAndEntryTestsPassed": true,
+    "grantV3Changed": false,
+    "receiptV3Changed": false,
+    "sqlChanged": false,
+    "dependencyOrLockChanged": false
+  },
+  "validation": {
+    "testLanes": [
+      { "laneId": "local_postgres_runner_fake_deny_network", "total": 141, "passed": 141, "failed": 0 },
+      { "laneId": "focused_public_core_non_runner_deny_network", "total": 85, "passed": 85, "failed": 0 },
+      { "laneId": "public_core_deny_network", "total": 393, "passed": 393, "failed": 0 },
+      { "laneId": "r4_offline_regression", "total": 713, "passed": 713, "failed": 0 },
+      { "laneId": "gate_b_core_successor_candidate_regression", "total": 145, "passed": 145, "failed": 0 },
+      { "laneId": "spine_regression", "total": 45, "passed": 45, "failed": 0 }
+    ],
+    "checkLanes": [
+      "runner_node_check",
+      "typescript",
+      "hosted_room_no_server_ai",
+      "legacy_r4_document_audit",
+      "diff_check"
+    ],
+    "committedBytesOnly": true,
+    "allPassed": true
+  },
+  "effectAudit": {
+    "externalNetworkCalls": 0,
+    "pendingGrants": 0,
+    "consumedGrants": 0,
+    "dockerCliCalls": 0,
+    "dockerDaemonCalls": 0,
+    "ociCalls": 0,
+    "postgresProcesses": 0,
+    "postgresConnections": 0,
+    "databaseIdentities": 0,
+    "sqlApplyRuns": 0,
+    "sqlVerifyRuns": 0,
+    "sqlRollbackRuns": 0,
+    "domainStatementRuns": 0,
+    "productionEffects": 0,
+    "runtimeActivations": 0,
+    "trafficActivations": 0,
+    "gateCActivations": 0,
+    "pushes": 0,
+    "pullRequests": 0,
+    "merges": 0,
+    "releases": 0,
+    "spendUsd": 0
+  },
+  "documentationScope": {
+    "legacyR4DocsAuditPassed": true,
+    "operationalCurrentStatusSurfacesCurrent": false,
+    "wholeRepositoryDocumentationCurrentClaimed": false,
+    "statusFreezeRequired": true
+  },
+  "artifacts": {
+    "artifactIndexSha256": "sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056",
+    "evidenceSchemaSha256": "sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a",
+    "implementationArtifactAggregateSha256": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130",
+    "runnerSha256": "sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75",
+    "runnerByteCount": 372277,
+    "runnerTestSha256": "sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1",
+    "runnerTestByteCount": 120964
+  },
+  "audits": {
+    "committedKc": {
+      "status": "PASS",
+      "blockerCount": 0,
+      "importantCount": 0,
+      "summaryText": "Kc committed-byte audit: PASS; HEAD 18e3a325cceabdf5168b5ffb328ee2580b069a76; tree 184d9a4147fbb9baea22b1303ca24a09c2687a79; parent 5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544; exact delta 2M/0A/0D/0R; runner 372277 bytes sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75; test 120964 bytes sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1; G2c sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130; validation 141/85/393/713/145/45 and five checks PASS; effects Docker/OCI/PostgreSQL/SQL/network/production/GateC=0; 0 Blocker/0 Important.",
+      "summarySha256": "sha256:eadd61948def5d6f14e8cab56bc06a30c8807d3711157876b12ab63a6bf5eb00"
+    },
+    "candidateLc": {
+      "status": "PASS",
+      "blockerCount": 0,
+      "importantCount": 0,
+      "latestByteOnly": true,
+      "committed": false,
+      "selfHashExcluded": true
+    },
+    "committedLc": "PLANNED_NOT_RUN_AT_LC",
+    "candidateMc": "PLANNED_NOT_RUN_AT_LC",
+    "committedMc": "PLANNED_NOT_RUN_AT_LC"
+  },
+  "readiness": {
+    "runnerCorrected": true,
+    "portableApfsPrepareProof": true,
+    "physicalExecuted": false,
+    "targetPostgresObserved": false,
+    "targetCatalogObserved": false,
+    "physicalGreen": false,
+    "productRuntimeEffects": false,
+    "trafficReady": false,
+    "gateCReady": false
+  },
+  "stop": {
+    "implementationEvidence": "LOCAL_POSTGRES_APFS_NLINK_CORRECTION_IMPLEMENTATION_EVIDENCE_GREEN",
+    "nextRequired": "STATUS_FREEZE_REQUIRED",
+    "gateC": "GATE_C_NOT_REQUESTED"
+  }
+}

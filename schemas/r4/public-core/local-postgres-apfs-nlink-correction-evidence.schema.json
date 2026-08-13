@@ -1,0 +1,432 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json",
+  "title": "R4 Public Core Local PostgreSQL APFS nlink Correction Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "lineage",
+    "failedPrepareTruth",
+    "workset",
+    "correctionContract",
+    "validation",
+    "effectAudit",
+    "documentationScope",
+    "artifacts",
+    "audits",
+    "readiness",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "r4_public_core_local_postgres_apfs_nlink_correction_evidence.v1"
+    },
+    "status": {
+      "type": "string",
+      "const": "LOCAL_POSTGRES_APFS_NLINK_CORRECTION_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "type": "string",
+      "const": "2026-08-13T23:54:48Z"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correctionAddendumSha256",
+        "correctionOwnerReviewSha256",
+        "correctionAddendumHead",
+        "correctionAddendumTree",
+        "correctionOwnerReviewHead",
+        "correctionOwnerReviewTree",
+        "authorityAuditSummarySha256",
+        "ownerApproval",
+        "repositoryCorrectionGrant",
+        "freshPhysicalExecutionGrant",
+        "gateCGrant"
+      ],
+      "properties": {
+        "correctionAddendumSha256": { "type": "string", "const": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06" },
+        "correctionOwnerReviewSha256": { "type": "string", "const": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6" },
+        "correctionAddendumHead": { "type": "string", "const": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff" },
+        "correctionAddendumTree": { "type": "string", "const": "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8" },
+        "correctionOwnerReviewHead": { "type": "string", "const": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544" },
+        "correctionOwnerReviewTree": { "type": "string", "const": "513bf389aebb03bfc86464693facd2257084b5e4" },
+        "authorityAuditSummarySha256": { "type": "string", "const": "sha256:e9206957b8af58e17156720065f6f84d3aa68aaafc351bc59eba2c3e5ac80f2f" },
+        "ownerApproval": { "type": "string", "const": "APPROVED_EXACT_EIGHT_CHOICES" },
+        "repositoryCorrectionGrant": { "type": "string", "const": "CONSUMED_BY_KC_LC_MC_ONLY" },
+        "freshPhysicalExecutionGrant": { "type": "string", "const": "NOT_REQUESTED" },
+        "gateCGrant": { "type": "string", "const": "NOT_REQUESTED" }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failedExecutionReview", "correctionAddendum", "correctionOwnerReview", "implementation"],
+      "properties": {
+        "failedExecutionReview": { "$ref": "#/$defs/failedExecutionReview" },
+        "correctionAddendum": { "$ref": "#/$defs/correctionAddendum" },
+        "correctionOwnerReview": { "$ref": "#/$defs/correctionOwnerReview" },
+        "implementation": { "$ref": "#/$defs/implementation" }
+      }
+    },
+    "failedPrepareTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executionCardSha256",
+        "executionReviewSha256",
+        "executionPayloadSha256",
+        "executionPayloadByteCount",
+        "ownerApprovalReceiptSha256",
+        "ownerApprovalReceiptByteCount",
+        "observedFilesystem",
+        "observedRootNlinkWithReceipt",
+        "frozenExpectedRootNlink",
+        "resultCode",
+        "pendingGrantCreated",
+        "ownerApprovalConsumed",
+        "dockerCalls",
+        "postgresConnections",
+        "sqlRuns"
+      ],
+      "properties": {
+        "executionCardSha256": { "type": "string", "const": "sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77" },
+        "executionReviewSha256": { "type": "string", "const": "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e" },
+        "executionPayloadSha256": { "type": "string", "const": "sha256:207e2c81a88cafd8b2802c8ec92bb9aa2d52d6142bf24cff82fd0d5a40f33eb3" },
+        "executionPayloadByteCount": { "type": "integer", "const": 5517 },
+        "ownerApprovalReceiptSha256": { "type": "string", "const": "sha256:0652fe3ac3125335728788bacc3e1cc2cee4a0f4b2417db662fb0a898fd6dd2a" },
+        "ownerApprovalReceiptByteCount": { "type": "integer", "const": 863 },
+        "observedFilesystem": { "type": "string", "const": "APFS" },
+        "observedRootNlinkWithReceipt": { "type": "integer", "const": 3 },
+        "frozenExpectedRootNlink": { "type": "integer", "const": 2 },
+        "resultCode": { "type": "string", "const": "local_postgres_private_root_invalid" },
+        "pendingGrantCreated": { "type": "boolean", "const": false },
+        "ownerApprovalConsumed": { "type": "boolean", "const": false },
+        "dockerCalls": { "type": "integer", "const": 0 },
+        "postgresConnections": { "type": "integer", "const": 0 },
+        "sqlRuns": { "type": "integer", "const": 0 }
+      }
+    },
+    "workset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationPathCount",
+        "evidencePathCount",
+        "statusPathCount",
+        "totalPathCount",
+        "addedPathCount",
+        "modifiedPathCount",
+        "totalCommitCount",
+        "implementationPaths",
+        "evidencePaths",
+        "statusPaths"
+      ],
+      "properties": {
+        "implementationPathCount": { "type": "integer", "const": 2 },
+        "evidencePathCount": { "type": "integer", "const": 3 },
+        "statusPathCount": { "type": "integer", "const": 10 },
+        "totalPathCount": { "type": "integer", "const": 15 },
+        "addedPathCount": { "type": "integer", "const": 4 },
+        "modifiedPathCount": { "type": "integer", "const": 11 },
+        "totalCommitCount": { "type": "integer", "const": 3 },
+        "implementationPaths": {
+          "type": "array",
+          "const": ["scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts"]
+        },
+        "evidencePaths": {
+          "type": "array",
+          "const": [
+            "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
+            "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
+            "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json"
+          ]
+        },
+        "statusPaths": {
+          "type": "array",
+          "const": [
+            "README.md",
+            "docs/CONTROL.md",
+            "docs/DECISIONS.md",
+            "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+            "docs/PRODUCT.md",
+            "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+            "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md",
+            "docs/README.md",
+            "docs/ROADMAP.md",
+            "docs/VALIDATION.md"
+          ]
+        }
+      }
+    },
+    "correctionContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixedDirectoryNlinkEqualityRemoved",
+        "minimumStructurallyValidDirectoryNlink",
+        "stableRootIdentityFields",
+        "directoryNlinkExcludedFromStableIdentity",
+        "exactEntryMembraneRetained",
+        "portableFilesystemTestPassed",
+        "darwinObservedReceiptOnlyNlink",
+        "hostileIdentityAndEntryTestsPassed",
+        "grantV3Changed",
+        "receiptV3Changed",
+        "sqlChanged",
+        "dependencyOrLockChanged"
+      ],
+      "properties": {
+        "fixedDirectoryNlinkEqualityRemoved": { "type": "boolean", "const": true },
+        "minimumStructurallyValidDirectoryNlink": { "type": "integer", "const": 2 },
+        "stableRootIdentityFields": { "type": "array", "const": ["path", "dev", "ino", "uid", "gid", "mode"] },
+        "directoryNlinkExcludedFromStableIdentity": { "type": "boolean", "const": true },
+        "exactEntryMembraneRetained": { "type": "boolean", "const": true },
+        "portableFilesystemTestPassed": { "type": "boolean", "const": true },
+        "darwinObservedReceiptOnlyNlink": { "type": "integer", "const": 3 },
+        "hostileIdentityAndEntryTestsPassed": { "type": "boolean", "const": true },
+        "grantV3Changed": { "type": "boolean", "const": false },
+        "receiptV3Changed": { "type": "boolean", "const": false },
+        "sqlChanged": { "type": "boolean", "const": false },
+        "dependencyOrLockChanged": { "type": "boolean", "const": false }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testLanes", "checkLanes", "committedBytesOnly", "allPassed"],
+      "properties": {
+        "testLanes": {
+          "type": "array",
+          "const": [
+            { "laneId": "local_postgres_runner_fake_deny_network", "total": 141, "passed": 141, "failed": 0 },
+            { "laneId": "focused_public_core_non_runner_deny_network", "total": 85, "passed": 85, "failed": 0 },
+            { "laneId": "public_core_deny_network", "total": 393, "passed": 393, "failed": 0 },
+            { "laneId": "r4_offline_regression", "total": 713, "passed": 713, "failed": 0 },
+            { "laneId": "gate_b_core_successor_candidate_regression", "total": 145, "passed": 145, "failed": 0 },
+            { "laneId": "spine_regression", "total": 45, "passed": 45, "failed": 0 }
+          ]
+        },
+        "checkLanes": {
+          "type": "array",
+          "const": ["runner_node_check", "typescript", "hosted_room_no_server_ai", "legacy_r4_document_audit", "diff_check"]
+        },
+        "committedBytesOnly": { "type": "boolean", "const": true },
+        "allPassed": { "type": "boolean", "const": true }
+      }
+    },
+    "effectAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "externalNetworkCalls",
+        "pendingGrants",
+        "consumedGrants",
+        "dockerCliCalls",
+        "dockerDaemonCalls",
+        "ociCalls",
+        "postgresProcesses",
+        "postgresConnections",
+        "databaseIdentities",
+        "sqlApplyRuns",
+        "sqlVerifyRuns",
+        "sqlRollbackRuns",
+        "domainStatementRuns",
+        "productionEffects",
+        "runtimeActivations",
+        "trafficActivations",
+        "gateCActivations",
+        "pushes",
+        "pullRequests",
+        "merges",
+        "releases",
+        "spendUsd"
+      ],
+      "properties": {
+        "externalNetworkCalls": { "type": "integer", "const": 0 },
+        "pendingGrants": { "type": "integer", "const": 0 },
+        "consumedGrants": { "type": "integer", "const": 0 },
+        "dockerCliCalls": { "type": "integer", "const": 0 },
+        "dockerDaemonCalls": { "type": "integer", "const": 0 },
+        "ociCalls": { "type": "integer", "const": 0 },
+        "postgresProcesses": { "type": "integer", "const": 0 },
+        "postgresConnections": { "type": "integer", "const": 0 },
+        "databaseIdentities": { "type": "integer", "const": 0 },
+        "sqlApplyRuns": { "type": "integer", "const": 0 },
+        "sqlVerifyRuns": { "type": "integer", "const": 0 },
+        "sqlRollbackRuns": { "type": "integer", "const": 0 },
+        "domainStatementRuns": { "type": "integer", "const": 0 },
+        "productionEffects": { "type": "integer", "const": 0 },
+        "runtimeActivations": { "type": "integer", "const": 0 },
+        "trafficActivations": { "type": "integer", "const": 0 },
+        "gateCActivations": { "type": "integer", "const": 0 },
+        "pushes": { "type": "integer", "const": 0 },
+        "pullRequests": { "type": "integer", "const": 0 },
+        "merges": { "type": "integer", "const": 0 },
+        "releases": { "type": "integer", "const": 0 },
+        "spendUsd": { "type": "integer", "const": 0 }
+      }
+    },
+    "documentationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["legacyR4DocsAuditPassed", "operationalCurrentStatusSurfacesCurrent", "wholeRepositoryDocumentationCurrentClaimed", "statusFreezeRequired"],
+      "properties": {
+        "legacyR4DocsAuditPassed": { "type": "boolean", "const": true },
+        "operationalCurrentStatusSurfacesCurrent": { "type": "boolean", "const": false },
+        "wholeRepositoryDocumentationCurrentClaimed": { "type": "boolean", "const": false },
+        "statusFreezeRequired": { "type": "boolean", "const": true }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactIndexSha256",
+        "evidenceSchemaSha256",
+        "implementationArtifactAggregateSha256",
+        "runnerSha256",
+        "runnerByteCount",
+        "runnerTestSha256",
+        "runnerTestByteCount"
+      ],
+      "properties": {
+        "artifactIndexSha256": { "type": "string", "const": "sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056" },
+        "evidenceSchemaSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "implementationArtifactAggregateSha256": { "type": "string", "const": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130" },
+        "runnerSha256": { "type": "string", "const": "sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75" },
+        "runnerByteCount": { "type": "integer", "const": 372277 },
+        "runnerTestSha256": { "type": "string", "const": "sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1" },
+        "runnerTestByteCount": { "type": "integer", "const": 120964 }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["committedKc", "candidateLc", "committedLc", "candidateMc", "committedMc"],
+      "properties": {
+        "committedKc": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "blockerCount", "importantCount", "summaryText", "summarySha256"],
+          "properties": {
+            "status": { "type": "string", "const": "PASS" },
+            "blockerCount": { "type": "integer", "const": 0 },
+            "importantCount": { "type": "integer", "const": 0 },
+            "summaryText": { "type": "string", "const": "Kc committed-byte audit: PASS; HEAD 18e3a325cceabdf5168b5ffb328ee2580b069a76; tree 184d9a4147fbb9baea22b1303ca24a09c2687a79; parent 5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544; exact delta 2M/0A/0D/0R; runner 372277 bytes sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75; test 120964 bytes sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1; G2c sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130; validation 141/85/393/713/145/45 and five checks PASS; effects Docker/OCI/PostgreSQL/SQL/network/production/GateC=0; 0 Blocker/0 Important." },
+            "summarySha256": { "type": "string", "const": "sha256:eadd61948def5d6f14e8cab56bc06a30c8807d3711157876b12ab63a6bf5eb00" }
+          }
+        },
+        "candidateLc": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "blockerCount", "importantCount", "latestByteOnly", "committed", "selfHashExcluded"],
+          "properties": {
+            "status": { "type": "string", "const": "PASS" },
+            "blockerCount": { "type": "integer", "const": 0 },
+            "importantCount": { "type": "integer", "const": 0 },
+            "latestByteOnly": { "type": "boolean", "const": true },
+            "committed": { "type": "boolean", "const": false },
+            "selfHashExcluded": { "type": "boolean", "const": true }
+          }
+        },
+        "committedLc": { "type": "string", "const": "PLANNED_NOT_RUN_AT_LC" },
+        "candidateMc": { "type": "string", "const": "PLANNED_NOT_RUN_AT_LC" },
+        "committedMc": { "type": "string", "const": "PLANNED_NOT_RUN_AT_LC" }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runnerCorrected",
+        "portableApfsPrepareProof",
+        "physicalExecuted",
+        "targetPostgresObserved",
+        "targetCatalogObserved",
+        "physicalGreen",
+        "productRuntimeEffects",
+        "trafficReady",
+        "gateCReady"
+      ],
+      "properties": {
+        "runnerCorrected": { "type": "boolean", "const": true },
+        "portableApfsPrepareProof": { "type": "boolean", "const": true },
+        "physicalExecuted": { "type": "boolean", "const": false },
+        "targetPostgresObserved": { "type": "boolean", "const": false },
+        "targetCatalogObserved": { "type": "boolean", "const": false },
+        "physicalGreen": { "type": "boolean", "const": false },
+        "productRuntimeEffects": { "type": "boolean", "const": false },
+        "trafficReady": { "type": "boolean", "const": false },
+        "gateCReady": { "type": "boolean", "const": false }
+      }
+    },
+    "stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["implementationEvidence", "nextRequired", "gateC"],
+      "properties": {
+        "implementationEvidence": { "type": "string", "const": "LOCAL_POSTGRES_APFS_NLINK_CORRECTION_IMPLEMENTATION_EVIDENCE_GREEN" },
+        "nextRequired": { "type": "string", "const": "STATUS_FREEZE_REQUIRED" },
+        "gateC": { "type": "string", "const": "GATE_C_NOT_REQUESTED" }
+      }
+    }
+  },
+  "$defs": {
+    "failedExecutionReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "parentHead", "exactDelta", "artifactSha256"],
+      "properties": {
+        "head": { "type": "string", "const": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab" },
+        "tree": { "type": "string", "const": "91f1a0aef6820bd4a145bc6d93acd0bbedc40992" },
+        "parentHead": { "type": "string", "const": "421560cb6ac2fbbf52d104a5b71ade6347d9629f" },
+        "exactDelta": { "type": "string", "const": "1_PATH_1A" },
+        "artifactSha256": { "type": "string", "const": "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e" }
+      }
+    },
+    "correctionAddendum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "parentHead", "exactDelta", "artifactSha256"],
+      "properties": {
+        "head": { "type": "string", "const": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff" },
+        "tree": { "type": "string", "const": "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8" },
+        "parentHead": { "type": "string", "const": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab" },
+        "exactDelta": { "type": "string", "const": "1_PATH_1A" },
+        "artifactSha256": { "type": "string", "const": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06" }
+      }
+    },
+    "correctionOwnerReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "parentHead", "exactDelta", "artifactSha256"],
+      "properties": {
+        "head": { "type": "string", "const": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544" },
+        "tree": { "type": "string", "const": "513bf389aebb03bfc86464693facd2257084b5e4" },
+        "parentHead": { "type": "string", "const": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff" },
+        "exactDelta": { "type": "string", "const": "1_PATH_1A" },
+        "artifactSha256": { "type": "string", "const": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "parentHead", "parentTree", "exactDelta", "artifactAggregateSha256"],
+      "properties": {
+        "head": { "type": "string", "const": "18e3a325cceabdf5168b5ffb328ee2580b069a76" },
+        "tree": { "type": "string", "const": "184d9a4147fbb9baea22b1303ca24a09c2687a79" },
+        "parentHead": { "type": "string", "const": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544" },
+        "parentTree": { "type": "string", "const": "513bf389aebb03bfc86464693facd2257084b5e4" },
+        "exactDelta": { "type": "string", "const": "2_PATHS_0A_2M_0D_0R" },
+        "artifactAggregateSha256": { "type": "string", "const": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130" }
+      }
+    }
+  }
+}

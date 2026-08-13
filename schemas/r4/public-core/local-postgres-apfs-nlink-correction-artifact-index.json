@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_apfs_nlink_correction_artifact_index.v1",
+  "status": "APFS_NLINK_CORRECTION_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 Local PostgreSQL committed Kc APFS nlink correction artifacts",
+  "authority": {
+    "baselineExecutionReviewHead": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab",
+    "baselineExecutionReviewTree": "91f1a0aef6820bd4a145bc6d93acd0bbedc40992",
+    "correctionAddendumSha256": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06",
+    "correctionOwnerReviewSha256": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6",
+    "authorityAuditSummarySha256": "sha256:e9206957b8af58e17156720065f6f84d3aa68aaafc351bc59eba2c3e5ac80f2f",
+    "repositoryCorrectionGrant": "APPROVED_EXACT_KC_LC_MC_ONLY",
+    "freshPhysicalExecutionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "failedExecutionReview": {
+      "head": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab",
+      "tree": "91f1a0aef6820bd4a145bc6d93acd0bbedc40992",
+      "parentHead": "421560cb6ac2fbbf52d104a5b71ade6347d9629f",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e"
+    },
+    "correctionAddendum": {
+      "head": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff",
+      "tree": "006c3bbf7f0a0e988c7afd65b425fbcefc1189b8",
+      "parentHead": "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06"
+    },
+    "correctionOwnerReview": {
+      "head": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544",
+      "tree": "513bf389aebb03bfc86464693facd2257084b5e4",
+      "parentHead": "04ad36bddbf7d2f62cdfc241f51a5cf817046aff",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6"
+    },
+    "implementation": {
+      "head": "18e3a325cceabdf5168b5ffb328ee2580b069a76",
+      "tree": "184d9a4147fbb9baea22b1303ca24a09c2687a79",
+      "parentHead": "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544",
+      "parentTree": "513bf389aebb03bfc86464693facd2257084b5e4",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "apfs_nlink_corrected_runner",
+      "gitStatus": "M",
+      "byteCount": 372277,
+      "sha256": "sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "apfs_nlink_correction_runner_test",
+      "gitStatus": "M",
+      "byteCount": 120964,
+      "sha256": "sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
+    "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "correctionContract": {
+    "fixedDirectoryNlinkEqualityRemoved": true,
+    "minimumStructurallyValidDirectoryNlink": 2,
+    "rootIdentityFields": ["path", "dev", "ino", "uid", "gid", "mode"],
+    "directoryNlinkExcludedFromStableIdentity": true,
+    "exactEntryMembraneRetained": true,
+    "grantV3Changed": false,
+    "receiptV3Changed": false,
+    "sqlChanged": false,
+    "dependenciesChanged": false,
+    "physicalEffects": 0
+  }
+}
