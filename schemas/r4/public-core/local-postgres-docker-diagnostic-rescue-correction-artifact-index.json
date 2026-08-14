@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_docker_diagnostic_rescue_correction_artifact_index.v1",
+  "status": "DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 Local PostgreSQL committed Kd Docker diagnostic and blocked-cleanup rescue correction artifacts",
+  "authority": {
+    "failedExecutionReviewHead": "6e67c1f1867d73f27674a5f056e0692c5b42d6a3",
+    "failedExecutionReviewTree": "60b3d7b124968a20f6ec30700d389849dd277ab2",
+    "correctionAddendumSha256": "sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9",
+    "correctionOwnerReviewSha256": "sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4",
+    "ownerApproval": "APPROVED_EXACT_NINE_CHOICES",
+    "repositoryCorrectionGrant": "APPROVED_EXACT_KD_LD_MD_ONLY",
+    "cleanupRescueGrant": "NOT_REQUESTED",
+    "freshPhysicalExecutionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "failedExecutionReview": {
+      "head": "6e67c1f1867d73f27674a5f056e0692c5b42d6a3",
+      "tree": "60b3d7b124968a20f6ec30700d389849dd277ab2",
+      "parentHead": "7a533f4b2cc91070e7bd78cb6c70c1f28524ec38",
+      "exactDelta": "1_PATH_1A"
+    },
+    "correctionAddendum": {
+      "head": "56553e4a1e7bc65516f1f14cbac7e8fab2a53262",
+      "tree": "45a8b295d5308766e2bf0a6f4715af0d5c5edaef",
+      "parentHead": "6e67c1f1867d73f27674a5f056e0692c5b42d6a3",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9"
+    },
+    "correctionOwnerReview": {
+      "head": "eb38eff55c2360b51df13dceb896680ec4440479",
+      "tree": "96abe090ac364a973d1b9bc6edc3e5ea70af4d6e",
+      "parentHead": "56553e4a1e7bc65516f1f14cbac7e8fab2a53262",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4"
+    },
+    "implementation": {
+      "head": "0fdf68c7c786085189c3df0787df07f366c6df5b",
+      "tree": "5f091925b8b48cbd515700b275465506a391ccde",
+      "parentHead": "eb38eff55c2360b51df13dceb896680ec4440479",
+      "parentTree": "96abe090ac364a973d1b9bc6edc3e5ea70af4d6e",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:25dba2e75ca042e8c20e096ddaf9f5ee24506fab678a0a0f33366edd8ecebe22"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:25dba2e75ca042e8c20e096ddaf9f5ee24506fab678a0a0f33366edd8ecebe22"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "docker_diagnostic_rescue_corrected_runner",
+      "gitStatus": "M",
+      "byteCount": 477808,
+      "sha256": "sha256:42d1c7b6640fd984a702922685cfc92181966318b7801606d17cacbf40b77f08"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "docker_diagnostic_rescue_correction_runner_test",
+      "gitStatus": "M",
+      "byteCount": 145472,
+      "sha256": "sha256:2c600732115b1e755a13af9fffd074b90831da69ea24beb1dde0635b16862cbd"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-docker-diagnostic-rescue-correction.json",
+    "schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "correctionContract": {
+    "failedPhysicalEvidencePreserved": true,
+    "newContainerMissingDiagnostic": "Error: No such object: <exact-container-name>",
+    "diagnosticMatchingRemainsExactFullLine": true,
+    "futureRescueCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-CARD.md",
+    "futureRescueReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-OWNER-REVIEW.md",
+    "futureCardGitStatus": "A",
+    "futureReviewGitStatus": "A",
+    "cleanupRescueAuthorityVersion": "r4.public-core-local-postgres-cleanup-rescue-authority.v1",
+    "cleanupRescueGrantVersion": "r4.public-core-local-postgres-cleanup-rescue-grant.v1",
+    "cleanupRescueReceiptVersion": "r4.public-core-local-postgres-cleanup-rescue-receipt.v1",
+    "oneUseNoRetryWriteAheadConstructed": true,
+    "crashRecoveryIsDockerEffectlessAndBlocked": true,
+    "oldForensicRootMutationAllowed": false,
+    "sqlChanged": false,
+    "dependenciesChanged": false,
+    "physicalEffects": 0
+  }
+}
