@@ -1,0 +1,143 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_body_free_docker_inspect_diagnostic_artifact_index.v1",
+  "status": "BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 Local PostgreSQL committed Kf body-free Docker inspect diagnostic artifacts",
+  "authority": {
+    "rescueOwnerReviewHead": "ac1dfea899f2edff6ec59dd401d8aec6256a485f",
+    "rescueOwnerReviewTree": "4c93a2bbe68efae13b4caaecfd3f39cdffb9964b",
+    "diagnosticAddendumSha256": "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13",
+    "diagnosticOwnerReviewSha256": "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579",
+    "pathCorrectionAddendumSha256": "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00",
+    "pathCorrectionOwnerReviewSha256": "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7",
+    "diagnosticConstructionChoices": "APPROVED_EXACT_NINE_CHOICES",
+    "pathCorrectionChoices": "APPROVED_EXACT_FOUR_CHOICES",
+    "repositoryConstructionGrant": "APPROVED_EXACT_KF_LF_MF_ONLY",
+    "dockerDiagnosticGrant": "NOT_REQUESTED",
+    "cleanupGrant": "NOT_REQUESTED",
+    "physicalExecutionGrant": "NOT_REQUESTED",
+    "productionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "rescueOwnerReview": {
+      "head": "ac1dfea899f2edff6ec59dd401d8aec6256a485f",
+      "tree": "4c93a2bbe68efae13b4caaecfd3f39cdffb9964b",
+      "parentHead": "fa0a9bf05b9d9c897013d30ac6b2fdbb980da7c5",
+      "exactDelta": "1_PATH_1A"
+    },
+    "diagnosticAddendum": {
+      "head": "931dbb7278bb06bf219ae7553b4317db415de0e7",
+      "tree": "22db25181c284d980f4e5d9cbf5cd5e3d7c6a725",
+      "parentHead": "ac1dfea899f2edff6ec59dd401d8aec6256a485f",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13"
+    },
+    "diagnosticOwnerReview": {
+      "head": "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e",
+      "tree": "1541a8dbd4d425b7faeebd66fa417a035f10f5b3",
+      "parentHead": "931dbb7278bb06bf219ae7553b4317db415de0e7",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579"
+    },
+    "pathCorrectionAddendum": {
+      "head": "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb",
+      "tree": "50e5bcc3b6dcec268f619e3b8399cc92e323da70",
+      "parentHead": "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00"
+    },
+    "pathCorrectionOwnerReview": {
+      "head": "725b02338db4aa53517929c28912ef2092732631",
+      "tree": "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1",
+      "parentHead": "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7"
+    },
+    "implementation": {
+      "head": "bd3cdf71055136dce2731d7da3bef9dc89e6f4d7",
+      "tree": "66af8e43a3372d6d871a1a778b4822b8a7307a16",
+      "parentHead": "725b02338db4aa53517929c28912ef2092732631",
+      "parentTree": "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "body_free_docker_inspect_diagnostic_runner",
+      "gitStatus": "M",
+      "byteCount": 590390,
+      "sha256": "sha256:32e0a5d9f325d08a0691efe6145a6f494e3bcac880790e12c2fa1474ee5ecb5e"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "body_free_docker_inspect_diagnostic_runner_test",
+      "gitStatus": "M",
+      "byteCount": 162132,
+      "sha256": "sha256:9739145a2b872194c02be9d9a0b4c7b148e3f2935c3db6cd408ded7d1ebeed46"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-body-free-docker-inspect-diagnostic.json",
+    "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "forensicBaseline": {
+    "oldRoot": "/private/tmp/forme-r4-pg-9ZGIOLeX",
+    "oldRootIdentity": "16777231/32871902/0700/501",
+    "oldConsumedGrantSha256": "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35",
+    "oldEvidenceSha256": "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c",
+    "oldJournalEntryCount": 34,
+    "oldJournalHeadSha256": "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25",
+    "rescueRoot": "/private/tmp/forme-r4-cleanup-rescue-VVZOVTGn",
+    "rescueRootIdentity": "16777231/33273981/0700/501",
+    "rescueConsumedGrantSha256": "sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654",
+    "rescueEvidenceSha256": "sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979",
+    "rescueJournalEntryCount": 6,
+    "rescueJournalHeadSha256": "sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491",
+    "rescueResult": "FAILED/local_postgres_docker_call_failed/BLOCKED",
+    "rootsMutated": false
+  },
+  "diagnosticContract": {
+    "futureDiagnosticCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1.md",
+    "futureDiagnosticReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1.md",
+    "futureCardGitStatus": "A",
+    "futureReviewGitStatus": "A",
+    "diagnosticAuthorityVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-authority.v1",
+    "diagnosticGrantVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
+    "diagnosticReceiptVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-receipt.v1",
+    "dockerVersionMaximum": 1,
+    "containerInspectMaximum": 1,
+    "allOtherDockerKindsMaximum": 0,
+    "oneUseNoRetryWriteAheadConstructed": true,
+    "rawOutputBodiesPersisted": false,
+    "cleanupAuthorityConstructed": false,
+    "diagnosticExecuted": false,
+    "physicalEffects": 0
+  }
+}

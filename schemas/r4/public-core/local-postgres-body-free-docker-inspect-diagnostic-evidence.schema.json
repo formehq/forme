@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "r4_public_core_local_postgres_body_free_docker_inspect_diagnostic_evidence.schema.json",
+  "title": "R4 Public Core Local PostgreSQL Body-Free Docker Inspect Diagnostic Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "lineage",
+    "failedRescueBaseline",
+    "workset",
+    "diagnosticContract",
+    "validation",
+    "effectAudit",
+    "documentationScope",
+    "artifacts",
+    "audits",
+    "readiness",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4_public_core_local_postgres_body_free_docker_inspect_diagnostic_evidence.v1"
+    },
+    "status": {
+      "const": "LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_PHYSICAL_EXECUTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "const": "2026-08-14T10:29:45Z"
+    },
+    "authority": {
+      "const": {
+        "diagnosticAddendumSha256": "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13",
+        "diagnosticOwnerReviewSha256": "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579",
+        "pathCorrectionAddendumSha256": "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00",
+        "pathCorrectionOwnerReviewSha256": "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7",
+        "diagnosticAddendumHead": "931dbb7278bb06bf219ae7553b4317db415de0e7",
+        "diagnosticAddendumTree": "22db25181c284d980f4e5d9cbf5cd5e3d7c6a725",
+        "diagnosticOwnerReviewHead": "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e",
+        "diagnosticOwnerReviewTree": "1541a8dbd4d425b7faeebd66fa417a035f10f5b3",
+        "pathCorrectionAddendumHead": "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb",
+        "pathCorrectionAddendumTree": "50e5bcc3b6dcec268f619e3b8399cc92e323da70",
+        "pathCorrectionOwnerReviewHead": "725b02338db4aa53517929c28912ef2092732631",
+        "pathCorrectionOwnerReviewTree": "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1",
+        "diagnosticConstructionChoices": "APPROVED_EXACT_NINE_CHOICES",
+        "pathCorrectionChoices": "APPROVED_EXACT_FOUR_CHOICES",
+        "repositoryConstructionGrant": "CONSUMED_BY_KF_LF_MF_ONLY",
+        "dockerDiagnosticGrant": "NOT_REQUESTED",
+        "cleanupGrant": "NOT_REQUESTED",
+        "physicalExecutionGrant": "NOT_REQUESTED",
+        "productionGrant": "NOT_REQUESTED",
+        "gateCGrant": "NOT_REQUESTED"
+      }
+    },
+    "lineage": {
+      "const": {
+        "rescueOwnerReview": {
+          "head": "ac1dfea899f2edff6ec59dd401d8aec6256a485f",
+          "tree": "4c93a2bbe68efae13b4caaecfd3f39cdffb9964b",
+          "parentHead": "fa0a9bf05b9d9c897013d30ac6b2fdbb980da7c5",
+          "exactDelta": "1_PATH_1A"
+        },
+        "diagnosticAddendum": {
+          "head": "931dbb7278bb06bf219ae7553b4317db415de0e7",
+          "tree": "22db25181c284d980f4e5d9cbf5cd5e3d7c6a725",
+          "parentHead": "ac1dfea899f2edff6ec59dd401d8aec6256a485f",
+          "exactDelta": "1_PATH_1A",
+          "artifactSha256": "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13"
+        },
+        "diagnosticOwnerReview": {
+          "head": "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e",
+          "tree": "1541a8dbd4d425b7faeebd66fa417a035f10f5b3",
+          "parentHead": "931dbb7278bb06bf219ae7553b4317db415de0e7",
+          "exactDelta": "1_PATH_1A",
+          "artifactSha256": "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579"
+        },
+        "pathCorrectionAddendum": {
+          "head": "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb",
+          "tree": "50e5bcc3b6dcec268f619e3b8399cc92e323da70",
+          "parentHead": "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e",
+          "exactDelta": "1_PATH_1A",
+          "artifactSha256": "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00"
+        },
+        "pathCorrectionOwnerReview": {
+          "head": "725b02338db4aa53517929c28912ef2092732631",
+          "tree": "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1",
+          "parentHead": "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb",
+          "exactDelta": "1_PATH_1A",
+          "artifactSha256": "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7"
+        },
+        "implementation": {
+          "head": "bd3cdf71055136dce2731d7da3bef9dc89e6f4d7",
+          "tree": "66af8e43a3372d6d871a1a778b4822b8a7307a16",
+          "parentHead": "725b02338db4aa53517929c28912ef2092732631",
+          "parentTree": "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1",
+          "exactDelta": "2_PATHS_0A_2M_0D_0R",
+          "artifactAggregateSha256": "sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4"
+        }
+      }
+    },
+    "failedRescueBaseline": {
+      "const": {
+        "rescueCardSha256": "sha256:131105860c2c94c25c62f17c0b64ff2f0f9f8c481563b9035953d4dca420bddf",
+        "rescueReviewSha256": "sha256:db692b6a074ec60d324ceede4a74136c26a3f53d3eba31c265d7a9f4297ed154",
+        "rescueAuthorityPayloadSha256": "sha256:d88fdaacabeb893b0e321b8c5cea0c87da3dbd08a56a0d79a6d42ae455dd556e",
+        "oldRoot": "/private/tmp/forme-r4-pg-9ZGIOLeX",
+        "oldRootIdentity": "16777231/32871902/0700/501",
+        "oldRootEntries": [
+          "grant.consumed.json",
+          "journal-v3",
+          "owner-approval-receipt",
+          "physical-evidence.json"
+        ],
+        "oldConsumedGrantSha256": "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35",
+        "oldFinalEvidenceSha256": "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c",
+        "oldJournalEntryCount": 34,
+        "oldJournalHeadSha256": "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25",
+        "oldResourceGrantId": "b92ae04555cc3d69a16c06ae53b30976",
+        "oldContainerName": "forme-r4-public-core-local-b92ae04555cc3d69",
+        "oldNetworkName": "forme-r4-public-core-local-net-b92ae04555cc3d69",
+        "oldVolumeName": "forme-r4-public-core-local-vol-b92ae04555cc3d69",
+        "rescueRoot": "/private/tmp/forme-r4-cleanup-rescue-VVZOVTGn",
+        "rescueRootIdentity": "16777231/33273981/0700/501",
+        "rescueRootEntries": [
+          "cleanup-rescue-evidence.json",
+          "owner-approval-receipt",
+          "rescue-journal-v1",
+          "rescue.consumed.json"
+        ],
+        "rescueOwnerApprovalReceiptSha256": "sha256:21744a1ab338128f912f046159ef4ebdf74b197088bfa4973ff8d6a597e9475d",
+        "rescueConsumedGrantSha256": "sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654",
+        "rescueFinalEvidenceSha256": "sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979",
+        "rescueJournalEntryCount": 6,
+        "rescueJournalHeadSha256": "sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491",
+        "rescueStatus": "FAILED",
+        "rescueCode": "local_postgres_docker_call_failed",
+        "rescueCleanupStatus": "BLOCKED",
+        "targetPostgresObserved": false,
+        "targetCatalogObserved": false,
+        "resourceAbsenceProven": false,
+        "rootsMutatedByConstruction": false
+      }
+    },
+    "workset": {
+      "const": {
+        "implementationPathCount": 2,
+        "evidencePathCount": 3,
+        "statusPathCount": 10,
+        "totalPathCount": 15,
+        "addedPathCount": 4,
+        "modifiedPathCount": 11,
+        "totalCommitCount": 3,
+        "implementationPaths": [
+          "scripts/r4-public-core-local-postgres.mjs",
+          "test/r4/public-core-local-postgres.test.ts"
+        ],
+        "evidencePaths": [
+          "docs/evidence/r4-public-core-local-postgres-body-free-docker-inspect-diagnostic.json",
+          "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-artifact-index.json",
+          "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-evidence.schema.json"
+        ],
+        "statusPaths": [
+          "README.md",
+          "docs/CONTROL.md",
+          "docs/DECISIONS.md",
+          "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+          "docs/PRODUCT.md",
+          "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+          "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+          "docs/README.md",
+          "docs/ROADMAP.md",
+          "docs/VALIDATION.md"
+        ]
+      }
+    },
+    "diagnosticContract": {
+      "const": {
+        "futureDiagnosticCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1.md",
+        "futureDiagnosticReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1.md",
+        "futureCardAndReviewAreAddOnly": true,
+        "diagnosticAuthorityVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-authority.v1",
+        "diagnosticGrantVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
+        "diagnosticReceiptVersion": "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-receipt.v1",
+        "maximumPrepareCount": 1,
+        "maximumConsumeCount": 1,
+        "maximumLifecycleCount": 1,
+        "dockerCallCeilings": {
+          "version": 1,
+          "image.inspect": 0,
+          "image.pull": 0,
+          "container.inspect": 1,
+          "container.create": 0,
+          "container.start": 0,
+          "container.stop": 0,
+          "container.rm": 0,
+          "network.inspect": 0,
+          "network.create": 0,
+          "network.rm": 0,
+          "volume.inspect": 0,
+          "volume.create": 0,
+          "volume.rm": 0
+        },
+        "spawnOutcomes": [
+          "COMPLETED",
+          "TIMED_OUT",
+          "SIGNALED",
+          "SPAWN_ERROR",
+          "UNKNOWN"
+        ],
+        "diagnosticClassifications": [
+          "MATCHED_EXISTING_MISSING",
+          "FOUND_JSON",
+          "UNCLASSIFIED_NONZERO",
+          "AMBIGUOUS_TRANSPORT",
+          "CONTRACT_INVALID"
+        ],
+        "ownershipClassifications": [
+          "NOT_APPLICABLE",
+          "OWNED",
+          "FOREIGN",
+          "UNLABELLED",
+          "MALFORMED"
+        ],
+        "oneUseNoRetryWriteAheadConstructed": true,
+        "rawOutputBodiesPersisted": false,
+        "rawOutputBuffersZeroed": true,
+        "arbitraryLabelsPersisted": false,
+        "crashRecoveryReplaysDockerCalls": false,
+        "diagnosticAuthorizesCleanup": false,
+        "diagnosticAuthorizesPhysicalGreen": false,
+        "committedDiagnosticTopologyVerified": true,
+        "zeroRealPortTestsPassed": true
+      }
+    },
+    "validation": {
+      "const": {
+        "testLanes": [
+          {
+            "laneId": "local_postgres_runner_fake_deny_network",
+            "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-local-postgres.test.ts",
+            "total": 160,
+            "passed": 160,
+            "failed": 0
+          },
+          {
+            "laneId": "focused_public_core_non_runner_deny_network",
+            "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-pg-executor.test.ts test/r4/public-core-postgres-application-store.test.ts",
+            "total": 85,
+            "passed": 85,
+            "failed": 0
+          },
+          {
+            "laneId": "public_core_deny_network",
+            "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-*.test.ts",
+            "total": 410,
+            "passed": 410,
+            "failed": 0
+          },
+          {
+            "laneId": "r4_offline_regression",
+            "command": "npm run test:r4:offline",
+            "total": 732,
+            "passed": 732,
+            "failed": 0
+          },
+          {
+            "laneId": "gate_b_core_successor_candidate_regression",
+            "command": "npm run test:r4:gate-b-core",
+            "total": 145,
+            "passed": 145,
+            "failed": 0
+          },
+          {
+            "laneId": "spine_regression",
+            "command": "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts",
+            "total": 45,
+            "passed": 45,
+            "failed": 0
+          }
+        ],
+        "checkLanes": [
+          "node --check scripts/r4-public-core-local-postgres.mjs",
+          "npm run typecheck",
+          "npm --workspace @forme/room run check:no-ai",
+          "npm run r4:docs:audit",
+          "git diff HEAD^ HEAD --check"
+        ],
+        "committedBytesOnly": true,
+        "allPassed": true
+      }
+    },
+    "effectAudit": {
+      "const": {
+        "constructionPaths": 15,
+        "constructionCommits": 3,
+        "dependencyChanges": 0,
+        "lockChanges": 0,
+        "sqlChanges": 0,
+        "externalNetworkCalls": 0,
+        "oldForensicRootMutations": 0,
+        "rescueForensicRootMutations": 0,
+        "pendingDiagnosticGrants": 0,
+        "consumedDiagnosticGrants": 0,
+        "diagnosticLifecycles": 0,
+        "cleanupLifecycles": 0,
+        "dockerCliCalls": 0,
+        "dockerSocketResolutions": 0,
+        "dockerDaemonCalls": 0,
+        "ociCalls": 0,
+        "postgresProcesses": 0,
+        "postgresConnections": 0,
+        "databaseIdentities": 0,
+        "sqlApplyRuns": 0,
+        "sqlVerifyRuns": 0,
+        "sqlRollbackRuns": 0,
+        "domainStatementRuns": 0,
+        "productNetworkEffects": 0,
+        "productionDatabaseOrDataEffects": 0,
+        "runtimeActivations": 0,
+        "routeActivations": 0,
+        "vaultEffects": 0,
+        "httpsEffects": 0,
+        "trafficActivations": 0,
+        "realRoomProjectionCuratorGuestBytes": 0,
+        "providerCalls": 0,
+        "modelCalls": 0,
+        "emailCalls": 0,
+        "deployments": 0,
+        "publications": 0,
+        "admissions": 0,
+        "gateCActivations": 0,
+        "pushes": 0,
+        "pullRequests": 0,
+        "merges": 0,
+        "releases": 0,
+        "spendUsd": 0
+      }
+    },
+    "documentationScope": {
+      "const": {
+        "legacyR4DocsAuditPassed": true,
+        "operationalCurrentStatusSurfacesCurrent": false,
+        "wholeRepositoryDocumentationCurrentClaimed": false,
+        "statusFreezeRequired": true
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifactIndexSha256",
+        "evidenceSchemaSha256",
+        "implementationArtifactAggregateSha256",
+        "runnerSha256",
+        "runnerByteCount",
+        "runnerTestSha256",
+        "runnerTestByteCount"
+      ],
+      "properties": {
+        "artifactIndexSha256": {
+          "const": "sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8"
+        },
+        "evidenceSchemaSha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "implementationArtifactAggregateSha256": {
+          "const": "sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4"
+        },
+        "runnerSha256": {
+          "const": "sha256:32e0a5d9f325d08a0691efe6145a6f494e3bcac880790e12c2fa1474ee5ecb5e"
+        },
+        "runnerByteCount": {
+          "const": 590390
+        },
+        "runnerTestSha256": {
+          "const": "sha256:9739145a2b872194c02be9d9a0b4c7b148e3f2935c3db6cd408ded7d1ebeed46"
+        },
+        "runnerTestByteCount": {
+          "const": 162132
+        }
+      }
+    },
+    "audits": {
+      "const": {
+        "committedKf": {
+          "status": "PASS",
+          "blockerCount": 0,
+          "importantCount": 0,
+          "summaryText": "Kf committed-byte audit: PASS; HEAD bd3cdf71055136dce2731d7da3bef9dc89e6f4d7; tree 66af8e43a3372d6d871a1a778b4822b8a7307a16; parent 725b02338db4aa53517929c28912ef2092732631; exact delta 2M/0A/0D/0R; runner 590390 bytes sha256:32e0a5d9f325d08a0691efe6145a6f494e3bcac880790e12c2fa1474ee5ecb5e; test 162132 bytes sha256:9739145a2b872194c02be9d9a0b4c7b148e3f2935c3db6cd408ded7d1ebeed46; G2f sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4; validation 160/85/410/732/145/45 and five checks PASS; effects Docker/socket/OCI/PostgreSQL/SQL/network/cleanup/production/GateC=0; 0 Blocker/0 Important.",
+          "summarySha256": "sha256:3614d5fc8d023c343c6c60b8be5a21569177f1c86be5007cc3feb122788e9edd"
+        },
+        "candidateLf": {
+          "status": "PASS",
+          "blockerCount": 0,
+          "importantCount": 0,
+          "latestByteOnly": true,
+          "committed": false,
+          "selfHashExcluded": true
+        },
+        "committedLf": "PLANNED_NOT_RUN_AT_LF",
+        "candidateMf": "PLANNED_NOT_RUN_AT_LF",
+        "committedMf": "PLANNED_NOT_RUN_AT_LF"
+      }
+    },
+    "readiness": {
+      "const": {
+        "bodyFreeDiagnosticMembraneConstructed": true,
+        "bodyFreeGrantSchemaConstructed": true,
+        "bodyFreeJournalConstructed": true,
+        "bodyFreeReceiptConstructed": true,
+        "bodyFreeFingerprintingConstructed": true,
+        "diagnosticGrantPrepared": false,
+        "diagnosticGrantConsumed": false,
+        "dockerDiagnosticExecuted": false,
+        "cleanupExecutedAfterDiagnostic": false,
+        "resourceAbsenceProven": false,
+        "physicalExecutedAfterConstruction": false,
+        "targetPostgresObservedAfterConstruction": false,
+        "targetCatalogObservedAfterConstruction": false,
+        "physicalGreen": false,
+        "productRuntimeEffects": false,
+        "trafficReady": false,
+        "gateCReady": false,
+        "issue67Done": false,
+        "r4Done": false
+      }
+    },
+    "stop": {
+      "const": {
+        "implementationEvidence": "LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN",
+        "nextRequired": "STATUS_FREEZE_REQUIRED",
+        "dockerDiagnostic": "DOCKER_DIAGNOSTIC_NOT_REQUESTED",
+        "cleanup": "CLEANUP_NOT_REQUESTED",
+        "physicalExecution": "PHYSICAL_EXECUTION_NOT_REQUESTED",
+        "production": "PRODUCTION_NOT_REQUESTED",
+        "gateC": "GATE_C_NOT_REQUESTED"
+      }
+    }
+  }
+}
