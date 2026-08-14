@@ -19,8 +19,16 @@ import {
   parseLocalPostgresRunnerArguments,
   prepareLocalPostgresPendingGrantV3,
   prepareLocalPostgresCleanupRescueGrant,
+  prepareBodyFreeDockerInspectDiagnosticGrant,
   runApprovedLocalPostgresPhysical,
   runApprovedLocalPostgresCleanupRescue,
+  runApprovedBodyFreeDockerInspectDiagnostic,
+  runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan,
+  runLocalPostgresBodyFreeDiagnosticFakePlan,
+  runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan,
+  runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan,
+  runLocalPostgresBodyFreeDiagnosticPrepareFakePlan,
+  runLocalPostgresBodyFreeDiagnosticReceiptValidationFakePlan,
   runLocalPostgresCleanupRescueAuthorityFakePlan,
   runLocalPostgresCleanupRescueBindingFakePlan,
   runLocalPostgresCleanupRescueFakePlan,
@@ -34,6 +42,7 @@ import {
   runLocalPostgresReadinessFakePlan,
   runLocalPostgresReceiptValidationFakePlan,
   validateLocalPostgresGrant,
+  validateBodyFreeDiagnosticGrant,
 // The approved runner is an executable .mjs artifact; its runtime exports are
 // contract-tested here without adding an out-of-workset declaration file.
 // @ts-expect-error -- intentionally no ambient declaration for the CLI artifact.
@@ -802,20 +811,20 @@ test("fresh execution authority uses only versioned add-only paths after the top
   assert.ok(source.includes("executionReviewHead}:${FRESH_EXECUTION_REVIEW_PATH}"));
 });
 
-test("future physical engine is fully constructed but ordinary test entry remains fake-only", async () => {
+test("authorized effect engines are constructed while ordinary tests remain fake-only", async () => {
   const source = await readFile(path.resolve("scripts/r4-public-core-local-postgres.mjs"), "utf8");
   assert.equal(source.includes("local_postgres_physical_engine_not_frozen"), false);
   assert.match(source, /if \(parsed\.mode === "fake"\)/u);
   assert.match(source, /consumeLocalPostgresGrant/u);
   assert.match(source, /performNormalPhysicalRun/u);
   assert.match(source, /cleanupOwnedDocker/u);
-  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 2,
-    "general physical and separately authorized cleanup-rescue each own one closed Docker port");
+  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 3,
+    "general physical, cleanup-rescue, and body-free diagnostic each own one closed Docker port");
   const hardlinkSites = source.match(/fs\.linkSync\([^\n]+/gu) ?? [];
   const hardlinkKinds = hardlinkSites.map((site) => (
     site.includes("receipt-link") ? "fake_receipt_hardlink_mutation" : site.includes("pending, consumed") ? "grant_consume" : "unknown"
   ));
-  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 2);
+  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 3);
   assert.equal(hardlinkKinds.filter((kind) => kind === "fake_receipt_hardlink_mutation").length, 1);
   assert.equal(hardlinkKinds.includes("unknown"), false);
   assert.equal(source.includes("coordinator.active.json"), false);
@@ -2947,4 +2956,267 @@ test("cleanup rescue CLI is versioned, path-closed, and does not widen ordinary 
   ]) assert.throws(() => parseLocalPostgresRunnerArguments(argv), LocalPostgresRunnerError);
   assert.equal(typeof prepareLocalPostgresCleanupRescueGrant, "function");
   assert.equal(typeof runApprovedLocalPostgresCleanupRescue, "function");
+});
+
+test("body-free diagnostic authority and grant contracts reject every hostile binding family", () => {
+  const authorityGreen = runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan();
+  assert.equal(authorityGreen.accepted, true);
+  assert.equal(authorityGreen.physicalEffects, 0);
+  for (const mutation of [
+    "duplicate_marker", "prefixed_marker", "top_extra", "authority", "lineage", "artifacts",
+    "blocked", "failed_rescue", "host", "ceiling",
+  ]) {
+    const result = runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of [
+    "top_extra", "missing_key", "schema", "grant_id", "owner_receipt", "authority", "lineage",
+    "artifacts", "blocked", "failed_rescue", "host", "ceiling", "docker_ceiling", "local_only",
+    "production", "expired", "future_created",
+  ]) {
+    const result = runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(typeof validateBodyFreeDiagnosticGrant, "function");
+});
+
+test("body-free diagnostic construction and authority-path correction close four exact committed steps", () => {
+  const rescueReview = "ac1dfea899f2edff6ec59dd401d8aec6256a485f";
+  const constructionAddendum = "931dbb7278bb06bf219ae7553b4317db415de0e7";
+  const constructionReview = "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e";
+  const pathCorrection = "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb";
+  const pathCorrectionReview = "725b02338db4aa53517929c28912ef2092732631";
+  assertHistoricalAuthorityStep({
+    head: constructionAddendum, parent: rescueReview,
+    tree: "22db25181c284d980f4e5d9cbf5cd5e3d7c6a725", status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-ADDENDUM.md",
+    artifactSha256: "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13",
+  });
+  assertHistoricalAuthorityStep({
+    head: constructionReview, parent: constructionAddendum,
+    tree: "1541a8dbd4d425b7faeebd66fa417a035f10f5b3", status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW.md",
+    artifactSha256: "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579",
+  });
+  assertHistoricalAuthorityStep({
+    head: pathCorrection, parent: constructionReview,
+    tree: "50e5bcc3b6dcec268f619e3b8399cc92e323da70", status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-AUTHORITY-PATH-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00",
+  });
+  assertHistoricalAuthorityStep({
+    head: pathCorrectionReview, parent: pathCorrection,
+    tree: "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1", status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-AUTHORITY-PATH-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7",
+  });
+});
+
+test("body-free diagnostic future effect authority uses only the corrected V1 paths", async () => {
+  const source = await readFile(path.resolve("scripts/r4-public-core-local-postgres.mjs"), "utf8");
+  assert.match(source, /const BODY_FREE_DIAGNOSTIC_CARD_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1\.md"/u);
+  assert.match(source, /const BODY_FREE_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1\.md"/u);
+  assert.match(source, /new Map\(\[\[BODY_FREE_DIAGNOSTIC_CARD_PATH, "A"\]\]\)/u);
+  assert.match(source, /new Map\(\[\[BODY_FREE_DIAGNOSTIC_EXECUTION_REVIEW_PATH, "A"\]\]\)/u);
+  assert.equal(source.includes('new Map([[BODY_FREE_DIAGNOSTIC_REVIEW_PATH, "M"]])'), false);
+});
+
+test("body-free diagnostic prepare is zero-effect, exact-root, and forensic-drift closed", () => {
+  const green = runLocalPostgresBodyFreeDiagnosticPrepareFakePlan();
+  assert.equal(green.status, "GREEN");
+  assert.deepEqual(green.rootEntries, ["diagnostic.pending.json", "owner-approval-receipt"]);
+  assert.equal(green.grant.schemaVersion,
+    "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1");
+  assert.equal(green.grant.localOnly, true);
+  assert.equal(green.grant.productionEffectsAllowed, false);
+  assert.equal(green.grant.ceilings.maximumDiagnosticLifecycles, 1);
+  assert.deepEqual(JSON.parse(JSON.stringify(green.grant.ceilings.dockerCalls)), {
+    version: 1, "image.inspect": 0, "image.pull": 0,
+    "container.inspect": 1, "container.create": 0, "container.start": 0,
+    "container.stop": 0, "container.rm": 0,
+    "network.inspect": 0, "network.create": 0, "network.rm": 0,
+    "volume.inspect": 0, "volume.create": 0, "volume.rm": 0,
+  });
+  assert.equal(green.physicalEffects, 0);
+  for (const mutation of ["blocked", "failed_rescue", "expired", "root_extra"]) {
+    const result = runLocalPostgresBodyFreeDiagnosticPrepareFakePlan({ mutation });
+    assert.equal(result.status, "FAILED", mutation);
+    assert.equal(result.grant, null, mutation);
+    assert.equal(result.rootEntries.includes("diagnostic.pending.json"), false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(typeof prepareBodyFreeDockerInspectDiagnosticGrant, "function");
+});
+
+test("body-free diagnostic captures exact body-free fingerprints without cleanup authority", async () => {
+  const expected = {
+    missing: ["COMPLETED", "MATCHED_EXISTING_MISSING", "NOT_APPLICABLE"],
+    found_owned: ["COMPLETED", "FOUND_JSON", "OWNED"],
+    found_foreign: ["COMPLETED", "FOUND_JSON", "FOREIGN"],
+    found_unlabelled: ["COMPLETED", "FOUND_JSON", "UNLABELLED"],
+    found_malformed: ["COMPLETED", "FOUND_JSON", "MALFORMED"],
+    unclassified_nonzero: ["COMPLETED", "UNCLASSIFIED_NONZERO", "NOT_APPLICABLE"],
+    invalid_utf8: ["COMPLETED", "UNCLASSIFIED_NONZERO", "NOT_APPLICABLE"],
+    multiline: ["COMPLETED", "UNCLASSIFIED_NONZERO", "NOT_APPLICABLE"],
+    timeout: ["TIMED_OUT", "AMBIGUOUS_TRANSPORT", "NOT_APPLICABLE"],
+    signal: ["SIGNALED", "AMBIGUOUS_TRANSPORT", "NOT_APPLICABLE"],
+    spawn_error: ["SPAWN_ERROR", "AMBIGUOUS_TRANSPORT", "NOT_APPLICABLE"],
+    truncated: ["SPAWN_ERROR", "AMBIGUOUS_TRANSPORT", "NOT_APPLICABLE"],
+    unknown: ["UNKNOWN", "AMBIGUOUS_TRANSPORT", "NOT_APPLICABLE"],
+    contract_invalid: ["COMPLETED", "CONTRACT_INVALID", "MALFORMED"],
+  } as const;
+  for (const [scenario, tuple] of Object.entries(expected)) {
+    const result = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario });
+    assert.equal(result.status, "OBSERVED", scenario);
+    assert.deepEqual(result.calls.map((call: { kind: string }) => call.kind), ["version", "container.inspect"], scenario);
+    assert.deepEqual(result.calls[0].argv, ["version", "--format", "{{json .}}"], scenario);
+    assert.deepEqual(result.calls[1].argv, [
+      "container", "inspect", "--format", "{{json .}}",
+      "forme-r4-public-core-local-b92ae04555cc3d69",
+    ], scenario);
+    const observation = result.receipt.observations[1];
+    assert.deepEqual([
+      observation.spawnOutcome, observation.diagnosticClassification, observation.ownershipClassification,
+    ], tuple, scenario);
+    assert.match(observation.stdoutSha256, /^sha256:[0-9a-f]{64}$/u, scenario);
+    assert.match(observation.stderrSha256, /^sha256:[0-9a-f]{64}$/u, scenario);
+    assert.equal(Object.hasOwn(observation, "stdout"), false, scenario);
+    assert.equal(Object.hasOwn(observation, "stderr"), false, scenario);
+    const receiptBytes = JSON.stringify(result.receipt);
+    for (const forbiddenBody of ["partial-output", "partial-error", "first\\nsecond", "unexpected\\n"]) {
+      assert.equal(receiptBytes.includes(forbiddenBody), false, `${scenario}:${forbiddenBody}`);
+    }
+    assert.equal(result.rawBuffersCleared, true, scenario);
+    assert.equal(result.openEffectCount, 0, scenario);
+    assert.deepEqual(result.rootEntries, [
+      "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+      "docker-inspect-diagnostic-journal-v1", "owner-approval-receipt",
+    ], scenario);
+    assert.equal(result.receipt.readiness.resourceAbsenceProven, false, scenario);
+    assert.equal(result.receipt.readiness.cleanupRescueGreen, false, scenario);
+    assert.equal(result.receipt.readiness.physicalExecutionPerformed, false, scenario);
+    assert.equal(result.receipt.readiness.gateCReady, false, scenario);
+    assert.equal(result.physicalEffects, 0, scenario);
+    assert.equal(result.socketCalls, 0, scenario);
+    assert.equal(result.postgresConnections, 0, scenario);
+    assert.equal(result.sqlStatements, 0, scenario);
+  }
+});
+
+test("body-free diagnostic fingerprints invalid UTF-8 and line structure without retaining bodies", async () => {
+  const invalid = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "invalid_utf8" });
+  assert.equal(invalid.receipt.observations[1].stdoutUtf8, false);
+  assert.equal(invalid.receipt.observations[1].stdoutBytes, 2);
+  assert.equal(invalid.receipt.observations[1].stdoutLineEndings, "NONE");
+  assert.equal(invalid.receipt.observations[1].stdoutLineCount, 1);
+  const multiline = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "multiline" });
+  assert.equal(multiline.receipt.observations[1].stderrUtf8, true);
+  assert.equal(multiline.receipt.observations[1].stderrLineEndings, "LF");
+  assert.equal(multiline.receipt.observations[1].stderrLineCount, 2);
+  const crlf = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "unclassified_nonzero" });
+  assert.equal(crlf.receipt.observations[1].stderrLineEndings, "CRLF");
+  assert.equal(crlf.receipt.observations[1].stderrLineCount, 2);
+});
+
+test("body-free diagnostic is one-use, write-ahead, crash-closed, and drift-denying", async () => {
+  const duplicate = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "missing", duplicateConsume: true });
+  assert.equal(duplicate.status, "OBSERVED");
+  assert.equal(duplicate.duplicateCode, "local_postgres_body_free_diagnostic_duplicate_consume");
+  assert.equal(duplicate.duplicateAddedCalls, 0);
+  assert.equal(duplicate.journalEntryCount, 9);
+  for (const crashAt of [
+    "grant.consume.link:after", "grant.consume.unlink_pending:after", "grant.consumed:after",
+  ] as const) {
+    const preCallCrash = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "missing", crashAt });
+    assert.equal(preCallCrash.simulatedCrash, true, crashAt);
+    assert.equal(preCallCrash.status, "FAILED", crashAt);
+    assert.equal(preCallCrash.calls.length, 0, crashAt);
+    assert.equal(preCallCrash.journalEntryCount, 2, crashAt);
+    assert.equal(preCallCrash.openEffectCount, 0, crashAt);
+    assert.deepEqual(preCallCrash.rootEntries, [
+      "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+      "docker-inspect-diagnostic-journal-v1", "owner-approval-receipt",
+    ], crashAt);
+  }
+  const crashed = await runLocalPostgresBodyFreeDiagnosticFakePlan({
+    scenario: "missing", crashAt: "container.inspect:after_call_before_completion",
+  });
+  assert.equal(crashed.simulatedCrash, true);
+  assert.equal(crashed.recoveryAddedCalls, 0);
+  assert.equal(crashed.status, "OBSERVED");
+  assert.equal(crashed.receipt.observations[1].spawnOutcome, "UNKNOWN");
+  assert.equal(crashed.receipt.observations[1].diagnosticClassification, "AMBIGUOUS_TRANSPORT");
+  assert.equal(crashed.openEffectCount, 0);
+  for (const input of [
+    { scenario: "missing", clockExpiredAt: "version:before" },
+    { scenario: "missing", hostDriftAt: "version:before" },
+  ] as const) {
+    const result = await runLocalPostgresBodyFreeDiagnosticFakePlan(input);
+    assert.equal(result.status, "FAILED", JSON.stringify(input));
+    assert.equal(result.calls.length, 0, JSON.stringify(input));
+    assert.equal(result.openEffectCount, 0, JSON.stringify(input));
+    assert.equal(result.physicalEffects, 0, JSON.stringify(input));
+  }
+  const forensic = await runLocalPostgresBodyFreeDiagnosticFakePlan({ scenario: "missing", forensicDriftAt: 3 });
+  assert.equal(forensic.status, "FAILED");
+  assert.equal(forensic.calls.length, 1);
+  assert.equal(forensic.receipt.closure.blockedRootUnchanged, true);
+  assert.equal(forensic.receipt.closure.failedRescueRootUnchanged, true);
+});
+
+test("body-free diagnostic receipt and journal hostile mutations never validate", () => {
+  assert.equal(runLocalPostgresBodyFreeDiagnosticReceiptValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of [
+    "top_extra", "nested_extra", "authority", "lineage", "artifacts", "blocked", "failed_rescue",
+    "host", "effects", "observation", "closure", "journal", "readiness", "consumed", "status_code", "accessor",
+  ]) {
+    const result = runLocalPostgresBodyFreeDiagnosticReceiptValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.code, "local_postgres_body_free_diagnostic_receipt_invalid", mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of ["top_extra", "sequence", "previous", "event", "detail", "entry_sha"]) {
+    const result = runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+});
+
+test("body-free diagnostic CLI is versioned, path-closed, and separate from rescue and physical", () => {
+  const diagnosticRoot = "/private/r4-diagnostic";
+  const blockedRoot = "/private/tmp/forme-r4-pg-9ZGIOLeX";
+  const rescueRoot = "/private/tmp/forme-r4-cleanup-rescue-VVZOVTGn";
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "prepare-inspect-diagnostic", "--diagnostic-root", diagnosticRoot, "--blocked-root", blockedRoot,
+    "--rescue-root", rescueRoot, "--diagnostic-review-head", "a".repeat(40),
+    "--owner-approval-receipt", `${diagnosticRoot}/owner-approval-receipt`,
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ]), {
+    mode: "prepare-inspect-diagnostic", diagnosticRoot, blockedRoot, rescueRoot,
+    diagnosticOwnerReviewHead: "a".repeat(40), ownerApprovalReceiptPath: `${diagnosticRoot}/owner-approval-receipt`,
+    createdAt: NOW, expiresAt: "2026-08-11T19:00:00.000Z",
+  });
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "inspect-diagnostic", "--diagnostic-root", diagnosticRoot, "--blocked-root", blockedRoot,
+    "--rescue-root", rescueRoot, "--evidence-out", `${diagnosticRoot}/docker-inspect-diagnostic-evidence.json`,
+  ]), {
+    mode: "inspect-diagnostic", diagnosticRoot, blockedRoot, rescueRoot,
+    evidenceOut: `${diagnosticRoot}/docker-inspect-diagnostic-evidence.json`,
+  });
+  for (const argv of [
+    ["prepare-inspect-diagnostic", "--diagnostic-root", diagnosticRoot, "--blocked-root", "/private/other",
+      "--rescue-root", rescueRoot, "--diagnostic-review-head", "a".repeat(40),
+      "--owner-approval-receipt", `${diagnosticRoot}/owner-approval-receipt`,
+      "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z"],
+    ["inspect-diagnostic", "--diagnostic-root", diagnosticRoot, "--blocked-root", blockedRoot,
+      "--rescue-root", "/private/other", "--evidence-out", `${diagnosticRoot}/docker-inspect-diagnostic-evidence.json`],
+    ["inspect-diagnostic", "--blocked-root", blockedRoot, "--diagnostic-root", diagnosticRoot,
+      "--rescue-root", rescueRoot, "--evidence-out", `${diagnosticRoot}/docker-inspect-diagnostic-evidence.json`],
+  ]) assert.throws(() => parseLocalPostgresRunnerArguments(argv), LocalPostgresRunnerError);
+  assert.equal(typeof prepareBodyFreeDockerInspectDiagnosticGrant, "function");
+  assert.equal(typeof runApprovedBodyFreeDockerInspectDiagnostic, "function");
 });

@@ -110,6 +110,36 @@ const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256 = "sha256:b85d2cd57322e050996
 const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD = "eb38eff55c2360b51df13dceb896680ec4440479";
 const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE = "96abe090ac364a973d1b9bc6edc3e5ea70af4d6e";
 const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256 = "sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4";
+const BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD = "931dbb7278bb06bf219ae7553b4317db415de0e7";
+const BODY_FREE_DIAGNOSTIC_ADDENDUM_TREE = "22db25181c284d980f4e5d9cbf5cd5e3d7c6a725";
+const BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256 = "sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13";
+const BODY_FREE_DIAGNOSTIC_REVIEW_HEAD = "fcb1a5bc20832bdc63d0c7cfd6ff49ed1cf20e9e";
+const BODY_FREE_DIAGNOSTIC_REVIEW_TREE = "1541a8dbd4d425b7faeebd66fa417a035f10f5b3";
+const BODY_FREE_DIAGNOSTIC_REVIEW_SHA256 = "sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD = "0a9c30632d37bcdca82f7d8d92e0d5c6b841f2fb";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_TREE = "50e5bcc3b6dcec268f619e3b8399cc92e323da70";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256 = "sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD = "725b02338db4aa53517929c28912ef2092732631";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE = "e3a4d568a1c9ba9e47c87d01e4b7129687aa13f1";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256 = "sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7";
+const FAILED_RESCUE_CARD_HEAD = "fa0a9bf05b9d9c897013d30ac6b2fdbb980da7c5";
+const FAILED_RESCUE_CARD_TREE = "4bebb6ea518b9b86e0fed75b9b09925cfc013c91";
+const FAILED_RESCUE_CARD_SHA256 = "sha256:131105860c2c94c25c62f17c0b64ff2f0f9f8c481563b9035953d4dca420bddf";
+const FAILED_RESCUE_REVIEW_HEAD = "ac1dfea899f2edff6ec59dd401d8aec6256a485f";
+const FAILED_RESCUE_REVIEW_TREE = "4c93a2bbe68efae13b4caaecfd3f39cdffb9964b";
+const FAILED_RESCUE_REVIEW_SHA256 = "sha256:db692b6a074ec60d324ceede4a74136c26a3f53d3eba31c265d7a9f4297ed154";
+const FAILED_RESCUE_AUTHORITY_PAYLOAD_SHA256 = "sha256:d88fdaacabeb893b0e321b8c5cea0c87da3dbd08a56a0d79a6d42ae455dd556e";
+const FAILED_RESCUE_PRIVATE_ROOT = "/private/tmp/forme-r4-cleanup-rescue-VVZOVTGn";
+const FAILED_RESCUE_PRIVATE_ROOT_IDENTITY = Object.freeze({ dev: "16777231", ino: "33273981", mode: "0700", uid: "501" });
+const FAILED_RESCUE_OWNER_APPROVAL_RECEIPT_SHA256 = "sha256:21744a1ab338128f912f046159ef4ebdf74b197088bfa4973ff8d6a597e9475d";
+const FAILED_RESCUE_OWNER_APPROVAL_RECEIPT_BYTES = 1085;
+const FAILED_RESCUE_CONSUMED_GRANT_SHA256 = "sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654";
+const FAILED_RESCUE_CONSUMED_GRANT_BYTES = 4796;
+const FAILED_RESCUE_GRANT_ID = "c89d8f4e678dcf2778925af338bb1180";
+const FAILED_RESCUE_EVIDENCE_SHA256 = "sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979";
+const FAILED_RESCUE_EVIDENCE_BYTES = 5109;
+const FAILED_RESCUE_JOURNAL_ENTRY_COUNT = 6;
+const FAILED_RESCUE_JOURNAL_HEAD_SHA256 = "sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491";
 const BLOCKED_OWNER_APPROVAL_RECEIPT_SHA256 = "sha256:d16d5482bc5f53ed109d5125fc2747afd786dd51bb35db27a245597811aef10c";
 const BLOCKED_CONSUMED_GRANT_SHA256 = "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35";
 const BLOCKED_FIRST_EVIDENCE_SHA256 = "sha256:3cc212108bf966903fe964a1a73ad468dd506a2c2d473a9e1e916c558cfe02a7";
@@ -239,6 +269,12 @@ const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-PO
 const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-OWNER-REVIEW.md";
 const BLOCKED_CLEANUP_RESCUE_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-CARD.md";
 const BLOCKED_CLEANUP_RESCUE_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-OWNER-REVIEW.md";
+const BODY_FREE_DIAGNOSTIC_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-ADDENDUM.md";
+const BODY_FREE_DIAGNOSTIC_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW.md";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-AUTHORITY-PATH-CORRECTION-ADDENDUM.md";
+const BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-AUTHORITY-PATH-CORRECTION-OWNER-REVIEW.md";
+const BODY_FREE_DIAGNOSTIC_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1.md";
+const BODY_FREE_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1.md";
 const LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS = Object.freeze([
   "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
   "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
@@ -273,6 +309,18 @@ const LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_STATUS_PATHS = Object.freeze([
   "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
   "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-body-free-docker-inspect-diagnostic.json",
+  "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-evidence.schema.json",
+]);
+const LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 
@@ -387,6 +435,78 @@ export const LOCAL_POSTGRES_DOCKER_COMMAND_KINDS = Object.freeze([
   "version", "image.inspect", "image.pull", "container.inspect", "container.create",
   "container.start", "container.stop", "container.rm", "network.inspect", "network.create",
   "network.rm", "volume.inspect", "volume.create", "volume.rm",
+]);
+
+const BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS = Object.freeze({
+  version: 1, "image.inspect": 0, "image.pull": 0,
+  "container.inspect": 1, "container.create": 0, "container.start": 0,
+  "container.stop": 0, "container.rm": 0,
+  "network.inspect": 0, "network.create": 0, "network.rm": 0,
+  "volume.inspect": 0, "volume.create": 0, "volume.rm": 0,
+});
+const BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_AUTHORITY_V1_BEGIN";
+const BODY_FREE_DIAGNOSTIC_AUTHORITY_END = "R4_LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_AUTHORITY_V1_END";
+const BODY_FREE_DIAGNOSTIC_GRANT_KEYS = Object.freeze([
+  "schemaVersion", "diagnosticGrantId", "ownerApprovalReceiptSha256", "authority", "lineage", "artifacts",
+  "blocked", "failedRescue", "host", "ceilings", "localOnly", "productionEffectsAllowed", "createdAt", "expiresAt",
+]);
+const BODY_FREE_DIAGNOSTIC_AUTHORITY_KEYS = Object.freeze([
+  "constructionAddendumSha256", "constructionOwnerReviewSha256", "pathCorrectionAddendumSha256",
+  "pathCorrectionOwnerReviewSha256", "diagnosticCardSha256", "diagnosticOwnerReviewSha256",
+  "diagnosticAuthorityPayloadSha256",
+]);
+const BODY_FREE_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS = Object.freeze(BODY_FREE_DIAGNOSTIC_AUTHORITY_KEYS.slice(0, 4));
+const BODY_FREE_DIAGNOSTIC_LINEAGE_KEYS = Object.freeze([
+  "cleanupRescueOwnerReviewHead", "cleanupRescueOwnerReviewTree",
+  "constructionAddendumHead", "constructionAddendumTree", "constructionOwnerReviewHead", "constructionOwnerReviewTree",
+  "pathCorrectionAddendumHead", "pathCorrectionAddendumTree", "pathCorrectionOwnerReviewHead", "pathCorrectionOwnerReviewTree",
+  "diagnosticImplementationHead", "diagnosticImplementationTree", "diagnosticImplementationArtifactAggregateSha256",
+  "diagnosticEvidenceHead", "diagnosticEvidenceTree", "diagnosticStatusHead", "diagnosticStatusTree",
+  "diagnosticCardHead", "diagnosticCardTree", "diagnosticOwnerReviewHead", "diagnosticOwnerReviewTree",
+]);
+const BODY_FREE_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS = Object.freeze(BODY_FREE_DIAGNOSTIC_LINEAGE_KEYS.slice(0, -4));
+const BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS = Object.freeze([
+  "diagnosticArtifactIndexSha256", "diagnosticEvidenceSchemaSha256", "diagnosticEvidenceSha256",
+  "diagnosticReportSha256", "diagnosticStatusCommittedAuditSummarySha256", "runnerSha256", "runnerTestSha256",
+]);
+const BODY_FREE_DIAGNOSTIC_FAILED_RESCUE_KEYS = Object.freeze([
+  "privateRoot", "rootDev", "rootIno", "rootMode", "rootUid", "rootEntries",
+  "ownerApprovalReceiptSha256", "ownerApprovalReceiptBytes", "consumedGrantSha256", "consumedGrantBytes",
+  "grantId", "finalEvidenceSha256", "finalEvidenceBytes", "journalEntryCount", "journalHeadSha256",
+  "status", "code", "cleanupStatus", "dockerCallCounts", "oldForensicRootUnchanged",
+]);
+const BODY_FREE_DIAGNOSTIC_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerCliIdentitySha256", "socketIdentitySha256",
+  "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const BODY_FREE_DIAGNOSTIC_PAYLOAD_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const BODY_FREE_DIAGNOSTIC_CEILING_KEYS = Object.freeze([
+  "maximumDiagnosticLifecycles", "maximumOutputBytesPerStream", "dockerCalls",
+]);
+const BODY_FREE_DIAGNOSTIC_OBSERVATION_KEYS = Object.freeze([
+  "effectId", "kind", "ordinal", "spawnOutcome", "exitStatus", "signal", "stdoutBytes", "stdoutSha256",
+  "stdoutUtf8", "stdoutEmpty", "stdoutLineEndings", "stdoutLineCount", "stderrBytes", "stderrSha256",
+  "stderrUtf8", "stderrEmpty", "stderrLineEndings", "stderrLineCount", "diagnosticClassification",
+  "ownershipClassification",
+]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_KEYS = Object.freeze([
+  "schemaVersion", "status", "code", "consumedDiagnosticGrantSha256", "authority", "lineage", "artifacts",
+  "blocked", "failedRescue", "hostObservation", "effects", "observations", "closure", "journal", "readiness",
+]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_HOST_KEYS = Object.freeze([
+  "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_EFFECT_KEYS = Object.freeze(["dockerCallCounts"]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_CLOSURE_KEYS = Object.freeze([
+  "diagnosticLocalResidueCount", "blockedRootUnchanged", "failedRescueRootUnchanged", "retainedDiagnosticForensicFiles",
+  "terminalReason",
+]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_JOURNAL_KEYS = Object.freeze(["entryCount", "headSha256"]);
+const BODY_FREE_DIAGNOSTIC_RECEIPT_READINESS_KEYS = Object.freeze([
+  "diagnosticObservationCaptured", "resourceAbsenceProven", "cleanupRescueGreen", "physicalExecutionPerformed",
+  "targetPostgresObserved", "productRuntimeEffects", "trafficReady", "gateCReady",
 ]);
 
 const GRANT_KEYS = Object.freeze(["schemaVersion", "grantId", "ownerApprovalReceiptSha256", "authority", "lineage", "artifacts", "host", "ceilings", "localOnly", "productionEffectsAllowed", "createdAt", "expiresAt"]);
@@ -7868,6 +7988,1719 @@ export async function runLocalPostgresCleanupLifecycleFakePlan(input = Object.fr
   return executePhase1FakeCoordinator(Object.freeze({ cleanupLifecycleCeilingProbe: true }));
 }
 
+function bodyFreeDiagnosticDockerCallCounts() {
+  return Object.freeze(Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [
+    kind, kind === "version" || kind === "container.inspect" ? 1 : 0,
+  ])));
+}
+
+function bodyFreeDiagnosticFailedRescueContract() {
+  return Object.freeze({
+    privateRoot: FAILED_RESCUE_PRIVATE_ROOT,
+    rootDev: FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.dev,
+    rootIno: FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.ino,
+    rootMode: FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.mode,
+    rootUid: FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.uid,
+    rootEntries: Object.freeze([
+      "cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json",
+    ]),
+    ownerApprovalReceiptSha256: FAILED_RESCUE_OWNER_APPROVAL_RECEIPT_SHA256,
+    ownerApprovalReceiptBytes: FAILED_RESCUE_OWNER_APPROVAL_RECEIPT_BYTES,
+    consumedGrantSha256: FAILED_RESCUE_CONSUMED_GRANT_SHA256,
+    consumedGrantBytes: FAILED_RESCUE_CONSUMED_GRANT_BYTES,
+    grantId: FAILED_RESCUE_GRANT_ID,
+    finalEvidenceSha256: FAILED_RESCUE_EVIDENCE_SHA256,
+    finalEvidenceBytes: FAILED_RESCUE_EVIDENCE_BYTES,
+    journalEntryCount: FAILED_RESCUE_JOURNAL_ENTRY_COUNT,
+    journalHeadSha256: FAILED_RESCUE_JOURNAL_HEAD_SHA256,
+    status: "FAILED", code: "local_postgres_docker_call_failed", cleanupStatus: "BLOCKED",
+    dockerCallCounts: bodyFreeDiagnosticDockerCallCounts(), oldForensicRootUnchanged: true,
+  });
+}
+
+function bodyFreeDiagnosticHostContract() {
+  return Object.freeze({
+    dockerCli: DOCKER_CLI, dockerCliSha256: DOCKER_CLI_SHA256,
+    dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1", dockerServerPlatform: IMAGE_PLATFORM,
+  });
+}
+
+function bodyFreeDiagnosticCeilings() {
+  return Object.freeze({
+    maximumDiagnosticLifecycles: 1,
+    maximumOutputBytesPerStream: MAX_DOCKER_OUTPUT_BYTES,
+    dockerCalls: BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS,
+  });
+}
+
+function assertBodyFreeDiagnosticFailedRescueRecord(raw, code = "local_postgres_body_free_diagnostic_authority_invalid") {
+  try {
+    const stable = ownedPlain(raw);
+    exactKeys(stable, BODY_FREE_DIAGNOSTIC_FAILED_RESCUE_KEYS);
+    exactKeys(stable.dockerCallCounts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+    if (canonicalJson(stable) !== canonicalJson(bodyFreeDiagnosticFailedRescueContract())) fail(code);
+    return stable;
+  } catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error) !== null) fail(code);
+    fail(code);
+  }
+}
+
+function validateBodyFreeDiagnosticAuthorityPayloadUnchecked(rawPayload) {
+  const payload = ownedPlain(rawPayload);
+  exactKeys(payload, [
+    "schemaVersion", "authority", "lineage", "artifacts", "blocked", "failedRescue", "host", "ceilings",
+    "localOnly", "productionEffectsAllowed",
+  ]);
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-authority.v1"
+    || payload.localOnly !== true || payload.productionEffectsAllowed !== false) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  exactKeys(payload.authority, BODY_FREE_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS);
+  exactKeys(payload.lineage, BODY_FREE_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS);
+  exactKeys(payload.artifacts, BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(payload.host, BODY_FREE_DIAGNOSTIC_PAYLOAD_HOST_KEYS);
+  exactKeys(payload.ceilings, BODY_FREE_DIAGNOSTIC_CEILING_KEYS);
+  exactKeys(payload.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (payload.authority.constructionAddendumSha256 !== BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256
+    || payload.authority.constructionOwnerReviewSha256 !== BODY_FREE_DIAGNOSTIC_REVIEW_SHA256
+    || payload.authority.pathCorrectionAddendumSha256 !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256
+    || payload.authority.pathCorrectionOwnerReviewSha256 !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256
+    || payload.lineage.cleanupRescueOwnerReviewHead !== FAILED_RESCUE_REVIEW_HEAD
+    || payload.lineage.cleanupRescueOwnerReviewTree !== FAILED_RESCUE_REVIEW_TREE
+    || payload.lineage.constructionAddendumHead !== BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD
+    || payload.lineage.constructionAddendumTree !== BODY_FREE_DIAGNOSTIC_ADDENDUM_TREE
+    || payload.lineage.constructionOwnerReviewHead !== BODY_FREE_DIAGNOSTIC_REVIEW_HEAD
+    || payload.lineage.constructionOwnerReviewTree !== BODY_FREE_DIAGNOSTIC_REVIEW_TREE
+    || payload.lineage.pathCorrectionAddendumHead !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD
+    || payload.lineage.pathCorrectionAddendumTree !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_TREE
+    || payload.lineage.pathCorrectionOwnerReviewHead !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD
+    || payload.lineage.pathCorrectionOwnerReviewTree !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  for (const key of BODY_FREE_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS) {
+    (key.endsWith("Sha256") ? assertSha(payload.lineage[key]) : assertGit(payload.lineage[key]));
+  }
+  for (const key of BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS) assertSha(payload.artifacts[key]);
+  assertCleanupRescueBlockedRecord(payload.blocked, "local_postgres_body_free_diagnostic_authority_invalid");
+  assertBodyFreeDiagnosticFailedRescueRecord(payload.failedRescue);
+  assertFixedRecord(payload.host, bodyFreeDiagnosticHostContract());
+  if (payload.ceilings.maximumDiagnosticLifecycles !== 1
+    || payload.ceilings.maximumOutputBytesPerStream !== MAX_DOCKER_OUTPUT_BYTES) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  for (const [kind, maximum] of Object.entries(BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS)) {
+    if (payload.ceilings.dockerCalls[kind] !== maximum) fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  return payload;
+}
+
+function validateBodyFreeDiagnosticAuthorityPayload(rawPayload) {
+  try { return validateBodyFreeDiagnosticAuthorityPayloadUnchecked(rawPayload); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_body_free_diagnostic_authority_invalid") throw error;
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+}
+
+function parseBodyFreeDiagnosticAuthorityCard(bytes) {
+  let source;
+  try { source = new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { fail("local_postgres_body_free_diagnostic_authority_invalid"); }
+  const lines = source.split("\n");
+  const begins = lines.flatMap((line, index) => line === BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === BODY_FREE_DIAGNOSTIC_AUTHORITY_END ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  const canonical = lines[begins[0] + 1];
+  let parsed;
+  try { parsed = parseStrictJson(canonical); }
+  catch { fail("local_postgres_body_free_diagnostic_authority_invalid"); }
+  if (canonical.length === 0 || canonicalJson(parsed) !== canonical) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  return Object.freeze({
+    payload: validateBodyFreeDiagnosticAuthorityPayload(parsed),
+    sha256: sha256Bytes(Buffer.from(canonical, "utf8")),
+  });
+}
+
+function verifyBodyFreeDiagnosticAuthorityBase() {
+  exactCommitStep(FAILED_RESCUE_CARD_HEAD, FAILED_RESCUE_REVIEW_HEAD, FAILED_RESCUE_REVIEW_TREE,
+    new Map([[BLOCKED_CLEANUP_RESCUE_REVIEW_PATH, "A"]]), "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(FAILED_RESCUE_REVIEW_HEAD, BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD, BODY_FREE_DIAGNOSTIC_ADDENDUM_TREE,
+    new Map([[BODY_FREE_DIAGNOSTIC_ADDENDUM_PATH, "A"]]), "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD, BODY_FREE_DIAGNOSTIC_REVIEW_HEAD, BODY_FREE_DIAGNOSTIC_REVIEW_TREE,
+    new Map([[BODY_FREE_DIAGNOSTIC_REVIEW_PATH, "A"]]), "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(BODY_FREE_DIAGNOSTIC_REVIEW_HEAD, BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD,
+    BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_TREE, new Map([[BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_PATH, "A"]]),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD, BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD,
+    BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE,
+    new Map([[BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_PATH, "A"]]),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  const bindings = [
+    [FAILED_RESCUE_CARD_HEAD, BLOCKED_CLEANUP_RESCUE_CARD_PATH, FAILED_RESCUE_CARD_SHA256],
+    [FAILED_RESCUE_REVIEW_HEAD, BLOCKED_CLEANUP_RESCUE_REVIEW_PATH, FAILED_RESCUE_REVIEW_SHA256],
+    [BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD, BODY_FREE_DIAGNOSTIC_ADDENDUM_PATH, BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256],
+    [BODY_FREE_DIAGNOSTIC_REVIEW_HEAD, BODY_FREE_DIAGNOSTIC_REVIEW_PATH, BODY_FREE_DIAGNOSTIC_REVIEW_SHA256],
+    [BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD, BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_PATH,
+      BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256],
+    [BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD, BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_PATH,
+      BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256],
+  ];
+  for (const [head, artifactPath, expectedSha] of bindings) {
+    if (sha256Bytes(runGit(["show", `${head}:${artifactPath}`], true)) !== expectedSha) {
+      fail("local_postgres_body_free_diagnostic_binding_invalid");
+    }
+  }
+}
+
+function deriveBodyFreeDiagnosticAuthority(diagnosticOwnerReviewHead) {
+  assertGit(diagnosticOwnerReviewHead);
+  verifyBodyFreeDiagnosticAuthorityBase();
+  const diagnosticCardHead = runGit(["rev-parse", `${diagnosticOwnerReviewHead}^`]);
+  const diagnosticStatusHead = runGit(["rev-parse", `${diagnosticCardHead}^`]);
+  const diagnosticEvidenceHead = runGit(["rev-parse", `${diagnosticStatusHead}^`]);
+  const diagnosticImplementationHead = runGit(["rev-parse", `${diagnosticEvidenceHead}^`]);
+  const lineage = Object.freeze({
+    cleanupRescueOwnerReviewHead: FAILED_RESCUE_REVIEW_HEAD,
+    cleanupRescueOwnerReviewTree: FAILED_RESCUE_REVIEW_TREE,
+    constructionAddendumHead: BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD,
+    constructionAddendumTree: BODY_FREE_DIAGNOSTIC_ADDENDUM_TREE,
+    constructionOwnerReviewHead: BODY_FREE_DIAGNOSTIC_REVIEW_HEAD,
+    constructionOwnerReviewTree: BODY_FREE_DIAGNOSTIC_REVIEW_TREE,
+    pathCorrectionAddendumHead: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD,
+    pathCorrectionAddendumTree: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_TREE,
+    pathCorrectionOwnerReviewHead: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD,
+    pathCorrectionOwnerReviewTree: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE,
+    diagnosticImplementationHead,
+    diagnosticImplementationTree: runGit(["rev-parse", `${diagnosticImplementationHead}^{tree}`]),
+    diagnosticImplementationArtifactAggregateSha256: artifactAggregate(
+      diagnosticImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS,
+    ).aggregateSha256,
+    diagnosticEvidenceHead,
+    diagnosticEvidenceTree: runGit(["rev-parse", `${diagnosticEvidenceHead}^{tree}`]),
+    diagnosticStatusHead,
+    diagnosticStatusTree: runGit(["rev-parse", `${diagnosticStatusHead}^{tree}`]),
+    diagnosticCardHead,
+    diagnosticCardTree: runGit(["rev-parse", `${diagnosticCardHead}^{tree}`]),
+    diagnosticOwnerReviewHead,
+    diagnosticOwnerReviewTree: runGit(["rev-parse", `${diagnosticOwnerReviewHead}^{tree}`]),
+  });
+  exactCommitStep(BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD, diagnosticImplementationHead,
+    lineage.diagnosticImplementationTree, statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(diagnosticImplementationHead, diagnosticEvidenceHead, lineage.diagnosticEvidenceTree,
+    statusMap(LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS,
+      new Set(LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS)),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(diagnosticEvidenceHead, diagnosticStatusHead, lineage.diagnosticStatusTree,
+    statusMap(LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_STATUS_PATHS,
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md"])),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(diagnosticStatusHead, diagnosticCardHead, lineage.diagnosticCardTree,
+    new Map([[BODY_FREE_DIAGNOSTIC_CARD_PATH, "A"]]), "local_postgres_body_free_diagnostic_binding_invalid");
+  exactCommitStep(diagnosticCardHead, diagnosticOwnerReviewHead, lineage.diagnosticOwnerReviewTree,
+    new Map([[BODY_FREE_DIAGNOSTIC_EXECUTION_REVIEW_PATH, "A"]]),
+    "local_postgres_body_free_diagnostic_binding_invalid");
+  const cardBytes = runGit(["show", `${diagnosticCardHead}:${BODY_FREE_DIAGNOSTIC_CARD_PATH}`], true);
+  const reviewBytes = runGit(["show", `${diagnosticOwnerReviewHead}:${BODY_FREE_DIAGNOSTIC_EXECUTION_REVIEW_PATH}`], true);
+  const parsed = parseBodyFreeDiagnosticAuthorityCard(cardBytes);
+  if (canonicalJson(parsed.payload.lineage)
+      !== canonicalJson(selectKeys(lineage, BODY_FREE_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS))) {
+    fail("local_postgres_body_free_diagnostic_authority_invalid");
+  }
+  const implementation = artifactAggregate(diagnosticImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
+  const expectedArtifacts = Object.freeze({
+    diagnosticArtifactIndexSha256: sha256Bytes(runGit([
+      "show", `${diagnosticEvidenceHead}:${LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS[1]}`,
+    ], true)),
+    diagnosticEvidenceSchemaSha256: sha256Bytes(runGit([
+      "show", `${diagnosticEvidenceHead}:${LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS[2]}`,
+    ], true)),
+    diagnosticEvidenceSha256: sha256Bytes(runGit([
+      "show", `${diagnosticEvidenceHead}:${LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_EVIDENCE_PATHS[0]}`,
+    ], true)),
+    diagnosticReportSha256: sha256Bytes(runGit([
+      "show", `${diagnosticStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md`,
+    ], true)),
+    diagnosticStatusCommittedAuditSummarySha256: parsed.payload.artifacts.diagnosticStatusCommittedAuditSummarySha256,
+    runnerSha256: implementation.records[0].sha256,
+    runnerTestSha256: implementation.records[1].sha256,
+  });
+  if (implementation.aggregateSha256 !== lineage.diagnosticImplementationArtifactAggregateSha256
+    || canonicalJson(parsed.payload.artifacts) !== canonicalJson(expectedArtifacts)) {
+    fail("local_postgres_body_free_diagnostic_binding_invalid");
+  }
+  return Object.freeze({
+    authority: Object.freeze({
+      constructionAddendumSha256: BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256,
+      constructionOwnerReviewSha256: BODY_FREE_DIAGNOSTIC_REVIEW_SHA256,
+      pathCorrectionAddendumSha256: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256,
+      pathCorrectionOwnerReviewSha256: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256,
+      diagnosticCardSha256: sha256Bytes(cardBytes), diagnosticOwnerReviewSha256: sha256Bytes(reviewBytes),
+      diagnosticAuthorityPayloadSha256: parsed.sha256,
+    }),
+    lineage, artifacts: expectedArtifacts, blocked: cleanupRescueBlockedContract(),
+    failedRescue: bodyFreeDiagnosticFailedRescueContract(), host: bodyFreeDiagnosticHostContract(),
+    ceilings: bodyFreeDiagnosticCeilings(),
+  });
+}
+
+function validateBodyFreeDiagnosticGrantUnchecked(rawGrant, now = new Date(), options = Object.freeze({})) {
+  const stableOptions = ownedPlain(options);
+  exactKeys(stableOptions, stableOptions.allowExpired === undefined ? [] : ["allowExpired"]);
+  if (stableOptions.allowExpired !== undefined && stableOptions.allowExpired !== true) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  const grant = ownedPlain(rawGrant);
+  exactKeys(grant, BODY_FREE_DIAGNOSTIC_GRANT_KEYS);
+  if (grant.schemaVersion !== "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1"
+    || typeof grant.diagnosticGrantId !== "string" || !GRANT_ID.test(grant.diagnosticGrantId)
+    || grant.localOnly !== true || grant.productionEffectsAllowed !== false) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  exactKeys(grant.authority, BODY_FREE_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(grant.lineage, BODY_FREE_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(grant.artifacts, BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(grant.host, BODY_FREE_DIAGNOSTIC_HOST_KEYS);
+  exactKeys(grant.ceilings, BODY_FREE_DIAGNOSTIC_CEILING_KEYS);
+  exactKeys(grant.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  assertSha(grant.ownerApprovalReceiptSha256);
+  for (const key of BODY_FREE_DIAGNOSTIC_AUTHORITY_KEYS) assertSha(grant.authority[key]);
+  for (const key of BODY_FREE_DIAGNOSTIC_LINEAGE_KEYS) {
+    (key.endsWith("Sha256") ? assertSha(grant.lineage[key]) : assertGit(grant.lineage[key]));
+  }
+  for (const key of BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS) assertSha(grant.artifacts[key]);
+  assertCleanupRescueBlockedRecord(grant.blocked, "local_postgres_body_free_diagnostic_grant_invalid");
+  assertBodyFreeDiagnosticFailedRescueRecord(grant.failedRescue, "local_postgres_body_free_diagnostic_grant_invalid");
+  assertSha(grant.host.dockerCliSha256); assertSha(grant.host.dockerCliIdentitySha256); assertSha(grant.host.socketIdentitySha256);
+  if (grant.authority.constructionAddendumSha256 !== BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256
+    || grant.authority.constructionOwnerReviewSha256 !== BODY_FREE_DIAGNOSTIC_REVIEW_SHA256
+    || grant.authority.pathCorrectionAddendumSha256 !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256
+    || grant.authority.pathCorrectionOwnerReviewSha256 !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256
+    || grant.lineage.cleanupRescueOwnerReviewHead !== FAILED_RESCUE_REVIEW_HEAD
+    || grant.lineage.cleanupRescueOwnerReviewTree !== FAILED_RESCUE_REVIEW_TREE
+    || grant.lineage.pathCorrectionOwnerReviewHead !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD
+    || grant.lineage.pathCorrectionOwnerReviewTree !== BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  assertFixedRecord(selectKeys(grant.host, BODY_FREE_DIAGNOSTIC_PAYLOAD_HOST_KEYS), bodyFreeDiagnosticHostContract());
+  if (grant.ceilings.maximumDiagnosticLifecycles !== 1
+    || grant.ceilings.maximumOutputBytesPerStream !== MAX_DOCKER_OUTPUT_BYTES) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  for (const [kind, maximum] of Object.entries(BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS)) {
+    if (grant.ceilings.dockerCalls[kind] !== maximum) fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  const createdAt = instant(grant.createdAt);
+  const expiresAt = instant(grant.expiresAt);
+  const observedAt = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(observedAt) || expiresAt <= createdAt || expiresAt - createdAt > MAX_GRANT_LIFETIME_MS
+    || (stableOptions.allowExpired !== true && (observedAt < createdAt - 60_000 || observedAt >= expiresAt))) {
+    fail("local_postgres_body_free_diagnostic_grant_expired");
+  }
+  return grant;
+}
+
+export function validateBodyFreeDiagnosticGrant(rawGrant, now = new Date()) {
+  try { return validateBodyFreeDiagnosticGrantUnchecked(rawGrant, now); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_body_free_diagnostic_grant_expired") throw error;
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+}
+
+function assertBodyFreeDiagnosticGrantMatchesDerived(stable, derived) {
+  for (const key of ["authority", "lineage", "artifacts", "blocked", "failedRescue", "ceilings"]) {
+    if (canonicalJson(stable[key]) !== canonicalJson(derived[key])) {
+      fail("local_postgres_body_free_diagnostic_binding_invalid");
+    }
+  }
+  if (canonicalJson(selectKeys(stable.host, BODY_FREE_DIAGNOSTIC_PAYLOAD_HOST_KEYS))
+      !== canonicalJson(derived.host)) fail("local_postgres_body_free_diagnostic_binding_invalid");
+}
+
+function verifyBodyFreeDiagnosticCommittedBindings(grant, observedAt = new Date(), options = Object.freeze({})) {
+  const stableOptions = ownedPlain(options);
+  exactKeys(stableOptions, stableOptions.allowExpired === undefined ? [] : ["allowExpired"]);
+  const stable = stableOptions.allowExpired === true
+    ? validateBodyFreeDiagnosticGrantUnchecked(grant, observedAt, { allowExpired: true })
+    : validateBodyFreeDiagnosticGrant(grant, observedAt);
+  const derived = deriveBodyFreeDiagnosticAuthority(stable.lineage.diagnosticOwnerReviewHead);
+  assertBodyFreeDiagnosticGrantMatchesDerived(stable, derived);
+  if (runGit(["rev-parse", "HEAD^{commit}"]) !== stable.lineage.diagnosticOwnerReviewHead
+    || runGit(["rev-parse", "HEAD^{tree}"]) !== stable.lineage.diagnosticOwnerReviewTree
+    || runGit(["diff", "--cached", "--quiet", "--exit-code"]) !== ""
+    || runGit(["status", "--porcelain=v1", "--untracked-files=no"]) !== ""
+    || sha256StableOwnedFile(fileURLToPath(import.meta.url)) !== stable.artifacts.runnerSha256
+    || sha256StableOwnedFile(path.join(ROOT, "test/r4/public-core-local-postgres.test.ts")) !== stable.artifacts.runnerTestSha256) {
+    fail("local_postgres_body_free_diagnostic_worktree_drift");
+  }
+  for (const artifactPath of LOCAL_POSTGRES_STAGE_A_PATHS) {
+    if (LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS.includes(artifactPath)) continue;
+    const committed = runGit(["show", `${stable.lineage.diagnosticOwnerReviewHead}:${artifactPath}`], true);
+    if (sha256StableOwnedFile(path.join(ROOT, artifactPath)) !== sha256Bytes(committed)) {
+      fail("local_postgres_body_free_diagnostic_worktree_drift");
+    }
+  }
+  for (const artifactPath of LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS) {
+    const committed = runGit(["show", `${stable.lineage.diagnosticOwnerReviewHead}:${artifactPath}`], true);
+    if (sha256StableOwnedFile(path.join(ROOT, artifactPath)) !== sha256Bytes(committed)) {
+      fail("local_postgres_body_free_diagnostic_worktree_drift");
+    }
+  }
+  const boundPaths = [...new Set([
+    "package-lock.json", ...LOCAL_POSTGRES_STAGE_A_PATHS, ...LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS,
+    ...LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS, ...Object.values(LOCAL_POSTGRES_SQL_PATHS),
+  ])].sort(binaryCompare);
+  const flags = runGit(["ls-files", "-v", "--", ...boundPaths]).split("\n").filter(Boolean);
+  if (flags.length !== boundPaths.length || flags.some((line) => !/^H /u.test(line))) {
+    fail("local_postgres_body_free_diagnostic_worktree_drift");
+  }
+  return stable;
+}
+
+function inspectFailedCleanupRescueRoot(rescueRoot = FAILED_RESCUE_PRIVATE_ROOT) {
+  if (rescueRoot !== FAILED_RESCUE_PRIVATE_ROOT) fail("local_postgres_body_free_diagnostic_forensic_drift");
+  let resolved;
+  try { resolved = fs.realpathSync(rescueRoot); }
+  catch { fail("local_postgres_body_free_diagnostic_forensic_drift"); }
+  if (resolved !== rescueRoot) fail("local_postgres_body_free_diagnostic_forensic_drift");
+  const rootStat = assertPrivateDirectory(rescueRoot);
+  const rootIdentity = privateDirectoryIdentity(rescueRoot, rootStat);
+  if (rootStat.dev.toString(10) !== FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.dev
+    || rootStat.ino.toString(10) !== FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.ino
+    || (Number(rootStat.mode) & 0o777).toString(8).padStart(4, "0") !== FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.mode
+    || rootStat.uid.toString(10) !== FAILED_RESCUE_PRIVATE_ROOT_IDENTITY.uid) {
+    fail("local_postgres_body_free_diagnostic_forensic_drift");
+  }
+  const names = fs.readdirSync(rescueRoot).sort(binaryCompare);
+  const expected = [...bodyFreeDiagnosticFailedRescueContract().rootEntries].sort(binaryCompare);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_body_free_diagnostic_forensic_drift");
+  }
+  const ownerPath = privatePath(rescueRoot, "owner-approval-receipt");
+  const ownerStat = fs.lstatSync(ownerPath, { bigint: true });
+  const ownerSha = readOwnerApprovalReceipt(rescueRoot, ownerPath, false);
+  const consumedPath = privatePath(rescueRoot, "rescue.consumed.json");
+  const consumedStat = fs.lstatSync(consumedPath, { bigint: true });
+  const consumed = readPrivateJsonRecord(consumedPath);
+  const evidencePath = privatePath(rescueRoot, "cleanup-rescue-evidence.json");
+  const evidenceStat = fs.lstatSync(evidencePath, { bigint: true });
+  const evidence = readPrivateJsonRecord(evidencePath);
+  const journal = readCleanupRescueJournal(rescueRoot);
+  const contract = bodyFreeDiagnosticFailedRescueContract();
+  if (ownerStat.size !== BigInt(contract.ownerApprovalReceiptBytes) || ownerSha !== contract.ownerApprovalReceiptSha256
+    || consumedStat.size !== BigInt(contract.consumedGrantBytes) || consumed.sha256 !== contract.consumedGrantSha256
+    || evidenceStat.size !== BigInt(contract.finalEvidenceBytes) || evidence.sha256 !== contract.finalEvidenceSha256
+    || consumed.value.rescueGrantId !== contract.grantId
+    || consumed.value.authority?.rescueAuthorityPayloadSha256 !== FAILED_RESCUE_AUTHORITY_PAYLOAD_SHA256
+    || evidence.value.status !== contract.status || evidence.value.code !== contract.code
+    || evidence.value.cleanupStatus !== contract.cleanupStatus
+    || evidence.value.cleanup?.oldForensicRootUnchanged !== true
+    || canonicalJson(evidence.value.effects?.dockerCallCounts) !== canonicalJson(contract.dockerCallCounts)
+    || journal.sequence !== contract.journalEntryCount || journal.lastSha256 !== contract.journalHeadSha256
+    || canonicalJson(journal.dockerCallCounts) !== canonicalJson(contract.dockerCallCounts)
+    || journal.openEffects.size !== 0) {
+    fail("local_postgres_body_free_diagnostic_forensic_drift");
+  }
+  assertPrivateDirectoryIdentity(rootIdentity);
+  return Object.freeze({
+    ...contract,
+    snapshotSha256: sha256Bytes(Buffer.from(canonicalJson(contract), "utf8")),
+    rootIdentity,
+  });
+}
+
+function prepareBodyFreeDiagnosticGrantWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, [
+    "diagnosticRoot", "blockedRoot", "rescueRoot", "diagnosticOwnerReviewHead",
+    "ownerApprovalReceiptPath", "createdAt", "expiresAt",
+  ]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || stable.blockedRoot !== BLOCKED_PRIVATE_ROOT || stable.rescueRoot !== FAILED_RESCUE_PRIVATE_ROOT
+    || typeof stable.ownerApprovalReceiptPath !== "string" || !path.isAbsolute(stable.ownerApprovalReceiptPath)) {
+    fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  }
+  let diagnosticRoot;
+  try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_body_free_diagnostic_private_root_invalid"); }
+  if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(diagnosticRoot);
+  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(diagnosticRoot, stable.ownerApprovalReceiptPath);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const blockedSnapshot = adapters.inspectBlockedForensicRoot(stable.blockedRoot);
+  const failedRescueSnapshot = adapters.inspectFailedRescueRoot(stable.rescueRoot);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const derived = adapters.deriveAuthority(stable.diagnosticOwnerReviewHead);
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  const observedAt = adapters.now();
+  const diagnosticGrantId = adapters.randomBytes(16).toString("hex");
+  const grant = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
+    diagnosticGrantId, ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    blocked: derived.blocked, failedRescue: derived.failedRescue,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+  });
+  validateBodyFreeDiagnosticGrant(grant, observedAt);
+  adapters.verifyBindings(grant, observedAt);
+  if (canonicalJson(selectKeys(blockedSnapshot, Object.keys(derived.blocked))) !== canonicalJson(derived.blocked)
+    || canonicalJson(selectKeys(failedRescueSnapshot, Object.keys(derived.failedRescue))) !== canonicalJson(derived.failedRescue)) {
+    fail("local_postgres_body_free_diagnostic_forensic_drift");
+  }
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const pending = privatePath(diagnosticRoot, "diagnostic.pending.json");
+  let pendingIdentity = null;
+  try {
+    const installed = installPendingGrant(diagnosticRoot, pending, grant, adapters.pendingInstallHooks);
+    pendingIdentity = installed.identity;
+    assertPrivateDirectoryIdentity(rootIdentity);
+    const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+    if (names.length !== 2 || names[0] !== "diagnostic.pending.json" || names[1] !== "owner-approval-receipt") {
+      fail("local_postgres_body_free_diagnostic_private_root_invalid");
+    }
+    return Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-prepare-receipt.v1",
+      pendingDiagnosticGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
+      diagnosticAuthorityPayloadSha256: grant.authority.diagnosticAuthorityPayloadSha256,
+      blockedSnapshotSha256: blockedSnapshot.snapshotSha256,
+      failedRescueSnapshotSha256: failedRescueSnapshot.snapshotSha256,
+      observedAt: observedAt.toISOString(),
+    });
+  } catch (error) {
+    if (pendingIdentity !== null) {
+      try {
+        const current = fs.lstatSync(pending, { bigint: true });
+        if (current.dev !== pendingIdentity.dev || current.ino !== pendingIdentity.ino || current.nlink !== 1n) {
+          fail("local_postgres_body_free_diagnostic_private_file_invalid");
+        }
+        fs.unlinkSync(pending);
+        fsyncPrivateDirectory(diagnosticRoot);
+        exactFileAbsence(pending);
+      } catch (cleanupError) {
+        if (authenticLocalPostgresRunnerErrorDetails(cleanupError) !== null) throw cleanupError;
+        fail("local_postgres_body_free_diagnostic_private_file_invalid");
+      }
+    }
+    throw error;
+  }
+}
+
+export function prepareBodyFreeDockerInspectDiagnosticGrant(input) {
+  return prepareBodyFreeDiagnosticGrantWithAdapters(input, Object.freeze({
+    inspectBlockedForensicRoot, inspectFailedRescueRoot: inspectFailedCleanupRescueRoot,
+    deriveAuthority: deriveBodyFreeDiagnosticAuthority, observeDockerCliIdentity,
+    resolveSocketIdentity: resolveDockerSocketIdentity, randomBytes: crypto.randomBytes,
+    now: () => new Date(), verifyBindings: verifyBodyFreeDiagnosticCommittedBindings,
+  }));
+}
+
+const BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY = "docker-inspect-diagnostic-journal-v1";
+const BODY_FREE_DIAGNOSTIC_SIMULATED_CRASH = Symbol("body-free-diagnostic-simulated-crash");
+const BODY_FREE_DIAGNOSTIC_JOURNAL_EVENTS = new Set([
+  "grant.consumed", "diagnostic.lifecycle_started", "docker.attempt", "docker.completed",
+  "observation.recorded", "diagnostic.recovered", "closure.proven",
+]);
+const BODY_FREE_DIAGNOSTIC_SPAWN_OUTCOMES = new Set([
+  "COMPLETED", "TIMED_OUT", "SIGNALED", "SPAWN_ERROR", "UNKNOWN",
+]);
+const BODY_FREE_DIAGNOSTIC_CLASSIFICATIONS = new Set([
+  "MATCHED_EXISTING_MISSING", "FOUND_JSON", "UNCLASSIFIED_NONZERO", "AMBIGUOUS_TRANSPORT", "CONTRACT_INVALID",
+]);
+const BODY_FREE_DIAGNOSTIC_OWNERSHIP_CLASSIFICATIONS = new Set([
+  "NOT_APPLICABLE", "OWNED", "FOREIGN", "UNLABELLED", "MALFORMED",
+]);
+const BODY_FREE_DIAGNOSTIC_LINE_ENDINGS = new Set(["NONE", "LF", "CRLF", "MIXED_OR_OTHER"]);
+const BODY_FREE_DIAGNOSTIC_SIGNALS = new Set([
+  "NONE", "UNKNOWN", "SIGABRT", "SIGALRM", "SIGHUP", "SIGINT", "SIGKILL", "SIGPIPE", "SIGQUIT",
+  "SIGTERM", "SIGUSR1", "SIGUSR2",
+]);
+
+function diagnosticRootProjection(snapshot, contract) {
+  return selectKeys(snapshot, Object.keys(contract));
+}
+
+function bodyFreeDiagnosticJournalDirectory(diagnosticRoot, create = false) {
+  const journalPath = privatePath(diagnosticRoot, BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY);
+  if (create && !fs.existsSync(journalPath)) {
+    try { fs.mkdirSync(journalPath, { mode: 0o700 }); fsyncPrivateDirectory(diagnosticRoot); }
+    catch { fail("local_postgres_body_free_diagnostic_journal_invalid"); }
+  }
+  assertPrivateDirectory(journalPath);
+  return journalPath;
+}
+
+function emptyBodyFreeDiagnosticJournalState() {
+  return {
+    sequence: 0, lastSha256: JOURNAL_GENESIS, consumedGrantSha256: null, lifecycleCount: 0,
+    dockerCallCounts: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    openEffects: new Map(), completedEffects: new Map(), observations: new Map(), closure: null,
+  };
+}
+
+function validateBodyFreeDiagnosticObservation(raw) {
+  const observation = ownedPlain(raw);
+  exactKeys(observation, BODY_FREE_DIAGNOSTIC_OBSERVATION_KEYS);
+  if (typeof observation.effectId !== "string" || observation.effectId.length < 1
+    || !["version", "container.inspect"].includes(observation.kind)
+    || !Number.isSafeInteger(observation.ordinal) || observation.ordinal !== 1
+    || !BODY_FREE_DIAGNOSTIC_SPAWN_OUTCOMES.has(observation.spawnOutcome)
+    || !(Number.isSafeInteger(observation.exitStatus) || observation.exitStatus === "NOT_AVAILABLE")
+    || !BODY_FREE_DIAGNOSTIC_SIGNALS.has(observation.signal)
+    || !BODY_FREE_DIAGNOSTIC_CLASSIFICATIONS.has(observation.diagnosticClassification)
+    || !BODY_FREE_DIAGNOSTIC_OWNERSHIP_CLASSIFICATIONS.has(observation.ownershipClassification)) {
+    fail("local_postgres_body_free_diagnostic_observation_invalid");
+  }
+  for (const prefix of ["stdout", "stderr"]) {
+    if (!Number.isSafeInteger(observation[`${prefix}Bytes`]) || observation[`${prefix}Bytes`] < 0
+      || observation[`${prefix}Bytes`] > MAX_DOCKER_OUTPUT_BYTES
+      || !SHA256.test(observation[`${prefix}Sha256`])
+      || typeof observation[`${prefix}Utf8`] !== "boolean"
+      || typeof observation[`${prefix}Empty`] !== "boolean"
+      || !BODY_FREE_DIAGNOSTIC_LINE_ENDINGS.has(observation[`${prefix}LineEndings`])
+      || !Number.isSafeInteger(observation[`${prefix}LineCount`]) || observation[`${prefix}LineCount`] < 0
+      || observation[`${prefix}Empty`] !== (observation[`${prefix}Bytes`] === 0)
+      || (observation[`${prefix}Empty`] && observation[`${prefix}LineCount`] !== 0)) {
+      fail("local_postgres_body_free_diagnostic_observation_invalid");
+    }
+  }
+  if (observation.spawnOutcome === "COMPLETED") {
+    if (!Number.isSafeInteger(observation.exitStatus) || observation.signal !== "NONE") {
+      fail("local_postgres_body_free_diagnostic_observation_invalid");
+    }
+  } else if (observation.exitStatus !== "NOT_AVAILABLE") {
+    fail("local_postgres_body_free_diagnostic_observation_invalid");
+  }
+  if (observation.diagnosticClassification === "MATCHED_EXISTING_MISSING"
+    && (observation.kind !== "container.inspect" || observation.exitStatus !== 1
+      || !observation.stdoutEmpty || observation.ownershipClassification !== "NOT_APPLICABLE")) {
+    fail("local_postgres_body_free_diagnostic_observation_invalid");
+  }
+  if (observation.diagnosticClassification === "FOUND_JSON" && observation.exitStatus !== 0) {
+    fail("local_postgres_body_free_diagnostic_observation_invalid");
+  }
+  if (observation.spawnOutcome !== "COMPLETED"
+    && observation.diagnosticClassification !== "AMBIGUOUS_TRANSPORT") {
+    fail("local_postgres_body_free_diagnostic_observation_invalid");
+  }
+  return observation;
+}
+
+function readBodyFreeDiagnosticJournal(diagnosticRoot, create = false) {
+  const state = emptyBodyFreeDiagnosticJournalState();
+  const journalPath = bodyFreeDiagnosticJournalDirectory(diagnosticRoot, create);
+  const names = fs.readdirSync(journalPath).sort(binaryCompare);
+  if (names.length > 12
+    || names.some((name, index) => name !== `entry-${String(index + 1).padStart(6, "0")}.json`)) {
+    fail("local_postgres_body_free_diagnostic_journal_invalid");
+  }
+  for (let index = 0; index < names.length; index += 1) {
+    const record = ownedPlain(readPrivateJsonRecord(path.join(journalPath, names[index])).value);
+    exactKeys(record, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    if (record.schemaVersion !== "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-journal-entry.v1"
+      || record.sequence !== index + 1 || record.previousSha256 !== state.lastSha256
+      || typeof record.event !== "string" || !BODY_FREE_DIAGNOSTIC_JOURNAL_EVENTS.has(record.event)) {
+      fail("local_postgres_body_free_diagnostic_journal_invalid");
+    }
+    const expectedSha = sha256Bytes(Buffer.from(canonicalJson({
+      schemaVersion: record.schemaVersion, sequence: record.sequence, previousSha256: record.previousSha256,
+      event: record.event, detail: record.detail,
+    }), "utf8"));
+    if (record.entrySha256 !== expectedSha) fail("local_postgres_body_free_diagnostic_journal_invalid");
+    if (record.event === "grant.consumed") {
+      exactKeys(record.detail, ["consumedDiagnosticGrantSha256"]);
+      if (state.sequence !== 0 || state.consumedGrantSha256 !== null) fail("local_postgres_body_free_diagnostic_journal_invalid");
+      state.consumedGrantSha256 = assertSha(record.detail.consumedDiagnosticGrantSha256);
+    } else if (record.event === "diagnostic.lifecycle_started") {
+      exactKeys(record.detail, ["ordinal"]);
+      if (state.consumedGrantSha256 === null || record.detail.ordinal !== 1 || state.lifecycleCount !== 0) {
+        fail("local_postgres_body_free_diagnostic_journal_invalid");
+      }
+      state.lifecycleCount = 1;
+    } else if (record.event === "docker.attempt") {
+      exactKeys(record.detail, ["effectId", "kind", "ordinal"]);
+      const { effectId, kind, ordinal } = record.detail;
+      if (state.lifecycleCount !== 1 || !["version", "container.inspect"].includes(kind)
+        || typeof effectId !== "string" || state.openEffects.has(effectId) || ordinal !== 1
+        || state.dockerCallCounts[kind] >= BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+        fail("local_postgres_body_free_diagnostic_journal_invalid");
+      }
+      state.dockerCallCounts[kind] += 1;
+      state.openEffects.set(effectId, Object.freeze({ effectId, kind, ordinal }));
+    } else if (record.event === "docker.completed") {
+      exactKeys(record.detail, ["effectId", "kind", "ordinal"]);
+      const open = state.openEffects.get(record.detail.effectId);
+      if (open === undefined || canonicalJson(open) !== canonicalJson(record.detail)) {
+        fail("local_postgres_body_free_diagnostic_journal_invalid");
+      }
+      state.openEffects.delete(record.detail.effectId);
+      state.completedEffects.set(record.detail.effectId, open);
+    } else if (record.event === "observation.recorded") {
+      const observation = validateBodyFreeDiagnosticObservation(record.detail);
+      const completed = state.completedEffects.get(observation.effectId);
+      if (completed === undefined || completed.kind !== observation.kind || completed.ordinal !== observation.ordinal
+        || state.observations.has(observation.effectId)) fail("local_postgres_body_free_diagnostic_journal_invalid");
+      state.observations.set(observation.effectId, observation);
+    } else if (record.event === "diagnostic.recovered") {
+      const observation = validateBodyFreeDiagnosticObservation(record.detail);
+      const open = state.openEffects.get(observation.effectId);
+      if (open === undefined || open.kind !== observation.kind || open.ordinal !== observation.ordinal
+        || observation.spawnOutcome !== "UNKNOWN"
+        || observation.diagnosticClassification !== "AMBIGUOUS_TRANSPORT"
+        || state.observations.has(observation.effectId)) fail("local_postgres_body_free_diagnostic_journal_invalid");
+      state.openEffects.delete(observation.effectId);
+      state.observations.set(observation.effectId, observation);
+    } else if (record.event === "closure.proven") {
+      exactKeys(record.detail, [
+        "diagnosticLocalResidueCount", "blockedRootUnchanged", "failedRescueRootUnchanged",
+      ]);
+      if (state.openEffects.size !== 0 || state.closure !== null
+        || record.detail.diagnosticLocalResidueCount !== 0
+        || typeof record.detail.blockedRootUnchanged !== "boolean"
+        || typeof record.detail.failedRescueRootUnchanged !== "boolean") {
+        fail("local_postgres_body_free_diagnostic_journal_invalid");
+      }
+      state.closure = Object.freeze(record.detail);
+    }
+    state.sequence = record.sequence;
+    state.lastSha256 = record.entrySha256;
+  }
+  if (state.sequence > 0 && state.consumedGrantSha256 === null) {
+    fail("local_postgres_body_free_diagnostic_journal_invalid");
+  }
+  return state;
+}
+
+function appendBodyFreeDiagnosticJournal(diagnosticRoot, event, detail) {
+  if (!BODY_FREE_DIAGNOSTIC_JOURNAL_EVENTS.has(event)) fail("local_postgres_body_free_diagnostic_journal_invalid");
+  const state = readBodyFreeDiagnosticJournal(diagnosticRoot, true);
+  const sequence = state.sequence + 1;
+  if (sequence > 12) fail("local_postgres_body_free_diagnostic_journal_invalid");
+  const preimage = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-journal-entry.v1",
+    sequence, previousSha256: state.lastSha256, event, detail: ownedPlain(detail),
+  });
+  const entry = Object.freeze({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8")) });
+  const journalPath = bodyFreeDiagnosticJournalDirectory(diagnosticRoot, true);
+  writePrivateJson(path.join(journalPath, `entry-${String(sequence).padStart(6, "0")}.json`), entry);
+  const refreshed = readBodyFreeDiagnosticJournal(diagnosticRoot);
+  if (refreshed.sequence !== sequence || refreshed.lastSha256 !== entry.entrySha256) {
+    fail("local_postgres_body_free_diagnostic_journal_invalid");
+  }
+  return refreshed;
+}
+
+function reserveBodyFreeDiagnosticCall(diagnosticRoot, kind) {
+  const state = readBodyFreeDiagnosticJournal(diagnosticRoot);
+  if (!["version", "container.inspect"].includes(kind) || state.lifecycleCount !== 1 || state.closure !== null
+    || state.dockerCallCounts[kind] >= BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+    fail("local_postgres_body_free_diagnostic_effect_ceiling_exceeded");
+  }
+  const detail = Object.freeze({
+    effectId: `docker-${String(state.sequence + 1).padStart(6, "0")}-${kind}`,
+    kind, ordinal: state.dockerCallCounts[kind] + 1,
+  });
+  appendBodyFreeDiagnosticJournal(diagnosticRoot, "docker.attempt", detail);
+  return detail;
+}
+
+function lineShape(bytes) {
+  if (bytes.length === 0) return Object.freeze({ lineEndings: "NONE", lineCount: 0 });
+  let lf = 0;
+  let crlf = 0;
+  let bareCr = 0;
+  let bareLf = 0;
+  for (let index = 0; index < bytes.length; index += 1) {
+    if (bytes[index] === 0x0d) {
+      if (bytes[index + 1] === 0x0a) { crlf += 1; index += 1; lf += 1; }
+      else bareCr += 1;
+    } else if (bytes[index] === 0x0a) { lf += 1; bareLf += 1; }
+  }
+  const lineEndings = lf === 0 && bareCr === 0 ? "NONE"
+    : bareCr === 0 && crlf > 0 && bareLf === 0 ? "CRLF"
+      : bareCr === 0 && crlf === 0 && bareLf > 0 ? "LF" : "MIXED_OR_OTHER";
+  return Object.freeze({ lineEndings, lineCount: lf + (bytes[bytes.length - 1] === 0x0a ? 0 : 1) });
+}
+
+function streamFingerprint(bytes) {
+  const shape = lineShape(bytes);
+  let utf8 = true;
+  try { new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { utf8 = false; }
+  return Object.freeze({
+    bytes: bytes.length, sha256: sha256Bytes(bytes), utf8, empty: bytes.length === 0,
+    lineEndings: shape.lineEndings, lineCount: shape.lineCount,
+  });
+}
+
+function diagnosticSignal(value) {
+  return typeof value === "string" && BODY_FREE_DIAGNOSTIC_SIGNALS.has(value) ? value : value === null ? "NONE" : "UNKNOWN";
+}
+
+function recoveredDiagnosticObservation(effect) {
+  const emptySha = sha256Bytes(Buffer.alloc(0));
+  return Object.freeze({
+    effectId: effect.effectId, kind: effect.kind, ordinal: effect.ordinal,
+    spawnOutcome: "UNKNOWN", exitStatus: "NOT_AVAILABLE", signal: "UNKNOWN",
+    stdoutBytes: 0, stdoutSha256: emptySha, stdoutUtf8: true, stdoutEmpty: true,
+    stdoutLineEndings: "NONE", stdoutLineCount: 0,
+    stderrBytes: 0, stderrSha256: emptySha, stderrUtf8: true, stderrEmpty: true,
+    stderrLineEndings: "NONE", stderrLineCount: 0,
+    diagnosticClassification: "AMBIGUOUS_TRANSPORT", ownershipClassification: "NOT_APPLICABLE",
+  });
+}
+
+function fingerprintDockerDiagnosticResult(kind, effect, raw, plan) {
+  const rawStdout = Buffer.isBuffer(raw?.stdout) ? raw.stdout : null;
+  const rawStderr = Buffer.isBuffer(raw?.stderr) ? raw.stderr : null;
+  const stdout = rawStdout === null ? Buffer.alloc(0) : Buffer.from(rawStdout);
+  const stderr = rawStderr === null ? Buffer.alloc(0) : Buffer.from(rawStderr);
+  try {
+    if (stdout.length > MAX_DOCKER_OUTPUT_BYTES || stderr.length > MAX_DOCKER_OUTPUT_BYTES) {
+      fail("local_postgres_body_free_diagnostic_output_invalid");
+    }
+    const out = streamFingerprint(stdout);
+    const err = streamFingerprint(stderr);
+    let spawnOutcome = "COMPLETED";
+    if (raw?.error?.code === "ETIMEDOUT") spawnOutcome = "TIMED_OUT";
+    else if (raw?.signal !== null && raw?.signal !== undefined) spawnOutcome = "SIGNALED";
+    else if (raw?.error !== undefined && raw?.error !== null) spawnOutcome = "SPAWN_ERROR";
+    else if (!Number.isSafeInteger(raw?.status) || !Buffer.isBuffer(raw?.stdout) || !Buffer.isBuffer(raw?.stderr)) {
+      spawnOutcome = "UNKNOWN";
+    }
+    const exitStatus = spawnOutcome === "COMPLETED" ? raw.status : "NOT_AVAILABLE";
+    const signal = spawnOutcome === "COMPLETED" ? "NONE" : diagnosticSignal(raw?.signal);
+    let diagnosticClassification = "AMBIGUOUS_TRANSPORT";
+    let ownershipClassification = "NOT_APPLICABLE";
+    let stdoutText = null;
+    let stderrText = null;
+    if (out.utf8) stdoutText = new TextDecoder("utf-8", { fatal: true }).decode(stdout);
+    if (err.utf8) stderrText = new TextDecoder("utf-8", { fatal: true }).decode(stderr);
+    if (spawnOutcome === "COMPLETED") {
+      if (exitStatus === 0 && stdoutText !== null) {
+        try {
+          if (kind === "version") {
+            validateDockerVersion(Object.freeze({ stdout: stdoutText.trim() }));
+          } else {
+            const parsed = parseStrictJson(stdoutText.trim());
+            const labels = parsed?.Config?.Labels;
+            if (labels === null || typeof labels !== "object" || Array.isArray(labels)) ownershipClassification = "MALFORMED";
+            else if (!Object.hasOwn(labels, plan.resources.labelKey)) ownershipClassification = "UNLABELLED";
+            else ownershipClassification = labels[plan.resources.labelKey] === plan.resources.labelValue ? "OWNED" : "FOREIGN";
+          }
+          diagnosticClassification = "FOUND_JSON";
+        } catch { diagnosticClassification = "CONTRACT_INVALID"; ownershipClassification = kind === "version" ? "NOT_APPLICABLE" : "MALFORMED"; }
+      } else if (kind === "container.inspect" && exitStatus === 1 && out.empty && stderrText !== null
+        && isExactDockerMissingDiagnostic(kind, stderrText, plan)) {
+        diagnosticClassification = "MATCHED_EXISTING_MISSING";
+      } else if (Number.isSafeInteger(exitStatus) && exitStatus !== 0) diagnosticClassification = "UNCLASSIFIED_NONZERO";
+      else diagnosticClassification = "CONTRACT_INVALID";
+    }
+    return validateBodyFreeDiagnosticObservation(Object.freeze({
+      effectId: effect.effectId, kind, ordinal: effect.ordinal, spawnOutcome, exitStatus, signal,
+      stdoutBytes: out.bytes, stdoutSha256: out.sha256, stdoutUtf8: out.utf8, stdoutEmpty: out.empty,
+      stdoutLineEndings: out.lineEndings, stdoutLineCount: out.lineCount,
+      stderrBytes: err.bytes, stderrSha256: err.sha256, stderrUtf8: err.utf8, stderrEmpty: err.empty,
+      stderrLineEndings: err.lineEndings, stderrLineCount: err.lineCount,
+      diagnosticClassification, ownershipClassification,
+    }));
+  } finally {
+    stdout.fill(0); stderr.fill(0);
+    rawStdout?.fill(0); rawStderr?.fill(0);
+  }
+}
+
+function consumeBodyFreeDiagnosticGrant(diagnosticRoot, now, verifyBindings, crashCheckpoint = undefined) {
+  const pending = privatePath(diagnosticRoot, "diagnostic.pending.json");
+  const consumed = privatePath(diagnosticRoot, "diagnostic.consumed.json");
+  const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+  if (names.length !== 2 || names[0] !== "diagnostic.pending.json" || names[1] !== "owner-approval-receipt") {
+    fail(fs.existsSync(consumed) ? "local_postgres_body_free_diagnostic_duplicate_consume"
+      : "local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  const record = readPrivateJsonRecord(pending);
+  const grant = validateBodyFreeDiagnosticGrant(record.value, now);
+  verifyBindings(grant, now);
+  if (readOwnerApprovalReceipt(diagnosticRoot, privatePath(diagnosticRoot, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  try { fs.linkSync(pending, consumed); fsyncPrivateDirectory(diagnosticRoot); }
+  catch { fail("local_postgres_body_free_diagnostic_duplicate_consume"); }
+  crashCheckpoint?.("grant.consume.link:after");
+  const pendingStat = fs.lstatSync(pending, { bigint: true });
+  const consumedStat = fs.lstatSync(consumed, { bigint: true });
+  if (pendingStat.dev !== consumedStat.dev || pendingStat.ino !== consumedStat.ino
+    || pendingStat.nlink !== 2n || consumedStat.nlink !== 2n) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  fs.unlinkSync(pending); fsyncPrivateDirectory(diagnosticRoot);
+  crashCheckpoint?.("grant.consume.unlink_pending:after");
+  const stable = readPrivateJsonRecord(consumed);
+  if (stable.sha256 !== record.sha256) fail("local_postgres_body_free_diagnostic_grant_invalid");
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: stable.sha256 });
+}
+
+function recoverBodyFreeDiagnosticGrant(diagnosticRoot, now, verifyBindings) {
+  exactFileAbsence(privatePath(diagnosticRoot, "docker-inspect-diagnostic-evidence.json"));
+  const allowed = new Set([
+    "diagnostic.consumed.json", "diagnostic.pending.json", BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-config", "docker-home", "owner-approval-receipt",
+  ]);
+  const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+  if (!names.includes("diagnostic.consumed.json") || !names.includes("owner-approval-receipt")
+    || names.some((name) => !allowed.has(name))) {
+    fail("local_postgres_body_free_diagnostic_grant_invalid");
+  }
+  const consumedPath = privatePath(diagnosticRoot, "diagnostic.consumed.json");
+  const pendingPath = privatePath(diagnosticRoot, "diagnostic.pending.json");
+  const pendingPresent = names.includes("diagnostic.pending.json");
+  const record = readPrivateJsonRecord(consumedPath, pendingPresent ? 2n : 1n);
+  const grant = validateBodyFreeDiagnosticGrantUnchecked(record.value, now, { allowExpired: true });
+  verifyBindings(grant, now, { allowExpired: true });
+  if (readOwnerApprovalReceipt(diagnosticRoot, privatePath(diagnosticRoot, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  if (pendingPresent) {
+    const pendingRecord = readPrivateJsonRecord(pendingPath, 2n);
+    const pendingStat = fs.lstatSync(pendingPath, { bigint: true });
+    const consumedStat = fs.lstatSync(consumedPath, { bigint: true });
+    if (pendingRecord.sha256 !== record.sha256 || pendingStat.dev !== consumedStat.dev
+      || pendingStat.ino !== consumedStat.ino || pendingStat.nlink !== 2n || consumedStat.nlink !== 2n) {
+      fail("local_postgres_body_free_diagnostic_grant_invalid");
+    }
+    fs.unlinkSync(pendingPath);
+    fsyncPrivateDirectory(diagnosticRoot);
+    exactFileAbsence(pendingPath);
+  }
+  if (!fs.existsSync(privatePath(diagnosticRoot, BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY))) {
+    appendBodyFreeDiagnosticJournal(diagnosticRoot, "grant.consumed", {
+      consumedDiagnosticGrantSha256: record.sha256,
+    });
+  }
+  const journal = readBodyFreeDiagnosticJournal(diagnosticRoot);
+  if (journal.consumedGrantSha256 !== record.sha256 || ![0, 1].includes(journal.lifecycleCount)
+    || journal.closure !== null) {
+    fail("local_postgres_body_free_diagnostic_journal_invalid");
+  }
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: record.sha256, journal });
+}
+
+function revalidateBodyFreeDiagnosticBoundary(context, edge) {
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+  const now = context.adapters.now(edge);
+  const nowMs = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(nowMs) || nowMs < instant(context.grant.createdAt) - 60_000
+    || nowMs >= instant(context.grant.expiresAt)) fail("local_postgres_body_free_diagnostic_grant_expired");
+  if (readOwnerApprovalReceipt(context.diagnosticRoot,
+    privatePath(context.diagnosticRoot, "owner-approval-receipt"), false) !== context.grant.ownerApprovalReceiptSha256) {
+    fail("local_postgres_owner_approval_receipt_drift");
+  }
+  const names = fs.readdirSync(context.diagnosticRoot).sort(binaryCompare);
+  const expected = [
+    "diagnostic.consumed.json", BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-config", "docker-home", "owner-approval-receipt",
+  ].sort(binaryCompare);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  }
+  context.adapters.revalidateHost(context.grant, context.socket, edge);
+  const blocked = context.adapters.inspectBlockedForensicRoot(context.blockedRoot);
+  const failedRescue = context.adapters.inspectFailedRescueRoot(context.rescueRoot);
+  if (canonicalJson(diagnosticRootProjection(blocked, context.grant.blocked)) !== canonicalJson(context.grant.blocked)
+    || canonicalJson(diagnosticRootProjection(failedRescue, context.grant.failedRescue))
+      !== canonicalJson(context.grant.failedRescue)) fail("local_postgres_body_free_diagnostic_forensic_drift");
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+}
+
+function callBodyFreeDiagnosticDocker(context, kind) {
+  if (!["version", "container.inspect"].includes(kind)) fail("local_postgres_docker_command_denied");
+  const argv = approvedDockerArgv(context.plan, kind, planStep(context.plan, kind).argv);
+  revalidateBodyFreeDiagnosticBoundary(context, `${kind}:before`);
+  const reservation = reserveBodyFreeDiagnosticCall(context.diagnosticRoot, kind);
+  const raw = context.adapters.callDocker(kind, argv, context);
+  context.adapters.crashCheckpoint?.(`${kind}:after_call_before_completion`);
+  revalidateBodyFreeDiagnosticBoundary(context, `${kind}:after`);
+  appendBodyFreeDiagnosticJournal(context.diagnosticRoot, "docker.completed", reservation);
+  const observation = fingerprintDockerDiagnosticResult(kind, reservation, raw, context.plan);
+  appendBodyFreeDiagnosticJournal(context.diagnosticRoot, "observation.recorded", observation);
+  return observation;
+}
+
+function diagnosticHostObservation(grant, journal) {
+  const version = [...journal.observations.values()].find((item) => item.kind === "version");
+  const matched = version?.diagnosticClassification === "FOUND_JSON";
+  return Object.freeze({
+    dockerCliIdentitySha256: grant.host.dockerCliIdentitySha256,
+    socketIdentitySha256: grant.host.socketIdentitySha256,
+    dockerClientVersion: matched ? "29.3.1" : "NOT_OBSERVED",
+    dockerServerVersion: matched ? "29.3.1" : "NOT_OBSERVED",
+    dockerServerPlatform: matched ? IMAGE_PLATFORM : "NOT_OBSERVED",
+  });
+}
+
+function buildBodyFreeDiagnosticReceipt(context, status, terminalReason) {
+  const journal = readBodyFreeDiagnosticJournal(context.diagnosticRoot);
+  const observed = status === "OBSERVED";
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-receipt.v1",
+    status, code: observed ? "local_postgres_body_free_diagnostic_observed" : "local_postgres_body_free_diagnostic_blocked",
+    consumedDiagnosticGrantSha256: context.consumedDiagnosticGrantSha256,
+    authority: context.grant.authority, lineage: context.grant.lineage, artifacts: context.grant.artifacts,
+    blocked: context.grant.blocked, failedRescue: context.grant.failedRescue,
+    hostObservation: diagnosticHostObservation(context.grant, journal),
+    effects: Object.freeze({ dockerCallCounts: Object.freeze({ ...journal.dockerCallCounts }) }),
+    observations: Object.freeze([...journal.observations.values()].sort((left, right) => {
+      const order = { version: 0, "container.inspect": 1 };
+      return order[left.kind] - order[right.kind];
+    })),
+    closure: Object.freeze({
+      diagnosticLocalResidueCount: journal.closure?.diagnosticLocalResidueCount ?? 0,
+      blockedRootUnchanged: journal.closure?.blockedRootUnchanged ?? false,
+      failedRescueRootUnchanged: journal.closure?.failedRescueRootUnchanged ?? false,
+      retainedDiagnosticForensicFiles: Object.freeze([
+        "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+        BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY, "owner-approval-receipt",
+      ]),
+      terminalReason,
+    }),
+    journal: Object.freeze({ entryCount: journal.sequence, headSha256: journal.lastSha256 }),
+    readiness: Object.freeze({
+      diagnosticObservationCaptured: observed, resourceAbsenceProven: false, cleanupRescueGreen: false,
+      physicalExecutionPerformed: false, targetPostgresObserved: false, productRuntimeEffects: false,
+      trafficReady: false, gateCReady: false,
+    }),
+  });
+}
+
+function validateBodyFreeDiagnosticReceiptUnchecked(rawReceipt, grant, journal, consumedDiagnosticGrantSha256) {
+  const receipt = ownedPlain(rawReceipt);
+  exactKeys(receipt, BODY_FREE_DIAGNOSTIC_RECEIPT_KEYS);
+  exactKeys(receipt.authority, BODY_FREE_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(receipt.lineage, BODY_FREE_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(receipt.artifacts, BODY_FREE_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(receipt.hostObservation, BODY_FREE_DIAGNOSTIC_RECEIPT_HOST_KEYS);
+  exactKeys(receipt.effects, BODY_FREE_DIAGNOSTIC_RECEIPT_EFFECT_KEYS);
+  exactKeys(receipt.effects.dockerCallCounts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.closure, BODY_FREE_DIAGNOSTIC_RECEIPT_CLOSURE_KEYS);
+  exactKeys(receipt.journal, BODY_FREE_DIAGNOSTIC_RECEIPT_JOURNAL_KEYS);
+  exactKeys(receipt.readiness, BODY_FREE_DIAGNOSTIC_RECEIPT_READINESS_KEYS);
+  if (!Array.isArray(receipt.observations)) fail("local_postgres_body_free_diagnostic_receipt_invalid");
+  const observations = receipt.observations.map(validateBodyFreeDiagnosticObservation);
+  if (receipt.schemaVersion !== "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-receipt.v1"
+    || !["OBSERVED", "FAILED"].includes(receipt.status)
+    || !["local_postgres_body_free_diagnostic_observed", "local_postgres_body_free_diagnostic_blocked"].includes(receipt.code)
+    || receipt.consumedDiagnosticGrantSha256 !== consumedDiagnosticGrantSha256
+    || canonicalJson(receipt.authority) !== canonicalJson(grant.authority)
+    || canonicalJson(receipt.lineage) !== canonicalJson(grant.lineage)
+    || canonicalJson(receipt.artifacts) !== canonicalJson(grant.artifacts)
+    || canonicalJson(receipt.blocked) !== canonicalJson(grant.blocked)
+    || canonicalJson(receipt.failedRescue) !== canonicalJson(grant.failedRescue)
+    || canonicalJson(receipt.effects.dockerCallCounts) !== canonicalJson(journal.dockerCallCounts)
+    || canonicalJson(observations) !== canonicalJson([...journal.observations.values()].sort((left, right) => {
+      const order = { version: 0, "container.inspect": 1 }; return order[left.kind] - order[right.kind];
+    }))
+    || receipt.journal.entryCount !== journal.sequence || receipt.journal.headSha256 !== journal.lastSha256
+    || receipt.hostObservation.dockerCliIdentitySha256 !== grant.host.dockerCliIdentitySha256
+    || receipt.hostObservation.socketIdentitySha256 !== grant.host.socketIdentitySha256) {
+    fail("local_postgres_body_free_diagnostic_receipt_invalid");
+  }
+  for (const [kind, count] of Object.entries(receipt.effects.dockerCallCounts)) {
+    if (!Number.isSafeInteger(count) || count < 0 || count > BODY_FREE_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+      fail("local_postgres_body_free_diagnostic_receipt_invalid");
+    }
+  }
+  const retained = [
+    "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+    BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY, "owner-approval-receipt",
+  ];
+  if (receipt.closure.diagnosticLocalResidueCount !== 0
+    || canonicalJson(receipt.closure.retainedDiagnosticForensicFiles) !== canonicalJson(retained)
+    || typeof receipt.closure.terminalReason !== "string" || receipt.closure.terminalReason.length < 1
+    || receipt.readiness.resourceAbsenceProven !== false || receipt.readiness.cleanupRescueGreen !== false
+    || receipt.readiness.physicalExecutionPerformed !== false || receipt.readiness.targetPostgresObserved !== false
+    || receipt.readiness.productRuntimeEffects !== false || receipt.readiness.trafficReady !== false
+    || receipt.readiness.gateCReady !== false) fail("local_postgres_body_free_diagnostic_receipt_invalid");
+  if (receipt.status === "OBSERVED") {
+    if (receipt.code !== "local_postgres_body_free_diagnostic_observed" || !journal.closure
+      || !journal.closure.blockedRootUnchanged || !journal.closure.failedRescueRootUnchanged
+      || observations.length !== 2 || observations[0].kind !== "version" || observations[1].kind !== "container.inspect"
+      || observations[0].diagnosticClassification !== "FOUND_JSON"
+      || receipt.hostObservation.dockerClientVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerPlatform !== IMAGE_PLATFORM
+      || receipt.readiness.diagnosticObservationCaptured !== true) {
+      fail("local_postgres_body_free_diagnostic_receipt_invalid");
+    }
+  } else if (receipt.code !== "local_postgres_body_free_diagnostic_blocked"
+    || receipt.readiness.diagnosticObservationCaptured !== false) {
+    fail("local_postgres_body_free_diagnostic_receipt_invalid");
+  }
+  return receipt;
+}
+
+function validateBodyFreeDiagnosticReceipt(rawReceipt, grant, journal, consumedDiagnosticGrantSha256) {
+  try { return validateBodyFreeDiagnosticReceiptUnchecked(rawReceipt, grant, journal, consumedDiagnosticGrantSha256); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_body_free_diagnostic_receipt_invalid") throw error;
+    fail("local_postgres_body_free_diagnostic_receipt_invalid");
+  }
+}
+
+function writeBodyFreeDiagnosticReceipt(context, receipt) {
+  const evidencePath = privatePath(context.diagnosticRoot, "docker-inspect-diagnostic-evidence.json");
+  exactFileAbsence(evidencePath);
+  const journal = readBodyFreeDiagnosticJournal(context.diagnosticRoot);
+  const validated = validateBodyFreeDiagnosticReceipt(
+    receipt, context.grant, journal, context.consumedDiagnosticGrantSha256,
+  );
+  writePrivateJson(evidencePath, validated);
+  const committed = readPrivateJsonRecord(evidencePath);
+  validateBodyFreeDiagnosticReceipt(
+    committed.value, context.grant, readBodyFreeDiagnosticJournal(context.diagnosticRoot),
+    context.consumedDiagnosticGrantSha256,
+  );
+  const names = fs.readdirSync(context.diagnosticRoot).sort(binaryCompare);
+  const expected = [
+    "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+    BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY, "owner-approval-receipt",
+  ].sort(binaryCompare);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  }
+  return committed.value;
+}
+
+function recoverOpenBodyFreeDiagnosticEffects(diagnosticRoot) {
+  let state = readBodyFreeDiagnosticJournal(diagnosticRoot);
+  for (const effect of [...state.openEffects.values()]) {
+    appendBodyFreeDiagnosticJournal(diagnosticRoot, "diagnostic.recovered", recoveredDiagnosticObservation(effect));
+    state = readBodyFreeDiagnosticJournal(diagnosticRoot);
+  }
+  return state;
+}
+
+function bodyFreeDiagnosticSnapshotsUnchanged(context) {
+  let blockedRootUnchanged = false;
+  let failedRescueRootUnchanged = false;
+  try {
+    const blocked = context.adapters.inspectBlockedForensicRoot(context.blockedRoot);
+    blockedRootUnchanged = canonicalJson(diagnosticRootProjection(blocked, context.grant.blocked))
+      === canonicalJson(context.grant.blocked);
+  } catch { blockedRootUnchanged = false; }
+  try {
+    const rescue = context.adapters.inspectFailedRescueRoot(context.rescueRoot);
+    failedRescueRootUnchanged = canonicalJson(diagnosticRootProjection(rescue, context.grant.failedRescue))
+      === canonicalJson(context.grant.failedRescue);
+  } catch { failedRescueRootUnchanged = false; }
+  return Object.freeze({ blockedRootUnchanged, failedRescueRootUnchanged });
+}
+
+function finalizeBodyFreeDiagnostic(context, terminalReason, forceFailed = false) {
+  recoverOpenBodyFreeDiagnosticEffects(context.diagnosticRoot);
+  const snapshots = bodyFreeDiagnosticSnapshotsUnchanged(context);
+  const state = readBodyFreeDiagnosticJournal(context.diagnosticRoot);
+  if (state.closure === null) {
+    appendBodyFreeDiagnosticJournal(context.diagnosticRoot, "closure.proven", {
+      diagnosticLocalResidueCount: 0,
+      blockedRootUnchanged: snapshots.blockedRootUnchanged,
+      failedRescueRootUnchanged: snapshots.failedRescueRootUnchanged,
+    });
+  }
+  const closed = readBodyFreeDiagnosticJournal(context.diagnosticRoot);
+  const hasVersion = [...closed.observations.values()].some((item) => item.kind === "version"
+    && item.diagnosticClassification === "FOUND_JSON");
+  const hasInspect = [...closed.observations.values()].some((item) => item.kind === "container.inspect");
+  const observed = !forceFailed && hasVersion && hasInspect
+    && closed.closure?.blockedRootUnchanged === true && closed.closure?.failedRescueRootUnchanged === true;
+  return writeBodyFreeDiagnosticReceipt(context,
+    buildBodyFreeDiagnosticReceipt(context, observed ? "OBSERVED" : "FAILED", terminalReason));
+}
+
+async function runBodyFreeDiagnosticWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["diagnosticRoot", "blockedRoot", "rescueRoot", "evidenceOut"]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || stable.blockedRoot !== BLOCKED_PRIVATE_ROOT || stable.rescueRoot !== FAILED_RESCUE_PRIVATE_ROOT
+    || stable.evidenceOut !== path.join(stable.diagnosticRoot, "docker-inspect-diagnostic-evidence.json")) {
+    fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  }
+  let diagnosticRoot;
+  try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_body_free_diagnostic_private_root_invalid"); }
+  if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_body_free_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(diagnosticRoot);
+  const initialNames = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+  const recovery = initialNames.includes("diagnostic.consumed.json")
+    && !initialNames.includes("docker-inspect-diagnostic-evidence.json");
+  const observedAt = adapters.now("entry");
+  const consumed = recovery
+    ? recoverBodyFreeDiagnosticGrant(diagnosticRoot, observedAt, adapters.verifyBindings)
+    : consumeBodyFreeDiagnosticGrant(diagnosticRoot, observedAt, adapters.verifyBindings, adapters.crashCheckpoint);
+  const grant = consumed.grant;
+  let socket = null;
+  if (!recovery) {
+    const cli = adapters.observeDockerCliIdentity();
+    socket = adapters.resolveSocketIdentity();
+    if (cli.identitySha256 !== grant.host.dockerCliIdentitySha256
+      || socket.identitySha256 !== grant.host.socketIdentitySha256) {
+      fail("local_postgres_body_free_diagnostic_binding_invalid");
+    }
+  }
+  const context = {
+    diagnosticRoot, blockedRoot: stable.blockedRoot, rescueRoot: stable.rescueRoot, rootIdentity,
+    grant, consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256, socket, adapters,
+    isolated: null,
+    plan: buildLocalPostgresDockerPlan({
+      grantId: BLOCKED_GRANT_ID, secretMountSource: path.join(diagnosticRoot, "unused-password-file"),
+    }),
+  };
+  if (recovery) {
+    let cleanupFailed = false;
+    try { cleanupIsolatedDockerHome(diagnosticRoot); }
+    catch { cleanupFailed = true; }
+    const receipt = finalizeBodyFreeDiagnostic(context, "CRASH_RECOVERED", cleanupFailed);
+    if (receipt.status !== "OBSERVED") throw new LocalPostgresRunnerError(receipt.code);
+    return receipt;
+  }
+  appendBodyFreeDiagnosticJournal(diagnosticRoot, "grant.consumed", {
+    consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256,
+  });
+  adapters.crashCheckpoint?.("grant.consumed:after");
+  appendBodyFreeDiagnosticJournal(diagnosticRoot, "diagnostic.lifecycle_started", { ordinal: 1 });
+  let failure = null;
+  let setupAttempted = false;
+  try {
+    setupAttempted = true;
+    context.isolated = prepareIsolatedDockerHome(diagnosticRoot);
+    const version = callBodyFreeDiagnosticDocker(context, "version");
+    if (version.diagnosticClassification !== "FOUND_JSON") fail("local_postgres_body_free_diagnostic_host_invalid");
+    callBodyFreeDiagnosticDocker(context, "container.inspect");
+  } catch (error) {
+    if (error === BODY_FREE_DIAGNOSTIC_SIMULATED_CRASH) throw error;
+    failure = error;
+  }
+  let cleanupFailed = false;
+  try { if (setupAttempted) cleanupIsolatedDockerHome(diagnosticRoot); }
+  catch { cleanupFailed = true; }
+  const terminalReason = cleanupFailed ? "LOCAL_CLOSURE_FAILED"
+    : failure === null ? "OBSERVATION_CAPTURED"
+      : authenticLocalPostgresRunnerErrorDetails(failure)?.code ?? "DIAGNOSTIC_BLOCKED";
+  const receipt = finalizeBodyFreeDiagnostic(context, terminalReason, failure !== null || cleanupFailed);
+  if (receipt.status !== "OBSERVED") throw new LocalPostgresRunnerError(receipt.code);
+  return receipt;
+}
+
+function productionBodyFreeDiagnosticDockerCall(_kind, argv, context) {
+  const result = spawnSync(DOCKER_CLI, ["--host", `unix://${context.socket.socketPath}`, ...argv], {
+    cwd: "/", encoding: null, env: dockerEnvironment(context.isolated),
+    maxBuffer: MAX_DOCKER_OUTPUT_BYTES, timeout: 60_000,
+  });
+  return Object.freeze({
+    status: result.status, signal: result.signal, error: result.error,
+    stdout: Buffer.isBuffer(result.stdout) ? result.stdout : Buffer.alloc(0),
+    stderr: Buffer.isBuffer(result.stderr) ? result.stderr : Buffer.alloc(0),
+  });
+}
+
+export async function runApprovedBodyFreeDockerInspectDiagnostic(input) {
+  return runBodyFreeDiagnosticWithAdapters(input, Object.freeze({
+    inspectBlockedForensicRoot, inspectFailedRescueRoot: inspectFailedCleanupRescueRoot,
+    verifyBindings: verifyBodyFreeDiagnosticCommittedBindings,
+    observeDockerCliIdentity, resolveSocketIdentity: resolveDockerSocketIdentity,
+    revalidateHost(grant, socket) {
+      if (observeDockerCliIdentity().identitySha256 !== grant.host.dockerCliIdentitySha256) {
+        fail("local_postgres_docker_cli_drift");
+      }
+      if (socket.identitySha256 !== grant.host.socketIdentitySha256) fail("local_postgres_socket_identity_drift");
+      revalidateDockerSocketIdentity(socket);
+    },
+    callDocker: productionBodyFreeDiagnosticDockerCall,
+    now: () => new Date(),
+  }));
+}
+
+function fakeBodyFreeDiagnosticDerived() {
+  const fakeSha = (domain) => sha256Bytes(Buffer.from(`r4-body-free-diagnostic-fake-${domain}`, "utf8"));
+  const lineage = Object.freeze({
+    cleanupRescueOwnerReviewHead: FAILED_RESCUE_REVIEW_HEAD,
+    cleanupRescueOwnerReviewTree: FAILED_RESCUE_REVIEW_TREE,
+    constructionAddendumHead: BODY_FREE_DIAGNOSTIC_ADDENDUM_HEAD,
+    constructionAddendumTree: BODY_FREE_DIAGNOSTIC_ADDENDUM_TREE,
+    constructionOwnerReviewHead: BODY_FREE_DIAGNOSTIC_REVIEW_HEAD,
+    constructionOwnerReviewTree: BODY_FREE_DIAGNOSTIC_REVIEW_TREE,
+    pathCorrectionAddendumHead: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_HEAD,
+    pathCorrectionAddendumTree: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_TREE,
+    pathCorrectionOwnerReviewHead: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_HEAD,
+    pathCorrectionOwnerReviewTree: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_TREE,
+    diagnosticImplementationHead: "1".repeat(40), diagnosticImplementationTree: "2".repeat(40),
+    diagnosticImplementationArtifactAggregateSha256: fakeSha("aggregate"),
+    diagnosticEvidenceHead: "3".repeat(40), diagnosticEvidenceTree: "4".repeat(40),
+    diagnosticStatusHead: "5".repeat(40), diagnosticStatusTree: "6".repeat(40),
+    diagnosticCardHead: "7".repeat(40), diagnosticCardTree: "8".repeat(40),
+    diagnosticOwnerReviewHead: "9".repeat(40), diagnosticOwnerReviewTree: "a".repeat(40),
+  });
+  const artifacts = Object.freeze({
+    diagnosticArtifactIndexSha256: fakeSha("index"), diagnosticEvidenceSchemaSha256: fakeSha("schema"),
+    diagnosticEvidenceSha256: fakeSha("evidence"), diagnosticReportSha256: fakeSha("report"),
+    diagnosticStatusCommittedAuditSummarySha256: fakeSha("audit"), runnerSha256: fakeSha("runner"),
+    runnerTestSha256: fakeSha("test"),
+  });
+  return Object.freeze({
+    authority: Object.freeze({
+      constructionAddendumSha256: BODY_FREE_DIAGNOSTIC_ADDENDUM_SHA256,
+      constructionOwnerReviewSha256: BODY_FREE_DIAGNOSTIC_REVIEW_SHA256,
+      pathCorrectionAddendumSha256: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_SHA256,
+      pathCorrectionOwnerReviewSha256: BODY_FREE_DIAGNOSTIC_PATH_CORRECTION_REVIEW_SHA256,
+      diagnosticCardSha256: fakeSha("card"), diagnosticOwnerReviewSha256: fakeSha("review"),
+      diagnosticAuthorityPayloadSha256: fakeSha("payload"),
+    }),
+    lineage, artifacts, blocked: cleanupRescueBlockedContract(),
+    failedRescue: bodyFreeDiagnosticFailedRescueContract(), host: bodyFreeDiagnosticHostContract(),
+    ceilings: bodyFreeDiagnosticCeilings(),
+  });
+}
+
+function fakeBodyFreeDiagnosticSnapshot(contract, mutation = null) {
+  const snapshot = JSON.parse(canonicalJson(contract));
+  if (mutation === "blocked") snapshot.rootIno = "1";
+  else if (mutation === "failed_rescue") snapshot.journalHeadSha256 = `sha256:${"f".repeat(64)}`;
+  const frozen = Object.freeze(snapshot);
+  return Object.freeze({
+    ...frozen, snapshotSha256: sha256Bytes(Buffer.from(canonicalJson(frozen), "utf8")),
+  });
+}
+
+function fakeBodyFreeDiagnosticGrant(ownerApprovalReceiptSha256) {
+  const derived = fakeBodyFreeDiagnosticDerived();
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
+    diagnosticGrantId: "d".repeat(32), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    blocked: derived.blocked, failedRescue: derived.failedRescue,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: `sha256:${"b".repeat(64)}`,
+      socketIdentitySha256: `sha256:${"c".repeat(64)}`,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: "2026-08-14T20:00:00.000Z", expiresAt: "2026-08-14T21:00:00.000Z",
+  });
+}
+
+export function runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set([
+    "none", "duplicate_marker", "prefixed_marker", "top_extra", "authority", "lineage", "artifacts",
+    "blocked", "failed_rescue", "host", "ceiling",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const derived = fakeBodyFreeDiagnosticDerived();
+  const payload = {
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-authority.v1",
+    authority: { ...selectKeys(derived.authority, BODY_FREE_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS) },
+    lineage: { ...selectKeys(derived.lineage, BODY_FREE_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS) },
+    artifacts: { ...derived.artifacts }, blocked: JSON.parse(canonicalJson(derived.blocked)),
+    failedRescue: JSON.parse(canonicalJson(derived.failedRescue)), host: { ...derived.host },
+    ceilings: JSON.parse(canonicalJson(derived.ceilings)), localOnly: true, productionEffectsAllowed: false,
+  };
+  if (mutation === "top_extra") payload.extra = true;
+  else if (mutation === "authority") payload.authority.pathCorrectionOwnerReviewSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "lineage") payload.lineage.pathCorrectionOwnerReviewHead = "f".repeat(40);
+  else if (mutation === "artifacts") payload.artifacts.runnerSha256 = "bad";
+  else if (mutation === "blocked") payload.blocked.rootIno = "1";
+  else if (mutation === "failed_rescue") payload.failedRescue.journalEntryCount = 7;
+  else if (mutation === "host") payload.host.dockerServerPlatform = "linux/amd64";
+  else if (mutation === "ceiling") payload.ceilings.dockerCalls["container.rm"] = 1;
+  const canonical = canonicalJson(payload);
+  let card = `fake diagnostic card\n${BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${BODY_FREE_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "duplicate_marker") card += `${BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${BODY_FREE_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "prefixed_marker") card = card.replace(BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN,
+    `prefix${BODY_FREE_DIAGNOSTIC_AUTHORITY_BEGIN}`);
+  let accepted = false;
+  let code = null;
+  try { parseBodyFreeDiagnosticAuthorityCard(Buffer.from(card, "utf8")); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-authority-fake-result.v1",
+    mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "none", "top_extra", "missing_key", "schema", "grant_id", "owner_receipt", "authority", "lineage",
+    "artifacts", "blocked", "failed_rescue", "host", "ceiling", "docker_ceiling", "local_only",
+    "production", "expired", "future_created",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const grant = JSON.parse(canonicalJson(fakeBodyFreeDiagnosticGrant(`sha256:${"1".repeat(64)}`)));
+  if (stable.mutation === "top_extra") grant.extra = true;
+  else if (stable.mutation === "missing_key") delete grant.failedRescue;
+  else if (stable.mutation === "schema") grant.schemaVersion = "v0";
+  else if (stable.mutation === "grant_id") grant.diagnosticGrantId = "bad";
+  else if (stable.mutation === "owner_receipt") grant.ownerApprovalReceiptSha256 = "bad";
+  else if (stable.mutation === "authority") grant.authority.diagnosticCardSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") grant.lineage.diagnosticOwnerReviewTree = "f".repeat(40);
+  else if (stable.mutation === "artifacts") grant.artifacts.runnerSha256 = "bad";
+  else if (stable.mutation === "blocked") grant.blocked.rootIno = "1";
+  else if (stable.mutation === "failed_rescue") grant.failedRescue.journalEntryCount = 7;
+  else if (stable.mutation === "host") grant.host.dockerServerPlatform = "linux/amd64";
+  else if (stable.mutation === "ceiling") grant.ceilings.maximumDiagnosticLifecycles = 2;
+  else if (stable.mutation === "docker_ceiling") grant.ceilings.dockerCalls["container.stop"] = 1;
+  else if (stable.mutation === "local_only") grant.localOnly = false;
+  else if (stable.mutation === "production") grant.productionEffectsAllowed = true;
+  else if (stable.mutation === "expired") grant.expiresAt = grant.createdAt;
+  else if (stable.mutation === "future_created") grant.createdAt = "2026-08-14T20:02:00.000Z";
+  let accepted = false;
+  let code = null;
+  try {
+    validateBodyFreeDiagnosticGrant(grant, new Date("2026-08-14T20:00:01.000Z"));
+    assertBodyFreeDiagnosticGrantMatchesDerived(grant, fakeBodyFreeDiagnosticDerived());
+    accepted = true;
+  } catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-grant-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresBodyFreeDiagnosticPrepareFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set(["none", "blocked", "failed_rescue", "expired", "root_extra"]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-diagnostic-prepare-")));
+  const receiptPath = path.join(temporaryRoot, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake body-free diagnostic approval", { mode: 0o600 });
+  fs.chmodSync(receiptPath, 0o600);
+  let result;
+  try {
+    if (mutation === "root_extra") fs.writeFileSync(path.join(temporaryRoot, "foreign"), "foreign", { mode: 0o600 });
+    const receipt = prepareBodyFreeDiagnosticGrantWithAdapters({
+      diagnosticRoot: temporaryRoot, blockedRoot: BLOCKED_PRIVATE_ROOT, rescueRoot: FAILED_RESCUE_PRIVATE_ROOT,
+      diagnosticOwnerReviewHead: "9".repeat(40), ownerApprovalReceiptPath: receiptPath,
+      createdAt: "2026-08-14T20:00:00.000Z",
+      expiresAt: mutation === "expired" ? "2026-08-14T20:00:00.000Z" : "2026-08-14T21:00:00.000Z",
+    }, Object.freeze({
+      inspectBlockedForensicRoot: () => fakeBodyFreeDiagnosticSnapshot(cleanupRescueBlockedContract(),
+        mutation === "blocked" ? "blocked" : null),
+      inspectFailedRescueRoot: () => fakeBodyFreeDiagnosticSnapshot(bodyFreeDiagnosticFailedRescueContract(),
+        mutation === "failed_rescue" ? "failed_rescue" : null),
+      deriveAuthority: () => fakeBodyFreeDiagnosticDerived(),
+      observeDockerCliIdentity: () => Object.freeze({ identitySha256: `sha256:${"b".repeat(64)}` }),
+      resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}` }),
+      randomBytes: () => Buffer.alloc(16, 0xd), now: () => new Date("2026-08-14T20:00:01.000Z"),
+      verifyBindings(candidate, observedAt) {
+        const validated = validateBodyFreeDiagnosticGrant(candidate, observedAt);
+        assertBodyFreeDiagnosticGrantMatchesDerived(validated, fakeBodyFreeDiagnosticDerived());
+      },
+    }));
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-prepare-fake-result.v1",
+      status: "GREEN", code: "local_postgres_body_free_diagnostic_prepare_green", receipt,
+      grant: readPrivateJson(path.join(temporaryRoot, "diagnostic.pending.json")),
+      rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)), physicalEffects: 0,
+    });
+  } catch (error) {
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-prepare-fake-result.v1",
+      status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed",
+      receipt: null, grant: null, rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)),
+      physicalEffects: 0,
+    });
+  } finally { fs.rmSync(temporaryRoot, { recursive: true, force: true }); }
+  return result;
+}
+
+function fakeBodyFreeDiagnosticDockerResult(kind, scenario, plan) {
+  const version = Buffer.from(canonicalJson({
+    Client: { Version: "29.3.1" }, Server: { Version: "29.3.1", Os: "linux", Arch: "arm64" },
+  }), "utf8");
+  if (kind === "version") {
+    if (scenario === "version_invalid") return { status: 0, signal: null, stdout: Buffer.from("{}", "utf8"), stderr: Buffer.alloc(0) };
+    return { status: 0, signal: null, stdout: version, stderr: Buffer.alloc(0) };
+  }
+  if (scenario === "missing") return {
+    status: 1, signal: null, stdout: Buffer.alloc(0),
+    stderr: Buffer.from(`Error: No such object: ${plan.resources.container}\n`, "utf8"),
+  };
+  if (scenario === "found_owned" || scenario === "found_foreign" || scenario === "found_unlabelled"
+    || scenario === "found_malformed") {
+    const labels = scenario === "found_owned" ? { [plan.resources.labelKey]: plan.resources.labelValue }
+      : scenario === "found_foreign" ? { [plan.resources.labelKey]: "foreign" }
+        : scenario === "found_unlabelled" ? {} : null;
+    return { status: 0, signal: null, stdout: Buffer.from(canonicalJson({ Config: { Labels: labels } }), "utf8"), stderr: Buffer.alloc(0) };
+  }
+  if (scenario === "unclassified_nonzero") return {
+    status: 125, signal: null, stdout: Buffer.from("unexpected\n", "utf8"),
+    stderr: Buffer.from("diagnostic\r\nsecond\r\n", "utf8"),
+  };
+  if (scenario === "invalid_utf8") return { status: 125, signal: null, stdout: Buffer.from([0xff, 0xfe]), stderr: Buffer.alloc(0) };
+  if (scenario === "multiline") return { status: 1, signal: null, stdout: Buffer.alloc(0), stderr: Buffer.from("first\nsecond\n", "utf8") };
+  if (scenario === "timeout") return { status: null, signal: null, error: Object.freeze({ code: "ETIMEDOUT" }), stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) };
+  if (scenario === "signal") return { status: null, signal: "SIGTERM", stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) };
+  if (scenario === "spawn_error") return { status: null, signal: null, error: Object.freeze({ code: "ENOENT" }), stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) };
+  if (scenario === "truncated") return {
+    status: null, signal: null, error: Object.freeze({ code: "ENOBUFS" }),
+    stdout: Buffer.from("partial-output", "utf8"), stderr: Buffer.from("partial-error", "utf8"),
+  };
+  if (scenario === "unknown") return { status: null, signal: null, stdout: "not-a-buffer", stderr: Buffer.alloc(0) };
+  if (scenario === "contract_invalid") return { status: 0, signal: null, stdout: Buffer.from("not-json", "utf8"), stderr: Buffer.alloc(0) };
+  fail("local_postgres_fake_fault_invalid");
+}
+
+async function executeBodyFreeDiagnosticFake(input) {
+  const stable = ownedPlain(input);
+  const allowedKeys = new Set(["scenario", "crashAt", "duplicateConsume", "clockExpiredAt", "hostDriftAt", "forensicDriftAt"]);
+  if (Object.keys(stable).some((key) => !allowedKeys.has(key))) fail("local_postgres_fake_fault_invalid");
+  const scenario = stable.scenario ?? "missing";
+  const scenarios = new Set([
+    "missing", "found_owned", "found_foreign", "found_unlabelled", "found_malformed", "unclassified_nonzero",
+    "invalid_utf8", "multiline", "timeout", "signal", "spawn_error", "truncated", "unknown",
+    "contract_invalid", "version_invalid",
+  ]);
+  if (!scenarios.has(scenario)
+    || (stable.crashAt !== undefined && ![
+      "grant.consume.link:after", "grant.consume.unlink_pending:after", "grant.consumed:after",
+      "version:after_call_before_completion", "container.inspect:after_call_before_completion",
+    ].includes(stable.crashAt))
+    || (stable.duplicateConsume !== undefined && typeof stable.duplicateConsume !== "boolean")
+    || (stable.clockExpiredAt !== undefined && typeof stable.clockExpiredAt !== "string")
+    || (stable.hostDriftAt !== undefined && typeof stable.hostDriftAt !== "string")
+    || (stable.forensicDriftAt !== undefined && (!Number.isSafeInteger(stable.forensicDriftAt) || stable.forensicDriftAt < 1))) {
+    fail("local_postgres_fake_fault_invalid");
+  }
+  const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-diagnostic-run-")));
+  const ownerPath = path.join(temporaryRoot, "owner-approval-receipt");
+  fs.writeFileSync(ownerPath, "fake body-free diagnostic execution approval", { mode: 0o600 });
+  fs.chmodSync(ownerPath, 0o600);
+  const ownerSha = readOwnerApprovalReceipt(temporaryRoot, ownerPath);
+  const grant = fakeBodyFreeDiagnosticGrant(ownerSha);
+  installPendingGrant(temporaryRoot, path.join(temporaryRoot, "diagnostic.pending.json"), grant);
+  const calls = [];
+  const rawBuffers = [];
+  let forensicInspections = 0;
+  let crashInjected = false;
+  const blockedSnapshot = fakeBodyFreeDiagnosticSnapshot(cleanupRescueBlockedContract());
+  const rescueSnapshot = fakeBodyFreeDiagnosticSnapshot(bodyFreeDiagnosticFailedRescueContract());
+  const adapters = Object.freeze({
+    inspectBlockedForensicRoot() {
+      forensicInspections += 1;
+      return forensicInspections === stable.forensicDriftAt
+        ? fakeBodyFreeDiagnosticSnapshot(cleanupRescueBlockedContract(), "blocked") : blockedSnapshot;
+    },
+    inspectFailedRescueRoot: () => rescueSnapshot,
+    verifyBindings(candidate, observedAt, options = Object.freeze({})) {
+      const validated = options.allowExpired === true
+        ? validateBodyFreeDiagnosticGrantUnchecked(candidate, observedAt, { allowExpired: true })
+        : validateBodyFreeDiagnosticGrant(candidate, observedAt);
+      assertBodyFreeDiagnosticGrantMatchesDerived(validated, fakeBodyFreeDiagnosticDerived());
+    },
+    observeDockerCliIdentity: () => Object.freeze({ identitySha256: grant.host.dockerCliIdentitySha256 }),
+    resolveSocketIdentity: () => Object.freeze({
+      identitySha256: grant.host.socketIdentitySha256, socketPath: "/private/fake/docker.sock",
+    }),
+    revalidateHost(_grant, _socket, edge) { if (stable.hostDriftAt === edge) fail("local_postgres_docker_cli_drift"); },
+    callDocker(kind, argv, context) {
+      calls.push(Object.freeze({ kind, argv: Object.freeze([...argv]) }));
+      const raw = fakeBodyFreeDiagnosticDockerResult(kind, scenario, context.plan);
+      rawBuffers.push(raw.stdout, raw.stderr);
+      return Object.freeze(raw);
+    },
+    crashCheckpoint(edge) {
+      if (!crashInjected && stable.crashAt === edge) { crashInjected = true; throw BODY_FREE_DIAGNOSTIC_SIMULATED_CRASH; }
+    },
+    now: (edge) => new Date(stable.clockExpiredAt === edge
+      ? "2026-08-14T21:00:00.000Z" : "2026-08-14T20:00:01.000Z"),
+  });
+  const request = Object.freeze({
+    diagnosticRoot: temporaryRoot, blockedRoot: BLOCKED_PRIVATE_ROOT, rescueRoot: FAILED_RESCUE_PRIVATE_ROOT,
+    evidenceOut: path.join(temporaryRoot, "docker-inspect-diagnostic-evidence.json"),
+  });
+  let receipt = null;
+  let failureCode = null;
+  let simulatedCrash = false;
+  let recoveryAddedCalls = 0;
+  try { receipt = await runBodyFreeDiagnosticWithAdapters(request, adapters); }
+  catch (error) {
+    if (error === BODY_FREE_DIAGNOSTIC_SIMULATED_CRASH) {
+      simulatedCrash = true;
+      const beforeRecoveryCalls = calls.length;
+      try { receipt = await runBodyFreeDiagnosticWithAdapters(request, adapters); }
+      catch (recoveryError) {
+        failureCode = authenticLocalPostgresRunnerErrorDetails(recoveryError)?.code ?? "local_postgres_runner_failed";
+      }
+      recoveryAddedCalls = calls.length - beforeRecoveryCalls;
+    } else failureCode = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed";
+    if (receipt === null) {
+      try { receipt = readPrivateJson(path.join(temporaryRoot, "docker-inspect-diagnostic-evidence.json")); }
+      catch { receipt = null; }
+    }
+  }
+  const firstCallCount = calls.length;
+  let duplicateCode = null;
+  if (stable.duplicateConsume === true) {
+    try { await runBodyFreeDiagnosticWithAdapters(request, adapters); }
+    catch (error) { duplicateCode = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  }
+  const journal = readBodyFreeDiagnosticJournal(temporaryRoot);
+  const rootEntries = Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare));
+  const result = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-fake-result.v1",
+    status: receipt?.status ?? "FAILED", code: receipt?.code ?? failureCode, receipt,
+    calls: Object.freeze(calls), firstCallCount, duplicateCode, duplicateAddedCalls: calls.length - firstCallCount,
+    simulatedCrash, recoveryAddedCalls, rootEntries, journalEntryCount: journal.sequence,
+    journalHeadSha256: journal.lastSha256, openEffectCount: journal.openEffects.size,
+    rawBuffersCleared: rawBuffers.every((buffer) => !Buffer.isBuffer(buffer) || buffer.every((byte) => byte === 0)),
+    physicalEffects: 0, socketCalls: 0, postgresConnections: 0, sqlStatements: 0,
+    productNetworkEffects: 0,
+  });
+  fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  return result;
+}
+
+export async function runLocalPostgresBodyFreeDiagnosticFakePlan(input = Object.freeze({})) {
+  return executeBodyFreeDiagnosticFake(input);
+}
+
+function fakeBodyFreeDiagnosticReceiptContext() {
+  const grant = fakeBodyFreeDiagnosticGrant(`sha256:${"1".repeat(64)}`);
+  const consumedSha = `sha256:${"2".repeat(64)}`;
+  const journal = emptyBodyFreeDiagnosticJournalState();
+  journal.sequence = 9;
+  journal.lastSha256 = `sha256:${"3".repeat(64)}`;
+  journal.consumedGrantSha256 = consumedSha;
+  journal.lifecycleCount = 1;
+  journal.dockerCallCounts.version = 1;
+  journal.dockerCallCounts["container.inspect"] = 1;
+  const plan = buildLocalPostgresDockerPlan({
+    grantId: BLOCKED_GRANT_ID, secretMountSource: "/private/fake/unused-password-file",
+  });
+  const versionEffect = Object.freeze({ effectId: "docker-000003-version", kind: "version", ordinal: 1 });
+  const inspectEffect = Object.freeze({ effectId: "docker-000006-container.inspect", kind: "container.inspect", ordinal: 1 });
+  const version = fingerprintDockerDiagnosticResult("version", versionEffect,
+    fakeBodyFreeDiagnosticDockerResult("version", "missing", plan), plan);
+  const inspect = fingerprintDockerDiagnosticResult("container.inspect", inspectEffect,
+    fakeBodyFreeDiagnosticDockerResult("container.inspect", "missing", plan), plan);
+  journal.observations.set(version.effectId, version);
+  journal.observations.set(inspect.effectId, inspect);
+  journal.closure = Object.freeze({
+    diagnosticLocalResidueCount: 0, blockedRootUnchanged: true, failedRescueRootUnchanged: true,
+  });
+  const receipt = {
+    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-receipt.v1",
+    status: "OBSERVED", code: "local_postgres_body_free_diagnostic_observed",
+    consumedDiagnosticGrantSha256: consumedSha,
+    authority: JSON.parse(canonicalJson(grant.authority)), lineage: JSON.parse(canonicalJson(grant.lineage)),
+    artifacts: JSON.parse(canonicalJson(grant.artifacts)), blocked: JSON.parse(canonicalJson(grant.blocked)),
+    failedRescue: JSON.parse(canonicalJson(grant.failedRescue)),
+    hostObservation: {
+      dockerCliIdentitySha256: grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: grant.host.socketIdentitySha256,
+      dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1", dockerServerPlatform: IMAGE_PLATFORM,
+    },
+    effects: { dockerCallCounts: { ...journal.dockerCallCounts } },
+    observations: [JSON.parse(canonicalJson(version)), JSON.parse(canonicalJson(inspect))],
+    closure: {
+      diagnosticLocalResidueCount: 0, blockedRootUnchanged: true, failedRescueRootUnchanged: true,
+      retainedDiagnosticForensicFiles: [
+        "diagnostic.consumed.json", "docker-inspect-diagnostic-evidence.json",
+        BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY, "owner-approval-receipt",
+      ],
+      terminalReason: "OBSERVATION_CAPTURED",
+    },
+    journal: { entryCount: journal.sequence, headSha256: journal.lastSha256 },
+    readiness: {
+      diagnosticObservationCaptured: true, resourceAbsenceProven: false, cleanupRescueGreen: false,
+      physicalExecutionPerformed: false, targetPostgresObserved: false, productRuntimeEffects: false,
+      trafficReady: false, gateCReady: false,
+    },
+  };
+  return { grant, consumedSha, journal, receipt };
+}
+
+export function runLocalPostgresBodyFreeDiagnosticReceiptValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "none", "top_extra", "nested_extra", "authority", "lineage", "artifacts", "blocked", "failed_rescue",
+    "host", "effects", "observation", "closure", "journal", "readiness", "consumed", "status_code", "accessor",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const { grant, consumedSha, journal, receipt } = fakeBodyFreeDiagnosticReceiptContext();
+  if (stable.mutation === "top_extra") receipt.extra = true;
+  else if (stable.mutation === "nested_extra") receipt.readiness.extra = true;
+  else if (stable.mutation === "authority") receipt.authority.diagnosticCardSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") receipt.lineage.diagnosticCardHead = "f".repeat(40);
+  else if (stable.mutation === "artifacts") receipt.artifacts.runnerSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "blocked") receipt.blocked.rootIno = "1";
+  else if (stable.mutation === "failed_rescue") receipt.failedRescue.journalEntryCount = 7;
+  else if (stable.mutation === "host") receipt.hostObservation.dockerServerPlatform = "MISMATCH";
+  else if (stable.mutation === "effects") receipt.effects.dockerCallCounts["container.inspect"] = 0;
+  else if (stable.mutation === "observation") receipt.observations[1].stdoutSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "closure") receipt.closure.diagnosticLocalResidueCount = 1;
+  else if (stable.mutation === "journal") receipt.journal.headSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "readiness") receipt.readiness.resourceAbsenceProven = true;
+  else if (stable.mutation === "consumed") receipt.consumedDiagnosticGrantSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "status_code") receipt.code = "local_postgres_body_free_diagnostic_blocked";
+  else if (stable.mutation === "accessor") {
+    Object.defineProperty(receipt, "status", { enumerable: true, get() { return "OBSERVED"; } });
+  }
+  let accepted = false;
+  let code = null;
+  try { validateBodyFreeDiagnosticReceipt(receipt, grant, journal, consumedSha); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-receipt-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set(["none", "top_extra", "sequence", "previous", "event", "detail", "entry_sha"]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-diagnostic-journal-")));
+  let accepted = false;
+  let code = null;
+  try {
+    appendBodyFreeDiagnosticJournal(temporaryRoot, "grant.consumed", {
+      consumedDiagnosticGrantSha256: `sha256:${"2".repeat(64)}`,
+    });
+    if (stable.mutation !== "none") {
+      const entryPath = path.join(temporaryRoot, BODY_FREE_DIAGNOSTIC_JOURNAL_DIRECTORY, "entry-000001.json");
+      const entry = JSON.parse(canonicalJson(readPrivateJson(entryPath)));
+      if (stable.mutation === "top_extra") entry.extra = true;
+      else if (stable.mutation === "sequence") entry.sequence = 2;
+      else if (stable.mutation === "previous") entry.previousSha256 = `sha256:${"f".repeat(64)}`;
+      else if (stable.mutation === "event") entry.event = "docker.attempt";
+      else if (stable.mutation === "detail") entry.detail = { consumedDiagnosticGrantSha256: "bad" };
+      else if (stable.mutation === "entry_sha") entry.entrySha256 = `sha256:${"f".repeat(64)}`;
+      writePrivateJson(entryPath, entry, false);
+    }
+    readBodyFreeDiagnosticJournal(temporaryRoot);
+    accepted = true;
+  } catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  finally { fs.rmSync(temporaryRoot, { recursive: true, force: true }); }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-journal-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
 export function parseLocalPostgresRunnerArguments(argv) {
   const stable = ownedPlain(argv);
   if (stable.length === 1 && stable[0] === "fake") return Object.freeze({ mode: "fake" });
@@ -7906,6 +9739,31 @@ export function parseLocalPostgresRunnerArguments(argv) {
     && stable[3] === "--blocked-root" && stable[4] === BLOCKED_PRIVATE_ROOT
     && stable[5] === "--evidence-out" && typeof stable[6] === "string" && path.isAbsolute(stable[6])) {
     return Object.freeze({ mode: "rescue", rescueRoot: stable[2], blockedRoot: stable[4], evidenceOut: stable[6] });
+  }
+  if (stable.length === 15 && stable[0] === "prepare-inspect-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--blocked-root" && stable[4] === BLOCKED_PRIVATE_ROOT
+    && stable[5] === "--rescue-root" && stable[6] === FAILED_RESCUE_PRIVATE_ROOT
+    && stable[7] === "--diagnostic-review-head" && typeof stable[8] === "string" && GIT_OBJECT.test(stable[8])
+    && stable[9] === "--owner-approval-receipt" && typeof stable[10] === "string" && path.isAbsolute(stable[10])
+    && stable[11] === "--created-at" && typeof stable[12] === "string"
+    && stable[13] === "--expires-at" && typeof stable[14] === "string") {
+    instant(stable[12]); instant(stable[14]);
+    return Object.freeze({
+      mode: "prepare-inspect-diagnostic", diagnosticRoot: stable[2], blockedRoot: stable[4],
+      rescueRoot: stable[6], diagnosticOwnerReviewHead: stable[8], ownerApprovalReceiptPath: stable[10],
+      createdAt: stable[12], expiresAt: stable[14],
+    });
+  }
+  if (stable.length === 9 && stable[0] === "inspect-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--blocked-root" && stable[4] === BLOCKED_PRIVATE_ROOT
+    && stable[5] === "--rescue-root" && stable[6] === FAILED_RESCUE_PRIVATE_ROOT
+    && stable[7] === "--evidence-out" && typeof stable[8] === "string" && path.isAbsolute(stable[8])) {
+    return Object.freeze({
+      mode: "inspect-diagnostic", diagnosticRoot: stable[2], blockedRoot: stable[4],
+      rescueRoot: stable[6], evidenceOut: stable[8],
+    });
   }
   fail("local_postgres_arguments_invalid");
 }
@@ -8953,6 +10811,18 @@ async function direct() {
   if (parsed.mode === "rescue") {
     await runApprovedLocalPostgresCleanupRescue({
       rescueRoot: parsed.rescueRoot, blockedRoot: parsed.blockedRoot, evidenceOut: parsed.evidenceOut,
+    });
+    return;
+  }
+  if (parsed.mode === "prepare-inspect-diagnostic") {
+    const { mode: _mode, ...input } = parsed;
+    process.stdout.write(`${canonicalJson(prepareBodyFreeDockerInspectDiagnosticGrant(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "inspect-diagnostic") {
+    await runApprovedBodyFreeDockerInspectDiagnostic({
+      diagnosticRoot: parsed.diagnosticRoot, blockedRoot: parsed.blockedRoot,
+      rescueRoot: parsed.rescueRoot, evidenceOut: parsed.evidenceOut,
     });
     return;
   }
