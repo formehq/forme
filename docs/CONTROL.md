@@ -1,39 +1,33 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-13
+- Updated: 2026-08-14
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
-  review is Owner-accepted and PR #72 is integrated into the R4 branch. #67 is
-  offline Technical Review Green on Draft PR #73, with the public-only boundary
-  foundation on Draft PR #75. The Owner approved the exact Durable Public Core
-  Construction Packet and Review on 2026-08-10 and Addendum A on 2026-08-11.
-  The Local PostgreSQL Wiring Packet and Addenda B/C reached Stage-A
-  `bc0b520`. Physical Rebind Effect 0 froze the v3 runner, but the first
-  precisely approved Physical Execution reached only `prepare`: a valid APFS
-  root with one receipt reported nlink 3 while the frozen contract required
-  2. No pending grant was created and Docker/OCI/PostgreSQL/SQL remained zero.
-  The old Card/Review/receipt are historical and non-executable. The approved
-  repository-only APFS correction is frozen at Kc `18e3a32` and Lc
-  `32448cb`. The subsequent execution-authority topology correction is
-  Technical Review Green at Kt `f7d3783` / Lt `c699f9d`: the failed
-  unversioned Card/Review remain historical, while future authority must use
-  unique add-only `-V2.md` paths. The exact stop is
-  `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
-  Application, persistence, `pg` executor, application-store bridge, v3
-  one-use authority, durable effect accounting and cleanup recovery are
-  constructed; no target PostgreSQL catalog was observed. Vault, HTTPS,
-  production pool/migration, runtime route, traffic and Gate C readiness
-  remain false. A separately approved fresh one-use Physical Execution,
-  publication-stable successor approval, Gate C
-  and one real Public Room / bounded Guest knock follow separately. Host
-  Binding is historical setup evidence and is not the #67 product gate.**
+  review is Owner-accepted and #67 has repository/offline Public Core plus
+  concrete Local PostgreSQL wiring. One exactly approved v3 rehearsal was
+  prepared and consumed. It observed matching Docker client/server `29.3.1`
+  and `linux/arm64`, then stopped on the first exact-name container absence
+  preflight. Its one cleanup-only recovery also stopped `BLOCKED`; absence was
+  not proven. No image pull, Docker create/start/remove, PostgreSQL process,
+  connection, database, SQL or domain action occurred. The old grant is
+  permanently consumed and its exact four-entry forensic root is retained.
+  The repository-only Docker diagnostic/rescue correction is now Technical
+  Review Green at Kd `0fdf68c` / Ld `62d0c98`: it accepts one reviewed exact
+  diagnostic and constructs an inert future cleanup-rescue membrane. The
+  exact stop is
+  `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Cleanup Rescue, another Physical Execution,
+  production pool/migration, runtime route, traffic and Gate C remain closed.
+  The next step is only a unique Rescue Card/Review proposal. Host Binding is
+  historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
   repository mechanisms are closed/implemented. #66 proved current Twin →
   bounded local Projection → exact local Owner approval → restart recovery.
   #67 has proved the Room-bound handoff, offline Public Core rehearsal, rich
   visitor surface and repository-only application/persistence/driver-bridge
-  construction. No disposable PostgreSQL rehearsal, production PostgreSQL
+  construction. The disposable rehearsal reached Docker preflight but did not
+  reach PostgreSQL; it remains FAILED/BLOCKED. No production PostgreSQL
   migration, Gate C deployment,
   Room mutation, publication, Curator admission, real Guest data, public
   traffic, Fresh Provider session, or Response delivery has run. R4 is not
@@ -57,27 +51,28 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **propose and independently review the fresh versioned
-  `PHYSICAL-EXECUTION-CARD-V2.md` and
-  `PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md` that bind the frozen
-  [`Execution-Authority Topology Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
-  Kt/Lt and the external committed-Mt audit; do not create a pending grant or
-  execute Docker/PostgreSQL yet. The hash-pinned
+- Next action: **propose and independently review the unique
+  `R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-CARD.md` and
+  `R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-OWNER-REVIEW.md`
+  that bind the frozen
+  [`Docker Diagnostic/Rescue Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md),
+  Kd/Ld and the external committed-Md audit; do not prepare a rescue grant,
+  call Docker or touch the historical root yet. The hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
   stopped at Technical Review. The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current execution-authority topology correction bindings: index
-  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+- Current Docker diagnostic/rescue correction bindings: index
+  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
   schema
-  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
   evidence
-  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
+  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
   report
-  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
-- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
+- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -324,7 +319,12 @@ Current truth:
   current Local PostgreSQL Wiring Stage-A `bc0b520` adds the audited concrete
   executor, 20-method bridge and corrected static SQL contract. No target
   PostgreSQL was observed, and vault/HTTPS transport/production pool and
-  migration/runtime route/traffic/Gate C remain false. PR #74 is merged as a fixture-only
+  migration/runtime route/traffic/Gate C remain false. A later approved v3
+  rehearsal consumed one grant, reached only matching Docker host observation
+  plus exact-name absence inspection, and ended FAILED/BLOCKED. It created no
+  Docker resource and reached no PostgreSQL/SQL effect. Kd/Ld
+  `0fdf68c` / `62d0c98` now freeze the repository-only diagnostic/rescue
+  correction; Rescue remains separately gated. PR #74 is merged as a fixture-only
   repair. The implementation proves a local Room-bound
   reapproval, immutable receipt/recovery, offline public Projection → independent
   curation → one 24-hour/one-use knock → private durable Interaction → local

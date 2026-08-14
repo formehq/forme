@@ -1,7 +1,7 @@
 # R4 #67 Public Core Gate C Activation Card — Local PostgreSQL Successor
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_FRESH_VERSIONED_ONE_USE_PHYSICAL_EXECUTION_REQUIRED_GATE_C_NOT_REQUESTED`**
-- Updated: 2026-08-13
+- Status: **`SUCCESSOR_NOT_APPROVABLE_BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED_PHYSICAL_EXECUTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Updated: 2026-08-14
 - Scope: **#67 only — one durable public Room through one bounded knock reaching the local Owner**
 - Predecessor Gate C Card SHA-256:
   `sha256:dcc2fb79a96d37eba8b1b0fb276a9ee0b01a436501520e224650cabeaf2e73f6`
@@ -13,17 +13,20 @@
 - Physical Rebind Effect-0 Construction: **TECHNICAL_REVIEW_GREEN**
 - APFS nlink Correction Construction: **TECHNICAL_REVIEW_GREEN**
 - Execution-Authority Topology Correction Construction: **TECHNICAL_REVIEW_GREEN**
-- Failed one-use Physical Execution authority: **HISTORICAL_NON_EXECUTABLE**
-- Fresh one-use Physical Execution Approval: **NOT_REQUESTED**
+- One-use Physical Execution result: **FAILED / CLEANUP_BLOCKED / HISTORICAL_NON_EXECUTABLE**
+- Docker Diagnostic/Rescue Correction Construction: **TECHNICAL_REVIEW_GREEN**
+- Blocked-Cleanup Rescue Approval: **NOT_REQUESTED**
+- Further Physical Execution Approval: **NOT_REQUESTED**
 - Gate C Activation Grant: **NOT_REQUESTED**
 - Migration, deployment, runtime/route, publication, real Guest, Provider,
   merge, release and spend grants: **NOT_REQUESTED**
 
 This successor Card records Local PostgreSQL Wiring, repository-only Physical
-Rebind Effect 0, the failed APFS prepare, the APFS correction and the later
-repository-only execution-authority topology correction.
+Rebind Effect 0, the failed APFS prepare, the APFS and authority-topology
+corrections, the later consumed v3 rehearsal that ended FAILED/BLOCKED, and
+the repository-only Docker diagnostic/rescue correction.
 It is a stop object, not an approval request. It grants no repository mutation,
-fresh one-use Physical Execution, Docker,
+cleanup rescue, further Physical Execution, Docker,
 OCI, PostgreSQL, SQL, runtime, route, Vault, HTTPS, traffic, Room, Projection,
 Curator, Guest, Provider, model, email, deployment, publication, admission,
 merge, release or spend authority.
@@ -72,6 +75,17 @@ its containing commit/tree externally and explicitly.
 | Topology-correction artifact index | `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5` |
 | Topology-correction schema / evidence | `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3` / `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57` |
 | Topology Correction Report | `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64` |
+| Physical Execution Card V2 / Review V2 | `sha256:1ca420578f3e16c75b8242d71b93ea7be18baa1815c0f83e610807f9ded7c795` / `sha256:e92a125cdf1f8c4df8448836275bd98225ec8ce0b764dd70dfbabc479366e377` |
+| Physical Execution `C2` / `R2` HEAD | `7a533f4b2cc91070e7bd78cb6c70c1f28524ec38` / `6e67c1f1867d73f27674a5f056e0692c5b42d6a3` |
+| consumed grant / final blocked receipt | `sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35` / `sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c` |
+| blocked journal count / head | `34` / `sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25` |
+| Diagnostic/Rescue Addendum / Review | `sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9` / `sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4` |
+| Corrected implementation `Kd` / tree | `0fdf68c7c786085189c3df0787df07f366c6df5b` / `5f091925b8b48cbd515700b275465506a391ccde` |
+| Correction evidence `Ld` / tree | `62d0c98d7052998b7bb69b76c83f60576091836b` / `4673f445021f0d4a92c6e01e4bdccbb303141e0a` |
+| Corrected runner / test | `sha256:42d1c7b6640fd984a702922685cfc92181966318b7801606d17cacbf40b77f08` / `sha256:2c600732115b1e755a13af9fffd074b90831da69ea24beb1dde0635b16862cbd` |
+| Diagnostic/Rescue artifact index | `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b` |
+| Diagnostic/Rescue schema / evidence | `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be` / `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3` |
+| Diagnostic/Rescue Correction Report | `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f` |
 | `package-lock.json` | `sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f` |
 | Phase-1 predecessor runner | `sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1` |
 | `schema.sql` / `verify.sql` / `rollback.sql` | `sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8` / `sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd` / `sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4` |
@@ -97,6 +111,11 @@ The current repository-only successor is the
 with [machine evidence](./evidence/r4-public-core-local-postgres-execution-authority-topology-correction.json),
 [artifact index](../schemas/r4/public-core/local-postgres-execution-authority-topology-correction-artifact-index.json)
 and [strict schema](../schemas/r4/public-core/local-postgres-execution-authority-topology-correction-evidence.schema.json).
+The current repository-only successor is the
+[Docker Diagnostic/Rescue Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md),
+with [machine evidence](./evidence/r4-public-core-local-postgres-docker-diagnostic-rescue-correction.json),
+[artifact index](../schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-artifact-index.json)
+and [strict schema](../schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-evidence.schema.json).
 
 Any changed implementation, dependency, SQL, catalog, runner, production
 configuration, deployment artifact, publication artifact, actor, window,
@@ -136,9 +155,14 @@ driver pool, runtime route or traffic path was configured.
 | Physical Rebind runner/evidence constructed | `true` |
 | APFS nlink correction constructed | `true` |
 | Execution-authority topology correction constructed | `true` |
-| Fresh versioned Card/Review constructed | `false / false` |
-| Failed physical prepare created or consumed a pending grant | `false / false` |
-| Disposable local PostgreSQL rehearsal exercised | `false` |
+| Physical Execution Card V2 / Review V2 constructed | `true / true` |
+| v3 physical grant prepared / consumed | `true / true` |
+| Disposable local rehearsal reached Docker preflight | `true` |
+| Docker version/platform matched | `true` |
+| Docker resource created or mutated | `false` |
+| Physical result / cleanup result | `FAILED / BLOCKED` |
+| Docker diagnostic/rescue correction constructed | `true` |
+| Blocked-Cleanup Rescue executed | `false` |
 | Target PostgreSQL observed | `false` |
 | Target catalog verified as 14 / 207 / 172 / 44 | `false` |
 | Production driver/pool configured | `false` |
@@ -152,16 +176,14 @@ driver pool, runtime route or traffic path was configured.
 | Real Room / Projection / Curator receipt | absent / absent / absent |
 | Real Guest Interaction | absent |
 
-The corrected committed runner rejects the prior 17-path/Addendum-B-only topology and
-binds `J/G19`, Stage B, K/L, current SQL/catalog, v3 one-use authority and exact
-cleanup semantics. It removes the invalid fixed directory-nlink equality while
-retaining exact path/dev/ino/uid/gid/mode and child-entry checks. Kt/Lt further
-preserve the failed unversioned authority as history and require unique,
-single-path add-only `-V2.md` Card/Review successors. This is
-constructed capability only: the failed prepare created or consumed no pending
-grant, and no Docker or PostgreSQL effect ran. A fresh versioned Physical
-Execution Card, Owner Review and exact Owner approval must bind the final Mt
-commit/tree plus its external committed-byte audit before any physical effect.
+The versioned v3 authority was consumed once and cannot be revived. Its journal
+proves one construction plus one cleanup-only lifecycle, matching Docker
+version/platform observations and exact-name inspect calls, with zero Docker
+resource creation/mutation and zero PostgreSQL/SQL effects. Cleanup remains
+blocked because absence was not proven. Kd/Ld correct only the reviewed
+diagnostic and construct a separate inert rescue membrane. A later Rescue
+Card, Owner Review and exact Owner approval must bind final Md and its external
+committed-byte audit before any rescue effect.
 
 ## Obsolete physical bindings
 
@@ -342,7 +364,7 @@ publication is implied.
 | Effect | Authorized now |
 |---|---:|
 | Further repository or dependency mutation | 0 |
-| One-use Physical Execution grants or executions | 0 / 0 |
+| New rescue or Physical Execution grants / executions | 0 / 0 |
 | Docker CLI / daemon calls | 0 / 0 |
 | OCI inspect / pulls | 0 / 0 |
 | PostgreSQL connections / database identities | 0 / 0 |
@@ -374,13 +396,15 @@ Acceptance or R4 Done.
 
 Do not approve or activate this Card. Current work stops exactly at:
 
-`LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 The next permitted repository step is a separately proposed, hash-pinned
-`PHYSICAL-EXECUTION-CARD-V2.md` and
-`PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md`. Physical preparation still requires
-a separate exact Owner approval. Even successful local rehearsal must stop and
-cannot request or imply Gate C. A later Gate C decision must separately bind a
+`R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-CARD.md` and
+`R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-OWNER-REVIEW.md`.
+Rescue preparation/execution still requires a separate exact Owner approval.
+Even successful cleanup rescue proves only exact resource absence and cannot
+request or imply Physical Green or Gate C. A later fresh Physical Execution
+and Gate C decision must separately bind a
 new activation-ready Card SHA-256, its containing HEAD/tree, every production
 input, exact Projection approval, actors, activation window, disable/rollback
 commands, effect ceilings and spend.

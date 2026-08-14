@@ -2,7 +2,7 @@
 
 The repository keeps a deliberately small decision surface.
 
-Current execution truth (2026-08-13): R0–R3 are Done and Owner-accepted. #66
+Current execution truth (2026-08-14): R0–R3 are Done and Owner-accepted. #66
 local Projection review is Owner-accepted and PR #72 is integrated into the R4
 branch. #67 is offline Technical Review Green on Draft PR #73, with no
 production Room/database mutation, deployment, publication, admission, real
@@ -12,22 +12,26 @@ repository-only APFS nlink correction is Technical Review Green at Kc
 grant creation on the invalid fixed-nlink contract; Docker, PostgreSQL and SQL
 remained zero. The later repository-only execution-authority topology
 correction is Technical Review Green at Kt `f7d3783` / Lt `c699f9d`.
-Future authority must use the unique versioned Card/Review additions. The next
-gate is a fresh versioned proposal followed by a separate one-use Physical
-Execution approval. R4 remains Building and is not
+A later approved v3 rehearsal consumed its one-use grant, observed matching
+Docker version/platform, then failed on the first container-absence diagnostic;
+cleanup remains `BLOCKED`. It created no Docker resource and made no
+PostgreSQL/SQL effect. The repository-only diagnostic/rescue correction is now
+Technical Review Green at Kd `0fdf68c` / Ld `62d0c98`. The next gate is a
+unique Blocked-Cleanup Rescue Card/Review proposal; rescue, another Physical
+Execution and Gate C are not requested. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current execution-authority topology correction bindings: index
-`sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+Current Docker diagnostic/rescue correction bindings: index
+`sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
 schema
-`sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+`sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
 evidence
-`sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
+`sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
 report
-`sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
-Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+`sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
+Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -41,6 +45,7 @@ Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md) | What did repository-only Physical Rebind Effect 0 construct, validate and leave closed? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md) | How was the invalid fixed APFS directory-link-count contract corrected without weakening root identity or granting execution? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md) | How were future execution authority paths made uniquely add-only while failed authority remained immutable history? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact missing-container diagnostic corrected and a future cleanup-rescue membrane constructed without executing rescue? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

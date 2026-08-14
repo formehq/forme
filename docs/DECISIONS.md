@@ -1186,7 +1186,6 @@ push/PR/merge/release and spend effects are zero.
 Only a fresh Card, Review and exact Owner approval bound to committed Mc and
 its external audit may open a later local physical attempt. #67 and R4 remain
 open.
-+
 ## 2026-08-13 — execution-authority topology correction reached repository Technical Review Green
 
 **Decision:** accept the precisely approved Topology Correction Addendum
@@ -1235,3 +1234,69 @@ push/PR/merge/release and spend effects are zero.
 Only the fresh versioned Card/Review proposal may be constructed next. Grant
 preparation or physical execution still requires a later separate exact Owner
 approval. #67 and R4 remain open.
+
+## 2026-08-14 — Docker diagnostic/rescue correction reached repository Technical Review Green
+
+**Decision:** preserve the consumed v3 Physical Execution and its final
+`FAILED / cleanup BLOCKED` result as immutable history, and accept only the
+precisely approved repository correction. The Docker Diagnostic and
+Blocked-Cleanup Rescue Correction Addendum is
+`sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9`;
+its Owner Review is
+`sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4`.
+This decision grants no cleanup rescue, further Physical Execution or Gate C.
+
+**Historical physical truth:** Card V2
+`sha256:1ca420578f3e16c75b8242d71b93ea7be18baa1815c0f83e610807f9ded7c795`
+and Review V2
+`sha256:e92a125cdf1f8c4df8448836275bd98225ec8ce0b764dd70dfbabc479366e377`
+authorized one v3 prepare and one disposable local rehearsal. Grant
+`sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35`
+was prepared and consumed. Docker client/server `29.3.1` and `linux/arm64`
+matched; the run then failed on the first exact container-absence diagnostic.
+The cleanup-only recovery also stopped `BLOCKED`. Final evidence is
+`sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c`;
+the journal is 34 entries with head
+`sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25`.
+No Docker resource was created or mutated and PostgreSQL/SQL/domain counts are
+zero. The consumed grant cannot be retried or converted into rescue authority.
+
+**Result:** Kd `0fdf68c7c786085189c3df0787df07f366c6df5b` / tree
+`5f091925b8b48cbd515700b275465506a391ccde` and Ld
+`62d0c98d7052998b7bb69b76c83f60576091836b` / tree
+`4673f445021f0d4a92c6e01e4bdccbb303141e0a` freeze the exact diagnostic
+correction and inert future rescue membrane. G2d is
+`sha256:25dba2e75ca042e8c20e096ddaf9f5ee24506fab678a0a0f33366edd8ecebe22`;
+G3d is
+`sha256:6a0ee94a92e7b5f153c269300e98f1a86108c63e4b3f8a88f951b1648fb3c749`.
+The artifact index is
+`sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`;
+the strict schema is
+`sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`;
+machine evidence is
+`sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md)
+is `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:80174c78baf223f7a7f2e7129749f7a4b00ca3f3d6cef72ce1f6c3952b564f8d`.
+Committed Kd/Ld audit summaries are
+`sha256:450160411b61707c244bbe2e7de3d22ede0aa2a0d27cb2c469fc7e05e0eafdc7`
+and
+`sha256:0de8f47a573d2a1f00836881858166bc5db2d0e541ab2e02c4b43989a739c94a`.
+
+**Validation and effect:** exact deny-network lanes pass 151/151, 85/85,
+403/403, 723/723, 145/145 and 45/45. Strict Ajv, authority topology,
+committed blobs, full-line diagnostic positives/near misses, future rescue
+grant/receipt, crash recovery, root/host drift, real-port denial, syntax,
+TypeScript, no-server-AI, docs and diff checks pass with 0 Blocker / 0
+Important. This construction made zero external-network, old-root, pending or
+consumed rescue-grant, Docker/OCI, PostgreSQL/SQL, production/runtime/traffic,
+Provider/model/email, deploy/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the unique Blocked-Cleanup Rescue Card/Review proposal may be constructed
+next. Rescue prepare/execute requires a later separate exact Owner approval;
+another Physical Execution and Gate C remain still-later independent gates.
+#67 and R4 remain open.

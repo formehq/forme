@@ -13,42 +13,31 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Progress / Vision Sharing: **2026-08-25 (Tuesday)** — share the truthful state
   reached by then; a complete or repeatable MVP is not required for the sharing
 - Current gate: **R4 Controlled Presence is Building on the real product
-  sequence, not on Host Binding.** R1–R3 are Owner-accepted. #66 completed one
-  real-Twin, local-only Projection review and Owner acceptance; PR #72 is
-  integrated into the R4 integration branch. #67 has an offline Technical
-  Review Green on Draft PR #73 for Room-bound reapproval, deterministic public
-  Room/knock rehearsal, restart recovery, and the richer visitor surface.
-  Draft PR #75 adds the public-only production-boundary foundation. The Owner
-  approved Draft PR #76's exact Durable Public Core Construction Packet on
-  2026-08-10 and Addendum A on 2026-08-11. The later Local PostgreSQL Wiring
-  Packet plus Addenda B/C first reached repository-only Technical Review
-  Green at Stage-A `bc0b520`: the application, durable persistence, concrete
-  `pg` executor and 20-method application-store bridge are constructed. The
-  committed SQL catalog contract is `14 / 207 / 172 / 44`, but it has not been
-  observed in PostgreSQL. The first one-use Physical Execution prepare stopped
-  before grant creation because the frozen runner incorrectly required an
-  APFS directory containing one receipt to retain nlink 2; the observed valid
-  value was 3. Docker/OCI/PostgreSQL/SQL effects remained zero and that Card,
-  Review and private receipt are now historical/non-executable. The precisely
-  approved repository-only APFS correction is Technical Review Green at Kc
-  `18e3a32` and Lc `32448cb`: fixed directory-nlink equality is removed while
-  path/dev/ino/uid/gid/mode identity and the exact-entry membrane remain
-  fail-closed. A later audit found that the fresh execution verifier still
-  required Git to add the already-existing failed Card/Review paths. The
-  precisely approved repository-only topology correction is now Technical
-  Review Green at Kt `f7d3783` and Lt `c699f9d`; future authority must use
-  the unique `-CARD-V2.md` and `-OWNER-REVIEW-V2.md` additions. A fresh
-  versioned Card/Review proposal and separate one-use Physical Execution
-  approval are the next gates; vault, HTTPS transport, production pool/migration,
-  runtime route, traffic and Gate C readiness remain false. #67 has not created or
-  mutated a production Room, deployed, published, admitted a Projection,
-  handled real Guest data, or run a real public knock. R4 is not Owner-accepted
-  or Done.
+  sequence, not on Host Binding.** R1–R3 are Owner-accepted and #66 completed
+  one real-Twin, local-only Projection review. #67 has repository/offline
+  Public Core and Local PostgreSQL wiring, including the concrete `pg`
+  executor and 20-method store bridge. One precisely approved disposable
+  local rehearsal was prepared and consumed. It observed matching Docker
+  client/server `29.3.1` and `linux/arm64`, then stopped on the first exact
+  container-absence diagnostic; the cleanup-only recovery also stopped
+  `BLOCKED` because absence could not be proven. It created no container,
+  network, volume, PostgreSQL process, database, SQL effect or application
+  action. The consumed grant cannot be retried. The repository-only Docker
+  diagnostic/rescue correction is now Technical Review Green at Kd
+  `0fdf68c` and Ld `62d0c98`: it adds one exact accepted diagnostic and an
+  inert, separately authorized cleanup-rescue membrane. Cleanup Rescue,
+  another Physical Execution and Gate C remain `NOT_REQUESTED`. The next gate
+  is a unique Blocked-Cleanup Rescue Card/Review proposal, not Docker
+  execution. Vault, HTTPS transport, production pool/migration, runtime route,
+  traffic and Gate C readiness remain false. #67 has not created or mutated a
+  production Room, deployed, published, admitted a Projection, handled real
+  Guest data or run a real public knock. R4 is not Owner-accepted or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
   APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`; execution-authority
-  topology correction Kt/Lt are `f7d3783` / `c699f9d`;
+  topology correction Kt/Lt are `f7d3783` / `c699f9d`; Docker diagnostic
+  rescue correction Kd/Ld are `0fdf68c` / `62d0c98`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -61,24 +50,26 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   first provider-call grant remain `NOT_REQUESTED`. Host Setup/Doctor is tracked
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
-- Production gap: the current Public Core is repository/offline proof only.
-  The disposable local PostgreSQL rehearsal has not run. Its first `prepare`
-  attempt created no pending grant and made zero Docker/OCI/PostgreSQL/SQL
-  effects; the APFS and execution-authority topology corrections are
-  repository-only. No production
+- Production gap: the current Public Core has repository/offline proof plus a
+  failed disposable local Docker preflight, not a PostgreSQL rehearsal Green.
+  One v3 grant was prepared and consumed. Docker version and exact-name inspect
+  calls ran, but no Docker resource was created or mutated and no PostgreSQL,
+  database or SQL effect ran. Cleanup remains conservatively `BLOCKED`; the
+  old forensic root is retained unchanged. The current diagnostic/rescue
+  correction is repository-only. No production
   PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
-- Execution-authority topology correction bindings: index
-  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+- Docker diagnostic/rescue correction bindings: index
+  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
   schema
-  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
   evidence
-  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
+  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
   report
-  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
   These prove repository correction only.
-- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -106,7 +97,8 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md),
     [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
     [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
-    and [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md)
+    [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
+    and [`Docker Diagnostic/Rescue Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md)
     — the Phase-1, rebind and repository corrections, exact stop and inputs still required
 12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
     — the current non-approvable activation boundary
@@ -290,11 +282,15 @@ Green at `bcd4259`. The current Local PostgreSQL Wiring successor is
 repository-only Technical Review Green at `bc0b520`, with exact
 [machine-backed evidence](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
 and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
-A precisely approved first physical prepare then stopped before grant creation
-on the invalid fixed APFS nlink contract. The repository-only correction is
-Green at Kc/Lc `18e3a32` / `32448cb`; a fresh one-use Physical Execution
-approval must precede any local PostgreSQL rehearsal. A later Gate C decision,
-publication-stable successor approval and one real Guest knock follow later.
+A precisely approved first physical prepare stopped before grant creation on
+the invalid fixed APFS nlink contract. After the APFS and topology corrections,
+a later approved v3 rehearsal prepared and consumed one grant, observed
+matching Docker version/platform and stopped FAILED/BLOCKED on exact resource
+absence proof. It created no Docker resource and reached no PostgreSQL or SQL
+effect. The current repository-only diagnostic/rescue correction is Green at
+Kd/Ld `0fdf68c` / `62d0c98`. A unique Rescue Card/Review and separate exact
+approval must precede any cleanup rescue. Another Physical Execution and Gate C
+follow only after genuine Rescue Green and their own gates.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model
 calls, real Guest-data handling, external email, production schema migration,

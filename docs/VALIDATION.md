@@ -1,16 +1,16 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-13
-- Execution-authority topology correction bindings: index
-  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+- Updated: 2026-08-14
+- Docker diagnostic/rescue correction bindings: index
+  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
   schema
-  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
   evidence
-  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
+  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
   report
-  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
-- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
+- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -35,9 +35,16 @@
   repository-only correction repaired the impossible future Card/Review
   add-only topology at Kt `f7d3783` / Lt `c699f9d`; its exact validation
   totals are 142 / 85 / 394 / 714 / 145 / 45 and strict machine
-  evidence/committed-byte audits are Green. Fresh versioned authority,
-  one-use Physical Execution and Gate C
-  remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
+  evidence/committed-byte audits are Green. Fresh versioned authority and
+  one-use Physical Execution were then separately reviewed; Gate C remained
+  `NOT_REQUESTED`. The
+  approved v3 rehearsal consumed its grant, observed matching Docker
+  version/platform and stopped at exact-name container absence; cleanup remains
+  `BLOCKED`. It created no Docker resource and made no PostgreSQL/SQL effect.
+  The repository-only diagnostic/rescue correction is Green at Kd `0fdf68c` /
+  Ld `62d0c98`, with exact totals 151 / 85 / 403 / 723 / 145 / 45.
+  Cleanup Rescue, another Physical Execution and Gate C remain `NOT_REQUESTED`;
+  R4 is not Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -1140,3 +1147,43 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
 - Consequence: stop. Only the fresh `-CARD-V2.md` and
   `-OWNER-REVIEW-V2.md` proposal may be constructed next; physical
   preparation still requires separate exact Owner approval.
+
+## Evidence round 25 — failed Docker preflight and rescue correction
+
+- Case: the exact Card V2/Review V2 and Owner approval authorized one v3
+  prepare plus one disposable local rehearsal. The grant was prepared and
+  consumed. Docker client/server `29.3.1` and `linux/arm64` matched, but the
+  first exact-name container absence check returned a full diagnostic outside
+  the old closed container table. Cleanup-only recovery also could not prove
+  exact absence and stopped `BLOCKED`.
+- Owner experience: the run failed closed. It made 14 completed Docker calls
+  across one construction and one cleanup lifecycle, but created, started,
+  stopped or removed no Docker resource; it did not inspect/pull an image,
+  import `pg`, connect to PostgreSQL, allocate a database, run SQL or execute a
+  domain action. The consumed grant is permanently non-retryable and the exact
+  four-entry forensic root remains retained.
+- Technical evidence: consumed grant
+  `sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35`,
+  final blocked receipt
+  `sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c`
+  and journal 34 /
+  `sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25`.
+  The correction freezes Kd `0fdf68c7c786085189c3df0787df07f366c6df5b`,
+  Ld `62d0c98d7052998b7bb69b76c83f60576091836b`, machine evidence
+  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`
+  and the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md).
+  Exact deny-network totals are 151 / 85 / 403 / 723 / 145 / 45; strict Ajv,
+  authority/lineage, exact diagnostics, future rescue grant/receipt, crash,
+  root/host drift, real-port denial, TypeScript, no-AI, docs and diff checks
+  pass with 0 Blocker / 0 Important.
+- Product judgment: the system demonstrated a valuable negative capability: it
+  consumed one authority, stopped on an unreviewed external diagnostic and did
+  not improvise. The correction makes a narrowly compatible future cleanup
+  possible, but it does not turn the failed rehearsal into success.
+- Not proven: exact absence of the historical container/network/volume,
+  Cleanup Rescue Green, PostgreSQL 16.10, target catalog 14 / 207 / 172 / 44,
+  apply/restart/rollback, production runtime/traffic, the real encounter or
+  Gate C.
+- Consequence: stop. Only a unique Blocked-Cleanup Rescue Card/Review proposal
+  may be constructed next. Rescue prepare/execute, another physical rehearsal
+  and Gate C each require later separate exact Owner authority.

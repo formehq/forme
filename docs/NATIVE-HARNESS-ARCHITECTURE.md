@@ -21,23 +21,27 @@
   Docker/PostgreSQL/SQL effects. The repository-only APFS correction is
   Technical Review Green at Kc `18e3a32` / Lc `32448cb`; the later
   execution-authority topology correction is Technical Review Green at Kt
-  `f7d3783` / Lt `c699f9d` and requires unique versioned future
-  Card/Review paths. A fresh versioned proposal, one-use Physical Execution,
-  target PostgreSQL observation, vault, transport, traffic and Gate
+  `f7d3783` / Lt `c699f9d`. A later approved one-use v3 rehearsal consumed
+  its grant, observed matching Docker version/platform, then stopped on an
+  exact missing-container diagnostic; cleanup is `BLOCKED`. No Docker resource
+  or PostgreSQL/SQL effect was created. The repository-only diagnostic/rescue
+  correction is Technical Review Green at Kd `0fdf68c` / Ld `62d0c98`.
+  Cleanup Rescue, another Physical Execution, target PostgreSQL observation,
+  vault, transport, traffic and Gate
   C remain closed. Draft PR #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
-- Updated: 2026-08-13
-- Execution-authority topology correction bindings: index
-  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+- Updated: 2026-08-14
+- Docker diagnostic/rescue correction bindings: index
+  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
   schema
-  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
   evidence
-  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
+  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
   report
-  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
-- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
+- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside
