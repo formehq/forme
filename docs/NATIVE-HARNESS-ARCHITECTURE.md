@@ -16,23 +16,25 @@
   `5e93196`, with a public-only boundary foundation on Draft PR #75 at
   `09401a0`; the Owner-approved Durable Public Core Construction and Addendum A
   are Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring
-  Stage A is `bc0b520`, and the repository-only Physical Rebind construction
-  is Technical Review Green at K `bcfe334` / L `beeb55b`; one-use Physical
+  Stage A is `bc0b520`. The first physical prepare stopped before grant
+  creation on an invalid fixed APFS directory-nlink precondition, with zero
+  Docker/PostgreSQL/SQL effects. The repository-only correction is Technical
+  Review Green at Kc `18e3a32` / Lc `32448cb`; a fresh one-use Physical
   Execution, target PostgreSQL observation, vault, transport, traffic and Gate
   C remain closed. Draft PR #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-13
-- Physical Rebind Effect-0 bindings: index
-  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+- APFS nlink correction bindings: index
+  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
   schema
-  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
   evidence
-  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
   report
-  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside

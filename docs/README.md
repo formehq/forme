@@ -7,22 +7,24 @@ local Projection review is Owner-accepted and PR #72 is integrated into the R4
 branch. #67 is offline Technical Review Green on Draft PR #73, with no
 production Room/database mutation, deployment, publication, admission, real
 Guest data or Provider call. Local PostgreSQL Wiring Stage A is `bc0b520`; the
-repository-only Physical Rebind is Technical Review Green at K `bcfe334` / L
-`beeb55b`, but no Docker, PostgreSQL or SQL rehearsal ran. The next gate is a
-separately approved one-use Physical Execution. R4 remains Building and is not
+repository-only APFS nlink correction is Technical Review Green at Kc
+`18e3a32` / Lc `32448cb`. The first approved physical `prepare` stopped before
+grant creation on the invalid fixed-nlink contract; Docker, PostgreSQL and SQL
+remained zero. The next gate is a fresh, separately approved one-use Physical
+Execution. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current Physical Rebind bindings: index
-`sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+Current APFS nlink correction bindings: index
+`sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
 schema
-`sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+`sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
 evidence
-`sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+`sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
 report
-`sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+`sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -34,6 +36,7 @@ Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREE
 | [`DECISIONS.md`](./DECISIONS.md) | Which important choices have been made, and why? |
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md) | What did repository-only Physical Rebind Effect 0 construct, validate and leave closed? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md) | How was the invalid fixed APFS directory-link-count contract corrected without weakening root identity or granting execution? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

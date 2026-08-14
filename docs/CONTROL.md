@@ -7,15 +7,20 @@
   foundation on Draft PR #75. The Owner approved the exact Durable Public Core
   Construction Packet and Review on 2026-08-10 and Addendum A on 2026-08-11.
   The Local PostgreSQL Wiring Packet and Addenda B/C reached Stage-A
-  `bc0b520`; the separately approved Physical Rebind Effect-0 construction is
-  now frozen at K `bcfe334` and L `beeb55b`, with exact stop
-  `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-  ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `bc0b520`. Physical Rebind Effect 0 froze the v3 runner, but the first
+  precisely approved Physical Execution reached only `prepare`: a valid APFS
+  root with one receipt reported nlink 3 while the frozen contract required
+  2. No pending grant was created and Docker/OCI/PostgreSQL/SQL remained zero.
+  The old Card/Review/receipt are historical and non-executable. The approved
+  repository-only APFS correction is now frozen at Kc `18e3a32` and Lc
+  `32448cb`, with exact stop
+  `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
   Application, persistence, `pg` executor, application-store bridge, v3
   one-use authority, durable effect accounting and cleanup recovery are
   constructed; no target PostgreSQL catalog was observed. Vault, HTTPS,
   production pool/migration, runtime route, traffic and Gate C readiness
-  remain false. A separately approved one-use Physical Execution,
+  remain false. A separately approved fresh one-use Physical Execution,
   publication-stable successor approval, Gate C
   and one real Public Room / bounded Guest knock follow separately. Host
   Binding is historical setup evidence and is not the #67 product gate.**
@@ -49,10 +54,10 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **prepare and independently review a separate one-use Physical
+- Next action: **prepare and independently review a fresh one-use Physical
   Execution Card and Owner Review that bind the frozen
-  [`Physical Rebind Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
-  K/L and the external committed-M audit; do not create a pending grant or
+  [`APFS nlink Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
+  Kc/Lc and the external committed-Mc audit; do not create a pending grant or
   execute Docker/PostgreSQL yet. The hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
@@ -60,15 +65,15 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current Physical Rebind bindings: index
-  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+- Current APFS nlink correction bindings: index
+  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
   schema
-  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
   evidence
-  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
   report
-  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

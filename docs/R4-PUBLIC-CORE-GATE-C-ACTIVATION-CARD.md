@@ -1,6 +1,6 @@
 # R4 #67 Public Core Gate C Activation Card — Local PostgreSQL Successor
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_ONE_USE_PHYSICAL_EXECUTION_REQUIRED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_FRESH_ONE_USE_PHYSICAL_EXECUTION_REQUIRED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-13
 - Scope: **#67 only — one durable public Room through one bounded knock reaching the local Owner**
 - Predecessor Gate C Card SHA-256:
@@ -11,14 +11,17 @@
 - Exact 19-artifact aggregate `G19`:
   `sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417`
 - Physical Rebind Effect-0 Construction: **TECHNICAL_REVIEW_GREEN**
-- One-use Physical Execution Approval: **NOT_REQUESTED**
+- APFS nlink Correction Construction: **TECHNICAL_REVIEW_GREEN**
+- Failed one-use Physical Execution authority: **HISTORICAL_NON_EXECUTABLE**
+- Fresh one-use Physical Execution Approval: **NOT_REQUESTED**
 - Gate C Activation Grant: **NOT_REQUESTED**
 - Migration, deployment, runtime/route, publication, real Guest, Provider,
   merge, release and spend grants: **NOT_REQUESTED**
 
-This successor Card records Local PostgreSQL Wiring plus the repository-only
-Physical Rebind Effect-0 result and the remaining activation requirements. It is a stop object, not an
-approval request. It grants no repository mutation, one-use Physical Execution, Docker,
+This successor Card records Local PostgreSQL Wiring, repository-only Physical
+Rebind Effect 0, the failed APFS prepare, and the repository-only correction.
+It is a stop object, not an approval request. It grants no repository mutation,
+fresh one-use Physical Execution, Docker,
 OCI, PostgreSQL, SQL, runtime, route, Vault, HTTPS, traffic, Room, Projection,
 Curator, Guest, Provider, model, email, deployment, publication, admission,
 merge, release or spend authority.
@@ -51,6 +54,15 @@ its containing commit/tree externally and explicitly.
 | Physical Rebind artifact index | `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554` |
 | Physical Rebind evidence schema / evidence | `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27` / `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3` |
 | Physical Rebind Construction Report | `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e` |
+| Failed Execution Card / Review | `sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77` / `sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e` |
+| Failed private approval receipt | `sha256:0652fe3ac3125335728788bacc3e1cc2cee4a0f4b2417db662fb0a898fd6dd2a` — historical/non-executable |
+| APFS correction Addendum / Owner Review | `sha256:b1ad65b6033eeb0b3848544df596af362e49015613434c4eb2a06ce4f1e80e06` / `sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6` |
+| Corrected implementation `Kc` / tree | `18e3a325cceabdf5168b5ffb328ee2580b069a76` / `184d9a4147fbb9baea22b1303ca24a09c2687a79` |
+| Correction evidence `Lc` / tree | `32448cb962c823d39205cc83d11aa3f6571cf65d` / `02b377385a0e68a60021f878027f41ab34399f63` |
+| Corrected runner / test | `sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75` / `sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1` |
+| Correction artifact index | `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056` |
+| Correction evidence schema / evidence | `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a` / `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c` |
+| APFS nlink Correction Report | `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175` |
 | `package-lock.json` | `sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f` |
 | Phase-1 predecessor runner | `sha256:43f1578bdadf8c21a74337dccb715b7fb1955f967c01901857237c7fdbbd05f1` |
 | `schema.sql` / `verify.sql` / `rollback.sql` | `sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8` / `sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd` / `sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4` |
@@ -66,6 +78,11 @@ The current repository-only successor is the
 with [machine evidence](./evidence/r4-public-core-local-postgres-physical-rebind.json),
 [artifact index](../schemas/r4/public-core/local-postgres-physical-rebind-artifact-index.json)
 and [strict schema](../schemas/r4/public-core/local-postgres-physical-rebind-evidence.schema.json).
+The latest repository-only successor is the
+[APFS nlink Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
+with [machine evidence](./evidence/r4-public-core-local-postgres-apfs-nlink-correction.json),
+[artifact index](../schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json)
+and [strict schema](../schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json).
 
 Any changed implementation, dependency, SQL, catalog, runner, production
 configuration, deployment artifact, publication artifact, actor, window,
@@ -103,6 +120,8 @@ driver pool, runtime route or traffic path was configured.
 | Concrete PostgreSQL executor constructed | `true` |
 | Application-store bridge constructed | `true` |
 | Physical Rebind runner/evidence constructed | `true` |
+| APFS nlink correction constructed | `true` |
+| Failed physical prepare created or consumed a pending grant | `false / false` |
 | Disposable local PostgreSQL rehearsal exercised | `false` |
 | Target PostgreSQL observed | `false` |
 | Target catalog verified as 14 / 207 / 172 / 44 | `false` |
@@ -117,11 +136,13 @@ driver pool, runtime route or traffic path was configured.
 | Real Room / Projection / Curator receipt | absent / absent / absent |
 | Real Guest Interaction | absent |
 
-The committed runner now rejects the prior 17-path/Addendum-B-only topology and
+The corrected committed runner rejects the prior 17-path/Addendum-B-only topology and
 binds `J/G19`, Stage B, K/L, current SQL/catalog, v3 one-use authority and exact
-cleanup semantics. This is constructed capability only: no pending grant was
-created or consumed, and no Docker or PostgreSQL effect ran. A new Physical
-Execution Card, Owner Review and exact Owner approval must bind the final M
+cleanup semantics. It removes the invalid fixed directory-nlink equality while
+retaining exact path/dev/ino/uid/gid/mode and child-entry checks. This is
+constructed capability only: the failed prepare created or consumed no pending
+grant, and no Docker or PostgreSQL effect ran. A fresh Physical
+Execution Card, Owner Review and exact Owner approval must bind the final Mc
 commit/tree plus its external committed-byte audit before any physical effect.
 
 ## Obsolete physical bindings
@@ -335,9 +356,9 @@ Acceptance or R4 Done.
 
 Do not approve or activate this Card. Current work stops exactly at:
 
-`LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`
 
-The next possible physical step is a separately proposed, hash-pinned one-use
+The next possible physical step is a separately proposed, hash-pinned fresh one-use
 Physical Execution Card and Owner Review. Even successful local rehearsal must stop and
 cannot request or imply Gate C. A later Gate C decision must separately bind a
 new activation-ready Card SHA-256, its containing HEAD/tree, every production

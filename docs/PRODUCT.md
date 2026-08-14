@@ -8,8 +8,10 @@
   approved the exact Durable Public Core Construction Packet/Review on
   2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is
   Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring is
-  frozen at `bc0b520`, and repository-only Physical Rebind is Technical Review
-  Green at K `bcfe334` / L `beeb55b`; target PostgreSQL, one-use execution,
+  frozen at `bc0b520`. A precisely approved physical prepare stopped before
+  grant creation on an invalid fixed APFS directory-nlink precondition, with
+  zero Docker/PostgreSQL/SQL effects. Repository-only correction is Technical
+  Review Green at Kc `18e3a32` / Lc `32448cb`; target PostgreSQL, fresh one-use execution,
   vault, transport, traffic and Gate C remain false. Draft PR #76 remains
   unmerged; production activation
   and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
@@ -17,15 +19,15 @@
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-13
-- Physical Rebind Effect-0 bindings: index
-  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+- APFS nlink correction bindings: index
+  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
   schema
-  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
   evidence
-  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
   report
-  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

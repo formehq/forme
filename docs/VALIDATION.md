@@ -2,15 +2,15 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-13
-- Physical Rebind Effect-0 bindings: index
-  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+- APFS nlink correction bindings: index
+  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
   schema
-  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
   evidence
-  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
   report
-  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -29,9 +29,11 @@
   `NOT_REQUESTED`. Since that dated Gate-B state, #67 Local PostgreSQL Wiring
   reached Stage A `bc0b520`, and the separately approved repository-only
   Physical Rebind reached Technical Review Green at K `bcfe334` / L
-  `beeb55b`. Its exact validation totals are 139 / 85 / 391 / 711 / 145 / 45;
-  strict machine evidence and committed-byte audits are Green. No Docker,
-  PostgreSQL or SQL rehearsal occurred. One-use Physical Execution and Gate C
+  `beeb55b`. A later precisely approved `prepare` created no grant and stopped
+  on a fixed APFS nlink error with zero Docker/PostgreSQL/SQL effects. The
+  repository correction is Green at Kc `18e3a32` / Lc `32448cb`; its exact
+  validation totals are 141 / 85 / 393 / 713 / 145 / 45 and strict machine
+  evidence/committed-byte audits are Green. Fresh one-use Physical Execution and Gate C
   remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -1081,5 +1083,29 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   does not prove the encounter or PostgreSQL experience.
 - Not proven: Docker/image/daemon facts, PostgreSQL 16.10, target catalog,
   apply/restart/rollback, production pool/migration, runtime, traffic or Gate C.
-- Consequence: prepare a new one-use Physical Execution Card/Review and obtain
-  exact Owner approval before creating or consuming a pending grant.
+- Consequence: this historical Effect-0 result led to a one-use Physical
+  Execution Card/Review; its prepare later stopped pre-grant on the APFS nlink
+  contract and that authority is now non-executable.
+
+## Evidence round 23 — APFS directory-link-count correction
+
+- Case: the precisely approved one-use Physical Execution reached only
+  `prepare`. A real mode-0700 APFS root containing the sole valid Owner receipt
+  reported nlink 3 while the frozen runner required exact nlink 2.
+- Owner experience: prepare stopped `local_postgres_private_root_invalid`;
+  there was no pending/consumed grant, Docker/OCI/PostgreSQL/SQL effect, secret,
+  journal or physical evidence. The Owner precisely approved repository-only
+  correction and explicitly invalidated the old Card/Review/private receipt.
+- Technical evidence: Kc `18e3a325cceabdf5168b5ffb328ee2580b069a76`,
+  Lc `32448cb962c823d39205cc83d11aa3f6571cf65d`, machine evidence
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`
+  and [Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md).
+  Exact deny-network totals are 141 / 85 / 393 / 713 / 145 / 45; strict Ajv,
+  authority/lineage, portable APFS, hostile root identity, TypeScript, no-AI,
+  docs and diff checks pass.
+- Product judgment: the correction restores an honest future prepare path; it
+  does not prove Docker, PostgreSQL, the public encounter or production value.
+- Not proven: fresh one-use execution, PostgreSQL 16.10, target catalog,
+  apply/restart/rollback, production pool/migration/runtime/traffic or Gate C.
+- Consequence: stop and prepare a fresh Card/Review only after committed Mc and
+  its external audit. The failed authority cannot be reused.

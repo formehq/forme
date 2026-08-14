@@ -25,11 +25,16 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Green at Stage-A `bc0b520`: the application, durable persistence, concrete
   `pg` executor and 20-method application-store bridge are constructed. The
   committed SQL catalog contract is `14 / 207 / 172 / 44`, but it has not been
-  observed in PostgreSQL. The separately approved repository-only Physical
-  Rebind construction is now Technical Review Green at K `bcfe334` and L
-  `beeb55b`: the runner binds the 19/9 lineage, v3 one-use authority, durable
-  effect accounting and cleanup recovery. One-use Physical Execution approval
-  is the next separate gate; vault, HTTPS transport, production pool/migration,
+  observed in PostgreSQL. The first one-use Physical Execution prepare stopped
+  before grant creation because the frozen runner incorrectly required an
+  APFS directory containing one receipt to retain nlink 2; the observed valid
+  value was 3. Docker/OCI/PostgreSQL/SQL effects remained zero and that Card,
+  Review and private receipt are now historical/non-executable. The precisely
+  approved repository-only correction is Technical Review Green at Kc
+  `18e3a32` and Lc `32448cb`: fixed directory-nlink equality is removed while
+  path/dev/ino/uid/gid/mode identity and the exact-entry membrane remain
+  fail-closed. A fresh one-use Physical Execution approval is the next
+  separate gate; vault, HTTPS transport, production pool/migration,
   runtime route, traffic and Gate C readiness remain false. #67 has not created or
   mutated a production Room, deployed, published, admitted a Projection,
   handled real Guest data, or run a real public knock. R4 is not Owner-accepted
@@ -37,7 +42,7 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
-  Physical Rebind K/L are `bcfe334` / `beeb55b`;
+  APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -51,21 +56,22 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
 - Production gap: the current Public Core is repository/offline proof only.
-  The disposable local PostgreSQL rehearsal has not run; Physical Rebind
-  construction made zero Docker/OCI/PostgreSQL/SQL effects. No production
+  The disposable local PostgreSQL rehearsal has not run. Its first `prepare`
+  attempt created no pending grant and made zero Docker/OCI/PostgreSQL/SQL
+  effects; the APFS correction is repository-only. No production
   PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
-- Physical Rebind Effect-0 bindings: index
-  `sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`,
+- APFS nlink correction bindings: index
+  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
   schema
-  `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`,
+  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
   evidence
-  `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`,
+  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
   report
-  `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`.
-  These prove repository construction only.
-- Current stop: `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+  These prove repository correction only.
+- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -90,9 +96,10 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 9. [`docs/README.md`](./docs/README.md) — complete map of frozen Gate B/Host
    history, including both Host Binding attempt envelopes
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
-    and [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md)
-    — the Phase-1 and current Effect-0 evidence, exact stop and inputs still required
+11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md),
+    [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
+    and [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md)
+    — the Phase-1, rebind and current correction evidence, exact stop and inputs still required
 12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
     — the current non-approvable activation boundary
 
@@ -275,8 +282,10 @@ Green at `bcd4259`. The current Local PostgreSQL Wiring successor is
 repository-only Technical Review Green at `bc0b520`, with exact
 [machine-backed evidence](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
 and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
-A separately approved Physical Rebind must precede any local PostgreSQL
-rehearsal; a later Gate C decision,
+A precisely approved first physical prepare then stopped before grant creation
+on the invalid fixed APFS nlink contract. The repository-only correction is
+Green at Kc/Lc `18e3a32` / `32448cb`; a fresh one-use Physical Execution
+approval must precede any local PostgreSQL rehearsal. A later Gate C decision,
 publication-stable successor approval and one real Guest knock follow later.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model

@@ -1146,3 +1146,43 @@ merge/release and spend effects are all zero.
 A new Physical Execution Card, Owner Review and exact Owner approval must bind
 the final status commit and its external committed-byte audit before any
 pending grant or physical effect. #67 and R4 remain open.
+
+## 2026-08-13 — APFS nlink correction reached repository Technical Review Green
+
+**Decision:** record the failed one-use Physical Execution prepare as
+historical zero-effect evidence and accept only the precisely approved
+repository correction. The failed Card
+`sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77`,
+Review `sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e`,
+canonical payload and private receipt
+`sha256:0652fe3ac3125335728788bacc3e1cc2cee4a0f4b2417db662fb0a898fd6dd2a`
+are non-executable and cannot authorize a corrected pending grant.
+
+**Result:** Kc `18e3a325cceabdf5168b5ffb328ee2580b069a76` / tree
+`184d9a4147fbb9baea22b1303ca24a09c2687a79` and Lc
+`32448cb962c823d39205cc83d11aa3f6571cf65d` / tree
+`02b377385a0e68a60021f878027f41ab34399f63` remove only the fixed directory
+link-count equality. Stable identity remains exact path/dev/ino/uid/gid/mode;
+the exact entry and no-follow membranes remain closed. Index
+`sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+schema `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+evidence `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`
+and [Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`
+freeze the result. The current non-approvable successor
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:986dfecbd439bdb36e1a0f23041c249cf556382a5e4eb2acd2e1daea4dc9c1ce`.
+Committed Kc/Lc audit summaries are
+`sha256:eadd61948def5d6f14e8cab56bc06a30c8807d3711157876b12ab63a6bf5eb00`
+and `sha256:01344b279f87b722a9898bda40b27c226e9a67ae24742ecbed82724b86bce58f`.
+
+**Validation and effect:** deny-network lanes pass 141/141, 85/85, 393/393,
+713/713, 145/145 and 45/45. Strict Ajv, authority topology, committed blobs,
+syntax, TypeScript, no-server-AI, docs and diff checks pass. Pending/consumed
+grants, Docker/OCI/PostgreSQL/SQL, production/runtime/traffic/Gate C,
+push/PR/merge/release and spend effects are zero.
+
+**Stop:** `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+Only a fresh Card, Review and exact Owner approval bound to committed Mc and
+its external audit may open a later local physical attempt. #67 and R4 remain
+open.
