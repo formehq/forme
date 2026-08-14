@@ -97,6 +97,37 @@ const TOPOLOGY_CORRECTION_ADDENDUM_SHA256 = "sha256:5c0aaed3f0386b3501548631be9f
 const TOPOLOGY_CORRECTION_REVIEW_HEAD = "dd9759f8034042fe28ae7c24c7519dc480ffad37";
 const TOPOLOGY_CORRECTION_REVIEW_TREE = "2dc809ea52e2e5d3d64346873e773ba55734de85";
 const TOPOLOGY_CORRECTION_REVIEW_SHA256 = "sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b";
+const FAILED_V2_EXECUTION_CARD_HEAD = "7a533f4b2cc91070e7bd78cb6c70c1f28524ec38";
+const FAILED_V2_EXECUTION_CARD_TREE = "6487d63ae0466c732f1a62ebe5e63f3067ff0e51";
+const FAILED_V2_EXECUTION_CARD_SHA256 = "sha256:1ca420578f3e16c75b8242d71b93ea7be18baa1815c0f83e610807f9ded7c795";
+const FAILED_V2_EXECUTION_REVIEW_HEAD = "6e67c1f1867d73f27674a5f056e0692c5b42d6a3";
+const FAILED_V2_EXECUTION_REVIEW_TREE = "60b3d7b124968a20f6ec30700d389849dd277ab2";
+const FAILED_V2_EXECUTION_REVIEW_SHA256 = "sha256:e92a125cdf1f8c4df8448836275bd98225ec8ce0b764dd70dfbabc479366e377";
+const FAILED_V2_EXECUTION_PAYLOAD_SHA256 = "sha256:773a172f0d756b218de9ecfd7e9c2858a28b6ceb236474d103a4822a4203bf56";
+const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD = "56553e4a1e7bc65516f1f14cbac7e8fab2a53262";
+const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE = "45a8b295d5308766e2bf0a6f4715af0d5c5edaef";
+const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256 = "sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9";
+const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD = "eb38eff55c2360b51df13dceb896680ec4440479";
+const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE = "96abe090ac364a973d1b9bc6edc3e5ea70af4d6e";
+const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256 = "sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4";
+const BLOCKED_OWNER_APPROVAL_RECEIPT_SHA256 = "sha256:d16d5482bc5f53ed109d5125fc2747afd786dd51bb35db27a245597811aef10c";
+const BLOCKED_CONSUMED_GRANT_SHA256 = "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35";
+const BLOCKED_FIRST_EVIDENCE_SHA256 = "sha256:3cc212108bf966903fe964a1a73ad468dd506a2c2d473a9e1e916c558cfe02a7";
+const BLOCKED_FINAL_EVIDENCE_SHA256 = "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c";
+const BLOCKED_JOURNAL_ENTRY_COUNT = 34;
+const BLOCKED_JOURNAL_HEAD_SHA256 = "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25";
+const BLOCKED_GRANT_ID = "b92ae04555cc3d69a16c06ae53b30976";
+const BLOCKED_PRIVATE_ROOT = "/private/tmp/forme-r4-pg-9ZGIOLeX";
+const BLOCKED_PRIVATE_ROOT_IDENTITY = Object.freeze({ dev: "16777231", ino: "32871902", mode: "0700", uid: "501" });
+const BLOCKED_OWNER_APPROVAL_RECEIPT_BYTES = 1083;
+const BLOCKED_CONSUMED_GRANT_BYTES = 6356;
+const BLOCKED_FINAL_EVIDENCE_BYTES = 7180;
+const BLOCKED_RESOURCES = Object.freeze({
+  runId: "b92ae04555cc3d69", container: "forme-r4-public-core-local-b92ae04555cc3d69",
+  network: "forme-r4-public-core-local-net-b92ae04555cc3d69",
+  volume: "forme-r4-public-core-local-vol-b92ae04555cc3d69",
+  labelKey: "forme.r4.public-core.local.grant", labelValue: BLOCKED_GRANT_ID,
+});
 const PACKAGE_LOCK_SHA256 = "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f";
 const PG_IMPORT_CLOSURE_SHA256 = "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4";
 const PG_IMPORT_CLOSURE_FILE_COUNT = 145;
@@ -204,6 +235,10 @@ const APFS_NLINK_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-
 const APFS_NLINK_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-OWNER-REVIEW.md";
 const TOPOLOGY_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-ADDENDUM.md";
 const TOPOLOGY_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-OWNER-REVIEW.md";
+const DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-ADDENDUM.md";
+const DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-OWNER-REVIEW.md";
+const BLOCKED_CLEANUP_RESCUE_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-CARD.md";
+const BLOCKED_CLEANUP_RESCUE_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BLOCKED-CLEANUP-RESCUE-OWNER-REVIEW.md";
 const LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS = Object.freeze([
   "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
   "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
@@ -227,6 +262,83 @@ const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
   "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md",
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-docker-diagnostic-rescue-correction.json",
+  "schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-docker-diagnostic-rescue-correction-evidence.schema.json",
+]);
+const LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+
+const CLEANUP_RESCUE_DOCKER_CALL_CEILINGS = Object.freeze({
+  version: 1, "image.inspect": 0, "image.pull": 0,
+  "container.inspect": 2, "container.create": 0, "container.start": 0,
+  "container.stop": 1, "container.rm": 1,
+  "network.inspect": 2, "network.create": 0, "network.rm": 1,
+  "volume.inspect": 2, "volume.create": 0, "volume.rm": 1,
+});
+const CLEANUP_RESCUE_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_BLOCKED_CLEANUP_RESCUE_AUTHORITY_V1_BEGIN";
+const CLEANUP_RESCUE_AUTHORITY_END = "R4_LOCAL_POSTGRES_BLOCKED_CLEANUP_RESCUE_AUTHORITY_V1_END";
+const CLEANUP_RESCUE_GRANT_KEYS = Object.freeze([
+  "schemaVersion", "rescueGrantId", "ownerApprovalReceiptSha256", "authority", "lineage", "artifacts",
+  "blocked", "host", "ceilings", "localOnly", "productionEffectsAllowed", "createdAt", "expiresAt",
+]);
+const CLEANUP_RESCUE_AUTHORITY_KEYS = Object.freeze([
+  "correctionAddendumSha256", "correctionOwnerReviewSha256", "rescueCardSha256",
+  "rescueOwnerReviewSha256", "rescueAuthorityPayloadSha256",
+]);
+const CLEANUP_RESCUE_PAYLOAD_AUTHORITY_KEYS = Object.freeze([
+  "correctionAddendumSha256", "correctionOwnerReviewSha256",
+]);
+const CLEANUP_RESCUE_LINEAGE_KEYS = Object.freeze([
+  "failedExecutionReviewHead", "failedExecutionReviewTree", "correctionAddendumHead", "correctionAddendumTree",
+  "correctionOwnerReviewHead", "correctionOwnerReviewTree", "correctionImplementationHead",
+  "correctionImplementationTree", "correctionImplementationArtifactAggregateSha256", "correctionEvidenceHead",
+  "correctionEvidenceTree", "correctionStatusHead", "correctionStatusTree", "rescueCardHead", "rescueCardTree",
+  "rescueOwnerReviewHead", "rescueOwnerReviewTree",
+]);
+const CLEANUP_RESCUE_PAYLOAD_LINEAGE_KEYS = Object.freeze(CLEANUP_RESCUE_LINEAGE_KEYS.slice(0, -4));
+const CLEANUP_RESCUE_ARTIFACT_KEYS = Object.freeze([
+  "correctionArtifactIndexSha256", "correctionEvidenceSchemaSha256", "correctionEvidenceSha256",
+  "correctionReportSha256", "correctionStatusCommittedAuditSummarySha256", "runnerSha256", "runnerTestSha256",
+]);
+const CLEANUP_RESCUE_BLOCKED_KEYS = Object.freeze([
+  "privateRoot", "rootDev", "rootIno", "rootMode", "rootUid", "rootEntries",
+  "ownerApprovalReceiptSha256", "ownerApprovalReceiptBytes", "consumedGrantSha256", "consumedGrantBytes",
+  "firstEvidenceSha256", "finalEvidenceSha256", "finalEvidenceBytes", "journalEntryCount",
+  "journalHeadSha256", "grantId", "resources",
+]);
+const CLEANUP_RESCUE_RESOURCE_KEYS = Object.freeze(["runId", "container", "network", "volume", "labelKey", "labelValue"]);
+const CLEANUP_RESCUE_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerCliIdentitySha256", "socketIdentitySha256",
+  "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const CLEANUP_RESCUE_PAYLOAD_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const CLEANUP_RESCUE_CEILING_KEYS = Object.freeze(["maximumCleanupRescueLifecycles", "dockerCalls"]);
+const CLEANUP_RESCUE_RECEIPT_KEYS = Object.freeze([
+  "schemaVersion", "status", "code", "cleanupStatus", "consumedRescueGrantSha256", "authority",
+  "lineage", "artifacts", "blocked", "hostObservation", "effects", "cleanup", "journal", "readiness",
+]);
+const CLEANUP_RESCUE_RECEIPT_EFFECT_KEYS = Object.freeze(["dockerCallCounts"]);
+const CLEANUP_RESCUE_RECEIPT_CLEANUP_KEYS = Object.freeze([
+  "ownedContainerCount", "ownedNetworkCount", "ownedVolumeCount", "rescueLocalResidueCount",
+  "oldForensicRootUnchanged", "retainedRescueForensicFiles",
+]);
+const CLEANUP_RESCUE_RECEIPT_HOST_KEYS = Object.freeze([
+  "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+]);
+const CLEANUP_RESCUE_RECEIPT_JOURNAL_KEYS = Object.freeze(["entryCount", "headSha256"]);
+const CLEANUP_RESCUE_RECEIPT_READINESS_KEYS = Object.freeze([
+  "cleanupRescueGreen", "physicalExecutionPerformed", "targetPostgresObserved", "productRuntimeEffects",
+  "trafficReady", "gateCReady",
 ]);
 
 export const LOCAL_POSTGRES_PHASE1_AUTHORITY = Object.freeze({
@@ -1476,6 +1588,1492 @@ export function prepareLocalPostgresPendingGrantV3(input) {
       verifyBindings: verifyLocalPostgresCommittedBindings,
     }),
   );
+}
+
+function cleanupRescueBlockedContract() {
+  return Object.freeze({
+    privateRoot: BLOCKED_PRIVATE_ROOT,
+    rootDev: BLOCKED_PRIVATE_ROOT_IDENTITY.dev,
+    rootIno: BLOCKED_PRIVATE_ROOT_IDENTITY.ino,
+    rootMode: BLOCKED_PRIVATE_ROOT_IDENTITY.mode,
+    rootUid: BLOCKED_PRIVATE_ROOT_IDENTITY.uid,
+    rootEntries: Object.freeze(["grant.consumed.json", "journal-v3", "owner-approval-receipt", "physical-evidence.json"]),
+    ownerApprovalReceiptSha256: BLOCKED_OWNER_APPROVAL_RECEIPT_SHA256,
+    ownerApprovalReceiptBytes: BLOCKED_OWNER_APPROVAL_RECEIPT_BYTES,
+    consumedGrantSha256: BLOCKED_CONSUMED_GRANT_SHA256,
+    consumedGrantBytes: BLOCKED_CONSUMED_GRANT_BYTES,
+    firstEvidenceSha256: BLOCKED_FIRST_EVIDENCE_SHA256,
+    finalEvidenceSha256: BLOCKED_FINAL_EVIDENCE_SHA256,
+    finalEvidenceBytes: BLOCKED_FINAL_EVIDENCE_BYTES,
+    journalEntryCount: BLOCKED_JOURNAL_ENTRY_COUNT,
+    journalHeadSha256: BLOCKED_JOURNAL_HEAD_SHA256,
+    grantId: BLOCKED_GRANT_ID,
+    resources: BLOCKED_RESOURCES,
+  });
+}
+
+function cleanupRescuePayloadHostContract() {
+  return Object.freeze({
+    dockerCli: DOCKER_CLI,
+    dockerCliSha256: DOCKER_CLI_SHA256,
+    dockerClientVersion: "29.3.1",
+    dockerServerVersion: "29.3.1",
+    dockerServerPlatform: IMAGE_PLATFORM,
+  });
+}
+
+function cleanupRescueCeilings() {
+  return Object.freeze({ maximumCleanupRescueLifecycles: 1, dockerCalls: CLEANUP_RESCUE_DOCKER_CALL_CEILINGS });
+}
+
+function assertCleanupRescueBlockedRecord(blocked, code = "local_postgres_cleanup_rescue_grant_invalid") {
+  try {
+    exactKeys(blocked, CLEANUP_RESCUE_BLOCKED_KEYS);
+    exactKeys(blocked.resources, CLEANUP_RESCUE_RESOURCE_KEYS);
+    const expected = cleanupRescueBlockedContract();
+    for (const [key, value] of Object.entries(expected)) {
+      if (key === "resources") assertFixedRecord(blocked.resources, expected.resources);
+      else if (key === "rootEntries") {
+        if (canonicalJson(blocked.rootEntries) !== canonicalJson(expected.rootEntries)) fail(code);
+      }
+      else if (blocked[key] !== value) fail(code);
+    }
+  } catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error) !== null) fail(code);
+    fail(code);
+  }
+}
+
+function validateCleanupRescueAuthorityPayloadUnchecked(rawPayload) {
+  const payload = ownedPlain(rawPayload);
+  exactKeys(payload, [
+    "schemaVersion", "authority", "lineage", "artifacts", "blocked", "host", "ceilings",
+    "localOnly", "productionEffectsAllowed",
+  ]);
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-cleanup-rescue-authority.v1"
+    || payload.localOnly !== true || payload.productionEffectsAllowed !== false) {
+    fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+  exactKeys(payload.authority, CLEANUP_RESCUE_PAYLOAD_AUTHORITY_KEYS);
+  exactKeys(payload.lineage, CLEANUP_RESCUE_PAYLOAD_LINEAGE_KEYS);
+  exactKeys(payload.artifacts, CLEANUP_RESCUE_ARTIFACT_KEYS);
+  exactKeys(payload.host, CLEANUP_RESCUE_PAYLOAD_HOST_KEYS);
+  exactKeys(payload.ceilings, CLEANUP_RESCUE_CEILING_KEYS);
+  exactKeys(payload.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (payload.authority.correctionAddendumSha256 !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256
+    || payload.authority.correctionOwnerReviewSha256 !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256
+    || payload.lineage.failedExecutionReviewHead !== FAILED_V2_EXECUTION_REVIEW_HEAD
+    || payload.lineage.failedExecutionReviewTree !== FAILED_V2_EXECUTION_REVIEW_TREE
+    || payload.lineage.correctionAddendumHead !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD
+    || payload.lineage.correctionAddendumTree !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE
+    || payload.lineage.correctionOwnerReviewHead !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD
+    || payload.lineage.correctionOwnerReviewTree !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE) {
+    fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+  for (const key of CLEANUP_RESCUE_PAYLOAD_LINEAGE_KEYS) {
+    (key.endsWith("Sha256") ? assertSha(payload.lineage[key]) : assertGit(payload.lineage[key]));
+  }
+  for (const key of CLEANUP_RESCUE_ARTIFACT_KEYS) assertSha(payload.artifacts[key]);
+  assertCleanupRescueBlockedRecord(payload.blocked, "local_postgres_cleanup_rescue_authority_invalid");
+  assertFixedRecord(payload.host, cleanupRescuePayloadHostContract());
+  if (payload.ceilings.maximumCleanupRescueLifecycles !== 1) fail("local_postgres_cleanup_rescue_authority_invalid");
+  for (const [key, value] of Object.entries(CLEANUP_RESCUE_DOCKER_CALL_CEILINGS)) {
+    if (payload.ceilings.dockerCalls[key] !== value) fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+  return payload;
+}
+
+function validateCleanupRescueAuthorityPayload(rawPayload) {
+  try { return validateCleanupRescueAuthorityPayloadUnchecked(rawPayload); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_cleanup_rescue_authority_invalid") throw error;
+    fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+}
+
+function parseCleanupRescueAuthorityCard(bytes) {
+  let source;
+  try { source = new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { fail("local_postgres_cleanup_rescue_authority_invalid"); }
+  const lines = source.split("\n");
+  const begins = lines.flatMap((line, index) => line === CLEANUP_RESCUE_AUTHORITY_BEGIN ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === CLEANUP_RESCUE_AUTHORITY_END ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+  const canonical = lines[begins[0] + 1];
+  let parsed;
+  try { parsed = parseStrictJson(canonical); }
+  catch { fail("local_postgres_cleanup_rescue_authority_invalid"); }
+  if (canonical.length === 0 || canonicalJson(parsed) !== canonical) fail("local_postgres_cleanup_rescue_authority_invalid");
+  return Object.freeze({ payload: validateCleanupRescueAuthorityPayload(parsed), sha256: sha256Bytes(Buffer.from(canonical, "utf8")) });
+}
+
+function verifyCleanupRescueCorrectionBase() {
+  exactCommitStep(FAILED_V2_EXECUTION_REVIEW_HEAD, DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD,
+    DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE, new Map([[DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_PATH, "A"]]),
+    "local_postgres_cleanup_rescue_binding_invalid");
+  exactCommitStep(DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD, DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD,
+    DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE, new Map([[DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_PATH, "A"]]),
+    "local_postgres_cleanup_rescue_binding_invalid");
+  if (sha256Bytes(runGit(["show", `${DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD}:${DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_PATH}`], true))
+      !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256
+    || sha256Bytes(runGit(["show", `${DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD}:${DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_PATH}`], true))
+      !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256) {
+    fail("local_postgres_cleanup_rescue_binding_invalid");
+  }
+}
+
+function deriveCleanupRescueAuthority(rescueOwnerReviewHead) {
+  assertGit(rescueOwnerReviewHead);
+  verifyCleanupRescueCorrectionBase();
+  const rescueCardHead = runGit(["rev-parse", `${rescueOwnerReviewHead}^`]);
+  const correctionStatusHead = runGit(["rev-parse", `${rescueCardHead}^`]);
+  const correctionEvidenceHead = runGit(["rev-parse", `${correctionStatusHead}^`]);
+  const correctionImplementationHead = runGit(["rev-parse", `${correctionEvidenceHead}^`]);
+  const lineage = Object.freeze({
+    failedExecutionReviewHead: FAILED_V2_EXECUTION_REVIEW_HEAD,
+    failedExecutionReviewTree: FAILED_V2_EXECUTION_REVIEW_TREE,
+    correctionAddendumHead: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD,
+    correctionAddendumTree: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE,
+    correctionOwnerReviewHead: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD,
+    correctionOwnerReviewTree: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE,
+    correctionImplementationHead,
+    correctionImplementationTree: runGit(["rev-parse", `${correctionImplementationHead}^{tree}`]),
+    correctionImplementationArtifactAggregateSha256: artifactAggregate(
+      correctionImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS,
+    ).aggregateSha256,
+    correctionEvidenceHead,
+    correctionEvidenceTree: runGit(["rev-parse", `${correctionEvidenceHead}^{tree}`]),
+    correctionStatusHead,
+    correctionStatusTree: runGit(["rev-parse", `${correctionStatusHead}^{tree}`]),
+    rescueCardHead,
+    rescueCardTree: runGit(["rev-parse", `${rescueCardHead}^{tree}`]),
+    rescueOwnerReviewHead,
+    rescueOwnerReviewTree: runGit(["rev-parse", `${rescueOwnerReviewHead}^{tree}`]),
+  });
+  exactCommitStep(DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD, correctionImplementationHead,
+    lineage.correctionImplementationTree, statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS),
+    "local_postgres_cleanup_rescue_binding_invalid");
+  exactCommitStep(correctionImplementationHead, correctionEvidenceHead, lineage.correctionEvidenceTree,
+    statusMap(LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS, new Set(LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS)),
+    "local_postgres_cleanup_rescue_binding_invalid");
+  exactCommitStep(correctionEvidenceHead, correctionStatusHead, lineage.correctionStatusTree,
+    statusMap(LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_STATUS_PATHS,
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md"])),
+    "local_postgres_cleanup_rescue_binding_invalid");
+  exactCommitStep(correctionStatusHead, rescueCardHead, lineage.rescueCardTree,
+    new Map([[BLOCKED_CLEANUP_RESCUE_CARD_PATH, "A"]]), "local_postgres_cleanup_rescue_binding_invalid");
+  exactCommitStep(rescueCardHead, rescueOwnerReviewHead, lineage.rescueOwnerReviewTree,
+    new Map([[BLOCKED_CLEANUP_RESCUE_REVIEW_PATH, "A"]]), "local_postgres_cleanup_rescue_binding_invalid");
+  const cardBytes = runGit(["show", `${rescueCardHead}:${BLOCKED_CLEANUP_RESCUE_CARD_PATH}`], true);
+  const reviewBytes = runGit(["show", `${rescueOwnerReviewHead}:${BLOCKED_CLEANUP_RESCUE_REVIEW_PATH}`], true);
+  const parsed = parseCleanupRescueAuthorityCard(cardBytes);
+  if (canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(lineage, CLEANUP_RESCUE_PAYLOAD_LINEAGE_KEYS))) {
+    fail("local_postgres_cleanup_rescue_authority_invalid");
+  }
+  const implementation = artifactAggregate(correctionImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
+  const expectedArtifacts = Object.freeze({
+    correctionArtifactIndexSha256: sha256Bytes(runGit(["show", `${correctionEvidenceHead}:${LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS[1]}`], true)),
+    correctionEvidenceSchemaSha256: sha256Bytes(runGit(["show", `${correctionEvidenceHead}:${LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS[2]}`], true)),
+    correctionEvidenceSha256: sha256Bytes(runGit(["show", `${correctionEvidenceHead}:${LOCAL_POSTGRES_DIAGNOSTIC_RESCUE_EVIDENCE_PATHS[0]}`], true)),
+    correctionReportSha256: sha256Bytes(runGit(["show", `${correctionStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md`], true)),
+    correctionStatusCommittedAuditSummarySha256: parsed.payload.artifacts.correctionStatusCommittedAuditSummarySha256,
+    runnerSha256: implementation.records[0].sha256,
+    runnerTestSha256: implementation.records[1].sha256,
+  });
+  if (implementation.aggregateSha256 !== lineage.correctionImplementationArtifactAggregateSha256
+    || canonicalJson(parsed.payload.artifacts) !== canonicalJson(expectedArtifacts)) {
+    fail("local_postgres_cleanup_rescue_binding_invalid");
+  }
+  return Object.freeze({
+    authority: Object.freeze({
+      correctionAddendumSha256: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256,
+      correctionOwnerReviewSha256: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256,
+      rescueCardSha256: sha256Bytes(cardBytes),
+      rescueOwnerReviewSha256: sha256Bytes(reviewBytes),
+      rescueAuthorityPayloadSha256: parsed.sha256,
+    }),
+    lineage, artifacts: expectedArtifacts, blocked: cleanupRescueBlockedContract(),
+    host: cleanupRescuePayloadHostContract(), ceilings: cleanupRescueCeilings(),
+  });
+}
+
+function validateLocalPostgresCleanupRescueGrantUnchecked(rawGrant, now = new Date()) {
+  const grant = ownedPlain(rawGrant);
+  exactKeys(grant, CLEANUP_RESCUE_GRANT_KEYS);
+  if (grant.schemaVersion !== "r4.public-core-local-postgres-cleanup-rescue-grant.v1"
+    || typeof grant.rescueGrantId !== "string" || !GRANT_ID.test(grant.rescueGrantId)
+    || grant.localOnly !== true || grant.productionEffectsAllowed !== false) {
+    fail("local_postgres_cleanup_rescue_grant_invalid");
+  }
+  exactKeys(grant.authority, CLEANUP_RESCUE_AUTHORITY_KEYS);
+  exactKeys(grant.lineage, CLEANUP_RESCUE_LINEAGE_KEYS);
+  exactKeys(grant.artifacts, CLEANUP_RESCUE_ARTIFACT_KEYS);
+  exactKeys(grant.host, CLEANUP_RESCUE_HOST_KEYS);
+  exactKeys(grant.ceilings, CLEANUP_RESCUE_CEILING_KEYS);
+  exactKeys(grant.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  assertSha(grant.ownerApprovalReceiptSha256);
+  for (const key of CLEANUP_RESCUE_AUTHORITY_KEYS) assertSha(grant.authority[key]);
+  for (const key of CLEANUP_RESCUE_LINEAGE_KEYS) {
+    (key.endsWith("Sha256") ? assertSha(grant.lineage[key]) : assertGit(grant.lineage[key]));
+  }
+  for (const key of CLEANUP_RESCUE_ARTIFACT_KEYS) assertSha(grant.artifacts[key]);
+  assertSha(grant.host.dockerCliSha256); assertSha(grant.host.dockerCliIdentitySha256); assertSha(grant.host.socketIdentitySha256);
+  if (grant.authority.correctionAddendumSha256 !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256
+    || grant.authority.correctionOwnerReviewSha256 !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256
+    || grant.lineage.failedExecutionReviewHead !== FAILED_V2_EXECUTION_REVIEW_HEAD
+    || grant.lineage.failedExecutionReviewTree !== FAILED_V2_EXECUTION_REVIEW_TREE
+    || grant.lineage.correctionAddendumHead !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD
+    || grant.lineage.correctionAddendumTree !== DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE
+    || grant.lineage.correctionOwnerReviewHead !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD
+    || grant.lineage.correctionOwnerReviewTree !== DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE) {
+    fail("local_postgres_cleanup_rescue_grant_invalid");
+  }
+  assertCleanupRescueBlockedRecord(grant.blocked);
+  assertFixedRecord(selectKeys(grant.host, CLEANUP_RESCUE_PAYLOAD_HOST_KEYS), cleanupRescuePayloadHostContract());
+  if (grant.ceilings.maximumCleanupRescueLifecycles !== 1) fail("local_postgres_cleanup_rescue_grant_invalid");
+  for (const [key, value] of Object.entries(CLEANUP_RESCUE_DOCKER_CALL_CEILINGS)) {
+    if (grant.ceilings.dockerCalls[key] !== value) fail("local_postgres_cleanup_rescue_grant_invalid");
+  }
+  const createdAt = instant(grant.createdAt);
+  const expiresAt = instant(grant.expiresAt);
+  const observedAt = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(observedAt) || expiresAt <= createdAt || expiresAt - createdAt > MAX_GRANT_LIFETIME_MS
+    || observedAt < createdAt - 60_000 || observedAt >= expiresAt) fail("local_postgres_cleanup_rescue_grant_expired");
+  return grant;
+}
+
+export function validateLocalPostgresCleanupRescueGrant(rawGrant, now = new Date()) {
+  try { return validateLocalPostgresCleanupRescueGrantUnchecked(rawGrant, now); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_cleanup_rescue_grant_expired") throw error;
+    fail("local_postgres_cleanup_rescue_grant_invalid");
+  }
+}
+
+function readBlockedJournalSnapshot(blockedRoot) {
+  const journalPath = privatePath(blockedRoot, JOURNAL_DIRECTORY);
+  assertPrivateDirectory(journalPath);
+  const names = fs.readdirSync(journalPath).sort(binaryCompare);
+  const expected = Array.from({ length: BLOCKED_JOURNAL_ENTRY_COUNT }, (_, index) => `entry-${String(index + 1).padStart(6, "0")}.json`);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  let previous = JOURNAL_GENESIS;
+  for (let index = 0; index < names.length; index += 1) {
+    const record = ownedPlain(readPrivateJsonRecord(path.join(journalPath, names[index])).value);
+    exactKeys(record, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    if (record.schemaVersion !== "r4.public-core-local-postgres-journal-entry.v3"
+      || record.sequence !== index + 1 || record.previousSha256 !== previous || typeof record.event !== "string") {
+      fail("local_postgres_cleanup_rescue_forensic_drift");
+    }
+    const expectedSha = sha256Bytes(Buffer.from(canonicalJson({
+      schemaVersion: record.schemaVersion, sequence: record.sequence, previousSha256: record.previousSha256,
+      event: record.event, detail: record.detail,
+    }), "utf8"));
+    if (record.entrySha256 !== expectedSha) fail("local_postgres_cleanup_rescue_forensic_drift");
+    previous = record.entrySha256;
+  }
+  if (previous !== BLOCKED_JOURNAL_HEAD_SHA256) fail("local_postgres_cleanup_rescue_forensic_drift");
+  return Object.freeze({ entryCount: names.length, headSha256: previous });
+}
+
+function inspectBlockedForensicRoot(blockedRoot = BLOCKED_PRIVATE_ROOT) {
+  if (blockedRoot !== BLOCKED_PRIVATE_ROOT) fail("local_postgres_cleanup_rescue_forensic_drift");
+  let resolved;
+  try { resolved = fs.realpathSync(blockedRoot); } catch { fail("local_postgres_cleanup_rescue_forensic_drift"); }
+  if (resolved !== blockedRoot) fail("local_postgres_cleanup_rescue_forensic_drift");
+  const rootStat = assertPrivateDirectory(blockedRoot);
+  const rootIdentity = privateDirectoryIdentity(blockedRoot, rootStat);
+  if (rootStat.dev.toString(10) !== BLOCKED_PRIVATE_ROOT_IDENTITY.dev
+    || rootStat.ino.toString(10) !== BLOCKED_PRIVATE_ROOT_IDENTITY.ino
+    || (Number(rootStat.mode) & 0o777).toString(8).padStart(4, "0") !== BLOCKED_PRIVATE_ROOT_IDENTITY.mode
+    || rootStat.uid.toString(10) !== BLOCKED_PRIVATE_ROOT_IDENTITY.uid) {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  const names = fs.readdirSync(blockedRoot).sort(binaryCompare);
+  const expected = ["grant.consumed.json", JOURNAL_DIRECTORY, "owner-approval-receipt", "physical-evidence.json"].sort(binaryCompare);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  const ownerPath = privatePath(blockedRoot, "owner-approval-receipt");
+  const ownerStat = fs.lstatSync(ownerPath, { bigint: true });
+  const ownerSha = readOwnerApprovalReceipt(blockedRoot, ownerPath, false);
+  const consumedPath = privatePath(blockedRoot, "grant.consumed.json");
+  const consumedStat = fs.lstatSync(consumedPath, { bigint: true });
+  const consumed = readPrivateJsonRecord(consumedPath);
+  const evidencePath = privatePath(blockedRoot, "physical-evidence.json");
+  const evidenceStat = fs.lstatSync(evidencePath, { bigint: true });
+  const evidence = readPrivateJsonRecord(evidencePath);
+  if (ownerStat.size !== BigInt(BLOCKED_OWNER_APPROVAL_RECEIPT_BYTES) || ownerSha !== BLOCKED_OWNER_APPROVAL_RECEIPT_SHA256
+    || consumedStat.size !== BigInt(BLOCKED_CONSUMED_GRANT_BYTES) || consumed.sha256 !== BLOCKED_CONSUMED_GRANT_SHA256
+    || evidenceStat.size !== BigInt(BLOCKED_FINAL_EVIDENCE_BYTES) || evidence.sha256 !== BLOCKED_FINAL_EVIDENCE_SHA256
+    || consumed.value.grantId !== BLOCKED_GRANT_ID || evidence.value.status !== "FAILED"
+    || evidence.value.code !== "local_postgres_cleanup_unproven" || evidence.value.cleanupStatus !== "BLOCKED") {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  const journal = readBlockedJournalSnapshot(blockedRoot);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const snapshot = Object.freeze({
+    privateRoot: blockedRoot, rootDev: rootStat.dev.toString(10), rootIno: rootStat.ino.toString(10),
+    rootMode: (Number(rootStat.mode) & 0o777).toString(8).padStart(4, "0"), rootUid: rootStat.uid.toString(10),
+    rootEntries: cleanupRescueBlockedContract().rootEntries,
+    ownerApprovalReceiptSha256: ownerSha, ownerApprovalReceiptBytes: Number(ownerStat.size),
+    consumedGrantSha256: consumed.sha256, consumedGrantBytes: Number(consumedStat.size),
+    finalEvidenceSha256: evidence.sha256, finalEvidenceBytes: Number(evidenceStat.size),
+    journalEntryCount: journal.entryCount, journalHeadSha256: journal.headSha256,
+  });
+  return Object.freeze({ ...snapshot, snapshotSha256: sha256Bytes(Buffer.from(canonicalJson(snapshot), "utf8")), rootIdentity });
+}
+
+function assertCleanupRescueGrantMatchesDerived(stable, derived) {
+  for (const key of ["authority", "lineage", "artifacts", "blocked", "ceilings"]) {
+    if (canonicalJson(stable[key]) !== canonicalJson(derived[key])) fail("local_postgres_cleanup_rescue_binding_invalid");
+  }
+  if (canonicalJson(selectKeys(stable.host, CLEANUP_RESCUE_PAYLOAD_HOST_KEYS)) !== canonicalJson(derived.host)) {
+    fail("local_postgres_cleanup_rescue_binding_invalid");
+  }
+}
+
+function verifyCleanupRescueCommittedBindings(grant, observedAt = new Date()) {
+  const stable = validateLocalPostgresCleanupRescueGrant(grant, observedAt);
+  const derived = deriveCleanupRescueAuthority(stable.lineage.rescueOwnerReviewHead);
+  assertCleanupRescueGrantMatchesDerived(stable, derived);
+  if (runGit(["rev-parse", "HEAD^{commit}"]) !== stable.lineage.rescueOwnerReviewHead
+    || runGit(["rev-parse", "HEAD^{tree}"]) !== stable.lineage.rescueOwnerReviewTree
+    || runGit(["diff", "--cached", "--quiet", "--exit-code"]) !== ""
+    || runGit(["status", "--porcelain=v1", "--untracked-files=no"]) !== ""
+    || sha256StableOwnedFile(path.join(ROOT, "package-lock.json"))
+      !== sha256Bytes(runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:package-lock.json`], true))
+    || sha256StableOwnedFile(fileURLToPath(import.meta.url)) !== stable.artifacts.runnerSha256
+    || sha256StableOwnedFile(path.join(ROOT, "test/r4/public-core-local-postgres.test.ts")) !== stable.artifacts.runnerTestSha256
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.schema))
+      !== sha256Bytes(runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:${LOCAL_POSTGRES_SQL_PATHS.schema}`], true))
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.verify))
+      !== sha256Bytes(runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:${LOCAL_POSTGRES_SQL_PATHS.verify}`], true))
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.rollback))
+      !== sha256Bytes(runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:${LOCAL_POSTGRES_SQL_PATHS.rollback}`], true))) {
+    fail("local_postgres_cleanup_rescue_worktree_drift");
+  }
+  for (const artifactPath of LOCAL_POSTGRES_STAGE_A_PATHS) {
+    if (LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS.includes(artifactPath)) continue;
+    const committed = runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:${artifactPath}`], true);
+    if (sha256StableOwnedFile(path.join(ROOT, artifactPath)) !== sha256Bytes(committed)) {
+      fail("local_postgres_cleanup_rescue_worktree_drift");
+    }
+  }
+  for (const artifactPath of LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS) {
+    const committed = runGit(["show", `${stable.lineage.rescueOwnerReviewHead}:${artifactPath}`], true);
+    if (sha256StableOwnedFile(path.join(ROOT, artifactPath)) !== sha256Bytes(committed)) {
+      fail("local_postgres_cleanup_rescue_worktree_drift");
+    }
+  }
+  const boundPaths = [...new Set([
+    "package-lock.json", ...LOCAL_POSTGRES_STAGE_A_PATHS, ...LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS,
+    ...LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS, ...Object.values(LOCAL_POSTGRES_SQL_PATHS),
+  ])].sort(binaryCompare);
+  const flags = runGit(["ls-files", "-v", "--", ...boundPaths]).split("\n").filter(Boolean);
+  if (flags.length !== boundPaths.length || flags.some((line) => !/^H /u.test(line))) {
+    fail("local_postgres_cleanup_rescue_worktree_drift");
+  }
+  return stable;
+}
+
+export function runLocalPostgresCleanupRescueBindingFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "implementation_head", "implementation_tree", "implementation_aggregate", "evidence_head", "evidence_tree",
+    "status_head", "status_tree", "card_head", "card_tree", "review_head", "review_tree", "runner", "test",
+    "index", "schema", "evidence", "report", "audit", "card_sha", "review_sha", "payload_sha",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const owner = `sha256:${"1".repeat(64)}`;
+  const grant = JSON.parse(canonicalJson(fakeCleanupRescueGrant(owner)));
+  const derived = fakeCleanupRescueDerived();
+  const hash = `sha256:${"f".repeat(64)}`;
+  const head = "f".repeat(40);
+  const mapping = {
+    implementation_head: ["lineage", "correctionImplementationHead", head],
+    implementation_tree: ["lineage", "correctionImplementationTree", head],
+    implementation_aggregate: ["lineage", "correctionImplementationArtifactAggregateSha256", hash],
+    evidence_head: ["lineage", "correctionEvidenceHead", head], evidence_tree: ["lineage", "correctionEvidenceTree", head],
+    status_head: ["lineage", "correctionStatusHead", head], status_tree: ["lineage", "correctionStatusTree", head],
+    card_head: ["lineage", "rescueCardHead", head], card_tree: ["lineage", "rescueCardTree", head],
+    review_head: ["lineage", "rescueOwnerReviewHead", head], review_tree: ["lineage", "rescueOwnerReviewTree", head],
+    runner: ["artifacts", "runnerSha256", hash], test: ["artifacts", "runnerTestSha256", hash],
+    index: ["artifacts", "correctionArtifactIndexSha256", hash],
+    schema: ["artifacts", "correctionEvidenceSchemaSha256", hash],
+    evidence: ["artifacts", "correctionEvidenceSha256", hash], report: ["artifacts", "correctionReportSha256", hash],
+    audit: ["artifacts", "correctionStatusCommittedAuditSummarySha256", hash],
+    card_sha: ["authority", "rescueCardSha256", hash], review_sha: ["authority", "rescueOwnerReviewSha256", hash],
+    payload_sha: ["authority", "rescueAuthorityPayloadSha256", hash],
+  };
+  const [group, key, value] = mapping[stable.mutation];
+  grant[group][key] = value;
+  let accepted = false;
+  let code = null;
+  try {
+    const validated = validateLocalPostgresCleanupRescueGrant(grant, new Date("2026-08-13T20:00:01.000Z"));
+    assertCleanupRescueGrantMatchesDerived(validated, derived);
+    accepted = true;
+  } catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-binding-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+function prepareLocalPostgresCleanupRescueGrantWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["rescueRoot", "blockedRoot", "rescueOwnerReviewHead", "ownerApprovalReceiptPath", "createdAt", "expiresAt"]);
+  if (typeof stable.rescueRoot !== "string" || !path.isAbsolute(stable.rescueRoot)
+    || typeof stable.blockedRoot !== "string" || !path.isAbsolute(stable.blockedRoot)
+    || typeof stable.ownerApprovalReceiptPath !== "string" || !path.isAbsolute(stable.ownerApprovalReceiptPath)) {
+    fail("local_postgres_cleanup_rescue_private_root_invalid");
+  }
+  let rescueRoot;
+  try { rescueRoot = fs.realpathSync(stable.rescueRoot); }
+  catch { fail("local_postgres_cleanup_rescue_private_root_invalid"); }
+  if (rescueRoot !== stable.rescueRoot) fail("local_postgres_cleanup_rescue_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(rescueRoot);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(rescueRoot, stable.ownerApprovalReceiptPath);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const blockedSnapshot = adapters.inspectBlockedForensicRoot(stable.blockedRoot);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const derived = adapters.deriveAuthority(stable.rescueOwnerReviewHead);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const rescueGrantId = adapters.randomBytes(16).toString("hex");
+  const observedAt = adapters.now();
+  const observedMs = observedAt instanceof Date ? observedAt.getTime() : Number.NaN;
+  const createdMs = instant(stable.createdAt);
+  const expiresMs = instant(stable.expiresAt);
+  if (!Number.isFinite(observedMs) || Math.abs(createdMs - observedMs) > 60_000
+    || expiresMs <= createdMs || expiresMs <= observedMs || expiresMs - createdMs > MAX_GRANT_LIFETIME_MS) {
+    fail("local_postgres_cleanup_rescue_grant_expired");
+  }
+  if (blockedSnapshot.privateRoot !== derived.blocked.privateRoot
+    || blockedSnapshot.rootDev !== derived.blocked.rootDev || blockedSnapshot.rootIno !== derived.blocked.rootIno
+    || blockedSnapshot.rootMode !== derived.blocked.rootMode || blockedSnapshot.rootUid !== derived.blocked.rootUid
+    || canonicalJson(blockedSnapshot.rootEntries) !== canonicalJson(derived.blocked.rootEntries)
+    || blockedSnapshot.ownerApprovalReceiptSha256 !== derived.blocked.ownerApprovalReceiptSha256
+    || blockedSnapshot.ownerApprovalReceiptBytes !== derived.blocked.ownerApprovalReceiptBytes
+    || blockedSnapshot.consumedGrantSha256 !== derived.blocked.consumedGrantSha256
+    || blockedSnapshot.consumedGrantBytes !== derived.blocked.consumedGrantBytes
+    || blockedSnapshot.finalEvidenceSha256 !== derived.blocked.finalEvidenceSha256
+    || blockedSnapshot.finalEvidenceBytes !== derived.blocked.finalEvidenceBytes
+    || blockedSnapshot.journalEntryCount !== derived.blocked.journalEntryCount
+    || blockedSnapshot.journalHeadSha256 !== derived.blocked.journalHeadSha256) {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  const grant = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-grant.v1", rescueGrantId,
+    ownerApprovalReceiptSha256, authority: derived.authority, lineage: derived.lineage,
+    artifacts: derived.artifacts, blocked: derived.blocked,
+    host: Object.freeze({ ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256 }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+  });
+  validateLocalPostgresCleanupRescueGrant(grant, observedAt);
+  adapters.verifyBindings(grant, observedAt);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const pending = privatePath(rescueRoot, "rescue.pending.json");
+  let pendingIdentity = null;
+  try {
+    const installed = installPendingGrant(rescueRoot, pending, grant, adapters.pendingInstallHooks);
+    pendingIdentity = installed.identity;
+    assertPrivateDirectoryIdentity(rootIdentity);
+    const names = fs.readdirSync(rescueRoot).sort(binaryCompare);
+    if (names.length !== 2 || names[0] !== "owner-approval-receipt" || names[1] !== "rescue.pending.json") {
+      fail("local_postgres_cleanup_rescue_private_root_invalid");
+    }
+    return Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-prepare-receipt.v1",
+      pendingRescueGrantSha256: installed.sha256,
+      ownerApprovalReceiptSha256,
+      rescueAuthorityPayloadSha256: grant.authority.rescueAuthorityPayloadSha256,
+      blockedForensicSnapshotSha256: blockedSnapshot.snapshotSha256,
+      observedAt: observedAt.toISOString(),
+    });
+  } catch (error) {
+    if (pendingIdentity !== null) {
+      try {
+        const current = fs.lstatSync(pending, { bigint: true });
+        if (current.dev !== pendingIdentity.dev || current.ino !== pendingIdentity.ino || current.nlink !== 1n) {
+          fail("local_postgres_cleanup_rescue_private_file_invalid");
+        }
+        fs.unlinkSync(pending);
+        fsyncPrivateDirectory(rescueRoot);
+        exactFileAbsence(pending);
+      } catch (cleanupError) {
+        if (authenticLocalPostgresRunnerErrorDetails(cleanupError) !== null) throw cleanupError;
+        fail("local_postgres_cleanup_rescue_private_file_invalid");
+      }
+    }
+    throw error;
+  }
+}
+
+export function prepareLocalPostgresCleanupRescueGrant(input) {
+  return prepareLocalPostgresCleanupRescueGrantWithAdapters(input, Object.freeze({
+    inspectBlockedForensicRoot,
+    deriveAuthority: deriveCleanupRescueAuthority,
+    observeDockerCliIdentity,
+    resolveSocketIdentity: resolveDockerSocketIdentity,
+    randomBytes: crypto.randomBytes,
+    now: () => new Date(),
+    verifyBindings: verifyCleanupRescueCommittedBindings,
+  }));
+}
+
+function fakeCleanupRescueDerived() {
+  const fakeSha = (domain) => sha256Bytes(Buffer.from(`r4-cleanup-rescue-fake-${domain}`, "utf8"));
+  const lineage = Object.freeze({
+    failedExecutionReviewHead: FAILED_V2_EXECUTION_REVIEW_HEAD,
+    failedExecutionReviewTree: FAILED_V2_EXECUTION_REVIEW_TREE,
+    correctionAddendumHead: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_HEAD,
+    correctionAddendumTree: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_TREE,
+    correctionOwnerReviewHead: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_HEAD,
+    correctionOwnerReviewTree: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_TREE,
+    correctionImplementationHead: "1".repeat(40), correctionImplementationTree: "2".repeat(40),
+    correctionImplementationArtifactAggregateSha256: fakeSha("aggregate"),
+    correctionEvidenceHead: "3".repeat(40), correctionEvidenceTree: "4".repeat(40),
+    correctionStatusHead: "5".repeat(40), correctionStatusTree: "6".repeat(40),
+    rescueCardHead: "7".repeat(40), rescueCardTree: "8".repeat(40),
+    rescueOwnerReviewHead: "9".repeat(40), rescueOwnerReviewTree: "a".repeat(40),
+  });
+  const artifacts = Object.freeze({
+    correctionArtifactIndexSha256: fakeSha("index"), correctionEvidenceSchemaSha256: fakeSha("schema"),
+    correctionEvidenceSha256: fakeSha("evidence"), correctionReportSha256: fakeSha("report"),
+    correctionStatusCommittedAuditSummarySha256: fakeSha("audit"), runnerSha256: fakeSha("runner"),
+    runnerTestSha256: fakeSha("test"),
+  });
+  return Object.freeze({
+    authority: Object.freeze({
+      correctionAddendumSha256: DIAGNOSTIC_RESCUE_CORRECTION_ADDENDUM_SHA256,
+      correctionOwnerReviewSha256: DIAGNOSTIC_RESCUE_CORRECTION_REVIEW_SHA256,
+      rescueCardSha256: fakeSha("card"), rescueOwnerReviewSha256: fakeSha("review"),
+      rescueAuthorityPayloadSha256: fakeSha("payload"),
+    }),
+    lineage, artifacts, blocked: cleanupRescueBlockedContract(), host: cleanupRescuePayloadHostContract(),
+    ceilings: cleanupRescueCeilings(),
+  });
+}
+
+function fakeBlockedForensicSnapshot(mutation = null) {
+  const snapshot = {
+    privateRoot: BLOCKED_PRIVATE_ROOT, rootDev: BLOCKED_PRIVATE_ROOT_IDENTITY.dev,
+    rootIno: BLOCKED_PRIVATE_ROOT_IDENTITY.ino, rootMode: BLOCKED_PRIVATE_ROOT_IDENTITY.mode,
+    rootUid: BLOCKED_PRIVATE_ROOT_IDENTITY.uid, rootEntries: cleanupRescueBlockedContract().rootEntries,
+    ownerApprovalReceiptSha256: BLOCKED_OWNER_APPROVAL_RECEIPT_SHA256,
+    ownerApprovalReceiptBytes: BLOCKED_OWNER_APPROVAL_RECEIPT_BYTES,
+    consumedGrantSha256: BLOCKED_CONSUMED_GRANT_SHA256, consumedGrantBytes: BLOCKED_CONSUMED_GRANT_BYTES,
+    finalEvidenceSha256: BLOCKED_FINAL_EVIDENCE_SHA256, finalEvidenceBytes: BLOCKED_FINAL_EVIDENCE_BYTES,
+    journalEntryCount: BLOCKED_JOURNAL_ENTRY_COUNT, journalHeadSha256: BLOCKED_JOURNAL_HEAD_SHA256,
+  };
+  if (mutation === "blocked_root_inode") snapshot.rootIno = "1";
+  else if (mutation === "blocked_journal_head") snapshot.journalHeadSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "blocked_final_evidence") snapshot.finalEvidenceSha256 = `sha256:${"e".repeat(64)}`;
+  const immutable = Object.freeze(snapshot);
+  return Object.freeze({ ...immutable, snapshotSha256: sha256Bytes(Buffer.from(canonicalJson(immutable), "utf8")) });
+}
+
+export function runLocalPostgresCleanupRescuePrepareFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? null;
+  const allowed = new Set([null, "blocked_root_inode", "blocked_journal_head", "blocked_final_evidence", "expired"]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-rescue-prepare-")));
+  const receiptPath = path.join(temporaryRoot, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake cleanup rescue owner approval", { mode: 0o600 });
+  fs.chmodSync(receiptPath, 0o600);
+  const createdAt = "2026-08-13T20:00:00.000Z";
+  const expiresAt = mutation === "expired" ? createdAt : "2026-08-13T21:00:00.000Z";
+  let result;
+  try {
+    const receipt = prepareLocalPostgresCleanupRescueGrantWithAdapters({
+      rescueRoot: temporaryRoot, blockedRoot: BLOCKED_PRIVATE_ROOT,
+      rescueOwnerReviewHead: "9".repeat(40), ownerApprovalReceiptPath: receiptPath, createdAt, expiresAt,
+    }, Object.freeze({
+      inspectBlockedForensicRoot: () => fakeBlockedForensicSnapshot(mutation),
+      deriveAuthority: () => fakeCleanupRescueDerived(),
+      observeDockerCliIdentity: () => Object.freeze({ identitySha256: `sha256:${"b".repeat(64)}` }),
+      resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}` }),
+      randomBytes: () => Buffer.alloc(16, 0xd), now: () => new Date("2026-08-13T20:00:01.000Z"),
+      verifyBindings: (grant, observedAt) => validateLocalPostgresCleanupRescueGrant(grant, observedAt),
+    }));
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-prepare-fake-result.v1",
+      status: "GREEN", code: "local_postgres_cleanup_rescue_prepare_green", receipt,
+      grant: readPrivateJson(path.join(temporaryRoot, "rescue.pending.json")),
+      rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)), physicalEffects: 0,
+    });
+  } catch (error) {
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-prepare-fake-result.v1",
+      status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed",
+      receipt: null, grant: null, rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)), physicalEffects: 0,
+    });
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+  return result;
+}
+
+export function runLocalPostgresCleanupRescueGrantValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "top_extra", "missing_key", "schema", "grant_id", "owner_receipt", "authority", "lineage", "artifacts",
+    "blocked_root", "blocked_entries", "blocked_owner", "blocked_consumed", "blocked_evidence", "blocked_journal",
+    "blocked_resource", "host", "ceiling", "docker_ceiling", "local_only",
+    "production", "expired", "future_created",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const grant = JSON.parse(canonicalJson(fakeCleanupRescueGrant(`sha256:${"1".repeat(64)}`)));
+  if (stable.mutation === "top_extra") grant.extra = true;
+  else if (stable.mutation === "missing_key") delete grant.artifacts;
+  else if (stable.mutation === "schema") grant.schemaVersion = "v0";
+  else if (stable.mutation === "grant_id") grant.rescueGrantId = "bad";
+  else if (stable.mutation === "owner_receipt") grant.ownerApprovalReceiptSha256 = "bad";
+  else if (stable.mutation === "authority") grant.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") grant.lineage.correctionOwnerReviewHead = "f".repeat(40);
+  else if (stable.mutation === "artifacts") grant.artifacts.runnerSha256 = "bad";
+  else if (stable.mutation === "blocked_root") grant.blocked.rootIno = "1";
+  else if (stable.mutation === "blocked_entries") grant.blocked.rootEntries = [...grant.blocked.rootEntries, "foreign"];
+  else if (stable.mutation === "blocked_owner") grant.blocked.ownerApprovalReceiptSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "blocked_consumed") grant.blocked.consumedGrantSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "blocked_evidence") grant.blocked.finalEvidenceSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "blocked_journal") grant.blocked.journalEntryCount = 35;
+  else if (stable.mutation === "blocked_resource") grant.blocked.resources.container = "foreign";
+  else if (stable.mutation === "host") grant.host.dockerServerPlatform = "linux/amd64";
+  else if (stable.mutation === "ceiling") grant.ceilings.maximumCleanupRescueLifecycles = 2;
+  else if (stable.mutation === "docker_ceiling") grant.ceilings.dockerCalls["container.create"] = 1;
+  else if (stable.mutation === "local_only") grant.localOnly = false;
+  else if (stable.mutation === "production") grant.productionEffectsAllowed = true;
+  else if (stable.mutation === "expired") grant.expiresAt = grant.createdAt;
+  else if (stable.mutation === "future_created") grant.createdAt = "2026-08-13T20:02:00.000Z";
+  let accepted = false;
+  let code = null;
+  try { validateLocalPostgresCleanupRescueGrant(grant, new Date("2026-08-13T20:00:01.000Z")); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-grant-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresCleanupRescueAuthorityFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set([
+    "none", "duplicate_marker", "prefixed_marker", "top_extra", "authority", "lineage", "artifacts", "blocked", "host", "ceiling",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const derived = fakeCleanupRescueDerived();
+  const payload = {
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-authority.v1",
+    authority: selectKeys(derived.authority, CLEANUP_RESCUE_PAYLOAD_AUTHORITY_KEYS),
+    lineage: selectKeys(derived.lineage, CLEANUP_RESCUE_PAYLOAD_LINEAGE_KEYS),
+    artifacts: { ...derived.artifacts }, blocked: JSON.parse(canonicalJson(derived.blocked)),
+    host: { ...derived.host }, ceilings: JSON.parse(canonicalJson(derived.ceilings)),
+    localOnly: true, productionEffectsAllowed: false,
+  };
+  if (mutation === "top_extra") payload.extra = true;
+  else if (mutation === "authority") payload.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "lineage") payload.lineage.correctionStatusHead = "bad";
+  else if (mutation === "artifacts") payload.artifacts.runnerSha256 = "bad";
+  else if (mutation === "blocked") payload.blocked.journalEntryCount = 35;
+  else if (mutation === "host") payload.host.dockerServerPlatform = "linux/amd64";
+  else if (mutation === "ceiling") payload.ceilings.dockerCalls["image.inspect"] = 1;
+  const canonical = canonicalJson(payload);
+  let card = `fake rescue card\n${CLEANUP_RESCUE_AUTHORITY_BEGIN}\n${canonical}\n${CLEANUP_RESCUE_AUTHORITY_END}\n`;
+  if (mutation === "duplicate_marker") card += `${CLEANUP_RESCUE_AUTHORITY_BEGIN}\n${canonical}\n${CLEANUP_RESCUE_AUTHORITY_END}\n`;
+  if (mutation === "prefixed_marker") card = card.replace(CLEANUP_RESCUE_AUTHORITY_BEGIN, `prefix${CLEANUP_RESCUE_AUTHORITY_BEGIN}`);
+  let accepted = false;
+  let code = null;
+  try { parseCleanupRescueAuthorityCard(Buffer.from(card, "utf8")); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-authority-fake-result.v1",
+    mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+const CLEANUP_RESCUE_JOURNAL_DIRECTORY = "rescue-journal-v1";
+const CLEANUP_RESCUE_SIMULATED_CRASH = Symbol("cleanup-rescue-simulated-crash");
+const CLEANUP_RESCUE_JOURNAL_EVENTS = new Set([
+  "grant.consumed", "rescue.lifecycle_started", "docker.attempt", "docker.completed", "cleanup.proven",
+]);
+const CLEANUP_RESCUE_RECEIPT_CODES = new Set([
+  "local_postgres_cleanup_rescue_green", "local_postgres_cleanup_rescue_blocked",
+  "local_postgres_cleanup_rescue_grant_invalid", "local_postgres_cleanup_rescue_grant_expired",
+  "local_postgres_cleanup_rescue_binding_invalid", "local_postgres_cleanup_rescue_worktree_drift",
+  "local_postgres_cleanup_rescue_forensic_drift", "local_postgres_cleanup_rescue_private_root_invalid",
+  "local_postgres_cleanup_rescue_private_file_invalid", "local_postgres_cleanup_rescue_duplicate_consume",
+  "local_postgres_cleanup_rescue_journal_invalid", "local_postgres_cleanup_rescue_effect_ceiling_exceeded",
+  "local_postgres_docker_call_failed", "local_postgres_docker_version_invalid",
+  "local_postgres_docker_cli_drift", "local_postgres_socket_identity_drift",
+  "local_postgres_resource_ownership_invalid", "local_postgres_cleanup_unproven",
+  "local_postgres_docker_contract_invalid", "local_postgres_docker_command_denied",
+  "local_postgres_owner_approval_receipt_drift", "local_postgres_private_root_invalid",
+  "local_postgres_private_file_invalid", "local_postgres_docker_home_invalid",
+  "local_postgres_private_path_invalid",
+]);
+
+function cleanupRescueJournalDirectory(rescueRoot, create = false) {
+  const journalPath = privatePath(rescueRoot, CLEANUP_RESCUE_JOURNAL_DIRECTORY);
+  if (create && !fs.existsSync(journalPath)) {
+    try { fs.mkdirSync(journalPath, { mode: 0o700 }); fsyncPrivateDirectory(rescueRoot); }
+    catch { fail("local_postgres_cleanup_rescue_journal_invalid"); }
+  }
+  assertPrivateDirectory(journalPath);
+  return journalPath;
+}
+
+function emptyCleanupRescueJournalState() {
+  return {
+    sequence: 0, lastSha256: JOURNAL_GENESIS, consumedGrantSha256: null, lifecycleCount: 0,
+    cleanupProven: false, dockerCallCounts: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    openEffects: new Map(),
+  };
+}
+
+function readCleanupRescueJournal(rescueRoot) {
+  const state = emptyCleanupRescueJournalState();
+  const journalPath = cleanupRescueJournalDirectory(rescueRoot, true);
+  const names = fs.readdirSync(journalPath).sort(binaryCompare);
+  if (names.some((name, index) => name !== `entry-${String(index + 1).padStart(6, "0")}.json`)) {
+    fail("local_postgres_cleanup_rescue_journal_invalid");
+  }
+  for (let index = 0; index < names.length; index += 1) {
+    const record = ownedPlain(readPrivateJsonRecord(path.join(journalPath, names[index])).value);
+    exactKeys(record, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    if (record.schemaVersion !== "r4.public-core-local-postgres-cleanup-rescue-journal-entry.v1"
+      || record.sequence !== index + 1 || record.previousSha256 !== state.lastSha256
+      || typeof record.event !== "string" || !CLEANUP_RESCUE_JOURNAL_EVENTS.has(record.event)) {
+      fail("local_postgres_cleanup_rescue_journal_invalid");
+    }
+    const expectedSha = sha256Bytes(Buffer.from(canonicalJson({
+      schemaVersion: record.schemaVersion, sequence: record.sequence, previousSha256: record.previousSha256,
+      event: record.event, detail: record.detail,
+    }), "utf8"));
+    if (record.entrySha256 !== expectedSha) fail("local_postgres_cleanup_rescue_journal_invalid");
+    if (record.event === "grant.consumed") {
+      exactKeys(record.detail, ["consumedRescueGrantSha256"]);
+      if (state.sequence !== 0 || state.consumedGrantSha256 !== null) fail("local_postgres_cleanup_rescue_journal_invalid");
+      state.consumedGrantSha256 = assertSha(record.detail.consumedRescueGrantSha256);
+    } else if (record.event === "rescue.lifecycle_started") {
+      exactKeys(record.detail, ["ordinal"]);
+      if (state.consumedGrantSha256 === null || record.detail.ordinal !== 1 || state.lifecycleCount !== 0) {
+        fail("local_postgres_cleanup_rescue_journal_invalid");
+      }
+      state.lifecycleCount = 1;
+    } else if (record.event === "docker.attempt") {
+      exactKeys(record.detail, ["effectId", "kind"]);
+      if (state.lifecycleCount !== 1 || typeof record.detail.effectId !== "string"
+        || state.openEffects.has(record.detail.effectId)
+        || !LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.includes(record.detail.kind)) {
+        fail("local_postgres_cleanup_rescue_journal_invalid");
+      }
+      state.dockerCallCounts[record.detail.kind] += 1;
+      if (state.dockerCallCounts[record.detail.kind] > CLEANUP_RESCUE_DOCKER_CALL_CEILINGS[record.detail.kind]) {
+        fail("local_postgres_cleanup_rescue_effect_ceiling_exceeded");
+      }
+      state.openEffects.set(record.detail.effectId, record.detail.kind);
+    } else if (record.event === "docker.completed") {
+      exactKeys(record.detail, ["effectId", "kind"]);
+      if (state.openEffects.get(record.detail.effectId) !== record.detail.kind) fail("local_postgres_cleanup_rescue_journal_invalid");
+      state.openEffects.delete(record.detail.effectId);
+    } else if (record.event === "cleanup.proven") {
+      exactKeys(record.detail, ["residueCount"]);
+      if (record.detail.residueCount !== 0 || state.openEffects.size !== 0) fail("local_postgres_cleanup_rescue_journal_invalid");
+      state.cleanupProven = true;
+    }
+    state.sequence = record.sequence;
+    state.lastSha256 = record.entrySha256;
+  }
+  if (state.sequence > 0 && state.consumedGrantSha256 === null) fail("local_postgres_cleanup_rescue_journal_invalid");
+  return state;
+}
+
+function appendCleanupRescueJournal(rescueRoot, event, detail) {
+  if (!CLEANUP_RESCUE_JOURNAL_EVENTS.has(event)) fail("local_postgres_cleanup_rescue_journal_invalid");
+  const state = readCleanupRescueJournal(rescueRoot);
+  const sequence = state.sequence + 1;
+  if (sequence > 32) fail("local_postgres_cleanup_rescue_journal_invalid");
+  const preimage = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-journal-entry.v1",
+    sequence, previousSha256: state.lastSha256, event, detail: ownedPlain(detail),
+  });
+  const entry = Object.freeze({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8")) });
+  const journalPath = cleanupRescueJournalDirectory(rescueRoot, true);
+  const finalPath = path.join(journalPath, `entry-${String(sequence).padStart(6, "0")}.json`);
+  writePrivateJson(finalPath, entry);
+  const refreshed = readCleanupRescueJournal(rescueRoot);
+  if (refreshed.sequence !== sequence || refreshed.lastSha256 !== entry.entrySha256) {
+    fail("local_postgres_cleanup_rescue_journal_invalid");
+  }
+  return refreshed;
+}
+
+function reserveCleanupRescueDockerCall(rescueRoot, kind) {
+  const state = readCleanupRescueJournal(rescueRoot);
+  if (!LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.includes(kind)
+    || state.lifecycleCount !== 1 || state.cleanupProven
+    || state.dockerCallCounts[kind] >= CLEANUP_RESCUE_DOCKER_CALL_CEILINGS[kind]) {
+    fail("local_postgres_cleanup_rescue_effect_ceiling_exceeded");
+  }
+  const effectId = `docker-${String(state.sequence + 1).padStart(6, "0")}-${kind}`;
+  appendCleanupRescueJournal(rescueRoot, "docker.attempt", { effectId, kind });
+  return Object.freeze({ effectId, kind });
+}
+
+function completeCleanupRescueDockerCall(rescueRoot, reservation) {
+  appendCleanupRescueJournal(rescueRoot, "docker.completed", reservation);
+}
+
+function consumeCleanupRescueGrant(rescueRoot, now, verifyBindings) {
+  const pending = privatePath(rescueRoot, "rescue.pending.json");
+  const consumed = privatePath(rescueRoot, "rescue.consumed.json");
+  const names = fs.readdirSync(rescueRoot).sort(binaryCompare);
+  if (names.length !== 2 || names[0] !== "owner-approval-receipt" || names[1] !== "rescue.pending.json") {
+    fail(fs.existsSync(consumed) ? "local_postgres_cleanup_rescue_duplicate_consume" : "local_postgres_cleanup_rescue_grant_invalid");
+  }
+  const record = readPrivateJsonRecord(pending);
+  const grant = validateLocalPostgresCleanupRescueGrant(record.value, now);
+  verifyBindings(grant, now);
+  if (readOwnerApprovalReceipt(rescueRoot, privatePath(rescueRoot, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  try {
+    fs.linkSync(pending, consumed);
+    fsyncPrivateDirectory(rescueRoot);
+  } catch { fail("local_postgres_cleanup_rescue_duplicate_consume"); }
+  const pendingStat = fs.lstatSync(pending, { bigint: true });
+  const consumedStat = fs.lstatSync(consumed, { bigint: true });
+  if (pendingStat.dev !== consumedStat.dev || pendingStat.ino !== consumedStat.ino
+    || pendingStat.nlink !== 2n || consumedStat.nlink !== 2n) fail("local_postgres_cleanup_rescue_grant_invalid");
+  fs.unlinkSync(pending);
+  fsyncPrivateDirectory(rescueRoot);
+  const stable = readPrivateJsonRecord(consumed);
+  if (stable.sha256 !== record.sha256) fail("local_postgres_cleanup_rescue_grant_invalid");
+  return Object.freeze({ grant, consumedRescueGrantSha256: stable.sha256 });
+}
+
+function recoverConsumedCleanupRescueGrant(rescueRoot, now, verifyBindings) {
+  const consumedPath = privatePath(rescueRoot, "rescue.consumed.json");
+  const evidencePath = privatePath(rescueRoot, "cleanup-rescue-evidence.json");
+  exactFileAbsence(privatePath(rescueRoot, "rescue.pending.json"));
+  exactFileAbsence(evidencePath);
+  const allowed = new Set([
+    "docker-config", "docker-home", CLEANUP_RESCUE_JOURNAL_DIRECTORY,
+    "owner-approval-receipt", "rescue.consumed.json",
+  ]);
+  const names = fs.readdirSync(rescueRoot).sort(binaryCompare);
+  if (!names.includes("owner-approval-receipt") || !names.includes("rescue.consumed.json")
+    || !names.includes(CLEANUP_RESCUE_JOURNAL_DIRECTORY)
+    || names.some((name) => !allowed.has(name))) {
+    fail("local_postgres_cleanup_rescue_grant_invalid");
+  }
+  const record = readPrivateJsonRecord(consumedPath);
+  const grant = validateLocalPostgresCleanupRescueGrant(record.value, now);
+  verifyBindings(grant, now);
+  if (readOwnerApprovalReceipt(rescueRoot, privatePath(rescueRoot, "owner-approval-receipt"), false)
+      !== grant.ownerApprovalReceiptSha256) {
+    fail("local_postgres_owner_approval_receipt_drift");
+  }
+  const journal = readCleanupRescueJournal(rescueRoot);
+  if (journal.consumedGrantSha256 !== record.sha256 || journal.lifecycleCount !== 1
+    || journal.sequence < 2 || journal.cleanupProven) {
+    fail("local_postgres_cleanup_rescue_journal_invalid");
+  }
+  return Object.freeze({ grant, consumedRescueGrantSha256: record.sha256, journal });
+}
+
+function validateCleanupRescueReceiptUnchecked(rawReceipt, grant, journal, consumedRescueGrantSha256) {
+  const receipt = ownedPlain(rawReceipt);
+  exactKeys(receipt, CLEANUP_RESCUE_RECEIPT_KEYS);
+  exactKeys(receipt.authority, CLEANUP_RESCUE_AUTHORITY_KEYS);
+  exactKeys(receipt.lineage, CLEANUP_RESCUE_LINEAGE_KEYS);
+  exactKeys(receipt.artifacts, CLEANUP_RESCUE_ARTIFACT_KEYS);
+  exactKeys(receipt.blocked, CLEANUP_RESCUE_BLOCKED_KEYS);
+  exactKeys(receipt.blocked.resources, CLEANUP_RESCUE_RESOURCE_KEYS);
+  exactKeys(receipt.hostObservation, CLEANUP_RESCUE_RECEIPT_HOST_KEYS);
+  exactKeys(receipt.effects, CLEANUP_RESCUE_RECEIPT_EFFECT_KEYS);
+  exactKeys(receipt.effects.dockerCallCounts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.cleanup, CLEANUP_RESCUE_RECEIPT_CLEANUP_KEYS);
+  exactKeys(receipt.journal, CLEANUP_RESCUE_RECEIPT_JOURNAL_KEYS);
+  exactKeys(receipt.readiness, CLEANUP_RESCUE_RECEIPT_READINESS_KEYS);
+  if (receipt.schemaVersion !== "r4.public-core-local-postgres-cleanup-rescue-receipt.v1"
+    || !CLEANUP_RESCUE_RECEIPT_CODES.has(receipt.code)
+    || receipt.consumedRescueGrantSha256 !== consumedRescueGrantSha256
+    || canonicalJson(receipt.authority) !== canonicalJson(grant.authority)
+    || canonicalJson(receipt.lineage) !== canonicalJson(grant.lineage)
+    || canonicalJson(receipt.artifacts) !== canonicalJson(grant.artifacts)
+    || canonicalJson(receipt.blocked) !== canonicalJson(grant.blocked)
+    || receipt.hostObservation.dockerCliIdentitySha256 !== grant.host.dockerCliIdentitySha256
+    || receipt.hostObservation.socketIdentitySha256 !== grant.host.socketIdentitySha256
+    || receipt.journal.entryCount !== journal.sequence || receipt.journal.headSha256 !== journal.lastSha256
+    || canonicalJson(receipt.effects.dockerCallCounts) !== canonicalJson(journal.dockerCallCounts)) {
+    fail("local_postgres_cleanup_rescue_receipt_invalid");
+  }
+  for (const [kind, count] of Object.entries(receipt.effects.dockerCallCounts)) {
+    if (!Number.isSafeInteger(count) || count < 0 || count > CLEANUP_RESCUE_DOCKER_CALL_CEILINGS[kind]) {
+      fail("local_postgres_cleanup_rescue_receipt_invalid");
+    }
+  }
+  const retained = ["cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json"];
+  if (!Number.isSafeInteger(receipt.cleanup.rescueLocalResidueCount) || receipt.cleanup.rescueLocalResidueCount !== 0
+    || canonicalJson(receipt.cleanup.retainedRescueForensicFiles) !== canonicalJson(retained)
+    || receipt.readiness.physicalExecutionPerformed !== false || receipt.readiness.targetPostgresObserved !== false
+    || receipt.readiness.productRuntimeEffects !== false || receipt.readiness.trafficReady !== false
+    || receipt.readiness.gateCReady !== false) fail("local_postgres_cleanup_rescue_receipt_invalid");
+  if (!["29.3.1", "MISMATCH", "UNKNOWN", "NOT_OBSERVED"].includes(receipt.hostObservation.dockerClientVersion)
+    || !["29.3.1", "MISMATCH", "UNKNOWN", "NOT_OBSERVED"].includes(receipt.hostObservation.dockerServerVersion)
+    || ![IMAGE_PLATFORM, "MISMATCH", "UNKNOWN", "NOT_OBSERVED"].includes(receipt.hostObservation.dockerServerPlatform)
+    || ![0, "UNKNOWN"].includes(receipt.cleanup.ownedContainerCount)
+    || ![0, "UNKNOWN"].includes(receipt.cleanup.ownedNetworkCount)
+    || ![0, "UNKNOWN"].includes(receipt.cleanup.ownedVolumeCount)
+    || typeof receipt.cleanup.oldForensicRootUnchanged !== "boolean") {
+    fail("local_postgres_cleanup_rescue_receipt_invalid");
+  }
+  if (receipt.status === "GREEN") {
+    if (receipt.code !== "local_postgres_cleanup_rescue_green" || receipt.cleanupStatus !== "PROVEN_ABSENT"
+      || !journal.cleanupProven || journal.openEffects.size !== 0 || receipt.cleanup.ownedContainerCount !== 0
+      || receipt.cleanup.ownedNetworkCount !== 0 || receipt.cleanup.ownedVolumeCount !== 0
+      || receipt.cleanup.oldForensicRootUnchanged !== true || receipt.readiness.cleanupRescueGreen !== true
+      || receipt.hostObservation.dockerClientVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerPlatform !== IMAGE_PLATFORM) {
+      fail("local_postgres_cleanup_rescue_receipt_invalid");
+    }
+  } else if (receipt.status === "FAILED") {
+    if (receipt.cleanupStatus !== "BLOCKED" || receipt.readiness.cleanupRescueGreen !== false) {
+      fail("local_postgres_cleanup_rescue_receipt_invalid");
+    }
+  } else fail("local_postgres_cleanup_rescue_receipt_invalid");
+  return receipt;
+}
+
+function validateCleanupRescueReceipt(rawReceipt, grant, journal, consumedRescueGrantSha256) {
+  try { return validateCleanupRescueReceiptUnchecked(rawReceipt, grant, journal, consumedRescueGrantSha256); }
+  catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error)?.code === "local_postgres_cleanup_rescue_receipt_invalid") throw error;
+    fail("local_postgres_cleanup_rescue_receipt_invalid");
+  }
+}
+
+function cleanupRescueSnapshotProjection(snapshot) {
+  return Object.freeze({
+    privateRoot: snapshot.privateRoot, rootDev: snapshot.rootDev, rootIno: snapshot.rootIno,
+    rootMode: snapshot.rootMode, rootUid: snapshot.rootUid, rootEntries: snapshot.rootEntries,
+    ownerApprovalReceiptSha256: snapshot.ownerApprovalReceiptSha256,
+    ownerApprovalReceiptBytes: snapshot.ownerApprovalReceiptBytes,
+    consumedGrantSha256: snapshot.consumedGrantSha256, consumedGrantBytes: snapshot.consumedGrantBytes,
+    finalEvidenceSha256: snapshot.finalEvidenceSha256, finalEvidenceBytes: snapshot.finalEvidenceBytes,
+    journalEntryCount: snapshot.journalEntryCount, journalHeadSha256: snapshot.journalHeadSha256,
+  });
+}
+
+function revalidateCleanupRescueBoundary(context, edge) {
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+  const now = context.adapters.now(edge);
+  const nowMs = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(nowMs) || nowMs < instant(context.grant.createdAt) - 60_000
+    || nowMs >= instant(context.grant.expiresAt)) fail("local_postgres_cleanup_rescue_grant_expired");
+  if (readOwnerApprovalReceipt(context.rescueRoot, privatePath(context.rescueRoot, "owner-approval-receipt"), false)
+    !== context.grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  const rescueNames = fs.readdirSync(context.rescueRoot).sort(binaryCompare);
+  const expectedRescueNames = [
+    "docker-config", "docker-home", CLEANUP_RESCUE_JOURNAL_DIRECTORY,
+    "owner-approval-receipt", "rescue.consumed.json",
+  ].sort(binaryCompare);
+  if (rescueNames.length !== expectedRescueNames.length
+    || rescueNames.some((name, index) => name !== expectedRescueNames[index])) {
+    fail("local_postgres_cleanup_rescue_private_root_invalid");
+  }
+  context.adapters.revalidateHost(context.grant, context.socket, edge);
+  const current = context.adapters.inspectBlockedForensicRoot(context.blockedRoot);
+  if (canonicalJson(cleanupRescueSnapshotProjection(current))
+    !== canonicalJson(cleanupRescueSnapshotProjection(context.blockedSnapshot))) {
+    fail("local_postgres_cleanup_rescue_forensic_drift");
+  }
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+}
+
+function cleanupRescueDockerCall(context, kind, argv, options = Object.freeze({})) {
+  const stableOptions = ownedPlain(options);
+  exactKeys(stableOptions, stableOptions.missingAllowed === undefined ? [] : ["missingAllowed"]);
+  if (stableOptions.missingAllowed !== undefined && stableOptions.missingAllowed !== true) {
+    fail("local_postgres_input_invalid");
+  }
+  if (CLEANUP_RESCUE_DOCKER_CALL_CEILINGS[kind] === undefined
+    || CLEANUP_RESCUE_DOCKER_CALL_CEILINGS[kind] === 0) {
+    fail("local_postgres_cleanup_rescue_effect_ceiling_exceeded");
+  }
+  const stableArgv = approvedDockerArgv(context.plan, kind, argv);
+  revalidateCleanupRescueBoundary(context, `${kind}:before`);
+  const reservation = reserveCleanupRescueDockerCall(context.rescueRoot, kind);
+  let result;
+  let callFailed = false;
+  try { result = context.adapters.callDocker(kind, stableArgv, context); }
+  catch { callFailed = true; }
+  context.adapters.crashCheckpoint?.(`${kind}:after_call_before_completion`);
+  revalidateCleanupRescueBoundary(context, `${kind}:after`);
+  if (callFailed) failDockerCall("AMBIGUOUS");
+  if (result === null || typeof result !== "object" || result.signal !== null || result.error !== undefined
+    || typeof result.stdout !== "string" || typeof result.stderr !== "string" || !Number.isSafeInteger(result.status)) {
+    failDockerCall("AMBIGUOUS");
+  }
+  completeCleanupRescueDockerCall(context.rescueRoot, reservation);
+  if (result.status !== 0) {
+    if (stableOptions.missingAllowed === true && result.status === 1 && result.stdout === ""
+      && isExactDockerMissingDiagnostic(kind, result.stderr, context.plan)) {
+      return Object.freeze({ found: false, stdout: "" });
+    }
+    failDockerCall("FAILED");
+  }
+  return Object.freeze({ found: true, stdout: result.stdout.trim() });
+}
+
+function inspectCleanupRescueResource(context, kind) {
+  const result = cleanupRescueDockerCall(context, kind, planStep(context.plan, kind).argv, { missingAllowed: true });
+  if (!result.found) return null;
+  const record = parseDockerJson(result.stdout);
+  const labels = kind === "container.inspect" ? record.Config?.Labels : record.Labels;
+  if (labels === null || typeof labels !== "object"
+    || labels[context.plan.resources.labelKey] !== context.plan.resources.labelValue) {
+    fail("local_postgres_resource_ownership_invalid");
+  }
+  return record;
+}
+
+function performCleanupRescue(context) {
+  const version = cleanupRescueDockerCall(context, "version", planStep(context.plan, "version").argv);
+  context.hostObservation = Object.freeze({
+    dockerCliIdentitySha256: context.grant.host.dockerCliIdentitySha256,
+    socketIdentitySha256: context.grant.host.socketIdentitySha256,
+    ...observeDockerVersion(version),
+  });
+  validateDockerVersion(version);
+  const container = inspectCleanupRescueResource(context, "container.inspect");
+  const network = inspectCleanupRescueResource(context, "network.inspect");
+  const volume = inspectCleanupRescueResource(context, "volume.inspect");
+  if (container !== null) {
+    if (container.State?.Running === true) {
+      cleanupRescueDockerCall(context, "container.stop", planStep(context.plan, "container.stop").argv);
+    }
+    cleanupRescueDockerCall(context, "container.rm", planStep(context.plan, "container.rm").argv);
+  }
+  if (network !== null) cleanupRescueDockerCall(context, "network.rm", planStep(context.plan, "network.rm").argv);
+  if (volume !== null) cleanupRescueDockerCall(context, "volume.rm", planStep(context.plan, "volume.rm").argv);
+  for (const kind of ["container.inspect", "network.inspect", "volume.inspect"]) {
+    if (inspectCleanupRescueResource(context, kind) !== null) fail("local_postgres_cleanup_unproven");
+  }
+}
+
+function buildCleanupRescueReceipt(context, status, code, oldForensicRootUnchanged) {
+  const journal = readCleanupRescueJournal(context.rescueRoot);
+  const green = status === "GREEN";
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-receipt.v1",
+    status, code, cleanupStatus: green ? "PROVEN_ABSENT" : "BLOCKED",
+    consumedRescueGrantSha256: context.consumedRescueGrantSha256,
+    authority: context.grant.authority, lineage: context.grant.lineage, artifacts: context.grant.artifacts,
+    blocked: context.grant.blocked,
+    hostObservation: context.hostObservation,
+    effects: Object.freeze({ dockerCallCounts: Object.freeze({ ...journal.dockerCallCounts }) }),
+    cleanup: Object.freeze({
+      ownedContainerCount: green ? 0 : "UNKNOWN", ownedNetworkCount: green ? 0 : "UNKNOWN",
+      ownedVolumeCount: green ? 0 : "UNKNOWN", rescueLocalResidueCount: 0,
+      oldForensicRootUnchanged,
+      retainedRescueForensicFiles: Object.freeze([
+        "cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json",
+      ]),
+    }),
+    journal: Object.freeze({ entryCount: journal.sequence, headSha256: journal.lastSha256 }),
+    readiness: Object.freeze({
+      cleanupRescueGreen: green, physicalExecutionPerformed: false, targetPostgresObserved: false,
+      productRuntimeEffects: false, trafficReady: false, gateCReady: false,
+    }),
+  });
+}
+
+function writeCleanupRescueReceipt(context, receipt) {
+  const evidencePath = privatePath(context.rescueRoot, "cleanup-rescue-evidence.json");
+  exactFileAbsence(evidencePath);
+  const journal = readCleanupRescueJournal(context.rescueRoot);
+  const validated = validateCleanupRescueReceipt(receipt, context.grant, journal, context.consumedRescueGrantSha256);
+  writePrivateJson(evidencePath, validated);
+  const committed = readPrivateJsonRecord(evidencePath);
+  validateCleanupRescueReceipt(committed.value, context.grant, readCleanupRescueJournal(context.rescueRoot), context.consumedRescueGrantSha256);
+  const names = fs.readdirSync(context.rescueRoot).sort(binaryCompare);
+  const expected = ["cleanup-rescue-evidence.json", CLEANUP_RESCUE_JOURNAL_DIRECTORY, "owner-approval-receipt", "rescue.consumed.json"].sort(binaryCompare);
+  if (names.length !== expected.length || names.some((name, index) => name !== expected[index])) {
+    fail("local_postgres_cleanup_rescue_private_root_invalid");
+  }
+  return committed.value;
+}
+
+function cleanupRescueProductionDockerCall(kind, argv, context) {
+  const result = spawnSync(DOCKER_CLI, ["--host", `unix://${context.socket.socketPath}`, ...argv], {
+    cwd: "/", encoding: "utf8", env: dockerEnvironment(context.isolated), maxBuffer: MAX_DOCKER_OUTPUT_BYTES,
+    timeout: 60_000,
+  });
+  return Object.freeze({ status: result.status, signal: result.signal, error: result.error, stdout: result.stdout, stderr: result.stderr });
+}
+
+function recoverCleanupRescueCrash(input, adapters, rescueRoot, rootIdentity, blockedSnapshot, observedAt) {
+  const recovered = recoverConsumedCleanupRescueGrant(rescueRoot, observedAt, adapters.verifyBindings);
+  let localCleanupFailed = false;
+  try { cleanupIsolatedDockerHome(rescueRoot); }
+  catch { localCleanupFailed = true; }
+  let oldForensicRootUnchanged = false;
+  try {
+    oldForensicRootUnchanged = canonicalJson(cleanupRescueSnapshotProjection(
+      adapters.inspectBlockedForensicRoot(input.blockedRoot),
+    )) === canonicalJson(cleanupRescueSnapshotProjection(blockedSnapshot));
+  } catch { oldForensicRootUnchanged = false; }
+  const context = {
+    rescueRoot, blockedRoot: input.blockedRoot, rootIdentity, blockedSnapshot,
+    grant: recovered.grant, consumedRescueGrantSha256: recovered.consumedRescueGrantSha256,
+    socket: Object.freeze({ identitySha256: recovered.grant.host.socketIdentitySha256 }), adapters,
+    isolated: null,
+    plan: buildLocalPostgresDockerPlan({
+      grantId: BLOCKED_GRANT_ID,
+      secretMountSource: path.join(rescueRoot, "unused-password-file"),
+    }),
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: recovered.grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: recovered.grant.host.socketIdentitySha256,
+      dockerClientVersion: "NOT_OBSERVED", dockerServerVersion: "NOT_OBSERVED",
+      dockerServerPlatform: "NOT_OBSERVED",
+    }),
+  };
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const code = localCleanupFailed ? "local_postgres_cleanup_unproven" : "local_postgres_cleanup_rescue_blocked";
+  const receipt = writeCleanupRescueReceipt(context,
+    buildCleanupRescueReceipt(context, "FAILED", code, oldForensicRootUnchanged));
+  throw new LocalPostgresRunnerError(receipt.code);
+}
+
+async function runLocalPostgresCleanupRescueWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["rescueRoot", "blockedRoot", "evidenceOut"]);
+  if (typeof stable.rescueRoot !== "string" || !path.isAbsolute(stable.rescueRoot)
+    || typeof stable.blockedRoot !== "string" || !path.isAbsolute(stable.blockedRoot)
+    || stable.evidenceOut !== path.join(stable.rescueRoot, "cleanup-rescue-evidence.json")) {
+    fail("local_postgres_cleanup_rescue_private_root_invalid");
+  }
+  let rescueRoot;
+  try { rescueRoot = fs.realpathSync(stable.rescueRoot); }
+  catch { fail("local_postgres_cleanup_rescue_private_root_invalid"); }
+  if (rescueRoot !== stable.rescueRoot) fail("local_postgres_cleanup_rescue_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(rescueRoot);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const blockedSnapshot = adapters.inspectBlockedForensicRoot(stable.blockedRoot);
+  const observedAt = adapters.now();
+  const entryNames = fs.readdirSync(rescueRoot).sort(binaryCompare);
+  if (entryNames.includes("rescue.consumed.json") && !entryNames.includes("rescue.pending.json")
+    && !entryNames.includes("cleanup-rescue-evidence.json")) {
+    return recoverCleanupRescueCrash(stable, adapters, rescueRoot, rootIdentity, blockedSnapshot, observedAt);
+  }
+  const consumed = consumeCleanupRescueGrant(rescueRoot, observedAt, adapters.verifyBindings);
+  const grant = consumed.grant;
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  if (cli.identitySha256 !== grant.host.dockerCliIdentitySha256
+    || socket.identitySha256 !== grant.host.socketIdentitySha256) {
+    fail("local_postgres_cleanup_rescue_binding_invalid");
+  }
+  const context = {
+    rescueRoot, blockedRoot: stable.blockedRoot, rootIdentity, blockedSnapshot, grant,
+    consumedRescueGrantSha256: consumed.consumedRescueGrantSha256, socket, adapters,
+    isolated: null,
+    plan: buildLocalPostgresDockerPlan({ grantId: BLOCKED_GRANT_ID, secretMountSource: path.join(rescueRoot, "unused-password-file") }),
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: grant.host.socketIdentitySha256,
+      dockerClientVersion: "NOT_OBSERVED", dockerServerVersion: "NOT_OBSERVED", dockerServerPlatform: "NOT_OBSERVED",
+    }),
+  };
+  if (canonicalJson(selectKeys(context.plan.resources, CLEANUP_RESCUE_RESOURCE_KEYS))
+    !== canonicalJson(BLOCKED_RESOURCES)) fail("local_postgres_cleanup_rescue_binding_invalid");
+  appendCleanupRescueJournal(rescueRoot, "grant.consumed", { consumedRescueGrantSha256: consumed.consumedRescueGrantSha256 });
+  appendCleanupRescueJournal(rescueRoot, "rescue.lifecycle_started", { ordinal: 1 });
+  let failure = null;
+  let isolatedSetupAttempted = false;
+  try {
+    isolatedSetupAttempted = true;
+    context.isolated = prepareIsolatedDockerHome(rescueRoot);
+    revalidateCleanupRescueBoundary(context, "rescue:before");
+    performCleanupRescue(context);
+    revalidateCleanupRescueBoundary(context, "rescue:after");
+  } catch (error) {
+    if (error === CLEANUP_RESCUE_SIMULATED_CRASH) throw error;
+    failure = error;
+  }
+  let localCleanupFailed = false;
+  try { if (isolatedSetupAttempted) cleanupIsolatedDockerHome(rescueRoot); }
+  catch { localCleanupFailed = true; }
+  let oldForensicRootUnchanged = false;
+  try {
+    oldForensicRootUnchanged = canonicalJson(cleanupRescueSnapshotProjection(adapters.inspectBlockedForensicRoot(stable.blockedRoot)))
+      === canonicalJson(cleanupRescueSnapshotProjection(blockedSnapshot));
+  } catch { oldForensicRootUnchanged = false; }
+  if (failure === null && !localCleanupFailed && oldForensicRootUnchanged) {
+    appendCleanupRescueJournal(rescueRoot, "cleanup.proven", { residueCount: 0 });
+    return writeCleanupRescueReceipt(context,
+      buildCleanupRescueReceipt(context, "GREEN", "local_postgres_cleanup_rescue_green", true));
+  }
+  const code = localCleanupFailed ? "local_postgres_cleanup_unproven"
+    : (authenticLocalPostgresRunnerErrorDetails(failure)?.code ?? "local_postgres_cleanup_rescue_blocked");
+  const receipt = writeCleanupRescueReceipt(context, buildCleanupRescueReceipt(context, "FAILED", code, oldForensicRootUnchanged));
+  const error = new LocalPostgresRunnerError(receipt.code);
+  throw error;
+}
+
+export async function runApprovedLocalPostgresCleanupRescue(input) {
+  return runLocalPostgresCleanupRescueWithAdapters(input, Object.freeze({
+    inspectBlockedForensicRoot,
+    verifyBindings: verifyCleanupRescueCommittedBindings,
+    observeDockerCliIdentity,
+    resolveSocketIdentity: resolveDockerSocketIdentity,
+    revalidateHost(grant, socket) {
+      if (observeDockerCliIdentity().identitySha256 !== grant.host.dockerCliIdentitySha256) {
+        fail("local_postgres_docker_cli_drift");
+      }
+      if (socket.identitySha256 !== grant.host.socketIdentitySha256) fail("local_postgres_socket_identity_drift");
+      revalidateDockerSocketIdentity(socket);
+    },
+    callDocker: cleanupRescueProductionDockerCall,
+    now: () => new Date(),
+  }));
+}
+
+function fakeCleanupRescueGrant(ownerApprovalReceiptSha256) {
+  const derived = fakeCleanupRescueDerived();
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-grant.v1",
+    rescueGrantId: "d".repeat(32), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    blocked: derived.blocked,
+    host: Object.freeze({ ...derived.host, dockerCliIdentitySha256: `sha256:${"b".repeat(64)}`, socketIdentitySha256: `sha256:${"c".repeat(64)}` }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: "2026-08-13T20:00:00.000Z", expiresAt: "2026-08-13T21:00:00.000Z",
+  });
+}
+
+function fakeCleanupRescueDockerPort(states, calls, mutations, argvRecords) {
+  const diagnostic = (kind) => {
+    if (kind === "container.inspect") return `Error: No such object: ${BLOCKED_RESOURCES.container}\n`;
+    if (kind === "network.inspect") return `Error response from daemon: network ${BLOCKED_RESOURCES.network} not found\n`;
+    if (kind === "volume.inspect") return `Error response from daemon: get ${BLOCKED_RESOURCES.volume}: no such volume\n`;
+    return "";
+  };
+  const stateKey = (kind) => kind.split(".")[0];
+  return (kind, argv) => {
+    calls.push(kind);
+    argvRecords.push(Object.freeze({ kind, argv: Object.freeze([...argv]) }));
+    if (kind === "version") {
+      return Object.freeze({
+        status: 0, signal: null, error: undefined, stderr: "",
+        stdout: JSON.stringify({ Client: { Version: "29.3.1" }, Server: { Version: "29.3.1", Os: "linux", Arch: "arm64" } }),
+      });
+    }
+    const resource = stateKey(kind);
+    const current = states[resource];
+    if (kind.endsWith(".inspect")) {
+      if (current === "ambiguous") return Object.freeze({ status: null, signal: "SIGKILL", error: undefined, stdout: "", stderr: "" });
+      if (current === "malformed") return Object.freeze({ status: 1, signal: null, error: undefined, stdout: "", stderr: `${diagnostic(kind).trim()} extra\n` });
+      if (current === "missing") return Object.freeze({ status: 1, signal: null, error: undefined, stdout: "", stderr: diagnostic(kind) });
+      const labels = current === "foreign" ? { [BLOCKED_RESOURCES.labelKey]: "foreign" }
+        : { [BLOCKED_RESOURCES.labelKey]: BLOCKED_RESOURCES.labelValue };
+      const record = resource === "container"
+        ? { Config: { Labels: labels }, State: { Running: current === "owned_running" } }
+        : { Labels: labels };
+      return Object.freeze({ status: 0, signal: null, error: undefined, stdout: JSON.stringify(record), stderr: "" });
+    }
+    if (kind === "container.stop") {
+      if (current !== "owned_running") return Object.freeze({ status: 1, signal: null, error: undefined, stdout: "", stderr: "unexpected\n" });
+      states.container = "owned_stopped"; mutations.push("container.stop");
+    } else if (kind === "container.rm") {
+      states.container = "missing"; mutations.push("container.rm");
+    } else if (kind === "network.rm") {
+      states.network = "missing"; mutations.push("network.rm");
+    } else if (kind === "volume.rm") {
+      states.volume = "missing"; mutations.push("volume.rm");
+    }
+    return Object.freeze({ status: 0, signal: null, error: undefined, stdout: "", stderr: "" });
+  };
+}
+
+export async function runLocalPostgresCleanupRescueFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  const allowedKeys = new Set([
+    "container", "network", "volume", "hostDriftAt", "blockedDriftAt", "clockExpiredAt", "crashAt",
+    "duplicateConsume",
+  ]);
+  if (Object.keys(stable).some((key) => !allowedKeys.has(key))) fail("local_postgres_input_invalid");
+  const allowedStates = new Set(["missing", "owned_running", "owned_stopped", "foreign", "malformed", "ambiguous"]);
+  const allowedCrashEdges = new Set([
+    "container.inspect:after_call_before_completion", "container.rm:after_call_before_completion",
+  ]);
+  const states = {
+    container: stable.container ?? "missing", network: stable.network ?? "missing", volume: stable.volume ?? "missing",
+  };
+  if (!allowedStates.has(states.container) || !allowedStates.has(states.network) || !allowedStates.has(states.volume)
+    || (stable.hostDriftAt !== undefined && typeof stable.hostDriftAt !== "string")
+    || (stable.clockExpiredAt !== undefined && typeof stable.clockExpiredAt !== "string")
+    || (stable.crashAt !== undefined && !allowedCrashEdges.has(stable.crashAt))
+    || (stable.blockedDriftAt !== undefined && (!Number.isSafeInteger(stable.blockedDriftAt) || stable.blockedDriftAt < 1))
+    || (stable.duplicateConsume !== undefined && typeof stable.duplicateConsume !== "boolean")) {
+    fail("local_postgres_input_invalid");
+  }
+  const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-rescue-run-")));
+  const ownerPath = path.join(temporaryRoot, "owner-approval-receipt");
+  fs.writeFileSync(ownerPath, "fake cleanup rescue execution approval", { mode: 0o600 });
+  fs.chmodSync(ownerPath, 0o600);
+  const ownerSha = readOwnerApprovalReceipt(temporaryRoot, ownerPath);
+  const grant = fakeCleanupRescueGrant(ownerSha);
+  installPendingGrant(temporaryRoot, path.join(temporaryRoot, "rescue.pending.json"), grant);
+  const calls = [];
+  const mutations = [];
+  const argvRecords = [];
+  const blockedSnapshot = fakeBlockedForensicSnapshot(null);
+  const rawCall = fakeCleanupRescueDockerPort(states, calls, mutations, argvRecords);
+  let blockedInspectionCount = 0;
+  const adapters = Object.freeze({
+    inspectBlockedForensicRoot() {
+      blockedInspectionCount += 1;
+      return blockedInspectionCount === stable.blockedDriftAt ? fakeBlockedForensicSnapshot("blocked_root_inode") : blockedSnapshot;
+    },
+    verifyBindings: (candidate, observedAt) => validateLocalPostgresCleanupRescueGrant(candidate, observedAt),
+    observeDockerCliIdentity: () => Object.freeze({ identitySha256: grant.host.dockerCliIdentitySha256 }),
+    resolveSocketIdentity: () => Object.freeze({
+      identitySha256: grant.host.socketIdentitySha256, socketPath: "/private/fake/docker.sock",
+    }),
+    revalidateHost(_grant, _socket, edge) {
+      if (stable.hostDriftAt === edge) fail("local_postgres_docker_cli_drift");
+    },
+    callDocker: (kind, argv) => rawCall(kind, argv),
+    crashCheckpoint(edge) {
+      if (stable.crashAt === edge) throw CLEANUP_RESCUE_SIMULATED_CRASH;
+    },
+    now: (edge) => new Date(stable.clockExpiredAt !== undefined && edge === stable.clockExpiredAt
+      ? "2026-08-13T21:00:00.000Z" : "2026-08-13T20:00:01.000Z"),
+  });
+  const request = Object.freeze({
+    rescueRoot: temporaryRoot, blockedRoot: BLOCKED_PRIVATE_ROOT,
+    evidenceOut: path.join(temporaryRoot, "cleanup-rescue-evidence.json"),
+  });
+  let receipt = null;
+  let failureCode = null;
+  let duplicateCode = null;
+  let simulatedCrash = false;
+  let recoveryAddedCalls = 0;
+  try { receipt = await runLocalPostgresCleanupRescueWithAdapters(request, adapters); }
+  catch (error) {
+    if (error === CLEANUP_RESCUE_SIMULATED_CRASH) {
+      simulatedCrash = true;
+      const beforeRecoveryCalls = calls.length;
+      try { await runLocalPostgresCleanupRescueWithAdapters(request, adapters); }
+      catch (recoveryError) {
+        failureCode = authenticLocalPostgresRunnerErrorDetails(recoveryError)?.code ?? "local_postgres_runner_failed";
+      }
+      recoveryAddedCalls = calls.length - beforeRecoveryCalls;
+    } else {
+      failureCode = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed";
+    }
+    try { receipt = readPrivateJson(path.join(temporaryRoot, "cleanup-rescue-evidence.json")); } catch { receipt = null; }
+  }
+  const firstCallCount = calls.length;
+  if (stable.duplicateConsume === true) {
+    try { await runLocalPostgresCleanupRescueWithAdapters(request, adapters); }
+    catch (error) { duplicateCode = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  }
+  const rootEntries = Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare));
+  const blockedAfter = adapters.inspectBlockedForensicRoot(BLOCKED_PRIVATE_ROOT);
+  const journalAfter = readCleanupRescueJournal(temporaryRoot);
+  const result = Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-fake-result.v1",
+    status: receipt?.status ?? "FAILED", code: receipt?.code ?? failureCode,
+    receipt, calls: Object.freeze([...calls]), argv: Object.freeze([...argvRecords]),
+    firstCallCount, mutations: Object.freeze([...mutations]),
+    duplicateCode, duplicateAddedCalls: calls.length - firstCallCount, rootEntries,
+    simulatedCrash, recoveryAddedCalls,
+    openEffectCount: journalAfter.openEffects.size,
+    oldForensicSnapshotSha256: blockedSnapshot.snapshotSha256,
+    oldForensicSnapshotSha256After: blockedAfter.snapshotSha256,
+    physicalEffects: 0, postgresConnections: 0, sqlStatements: 0, productNetworkEffects: 0,
+  });
+  fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  return result;
+}
+
+export function runLocalPostgresCleanupRescueReceiptValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "top_extra", "authority", "lineage", "artifacts", "blocked", "host", "effects", "cleanup",
+    "journal", "readiness", "consumed", "status",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const owner = `sha256:${"1".repeat(64)}`;
+  const grant = fakeCleanupRescueGrant(owner);
+  const journal = emptyCleanupRescueJournalState();
+  journal.sequence = 3; journal.lastSha256 = `sha256:${"2".repeat(64)}`; journal.consumedGrantSha256 = `sha256:${"3".repeat(64)}`;
+  journal.lifecycleCount = 1; journal.cleanupProven = true;
+  journal.dockerCallCounts.version = 1;
+  const receipt = {
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-receipt.v1", status: "GREEN",
+    code: "local_postgres_cleanup_rescue_green", cleanupStatus: "PROVEN_ABSENT",
+    consumedRescueGrantSha256: journal.consumedGrantSha256,
+    authority: grant.authority, lineage: grant.lineage, artifacts: grant.artifacts, blocked: grant.blocked,
+    hostObservation: {
+      dockerCliIdentitySha256: grant.host.dockerCliIdentitySha256, socketIdentitySha256: grant.host.socketIdentitySha256,
+      dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1", dockerServerPlatform: IMAGE_PLATFORM,
+    },
+    effects: { dockerCallCounts: { ...journal.dockerCallCounts } },
+    cleanup: {
+      ownedContainerCount: 0, ownedNetworkCount: 0, ownedVolumeCount: 0, rescueLocalResidueCount: 0,
+      oldForensicRootUnchanged: true,
+      retainedRescueForensicFiles: ["cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json"],
+    },
+    journal: { entryCount: journal.sequence, headSha256: journal.lastSha256 },
+    readiness: {
+      cleanupRescueGreen: true, physicalExecutionPerformed: false, targetPostgresObserved: false,
+      productRuntimeEffects: false, trafficReady: false, gateCReady: false,
+    },
+  };
+  const mutation = stable.mutation;
+  if (mutation === "top_extra") receipt.extra = true;
+  else if (mutation === "authority") receipt.authority = { ...receipt.authority, rescueCardSha256: `sha256:${"f".repeat(64)}` };
+  else if (mutation === "lineage") receipt.lineage = { ...receipt.lineage, rescueCardHead: "f".repeat(40) };
+  else if (mutation === "artifacts") receipt.artifacts = { ...receipt.artifacts, runnerSha256: `sha256:${"f".repeat(64)}` };
+  else if (mutation === "blocked") receipt.blocked = { ...receipt.blocked, journalEntryCount: 35 };
+  else if (mutation === "host") receipt.hostObservation = { ...receipt.hostObservation, dockerClientVersion: "MISMATCH" };
+  else if (mutation === "effects") receipt.effects.dockerCallCounts.version = 2;
+  else if (mutation === "cleanup") receipt.cleanup.rescueLocalResidueCount = 1;
+  else if (mutation === "journal") receipt.journal.headSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "readiness") receipt.readiness.gateCReady = true;
+  else if (mutation === "consumed") receipt.consumedRescueGrantSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "status") receipt.cleanupStatus = "BLOCKED";
+  let accepted = false;
+  let code = null;
+  try { validateCleanupRescueReceipt(receipt, grant, journal, journal.consumedGrantSha256); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-receipt-validation-fake-result.v1",
+    mutation, accepted, code, physicalEffects: 0,
+  });
 }
 
 function fakePrepareAuthority(cardMutation = null) {
@@ -2758,6 +4356,7 @@ function isExactDockerMissingDiagnostic(kind, stderr, plan) {
     ]),
     "container.inspect": Object.freeze([
       `Error response from daemon: No such container: ${plan.resources.container}`,
+      `Error: No such object: ${plan.resources.container}`,
     ]),
     "network.inspect": Object.freeze([
       `Error response from daemon: network ${plan.resources.network} not found`,
@@ -2767,6 +4366,23 @@ function isExactDockerMissingDiagnostic(kind, stderr, plan) {
     ]),
   }[kind];
   return Array.isArray(expected) && expected.includes(message);
+}
+
+export function runLocalPostgresDockerDiagnosticFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["kind", "status", "stdout", "stderr"]);
+  if (typeof stable.kind !== "string" || !LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.includes(stable.kind)
+    || !Number.isSafeInteger(stable.status) || typeof stable.stdout !== "string"
+    || typeof stable.stderr !== "string") fail("local_postgres_input_invalid");
+  const plan = buildLocalPostgresDockerPlan({ grantId: BLOCKED_GRANT_ID, secretMountSource: "/private/fake/postgres-password" });
+  const missingExact = stable.status === 1 && stable.stdout === ""
+    && isExactDockerMissingDiagnostic(stable.kind, stable.stderr, plan);
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-docker-diagnostic-fake-result.v1",
+    outcome: missingExact ? "MISSING_EXACT" : "FAILED",
+    missingExact,
+    physicalEffects: 0,
+  });
 }
 
 function parseDockerJson(value, code = "local_postgres_docker_contract_invalid") {
@@ -6272,6 +7888,25 @@ export function parseLocalPostgresRunnerArguments(argv) {
     && typeof stable[4] === "string" && path.isAbsolute(stable[4])) {
     return Object.freeze({ mode: "physical", grantRoot: stable[2], evidenceOut: stable[4] });
   }
+  if (stable.length === 13 && stable[0] === "prepare-rescue" && stable[1] === "--rescue-root"
+    && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--blocked-root" && stable[4] === BLOCKED_PRIVATE_ROOT
+    && stable[5] === "--rescue-review-head" && typeof stable[6] === "string" && GIT_OBJECT.test(stable[6])
+    && stable[7] === "--owner-approval-receipt" && typeof stable[8] === "string" && path.isAbsolute(stable[8])
+    && stable[9] === "--created-at" && typeof stable[10] === "string"
+    && stable[11] === "--expires-at" && typeof stable[12] === "string") {
+    instant(stable[10]); instant(stable[12]);
+    return Object.freeze({
+      mode: "prepare-rescue", rescueRoot: stable[2], blockedRoot: stable[4], rescueOwnerReviewHead: stable[6],
+      ownerApprovalReceiptPath: stable[8], createdAt: stable[10], expiresAt: stable[12],
+    });
+  }
+  if (stable.length === 7 && stable[0] === "rescue" && stable[1] === "--rescue-root"
+    && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--blocked-root" && stable[4] === BLOCKED_PRIVATE_ROOT
+    && stable[5] === "--evidence-out" && typeof stable[6] === "string" && path.isAbsolute(stable[6])) {
+    return Object.freeze({ mode: "rescue", rescueRoot: stable[2], blockedRoot: stable[4], evidenceOut: stable[6] });
+  }
   fail("local_postgres_arguments_invalid");
 }
 
@@ -7308,6 +8943,17 @@ async function direct() {
   if (parsed.mode === "prepare") {
     const { mode: _mode, ...input } = parsed;
     process.stdout.write(`${canonicalJson(prepareLocalPostgresPendingGrantV3(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "prepare-rescue") {
+    const { mode: _mode, ...input } = parsed;
+    process.stdout.write(`${canonicalJson(prepareLocalPostgresCleanupRescueGrant(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "rescue") {
+    await runApprovedLocalPostgresCleanupRescue({
+      rescueRoot: parsed.rescueRoot, blockedRoot: parsed.blockedRoot, evidenceOut: parsed.evidenceOut,
+    });
     return;
   }
   await runApprovedLocalPostgresPhysical({ grantRoot: parsed.grantRoot, evidenceOut: parsed.evidenceOut });

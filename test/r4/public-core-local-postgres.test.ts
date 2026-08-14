@@ -18,7 +18,16 @@ import {
   deriveLocalPostgresResourceNames,
   parseLocalPostgresRunnerArguments,
   prepareLocalPostgresPendingGrantV3,
+  prepareLocalPostgresCleanupRescueGrant,
   runApprovedLocalPostgresPhysical,
+  runApprovedLocalPostgresCleanupRescue,
+  runLocalPostgresCleanupRescueAuthorityFakePlan,
+  runLocalPostgresCleanupRescueBindingFakePlan,
+  runLocalPostgresCleanupRescueFakePlan,
+  runLocalPostgresCleanupRescueGrantValidationFakePlan,
+  runLocalPostgresCleanupRescuePrepareFakePlan,
+  runLocalPostgresCleanupRescueReceiptValidationFakePlan,
+  runLocalPostgresDockerDiagnosticFakePlan,
   runLocalPostgresFakePlan,
   runLocalPostgresCleanupLifecycleFakePlan,
   runLocalPostgresPrepareFakePlan,
@@ -800,11 +809,15 @@ test("future physical engine is fully constructed but ordinary test entry remain
   assert.match(source, /consumeLocalPostgresGrant/u);
   assert.match(source, /performNormalPhysicalRun/u);
   assert.match(source, /cleanupOwnedDocker/u);
-  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 1);
+  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 2,
+    "general physical and separately authorized cleanup-rescue each own one closed Docker port");
   const hardlinkSites = source.match(/fs\.linkSync\([^\n]+/gu) ?? [];
-  assert.deepEqual(hardlinkSites.map((site) => (
+  const hardlinkKinds = hardlinkSites.map((site) => (
     site.includes("receipt-link") ? "fake_receipt_hardlink_mutation" : site.includes("pending, consumed") ? "grant_consume" : "unknown"
-  )), ["fake_receipt_hardlink_mutation", "grant_consume"]);
+  ));
+  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 2);
+  assert.equal(hardlinkKinds.filter((kind) => kind === "fake_receipt_hardlink_mutation").length, 1);
+  assert.equal(hardlinkKinds.includes("unknown"), false);
   assert.equal(source.includes("coordinator.active.json"), false);
   assert.equal(source.includes("coordinator.claim.json"), false);
   assert.equal(source.includes("process.kill("), false, "PID-only liveness cannot authorize takeover");
@@ -2633,4 +2646,305 @@ test("prepare and physical entry reject a symlink root alias before reading gran
     runnerError("local_postgres_private_root_invalid"),
   );
   assert.deepEqual((await readdir(root)).sort(), []);
+});
+
+test("Docker missing diagnostics accept only the exact frozen full-line table", () => {
+  const resources = deriveLocalPostgresResourceNames("b92ae04555cc3d69a16c06ae53b30976");
+  const accepted = [
+    ["image.inspect", `Error response from daemon: No such image: ${IMAGE_REFERENCE}\n`],
+    ["image.inspect", `Error: No such object: ${IMAGE_REFERENCE}\n`],
+    ["container.inspect", `Error response from daemon: No such container: ${resources.container}\n`],
+    ["container.inspect", `Error: No such object: ${resources.container}\n`],
+    ["network.inspect", `Error response from daemon: network ${resources.network} not found\n`],
+    ["volume.inspect", `Error response from daemon: get ${resources.volume}: no such volume\n`],
+  ] as const;
+  for (const [kind, stderr] of accepted) {
+    const result = runLocalPostgresDockerDiagnosticFakePlan({ kind, status: 1, stdout: "", stderr });
+    assert.equal(result.outcome, "MISSING_EXACT", `${kind}: ${stderr}`);
+    assert.equal(result.missingExact, true);
+    assert.equal(result.physicalEffects, 0);
+  }
+  const exactNames = {
+    "image.inspect": IMAGE_REFERENCE,
+    "container.inspect": resources.container,
+    "network.inspect": resources.network,
+    "volume.inspect": resources.volume,
+  } as const;
+  const hostile = accepted.flatMap(([kind, stderr]) => {
+    const exactName = exactNames[kind];
+    const withoutLf = stderr.slice(0, -1);
+    return [
+      { kind, status: 1, stdout: "", stderr: stderr.replace(exactName, `${exactName}-other`) },
+      { kind, status: 1, stdout: "", stderr: `prefix ${stderr}` },
+      { kind, status: 1, stdout: "", stderr: `${withoutLf} suffix\n` },
+      { kind, status: 1, stdout: "", stderr: `${stderr}extra\n` },
+      { kind, status: 1, stdout: "", stderr: `${withoutLf}\r\n` },
+      { kind, status: 0, stdout: "", stderr },
+      { kind, status: 1, stdout: "unexpected", stderr },
+    ];
+  });
+  hostile.push(
+    { kind: "network.inspect", status: 1, stdout: "", stderr: `Error: No such object: ${resources.network}\n` },
+    { kind: "volume.inspect", status: 1, stdout: "", stderr: `Error: No such object: ${resources.volume}\n` },
+  );
+  for (const candidate of hostile) {
+    const result = runLocalPostgresDockerDiagnosticFakePlan(candidate);
+    assert.equal(result.outcome, "FAILED", JSON.stringify(candidate));
+    assert.equal(result.missingExact, false);
+    assert.equal(result.physicalEffects, 0);
+  }
+});
+
+test("Docker diagnostic/rescue Addendum and Review are exact single-document descendants of failed Review V2", () => {
+  assertHistoricalAuthorityStep({
+    head: "56553e4a1e7bc65516f1f14cbac7e8fab2a53262",
+    parent: "6e67c1f1867d73f27674a5f056e0692c5b42d6a3",
+    tree: "45a8b295d5308766e2bf0a6f4715af0d5c5edaef",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9",
+  });
+  assertHistoricalAuthorityStep({
+    head: "eb38eff55c2360b51df13dceb896680ec4440479",
+    parent: "56553e4a1e7bc65516f1f14cbac7e8fab2a53262",
+    tree: "96abe090ac364a973d1b9bc6edc3e5ea70af4d6e",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4",
+  });
+});
+
+test("cleanup rescue authority, prepare, and grant membranes are closed and fake-only", () => {
+  assert.deepEqual(runLocalPostgresCleanupRescueAuthorityFakePlan(), {
+    schemaVersion: "r4.public-core-local-postgres-cleanup-rescue-authority-fake-result.v1",
+    mutation: "none", accepted: true, code: null, physicalEffects: 0,
+  });
+  for (const mutation of [
+    "duplicate_marker", "prefixed_marker", "top_extra", "authority", "lineage", "artifacts", "blocked", "host", "ceiling",
+  ]) {
+    const result = runLocalPostgresCleanupRescueAuthorityFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.code, "local_postgres_cleanup_rescue_authority_invalid", mutation);
+    assert.equal(result.physicalEffects, 0);
+  }
+
+  const prepared = runLocalPostgresCleanupRescuePrepareFakePlan();
+  assert.equal(prepared.status, "GREEN");
+  assert.equal(prepared.code, "local_postgres_cleanup_rescue_prepare_green");
+  assert.deepEqual(prepared.rootEntries, ["owner-approval-receipt", "rescue.pending.json"]);
+  assert.equal(prepared.grant.schemaVersion, "r4.public-core-local-postgres-cleanup-rescue-grant.v1");
+  assert.equal(prepared.grant.blocked.consumedGrantSha256,
+    "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35");
+  assert.equal(prepared.grant.blocked.finalEvidenceSha256,
+    "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c");
+  assert.equal(prepared.grant.blocked.journalEntryCount, 34);
+  assert.equal(prepared.grant.blocked.journalHeadSha256,
+    "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25");
+  assert.equal(prepared.physicalEffects, 0);
+  for (const mutation of ["blocked_root_inode", "blocked_journal_head", "blocked_final_evidence", "expired"] as const) {
+    const failed = runLocalPostgresCleanupRescuePrepareFakePlan({ mutation });
+    assert.equal(failed.status, "FAILED", mutation);
+    assert.equal(failed.receipt, null, mutation);
+    assert.equal(failed.grant, null, mutation);
+    assert.deepEqual(failed.rootEntries, ["owner-approval-receipt"], mutation);
+    assert.equal(failed.physicalEffects, 0, mutation);
+  }
+  for (const mutation of [
+    "top_extra", "missing_key", "schema", "grant_id", "owner_receipt", "authority", "lineage", "artifacts",
+    "blocked_root", "blocked_entries", "blocked_owner", "blocked_consumed", "blocked_evidence", "blocked_journal",
+    "blocked_resource", "host", "ceiling", "docker_ceiling", "local_only",
+    "production", "expired", "future_created",
+  ]) {
+    const result = runLocalPostgresCleanupRescueGrantValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+    assert.match(result.code, /^local_postgres_/u, mutation);
+  }
+  for (const mutation of [
+    "implementation_head", "implementation_tree", "implementation_aggregate", "evidence_head", "evidence_tree",
+    "status_head", "status_tree", "card_head", "card_tree", "review_head", "review_tree", "runner", "test",
+    "index", "schema", "evidence", "report", "audit", "card_sha", "review_sha", "payload_sha",
+  ]) {
+    const result = runLocalPostgresCleanupRescueBindingFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.code, "local_postgres_cleanup_rescue_binding_invalid", mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+});
+
+test("cleanup rescue fake proves exact absence without image, create, start, pg, SQL, or product effects", async () => {
+  const result = await runLocalPostgresCleanupRescueFakePlan({});
+  assert.equal(result.status, "GREEN");
+  assert.equal(result.code, "local_postgres_cleanup_rescue_green");
+  assert.deepEqual(result.calls, [
+    "version", "container.inspect", "network.inspect", "volume.inspect",
+    "container.inspect", "network.inspect", "volume.inspect",
+  ]);
+  assert.deepEqual(result.argv.map((record: Readonly<{ kind: string; argv: readonly string[] }>) => record.argv), [
+    ["version", "--format", "{{json .}}"],
+    ["container", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-b92ae04555cc3d69"],
+    ["network", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-net-b92ae04555cc3d69"],
+    ["volume", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-vol-b92ae04555cc3d69"],
+    ["container", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-b92ae04555cc3d69"],
+    ["network", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-net-b92ae04555cc3d69"],
+    ["volume", "inspect", "--format", "{{json .}}", "forme-r4-public-core-local-vol-b92ae04555cc3d69"],
+  ]);
+  assert.deepEqual(result.mutations, []);
+  assert.deepEqual(JSON.parse(JSON.stringify(result.receipt.effects.dockerCallCounts)), {
+    version: 1, "image.inspect": 0, "image.pull": 0,
+    "container.inspect": 2, "container.create": 0, "container.start": 0, "container.stop": 0, "container.rm": 0,
+    "network.inspect": 2, "network.create": 0, "network.rm": 0,
+    "volume.inspect": 2, "volume.create": 0, "volume.rm": 0,
+  });
+  assert.equal(result.receipt.cleanup.oldForensicRootUnchanged, true);
+  assert.equal(result.oldForensicSnapshotSha256After, result.oldForensicSnapshotSha256);
+  assert.equal(result.receipt.cleanupStatus, "PROVEN_ABSENT");
+  assert.deepEqual(result.rootEntries, [
+    "cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json",
+  ]);
+  assert.equal(result.physicalEffects, 0);
+  assert.equal(result.postgresConnections, 0);
+  assert.equal(result.sqlStatements, 0);
+  assert.equal(result.productNetworkEffects, 0);
+});
+
+test("cleanup rescue exact-owned maximum path is one-use and bounded by the closed Docker vector", async () => {
+  const result = await runLocalPostgresCleanupRescueFakePlan({
+    container: "owned_running", network: "owned_stopped", volume: "owned_stopped", duplicateConsume: true,
+  });
+  assert.equal(result.status, "GREEN");
+  assert.deepEqual(result.calls, [
+    "version", "container.inspect", "network.inspect", "volume.inspect", "container.stop", "container.rm",
+    "network.rm", "volume.rm", "container.inspect", "network.inspect", "volume.inspect",
+  ]);
+  assert.deepEqual(result.mutations, ["container.stop", "container.rm", "network.rm", "volume.rm"]);
+  assert.deepEqual(JSON.parse(JSON.stringify(result.receipt.effects.dockerCallCounts)), {
+    version: 1, "image.inspect": 0, "image.pull": 0,
+    "container.inspect": 2, "container.create": 0, "container.start": 0, "container.stop": 1, "container.rm": 1,
+    "network.inspect": 2, "network.create": 0, "network.rm": 1,
+    "volume.inspect": 2, "volume.create": 0, "volume.rm": 1,
+  });
+  assert.equal(result.duplicateCode, "local_postgres_cleanup_rescue_duplicate_consume");
+  assert.equal(result.duplicateAddedCalls, 0);
+  assert.equal(result.receipt.cleanup.oldForensicRootUnchanged, true);
+  assert.equal(result.oldForensicSnapshotSha256After, result.oldForensicSnapshotSha256);
+  assert.equal(result.physicalEffects, 0);
+});
+
+test("cleanup rescue foreign, malformed, ambiguous, and host-drift preflights are body-free and mutation-free", async () => {
+  const cases = [
+    { input: { container: "foreign" }, code: "local_postgres_resource_ownership_invalid" },
+    { input: { network: "malformed" }, code: "local_postgres_docker_call_failed" },
+    { input: { volume: "ambiguous" }, code: "local_postgres_docker_call_failed" },
+    { input: { hostDriftAt: "container.inspect:before" }, code: "local_postgres_docker_cli_drift" },
+    { input: { hostDriftAt: "network.inspect:after" }, code: "local_postgres_docker_cli_drift" },
+    { input: { blockedDriftAt: 2 }, code: "local_postgres_cleanup_rescue_forensic_drift" },
+    { input: { clockExpiredAt: "container.inspect:before" }, code: "local_postgres_cleanup_rescue_grant_expired" },
+  ] as const;
+  for (const item of cases) {
+    const result = await runLocalPostgresCleanupRescueFakePlan(item.input);
+    assert.equal(result.status, "FAILED", JSON.stringify(item.input));
+    assert.equal(result.code, item.code, JSON.stringify(item.input));
+    assert.equal(result.receipt.cleanupStatus, "BLOCKED");
+    assert.equal(result.receipt.readiness.cleanupRescueGreen, false);
+    assert.deepEqual(result.mutations, [], JSON.stringify(item.input));
+    if ("blockedDriftAt" in item.input) assert.deepEqual(result.calls, []);
+    assert.equal(result.receipt.cleanup.oldForensicRootUnchanged, true);
+    assert.equal(result.physicalEffects, 0);
+    assert.equal(result.postgresConnections, 0);
+    assert.equal(result.sqlStatements, 0);
+  }
+  const ambiguous = await runLocalPostgresCleanupRescueFakePlan({ volume: "ambiguous", duplicateConsume: true });
+  assert.equal(ambiguous.status, "FAILED");
+  assert.equal(ambiguous.openEffectCount, 1);
+  assert.equal(ambiguous.duplicateCode, "local_postgres_cleanup_rescue_duplicate_consume");
+  assert.equal(ambiguous.duplicateAddedCalls, 0);
+});
+
+test("cleanup rescue crash recovery never replays an open Docker effect and freezes BLOCKED evidence", async () => {
+  const result = await runLocalPostgresCleanupRescueFakePlan({
+    crashAt: "container.inspect:after_call_before_completion",
+  });
+  assert.equal(result.simulatedCrash, true);
+  assert.equal(result.recoveryAddedCalls, 0);
+  assert.deepEqual(result.calls, ["version", "container.inspect"]);
+  assert.deepEqual(result.mutations, []);
+  assert.equal(result.status, "FAILED");
+  assert.equal(result.code, "local_postgres_cleanup_rescue_blocked");
+  assert.equal(result.receipt.cleanupStatus, "BLOCKED");
+  assert.equal(result.receipt.readiness.cleanupRescueGreen, false);
+  assert.equal(result.receipt.cleanup.oldForensicRootUnchanged, true);
+  assert.equal(result.openEffectCount, 1);
+  assert.deepEqual(JSON.parse(JSON.stringify(result.receipt.effects.dockerCallCounts)), {
+    version: 1, "image.inspect": 0, "image.pull": 0,
+    "container.inspect": 1, "container.create": 0, "container.start": 0,
+    "container.stop": 0, "container.rm": 0,
+    "network.inspect": 0, "network.create": 0, "network.rm": 0,
+    "volume.inspect": 0, "volume.create": 0, "volume.rm": 0,
+  });
+  assert.deepEqual(result.rootEntries, [
+    "cleanup-rescue-evidence.json", "owner-approval-receipt", "rescue-journal-v1", "rescue.consumed.json",
+  ]);
+  assert.equal(result.oldForensicSnapshotSha256After, result.oldForensicSnapshotSha256);
+  assert.equal(result.physicalEffects, 0);
+  assert.equal(result.postgresConnections, 0);
+  assert.equal(result.sqlStatements, 0);
+  assert.equal(result.productNetworkEffects, 0);
+
+  const afterRemove = await runLocalPostgresCleanupRescueFakePlan({
+    container: "owned_stopped", crashAt: "container.rm:after_call_before_completion",
+  });
+  assert.equal(afterRemove.simulatedCrash, true);
+  assert.equal(afterRemove.recoveryAddedCalls, 0);
+  assert.deepEqual(afterRemove.calls, [
+    "version", "container.inspect", "network.inspect", "volume.inspect", "container.rm",
+  ]);
+  assert.deepEqual(afterRemove.mutations, ["container.rm"]);
+  assert.equal(afterRemove.status, "FAILED");
+  assert.equal(afterRemove.code, "local_postgres_cleanup_rescue_blocked");
+  assert.equal(afterRemove.openEffectCount, 1);
+  assert.equal(afterRemove.receipt.effects.dockerCallCounts["container.rm"], 1);
+  assert.deepEqual(afterRemove.rootEntries, result.rootEntries);
+  assert.equal(afterRemove.oldForensicSnapshotSha256After, afterRemove.oldForensicSnapshotSha256);
+});
+
+test("cleanup rescue receipt cross-binding mutations fail before acceptance", () => {
+  for (const mutation of [
+    "top_extra", "authority", "lineage", "artifacts", "blocked", "host", "effects", "cleanup",
+    "journal", "readiness", "consumed", "status",
+  ]) {
+    const result = runLocalPostgresCleanupRescueReceiptValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.code, "local_postgres_cleanup_rescue_receipt_invalid", mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+});
+
+test("cleanup rescue CLI is versioned, path-closed, and does not widen ordinary prepare or physical", () => {
+  const rescueRoot = "/private/r4-cleanup-rescue";
+  const blockedRoot = "/private/tmp/forme-r4-pg-9ZGIOLeX";
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "prepare-rescue", "--rescue-root", rescueRoot, "--blocked-root", blockedRoot,
+    "--rescue-review-head", "a".repeat(40), "--owner-approval-receipt", `${rescueRoot}/owner-approval-receipt`,
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ]), {
+    mode: "prepare-rescue", rescueRoot, blockedRoot, rescueOwnerReviewHead: "a".repeat(40),
+    ownerApprovalReceiptPath: `${rescueRoot}/owner-approval-receipt`, createdAt: NOW,
+    expiresAt: "2026-08-11T19:00:00.000Z",
+  });
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "rescue", "--rescue-root", rescueRoot, "--blocked-root", blockedRoot,
+    "--evidence-out", `${rescueRoot}/cleanup-rescue-evidence.json`,
+  ]), { mode: "rescue", rescueRoot, blockedRoot, evidenceOut: `${rescueRoot}/cleanup-rescue-evidence.json` });
+  for (const argv of [
+    ["prepare-rescue", "--rescue-root", rescueRoot, "--blocked-root", "/private/other",
+      "--rescue-review-head", "a".repeat(40), "--owner-approval-receipt", `${rescueRoot}/owner-approval-receipt`,
+      "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z"],
+    ["rescue", "--rescue-root", rescueRoot, "--blocked-root", "/private/other",
+      "--evidence-out", `${rescueRoot}/cleanup-rescue-evidence.json`],
+    ["rescue", "--blocked-root", blockedRoot, "--rescue-root", rescueRoot,
+      "--evidence-out", `${rescueRoot}/cleanup-rescue-evidence.json`],
+  ]) assert.throws(() => parseLocalPostgresRunnerArguments(argv), LocalPostgresRunnerError);
+  assert.equal(typeof prepareLocalPostgresCleanupRescueGrant, "function");
+  assert.equal(typeof runApprovedLocalPostgresCleanupRescue, "function");
 });
