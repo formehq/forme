@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_execution_authority_topology_correction_artifact_index.v1",
+  "status": "EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 Local PostgreSQL committed Kt execution-authority topology correction artifacts",
+  "authority": {
+    "baselineStatusHead": "6c96f70b43315d5f9b72cb929dc530b36c4ddfde",
+    "baselineStatusTree": "e08de32e58c5c05730d69280aae824cb2277ea33",
+    "correctionAddendumSha256": "sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22",
+    "correctionOwnerReviewSha256": "sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b",
+    "ownerApproval": "APPROVED_EXACT_NINE_CHOICES",
+    "repositoryCorrectionGrant": "APPROVED_EXACT_KT_LT_MT_ONLY",
+    "freshPhysicalExecutionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "baselineStatus": {
+      "head": "6c96f70b43315d5f9b72cb929dc530b36c4ddfde",
+      "tree": "e08de32e58c5c05730d69280aae824cb2277ea33",
+      "parentHead": "32448cb962c823d39205cc83d11aa3f6571cf65d",
+      "exactDelta": "10_PATHS_1A_9M"
+    },
+    "correctionAddendum": {
+      "head": "e61a2bb1817ac56c9377e161078f46543d8d2411",
+      "tree": "88b35f39ce6e7d170309244930129911cc09b230",
+      "parentHead": "6c96f70b43315d5f9b72cb929dc530b36c4ddfde",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22"
+    },
+    "correctionOwnerReview": {
+      "head": "dd9759f8034042fe28ae7c24c7519dc480ffad37",
+      "tree": "2dc809ea52e2e5d3d64346873e773ba55734de85",
+      "parentHead": "e61a2bb1817ac56c9377e161078f46543d8d2411",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b"
+    },
+    "implementation": {
+      "head": "f7d37830044ca2ad098b4c031feb62de77e209c3",
+      "tree": "edbe46a65a5008c3221087e83345407a3a197d5e",
+      "parentHead": "dd9759f8034042fe28ae7c24c7519dc480ffad37",
+      "parentTree": "2dc809ea52e2e5d3d64346873e773ba55734de85",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:3443602d4f7b1561088f6815c8fcbc866ec75f8915eebf94ab7c0cf1d5d359d6"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:3443602d4f7b1561088f6815c8fcbc866ec75f8915eebf94ab7c0cf1d5d359d6"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "topology_corrected_runner",
+      "gitStatus": "M",
+      "byteCount": 378511,
+      "sha256": "sha256:c4d6bed15aa2813801feea5026554c436d35b745d724e14c73332688f020a392"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "topology_correction_runner_test",
+      "gitStatus": "M",
+      "byteCount": 127389,
+      "sha256": "sha256:6371de8ade9695dcb5003a84ff53063974a6eb1d4b8d76accfb28cca94b976d9"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-execution-authority-topology-correction.json",
+    "schemas/r4/public-core/local-postgres-execution-authority-topology-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-execution-authority-topology-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "correctionContract": {
+    "failedAuthorityPathsPreserved": true,
+    "freshExecutionCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD-V2.md",
+    "freshExecutionReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md",
+    "futureCardGitStatus": "A",
+    "futureReviewGitStatus": "A",
+    "canonicalExecutionAuthorityVersion": "r4.public-core-local-postgres-execution-authority.v1",
+    "grantV3Changed": false,
+    "receiptV3Changed": false,
+    "sqlChanged": false,
+    "dependenciesChanged": false,
+    "physicalEffects": 0
+  }
+}
