@@ -23,6 +23,34 @@ Do not implement past the proposal stage without explicit owner confirmation whe
 - adds a foundational dependency;
 - changes P0 scope, dates, or public behavior.
 
+## Outcome-envelope workflow
+
+Prefer one medium-grained Owner decision over a sequence of ceremonial
+per-file, per-commit, or per-hash approvals.
+
+Before implementation, state an outcome envelope containing:
+
+- the user-visible outcome and current roadmap gate;
+- the allowed paths or bounded workset;
+- the data, permission, runtime, network, production, publication, spend, and
+  other external-effect ceilings;
+- the validation and evidence expected at Technical Review; and
+- the exact stop or review condition.
+
+Once the Owner confirms that envelope, proceed autonomously inside it through
+implementation, local/fake tests, bounded repairs, evidence freezing,
+documentation reconciliation, and commits. Recomputed hashes and ordinary
+implementation choices inside the confirmed envelope do not reopen an Owner
+gate.
+
+Stop and return to the Owner when the work would cross an Owner stop gate,
+expand the outcome/workset/effect ceiling, make an external or irreversible
+effect not already explicit in the envelope, encounter ambiguous evidence or
+an exhausted safety ceiling, or materially change the promised result. A
+failed test that can be repaired inside the envelope is not by itself a new
+approval gate. Passing tests remains Technical Review, not Owner Experience
+Acceptance.
+
 ## Non-negotiable boundaries
 
 - The owner retains final authority over meaning and authorship.
