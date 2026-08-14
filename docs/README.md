@@ -12,26 +12,26 @@ repository-only APFS nlink correction is Technical Review Green at Kc
 grant creation on the invalid fixed-nlink contract; Docker, PostgreSQL and SQL
 remained zero. The later repository-only execution-authority topology
 correction is Technical Review Green at Kt `f7d3783` / Lt `c699f9d`.
-A later approved v3 rehearsal consumed its one-use grant, observed matching
-Docker version/platform, then failed on the first container-absence diagnostic;
-cleanup remains `BLOCKED`. It created no Docker resource and made no
-PostgreSQL/SQL effect. The repository-only diagnostic/rescue correction is now
-Technical Review Green at Kd `0fdf68c` / Ld `62d0c98`. The next gate is a
-unique Blocked-Cleanup Rescue Card/Review proposal; rescue, another Physical
-Execution and Gate C are not requested. R4 remains Building and is not
+A later approved v3 rehearsal and its separately approved cleanup rescue each
+consumed one-use authority and failed closed on the exact-name inspect result.
+They created no Docker resource and made no PostgreSQL/SQL effect; absence
+remains unknown. The repository-only body-free inspect diagnostic is now
+Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`. The next gate is only
+the versioned Diagnostic Card V1/Review V1 proposal; diagnostic execution,
+cleanup, another Physical Execution and Gate C are not requested. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current Docker diagnostic/rescue correction bindings: index
-`sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
+Current body-free inspect diagnostic bindings: index
+`sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`,
 schema
-`sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
+`sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`,
 evidence
-`sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
+`sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`,
 report
-`sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
-Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`.
+Current stop: `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -46,6 +46,7 @@ Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVI
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md) | How was the invalid fixed APFS directory-link-count contract corrected without weakening root identity or granting execution? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md) | How were future execution authority paths made uniquely add-only while failed authority remained immutable history? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact missing-container diagnostic corrected and a future cleanup-rescue membrane constructed without executing rescue? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a one-use body-free inspect diagnostic constructed without authorizing or calling Docker? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

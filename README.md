@@ -16,20 +16,20 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   sequence, not on Host Binding.** R1–R3 are Owner-accepted and #66 completed
   one real-Twin, local-only Projection review. #67 has repository/offline
   Public Core and Local PostgreSQL wiring, including the concrete `pg`
-  executor and 20-method store bridge. One precisely approved disposable
-  local rehearsal was prepared and consumed. It observed matching Docker
-  client/server `29.3.1` and `linux/arm64`, then stopped on the first exact
-  container-absence diagnostic; the cleanup-only recovery also stopped
-  `BLOCKED` because absence could not be proven. It created no container,
-  network, volume, PostgreSQL process, database, SQL effect or application
-  action. The consumed grant cannot be retried. The repository-only Docker
-  diagnostic/rescue correction is now Technical Review Green at Kd
-  `0fdf68c` and Ld `62d0c98`: it adds one exact accepted diagnostic and an
-  inert, separately authorized cleanup-rescue membrane. Cleanup Rescue,
-  another Physical Execution and Gate C remain `NOT_REQUESTED`. The next gate
-  is a unique Blocked-Cleanup Rescue Card/Review proposal, not Docker
-  execution. Vault, HTTPS transport, production pool/migration, runtime route,
-  traffic and Gate C readiness remain false. #67 has not created or mutated a
+  executor and 20-method store bridge. One physical rehearsal and its later
+  cleanup rescue each consumed their one-use grants and failed closed. Docker
+  version/platform matched, but the exact-name resource diagnostic remained
+  unclassified; absence is still unknown. Neither run created, started,
+  stopped or removed a Docker resource, and neither reached PostgreSQL, SQL or
+  an application action. Both grants are permanently non-retryable. The new
+  repository-only body-free inspect diagnostic is Technical Review Green at
+  Kf `bd3cdf7` and Lf `7384ef8`: it can later capture bounded hashes and shape
+  facts from one version call and one exact-name container inspect without
+  retaining output bodies. Docker Diagnostic, cleanup, another Physical
+  Execution and Gate C remain `NOT_REQUESTED`. The next gate is only a
+  versioned Diagnostic Card V1/Review V1 proposal, not Docker execution.
+  Vault, HTTPS transport, production pool/migration, runtime route, traffic
+  and Gate C readiness remain false. #67 has not created or mutated a
   production Room, deployed, published, admitted a Projection, handled real
   Guest data or run a real public knock. R4 is not Owner-accepted or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
@@ -37,7 +37,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
   APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`; execution-authority
   topology correction Kt/Lt are `f7d3783` / `c699f9d`; Docker diagnostic
-  rescue correction Kd/Ld are `0fdf68c` / `62d0c98`;
+  rescue correction Kd/Ld are `0fdf68c` / `62d0c98`; body-free inspect
+  diagnostic Kf/Lf are `bd3cdf7` / `7384ef8`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -51,25 +52,25 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
 - Production gap: the current Public Core has repository/offline proof plus a
-  failed disposable local Docker preflight, not a PostgreSQL rehearsal Green.
-  One v3 grant was prepared and consumed. Docker version and exact-name inspect
-  calls ran, but no Docker resource was created or mutated and no PostgreSQL,
-  database or SQL effect ran. Cleanup remains conservatively `BLOCKED`; the
-  old forensic root is retained unchanged. The current diagnostic/rescue
-  correction is repository-only. No production
+  failed disposable local Docker preflight and failed cleanup rescue, not a
+  PostgreSQL rehearsal Green. Both one-use grants were consumed; no Docker
+  resource was created or mutated and no PostgreSQL, database or SQL effect
+  ran. Exact resource absence remains unknown and both forensic roots are
+  retained unchanged. The body-free diagnostic construction is repository-only
+  and has made zero Docker/socket calls. No production
   PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
-- Docker diagnostic/rescue correction bindings: index
-  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
+- Body-free inspect diagnostic bindings: index
+  `sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`,
   schema
-  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
+  `sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`,
   evidence
-  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
+  `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`,
   report
-  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
-  These prove repository correction only.
-- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`.
+  These prove repository construction only.
+- Current stop: `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -98,7 +99,8 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
     [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
     [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
     [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
-    and [`Docker Diagnostic/Rescue Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md)
+    [`Docker Diagnostic/Rescue Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md),
+    and [`Body-Free Docker Inspect Diagnostic Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md)
     — the Phase-1, rebind and repository corrections, exact stop and inputs still required
 12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
     — the current non-approvable activation boundary
@@ -284,13 +286,13 @@ repository-only Technical Review Green at `bc0b520`, with exact
 and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
 A precisely approved first physical prepare stopped before grant creation on
 the invalid fixed APFS nlink contract. After the APFS and topology corrections,
-a later approved v3 rehearsal prepared and consumed one grant, observed
-matching Docker version/platform and stopped FAILED/BLOCKED on exact resource
-absence proof. It created no Docker resource and reached no PostgreSQL or SQL
-effect. The current repository-only diagnostic/rescue correction is Green at
-Kd/Ld `0fdf68c` / `62d0c98`. A unique Rescue Card/Review and separate exact
-approval must precede any cleanup rescue. Another Physical Execution and Gate C
-follow only after genuine Rescue Green and their own gates.
+a later approved v3 rehearsal and one cleanup rescue each consumed one grant
+and failed closed on exact resource-absence proof. They created no Docker
+resource and reached no PostgreSQL or SQL effect. Kf/Lf `bd3cdf7` / `7384ef8`
+now freeze a repository-only body-free observation membrane. A versioned
+Diagnostic Card/Review and separate exact approval must precede its one version
+call and one container inspect. Cleanup, another Physical Execution and Gate C
+remain later independent gates.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model
 calls, real Guest-data handling, external email, production schema migration,

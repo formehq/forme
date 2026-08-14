@@ -6,15 +6,15 @@
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- Docker diagnostic/rescue correction bindings: index
-  `sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`,
+- Body-free inspect diagnostic bindings: index
+  `sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`,
   schema
-  `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`,
+  `sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`,
   evidence
-  `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`,
+  `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`,
   report
-  `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`.
-- Current stop: `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`.
+- Current stop: `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
@@ -25,15 +25,14 @@
   required 2; all physical effects stayed zero. The approved repository-only
   APFS correction is Technical Review Green at Kc `18e3a32` / Lc
   `32448cb`. The execution-authority topology correction is Technical Review
-  Green at Kt `f7d3783` / Lt `c699f9d`. A later one-use v3 rehearsal
-  consumed its grant and observed matching Docker version/platform, then
-  failed at exact-name container absence and ended cleanup `BLOCKED`. It
-  created no Docker resource and reached no PostgreSQL or SQL effect. The
-  repository-only diagnostic/rescue correction is Technical Review Green at
-  Kd `0fdf68c` / Ld `62d0c98`, with exact stop
-  `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
-  GATE_C_NOT_REQUESTED`; #67
+  Green at Kt `f7d3783` / Lt `c699f9d`. A later one-use v3 rehearsal and its
+  separately approved cleanup rescue each consumed a grant and failed closed
+  on the exact-name inspect result. They created no Docker resource and reached
+  no PostgreSQL or SQL effect. The repository-only body-free diagnostic is
+  Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`, with exact stop
+  `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED /
+  PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`; #67
   remains In Progress until
   later activation and one real Public Room / bounded
   Guest knock pass their gates and Owner Experience Acceptance. #68 Fresh local
@@ -45,10 +44,11 @@
 - Production truth: Public Core is repository/offline proof only. The concrete
   `pg` executor and application-store bridge are constructed, and the committed
   static catalog contract is `14 / 207 / 172 / 44`; no target PostgreSQL
-  catalog has been observed. The disposable rehearsal reached only Docker
-  diagnostic/absence preflight and remains FAILED/BLOCKED; no resource was
-  created and no PostgreSQL/SQL effect ran. The current correction itself made
-  zero Docker/OCI/PostgreSQL/SQL effects. No production PostgreSQL migration, Gate C deployment/provisioning,
+  catalog has been observed. The disposable rehearsal and cleanup rescue
+  reached only Docker diagnostic/absence preflight and remain FAILED/BLOCKED;
+  no resource was created and no PostgreSQL/SQL effect ran. The body-free
+  construction itself made zero Docker/socket/OCI/PostgreSQL/SQL effects. No
+  production PostgreSQL migration, Gate C deployment/provisioning,
   production Room
   mutation, public publication/admission, real Guest data, Provider call,
   external email, production secret, public traffic or spend has occurred.
@@ -264,8 +264,12 @@ Native Harness role clarification
   → versioned Physical Execution Card + Review + Owner approval [approved and consumed ✓]
   → disposable Docker preflight [FAILED · cleanup BLOCKED · no resource/PG/SQL effect]
   → Docker diagnostic/rescue correction [Technical Review ✓ · Kd/Ld `0fdf68c`/`62d0c98`]
-  → Blocked-Cleanup Rescue Card + Review + Owner approval [required · not requested]
-  → cleanup rescue [not requested]
+  → Blocked-Cleanup Rescue Card + Review + Owner approval [approved and consumed ✓]
+  → cleanup rescue [FAILED · BLOCKED · no resource/PG/SQL effect]
+  → body-free Docker inspect diagnostic construction [Technical Review ✓ · Kf/Lf `bd3cdf7`/`7384ef8`]
+  → Diagnostic Card V1 + Review V1 + Owner approval [required · not requested]
+  → one-use body-free Docker inspect diagnostic [not requested]
+  → result-specific cleanup correction [not requested]
   → fresh Physical Execution V3 [not requested]
   → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
@@ -302,12 +306,15 @@ The APFS correction result is the
 [`APFS nlink Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md).
 The execution-authority correction result is the
 [`Execution-Authority Topology Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md).
-The current correction result is the
+The Docker rescue-correction result is the
 [`Docker Diagnostic/Rescue Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md).
+The current construction result is the
+[`Body-Free Docker Inspect Diagnostic Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md).
 The hash-pinned [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
-remains non-approvable. A unique Blocked-Cleanup Rescue Card/Review proposal
-comes next; only a later separate exact approval may prepare and run rescue.
-Another Physical Execution remains a still-later, separately approved gate.
+remains non-approvable. The versioned Diagnostic Card V1/Review V1 proposal
+comes next; only a later separate exact approval may prepare and run the
+body-free observation. Cleanup and another Physical Execution remain
+still-later, separately approved gates.
 Later production inputs
 must still cover setup, deployment, publication, Curator
 admission and one real knock; activation also requires a publication-stable

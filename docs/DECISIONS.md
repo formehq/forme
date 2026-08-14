@@ -1300,3 +1300,71 @@ Only the unique Blocked-Cleanup Rescue Card/Review proposal may be constructed
 next. Rescue prepare/execute requires a later separate exact Owner approval;
 another Physical Execution and Gate C remain still-later independent gates.
 #67 and R4 remain open.
+
+## 2026-08-14 — body-free Docker inspect diagnostic construction reached repository Technical Review Green
+
+**Decision:** preserve both consumed one-use grants, both forensic roots and
+both `FAILED / BLOCKED` receipts as immutable history. Accept the precisely
+approved Body-Free Docker Inspect Diagnostic Capture Addendum
+`sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13`,
+its Owner Review
+`sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579`,
+the Authority-Path Correction Addendum
+`sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00`
+and its Owner Review
+`sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7`.
+The correction selects only the future versioned `-CARD-V1.md` and
+`-OWNER-REVIEW-V1.md` effect-authority paths. This decision grants repository
+construction only; Docker Diagnostic, cleanup, Physical Execution, production
+and Gate C are not requested.
+
+**Historical rescue truth:** Rescue grant
+`sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654`
+was consumed once. Final evidence is
+`sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979`;
+the journal is 6 entries with head
+`sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491`.
+The result remains `FAILED / local_postgres_docker_call_failed / BLOCKED`.
+No Docker resource was created, started, stopped or removed; no PostgreSQL,
+SQL or domain effect ran; resource absence remains unknown. The earlier
+physical grant/evidence/journal remain separately frozen and non-retryable.
+
+**Result:** Kf `bd3cdf71055136dce2731d7da3bef9dc89e6f4d7` / tree
+`66af8e43a3372d6d871a1a778b4822b8a7307a16` and Lf
+`7384ef89e70209657f1bb8714d9f708004bacc13` / tree
+`fb3539a4013679c7cf1626eedc4e4227b4c55ca4` freeze the strict one-use,
+write-ahead, no-retry body-free diagnostic membrane. G2f is
+`sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4`;
+G3f is
+`sha256:b51e1e01bc2bd2228ddb5a4d84ff58d002e65c30bd977e135f2215591c3e59ff`.
+The artifact index is
+`sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`;
+the strict schema is
+`sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`;
+machine evidence is
+`sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md)
+is `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:2ec719b52f7fe730d616e7347401abc4cb453c67a0c8ee5c326cd83d832d135e`.
+Committed Kf/Lf audit summaries are
+`sha256:3614d5fc8d023c343c6c60b8be5a21569177f1c86be5007cc3feb122788e9edd`
+and
+`sha256:a5282e9c0ba83ee92cec45c06b7801a43b22822aa586aaebd67d47ff527efba4`.
+
+**Validation and effect:** exact deny-network lanes pass 160/160, 85/85,
+410/410, 732/732, 145/145 and 45/45. Strict Ajv, four authority steps,
+committed blobs, body-free fingerprints, hostile grant/journal/receipt,
+consume/journal/call crash, duplicate consume, expiry and drift, syntax,
+TypeScript, no-server-AI, docs and diff checks pass with 0 Blocker / 0
+Important. Construction made zero external-network, forensic-root, pending or
+consumed diagnostic-grant, Docker/socket/OCI, PostgreSQL/SQL,
+production/runtime/traffic, Provider/model/email,
+deploy/publication/admission/Gate C, push/PR, merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the versioned Diagnostic Card V1/Review V1 proposal may be constructed
+next. Diagnostic prepare/execute, cleanup, another Physical Execution,
+production and Gate C each require later separate exact Owner authority. #67
+and R4 remain open.
