@@ -77,6 +77,26 @@ const APFS_NLINK_CORRECTION_ADDENDUM_SHA256 = "sha256:b1ad65b6033eeb0b3848544df5
 const APFS_NLINK_CORRECTION_REVIEW_HEAD = "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544";
 const APFS_NLINK_CORRECTION_REVIEW_TREE = "513bf389aebb03bfc86464693facd2257084b5e4";
 const APFS_NLINK_CORRECTION_REVIEW_SHA256 = "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6";
+const APFS_CORRECTION_IMPLEMENTATION_HEAD = "18e3a325cceabdf5168b5ffb328ee2580b069a76";
+const APFS_CORRECTION_IMPLEMENTATION_TREE = "184d9a4147fbb9baea22b1303ca24a09c2687a79";
+const APFS_CORRECTION_IMPLEMENTATION_AGGREGATE_SHA256 = "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130";
+const APFS_CORRECTION_RUNNER_SHA256 = "sha256:4383a52908d7d51d3cac8d549212fa0e7f80c61796123f38280a47421c169b75";
+const APFS_CORRECTION_RUNNER_TEST_SHA256 = "sha256:8cc713943f973272aabfd5b3c3e838543e62a632f3917c2585239aac41c648f1";
+const APFS_CORRECTION_EVIDENCE_HEAD = "32448cb962c823d39205cc83d11aa3f6571cf65d";
+const APFS_CORRECTION_EVIDENCE_TREE = "02b377385a0e68a60021f878027f41ab34399f63";
+const APFS_CORRECTION_ARTIFACT_INDEX_SHA256 = "sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056";
+const APFS_CORRECTION_EVIDENCE_SCHEMA_SHA256 = "sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a";
+const APFS_CORRECTION_EVIDENCE_SHA256 = "sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c";
+const APFS_CORRECTION_STATUS_HEAD = "6c96f70b43315d5f9b72cb929dc530b36c4ddfde";
+const APFS_CORRECTION_STATUS_TREE = "e08de32e58c5c05730d69280aae824cb2277ea33";
+const APFS_CORRECTION_STATUS_AGGREGATE_SHA256 = "sha256:72fe493881c293e6ac60368b8ab490073de1e7c2609a9de83d534dd27ca39bdc";
+const APFS_CORRECTION_REPORT_SHA256 = "sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175";
+const TOPOLOGY_CORRECTION_ADDENDUM_HEAD = "e61a2bb1817ac56c9377e161078f46543d8d2411";
+const TOPOLOGY_CORRECTION_ADDENDUM_TREE = "88b35f39ce6e7d170309244930129911cc09b230";
+const TOPOLOGY_CORRECTION_ADDENDUM_SHA256 = "sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22";
+const TOPOLOGY_CORRECTION_REVIEW_HEAD = "dd9759f8034042fe28ae7c24c7519dc480ffad37";
+const TOPOLOGY_CORRECTION_REVIEW_TREE = "2dc809ea52e2e5d3d64346873e773ba55734de85";
+const TOPOLOGY_CORRECTION_REVIEW_SHA256 = "sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b";
 const PACKAGE_LOCK_SHA256 = "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f";
 const PG_IMPORT_CLOSURE_SHA256 = "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4";
 const PG_IMPORT_CLOSURE_FILE_COUNT = 145;
@@ -176,21 +196,37 @@ const LOCAL_POSTGRES_EFFECT0_STATUS_PATHS = Object.freeze([
   "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md",
   "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
-const PHYSICAL_EXECUTION_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD.md";
-const PHYSICAL_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW.md";
+const FAILED_EXECUTION_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD.md";
+const FAILED_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW.md";
+const FRESH_EXECUTION_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD-V2.md";
+const FRESH_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md";
 const APFS_NLINK_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-ADDENDUM.md";
 const APFS_NLINK_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-OWNER-REVIEW.md";
-const LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS = Object.freeze([
+const TOPOLOGY_CORRECTION_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-ADDENDUM.md";
+const TOPOLOGY_CORRECTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-OWNER-REVIEW.md";
+const LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS = Object.freeze([
   "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json",
   "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json",
   "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json",
 ]);
-const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
-  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md", "docs/README.md",
+const LOCAL_POSTGRES_APFS_CORRECTION_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
   "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
   "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md",
-  "docs/ROADMAP.md", "docs/VALIDATION.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-execution-authority-topology-correction.json",
+  "schemas/r4/public-core/local-postgres-execution-authority-topology-correction-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-execution-authority-topology-correction-evidence.schema.json",
+]);
+const LOCAL_POSTGRES_REBIND_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 
 export const LOCAL_POSTGRES_PHASE1_AUTHORITY = Object.freeze({
@@ -1045,49 +1081,71 @@ function verifySuccessorTopology(grant) {
   exactCommitStep(EFFECT0_EVIDENCE_HEAD, EFFECT0_STATUS_HEAD, EFFECT0_STATUS_TREE,
     statusMap(LOCAL_POSTGRES_EFFECT0_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
   exactCommitStep(EFFECT0_STATUS_HEAD, FAILED_EXECUTION_CARD_HEAD, FAILED_EXECUTION_CARD_TREE,
-    new Map([[PHYSICAL_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
+    new Map([[FAILED_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
   exactCommitStep(FAILED_EXECUTION_CARD_HEAD, FAILED_EXECUTION_REVIEW_HEAD, FAILED_EXECUTION_REVIEW_TREE,
-    new Map([[PHYSICAL_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
+    new Map([[FAILED_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
   exactCommitStep(FAILED_EXECUTION_REVIEW_HEAD, APFS_NLINK_CORRECTION_ADDENDUM_HEAD, APFS_NLINK_CORRECTION_ADDENDUM_TREE,
     new Map([[APFS_NLINK_CORRECTION_ADDENDUM_PATH, "A"]]), "local_postgres_apfs_nlink_correction_binding_invalid");
   exactCommitStep(APFS_NLINK_CORRECTION_ADDENDUM_HEAD, APFS_NLINK_CORRECTION_REVIEW_HEAD, APFS_NLINK_CORRECTION_REVIEW_TREE,
     new Map([[APFS_NLINK_CORRECTION_REVIEW_PATH, "A"]]), "local_postgres_apfs_nlink_correction_binding_invalid");
-  exactCommitStep(APFS_NLINK_CORRECTION_REVIEW_HEAD, lineage.rebindImplementationHead, lineage.rebindImplementationTree,
+  exactCommitStep(APFS_NLINK_CORRECTION_REVIEW_HEAD, APFS_CORRECTION_IMPLEMENTATION_HEAD, APFS_CORRECTION_IMPLEMENTATION_TREE,
+    statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS), "local_postgres_apfs_nlink_correction_binding_invalid");
+  exactCommitStep(APFS_CORRECTION_IMPLEMENTATION_HEAD, APFS_CORRECTION_EVIDENCE_HEAD, APFS_CORRECTION_EVIDENCE_TREE,
+    statusMap(LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS, new Set(LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS)), "local_postgres_apfs_nlink_correction_binding_invalid");
+  exactCommitStep(APFS_CORRECTION_EVIDENCE_HEAD, APFS_CORRECTION_STATUS_HEAD, APFS_CORRECTION_STATUS_TREE,
+    statusMap(LOCAL_POSTGRES_APFS_CORRECTION_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md"])), "local_postgres_apfs_nlink_correction_binding_invalid");
+  exactCommitStep(APFS_CORRECTION_STATUS_HEAD, TOPOLOGY_CORRECTION_ADDENDUM_HEAD, TOPOLOGY_CORRECTION_ADDENDUM_TREE,
+    new Map([[TOPOLOGY_CORRECTION_ADDENDUM_PATH, "A"]]), "local_postgres_execution_topology_correction_binding_invalid");
+  exactCommitStep(TOPOLOGY_CORRECTION_ADDENDUM_HEAD, TOPOLOGY_CORRECTION_REVIEW_HEAD, TOPOLOGY_CORRECTION_REVIEW_TREE,
+    new Map([[TOPOLOGY_CORRECTION_REVIEW_PATH, "A"]]), "local_postgres_execution_topology_correction_binding_invalid");
+  exactCommitStep(TOPOLOGY_CORRECTION_REVIEW_HEAD, lineage.rebindImplementationHead, lineage.rebindImplementationTree,
     statusMap(LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS), "local_postgres_rebind_implementation_binding_invalid");
   exactCommitStep(lineage.rebindImplementationHead, lineage.rebindEvidenceHead, lineage.rebindEvidenceTree,
     statusMap(LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS, new Set(LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS)), "local_postgres_rebind_evidence_binding_invalid");
   exactCommitStep(lineage.rebindEvidenceHead, lineage.rebindStatusHead, lineage.rebindStatusTree,
-    statusMap(LOCAL_POSTGRES_REBIND_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
+    statusMap(LOCAL_POSTGRES_REBIND_STATUS_PATHS, new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md"])), "local_postgres_rebind_status_binding_invalid");
   exactCommitStep(lineage.rebindStatusHead, lineage.executionCardHead, lineage.executionCardTree,
-    new Map([[PHYSICAL_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
+    new Map([[FRESH_EXECUTION_CARD_PATH, "A"]]), "local_postgres_execution_card_binding_invalid");
   exactCommitStep(lineage.executionCardHead, lineage.executionReviewHead, lineage.executionReviewTree,
-    new Map([[PHYSICAL_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
+    new Map([[FRESH_EXECUTION_REVIEW_PATH, "A"]]), "local_postgres_execution_review_binding_invalid");
   const implementation = artifactAggregate(lineage.rebindImplementationHead, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
   const effect0Implementation = artifactAggregate(EFFECT0_IMPLEMENTATION_HEAD, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
+  const apfsImplementation = artifactAggregate(APFS_CORRECTION_IMPLEMENTATION_HEAD, LOCAL_POSTGRES_REBIND_IMPLEMENTATION_PATHS);
+  const apfsStatus = artifactAggregate(APFS_CORRECTION_STATUS_HEAD, LOCAL_POSTGRES_APFS_CORRECTION_STATUS_PATHS);
   if (effect0Implementation.aggregateSha256 !== EFFECT0_IMPLEMENTATION_AGGREGATE_SHA256
     || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[0]}`], true)) !== EFFECT0_EVIDENCE_SHA256
     || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[1]}`], true)) !== EFFECT0_ARTIFACT_INDEX_SHA256
     || sha256Bytes(runGit(["show", `${EFFECT0_EVIDENCE_HEAD}:${LOCAL_POSTGRES_EFFECT0_EVIDENCE_PATHS[2]}`], true)) !== EFFECT0_EVIDENCE_SCHEMA_SHA256
     || sha256Bytes(runGit(["show", `${EFFECT0_STATUS_HEAD}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`], true)) !== EFFECT0_REPORT_SHA256
-    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_CARD_HEAD}:${PHYSICAL_EXECUTION_CARD_PATH}`], true)) !== FAILED_EXECUTION_CARD_SHA256
-    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_REVIEW_HEAD}:${PHYSICAL_EXECUTION_REVIEW_PATH}`], true)) !== FAILED_EXECUTION_REVIEW_SHA256
+    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_CARD_HEAD}:${FAILED_EXECUTION_CARD_PATH}`], true)) !== FAILED_EXECUTION_CARD_SHA256
+    || sha256Bytes(runGit(["show", `${FAILED_EXECUTION_REVIEW_HEAD}:${FAILED_EXECUTION_REVIEW_PATH}`], true)) !== FAILED_EXECUTION_REVIEW_SHA256
     || sha256Bytes(runGit(["show", `${APFS_NLINK_CORRECTION_ADDENDUM_HEAD}:${APFS_NLINK_CORRECTION_ADDENDUM_PATH}`], true)) !== APFS_NLINK_CORRECTION_ADDENDUM_SHA256
     || sha256Bytes(runGit(["show", `${APFS_NLINK_CORRECTION_REVIEW_HEAD}:${APFS_NLINK_CORRECTION_REVIEW_PATH}`], true)) !== APFS_NLINK_CORRECTION_REVIEW_SHA256
+    || apfsImplementation.aggregateSha256 !== APFS_CORRECTION_IMPLEMENTATION_AGGREGATE_SHA256
+    || apfsImplementation.records[0].sha256 !== APFS_CORRECTION_RUNNER_SHA256
+    || apfsImplementation.records[1].sha256 !== APFS_CORRECTION_RUNNER_TEST_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_CORRECTION_EVIDENCE_HEAD}:${LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS[0]}`], true)) !== APFS_CORRECTION_EVIDENCE_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_CORRECTION_EVIDENCE_HEAD}:${LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS[1]}`], true)) !== APFS_CORRECTION_ARTIFACT_INDEX_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_CORRECTION_EVIDENCE_HEAD}:${LOCAL_POSTGRES_APFS_CORRECTION_EVIDENCE_PATHS[2]}`], true)) !== APFS_CORRECTION_EVIDENCE_SCHEMA_SHA256
+    || apfsStatus.aggregateSha256 !== APFS_CORRECTION_STATUS_AGGREGATE_SHA256
+    || sha256Bytes(runGit(["show", `${APFS_CORRECTION_STATUS_HEAD}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`], true)) !== APFS_CORRECTION_REPORT_SHA256
+    || sha256Bytes(runGit(["show", `${TOPOLOGY_CORRECTION_ADDENDUM_HEAD}:${TOPOLOGY_CORRECTION_ADDENDUM_PATH}`], true)) !== TOPOLOGY_CORRECTION_ADDENDUM_SHA256
+    || sha256Bytes(runGit(["show", `${TOPOLOGY_CORRECTION_REVIEW_HEAD}:${TOPOLOGY_CORRECTION_REVIEW_PATH}`], true)) !== TOPOLOGY_CORRECTION_REVIEW_SHA256
     || implementation.aggregateSha256 !== lineage.rebindImplementationArtifactAggregateSha256
     || implementation.records[0].sha256 !== grant.artifacts.runnerSha256
     || implementation.records[1].sha256 !== grant.artifacts.runnerTestSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[0]}`], true)) !== grant.artifacts.physicalRebindEvidenceSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[1]}`], true)) !== grant.artifacts.physicalRebindArtifactIndexSha256
     || sha256Bytes(runGit(["show", `${lineage.rebindEvidenceHead}:${LOCAL_POSTGRES_REBIND_EVIDENCE_PATHS[2]}`], true)) !== grant.artifacts.physicalRebindEvidenceSchemaSha256
-    || sha256Bytes(runGit(["show", `${lineage.rebindStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`], true)) !== grant.artifacts.physicalRebindReportSha256
-    || sha256Bytes(runGit(["show", `${lineage.executionCardHead}:${PHYSICAL_EXECUTION_CARD_PATH}`], true)) !== grant.authority.executionCardSha256
-    || sha256Bytes(runGit(["show", `${lineage.executionReviewHead}:${PHYSICAL_EXECUTION_REVIEW_PATH}`], true)) !== grant.authority.executionReviewSha256) {
+    || sha256Bytes(runGit(["show", `${lineage.rebindStatusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md`], true)) !== grant.artifacts.physicalRebindReportSha256
+    || sha256Bytes(runGit(["show", `${lineage.executionCardHead}:${FRESH_EXECUTION_CARD_PATH}`], true)) !== grant.authority.executionCardSha256
+    || sha256Bytes(runGit(["show", `${lineage.executionReviewHead}:${FRESH_EXECUTION_REVIEW_PATH}`], true)) !== grant.authority.executionReviewSha256) {
     fail("local_postgres_successor_binding_invalid");
   }
 }
 
 function verifyExecutionAuthorityPayloadAgainstGrant(grant) {
-  const cardBytes = runGit(["show", `${grant.lineage.executionCardHead}:${PHYSICAL_EXECUTION_CARD_PATH}`], true);
+  const cardBytes = runGit(["show", `${grant.lineage.executionCardHead}:${FRESH_EXECUTION_CARD_PATH}`], true);
   const parsed = parseExecutionAuthorityCard(cardBytes);
   if (parsed.sha256 !== grant.authority.executionAuthorityPayloadSha256
     || canonicalJson(parsed.payload.authority) !== canonicalJson(selectKeys(grant.authority, Object.keys(parsed.payload.authority)))
@@ -1311,13 +1369,13 @@ function deriveExecutionAuthority(executionReviewHead) {
     executionCardHead, executionCardTree: runGit(["rev-parse", `${executionCardHead}^{tree}`]),
     executionReviewHead, executionReviewTree: runGit(["rev-parse", `${executionReviewHead}^{tree}`]),
   });
-  const cardBytes = runGit(["show", `${executionCardHead}:${PHYSICAL_EXECUTION_CARD_PATH}`], true);
+  const cardBytes = runGit(["show", `${executionCardHead}:${FRESH_EXECUTION_CARD_PATH}`], true);
   const parsed = parseExecutionAuthorityCard(cardBytes);
   for (const key of EXECUTION_PAYLOAD_LINEAGE_KEYS) if (parsed.payload.lineage[key] !== lineage[key]) fail("local_postgres_execution_authority_invalid");
   const authority = Object.freeze({
     ...parsed.payload.authority,
     executionCardSha256: sha256Bytes(cardBytes),
-    executionReviewSha256: sha256Bytes(runGit(["show", `${executionReviewHead}:${PHYSICAL_EXECUTION_REVIEW_PATH}`], true)),
+    executionReviewSha256: sha256Bytes(runGit(["show", `${executionReviewHead}:${FRESH_EXECUTION_REVIEW_PATH}`], true)),
     executionAuthorityPayloadSha256: parsed.sha256,
   });
   const candidate = Object.freeze({

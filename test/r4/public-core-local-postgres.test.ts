@@ -470,6 +470,35 @@ function assertHistoricalAuthorityStep(input: Readonly<{
   assert.equal(`sha256:${createHash("sha256").update(bytes).digest("hex")}`, input.artifactSha256);
 }
 
+function assertHistoricalConstructionStep(input: Readonly<{
+  head: string;
+  parent: string;
+  tree: string;
+  paths: Readonly<Record<string, "A" | "M">>;
+}>): void {
+  assert.equal(gitText(["rev-parse", `${input.head}^{commit}`]), input.head);
+  assert.equal(gitText(["rev-parse", `${input.head}^`]), input.parent);
+  assert.equal(gitText(["rev-parse", `${input.head}^{tree}`]), input.tree);
+  const actual = gitText(["diff-tree", "--no-commit-id", "--name-status", "-r", input.head])
+    .split("\n")
+    .filter(Boolean)
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  const expected = Object.entries(input.paths)
+    .map(([artifactPath, status]) => `${status}\t${artifactPath}`)
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
+  assert.deepEqual(actual, expected);
+}
+
+function committedArtifactAggregate(head: string, artifactPaths: readonly string[]): string {
+  const records = [...artifactPaths]
+    .sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)))
+    .map((artifactPath) => {
+      const bytes = gitBytes(["show", `${head}:${artifactPath}`]);
+      return `${artifactPath}\0sha256:${createHash("sha256").update(bytes).digest("hex")}\0${bytes.length}\n`;
+    });
+  return `sha256:${createHash("sha256").update(Buffer.from(records.join(""), "utf8")).digest("hex")}`;
+}
+
 test("successor runner freezes J/G19, S/G9, P/W and the exact 19-path baseline", () => {
   assert.deepEqual(LOCAL_POSTGRES_STAGE_A_PATHS, [
     "apps/room/package.json",
@@ -638,6 +667,11 @@ test("failed physical authority and the APFS nlink correction close through exac
   const failedReview = "e91e4fbdfa3dd884603d365ce6bb69ca5a64e6ab";
   const correctionAddendum = "04ad36bddbf7d2f62cdfc241f51a5cf817046aff";
   const correctionReview = "5ec9521e6c16c76ce3cd10ab9f6a1c8acad74544";
+  const correctionImplementation = "18e3a325cceabdf5168b5ffb328ee2580b069a76";
+  const correctionEvidence = "32448cb962c823d39205cc83d11aa3f6571cf65d";
+  const correctionStatus = "6c96f70b43315d5f9b72cb929dc530b36c4ddfde";
+  const topologyAddendum = "e61a2bb1817ac56c9377e161078f46543d8d2411";
+  const topologyReview = "dd9759f8034042fe28ae7c24c7519dc480ffad37";
 
   assertHistoricalAuthorityStep({
     head: failedCard,
@@ -671,6 +705,92 @@ test("failed physical authority and the APFS nlink correction close through exac
     artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-APFS-NLINK-CORRECTION-OWNER-REVIEW.md",
     artifactSha256: "sha256:a33d6e8b70783e756169af0256f8f5f749461187fb79f343540788df70540bd6",
   });
+  assertHistoricalConstructionStep({
+    head: correctionImplementation,
+    parent: correctionReview,
+    tree: "184d9a4147fbb9baea22b1303ca24a09c2687a79",
+    paths: {
+      "scripts/r4-public-core-local-postgres.mjs": "M",
+      "test/r4/public-core-local-postgres.test.ts": "M",
+    },
+  });
+  assert.equal(
+    committedArtifactAggregate(correctionImplementation, [
+      "scripts/r4-public-core-local-postgres.mjs",
+      "test/r4/public-core-local-postgres.test.ts",
+    ]),
+    "sha256:56e2e3b10236e693bf7813c3c97e0acbb6c897123c37918cfda9d8609294e130",
+  );
+  assertHistoricalConstructionStep({
+    head: correctionEvidence,
+    parent: correctionImplementation,
+    tree: "02b377385a0e68a60021f878027f41ab34399f63",
+    paths: {
+      "docs/evidence/r4-public-core-local-postgres-apfs-nlink-correction.json": "A",
+      "schemas/r4/public-core/local-postgres-apfs-nlink-correction-artifact-index.json": "A",
+      "schemas/r4/public-core/local-postgres-apfs-nlink-correction-evidence.schema.json": "A",
+    },
+  });
+  const correctionStatusPaths = {
+    "README.md": "M",
+    "docs/CONTROL.md": "M",
+    "docs/DECISIONS.md": "M",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md": "M",
+    "docs/PRODUCT.md": "M",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md": "M",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md": "A",
+    "docs/README.md": "M",
+    "docs/ROADMAP.md": "M",
+    "docs/VALIDATION.md": "M",
+  } as const;
+  assertHistoricalConstructionStep({
+    head: correctionStatus,
+    parent: correctionEvidence,
+    tree: "e08de32e58c5c05730d69280aae824cb2277ea33",
+    paths: correctionStatusPaths,
+  });
+  assert.equal(
+    committedArtifactAggregate(correctionStatus, Object.keys(correctionStatusPaths)),
+    "sha256:72fe493881c293e6ac60368b8ab490073de1e7c2609a9de83d534dd27ca39bdc",
+  );
+  assertHistoricalAuthorityStep({
+    head: topologyAddendum,
+    parent: correctionStatus,
+    tree: "88b35f39ce6e7d170309244930129911cc09b230",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22",
+  });
+  assertHistoricalAuthorityStep({
+    head: topologyReview,
+    parent: topologyAddendum,
+    tree: "2dc809ea52e2e5d3d64346873e773ba55734de85",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b",
+  });
+  const statusPaths = gitText(["ls-tree", "-r", "--name-only", topologyReview]).split("\n");
+  assert.ok(statusPaths.includes("docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD.md"));
+  assert.ok(statusPaths.includes("docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW.md"));
+  assert.equal(statusPaths.includes("docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD-V2.md"), false);
+  assert.equal(statusPaths.includes("docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md"), false);
+});
+
+test("fresh execution authority uses only versioned add-only paths after the topology correction", async () => {
+  const source = await readFile(path.resolve("scripts/r4-public-core-local-postgres.mjs"), "utf8");
+  assert.match(source, /const FAILED_EXECUTION_CARD_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD\.md"/u);
+  assert.match(source, /const FAILED_EXECUTION_REVIEW_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW\.md"/u);
+  assert.match(source, /const FRESH_EXECUTION_CARD_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-CARD-V2\.md"/u);
+  assert.match(source, /const FRESH_EXECUTION_REVIEW_PATH = "docs\/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-EXECUTION-OWNER-REVIEW-V2\.md"/u);
+  assert.match(source, /new Map\(\[\[FRESH_EXECUTION_CARD_PATH, "A"\]\]\)/u);
+  assert.match(source, /new Map\(\[\[FRESH_EXECUTION_REVIEW_PATH, "A"\]\]\)/u);
+  assert.equal(source.includes('new Map([[FAILED_EXECUTION_CARD_PATH, "M"]])'), false);
+  assert.equal(source.includes('new Map([[FAILED_EXECUTION_REVIEW_PATH, "M"]])'), false);
+  assert.ok(source.includes("TOPOLOGY_CORRECTION_REVIEW_HEAD, lineage.rebindImplementationHead"));
+  assert.ok(source.includes("lineage.executionCardHead}:${FRESH_EXECUTION_CARD_PATH}"));
+  assert.ok(source.includes("lineage.executionReviewHead}:${FRESH_EXECUTION_REVIEW_PATH}"));
+  assert.ok(source.includes("executionCardHead}:${FRESH_EXECUTION_CARD_PATH}"));
+  assert.ok(source.includes("executionReviewHead}:${FRESH_EXECUTION_REVIEW_PATH}"));
 });
 
 test("future physical engine is fully constructed but ordinary test entry remains fake-only", async () => {
