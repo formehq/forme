@@ -10,24 +10,27 @@
   Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring is
   frozen at `bc0b520`. A precisely approved physical prepare stopped before
   grant creation on an invalid fixed APFS directory-nlink precondition, with
-  zero Docker/PostgreSQL/SQL effects. Repository-only correction is Technical
-  Review Green at Kc `18e3a32` / Lc `32448cb`; target PostgreSQL, fresh one-use execution,
-  vault, transport, traffic and Gate C remain false. Draft PR #76 remains
+  zero Docker/PostgreSQL/SQL effects. Repository-only APFS correction is
+  Technical Review Green at Kc `18e3a32` / Lc `32448cb`. The later
+  execution-authority topology correction is Technical Review Green at Kt
+  `f7d3783` / Lt `c699f9d`, preserving failed authority as history and
+  requiring unique versioned future Card/Review paths; target PostgreSQL,
+  fresh one-use execution, vault, transport, traffic and Gate C remain false. Draft PR #76 remains
   unmerged; production activation
   and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
   attempts are consumed Yellow
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-13
-- APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

@@ -6,15 +6,15 @@
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
@@ -23,8 +23,10 @@
   `bc0b520`. The first physical prepare stopped before grant creation because
   a valid APFS receipt-only root reported nlink 3 while the frozen contract
   required 2; all physical effects stayed zero. The approved repository-only
-  correction is Technical Review Green at Kc `18e3a32` / Lc `32448cb`, with
-  exact stop `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  APFS correction is Technical Review Green at Kc `18e3a32` / Lc
+  `32448cb`. The execution-authority topology correction is Technical Review
+  Green at Kt `f7d3783` / Lt `c699f9d`, with exact stop
+  `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN /
   FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`; #67
   remains In Progress until
   later activation and one real Public Room / bounded
@@ -251,7 +253,8 @@ Native Harness role clarification
   → Physical Rebind Effect-0 construction [Technical Review ✓ · K/L `bcfe334`/`beeb55b`]
   → first one-use Physical Execution prepare [stopped pre-grant · APFS nlink contract error · effects 0]
   → APFS nlink correction [Technical Review ✓ · Kc/Lc `18e3a32`/`32448cb`]
-  → fresh one-use Physical Execution Card + Review + Owner approval [required · not requested]
+  → execution-authority topology correction [Technical Review ✓ · Kt/Lt `f7d3783`/`c699f9d`]
+  → fresh versioned Physical Execution Card + Review + Owner approval [required · not requested]
   → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
   → #68 Fresh candidate → #69 exact Response
@@ -283,10 +286,14 @@ K/L `bcfe334` / `beeb55b`, and the APFS nlink correction is current at Kc/Lc
 [`Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md).
 The current Effect-0 result is the
 [`Physical Rebind Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md).
-The current correction result is the
+The APFS correction result is the
 [`APFS nlink Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md).
+The current correction result is the
+[`Execution-Authority Topology Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md).
 The hash-pinned [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
-remains non-approvable. One-use Physical Execution comes next; later production inputs
+remains non-approvable. A fresh versioned Card/Review proposal and separate
+Owner approval come next; only then may one-use Physical Execution be prepared.
+Later production inputs
 must still cover setup, deployment, publication, Curator
 admission and one real knock; activation also requires a publication-stable
 successor and new exact Room-bound approval. #71 is sequenced before #68 only

@@ -12,9 +12,12 @@
   root with one receipt reported nlink 3 while the frozen contract required
   2. No pending grant was created and Docker/OCI/PostgreSQL/SQL remained zero.
   The old Card/Review/receipt are historical and non-executable. The approved
-  repository-only APFS correction is now frozen at Kc `18e3a32` and Lc
-  `32448cb`, with exact stop
-  `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  repository-only APFS correction is frozen at Kc `18e3a32` and Lc
+  `32448cb`. The subsequent execution-authority topology correction is
+  Technical Review Green at Kt `f7d3783` / Lt `c699f9d`: the failed
+  unversioned Card/Review remain historical, while future authority must use
+  unique add-only `-V2.md` paths. The exact stop is
+  `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN /
   FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
   Application, persistence, `pg` executor, application-store bridge, v3
   one-use authority, durable effect accounting and cleanup recovery are
@@ -54,10 +57,11 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **prepare and independently review a fresh one-use Physical
-  Execution Card and Owner Review that bind the frozen
-  [`APFS nlink Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
-  Kc/Lc and the external committed-Mc audit; do not create a pending grant or
+- Next action: **propose and independently review the fresh versioned
+  `PHYSICAL-EXECUTION-CARD-V2.md` and
+  `PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md` that bind the frozen
+  [`Execution-Authority Topology Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
+  Kt/Lt and the external committed-Mt audit; do not create a pending grant or
   execute Docker/PostgreSQL yet. The hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
@@ -65,15 +69,15 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Current execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

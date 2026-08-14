@@ -2,15 +2,15 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-13
-- APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -31,9 +31,12 @@
   Physical Rebind reached Technical Review Green at K `bcfe334` / L
   `beeb55b`. A later precisely approved `prepare` created no grant and stopped
   on a fixed APFS nlink error with zero Docker/PostgreSQL/SQL effects. The
-  repository correction is Green at Kc `18e3a32` / Lc `32448cb`; its exact
-  validation totals are 141 / 85 / 393 / 713 / 145 / 45 and strict machine
-  evidence/committed-byte audits are Green. Fresh one-use Physical Execution and Gate C
+  APFS correction is Green at Kc `18e3a32` / Lc `32448cb`. A later
+  repository-only correction repaired the impossible future Card/Review
+  add-only topology at Kt `f7d3783` / Lt `c699f9d`; its exact validation
+  totals are 142 / 85 / 394 / 714 / 145 / 45 and strict machine
+  evidence/committed-byte audits are Green. Fresh versioned authority,
+  one-use Physical Execution and Gate C
   remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
@@ -1109,3 +1112,31 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   apply/restart/rollback, production pool/migration/runtime/traffic or Gate C.
 - Consequence: stop and prepare a fresh Card/Review only after committed Mc and
   its external audit. The failed authority cannot be reused.
+
+## Evidence round 24 — execution-authority topology correction
+
+- Case: the frozen successor verifier required future authority commits to add
+  the already-existing failed unversioned Card/Review paths. Git could only
+  report modifications there, so the promised add-only topology was
+  impossible.
+- Owner experience: the Owner precisely approved the Topology Correction
+  Addendum and Review, all nine correction choices, exact fifteen-path
+  `Kt/Lt/Mt` construction and zero-effect boundary. Physical Execution and
+  Gate C remained `NOT_REQUESTED`.
+- Technical evidence: Kt
+  `f7d37830044ca2ad098b4c031feb62de77e209c3`, Lt
+  `c699f9d9b023e5185baebbf429a3044bfae0366a`, machine evidence
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`
+  and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md).
+  Exact deny-network totals are 142 / 85 / 394 / 714 / 145 / 45; strict Ajv,
+  complete historical lineage, committed blobs, versioned-path contract,
+  TypeScript, no-AI, docs and diff checks pass.
+- Product judgment: future one-use execution authority now has an honest,
+  uniquely add-only proposal path. Failed authority remains immutable history;
+  canonical payload v1 and grant/receipt v3 did not widen.
+- Not proven: a fresh versioned Card/Review, Owner approval, pending/consumed
+  grant, Docker/image/daemon facts, PostgreSQL 16.10, target catalog,
+  apply/restart/rollback, production runtime/traffic or Gate C.
+- Consequence: stop. Only the fresh `-CARD-V2.md` and
+  `-OWNER-REVIEW-V2.md` proposal may be constructed next; physical
+  preparation still requires separate exact Owner approval.

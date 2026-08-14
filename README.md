@@ -30,11 +30,16 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   APFS directory containing one receipt to retain nlink 2; the observed valid
   value was 3. Docker/OCI/PostgreSQL/SQL effects remained zero and that Card,
   Review and private receipt are now historical/non-executable. The precisely
-  approved repository-only correction is Technical Review Green at Kc
+  approved repository-only APFS correction is Technical Review Green at Kc
   `18e3a32` and Lc `32448cb`: fixed directory-nlink equality is removed while
   path/dev/ino/uid/gid/mode identity and the exact-entry membrane remain
-  fail-closed. A fresh one-use Physical Execution approval is the next
-  separate gate; vault, HTTPS transport, production pool/migration,
+  fail-closed. A later audit found that the fresh execution verifier still
+  required Git to add the already-existing failed Card/Review paths. The
+  precisely approved repository-only topology correction is now Technical
+  Review Green at Kt `f7d3783` and Lt `c699f9d`; future authority must use
+  the unique `-CARD-V2.md` and `-OWNER-REVIEW-V2.md` additions. A fresh
+  versioned Card/Review proposal and separate one-use Physical Execution
+  approval are the next gates; vault, HTTPS transport, production pool/migration,
   runtime route, traffic and Gate C readiness remain false. #67 has not created or
   mutated a production Room, deployed, published, admitted a Projection,
   handled real Guest data, or run a real public knock. R4 is not Owner-accepted
@@ -42,7 +47,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
-  APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`;
+  APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`; execution-authority
+  topology correction Kt/Lt are `f7d3783` / `c699f9d`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -58,20 +64,21 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Production gap: the current Public Core is repository/offline proof only.
   The disposable local PostgreSQL rehearsal has not run. Its first `prepare`
   attempt created no pending grant and made zero Docker/OCI/PostgreSQL/SQL
-  effects; the APFS correction is repository-only. No production
+  effects; the APFS and execution-authority topology corrections are
+  repository-only. No production
   PostgreSQL migration, Gate C deployment/provisioning, production
   Room mutation, public traffic, external email, Provider call, production
   secret, or spend has occurred.
-- APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
   These prove repository correction only.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -98,8 +105,9 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
 11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md),
     [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
-    and [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md)
-    — the Phase-1, rebind and current correction evidence, exact stop and inputs still required
+    [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
+    and [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md)
+    — the Phase-1, rebind and repository corrections, exact stop and inputs still required
 12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
     — the current non-approvable activation boundary
 

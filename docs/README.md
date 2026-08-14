@@ -10,21 +10,24 @@ Guest data or Provider call. Local PostgreSQL Wiring Stage A is `bc0b520`; the
 repository-only APFS nlink correction is Technical Review Green at Kc
 `18e3a32` / Lc `32448cb`. The first approved physical `prepare` stopped before
 grant creation on the invalid fixed-nlink contract; Docker, PostgreSQL and SQL
-remained zero. The next gate is a fresh, separately approved one-use Physical
-Execution. R4 remains Building and is not
+remained zero. The later repository-only execution-authority topology
+correction is Technical Review Green at Kt `f7d3783` / Lt `c699f9d`.
+Future authority must use the unique versioned Card/Review additions. The next
+gate is a fresh versioned proposal followed by a separate one-use Physical
+Execution approval. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current APFS nlink correction bindings: index
-`sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+Current execution-authority topology correction bindings: index
+`sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
 schema
-`sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+`sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
 evidence
-`sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+`sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
 report
-`sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+`sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -37,6 +40,7 @@ Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRE
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md) | What did repository-only Physical Rebind Effect 0 construct, validate and leave closed? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md) | How was the invalid fixed APFS directory-link-count contract corrected without weakening root identity or granting execution? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md) | How were future execution authority paths made uniquely add-only while failed authority remained immutable history? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

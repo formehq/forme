@@ -1186,3 +1186,52 @@ push/PR/merge/release and spend effects are zero.
 Only a fresh Card, Review and exact Owner approval bound to committed Mc and
 its external audit may open a later local physical attempt. #67 and R4 remain
 open.
++
+## 2026-08-13 — execution-authority topology correction reached repository Technical Review Green
+
+**Decision:** accept the precisely approved Topology Correction Addendum
+`sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22`
+and Owner Review
+`sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b`.
+The failed unversioned Physical Execution Card/Review remain immutable
+historical evidence. Any future authority proposal must add the unique
+`PHYSICAL-EXECUTION-CARD-V2.md` and
+`PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md` paths. This decision grants
+repository construction only; Physical Execution and Gate C are not requested.
+
+**Result:** Kt `f7d37830044ca2ad098b4c031feb62de77e209c3` / tree
+`edbe46a65a5008c3221087e83345407a3a197d5e` and Lt
+`c699f9d9b023e5185baebbf429a3044bfae0366a` / tree
+`53bf1fb2877003251e2468dc7c3e70f2175ae3d6` freeze the corrected verifier,
+historical lineage and versioned add-only successor contract. G2t is
+`sha256:3443602d4f7b1561088f6815c8fcbc866ec75f8915eebf94ab7c0cf1d5d359d6`;
+G3t is
+`sha256:8a34840526c11e5ab3318157992d55180d45da6d3cc649a5d0ad1527ae717535`.
+The index
+`sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+schema
+`sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+evidence
+`sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`
+and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`
+freeze the machine and human evidence. The current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:b8474436e2e83e2b918ff34e469c4d6b4c9d3f93291b17318f4a0056f612a53f`.
+Committed Kt/Lt audit summaries are
+`sha256:193c18fad8f845c1fbaffdc09aea35f9e3d82cbd7c44651e7b2e0daf3c0a74f0`
+and
+`sha256:4b313ae973f8dcdd07bb519bf0c2372763b5918e10e71be3f3d214c0e24b7d94`.
+
+**Validation and effect:** deny-network lanes pass 142/142, 85/85, 394/394,
+714/714, 145/145 and 45/45. Strict Ajv, complete committed topology,
+committed blobs, syntax, TypeScript, no-server-AI, docs and diff checks pass.
+Canonical payload v1, grant v3, receipt v3, SQL, dependencies, locks and
+effect ceilings are unchanged. Pending/consumed grants,
+Docker/OCI/PostgreSQL/SQL, production/runtime/traffic/Gate C,
+push/PR/merge/release and spend effects are zero.
+
+**Stop:** `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+Only the fresh versioned Card/Review proposal may be constructed next. Grant
+preparation or physical execution still requires a later separate exact Owner
+approval. #67 and R4 remain open.

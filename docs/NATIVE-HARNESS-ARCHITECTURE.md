@@ -18,23 +18,26 @@
   are Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring
   Stage A is `bc0b520`. The first physical prepare stopped before grant
   creation on an invalid fixed APFS directory-nlink precondition, with zero
-  Docker/PostgreSQL/SQL effects. The repository-only correction is Technical
-  Review Green at Kc `18e3a32` / Lc `32448cb`; a fresh one-use Physical
-  Execution, target PostgreSQL observation, vault, transport, traffic and Gate
+  Docker/PostgreSQL/SQL effects. The repository-only APFS correction is
+  Technical Review Green at Kc `18e3a32` / Lc `32448cb`; the later
+  execution-authority topology correction is Technical Review Green at Kt
+  `f7d3783` / Lt `c699f9d` and requires unique versioned future
+  Card/Review paths. A fresh versioned proposal, one-use Physical Execution,
+  target PostgreSQL observation, vault, transport, traffic and Gate
   C remain closed. Draft PR #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-13
-- APFS nlink correction bindings: index
-  `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+- Execution-authority topology correction bindings: index
+  `sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
   schema
-  `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+  `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
   evidence
-  `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`,
+  `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`,
   report
-  `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`.
-- Current stop: `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+  `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`.
+- Current stop: `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside
