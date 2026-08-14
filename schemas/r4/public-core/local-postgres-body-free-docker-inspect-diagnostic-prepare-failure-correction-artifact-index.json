@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_body_free_diagnostic_prepare_failure_correction_artifact_index.v1",
+  "status": "IMPLEMENTATION_FROZEN",
+  "scope": {
+    "issue": 67,
+    "outcome": "Classify every body-free diagnostic prepare failure without widening diagnostic effects",
+    "currentGate": "R4_CONTROLLED_PRESENCE_BUILDING",
+    "repositoryOnly": true
+  },
+  "authority": {
+    "prepareFailureAddendumSha256": "sha256:ae774a9233b1b0c5a69d40f1ce19634f9d6ae4b6a264cb7c289548ddc06dc060",
+    "prepareFailureOwnerReviewSha256": "sha256:258a1fea0bf77d2be4aa09f655575c8c9afba5ab3f188e9189eb80cc1662eaaa",
+    "rootNlinkCorrectionAddendumSha256": "sha256:5f573a18da85cb13f46d887e06a24d31a4acc390e9673432a185850e44645f5b",
+    "rootNlinkCorrectionOwnerReviewSha256": "sha256:9697d3171451518f7445dbf80b5f0b7545ef6b68649bb4541c18267278933b1c",
+    "ownerOutcomeEnvelopeConfirmed": true,
+    "replacementDiagnostic": "NOT_REQUESTED",
+    "cleanup": "NOT_REQUESTED",
+    "physicalExecution": "NOT_REQUESTED",
+    "production": "NOT_REQUESTED",
+    "gateC": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "baselineHead": "0d2d1666e66fde08f65dfd94926639703691af38",
+    "baselineTree": "420545387651dc832eed695cc066f3046f18369a",
+    "implementationHead": "eaca190eb36fa45ea12077956a4a4b1433102c16",
+    "implementationTree": "ec98c83bab6c12be04e7c02e1738ed113da73f64",
+    "implementationParent": "0d2d1666e66fde08f65dfd94926639703691af38",
+    "implementationPathCount": 2,
+    "addedPathCount": 0,
+    "modifiedPathCount": 2,
+    "deletedPathCount": 0,
+    "renamedPathCount": 0
+  },
+  "aggregate": {
+    "ordering": "unsigned UTF-8 byte order",
+    "framing": "path NUL sha256:<digest> NUL decimal-byte-count LF",
+    "frameBytes": 243,
+    "sha256": "sha256:84254f0f408be406b8e87a3468dbb0f67abfc49b183abf65db6fa74f4d6929e0"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 597087,
+      "sha256": "sha256:e027e71dc071d2917c7d9db4e7bf35cbf9c3eb81792f0ba96a8bcdd3ca883e39"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 164594,
+      "sha256": "sha256:a777b6c5ef5d419d993c11891a72484eddbad681177d66cfdd6ed4632713cb87"
+    }
+  ],
+  "prepareContract": {
+    "stageCount": 19,
+    "stages": [
+      "INPUT",
+      "PRIVATE_ROOT",
+      "OWNER_APPROVAL_RECEIPT",
+      "BLOCKED_ROOT_SNAPSHOT",
+      "FAILED_RESCUE_ROOT_SNAPSHOT",
+      "AUTHORITY",
+      "DOCKER_CLI",
+      "DOCKER_SOCKET",
+      "TIME",
+      "COMMITTED_BINDINGS",
+      "PENDING_OPEN",
+      "PENDING_WRITE",
+      "PENDING_FILE_FSYNC",
+      "PENDING_CLOSE",
+      "PENDING_DIRECTORY_FSYNC",
+      "PENDING_READBACK",
+      "FINAL_ROOT",
+      "PREPARE_RECEIPT",
+      "PENDING_ROLLBACK"
+    ],
+    "failureCode": "local_postgres_body_free_diagnostic_prepare_failed",
+    "rollbackFailureCode": "local_postgres_body_free_diagnostic_prepare_rollback_failed",
+    "rawFailureBodiesRetained": false,
+    "sameInodeRollbackRequired": true,
+    "dockerCallsDuringConstruction": 0
+  },
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-body-free-docker-inspect-diagnostic-prepare-failure-correction.json",
+    "schemas/r4/public-core/local-postgres-body-free-docker-inspect-diagnostic-prepare-failure-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/README.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ]
+}
