@@ -508,6 +508,16 @@ const BODY_FREE_DIAGNOSTIC_RECEIPT_READINESS_KEYS = Object.freeze([
   "diagnosticObservationCaptured", "resourceAbsenceProven", "cleanupRescueGreen", "physicalExecutionPerformed",
   "targetPostgresObserved", "productRuntimeEffects", "trafficReady", "gateCReady",
 ]);
+export const LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_STAGES = Object.freeze([
+  "INPUT", "PRIVATE_ROOT", "OWNER_APPROVAL_RECEIPT", "BLOCKED_ROOT_SNAPSHOT",
+  "FAILED_RESCUE_ROOT_SNAPSHOT", "AUTHORITY", "DOCKER_CLI", "DOCKER_SOCKET", "TIME",
+  "COMMITTED_BINDINGS", "PENDING_OPEN", "PENDING_WRITE", "PENDING_FILE_FSYNC",
+  "PENDING_CLOSE", "PENDING_DIRECTORY_FSYNC", "PENDING_READBACK", "FINAL_ROOT",
+  "PREPARE_RECEIPT", "PENDING_ROLLBACK",
+]);
+const BODY_FREE_DIAGNOSTIC_PREPARE_STAGE_SET = new Set(LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_STAGES);
+const BODY_FREE_DIAGNOSTIC_PREPARE_FAILED = "local_postgres_body_free_diagnostic_prepare_failed";
+const BODY_FREE_DIAGNOSTIC_PREPARE_ROLLBACK_FAILED = "local_postgres_body_free_diagnostic_prepare_rollback_failed";
 
 const GRANT_KEYS = Object.freeze(["schemaVersion", "grantId", "ownerApprovalReceiptSha256", "authority", "lineage", "artifacts", "host", "ceilings", "localOnly", "productionEffectsAllowed", "createdAt", "expiresAt"]);
 const AUTHORITY_KEYS = Object.freeze(["wiringPacketSha256", "wiringOwnerReviewSha256", "addendumBSha256", "addendumBOwnerReviewSha256", "addendumCSha256", "addendumCOwnerReviewSha256", "physicalRebindPacketSha256", "physicalRebindReviewSha256", "executionCardSha256", "executionReviewSha256", "executionAuthorityPayloadSha256"]);
@@ -779,6 +789,31 @@ export class LocalPostgresRunnerError extends Error {
 
   toJSON() {
     return Object.freeze({ name: "LocalPostgresRunnerError", code: ERROR_DETAILS.get(this)?.code ?? "local_postgres_runner_failed" });
+  }
+}
+
+function failBodyFreeDiagnosticPrepare(stage, rollback = false) {
+  if (!BODY_FREE_DIAGNOSTIC_PREPARE_STAGE_SET.has(stage)) fail(BODY_FREE_DIAGNOSTIC_PREPARE_FAILED);
+  const code = rollback ? BODY_FREE_DIAGNOSTIC_PREPARE_ROLLBACK_FAILED : BODY_FREE_DIAGNOSTIC_PREPARE_FAILED;
+  const error = new LocalPostgresRunnerError(code);
+  ERROR_DETAILS.set(error, Object.freeze({ code, prepareStage: stage }));
+  throw error;
+}
+
+function bodyFreeDiagnosticPrepareError(error, stage, rollback = false) {
+  const details = authenticLocalPostgresRunnerErrorDetails(error);
+  if (details?.prepareStage !== undefined) throw error;
+  failBodyFreeDiagnosticPrepare(stage, rollback);
+}
+
+function bodyFreeDiagnosticPrepareStage(adapters, stage, operation) {
+  try {
+    adapters.prepareCheckpoint?.(stage, "before");
+    const result = operation();
+    adapters.prepareCheckpoint?.(stage, "after");
+    return result;
+  } catch (error) {
+    bodyFreeDiagnosticPrepareError(error, stage, stage === "PENDING_ROLLBACK");
   }
 }
 
@@ -1061,8 +1096,13 @@ function installPendingGrant(privateRoot, filePath, value, hooks = Object.freeze
   let descriptor;
   let createdIdentity = null;
   let installed = false;
+  let failureStage = "PENDING_OPEN";
+  const checkpoint = (name, stage, edge) => {
+    failureStage = stage;
+    hooks.checkpoint?.(name, edge);
+  };
   try {
-    hooks.checkpoint?.("pending.open", "before");
+    checkpoint("pending.open", "PENDING_OPEN", "before");
     descriptor = fs.openSync(filePath,
       fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_NOFOLLOW, 0o600);
     const opened = fs.fstatSync(descriptor, { bigint: true });
@@ -1071,29 +1111,31 @@ function installPendingGrant(privateRoot, filePath, value, hooks = Object.freeze
       fail("local_postgres_private_file_invalid");
     }
     createdIdentity = Object.freeze({ dev: opened.dev, ino: opened.ino });
-    hooks.checkpoint?.("pending.open", "after");
-    hooks.checkpoint?.("pending.write", "before");
+    checkpoint("pending.open", "PENDING_OPEN", "after");
+    checkpoint("pending.write", "PENDING_WRITE", "before");
     fs.writeFileSync(descriptor, bytes);
-    hooks.checkpoint?.("pending.write", "after");
-    hooks.checkpoint?.("pending.file_fsync", "before");
+    checkpoint("pending.write", "PENDING_WRITE", "after");
+    checkpoint("pending.file_fsync", "PENDING_FILE_FSYNC", "before");
     fs.fsyncSync(descriptor);
-    hooks.checkpoint?.("pending.file_fsync", "after");
+    checkpoint("pending.file_fsync", "PENDING_FILE_FSYNC", "after");
     const written = fs.fstatSync(descriptor, { bigint: true });
     if (written.dev !== opened.dev || written.ino !== opened.ino || written.nlink !== 1n
       || written.size !== BigInt(bytes.length) || (Number(written.mode) & 0o777) !== 0o600) {
       fail("local_postgres_private_file_invalid");
     }
-    hooks.checkpoint?.("pending.close", "before");
+    checkpoint("pending.close", "PENDING_CLOSE", "before");
     fs.closeSync(descriptor);
     descriptor = undefined;
-    hooks.checkpoint?.("pending.close", "after");
-    hooks.checkpoint?.("pending.directory_fsync", "before");
+    checkpoint("pending.close", "PENDING_CLOSE", "after");
+    checkpoint("pending.directory_fsync", "PENDING_DIRECTORY_FSYNC", "before");
     fsyncPrivateDirectory(privateRoot);
-    hooks.checkpoint?.("pending.directory_fsync", "after");
+    checkpoint("pending.directory_fsync", "PENDING_DIRECTORY_FSYNC", "after");
+    checkpoint("pending.readback", "PENDING_READBACK", "before");
     const installedRecord = readPrivateJsonRecord(filePath);
     const current = fs.lstatSync(filePath, { bigint: true });
     if (current.dev !== createdIdentity.dev || current.ino !== createdIdentity.ino || current.nlink !== 1n
       || installedRecord.sha256 !== sha256Bytes(bytes)) fail("local_postgres_private_file_invalid");
+    checkpoint("pending.readback", "PENDING_READBACK", "after");
     installed = true;
     return Object.freeze({ identity: createdIdentity, sha256: installedRecord.sha256 });
   } catch (error) {
@@ -1103,18 +1145,22 @@ function installPendingGrant(privateRoot, filePath, value, hooks = Object.freeze
     }
     if (createdIdentity !== null && !installed) {
       try {
+        hooks.rollbackCheckpoint?.("PENDING_ROLLBACK", "before");
         const current = fs.lstatSync(filePath, { bigint: true });
         if (current.dev !== createdIdentity.dev || current.ino !== createdIdentity.ino || current.nlink !== 1n) {
           fail("local_postgres_private_file_invalid");
         }
+        hooks.rollbackCheckpoint?.("PENDING_ROLLBACK", "after");
         fs.unlinkSync(filePath);
         fsyncPrivateDirectory(privateRoot);
         exactFileAbsence(filePath);
       } catch (cleanupError) {
+        hooks.classifyFailure?.("PENDING_ROLLBACK", cleanupError, true);
         if (authenticLocalPostgresRunnerErrorDetails(cleanupError) !== null) throw cleanupError;
         fail("local_postgres_private_file_invalid");
       }
     }
+    hooks.classifyFailure?.(failureStage, error, false);
     if (authenticLocalPostgresRunnerErrorDetails(error) !== null) throw error;
     fail("local_postgres_private_file_invalid");
   } finally {
@@ -8416,70 +8462,138 @@ function inspectFailedCleanupRescueRoot(rescueRoot = FAILED_RESCUE_PRIVATE_ROOT)
 }
 
 function prepareBodyFreeDiagnosticGrantWithAdapters(input, adapters) {
-  const stable = ownedPlain(input);
-  exactKeys(stable, [
-    "diagnosticRoot", "blockedRoot", "rescueRoot", "diagnosticOwnerReviewHead",
-    "ownerApprovalReceiptPath", "createdAt", "expiresAt",
-  ]);
-  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
-    || stable.blockedRoot !== BLOCKED_PRIVATE_ROOT || stable.rescueRoot !== FAILED_RESCUE_PRIVATE_ROOT
-    || typeof stable.ownerApprovalReceiptPath !== "string" || !path.isAbsolute(stable.ownerApprovalReceiptPath)) {
-    fail("local_postgres_body_free_diagnostic_private_root_invalid");
-  }
-  let diagnosticRoot;
-  try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
-  catch { fail("local_postgres_body_free_diagnostic_private_root_invalid"); }
-  if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_body_free_diagnostic_private_root_invalid");
-  const rootIdentity = privateDirectoryIdentity(diagnosticRoot);
-  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(diagnosticRoot, stable.ownerApprovalReceiptPath);
-  assertPrivateDirectoryIdentity(rootIdentity);
-  const blockedSnapshot = adapters.inspectBlockedForensicRoot(stable.blockedRoot);
-  const failedRescueSnapshot = adapters.inspectFailedRescueRoot(stable.rescueRoot);
-  assertPrivateDirectoryIdentity(rootIdentity);
-  const derived = adapters.deriveAuthority(stable.diagnosticOwnerReviewHead);
-  const cli = adapters.observeDockerCliIdentity();
-  const socket = adapters.resolveSocketIdentity();
-  const observedAt = adapters.now();
-  const diagnosticGrantId = adapters.randomBytes(16).toString("hex");
-  const grant = Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
-    diagnosticGrantId, ownerApprovalReceiptSha256,
-    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
-    blocked: derived.blocked, failedRescue: derived.failedRescue,
-    host: Object.freeze({
-      ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256,
-    }),
-    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
-    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
-  });
-  validateBodyFreeDiagnosticGrant(grant, observedAt);
-  adapters.verifyBindings(grant, observedAt);
-  if (canonicalJson(selectKeys(blockedSnapshot, Object.keys(derived.blocked))) !== canonicalJson(derived.blocked)
-    || canonicalJson(selectKeys(failedRescueSnapshot, Object.keys(derived.failedRescue))) !== canonicalJson(derived.failedRescue)) {
-    fail("local_postgres_body_free_diagnostic_forensic_drift");
-  }
-  assertPrivateDirectoryIdentity(rootIdentity);
-  const pending = privatePath(diagnosticRoot, "diagnostic.pending.json");
-  let pendingIdentity = null;
-  try {
-    const installed = installPendingGrant(diagnosticRoot, pending, grant, adapters.pendingInstallHooks);
-    pendingIdentity = installed.identity;
-    assertPrivateDirectoryIdentity(rootIdentity);
-    const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
-    if (names.length !== 2 || names[0] !== "diagnostic.pending.json" || names[1] !== "owner-approval-receipt") {
+  const stable = bodyFreeDiagnosticPrepareStage(adapters, "INPUT", () => {
+    const candidate = ownedPlain(input);
+    exactKeys(candidate, [
+      "diagnosticRoot", "blockedRoot", "rescueRoot", "diagnosticOwnerReviewHead",
+      "ownerApprovalReceiptPath", "createdAt", "expiresAt",
+    ]);
+    if (typeof candidate.diagnosticRoot !== "string" || !path.isAbsolute(candidate.diagnosticRoot)
+      || candidate.blockedRoot !== BLOCKED_PRIVATE_ROOT || candidate.rescueRoot !== FAILED_RESCUE_PRIVATE_ROOT
+      || typeof candidate.ownerApprovalReceiptPath !== "string" || !path.isAbsolute(candidate.ownerApprovalReceiptPath)) {
       fail("local_postgres_body_free_diagnostic_private_root_invalid");
     }
-    return Object.freeze({
-      schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-prepare-receipt.v1",
-      pendingDiagnosticGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
-      diagnosticAuthorityPayloadSha256: grant.authority.diagnosticAuthorityPayloadSha256,
-      blockedSnapshotSha256: blockedSnapshot.snapshotSha256,
-      failedRescueSnapshotSha256: failedRescueSnapshot.snapshotSha256,
-      observedAt: observedAt.toISOString(),
+    return candidate;
+  });
+  const root = bodyFreeDiagnosticPrepareStage(adapters, "PRIVATE_ROOT", () => {
+    let diagnosticRoot;
+    try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
+    catch { fail("local_postgres_body_free_diagnostic_private_root_invalid"); }
+    if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_body_free_diagnostic_private_root_invalid");
+    return Object.freeze({ diagnosticRoot, identity: privateDirectoryIdentity(diagnosticRoot) });
+  });
+  const { diagnosticRoot, identity: rootIdentity } = root;
+  const ownerApprovalReceiptSha256 = bodyFreeDiagnosticPrepareStage(adapters, "OWNER_APPROVAL_RECEIPT", () => {
+    const sha256 = readOwnerApprovalReceipt(diagnosticRoot, stable.ownerApprovalReceiptPath);
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return sha256;
+  });
+  const blockedSnapshot = bodyFreeDiagnosticPrepareStage(adapters, "BLOCKED_ROOT_SNAPSHOT", () => {
+    const snapshot = adapters.inspectBlockedForensicRoot(stable.blockedRoot);
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return snapshot;
+  });
+  const failedRescueSnapshot = bodyFreeDiagnosticPrepareStage(adapters, "FAILED_RESCUE_ROOT_SNAPSHOT", () => {
+    const snapshot = adapters.inspectFailedRescueRoot(stable.rescueRoot);
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return snapshot;
+  });
+  const derived = bodyFreeDiagnosticPrepareStage(adapters, "AUTHORITY", () => {
+    const authority = adapters.deriveAuthority(stable.diagnosticOwnerReviewHead);
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return authority;
+  });
+  const cli = bodyFreeDiagnosticPrepareStage(adapters, "DOCKER_CLI", () => {
+    const identity = adapters.observeDockerCliIdentity();
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return identity;
+  });
+  const socket = bodyFreeDiagnosticPrepareStage(adapters, "DOCKER_SOCKET", () => {
+    const identity = adapters.resolveSocketIdentity();
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return identity;
+  });
+  const time = bodyFreeDiagnosticPrepareStage(adapters, "TIME", () => Object.freeze({
+    observedAt: adapters.now(), diagnosticGrantId: adapters.randomBytes(16).toString("hex"),
+  }));
+  const grant = bodyFreeDiagnosticPrepareStage(adapters, "AUTHORITY", () => {
+    const candidate = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-grant.v1",
+      diagnosticGrantId: time.diagnosticGrantId, ownerApprovalReceiptSha256,
+      authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+      blocked: derived.blocked, failedRescue: derived.failedRescue,
+      host: Object.freeze({
+        ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256,
+      }),
+      ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+      createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+    });
+    validateBodyFreeDiagnosticGrant(candidate, time.observedAt);
+    return candidate;
+  });
+  bodyFreeDiagnosticPrepareStage(adapters, "COMMITTED_BINDINGS", () => {
+    adapters.verifyBindings(grant, time.observedAt);
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return true;
+  });
+  bodyFreeDiagnosticPrepareStage(adapters, "BLOCKED_ROOT_SNAPSHOT", () => {
+    if (canonicalJson(selectKeys(blockedSnapshot, Object.keys(derived.blocked))) !== canonicalJson(derived.blocked)) {
+      fail("local_postgres_body_free_diagnostic_forensic_drift");
+    }
+    return true;
+  });
+  bodyFreeDiagnosticPrepareStage(adapters, "FAILED_RESCUE_ROOT_SNAPSHOT", () => {
+    if (canonicalJson(selectKeys(failedRescueSnapshot, Object.keys(derived.failedRescue))) !== canonicalJson(derived.failedRescue)) {
+      fail("local_postgres_body_free_diagnostic_forensic_drift");
+    }
+    return true;
+  });
+  const pending = bodyFreeDiagnosticPrepareStage(adapters, "PRIVATE_ROOT", () => {
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return privatePath(diagnosticRoot, "diagnostic.pending.json");
+  });
+  let pendingIdentity = null;
+  try {
+    const pendingStages = Object.freeze({
+      "pending.open": "PENDING_OPEN", "pending.write": "PENDING_WRITE",
+      "pending.file_fsync": "PENDING_FILE_FSYNC", "pending.close": "PENDING_CLOSE",
+      "pending.directory_fsync": "PENDING_DIRECTORY_FSYNC", "pending.readback": "PENDING_READBACK",
+    });
+    const installed = installPendingGrant(diagnosticRoot, pending, grant, Object.freeze({
+      checkpoint(name, edge) {
+        adapters.pendingInstallHooks?.checkpoint?.(name, edge);
+        adapters.prepareCheckpoint?.(pendingStages[name], edge);
+      },
+      rollbackCheckpoint(stage, edge) {
+        adapters.pendingInstallHooks?.rollbackCheckpoint?.(stage, edge);
+        adapters.prepareCheckpoint?.(stage, edge);
+      },
+      classifyFailure(stage, error, rollback) { bodyFreeDiagnosticPrepareError(error, stage, rollback); },
+    }));
+    pendingIdentity = installed.identity;
+    bodyFreeDiagnosticPrepareStage(adapters, "FINAL_ROOT", () => {
+      assertPrivateDirectoryIdentity(rootIdentity);
+      const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+      if (names.length !== 2 || names[0] !== "diagnostic.pending.json" || names[1] !== "owner-approval-receipt") {
+        fail("local_postgres_body_free_diagnostic_private_root_invalid");
+      }
+      return true;
+    });
+    return bodyFreeDiagnosticPrepareStage(adapters, "PREPARE_RECEIPT", () => {
+      const receipt = Object.freeze({
+        schemaVersion: "r4.public-core-local-postgres-body-free-docker-inspect-diagnostic-prepare-receipt.v1",
+        pendingDiagnosticGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
+        diagnosticAuthorityPayloadSha256: grant.authority.diagnosticAuthorityPayloadSha256,
+        blockedSnapshotSha256: blockedSnapshot.snapshotSha256,
+        failedRescueSnapshotSha256: failedRescueSnapshot.snapshotSha256,
+        observedAt: time.observedAt.toISOString(),
+      });
+      canonicalJson(receipt);
+      return receipt;
     });
   } catch (error) {
     if (pendingIdentity !== null) {
-      try {
+      bodyFreeDiagnosticPrepareStage(adapters, "PENDING_ROLLBACK", () => {
         const current = fs.lstatSync(pending, { bigint: true });
         if (current.dev !== pendingIdentity.dev || current.ino !== pendingIdentity.ino || current.nlink !== 1n) {
           fail("local_postgres_body_free_diagnostic_private_file_invalid");
@@ -8487,10 +8601,8 @@ function prepareBodyFreeDiagnosticGrantWithAdapters(input, adapters) {
         fs.unlinkSync(pending);
         fsyncPrivateDirectory(diagnosticRoot);
         exactFileAbsence(pending);
-      } catch (cleanupError) {
-        if (authenticLocalPostgresRunnerErrorDetails(cleanupError) !== null) throw cleanupError;
-        fail("local_postgres_body_free_diagnostic_private_file_invalid");
-      }
+        return true;
+      });
     }
     throw error;
   }
@@ -9377,10 +9489,20 @@ export function runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan(input 
 
 export function runLocalPostgresBodyFreeDiagnosticPrepareFakePlan(input = Object.freeze({})) {
   const stable = ownedPlain(input);
-  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const expectedKeys = [];
+  if (stable.mutation !== undefined) expectedKeys.push("mutation");
+  if (stable.stage !== undefined) expectedKeys.push("stage");
+  if (stable.edge !== undefined) expectedKeys.push("edge");
+  exactKeys(stable, expectedKeys);
   const mutation = stable.mutation ?? "none";
   const allowed = new Set(["none", "blocked", "failed_rescue", "expired", "root_extra"]);
   if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const injectedStage = stable.stage ?? null;
+  const injectedEdge = stable.edge ?? null;
+  if ((injectedStage === null) !== (injectedEdge === null)
+    || (injectedStage !== null && !BODY_FREE_DIAGNOSTIC_PREPARE_STAGE_SET.has(injectedStage))
+    || (injectedEdge !== null && injectedEdge !== "before" && injectedEdge !== "after")
+    || (injectedStage !== null && mutation !== "none")) fail("local_postgres_fake_fault_invalid");
   const temporaryRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-diagnostic-prepare-")));
   const receiptPath = path.join(temporaryRoot, "owner-approval-receipt");
   fs.writeFileSync(receiptPath, "fake body-free diagnostic approval", { mode: 0o600 });
@@ -9402,6 +9524,14 @@ export function runLocalPostgresBodyFreeDiagnosticPrepareFakePlan(input = Object
       observeDockerCliIdentity: () => Object.freeze({ identitySha256: `sha256:${"b".repeat(64)}` }),
       resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}` }),
       randomBytes: () => Buffer.alloc(16, 0xd), now: () => new Date("2026-08-14T20:00:01.000Z"),
+      prepareCheckpoint(stage, edge) {
+        if (stage === injectedStage && edge === injectedEdge) throw new Error("private fake prepare failure body");
+      },
+      pendingInstallHooks: injectedStage === "PENDING_ROLLBACK" ? Object.freeze({
+        checkpoint(name, edge) {
+          if (name === "pending.write" && edge === "after") throw new Error("private fake primary failure body");
+        },
+      }) : undefined,
       verifyBindings(candidate, observedAt) {
         const validated = validateBodyFreeDiagnosticGrant(candidate, observedAt);
         assertBodyFreeDiagnosticGrantMatchesDerived(validated, fakeBodyFreeDiagnosticDerived());
@@ -9411,12 +9541,14 @@ export function runLocalPostgresBodyFreeDiagnosticPrepareFakePlan(input = Object
       schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-prepare-fake-result.v1",
       status: "GREEN", code: "local_postgres_body_free_diagnostic_prepare_green", receipt,
       grant: readPrivateJson(path.join(temporaryRoot, "diagnostic.pending.json")),
-      rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)), physicalEffects: 0,
+      prepareStage: null, rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)), physicalEffects: 0,
     });
   } catch (error) {
+    const details = authenticLocalPostgresRunnerErrorDetails(error);
     result = Object.freeze({
       schemaVersion: "r4.public-core-local-postgres-body-free-diagnostic-prepare-fake-result.v1",
-      status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed",
+      status: "FAILED", code: details?.code ?? "local_postgres_runner_failed",
+      prepareStage: details?.prepareStage ?? null,
       receipt: null, grant: null, rootEntries: Object.freeze(fs.readdirSync(temporaryRoot).sort(binaryCompare)),
       physicalEffects: 0,
     });
@@ -10831,8 +10963,13 @@ async function direct() {
 
 if (process.argv[1] !== undefined && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   direct().catch((error) => {
-    const code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed";
-    process.stderr.write(`${canonicalJson({ schemaVersion: "r4.public-core-local-postgres-error.v3", code })}\n`);
+    const details = authenticLocalPostgresRunnerErrorDetails(error);
+    const code = details?.code ?? "local_postgres_runner_failed";
+    const publicError = { schemaVersion: "r4.public-core-local-postgres-error.v3", code };
+    if (BODY_FREE_DIAGNOSTIC_PREPARE_STAGE_SET.has(details?.prepareStage)) {
+      publicError.prepareStage = details.prepareStage;
+    }
+    process.stderr.write(`${canonicalJson(publicError)}\n`);
     process.exitCode = 1;
   });
 }

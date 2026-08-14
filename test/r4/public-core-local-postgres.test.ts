@@ -7,6 +7,7 @@ import path from "node:path";
 import test from "node:test";
 import {
   LOCAL_POSTGRES_DOCKER_COMMAND_KINDS,
+  LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_STAGES,
   LOCAL_POSTGRES_PHASE1_AUTHORITY,
   LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY,
   LOCAL_POSTGRES_PHYSICAL_LIFECYCLE_STAGES,
@@ -3049,6 +3050,50 @@ test("body-free diagnostic prepare is zero-effect, exact-root, and forensic-drif
     assert.equal(result.physicalEffects, 0, mutation);
   }
   assert.equal(typeof prepareBodyFreeDockerInspectDiagnosticGrant, "function");
+});
+
+test("body-free diagnostic prepare classifies every stage edge without leaking raw failure bodies", () => {
+  for (const stage of LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_STAGES) {
+    for (const edge of ["before", "after"] as const) {
+      const result = runLocalPostgresBodyFreeDiagnosticPrepareFakePlan({ stage, edge });
+      assert.equal(result.status, "FAILED", `${stage}:${edge}`);
+      assert.equal(result.prepareStage, stage, `${stage}:${edge}`);
+      assert.equal(result.code, stage === "PENDING_ROLLBACK"
+        ? "local_postgres_body_free_diagnostic_prepare_rollback_failed"
+        : "local_postgres_body_free_diagnostic_prepare_failed", `${stage}:${edge}`);
+      assert.equal(result.receipt, null, `${stage}:${edge}`);
+      assert.equal(result.grant, null, `${stage}:${edge}`);
+      assert.equal(result.physicalEffects, 0, `${stage}:${edge}`);
+      assert.equal(result.rootEntries.includes("private fake prepare failure body"), false, `${stage}:${edge}`);
+      if (stage === "PENDING_ROLLBACK") {
+        assert.deepEqual(result.rootEntries, ["diagnostic.pending.json", "owner-approval-receipt"], `${stage}:${edge}`);
+      } else {
+        assert.deepEqual(result.rootEntries, ["owner-approval-receipt"], `${stage}:${edge}`);
+      }
+    }
+  }
+});
+
+test("body-free diagnostic prepare CLI returns one closed code and stage", () => {
+  const runner = path.resolve("scripts/r4-public-core-local-postgres.mjs");
+  let stderr = "";
+  assert.throws(() => execFileSync(process.execPath, [
+    runner, "prepare-inspect-diagnostic", "--diagnostic-root", "/private/forme-r4-missing-diagnostic-root",
+    "--blocked-root", "/private/tmp/forme-r4-pg-9ZGIOLeX",
+    "--rescue-root", "/private/tmp/forme-r4-cleanup-rescue-VVZOVTGn",
+    "--diagnostic-review-head", "a".repeat(40),
+    "--owner-approval-receipt", "/private/forme-r4-missing-diagnostic-root/owner-approval-receipt",
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }), (error: unknown) => {
+    if (typeof error !== "object" || error === null || !("stderr" in error)) return false;
+    stderr = String(error.stderr);
+    return true;
+  });
+  assert.deepEqual(JSON.parse(stderr), {
+    schemaVersion: "r4.public-core-local-postgres-error.v3",
+    code: "local_postgres_body_free_diagnostic_prepare_failed",
+    prepareStage: "PRIVATE_ROOT",
+  });
 });
 
 test("body-free diagnostic captures exact body-free fingerprints without cleanup authority", async () => {
