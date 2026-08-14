@@ -2,15 +2,15 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-14
-- Body-free inspect diagnostic bindings: index
-  `sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`,
+- Prepare-failure correction bindings: index
+  `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
   schema
-  `sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`,
+  `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
   evidence
-  `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`,
+  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
   report
-  `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`.
-- Current stop: `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
+- Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -42,9 +42,12 @@
   consumed a grant and failed closed at exact-name inspect. They created no
   Docker resource and made no PostgreSQL/SQL effect; absence remains unknown.
   The repository-only body-free inspect diagnostic is Green at Kf `bd3cdf7` /
-  Lf `7384ef8`, with exact totals 160 / 85 / 410 / 732 / 145 / 45.
-  Diagnostic execution, cleanup, another Physical Execution and Gate C remain
-  `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
+  Lf `7384ef8`. Its approved V1 prepare then failed before grant creation with
+  `local_postgres_runner_failed` and zero Docker/socket/PostgreSQL/SQL effects.
+  Kp `eaca190` / Lp `7a31dba` now freeze exact 19-stage body-free failure
+  classification and rollback, with exact totals 162 / 734 / 145 / 45.
+  Replacement diagnostic, cleanup, another Physical Execution and Gate C
+  remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -1225,3 +1228,32 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
 - Consequence: stop. Only the versioned Diagnostic Card V1/Review V1 proposal
   may be constructed next. Diagnostic prepare/execute, cleanup, another
   physical rehearsal and Gate C each require later separate exact authority.
+
+## Evidence round 27 — failed V1 prepare and stage-exact correction
+
+- Case: the exact Diagnostic Card V1/Review V1 and Owner approval authorized
+  one `prepare` and one later diagnostic lifecycle. The fresh `prepare` failed
+  before grant creation and returned `local_postgres_runner_failed`. The root
+  retained only its 1,072-byte Owner receipt; Docker/socket, PostgreSQL and SQL
+  effects remained zero, so the diagnostic lifecycle never started.
+- Technical evidence: Kp `eaca190eb36fa45ea12077956a4a4b1433102c16`
+  and Lp `7a31dbaa385be561acac4fc21f017a804be4a68c` freeze 19 closed
+  prepare stages, distinct ordinary/rollback codes, same-inode cleanup and
+  body-free CLI output. The machine evidence is
+  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`;
+  the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md)
+  records the human audit. Exact deny-network totals are 162 / 734 / 145 / 45;
+  strict Ajv and nine hostile mutations, committed hashes, TypeScript, docs and
+  diff checks are Green.
+- Product judgment: this closes an observability/control defect, not the
+  integration gap. Future failure will identify the exact stage without
+  disclosing bodies or improvising cleanup. PostgreSQL and the real public
+  encounter are still unproven.
+- Collaboration learning: once the Owner approves a bounded outcome envelope,
+  implementation, tests, evidence, status reconciliation and hash updates
+  inside that envelope should proceed without per-commit approvals. Review
+  returns at a new authority/effect boundary, material drift or failed ceiling.
+- Consequence: stop before a replacement diagnostic. Review the next local
+  integration campaign as one medium-grained outcome, not as another sequence
+  of ceremonial hash approvals. Physical Execution, production and Gate C
+  remain not requested.

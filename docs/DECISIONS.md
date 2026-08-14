@@ -1368,3 +1368,64 @@ Only the versioned Diagnostic Card V1/Review V1 proposal may be constructed
 next. Diagnostic prepare/execute, cleanup, another Physical Execution,
 production and Gate C each require later separate exact Owner authority. #67
 and R4 remain open.
+
+## 2026-08-14 — failed V1 diagnostic prepare corrected; outcome-envelope collaboration adopted
+
+**Decision:** preserve the approved Diagnostic Card V1/Review V1 and failed
+pre-grant `prepare` as immutable history. Accept the bounded repository
+correction authorized by Prepare-Failure Addendum
+`sha256:ae774a9233b1b0c5a69d40f1ce19634f9d6ae4b6a264cb7c289548ddc06dc060`,
+Owner Review
+`sha256:258a1fea0bf77d2be4aa09f655575c8c9afba5ab3f188e9189eb80cc1662eaaa`,
+Root-nlink Addendum
+`sha256:5f573a18da85cb13f46d887e06a24d31a4acc390e9673432a185850e44645f5b`
+and Owner Review
+`sha256:9697d3171451518f7445dbf80b5f0b7545ef6b68649bb4541c18267278933b1c`.
+The result identifies 19 closed prepare stages, returns body-free failure codes
+and preserves exact same-inode rollback without authorizing a replacement
+diagnostic.
+
+**Result:** Kp `eaca190eb36fa45ea12077956a4a4b1433102c16` / tree
+`ec98c83bab6c12be04e7c02e1738ed113da73f64` and Lp
+`7a31dbaa385be561acac4fc21f017a804be4a68c` / tree
+`d6e2dc39b693091069ed92f6bcef8ce79e533cc4` form exact `2M` then `3A`
+commits. G2p is
+`sha256:84254f0f408be406b8e87a3468dbb0f67abfc49b183abf65db6fa74f4d6929e0`;
+G3p is
+`sha256:6aec3a9e4c867403ec7e3f0c08f4892aa40129b39a83850a4eb04d6894538a26`.
+The artifact index is
+`sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`;
+the strict schema is
+`sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`;
+machine evidence is
+`sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md)
+is `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:50300238c5cf28bd9dfd42fcaea3d22ae6d0038a3c8d0e0f54547332ed86356e`.
+Committed Kp/Lp audit summaries are
+`sha256:28a08418c5964143584d8bdb3b26621950efc6c17b9143acbdb66be563a2c55e`
+and
+`sha256:18c40a216a286cd8fef1a7112cd7d206bc9d50b1d3f81546a7f56c108882364f`.
+
+**Validation and effect:** deny-network lanes pass 162/162, 734/734,
+145/145 and 45/45. TypeScript, strict Ajv, nine hostile evidence mutations,
+cross-hashes, docs and diff checks are Green. Repository construction made
+zero external-network, Docker/socket/OCI, forensic-root, PostgreSQL/SQL,
+runtime/traffic, production, Provider/message, deploy/publication/admission,
+release or spend effects.
+
+**Collaboration rule:** future work should use Owner-approved outcome
+envelopes. Within an exact outcome, path/effect ceiling and stop condition,
+the agent may implement, test, repair, freeze evidence, reconcile current
+status documents and commit without returning for per-file, per-commit or
+recomputed-hash approval. Review returns when authority, durable state, schema
+or trust boundaries expand; an external effect begins; scope/date/public
+behavior changes; evidence becomes ambiguous; or a ceiling/failure stop is
+reached. This reduces ceremonial approval without weakening Owner authority.
+
+**Stop:** `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The next review is a medium-grained local integration campaign. No replacement
+diagnostic, cleanup, Physical Execution, production action or Gate C action is
+authorized by this decision. #67 and R4 remain open.

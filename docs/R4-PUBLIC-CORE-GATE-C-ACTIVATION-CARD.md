@@ -1,9 +1,9 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED_PHYSICAL_EXECUTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED_PHYSICAL_EXECUTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-14
-- Scope: current non-approvable production boundary after repository-only
-  body-free Docker inspect diagnostic construction
+- Scope: current non-approvable production boundary after the failed V1
+  diagnostic prepare and repository-only prepare-failure correction
 - Docker Diagnostic: **NOT_REQUESTED**
 - Cleanup: **NOT_REQUESTED**
 - Physical Execution: **NOT_REQUESTED**
@@ -11,8 +11,8 @@
 - Gate C: **NOT_REQUESTED**
 
 This Card is a status surface, not an activation grant. It records why Gate C
-remains closed after the body-free diagnostic construction. It cannot prepare
-or consume a diagnostic grant, call Docker, clean a resource, start
+remains closed after the prepare-failure correction. It cannot prepare or
+consume a replacement diagnostic grant, call Docker, clean a resource, start
 PostgreSQL, run SQL, deploy, publish, admit a Projection or enable traffic.
 
 ## Current truth
@@ -24,10 +24,11 @@ failed closed on the external Docker inspect diagnostic before any Docker
 resource mutation or PostgreSQL/SQL effect. Both grants are permanently
 non-retryable. Exact resource absence remains unknown.
 
-Kf/Lf now construct a separate body-free observation membrane. A future
-separately approved diagnostic can make at most one Docker `version` call and
-one exact-name `container.inspect`, retaining only bounded hashes and output
-shape/classification facts. Construction did not activate that capability.
+Kf/Lf constructed a body-free observation membrane. Its exact Card V1/Review
+V1 were later approved, but `prepare` failed before grant creation with
+`local_postgres_runner_failed` and zero Docker/socket effects. Kp/Lp now
+classify 19 closed stages and prove same-inode rollback. They did not activate
+or renew diagnostic authority.
 
 ## Exact current bindings
 
@@ -48,10 +49,23 @@ shape/classification facts. Construction did not activate that capability.
 | construction report | `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da` |
 | committed-`Kf` audit | `sha256:3614d5fc8d023c343c6c60b8be5a21569177f1c86be5007cc3feb122788e9edd` |
 | committed-`Lf` audit | `sha256:a5282e9c0ba83ee92cec45c06b7801a43b22822aa586aaebd67d47ff527efba4` |
+| Diagnostic Card V1 SHA / HEAD | `sha256:1cd345018dc6ddbf393df873bca01a54fcb75f8e608f9f63a48c9f61fd06319e` / `0175b455b4b44bef64db42f062903daaa8b08db0` |
+| Diagnostic Review V1 SHA / HEAD | `sha256:324af94569b0c54456e474230bc06b3e7f15573ee97ec4a46c5886d56969abed` / `ba092d1ecd3f7f45f708dfb27642c1b5aa07c2aa` |
+| Prepare-Failure Addendum / Review | `sha256:ae774a9233b1b0c5a69d40f1ce19634f9d6ae4b6a264cb7c289548ddc06dc060` / `sha256:258a1fea0bf77d2be4aa09f655575c8c9afba5ab3f188e9189eb80cc1662eaaa` |
+| Root-nlink Addendum / Review | `sha256:5f573a18da85cb13f46d887e06a24d31a4acc390e9673432a185850e44645f5b` / `sha256:9697d3171451518f7445dbf80b5f0b7545ef6b68649bb4541c18267278933b1c` |
+| `Kp` HEAD / tree | `eaca190eb36fa45ea12077956a4a4b1433102c16` / `ec98c83bab6c12be04e7c02e1738ed113da73f64` |
+| `Lp` HEAD / tree | `7a31dbaa385be561acac4fc21f017a804be4a68c` / `d6e2dc39b693091069ed92f6bcef8ce79e533cc4` |
+| `G2p` / `G3p` | `sha256:84254f0f408be406b8e87a3468dbb0f67abfc49b183abf65db6fa74f4d6929e0` / `sha256:6aec3a9e4c867403ec7e3f0c08f4892aa40129b39a83850a4eb04d6894538a26` |
+| current artifact index | `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0` |
+| current strict schema | `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532` |
+| current machine evidence | `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1` |
+| current construction report | `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac` |
+| committed-`Kp` / `Lp` audits | `sha256:28a08418c5964143584d8bdb3b26621950efc6c17b9143acbdb66be563a2c55e` / `sha256:18c40a216a286cd8fef1a7112cd7d206bc9d50b1d3f81546a7f56c108882364f` |
 
-The exact direct chain is
-`RR -> F -> FV -> G -> GV -> Kf -> Lf -> Mf`. The future Card/Review pair is
-not present and is not authorized by this file.
+The current successor chain continues through
+`Mf -> FC1 -> FR1 -> H -> HV -> N -> NV -> Kp -> Lp`. The failed V1 prepare
+created no grant. No replacement Card/Review or effect authority is implied by
+this status surface.
 
 ## Frozen failed authority and forensic roots
 
@@ -85,8 +99,10 @@ this Card authorizes reading, mutation or cleanup there.
 | body-free diagnostic membrane constructed | `true` |
 | strict diagnostic grant/journal/receipt constructed | `true` |
 | body-free output fingerprinting constructed | `true` |
-| diagnostic Card V1 / Review V1 present | `false / false` |
-| diagnostic grant prepared / consumed | `false / false` |
+| diagnostic Card V1 / Review V1 present | `true / true` |
+| V1 prepare attempted / grant created | `true / false` |
+| prepare-failure correction constructed | `true` |
+| replacement diagnostic approved | `false` |
 | body-free Docker diagnostic executed | `false` |
 | resource absence proven | `false` |
 | cleanup Green | `false` |
@@ -117,17 +133,16 @@ target-PostgreSQL observation.
 
 At minimum, later independent gates must establish:
 
-1. a versioned Diagnostic Card V1 and Owner Review V1 bound to committed `Mf`
-   and its external committed-byte audit;
-2. separate exact Owner approval for one diagnostic prepare/consume/lifecycle;
-3. a truthful body-free observation reviewed into a result-specific decision;
-4. exact cleanup proof or a separately approved correction, without reusing a
+1. a replacement body-free diagnostic authority, preferably reviewed as the
+   first bounded effect in one medium-grained local integration campaign;
+2. a truthful body-free observation reviewed into a result-specific decision;
+3. exact cleanup proof or a separately approved correction, without reusing a
    consumed grant;
-5. a fresh physical rehearsal that actually reaches PostgreSQL 16.10,
+4. a fresh physical rehearsal that actually reaches PostgreSQL 16.10,
    validates catalog `14 / 207 / 172 / 44`, apply/restart/rollback and zero
    residue;
-6. production pool/migration/runtime/route readiness; and
-7. publication-stable Projection approval, deployment/provisioning, exact Room
+5. production pool/migration/runtime/route readiness; and
+6. publication-stable Projection approval, deployment/provisioning, exact Room
    activation inputs and one real bounded Guest encounter.
 
 None of those facts can be inferred from repository construction.
@@ -136,13 +151,10 @@ None of those facts can be inferred from repository construction.
 
 Do not approve or activate this Card. Current work stops exactly at:
 
-`LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
-The next permitted repository step is only the separately proposed,
-hash-pinned
-`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1.md`
-and
-`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1.md`.
+The next decision is whether to authorize a bounded local integration campaign;
+this Card does not authorize that campaign or any Docker/PostgreSQL effect.
 Even an approved diagnostic would authorize observation only. Cleanup,
 another Physical Execution, production and Gate C each remain separate later
 decisions.

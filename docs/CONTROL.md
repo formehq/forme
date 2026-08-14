@@ -3,22 +3,18 @@
 - Updated: 2026-08-14
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and #67 has repository/offline Public Core plus
-  concrete Local PostgreSQL wiring. The disposable physical rehearsal and its
-  later cleanup rescue each consumed one exact grant and failed closed on an
-  unclassified exact-name inspect result. Neither created or mutated a Docker
-  resource, and neither reached PostgreSQL, SQL or a domain action. Both
-  grants are permanently non-retryable; the two exact four-entry forensic
-  roots remain retained. Kf `bd3cdf7` / Lf `7384ef8` now freeze a
-  repository-only body-free inspect diagnostic: a later separately authorized
-  lifecycle can fingerprint exactly one version call and one container inspect
-  without retaining stdout/stderr bodies. The exact stop is
-  `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-  ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED /
-  PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Diagnostic
-  execution, cleanup, another Physical Execution, production pool/migration,
-  runtime route, traffic and Gate C remain closed. The next step is only the
-  versioned Diagnostic Card V1/Review V1 proposal. Host Binding is historical
-  setup evidence and is not the #67 product gate.**
+  concrete Local PostgreSQL wiring. The physical rehearsal and cleanup rescue
+  failed closed before PostgreSQL. A later one-use body-free diagnostic was
+  approved, but its `prepare` failed before grant creation and before every
+  Docker/socket effect with the generic code `local_postgres_runner_failed`.
+  Kp `eaca190` / Lp `7a31dba` now freeze a repository-only correction that
+  classifies all 19 prepare stages, keeps failure output body-free, and proves
+  exact same-inode rollback. The exact stop is
+  `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Replacement diagnostic, cleanup, Physical Execution,
+  production pool/migration, runtime route, traffic and Gate C remain closed.
+  Host Binding is historical setup evidence and is not the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
   repository mechanisms are closed/implemented. #66 proved current Twin →
@@ -51,29 +47,27 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **propose and independently review only
-  `R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CARD-V1.md`
-  and
-  `R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-OWNER-REVIEW-V1.md`,
-  binding the frozen
-  [`Body-Free Docker Inspect Diagnostic Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md),
-  Kf/Lf and the external committed-Mf audit; do not prepare a diagnostic grant,
-  resolve the Docker socket, call Docker or touch either forensic root. The hash-pinned
+- Next action: **review one medium-grained local integration campaign rather
+  than another chain of per-commit approvals. Its first external effect would
+  be a separately authorized replacement body-free diagnostic; its intended
+  exit would be truthful PostgreSQL rehearsal evidence or an exact fail-closed
+  return. Until that review, do not prepare a replacement grant, resolve the
+  Docker socket, call Docker or touch any forensic root. The hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
   stopped at Technical Review. The accepted #66 review
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current body-free inspect diagnostic bindings: index
-  `sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`,
+- Current prepare-failure correction bindings: index
+  `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
   schema
-  `sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`,
+  `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
   evidence
-  `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`,
+  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
   report
-  `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`.
-- Current stop: `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
+- Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
@@ -324,8 +318,11 @@ Current truth:
   rehearsal and separately approved cleanup rescue each consumed one grant,
   reached exact-name inspection, and ended FAILED/BLOCKED. They created no
   Docker resource and reached no PostgreSQL/SQL effect. Kf/Lf
-  `bd3cdf7` / `7384ef8` now freeze the repository-only body-free observation
-  membrane; Diagnostic execution and cleanup remain separately gated. PR #74 is merged as a fixture-only
+  `bd3cdf7` / `7384ef8` froze the repository-only body-free observation
+  membrane. Its later V1 prepare failed before grant creation with a generic
+  runner code and zero Docker/socket effects. Kp/Lp `eaca190` / `7a31dba` now
+  freeze the 19-stage body-free failure membrane; replacement Diagnostic
+  execution and cleanup remain separately gated. PR #74 is merged as a fixture-only
   repair. The implementation proves a local Room-bound
   reapproval, immutable receipt/recovery, offline public Projection → independent
   curation → one 24-hour/one-use knock → private durable Interaction → local
