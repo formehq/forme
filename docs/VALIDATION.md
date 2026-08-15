@@ -1,16 +1,16 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-14
-- Prepare-failure correction bindings: index
-  `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
+- Updated: 2026-08-15
+- Integration Campaign bindings: index
+  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
   schema
-  `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
+  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
   evidence
-  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
+  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
   report
-  `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
-- Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -44,10 +44,13 @@
   The repository-only body-free inspect diagnostic is Green at Kf `bd3cdf7` /
   Lf `7384ef8`. Its approved V1 prepare then failed before grant creation with
   `local_postgres_runner_failed` and zero Docker/socket/PostgreSQL/SQL effects.
-  Kp `eaca190` / Lp `7a31dba` now freeze exact 19-stage body-free failure
-  classification and rollback, with exact totals 162 / 734 / 145 / 45.
-  Replacement diagnostic, cleanup, another Physical Execution and Gate C
-  remain `NOT_REQUESTED`; R4 is not Owner-accepted or Done**
+  Kp `eaca190` / Lp `7a31dba` froze exact 19-stage body-free failure
+  classification and rollback. The Owner then approved a medium-grained
+  outcome envelope, and Integration Campaign Ki `76afe10` / Li `4c20af2`
+  reached repository Technical Review Green with focused 14/14, complete
+  offline 747/747, Gate-B Core 145/145 and spine 45/45. Campaign execution,
+  cleanup, production and Gate C remain `NOT_REQUESTED`; R4 is not
+  Owner-accepted or Done**
 
 This document records what real use has taught us. It is deliberately separate from:
 
@@ -1208,26 +1211,26 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   `sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979`,
   and the journal is 6 entries / head
   `sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491`.
-  Kf `bd3cdf71055136dce2731d7da3bef9dc89e6f4d7` and Lf
-  `7384ef89e70209657f1bb8714d9f708004bacc13` freeze the body-free diagnostic;
-  machine evidence is
-  `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`
-  and the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md)
-  records the human audit. Exact deny-network totals are 160 / 85 / 410 / 732
-  / 145 / 45; strict Ajv, authority topology, committed blobs, output-shape
-  fingerprints, hostile grant/journal/receipt, crash, drift, TypeScript,
-  no-AI, docs and diff checks pass with 0 Blocker / 0 Important.
+  Integration Campaign Ki `76afe10ee53b81f316dbc48bd4e412771e2ae0c7`
+  and Li `4c20af20b24f21cce4566ba6c511e5ac39b527df` freeze one closed
+  diagnosis/cleanup/absence/rehearsal state machine. Machine evidence is
+  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`;
+  the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+  records the human audit. Focused 14/14, offline 747/747, Gate-B Core 145/145
+  and spine 45/45 are Green; strict Ajv rejected 11 hostile evidence
+  mutations. All construction effects remain zero.
 - Product judgment: the system still has not reached PostgreSQL or the real
-  encounter, but it no longer needs to guess Docker text. A later one-use
-  observation can capture useful cryptographic facts without retaining
-  stdout/stderr bodies or gaining cleanup authority.
-- Not proven: diagnostic execution, exact resource absence, Cleanup Green,
+  encounter, but the next local decision is now one coherent one-use campaign
+  rather than several implementation-level approvals. Safety boundaries did
+  not move: diagnosis remains body-free, cleanup requires exact ownership and
+  physical construction requires durable absence.
+- Not proven: campaign execution, exact resource absence, Cleanup Green,
   PostgreSQL 16.10, target catalog 14 / 207 / 172 / 44,
   apply/restart/rollback, production runtime/traffic, the real encounter or
   Gate C.
-- Consequence: stop. Only the versioned Diagnostic Card V1/Review V1 proposal
-  may be constructed next. Diagnostic prepare/execute, cleanup, another
-  physical rehearsal and Gate C each require later separate exact authority.
+- Consequence: stop. Only the versioned Integration Campaign Execution
+  Card/Review proposal may be constructed next. Campaign prepare/execute,
+  cleanup, production and Gate C each require later separate exact authority.
 
 ## Evidence round 27 — failed V1 prepare and stage-exact correction
 
@@ -1257,3 +1260,45 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   integration campaign as one medium-grained outcome, not as another sequence
   of ceremonial hash approvals. Physical Execution, production and Gate C
   remain not requested.
+
+## Evidence round 28 — medium-grained Local PostgreSQL Integration Campaign constructed
+
+- Case: the Owner approved one repository-only outcome envelope with nine
+  choices, an exact 15-path/three-commit workset and zero external-effect
+  ceiling. The intended future outcome is one conditional local campaign:
+  diagnose exact historical names, remove only exact-owned leftovers, prove
+  absence, then run the frozen disposable PostgreSQL rehearsal.
+- Technical evidence: Ki
+  `76afe10ee53b81f316dbc48bd4e412771e2ae0c7` / tree
+  `49ab93f6c3ef5b57488d4dda244aad527a9dafd6` is exact `2M`; Li
+  `4c20af20b24f21cce4566ba6c511e5ac39b527df` / tree
+  `621943118f9f4699b57bed954bfb602cdd125361` is exact `3A`. G2 is
+  `sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc`
+  and G3 is
+  `sha256:6e9c4f9394c70641fd4fb75d378ef75d6f82ccae37c4f7557d5020ac1d3a8868`.
+  The strict index/schema/evidence hashes are
+  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
+  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`
+  and
+  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`.
+  Focused campaign tests pass 14/14; the latest complete offline regression
+  passes 747/747; Gate-B Core 145/145 and spine 45/45 remain Green. Strict Ajv,
+  11 hostile evidence mutations, committed topology, body-free schemas,
+  write-ahead crash/clock/host/headroom/recovery matrices, TypeScript, no-AI,
+  inventory, docs and diff checks pass.
+- Effect truth: repository construction read no forensic root, created or
+  consumed no campaign grant, resolved no Docker socket, called no Docker/OCI
+  or PostgreSQL port, ran no SQL and made no production, traffic, Provider,
+  message, deploy, publication, admission, Gate C, push, PR, merge, release or
+  spend effect.
+- Product judgment: the campaign reduces coordination overhead without
+  weakening product safety. The owner can next decide one understandable local
+  outcome instead of approving each internal correction. This is still
+  Technical Review evidence, not a real integration result or Owner Experience
+  Acceptance.
+- Consequence: stop at
+  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED /
+  PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Construct the final
+  versioned Execution Card/Owner Review, then return for one separate exact
+  local-effect decision.

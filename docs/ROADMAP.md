@@ -1,20 +1,20 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-14
+- Updated: 2026-08-15
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; there is no calendar-date substitute for Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- Prepare-failure correction bindings: index
-  `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
+- Integration Campaign bindings: index
+  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
   schema
-  `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
+  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
   evidence
-  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
+  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
   report
-  `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
-- Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
@@ -31,10 +31,11 @@
   no PostgreSQL or SQL effect. The repository-only body-free diagnostic is
   Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`. Its V1 prepare then
   failed before grant creation with zero Docker/socket effects. Kp `eaca190` /
-  Lp `7a31dba` now freeze exact stage classification and rollback, with stop
-  `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED /
-  PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`; #67
+  Lp `7a31dba` froze exact stage classification and rollback. The
+  Owner-approved medium-grained Integration Campaign is repository Technical
+  Review Green at Ki `76afe10` / Li `4c20af2`; its one-use execution Card and
+  Review are the next gate. Campaign execution, cleanup, production and Gate C
+  remain unrequested; #67
   remains In Progress until
   later activation and one real Public Room / bounded
   Guest knock pass their gates and Owner Experience Acceptance. #68 Fresh local
@@ -272,9 +273,9 @@ Native Harness role clarification
   → Diagnostic Card V1 + Review V1 + Owner approval [approved and prepare consumed ✓]
   → V1 diagnostic prepare [FAILED pre-grant · Docker/socket/PG/SQL 0]
   → prepare-failure correction [Technical Review ✓ · Kp/Lp `eaca190`/`7a31dba`]
-  → replacement diagnostic / local integration campaign [review required]
-  → result-specific cleanup correction [not requested]
-  → fresh Physical Execution V3 [not requested]
+  → Integration Campaign construction [Technical Review ✓ · Ki/Li `76afe10`/`4c20af2`]
+  → versioned Integration Campaign Execution Card + Review [approval required]
+  → one-use diagnosis → exact-owned cleanup → absence gate → frozen rehearsal [not requested]
   → publication-stable successor + Room-bound exact approval
   → Gate C production Public Core + one real knock [not requested]
   → #68 Fresh candidate → #69 exact Response

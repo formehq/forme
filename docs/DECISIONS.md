@@ -1429,3 +1429,62 @@ reached. This reduces ceremonial approval without weakening Owner authority.
 The next review is a medium-grained local integration campaign. No replacement
 diagnostic, cleanup, Physical Execution, production action or Gate C action is
 authorized by this decision. #67 and R4 remain open.
+
+## 2026-08-15 — Local PostgreSQL Integration Campaign reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved medium-grained outcome envelope and all
+nine choices in the committed Construction Packet
+`sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50`
+and Owner Review
+`sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f`.
+The approval authorized exactly 15 paths and three repository-only commits,
+while keeping replacement diagnostic, cleanup, Physical Execution, production
+and Gate C not requested.
+
+**Result:** Ki `76afe10ee53b81f316dbc48bd4e412771e2ae0c7` / tree
+`49ab93f6c3ef5b57488d4dda244aad527a9dafd6` freezes the exact `2M` campaign
+runner/test delta. Li `4c20af20b24f21cce4566ba6c511e5ac39b527df` / tree
+`621943118f9f4699b57bed954bfb602cdd125361` freezes the exact `3A` machine
+evidence delta. G2 is
+`sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc`;
+G3 is
+`sha256:6e9c4f9394c70641fd4fb75d378ef75d6f82ccae37c4f7557d5020ac1d3a8868`.
+The artifact index is
+`sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`;
+the strict schema is
+`sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`;
+machine evidence is
+`sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+is `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`;
+and the current non-approvable [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+is `sha256:deeb16cff4c6ba3082306bbf7c62f7f45a193260a1ee94cd8b344fbae4b296b4`.
+Committed Ki/Li audit summaries are
+`sha256:c1f5aafb2df9ac07c21fa72f652801f97ba2987d3c52e82d5c312823ef5bab4e`
+and
+`sha256:9bafd4a36e5261679ba54fb179c68d69bc89ce1283eab4cb2ddbea0811a0dcc1`.
+
+**Constructed contract:** one future one-use campaign may, only after a
+separate exact execution approval, perform a body-free diagnostic over the
+three historical exact names, remove only exact-owned resources, prove all
+three absent, and run the frozen disposable PostgreSQL rehearsal. It uses a
+closed v1 grant/journal/receipt family, write-ahead reservations, one campaign
+consumption, one diagnostic, at most one historical cleanup, one physical
+construction, at most two cleanup-only physical recoveries, one anonymous
+image pull and no retry. Foreign, unlabelled, malformed, unknown, ambiguous,
+expired, drifted or ceiling-exhausted state stops.
+
+**Validation and effect:** focused campaign tests pass 14/14; the complete R4
+offline regression passes 747/747; Gate-B Core passes 145/145; spine passes
+45/45. Strict Ajv, 11 hostile evidence mutations, committed topology and blob
+bindings, 48 write-ahead crash cases, clock/host/headroom/recovery ceilings,
+TypeScript, no-server-AI, inventory, docs and diff checks pass with 0 Blocker /
+0 Important. Construction made zero forensic-root, campaign-grant,
+Docker/socket/OCI, PostgreSQL/SQL, production/runtime/traffic,
+Provider/model/email, deploy/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the final versioned Integration Campaign Execution Card/Owner Review may
+be added next. Campaign prepare/execute, cleanup, production and Gate C require
+a later separate exact Owner approval. #67 and R4 remain open.

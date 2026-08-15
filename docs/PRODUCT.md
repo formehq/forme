@@ -19,9 +19,12 @@
   SQL or domain action was created; absence remains unknown. The repository-only
   body-free inspect diagnostic reached Technical Review Green at Kf `bd3cdf7`
   / Lf `7384ef8`; its approved V1 prepare then failed before grant creation
-  and before Docker/socket effects. Kp `eaca190` / Lp `7a31dba` now freeze the
-  19-stage body-free correction. Replacement diagnostic, cleanup, another
-  physical execution, target
+  and before Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze the
+  19-stage body-free correction. The Owner-approved Integration Campaign
+  repository construction is Technical Review Green at Ki `76afe10` / Li
+  `4c20af2`; it closes the future body-free diagnostic, exact-ownership
+  cleanup, absence gate and frozen disposable rehearsal into one one-use
+  state machine. Campaign execution, cleanup, target
   PostgreSQL, vault, transport, traffic and
   Gate C remain false. Draft PR #76 remains
   unmerged; production activation
@@ -29,16 +32,16 @@
   attempts are consumed Yellow
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
-- Updated: 2026-08-14
-- Prepare-failure correction bindings: index
-  `sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
+- Updated: 2026-08-15
+- Integration Campaign bindings: index
+  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
   schema
-  `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
+  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
   evidence
-  `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
+  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
   report
-  `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
-- Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

@@ -2,7 +2,7 @@
 
 The repository keeps a deliberately small decision surface.
 
-Current execution truth (2026-08-14): R0–R3 are Done and Owner-accepted. #66
+Current execution truth (2026-08-15): R0–R3 are Done and Owner-accepted. #66
 local Projection review is Owner-accepted and PR #72 is integrated into the R4
 branch. #67 is offline Technical Review Green on Draft PR #73, with no
 production Room/database mutation, deployment, publication, admission, real
@@ -18,23 +18,27 @@ They created no Docker resource and made no PostgreSQL/SQL effect; absence
 remains unknown. The repository-only body-free inspect diagnostic reached
 Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`; its approved V1
 `prepare` later failed before grant creation and before all Docker/socket
-effects with a generic runner code. Kp `eaca190` / Lp `7a31dba` now freeze an
-exact 19-stage body-free failure membrane and same-inode rollback proof.
-Replacement diagnostic, cleanup, Physical Execution and Gate C are not
-requested. R4 remains Building and is not
+effects with a generic runner code. Kp `eaca190` / Lp `7a31dba` froze an
+exact 19-stage body-free failure membrane and same-inode rollback proof. The
+Owner-approved Integration Campaign repository construction is now Technical
+Review Green at Ki `76afe10` / Li `4c20af2`. It combines body-free exact-name
+diagnosis, exact-ownership cleanup, absence gating and the frozen disposable
+PostgreSQL rehearsal under one future one-use authority, while construction
+itself made zero Docker/socket/PostgreSQL/SQL effects. Campaign execution,
+cleanup, production and Gate C are not requested. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current prepare-failure correction bindings: index
-`sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`,
+Current Integration Campaign bindings: index
+`sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
 schema
-`sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`,
+`sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
 evidence
-`sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`,
+`sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
 report
-`sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`.
-Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -51,6 +55,7 @@ Current stop: `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TE
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact missing-container diagnostic corrected and a future cleanup-rescue membrane constructed without executing rescue? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a one-use body-free inspect diagnostic constructed without authorizing or calling Docker? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the failed V1 prepare made stage-exact and body-free without granting a replacement diagnostic? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md) | How did one medium-grained repository campaign close diagnosis, exact-owned cleanup, absence gating and the frozen rehearsal contract without executing them? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |
