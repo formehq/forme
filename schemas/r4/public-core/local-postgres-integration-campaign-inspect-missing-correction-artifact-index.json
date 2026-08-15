@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_inspect_missing_correction_artifact_index.v1",
+  "status": "IMPLEMENTATION_FROZEN",
+  "scope": {
+    "issue": 67,
+    "outcome": "Correct exact Docker inspect-missing frames and close the Gate-B concurrent validation ambiguity",
+    "currentGate": "R4_CONTROLLED_PRESENCE_BUILDING",
+    "repositoryOnly": true
+  },
+  "authority": {
+    "inspectMissingAddendumSha256": "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505",
+    "inspectMissingOwnerReviewSha256": "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324",
+    "gateBConcurrencyAddendumSha256": "sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7",
+    "gateBConcurrencyOwnerReviewSha256": "sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7",
+    "ownerOutcomeEnvelopeConfirmed": true,
+    "replacementCampaign": "NOT_REQUESTED",
+    "docker": "NOT_REQUESTED",
+    "cleanup": "NOT_REQUESTED",
+    "postgresql": "NOT_REQUESTED",
+    "production": "NOT_REQUESTED",
+    "gateC": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "inspectAuthority": {
+      "addendumHead": "15536817efe6b0b7a5c8014e912f02429f197ef1",
+      "addendumTree": "503c9432fd2b75fd16857afe58c2eb78a24581da",
+      "reviewHead": "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+      "reviewTree": "34b9fd454725c15710946503af7d8be126fa09ab"
+    },
+    "inspectImplementation": {
+      "head": "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+      "tree": "14526ed95feae2da6c9c14a89ece48616822e4e8",
+      "parentHead": "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R"
+    },
+    "gateBConcurrencyAuthority": {
+      "addendumHead": "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
+      "addendumTree": "8860d06a9ccc821be62bf62ee79cd356b8b7fb52",
+      "addendumParentHead": "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+      "reviewHead": "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+      "reviewTree": "63e69b5594aa9ba6627b825b1ac4aa636e15605e",
+      "reviewParentHead": "e21c441a6154f3c08b96ccbf7f0f7b693107b99a"
+    },
+    "gateBConcurrencyImplementation": {
+      "head": "98392bf19356982c884961a1425cd97ff33811bf",
+      "tree": "796684556d04368c3acd3926d0c86992affa205c",
+      "parentHead": "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R"
+    }
+  },
+  "aggregates": {
+    "ordering": "unsigned UTF-8 byte order",
+    "framing": "path NUL sha256:<digest> NUL decimal-byte-count LF",
+    "inspectImplementation": {
+      "frameBytes": 243,
+      "sha256": "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f"
+    },
+    "gateBConcurrencyImplementation": {
+      "frameBytes": 240,
+      "sha256": "sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "commit": "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 735755,
+      "sha256": "sha256:f012fd876cc49bd14be3519af6aeef98d7451ab29c90c786a7f242f59915984c"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "commit": "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 196175,
+      "sha256": "sha256:25e51e491a37e1e048e6bce590c8cf5d08599a4fa8b2fd02cf83a17523280b83"
+    },
+    {
+      "path": "scripts/r4-gate-b-physical-runner.mjs",
+      "commit": "98392bf19356982c884961a1425cd97ff33811bf",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 656525,
+      "sha256": "sha256:8e0a6afca5674975c150a40f6f9dafd9a0b1d84be1d4886a325fd0f88d370184"
+    },
+    {
+      "path": "test/r4-gate-b-core/physical-runner.test.ts",
+      "commit": "98392bf19356982c884961a1425cd97ff33811bf",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 322161,
+      "sha256": "sha256:d2efcb6ea9780b1c8d44bd1d58d4b3d0557baf68845c226226feac5a871dc6a3"
+    }
+  ],
+  "inspectMissingContract": {
+    "dockerCliVersion": "29.3.1",
+    "missingStatus": 1,
+    "missingStdoutByteCount": 1,
+    "missingStdoutSha256": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "inspectKinds": [
+      "image.inspect",
+      "container.inspect",
+      "network.inspect",
+      "volume.inspect"
+    ],
+    "productionAndFakeShareRawParser": true,
+    "unknownNeverBecomesAbsence": true,
+    "rawBodiesRetained": false
+  },
+  "gateBConcurrencyContract": {
+    "oldFixedTerminalWaitMilliseconds": 10000,
+    "terminalWaitBasis": "MIN_ABSOLUTE_AUTHORITY_OR_HELPER_START_CEILING_PLUS_EXISTING_CLEANUP_GRACE",
+    "helperStartCeilingMilliseconds": 900000,
+    "cleanupGraceMilliseconds": 2000,
+    "retryCount": 0,
+    "focusedDeadlineCases": 2,
+    "defaultConcurrentGreenRuns": 2,
+    "serialFullGreenRuns": 1,
+    "realHelperStarts": 0,
+    "providerCalls": 0,
+    "physicalEffects": 0
+  },
+  "immutableCampaignHistory": {
+    "executionCardV1Sha256": "sha256:c44e629b62593d7f80ba24a2efd920ebaacb611fdd99975c2912e4ae0c0e4c34",
+    "executionReviewV1Sha256": "sha256:74a63a933ec89b991c7ff4403835372bc7fa79af30b2ee2cf5006a9513aee909",
+    "failedFirstPrepareRoot": "/Users/zaynw/.forme-r4-integration-campaign-c44e629b",
+    "consumedR2Root": "/Users/zaynw/.forme-r4-integration-campaign-c44e629b-r2",
+    "consumedGrantSha256": "sha256:7fdf12a2f7bd195ef07218e724f45708ec0cac93c1175605668678df7c236e81",
+    "terminalEvidenceSha256": "sha256:be312a188ec955f43bb2cb22bd276f1782ceaaa89da0d5c79d582d8f597c0501",
+    "terminalJournalEntryCount": 7,
+    "terminalJournalSha256": "sha256:5f22912b70c2b4bf5f9e4007afb27763931d5c158e41a4eebb7f543bf4208a04",
+    "rootsReadDuringConstruction": false,
+    "rootsModifiedDuringConstruction": false
+  },
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/README.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ]
+}
