@@ -16,15 +16,17 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   sequence.** R1–R3 are Owner-accepted and #66 completed one real-Twin,
   local-only Projection review. #67 has repository/offline Public Core and
   Local PostgreSQL wiring, including the concrete `pg` executor and 20-method
-  store bridge. The new Integration Campaign repository construction is
-  Technical Review Green at Ki `76afe10` / Li `4c20af2`: it combines a
-  body-free exact-name diagnostic, ownership-gated historical cleanup,
-  absence-before-physical proof and the frozen disposable PostgreSQL rehearsal
-  under one future one-use authority. This construction ran 747/747 offline
-  checks and made zero Docker/socket/PostgreSQL/SQL effects. It is not a
-  successful Docker or PostgreSQL integration. Campaign execution, cleanup,
-  production and Gate C remain `NOT_REQUESTED`; the next decision is one final
-  versioned Execution Card/Review. Vault, HTTPS transport, production
+  store bridge. The Integration Campaign inspect-missing correction is now
+  repository Technical Review Green at Kic `1e93280`, Kgc `98392bf` and Lic
+  `614202e`: production and fake diagnostics share one exact body-free parser,
+  and the prior Gate-B concurrent validation ambiguity is closed without
+  skipping or serialising the default command. Validation is 15/15 focused,
+  176/176 runner, 748/748 offline, two consecutive 146/146 default Gate-B runs,
+  one 146/146 serial Gate-B run and 45/45 spine. Construction made zero
+  Docker/socket/PostgreSQL/SQL effects. It is not a successful Docker or
+  PostgreSQL integration. Fresh Campaign V2 execution, cleanup, production and
+  Gate C remain `NOT_REQUESTED`; the next decision is a fresh versioned V2
+  Execution Card/Review. Vault, HTTPS transport, production
   pool/migration, runtime route and traffic readiness remain false. #67 has not
   created or mutated a production Room, deployed, published, admitted a
   Projection, handled real Guest data or run a real public knock. R4 is not
@@ -37,7 +39,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   rescue correction Kd/Ld are `0fdf68c` / `62d0c98`; body-free inspect
   diagnostic Kf/Lf are `bd3cdf7` / `7384ef8`; prepare-failure correction
   Kp/Lp are `eaca190` / `7a31dba`; Integration Campaign Ki/Li are
-  `76afe10` / `4c20af2`;
+  `76afe10` / `4c20af2`; inspect-missing Kic/Kgc/Lic are
+  `1e93280` / `98392bf` / `614202e`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -51,22 +54,22 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
 - Production gap: the current Public Core has repository/offline proof and a
-  fully constructed local Integration Campaign, not a PostgreSQL rehearsal
+  corrected local Integration Campaign contract, not a PostgreSQL rehearsal
   Green. Historical resource absence remains unknown, all forensic roots are
   retained unchanged, and no Docker resource, PostgreSQL process, database or
-  SQL effect ran during construction. No production PostgreSQL migration,
+  SQL effect ran during correction construction. No production PostgreSQL migration,
   Gate C deployment/provisioning, production Room mutation, public traffic,
   external email, Provider call, production secret or spend has occurred.
-- Integration Campaign bindings: index
-  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
+- Inspect-missing correction bindings: index
+  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
   schema
-  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
+  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
   evidence
-  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
+  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
   report
-  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
+  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
   These prove repository construction only.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 

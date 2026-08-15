@@ -1,13 +1,13 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-15
-- Current predecessor: Local PostgreSQL Integration Campaign repository construction
+- Current predecessor: Local PostgreSQL Integration Campaign inspect-missing and Gate-B concurrency corrections
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the medium-grained Integration Campaign reached
-repository Technical Review Green. It cannot prepare or consume a campaign
+Gate C is still closed after the inspect-missing and Gate-B concurrency
+corrections reached repository Technical Review Green. It cannot prepare or consume a campaign
 grant, inspect or remove a Docker resource, run PostgreSQL, migrate production,
 activate a route or carry traffic.
 
@@ -21,33 +21,35 @@ authorities and failed closed before PostgreSQL; the later V1 diagnostic
 prepare failed before grant creation and before Docker/socket effects. Those
 histories remain immutable and non-retryable.
 
-The Owner-approved Integration Campaign construction now closes the next local
-mechanism into one state machine: body-free exact-name diagnosis, cleanup only
-for exact-owned historical resources, durable absence-before-physical gating,
-the frozen disposable PostgreSQL rehearsal, write-ahead accounting, at most
-two cleanup-only physical recoveries and exact terminal closure. Construction
-is Technical Review Green. The campaign has not been prepared or executed.
+The first Integration Campaign stopped before PostgreSQL because its pinned
+body-free parser did not classify the observed inspect-missing result. The
+repository correction then exposed an independent false Red in default
+concurrent Gate-B validation. Kic fixed the shared parser; Kgc bound feeder
+waiting to the remaining approved authority deadline without retry; Lic froze
+strict machine evidence. Default Gate-B validation is Green twice concurrently
+and once serially. A fresh Campaign V2 has not been proposed, prepared or
+executed.
 
 ## Exact current bindings
 
 | Binding | Exact value |
 |---|---|
-| Construction Packet | `sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50` |
-| Construction Owner Review | `sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f` |
-| Ki HEAD / tree | `76afe10ee53b81f316dbc48bd4e412771e2ae0c7` / `49ab93f6c3ef5b57488d4dda244aad527a9dafd6` |
-| Li HEAD / tree | `4c20af20b24f21cce4566ba6c511e5ac39b527df` / `621943118f9f4699b57bed954bfb602cdd125361` |
-| G2 / G3 | `sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc` / `sha256:6e9c4f9394c70641fd4fb75d378ef75d6f82ccae37c4f7557d5020ac1d3a8868` |
-| artifact index | `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a` |
-| strict evidence schema | `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb` |
-| machine evidence | `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3` |
-| construction report | `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2` |
-| committed Ki audit | `sha256:c1f5aafb2df9ac07c21fa72f652801f97ba2987d3c52e82d5c312823ef5bab4e` |
-| committed Li audit | `sha256:9bafd4a36e5261679ba54fb179c68d69bc89ce1283eab4cb2ddbea0811a0dcc1` |
+| Inspect-Missing Correction Addendum / Review | `sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505` / `sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324` |
+| Kic HEAD / tree / G2 | `1e93280bc3842d40e6f797a38ca4bfa2a2277813` / `14526ed95feae2da6c9c14a89ece48616822e4e8` / `sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f` |
+| Concurrency Addendum SHA / HEAD / tree | `sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7` / `e21c441a6154f3c08b96ccbf7f0f7b693107b99a` / `8860d06a9ccc821be62bf62ee79cd356b8b7fb52` |
+| Concurrency Review SHA / HEAD / tree | `sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7` / `9f178918c416bd3be54e4cbc44e0c64567a78ca1` / `63e69b5594aa9ba6627b825b1ac4aa636e15605e` |
+| Kgc HEAD / tree / G2 | `98392bf19356982c884961a1425cd97ff33811bf` / `796684556d04368c3acd3926d0c86992affa205c` / `sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4` |
+| Lic HEAD / tree / G3 | `614202e8765372755f75ce7fa465ef9e550971a8` / `180d6a9fa048e07e72ddbab8e2e4e2e354fb902a` / `sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39` |
+| artifact index | `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125` |
+| strict evidence schema | `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204` |
+| machine evidence | `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1` |
+| construction report | `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d` |
+| committed Kic / Kgc / Lic audits | `sha256:7c1ea06b0f7c1422b29ef6eba6a92a063d1e6495e3d7a5cb6adccd535b1bd094` / `sha256:aeb46997b467b5471f484de08c543b061e0caed398d9aa6c83200203252f231f` / `sha256:3623dafd4f988503955b64206fe7bb292787de7c864ea38bcd5f4f9f5f9dd9e6` |
 
 The future local-effect proposal may use only these versioned add-only paths:
 
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V1.md`;
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V1.md`.
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V2.md`;
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V2.md`.
 
 They are not Gate C authority. They may authorize only one disposable local
 campaign after a separate exact Owner decision.
@@ -71,8 +73,12 @@ None can be revived, retried or interpreted as campaign authority.
 | exact-ownership cleanup guard constructed | `true` |
 | durable absence-before-physical gate constructed | `true` |
 | write-ahead/clock/host/headroom/recovery guards constructed | `true` |
-| focused campaign fake tests | `14 / 14` |
-| complete offline regression | `747 / 747` |
+| focused correction tests | `15 / 15` |
+| local PostgreSQL runner | `176 / 176` |
+| complete offline regression | `748 / 748` |
+| Gate-B default concurrent validation | `146 / 146` twice |
+| Gate-B serial validation | `146 / 146` |
+| spine | `45 / 45` |
 | campaign execution approved | `false` |
 | campaign grant prepared / consumed | `false / false` |
 | historical resources observed absent | `false` |
@@ -93,9 +99,10 @@ push, PR mutation, merge or spend.
 
 ## What must happen before Gate C can become approvable
 
-1. Commit and independently audit the exact Mi status freeze.
-2. Construct the versioned Integration Campaign Execution Card/Owner Review
-   from committed Mi bytes and return for one separate local-effect approval.
+1. Commit and independently audit the exact Mic status freeze.
+2. Construct the fresh versioned V2 Integration Campaign Execution Card/Owner
+   Review from committed Mic bytes and return for one separate local-effect
+   approval.
 3. Under that one-use authority only, reach complete campaign Green: historical
    resource absence, PostgreSQL `160010`, target catalog `14 / 207 / 172 / 44`,
    the frozen `3 / 3 / 1` schema sequence, `23 / 20` actions and zero owned
@@ -108,6 +115,6 @@ No local campaign outcome automatically opens production or marks #67/R4 Done.
 
 ## Mandatory stop
 
-`LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 Gate C remains intentionally non-approvable.

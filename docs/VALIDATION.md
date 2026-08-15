@@ -2,15 +2,15 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-15
-- Integration Campaign bindings: index
-  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
+- Inspect-missing correction bindings: index
+  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
   schema
-  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
+  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
   evidence
-  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
+  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
   report
-  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
@@ -45,10 +45,14 @@
   Lf `7384ef8`. Its approved V1 prepare then failed before grant creation with
   `local_postgres_runner_failed` and zero Docker/socket/PostgreSQL/SQL effects.
   Kp `eaca190` / Lp `7a31dba` froze exact 19-stage body-free failure
-  classification and rollback. The Owner then approved a medium-grained
-  outcome envelope, and Integration Campaign Ki `76afe10` / Li `4c20af2`
-  reached repository Technical Review Green with focused 14/14, complete
-  offline 747/747, Gate-B Core 145/145 and spine 45/45. Campaign execution,
+  classification and rollback. The first Integration Campaign stopped before
+  PostgreSQL on an inspect-missing parser defect. The repository-only parser
+  correction and Gate-B concurrency validation correction are now Technical
+  Review Green at Kic `1e93280`, Kgc `98392bf` and Lic `614202e`. Focused
+  correction tests pass 15/15, the local PostgreSQL runner 176/176, complete
+  offline 748/748, Gate-B Core 146/146 twice concurrently and once serially,
+  and spine 45/45. A fresh Campaign V2 has not been prepared or executed.
+  Campaign execution,
   cleanup, production and Gate C remain `NOT_REQUESTED`; R4 is not
   Owner-accepted or Done**
 
@@ -1302,3 +1306,46 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Construct the final
   versioned Execution Card/Owner Review, then return for one separate exact
   local-effect decision.
+
+## Evidence round 29 — inspect parser and Gate-B concurrency corrections constructed
+
+- Case: the first Integration Campaign stopped before PostgreSQL because the
+  exact-name inspect result was not classified by the pinned body-free parser.
+  The repository-only parser correction then revealed that default Gate-B
+  validation could falsely fail under concurrent load because the feeder wait
+  ignored the still-valid authority window. No replacement campaign or Docker
+  effect was authorized.
+- Technical evidence: Kic
+  `1e93280bc3842d40e6f797a38ca4bfa2a2277813` / tree
+  `14526ed95feae2da6c9c14a89ece48616822e4e8` freezes the shared parser. Kgc
+  `98392bf19356982c884961a1425cd97ff33811bf` / tree
+  `796684556d04368c3acd3926d0c86992affa205c` binds the feeder wait to the
+  remaining approved authority deadline without retry. Lic
+  `614202e8765372755f75ce7fa465ef9e550971a8` / tree
+  `180d6a9fa048e07e72ddbab8e2e4e2e354fb902a` freezes strict machine evidence.
+  G2 for Kgc is
+  `sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4`;
+  G3 is
+  `sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39`.
+  The index/schema/evidence hashes are
+  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`
+  and
+  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`.
+  Focused correction tests pass 15/15, the local PostgreSQL runner 176/176,
+  complete offline 748/748, Gate-B 146/146 twice by default concurrently and
+  once serially, and spine 45/45.
+- Effect truth: construction read or changed no forensic root, created or
+  consumed no campaign grant, resolved no Docker socket, called no Docker/OCI
+  or PostgreSQL port, ran no SQL and made no cleanup, production, traffic,
+  Provider, message, deployment, publication, Gate C, push, PR, merge, release
+  or spend effect.
+- Product judgment: the local campaign mechanism is again technically coherent
+  under both default concurrency and serial validation, but it has still not
+  reached PostgreSQL. This is a repaired launchpad, not the MVP encounter.
+- Consequence: stop at
+  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED /
+  PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Only a fresh versioned V2
+  Execution Card/Owner Review may be constructed next; no local effect is
+  authorized by this evidence round.

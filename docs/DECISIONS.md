@@ -1488,3 +1488,65 @@ merge/release or spend effects.
 Only the final versioned Integration Campaign Execution Card/Owner Review may
 be added next. Campaign prepare/execute, cleanup, production and Gate C require
 a later separate exact Owner approval. #67 and R4 remain open.
+
+## 2026-08-15 — inspect-missing and Gate-B concurrency corrections reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved Integration Campaign Inspect-Missing
+Correction and Gate-B Concurrency Validation Correction as one closed
+repository-only successor. The inspect correction Addendum/Review are
+`sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505`
+and
+`sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324`.
+The concurrency Addendum
+`sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7`
+at `e21c441a6154f3c08b96ccbf7f0f7b693107b99a` / tree
+`8860d06a9ccc821be62bf62ee79cd356b8b7fb52` and Owner Review
+`sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7`
+at `9f178918c416bd3be54e4cbc44e0c64567a78ca1` / tree
+`63e69b5594aa9ba6627b825b1ac4aa636e15605e` authorize exactly Kgc → Lic →
+Mic, 15 paths and three commits, with all external effects zero.
+
+**Result:** Kic `1e93280bc3842d40e6f797a38ca4bfa2a2277813` / tree
+`14526ed95feae2da6c9c14a89ece48616822e4e8` freezes the shared pinned
+inspect parser; its G2 is
+`sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f`.
+Kgc `98392bf19356982c884961a1425cd97ff33811bf` / tree
+`796684556d04368c3acd3926d0c86992affa205c` freezes the authority-deadline
+feeder wait without retry; its G2 is
+`sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4`.
+Lic `614202e8765372755f75ce7fa465ef9e550971a8` / tree
+`180d6a9fa048e07e72ddbab8e2e4e2e354fb902a` freezes the strict three-file
+machine evidence delta; G3 is
+`sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39`.
+The artifact index, schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+`sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+`sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`
+and
+`sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
+Committed Kic/Kgc/Lic audit summaries are
+`sha256:7c1ea06b0f7c1422b29ef6eba6a92a063d1e6495e3d7a5cb6adccd535b1bd094`,
+`sha256:aeb46997b467b5471f484de08c543b061e0caed398d9aa6c83200203252f231f`
+and
+`sha256:3623dafd4f988503955b64206fe7bb292787de7c864ea38bcd5f4f9f5f9dd9e6`.
+The current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:9b28a9fc61417f31de26a45b6ecc320019c375f9ca1fe233573cb151b09be05a`.
+
+**Validation and effect:** focused correction tests pass 15/15, the complete
+local PostgreSQL runner 176/176, the complete R4 offline suite 748/748, Gate-B
+146/146 twice under default concurrency and once serially, and spine 45/45.
+Strict Ajv, hostile evidence mutations, committed topology and blobs,
+TypeScript, no-server-AI, inventory, docs and diff checks are Green with 0
+Blocker / 0 Important. Construction made zero forensic-root, grant,
+Docker/socket/OCI, cleanup, PostgreSQL/SQL, production/runtime/traffic,
+Provider/message, deployment/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only a fresh versioned V2 Integration Campaign Execution Card/Owner Review may
+be constructed next. Replacement Campaign, Docker, cleanup, PostgreSQL,
+production and Gate C each require later separate exact Owner authority. #67
+and R4 remain open.

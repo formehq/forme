@@ -6,15 +6,15 @@
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- Integration Campaign bindings: index
-  `sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`,
+- Inspect-missing correction bindings: index
+  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
   schema
-  `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`,
+  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
   evidence
-  `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`,
+  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
   report
-  `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
@@ -32,9 +32,12 @@
   Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`. Its V1 prepare then
   failed before grant creation with zero Docker/socket effects. Kp `eaca190` /
   Lp `7a31dba` froze exact stage classification and rollback. The
-  Owner-approved medium-grained Integration Campaign is repository Technical
-  Review Green at Ki `76afe10` / Li `4c20af2`; its one-use execution Card and
-  Review are the next gate. Campaign execution, cleanup, production and Gate C
+  first Integration Campaign exposed an inspect-missing parser defect and then
+  a Gate-B concurrency validation defect before PostgreSQL. Both repository
+  corrections are Technical Review Green at Kic `1e93280`, Kgc `98392bf` and
+  Lic `614202e`; the default concurrent Gate-B run is Green twice and the
+  serial run once. A fresh versioned Campaign V2 Card/Review is the next gate.
+  Campaign execution, cleanup, production and Gate C
   remain unrequested; #67
   remains In Progress until
   later activation and one real Public Room / bounded
