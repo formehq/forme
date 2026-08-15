@@ -23,23 +23,24 @@ exact 19-stage body-free failure membrane and same-inode rollback proof. The
 first Integration Campaign then stopped before PostgreSQL on an inspect-missing
 parser defect. The Owner-approved parser and Gate-B concurrency validation
 corrections are repository Technical Review Green at Kic `1e93280`, Kgc
-`98392bf` and Lic `614202e`. Production and fake diagnostics share the same
-pinned body-free parser; Gate-B is Green twice by default concurrently and once
-serially. Construction made zero Docker/socket/PostgreSQL/SQL effects. A fresh
-Campaign V2, cleanup, production and Gate C are not requested. R4 remains Building and is not
+`98392bf` and Lic `614202e`. The V2 topology verifier correction is now Green
+at Kvt `85096f6` / Lvt `27540be` and binds the complete committed prefix before
+future Kvt/Lvt/Mvt/Card V2/Review V2. Construction made zero
+Docker/socket/PostgreSQL/SQL effects. V2 Card/Review construction is approved;
+prepare, execution, cleanup, production and Gate C are not requested. R4 remains Building and is not
 on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
 and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current inspect-missing correction bindings: index
-`sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+Current V2 topology verifier correction bindings: index
+`sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
 schema
-`sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+`sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
 evidence
-`sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
+`sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
 report
-`sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
-Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -58,6 +59,7 @@ Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TE
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the failed V1 prepare made stage-exact and body-free without granting a replacement diagnostic? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md) | How did one medium-grained repository campaign close diagnosis, exact-owned cleanup, absence gating and the frozen rehearsal contract without executing them? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md) | How were the inspect-missing parser and Gate-B concurrency validation corrected without authorizing a replacement campaign? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md) | How was the full committed successor topology made executable for V2 Card/Review without authorizing physical execution? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

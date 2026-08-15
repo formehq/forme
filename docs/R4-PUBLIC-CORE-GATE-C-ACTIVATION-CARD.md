@@ -1,13 +1,13 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_V2_TOPOLOGY_VERIFIER_CORRECTION_GREEN_PHYSICAL_EXECUTION_NOT_REQUESTED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-15
-- Current predecessor: Local PostgreSQL Integration Campaign inspect-missing and Gate-B concurrency corrections
+- Current predecessor: Local PostgreSQL Integration Campaign V2 topology verifier correction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the inspect-missing and Gate-B concurrency
-corrections reached repository Technical Review Green. It cannot prepare or consume a campaign
+Gate C is still closed after the V2 topology verifier correction reached
+repository Technical Review Green. It cannot prepare or consume a campaign
 grant, inspect or remove a Docker resource, run PostgreSQL, migrate production,
 activate a route or carry traffic.
 
@@ -27,8 +27,9 @@ repository correction then exposed an independent false Red in default
 concurrent Gate-B validation. Kic fixed the shared parser; Kgc bound feeder
 waiting to the remaining approved authority deadline without retry; Lic froze
 strict machine evidence. Default Gate-B validation is Green twice concurrently
-and once serially. A fresh Campaign V2 has not been proposed, prepared or
-executed.
+and once serially. Kvt then corrected the verifier to bind that complete
+history before the future Kvt/Lvt/Mvt/Card V2/Review V2 chain. V2 Card/Review
+construction is approved, but no campaign has been prepared or executed.
 
 ## Exact current bindings
 
@@ -40,10 +41,13 @@ executed.
 | Concurrency Review SHA / HEAD / tree | `sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7` / `9f178918c416bd3be54e4cbc44e0c64567a78ca1` / `63e69b5594aa9ba6627b825b1ac4aa636e15605e` |
 | Kgc HEAD / tree / G2 | `98392bf19356982c884961a1425cd97ff33811bf` / `796684556d04368c3acd3926d0c86992affa205c` / `sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4` |
 | Lic HEAD / tree / G3 | `614202e8765372755f75ce7fa465ef9e550971a8` / `180d6a9fa048e07e72ddbab8e2e4e2e354fb902a` / `sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39` |
-| artifact index | `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125` |
-| strict evidence schema | `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204` |
-| machine evidence | `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1` |
-| construction report | `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d` |
+| Mic HEAD / tree / G10 | `eb209d314a1084069a15fd4c819cf5e4d5760b77` / `09e95f7d13873303dff81fcf5ec29433c8e589dd` / `sha256:c088d756b29f330dc31f626ab9fa4a33984f7c4afa92213c5f2c122349624cb5` |
+| Kvt HEAD / tree / G2 | `85096f689ed89fef97c7781c2d84d813097cadae` / `1af3bea05f683863c5e93ecd4351bfcd2dbbf499` / `sha256:85c3882e4bdd18cb05432712e643cd68485a0a6693a95671d72cad0a36c398bf` |
+| Lvt HEAD / tree / G3 | `27540be8753424b841a79b785bfa658911cbfbb1` / `a978e0ba70d69844242cf7b0ca627c861091e89a` / `sha256:e9b439cb6fbafa339991ea6cb56a59efb3eba1273633b399da57dc4986ba417f` |
+| artifact index | `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929` |
+| strict evidence schema | `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f` |
+| machine evidence | `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80` |
+| construction report | `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07` |
 | committed Kic / Kgc / Lic audits | `sha256:7c1ea06b0f7c1422b29ef6eba6a92a063d1e6495e3d7a5cb6adccd535b1bd094` / `sha256:aeb46997b467b5471f484de08c543b061e0caed398d9aa6c83200203252f231f` / `sha256:3623dafd4f988503955b64206fe7bb292787de7c864ea38bcd5f4f9f5f9dd9e6` |
 
 The future local-effect proposal may use only these versioned add-only paths:

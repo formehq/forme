@@ -1550,3 +1550,49 @@ Only a fresh versioned V2 Integration Campaign Execution Card/Owner Review may
 be constructed next. Replacement Campaign, Docker, cleanup, PostgreSQL,
 production and Gate C each require later separate exact Owner authority. #67
 and R4 remain open.
+
+## 2026-08-15 — Integration Campaign V2 topology verifier correction reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved repository-only V2 topology verifier
+correction as the executable bridge from the actual committed Integration
+Campaign history to future versioned V2 authority. The Owner authorized runner
+and test correction, strict evidence and status freeze, and direct construction
+and audit of the add-only V2 Card/Review. Docker, cleanup, PostgreSQL,
+production and Gate C remain unrequested.
+
+**Result:** Kvt `85096f689ed89fef97c7781c2d84d813097cadae` / tree
+`1af3bea05f683863c5e93ecd4351bfcd2dbbf499` is the exact two-path direct
+child of Mic `eb209d314a1084069a15fd4c819cf5e4d5760b77`; G2 is
+`sha256:85c3882e4bdd18cb05432712e643cd68485a0a6693a95671d72cad0a36c398bf`.
+It verifies the complete V1 Review → Inspect Addendum/Review → Kic →
+Concurrency Addendum/Review → Kgc → Lic → Mic prefix and then requires Mic →
+Kvt → Lvt → Mvt → Card V2 → Review V2. Lvt
+`27540be8753424b841a79b785bfa658911cbfbb1` / tree
+`a978e0ba70d69844242cf7b0ca627c861091e89a` is the exact three-addition
+direct child; G3 is
+`sha256:e9b439cb6fbafa339991ea6cb56a59efb3eba1273633b399da57dc4986ba417f`.
+The artifact index, strict schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
+`sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
+`sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`
+and
+`sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+Committed Kvt/Lvt audit summaries are
+`sha256:a3415dca563387720991bb0c29f4a38c692b2032e3877149008d499f5b91145c`
+and
+`sha256:cc80574dfbe4dabecfbba6814ed47d8a7531e3891b95d18f2587666101d05813`.
+
+**Validation and effect:** committed topology passes 1/1; local PostgreSQL
+runner 176/176; R4 offline 748/748; Gate-B 146/146 twice under default
+concurrency and once serially; spine 45/45. Strict Ajv and eight hostile
+machine-evidence mutations, syntax, TypeScript, no-AI boundary, inventory,
+docs and diff checks are Green. Construction made zero forensic-root, network,
+Docker/socket/OCI, cleanup, PostgreSQL/SQL, product runtime, production,
+traffic, provider, message, deployment, release, spend or Gate C effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The next repository actions are the two add-only V2 authority documents. Any
+prepare or physical campaign still requires a later separate exact Owner
+approval. #67 and R4 remain open.

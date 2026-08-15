@@ -7,13 +7,12 @@
   failed closed before PostgreSQL. The later V1 diagnostic `prepare` also
   failed before grant creation and before every Docker/socket effect. Kp
   `eaca190` / Lp `7a31dba` froze its 19-stage body-free correction. The
-  Integration Campaign inspect-missing correction is repository Technical
-  Review Green at Kic `1e93280`, Kgc `98392bf` and Lic `614202e`: the exact
-  pinned missing frame now reaches one shared production/fake parser, and the
-  default concurrent Gate-B validation is Green twice without a serial-only
-  waiver. The exact stop is
-  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED /
+  Integration Campaign V2 topology verifier correction is repository
+  Technical Review Green at Kvt `85096f6` / Lvt `27540be`: the runner verifies
+  the actual complete successor chain rather than the impossible simplified
+  chain. The exact stop is
+  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN /
+  V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED /
   PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Campaign execution,
   cleanup, production pool/migration, runtime route, traffic and Gate C remain
   closed.
@@ -50,10 +49,10 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **construct and review a fresh versioned Integration Campaign V2
-  Execution Card/Owner Review as one coherent effect decision. The corrected
-  repository campaign and machine evidence are complete; no intermediate implementation approval
-  remains. Until that separate approval, do not prepare a campaign grant,
+- Next action: **construct and audit a fresh versioned Integration Campaign V2
+  Execution Card/Owner Review as two add-only direct children. The corrected
+  repository campaign and machine evidence are complete; no intermediate
+  repository approval remains. Until a separate exact physical approval, do not prepare a campaign grant,
   resolve the Docker socket, call Docker or touch any forensic root. The
   hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
@@ -62,15 +61,15 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current inspect-missing correction bindings: index
-  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+- Current V2 topology verifier correction bindings: index
+  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
-  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
   evidence
-  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
+  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
   report
-  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

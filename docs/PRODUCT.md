@@ -27,8 +27,11 @@
   correction are now repository Technical Review Green at Kic `1e93280`, Kgc
   `98392bf` and Lic `614202e`. Production and fake diagnostics share the exact
   pinned body-free parser, and the default concurrent Gate-B validation is
-  Green twice plus once serially. A fresh Campaign V2 has not been proposed,
-  prepared or executed. Cleanup, target
+  Green twice plus once serially. The V2 topology verifier correction is now
+  repository Technical Review Green at Kvt `85096f6` / Lvt `27540be`; it
+  verifies the actual full successor prefix and future Kvt/Lvt/Mvt/Card
+  V2/Review V2 chain. V2 Card/Review construction is approved, but no V2
+  campaign has been prepared or executed. Cleanup, target
   PostgreSQL, vault, transport, traffic and
   Gate C remain false. Draft PR #76 remains
   unmerged; production activation
@@ -37,15 +40,15 @@
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-15
-- Inspect-missing correction bindings: index
-  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+- V2 topology verifier correction bindings: index
+  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
-  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
   evidence
-  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
+  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
   report
-  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

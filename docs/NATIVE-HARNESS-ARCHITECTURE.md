@@ -28,27 +28,27 @@
   diagnostic reached Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`;
   its approved V1 prepare then failed before grant creation with zero
   Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze exact 19-stage
-  body-free classification and rollback. The Integration Campaign
-  inspect-missing correction is now repository Technical Review Green at Kic
-  `1e93280`, Kgc `98392bf` and Lic `614202e`. Production and fake diagnostics
-  share the exact pinned body-free parser, and the default concurrent Gate-B
-  validation is Green twice without weakening terminal truth. Fresh Campaign
-  V2 execution, cleanup, target PostgreSQL observation, vault, transport,
+  body-free classification and rollback. The Integration Campaign parser and
+  concurrency corrections remain Green at Kic/Kgc/Lic, and the V2 topology
+  verifier correction is now repository Technical Review Green at Kvt
+  `85096f6` / Lvt `27540be`. The runner verifies the complete committed prefix
+  through Mic before accepting Kvt/Lvt/Mvt/Card V2/Review V2. V2 Card/Review
+  construction is approved; prepare, execution, cleanup, target PostgreSQL observation, vault, transport,
   traffic and Gate C remain closed. Draft PR
   #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-15
-- Inspect-missing correction bindings: index
-  `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+- V2 topology verifier correction bindings: index
+  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
-  `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
   evidence
-  `sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`,
+  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
   report
-  `sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside
