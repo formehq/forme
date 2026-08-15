@@ -9833,9 +9833,1927 @@ export function runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan(inpu
   });
 }
 
+// Integration Campaign v1 is a new authority family.  It deliberately does
+// not accept any of the consumed physical/rescue grants or the failed V1
+// diagnostic authority.  The construction Packet freezes the state-machine
+// semantics here; a later versioned Card/Review supplies the final Ki/Li/Mi
+// hashes and is still required before the real entry point may be prepared.
+const INTEGRATION_CAMPAIGN_PACKET_HEAD = "1f5b9476d891d348161d4a43d918b53873a809e2";
+const INTEGRATION_CAMPAIGN_PACKET_TREE = "3f42dc6707d2438bd3ad92e17de938210027c80e";
+const INTEGRATION_CAMPAIGN_PACKET_SHA256 = "sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50";
+const INTEGRATION_CAMPAIGN_REVIEW_HEAD = "c15753d299530dfccd027f0ec2a93db77d74a1e9";
+const INTEGRATION_CAMPAIGN_REVIEW_TREE = "228a2ec1b9f771e7bbb747420645a45011865aa3";
+const INTEGRATION_CAMPAIGN_REVIEW_SHA256 = "sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f";
+const INTEGRATION_CAMPAIGN_PACKET_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-PACKET.md";
+const INTEGRATION_CAMPAIGN_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-OWNER-REVIEW.md";
+const INTEGRATION_CAMPAIGN_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V1.md";
+const INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V1.md";
+const INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V1_BEGIN";
+const INTEGRATION_CAMPAIGN_AUTHORITY_END = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V1_END";
+const INTEGRATION_CAMPAIGN_SCHEMA = "r4.public-core-local-postgres-integration-campaign-grant.v1";
+const INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA = "r4.public-core-local-postgres-integration-campaign-receipt.v1";
+const INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA = "r4.public-core-local-postgres-integration-campaign-journal-entry.v1";
+const INTEGRATION_CAMPAIGN_GENESIS = `sha256:${"0".repeat(64)}`;
+const INTEGRATION_CAMPAIGN_RECEIPT_CODES = Object.freeze([
+  "local_postgres_integration_campaign_green",
+  "local_postgres_integration_campaign_cleanup_recovered_after_interruption",
+  "local_postgres_integration_campaign_foreign_resource",
+  "local_postgres_integration_campaign_unlabelled_resource",
+  "local_postgres_integration_campaign_malformed_resource",
+  "local_postgres_integration_campaign_diagnostic_ambiguous",
+  "local_postgres_integration_campaign_absence_unproven",
+  "local_postgres_integration_campaign_cleanup_blocked",
+  "local_postgres_integration_campaign_physical_failed",
+  "local_postgres_integration_campaign_physical_cleanup_blocked",
+  "local_postgres_integration_campaign_host_drift",
+  "local_postgres_integration_campaign_clock_invalid",
+  "local_postgres_integration_campaign_ceiling_exceeded",
+  "local_postgres_integration_campaign_journal_headroom_exhausted",
+  "local_postgres_integration_campaign_consumed_cleanup_only",
+  "local_postgres_integration_campaign_authority_invalid",
+  "local_postgres_integration_campaign_failed",
+  "local_postgres_integration_campaign_ambiguous_effect",
+]);
+const INTEGRATION_CAMPAIGN_OLD_PHYSICAL_GRANT_SHA256 = "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35";
+const INTEGRATION_CAMPAIGN_OLD_PHYSICAL_EVIDENCE_SHA256 = "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c";
+const INTEGRATION_CAMPAIGN_OLD_PHYSICAL_JOURNAL_SHA256 = "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25";
+const INTEGRATION_CAMPAIGN_OLD_RESCUE_GRANT_SHA256 = "sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654";
+const INTEGRATION_CAMPAIGN_OLD_RESCUE_EVIDENCE_SHA256 = "sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979";
+const INTEGRATION_CAMPAIGN_OLD_RESCUE_JOURNAL_SHA256 = "sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491";
+
+const INTEGRATION_CAMPAIGN_RESOURCE_KINDS = Object.freeze(["container", "network", "volume"]);
+const INTEGRATION_CAMPAIGN_CLASSIFICATIONS = Object.freeze([
+  "MISSING", "OWNED", "FOREIGN", "UNLABELLED", "MALFORMED", "UNKNOWN",
+]);
+const INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES = Object.freeze({
+  labelKey: "forme.r4.public-core.local.grant",
+  labelValue: BLOCKED_GRANT_ID,
+  container: "forme-r4-public-core-local-b92ae04555cc3d69",
+  network: "forme-r4-public-core-local-net-b92ae04555cc3d69",
+  volume: "forme-r4-public-core-local-vol-b92ae04555cc3d69",
+});
+const INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS = Object.freeze({
+  version: 1, "image.inspect": 0, "image.pull": 0,
+  "container.inspect": 2, "container.create": 0, "container.start": 0,
+  "container.stop": 1, "container.rm": 1,
+  "network.inspect": 2, "network.create": 0, "network.rm": 1,
+  "volume.inspect": 2, "volume.create": 0, "volume.rm": 1,
+});
+const INTEGRATION_CAMPAIGN_CACHED_PHYSICAL_DOCKER_CALLS = Object.freeze({
+  version: 1, "image.inspect": 1, "image.pull": 0,
+  "container.inspect": 4, "container.create": 1, "container.start": 2,
+  "container.stop": 2, "container.rm": 1,
+  "network.inspect": 3, "network.create": 1, "network.rm": 1,
+  "volume.inspect": 3, "volume.create": 1, "volume.rm": 1,
+});
+export const LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS = Object.freeze({
+  maximumCampaignConsumptions: 1,
+  maximumDiagnosticPhases: 1,
+  maximumHistoricalCleanupPhases: 1,
+  maximumPhysicalConstructionPhases: 1,
+  maximumPhysicalCleanupRecoveryPhases: 2,
+  maximumAnonymousImagePulls: 1,
+  diagnosticDockerCalls: INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS,
+  physicalDockerCalls: DOCKER_CALL_CEILINGS,
+  physical: Object.freeze({ ...CEILING_VALUES }),
+});
+const INTEGRATION_CAMPAIGN_GRANT_KEYS = Object.freeze([
+  "schemaVersion", "campaignGrantId", "ownerApprovalReceiptSha256", "authority", "lineage", "artifacts",
+  "historical", "host", "ceilings", "localOnly", "productionEffectsAllowed", "createdAt", "expiresAt",
+]);
+const INTEGRATION_CAMPAIGN_AUTHORITY_KEYS = Object.freeze([
+  "constructionPacketSha256", "constructionOwnerReviewSha256", "executionCardSha256",
+  "executionOwnerReviewSha256", "executionAuthorityPayloadSha256",
+]);
+const INTEGRATION_CAMPAIGN_LINEAGE_KEYS = Object.freeze([
+  "constructionPacketHead", "constructionPacketTree", "constructionOwnerReviewHead", "constructionOwnerReviewTree",
+  "implementationHead", "implementationTree", "implementationAggregateSha256", "evidenceHead", "evidenceTree",
+  "statusHead", "statusTree", "statusAggregateSha256", "executionCardHead", "executionCardTree",
+  "executionOwnerReviewHead", "executionOwnerReviewTree",
+]);
+const INTEGRATION_CAMPAIGN_ARTIFACT_KEYS = Object.freeze([
+  "artifactIndexSha256", "evidenceSchemaSha256", "evidenceSha256", "constructionReportSha256",
+  "committedStatusAuditSha256", "runnerSha256", "runnerTestSha256", "packageLockSha256",
+  "pgImportClosureSha256", "pgImportClosureFileCount", "pgImportClosurePackageCount", "schemaSqlSha256",
+  "verifySqlSha256", "rollbackSqlSha256", "catalogContractSha256", "catalog",
+]);
+const INTEGRATION_CAMPAIGN_HISTORICAL_KEYS = Object.freeze([
+  "labelKey", "labelValue", "container", "network", "volume", "failedPhysicalGrantSha256",
+  "failedPhysicalEvidenceSha256", "failedPhysicalJournalEntryCount", "failedPhysicalJournalSha256",
+  "failedRescueGrantSha256", "failedRescueEvidenceSha256", "failedRescueJournalEntryCount",
+  "failedRescueJournalSha256", "failedDiagnosticCardSha256", "failedDiagnosticReviewSha256",
+  "failedDiagnosticPayloadSha256",
+]);
+const INTEGRATION_CAMPAIGN_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion",
+  "dockerServerVersion", "dockerServerPlatform", "imageReference", "imagePlatform", "imagePlatformManifest",
+  "imageCachePolicy",
+]);
+const INTEGRATION_CAMPAIGN_CEILING_KEYS = Object.freeze([
+  "maximumCampaignConsumptions", "maximumDiagnosticPhases", "maximumHistoricalCleanupPhases",
+  "maximumPhysicalConstructionPhases", "maximumPhysicalCleanupRecoveryPhases", "maximumAnonymousImagePulls",
+  "diagnosticDockerCalls", "physicalDockerCalls", "physical",
+]);
+
+function integrationCampaignHistoricalContract() {
+  return Object.freeze({
+    ...INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES,
+    failedPhysicalGrantSha256: INTEGRATION_CAMPAIGN_OLD_PHYSICAL_GRANT_SHA256,
+    failedPhysicalEvidenceSha256: INTEGRATION_CAMPAIGN_OLD_PHYSICAL_EVIDENCE_SHA256,
+    failedPhysicalJournalEntryCount: 34,
+    failedPhysicalJournalSha256: INTEGRATION_CAMPAIGN_OLD_PHYSICAL_JOURNAL_SHA256,
+    failedRescueGrantSha256: INTEGRATION_CAMPAIGN_OLD_RESCUE_GRANT_SHA256,
+    failedRescueEvidenceSha256: INTEGRATION_CAMPAIGN_OLD_RESCUE_EVIDENCE_SHA256,
+    failedRescueJournalEntryCount: 6,
+    failedRescueJournalSha256: INTEGRATION_CAMPAIGN_OLD_RESCUE_JOURNAL_SHA256,
+    failedDiagnosticCardSha256: "sha256:1cd345018dc6ddbf393df873bca01a54fcb75f8e608f9f63a48c9f61fd06319e",
+    failedDiagnosticReviewSha256: "sha256:324af94569b0c54456e474230bc06b3e7f15573ee97ec4a46c5886d56969abed",
+    failedDiagnosticPayloadSha256: "sha256:53188dac86131bf4910f06dc8dd64e7f1127d29cd55f21882960ab674a24262d",
+  });
+}
+
+function integrationCampaignFakeGrant() {
+  const hash = (digit) => `sha256:${digit.repeat(64)}`;
+  const git = (digit) => digit.repeat(40);
+  return Object.freeze({
+    schemaVersion: INTEGRATION_CAMPAIGN_SCHEMA,
+    campaignGrantId: "9".repeat(32),
+    ownerApprovalReceiptSha256: hash("9"),
+    authority: Object.freeze({
+      constructionPacketSha256: INTEGRATION_CAMPAIGN_PACKET_SHA256,
+      constructionOwnerReviewSha256: INTEGRATION_CAMPAIGN_REVIEW_SHA256,
+      executionCardSha256: hash("a"), executionOwnerReviewSha256: hash("b"),
+      executionAuthorityPayloadSha256: hash("c"),
+    }),
+    lineage: Object.freeze({
+      constructionPacketHead: INTEGRATION_CAMPAIGN_PACKET_HEAD,
+      constructionPacketTree: INTEGRATION_CAMPAIGN_PACKET_TREE,
+      constructionOwnerReviewHead: INTEGRATION_CAMPAIGN_REVIEW_HEAD,
+      constructionOwnerReviewTree: INTEGRATION_CAMPAIGN_REVIEW_TREE,
+      implementationHead: git("1"), implementationTree: git("2"), implementationAggregateSha256: hash("1"),
+      evidenceHead: git("3"), evidenceTree: git("4"), statusHead: git("5"), statusTree: git("6"),
+      statusAggregateSha256: hash("2"), executionCardHead: git("7"), executionCardTree: git("8"),
+      executionOwnerReviewHead: git("9"), executionOwnerReviewTree: git("a"),
+    }),
+    artifacts: Object.freeze({
+      artifactIndexSha256: hash("3"), evidenceSchemaSha256: hash("4"), evidenceSha256: hash("5"),
+      constructionReportSha256: hash("6"), committedStatusAuditSha256: hash("7"), runnerSha256: hash("8"),
+      runnerTestSha256: hash("9"), packageLockSha256: PACKAGE_LOCK_SHA256,
+      pgImportClosureSha256: PG_IMPORT_CLOSURE_SHA256, pgImportClosureFileCount: PG_IMPORT_CLOSURE_FILE_COUNT,
+      pgImportClosurePackageCount: PG_IMPORT_CLOSURE_PACKAGE_COUNT, schemaSqlSha256: SCHEMA_SQL_SHA256,
+      verifySqlSha256: VERIFY_SQL_SHA256, rollbackSqlSha256: ROLLBACK_SQL_SHA256,
+      catalogContractSha256: CATALOG_CONTRACT_SHA256,
+      catalog: Object.freeze({ ...LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.catalog }),
+    }),
+    historical: integrationCampaignHistoricalContract(),
+    host: Object.freeze({
+      dockerCli: DOCKER_CLI, dockerCliSha256: DOCKER_CLI_SHA256, dockerCliIdentitySha256: hash("d"),
+      socketIdentitySha256: hash("e"), dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1",
+      dockerServerPlatform: IMAGE_PLATFORM, imageReference: IMAGE_REFERENCE, imagePlatform: IMAGE_PLATFORM,
+      imagePlatformManifest: IMAGE_PLATFORM_MANIFEST, imageCachePolicy: IMAGE_CACHE_POLICY,
+    }),
+    ceilings: LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS,
+    localOnly: true, productionEffectsAllowed: false,
+    createdAt: "2026-08-14T20:00:00.000Z", expiresAt: "2026-08-14T21:00:00.000Z",
+  });
+}
+
+export function validateLocalPostgresIntegrationCampaignGrant(rawGrant, now = new Date(), allowExpired = false) {
+  const grant = ownedPlain(rawGrant);
+  exactKeys(grant, INTEGRATION_CAMPAIGN_GRANT_KEYS);
+  exactKeys(grant.authority, INTEGRATION_CAMPAIGN_AUTHORITY_KEYS);
+  exactKeys(grant.lineage, INTEGRATION_CAMPAIGN_LINEAGE_KEYS);
+  exactKeys(grant.artifacts, INTEGRATION_CAMPAIGN_ARTIFACT_KEYS);
+  exactKeys(grant.artifacts.catalog, CATALOG_KEYS);
+  exactKeys(grant.historical, INTEGRATION_CAMPAIGN_HISTORICAL_KEYS);
+  exactKeys(grant.host, INTEGRATION_CAMPAIGN_HOST_KEYS);
+  exactKeys(grant.ceilings, INTEGRATION_CAMPAIGN_CEILING_KEYS);
+  exactKeys(grant.ceilings.diagnosticDockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(grant.ceilings.physicalDockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(grant.ceilings.physical, Object.keys(CEILING_VALUES));
+  if (grant.schemaVersion !== INTEGRATION_CAMPAIGN_SCHEMA || !GRANT_ID.test(grant.campaignGrantId)
+    || grant.localOnly !== true || grant.productionEffectsAllowed !== false
+    || grant.authority.constructionPacketSha256 !== INTEGRATION_CAMPAIGN_PACKET_SHA256
+    || grant.authority.constructionOwnerReviewSha256 !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
+    || grant.lineage.constructionPacketHead !== INTEGRATION_CAMPAIGN_PACKET_HEAD
+    || grant.lineage.constructionPacketTree !== INTEGRATION_CAMPAIGN_PACKET_TREE
+    || grant.lineage.constructionOwnerReviewHead !== INTEGRATION_CAMPAIGN_REVIEW_HEAD
+    || grant.lineage.constructionOwnerReviewTree !== INTEGRATION_CAMPAIGN_REVIEW_TREE
+    || canonicalJson(grant.historical) !== canonicalJson(integrationCampaignHistoricalContract())
+    || canonicalJson(grant.ceilings) !== canonicalJson(LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS)
+    || grant.host.dockerCli !== DOCKER_CLI || grant.host.dockerCliSha256 !== DOCKER_CLI_SHA256
+    || grant.host.imageReference !== IMAGE_REFERENCE || grant.host.imagePlatform !== IMAGE_PLATFORM
+    || grant.host.imagePlatformManifest !== IMAGE_PLATFORM_MANIFEST || grant.host.imageCachePolicy !== IMAGE_CACHE_POLICY
+    || grant.artifacts.packageLockSha256 !== PACKAGE_LOCK_SHA256
+    || grant.artifacts.pgImportClosureSha256 !== PG_IMPORT_CLOSURE_SHA256
+    || grant.artifacts.pgImportClosureFileCount !== PG_IMPORT_CLOSURE_FILE_COUNT
+    || grant.artifacts.pgImportClosurePackageCount !== PG_IMPORT_CLOSURE_PACKAGE_COUNT
+    || grant.artifacts.schemaSqlSha256 !== SCHEMA_SQL_SHA256 || grant.artifacts.verifySqlSha256 !== VERIFY_SQL_SHA256
+    || grant.artifacts.rollbackSqlSha256 !== ROLLBACK_SQL_SHA256
+    || grant.artifacts.catalogContractSha256 !== CATALOG_CONTRACT_SHA256
+    || canonicalJson(grant.artifacts.catalog) !== canonicalJson(LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.catalog)) {
+    fail("local_postgres_integration_campaign_grant_invalid");
+  }
+  for (const key of [...INTEGRATION_CAMPAIGN_AUTHORITY_KEYS, "ownerApprovalReceiptSha256"]) {
+    assertSha(key === "ownerApprovalReceiptSha256" ? grant[key] : grant.authority[key]);
+  }
+  for (const key of INTEGRATION_CAMPAIGN_LINEAGE_KEYS) {
+    (key.endsWith("Sha256") ? assertSha(grant.lineage[key]) : assertGit(grant.lineage[key]));
+  }
+  for (const key of INTEGRATION_CAMPAIGN_ARTIFACT_KEYS) {
+    if (key.endsWith("Sha256")) assertSha(grant.artifacts[key]);
+  }
+  assertSha(grant.host.dockerCliIdentitySha256); assertSha(grant.host.socketIdentitySha256);
+  const createdAt = instant(grant.createdAt);
+  const expiresAt = instant(grant.expiresAt);
+  const observedAt = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(observedAt) || expiresAt <= createdAt || expiresAt - createdAt > MAX_GRANT_LIFETIME_MS
+    || observedAt < createdAt - 60_000 || (!allowExpired && observedAt >= expiresAt)) {
+    fail("local_postgres_integration_campaign_grant_expired");
+  }
+  if (new Set([
+    grant.authority.executionCardSha256, grant.authority.executionOwnerReviewSha256,
+    grant.authority.executionAuthorityPayloadSha256,
+  ]).size !== 3 || new Set([
+    INTEGRATION_CAMPAIGN_OLD_PHYSICAL_GRANT_SHA256, INTEGRATION_CAMPAIGN_OLD_RESCUE_GRANT_SHA256,
+    grant.historical.failedDiagnosticCardSha256, grant.historical.failedDiagnosticReviewSha256,
+    grant.historical.failedDiagnosticPayloadSha256,
+  ]).has(grant.authority.executionCardSha256)
+    || new Set([
+      INTEGRATION_CAMPAIGN_OLD_PHYSICAL_GRANT_SHA256, INTEGRATION_CAMPAIGN_OLD_RESCUE_GRANT_SHA256,
+      grant.historical.failedDiagnosticCardSha256, grant.historical.failedDiagnosticReviewSha256,
+      grant.historical.failedDiagnosticPayloadSha256,
+    ]).has(grant.authority.executionOwnerReviewSha256)) {
+    fail("local_postgres_integration_campaign_grant_invalid");
+  }
+  return grant;
+}
+
+function integrationCampaignEmptyDockerCalls() {
+  return Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0]));
+}
+
+function integrationCampaignCheckEffectClock(state) {
+  const observedAt = typeof state.nowMs === "number" ? state.nowMs : state.now().getTime();
+  if (!Number.isFinite(observedAt)) fail("local_postgres_integration_campaign_clock_invalid");
+  if (["HISTORICAL_CLEANUP", "PHYSICAL_CLEANUP_RECOVERY"].includes(state.currentPhase)) return observedAt;
+  const createdAt = instant(state.grant.createdAt);
+  const expiresAt = instant(state.grant.expiresAt);
+  if (observedAt < createdAt - 60_000 || observedAt < (state.lastNonCleanupObservedAt ?? createdAt - 60_000)
+    || observedAt >= expiresAt) {
+    fail("local_postgres_integration_campaign_clock_invalid");
+  }
+  state.lastNonCleanupObservedAt = observedAt;
+  return observedAt;
+}
+
+function integrationCampaignJournalEventUsesCleanupHeadroom(event, detail) {
+  return (event === "phase.started" && ["historical_cleanup", "physical_cleanup_recovery"].includes(detail.phase))
+    || (["effect.reserved", "effect.completed"].includes(event)
+      && ["HISTORICAL_CLEANUP", "PHYSICAL_CLEANUP_RECOVERY"].includes(detail.phase))
+    || (event === "campaign.terminal"
+      && ["HISTORICAL_CLEANUP", "PHYSICAL_CLEANUP_RECOVERY"].includes(detail.phase));
+}
+
+function integrationCampaignJournalAppend(journal, event, detail) {
+  const sequence = journal.entries.length + 1;
+  const preimage = Object.freeze({
+    schemaVersion: INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA, sequence, previousSha256: journal.headSha256,
+    event, detail: ownedPlain(detail),
+  });
+  const entry = Object.freeze({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8")) });
+  const entryBytes = Buffer.byteLength(`${canonicalJson(entry)}\n`, "utf8");
+  const currentBytes = journal.totalBytes ?? journal.entries.reduce(
+    (sum, value) => sum + Buffer.byteLength(`${canonicalJson(value)}\n`, "utf8"), 0,
+  );
+  const maximumBytes = integrationCampaignJournalEventUsesCleanupHeadroom(event, preimage.detail)
+    ? JOURNAL_TOTAL_MAXIMUM_BYTES : JOURNAL_NORMAL_MAXIMUM_BYTES;
+  if (currentBytes + entryBytes > maximumBytes) {
+    fail("local_postgres_integration_campaign_journal_headroom_exhausted");
+  }
+  journal.entries.push(entry); journal.headSha256 = entry.entrySha256; journal.totalBytes = currentBytes + entryBytes;
+  return entry;
+}
+
+function validateIntegrationCampaignJournal(entries) {
+  const stable = ownedPlain(entries);
+  if (!Array.isArray(stable)) fail("local_postgres_integration_campaign_journal_invalid");
+  let previousSha256 = INTEGRATION_CAMPAIGN_GENESIS;
+  let totalBytes = 0;
+  const open = new Map();
+  const attempts = integrationCampaignEmptyDockerCalls();
+  const completions = integrationCampaignEmptyDockerCalls();
+  const phases = { diagnostic: 0, historicalCleanup: 0, physicalConstruction: 0, physicalCleanupRecoveries: 0 };
+  const observations = [];
+  let physicalRehearsalAttemptCount = 0;
+  let physicalRehearsalCompletionCount = 0;
+  let consumed = false;
+  let consumedCampaignGrantSha256 = null;
+  let terminal = null;
+  for (let index = 0; index < stable.length; index += 1) {
+    const entry = stable[index];
+    exactKeys(entry, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    if (entry.schemaVersion !== INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA || entry.sequence !== index + 1
+      || entry.previousSha256 !== previousSha256 || typeof entry.event !== "string") {
+      fail("local_postgres_integration_campaign_journal_invalid");
+    }
+    const preimage = selectKeys(entry, ["schemaVersion", "sequence", "previousSha256", "event", "detail"]);
+    if (entry.entrySha256 !== sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8"))) {
+      fail("local_postgres_integration_campaign_journal_invalid");
+    }
+    totalBytes += Buffer.byteLength(`${canonicalJson(entry)}\n`, "utf8");
+    const maximumBytes = integrationCampaignJournalEventUsesCleanupHeadroom(entry.event, entry.detail)
+      ? JOURNAL_TOTAL_MAXIMUM_BYTES : JOURNAL_NORMAL_MAXIMUM_BYTES;
+    if (totalBytes > maximumBytes) fail("local_postgres_integration_campaign_journal_invalid");
+    if (entry.event === "campaign.consumed") {
+      exactKeys(entry.detail, ["consumedCampaignGrantSha256"]);
+      if (consumed || index !== 0 || !SHA256.test(entry.detail.consumedCampaignGrantSha256)) {
+        fail("local_postgres_integration_campaign_journal_invalid");
+      }
+      consumed = true; consumedCampaignGrantSha256 = entry.detail.consumedCampaignGrantSha256;
+    } else if (entry.event === "phase.started") {
+      exactKeys(entry.detail, ["phase", "ordinal"]);
+      if (!consumed || !Number.isSafeInteger(entry.detail.ordinal) || entry.detail.ordinal < 1) {
+        fail("local_postgres_integration_campaign_journal_invalid");
+      }
+      if (entry.detail.phase === "diagnostic" && entry.detail.ordinal === 1 && phases.diagnostic === 0) {
+        phases.diagnostic = 1;
+      } else if (entry.detail.phase === "historical_cleanup" && entry.detail.ordinal === 1
+        && phases.diagnostic === 1 && phases.historicalCleanup === 0) {
+        phases.historicalCleanup = 1;
+      } else if (entry.detail.phase === "physical_construction" && entry.detail.ordinal === 1
+        && phases.diagnostic === 1 && phases.physicalConstruction === 0) {
+        phases.physicalConstruction = 1;
+      } else if (entry.detail.phase === "physical_cleanup_recovery"
+        && entry.detail.ordinal === phases.physicalCleanupRecoveries + 1
+        && entry.detail.ordinal <= LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS.maximumPhysicalCleanupRecoveryPhases
+        && phases.physicalConstruction === 1) {
+        phases.physicalCleanupRecoveries += 1;
+      } else fail("local_postgres_integration_campaign_journal_invalid");
+    } else if (entry.event === "effect.reserved") {
+      exactKeys(entry.detail, ["effectId", "kind", "target", "ordinal", "phase"]);
+      if (!consumed || typeof entry.detail.effectId !== "string" || typeof entry.detail.kind !== "string"
+        || typeof entry.detail.target !== "string" || !Number.isSafeInteger(entry.detail.ordinal)
+        || entry.detail.ordinal < 1 || open.has(entry.detail.effectId)) {
+        fail("local_postgres_integration_campaign_journal_invalid");
+      }
+      if (entry.detail.kind === "physical:rehearsal") {
+        if (entry.detail.phase !== "PHYSICAL_CONSTRUCTION" || entry.detail.ordinal !== 1
+          || physicalRehearsalAttemptCount !== 0 || phases.physicalConstruction !== 1) {
+          fail("local_postgres_integration_campaign_journal_invalid");
+        }
+        physicalRehearsalAttemptCount = 1;
+      } else if (entry.detail.kind === "physical:cleanup_recovery") {
+        if (entry.detail.phase !== "PHYSICAL_CLEANUP_RECOVERY"
+          || entry.detail.ordinal !== phases.physicalCleanupRecoveries) {
+          fail("local_postgres_integration_campaign_journal_invalid");
+        }
+      } else if (Object.prototype.hasOwnProperty.call(attempts, entry.detail.kind)) {
+        const expected = attempts[entry.detail.kind] + 1;
+        if (entry.detail.ordinal !== expected
+          || entry.detail.ordinal > INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS[entry.detail.kind]
+          || !["DIAGNOSTIC", "HISTORICAL_CLEANUP"].includes(entry.detail.phase)) {
+          fail("local_postgres_integration_campaign_journal_invalid");
+        }
+        attempts[entry.detail.kind] = expected;
+      } else fail("local_postgres_integration_campaign_journal_invalid");
+      open.set(entry.detail.effectId, entry.detail);
+    } else if (entry.event === "effect.completed") {
+      exactKeys(entry.detail, ["effectId", "kind", "target", "ordinal", "phase"]);
+      const reserved = open.get(entry.detail.effectId);
+      if (reserved === undefined || canonicalJson(reserved) !== canonicalJson(entry.detail)) {
+        fail("local_postgres_integration_campaign_journal_invalid");
+      }
+      open.delete(entry.detail.effectId);
+      if (entry.detail.kind === "physical:rehearsal") physicalRehearsalCompletionCount += 1;
+      else if (Object.prototype.hasOwnProperty.call(completions, entry.detail.kind)) completions[entry.detail.kind] += 1;
+    } else if (entry.event === "observation.recorded") {
+      exactKeys(entry.detail, ["kind", "ordinal", "classification", "ownership", "bodyBytes", "bodySha256", "bodyRetained"]);
+      const body = Buffer.from(canonicalJson(selectKeys(
+        entry.detail, ["kind", "classification", "ordinal", "ownership"],
+      )), "utf8");
+      const resourceKind = typeof entry.detail.kind === "string" && entry.detail.kind.endsWith(".inspect")
+        ? entry.detail.kind.slice(0, -".inspect".length) : null;
+      const classificationValid = entry.detail.kind === "version"
+        ? entry.detail.ordinal === 1 && entry.detail.classification === "MATCHED"
+          && entry.detail.ownership === "NOT_APPLICABLE"
+        : INTEGRATION_CAMPAIGN_RESOURCE_KINDS.includes(resourceKind)
+          && entry.detail.ordinal <= 2 && INTEGRATION_CAMPAIGN_CLASSIFICATIONS.includes(entry.detail.classification)
+          && ((entry.detail.classification === "MISSING" && entry.detail.ownership === "NOT_PRESENT")
+            || (entry.detail.classification === "OWNED" && entry.detail.ownership === "EXACT_HISTORICAL_GRANT")
+            || (["FOREIGN", "UNLABELLED", "MALFORMED", "UNKNOWN"].includes(entry.detail.classification)
+              && entry.detail.ownership === entry.detail.classification));
+      if (typeof entry.detail.kind !== "string" || !Number.isSafeInteger(entry.detail.ordinal)
+        || entry.detail.ordinal < 1 || typeof entry.detail.classification !== "string"
+        || typeof entry.detail.ownership !== "string" || !Number.isSafeInteger(entry.detail.bodyBytes)
+        || entry.detail.bodyBytes !== body.length || entry.detail.bodySha256 !== sha256Bytes(body)
+        || entry.detail.bodyRetained !== false || !classificationValid) {
+        fail("local_postgres_integration_campaign_journal_invalid");
+      }
+      observations.push(entry.detail);
+    } else if (entry.event === "campaign.terminal") {
+      exactKeys(entry.detail, ["status", "code", "phase"]);
+      if (terminal !== null || index !== stable.length - 1
+        || !["GREEN", "FAILED", "CLEANUP_BLOCKED"].includes(entry.detail.status)
+        || typeof entry.detail.code !== "string" || ![
+          "DIAGNOSTIC", "HISTORICAL_CLEANUP", "PHYSICAL_CONSTRUCTION", "PHYSICAL_CLEANUP_RECOVERY",
+        ].includes(entry.detail.phase)) fail("local_postgres_integration_campaign_journal_invalid");
+      terminal = entry.detail;
+    } else {
+      fail("local_postgres_integration_campaign_journal_invalid");
+    }
+    previousSha256 = entry.entrySha256;
+  }
+  return Object.freeze({ entryCount: stable.length, headSha256: previousSha256,
+    openEffectCount: open.size, totalBytes, consumedCampaignGrantSha256,
+    phases: Object.freeze(phases), attempts: Object.freeze(attempts), completions: Object.freeze(completions),
+    physicalRehearsalAttemptCount, physicalRehearsalCompletionCount,
+    observations: Object.freeze(observations), terminal });
+}
+
+function integrationCampaignReserve(state, kind, target) {
+  integrationCampaignCheckEffectClock(state);
+  const counter = kind.startsWith("physical:") ? state.physicalAttempts : state.attempts;
+  const count = (counter[kind] ?? 0) + 1;
+  const phaseCeiling = kind === "physical:rehearsal" ? 1
+    : kind === "physical:cleanup_recovery"
+      ? LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS.maximumPhysicalCleanupRecoveryPhases
+      : INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS[kind];
+  if (phaseCeiling !== null && phaseCeiling !== undefined && count > phaseCeiling) {
+    fail("local_postgres_integration_campaign_ceiling_exceeded");
+  }
+  counter[kind] = count;
+  const effectId = `${String(state.effectOrdinal += 1).padStart(3, "0")}-${kind}`;
+  const reservation = Object.freeze({ effectId, kind, target, ordinal: count, phase: state.currentPhase });
+  integrationCampaignJournalAppend(state.journal, "effect.reserved", reservation);
+  return reservation;
+}
+
+function integrationCampaignComplete(state, reservation) {
+  const counter = reservation.kind.startsWith("physical:") ? state.physicalCompletions : state.completions;
+  counter[reservation.kind] = (counter[reservation.kind] ?? 0) + 1;
+  integrationCampaignJournalAppend(state.journal, "effect.completed", reservation);
+}
+
+function integrationCampaignObservation(kind, classification, ordinal, ownership = "NOT_APPLICABLE") {
+  const body = Buffer.from(canonicalJson({ kind, classification, ordinal, ownership }), "utf8");
+  return Object.freeze({
+    kind, ordinal, classification, ownership, bodyBytes: body.length, bodySha256: sha256Bytes(body),
+    bodyRetained: false,
+  });
+}
+
+function integrationCampaignConsumeOnce(state, consumedCampaignGrantSha256) {
+  if (state.consumeCount !== 0) fail("local_postgres_integration_campaign_consumed_cleanup_only");
+  integrationCampaignJournalAppend(state.journal, "campaign.consumed", { consumedCampaignGrantSha256 });
+  state.consumeCount = 1;
+}
+
+function validateIntegrationCampaignReceipt(rawReceipt, grant, journal) {
+  const receipt = ownedPlain(rawReceipt);
+  exactKeys(receipt, [
+    "schemaVersion", "status", "code", "consumedCampaignGrantSha256", "authority", "lineage", "artifacts",
+    "historical", "hostObservation", "phases", "effects", "observations", "physical", "cleanup", "journal",
+    "readiness",
+  ]);
+  exactKeys(receipt.phases, ["diagnostic", "historicalCleanup", "physicalConstruction", "physicalCleanupRecoveries"]);
+  exactKeys(receipt.hostObservation, [
+    "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion", "dockerServerVersion",
+    "dockerServerPlatform",
+  ]);
+  exactKeys(receipt.effects, [
+    "diagnosticDockerCallAttempts", "diagnosticDockerCallCompletions",
+    "physicalRehearsalAttemptCount", "physicalRehearsalCompletionCount",
+  ]);
+  exactKeys(receipt.effects.diagnosticDockerCallAttempts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.effects.diagnosticDockerCallCompletions, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.cleanup, [
+    "historicalContainerAbsent", "historicalNetworkAbsent", "historicalVolumeAbsent", "ownedContainerCount",
+    "ownedNetworkCount", "ownedVolumeCount", "ownedCredentialCount", "ownedDockerConfigCount",
+    "ownedImportedRuntimeCount", "activeCoordinatorResidueCount", "pinnedImageCacheOnlyDaemonResidue",
+  ]);
+  exactKeys(receipt.journal, ["entryCount", "headSha256", "openEffectCount"]);
+  exactKeys(receipt.readiness, [
+    "diagnosticComplete", "historicalResourcesAbsent", "physicalExecuted", "targetPostgresObserved",
+    "productRuntimeEffects", "productionEffects", "trafficReady", "gateCReady",
+  ]);
+  if (receipt.schemaVersion !== INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA
+    || !["GREEN", "FAILED", "CLEANUP_BLOCKED"].includes(receipt.status)
+    || !INTEGRATION_CAMPAIGN_RECEIPT_CODES.includes(receipt.code)
+    || !SHA256.test(receipt.consumedCampaignGrantSha256)
+    || canonicalJson(receipt.authority) !== canonicalJson(grant.authority)
+    || canonicalJson(receipt.lineage) !== canonicalJson(grant.lineage)
+    || canonicalJson(receipt.artifacts) !== canonicalJson(grant.artifacts)
+    || canonicalJson(receipt.historical) !== canonicalJson(grant.historical)
+    || receipt.hostObservation.dockerCliIdentitySha256 !== grant.host.dockerCliIdentitySha256
+    || receipt.hostObservation.socketIdentitySha256 !== grant.host.socketIdentitySha256
+    || receipt.hostObservation.dockerClientVersion !== grant.host.dockerClientVersion
+    || receipt.hostObservation.dockerServerVersion !== grant.host.dockerServerVersion
+    || receipt.hostObservation.dockerServerPlatform !== grant.host.dockerServerPlatform) {
+    fail("local_postgres_integration_campaign_receipt_invalid");
+  }
+  const folded = validateIntegrationCampaignJournal(journal.entries);
+  if (canonicalJson(receipt.journal) !== canonicalJson(selectKeys(
+    folded, ["entryCount", "headSha256", "openEffectCount"],
+  ))
+    || receipt.phases.diagnostic !== 1 || receipt.phases.historicalCleanup < 0
+    || receipt.phases.historicalCleanup > 1 || receipt.phases.physicalConstruction < 0
+    || receipt.phases.physicalConstruction > 1 || receipt.phases.physicalCleanupRecoveries < 0
+    || receipt.phases.physicalCleanupRecoveries > 2
+    || !Number.isSafeInteger(receipt.effects.physicalRehearsalAttemptCount)
+    || !Number.isSafeInteger(receipt.effects.physicalRehearsalCompletionCount)
+    || receipt.effects.physicalRehearsalAttemptCount < receipt.effects.physicalRehearsalCompletionCount
+    || receipt.effects.physicalRehearsalAttemptCount < 0 || receipt.effects.physicalRehearsalAttemptCount > 1
+    || receipt.readiness.productRuntimeEffects !== false || receipt.readiness.productionEffects !== false
+    || receipt.readiness.trafficReady !== false || receipt.readiness.gateCReady !== false) {
+    fail("local_postgres_integration_campaign_receipt_invalid");
+  }
+  for (const kind of LOCAL_POSTGRES_DOCKER_COMMAND_KINDS) {
+    const attempts = receipt.effects.diagnosticDockerCallAttempts[kind];
+    const completions = receipt.effects.diagnosticDockerCallCompletions[kind];
+    if (!Number.isSafeInteger(attempts) || !Number.isSafeInteger(completions) || attempts < completions
+      || completions < 0 || attempts > INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS[kind]) {
+      fail("local_postgres_integration_campaign_receipt_invalid");
+    }
+  }
+  if (folded.consumedCampaignGrantSha256 !== receipt.consumedCampaignGrantSha256
+    || canonicalJson(folded.phases) !== canonicalJson(receipt.phases)
+    || canonicalJson(folded.attempts) !== canonicalJson(receipt.effects.diagnosticDockerCallAttempts)
+    || canonicalJson(folded.completions) !== canonicalJson(receipt.effects.diagnosticDockerCallCompletions)
+    || folded.physicalRehearsalAttemptCount !== receipt.effects.physicalRehearsalAttemptCount
+    || folded.physicalRehearsalCompletionCount !== receipt.effects.physicalRehearsalCompletionCount
+    || canonicalJson(folded.observations) !== canonicalJson(receipt.observations)
+    || folded.terminal === null || folded.terminal.status !== receipt.status || folded.terminal.code !== receipt.code) {
+    fail("local_postgres_integration_campaign_receipt_invalid");
+  }
+  const diagnosticComplete = folded.observations.some((value) => value.kind === "version"
+      && value.classification === "MATCHED")
+    && INTEGRATION_CAMPAIGN_RESOURCE_KINDS.every((resource) => folded.observations.some(
+      (value) => value.kind === `${resource}.inspect` && value.ordinal === 1,
+    ));
+  const observedAbsence = Object.fromEntries(INTEGRATION_CAMPAIGN_RESOURCE_KINDS.map((resource) => {
+    const last = folded.observations.filter((value) => value.kind === `${resource}.inspect`).at(-1);
+    return [resource, last?.classification === "MISSING" && last?.ownership === "NOT_PRESENT"];
+  }));
+  if (receipt.readiness.diagnosticComplete !== diagnosticComplete
+    || receipt.readiness.historicalResourcesAbsent !== Object.values(observedAbsence).every(Boolean)
+    || receipt.cleanup.historicalContainerAbsent !== observedAbsence.container
+    || receipt.cleanup.historicalNetworkAbsent !== observedAbsence.network
+    || receipt.cleanup.historicalVolumeAbsent !== observedAbsence.volume) {
+    fail("local_postgres_integration_campaign_receipt_invalid");
+  }
+  if (!Array.isArray(receipt.observations) || receipt.observations.some((value) => (
+    value.bodyRetained !== false || !SHA256.test(value.bodySha256) || !Number.isSafeInteger(value.bodyBytes)
+  ))) fail("local_postgres_integration_campaign_receipt_invalid");
+  if (receipt.physical.status === "GREEN") {
+    exactKeys(receipt.physical, [
+      "status", "postgresServerVersionNum", "catalog", "schemaApplyCount", "verifyCount", "rollbackCount",
+      "domainActionInvocationCount", "distinctDomainActionCount", "containerRestartCount",
+      "databaseIdentityCount", "dockerCallCounts", "cleanupStatus",
+    ]);
+  } else if (receipt.physical.status === "NOT_RUN") exactKeys(receipt.physical, ["status"]);
+  else if (["FAILED", "CLEANUP_BLOCKED"].includes(receipt.physical.status)) {
+    exactKeys(receipt.physical, ["status", "code"]);
+    if (typeof receipt.physical.code !== "string") fail("local_postgres_integration_campaign_receipt_invalid");
+  } else if (receipt.physical.status === "CLEANUP_RECOVERED") {
+    exactKeys(receipt.physical, ["status", "cleanupStatus"]);
+    if (receipt.physical.cleanupStatus !== "PROVEN_ABSENT") fail("local_postgres_integration_campaign_receipt_invalid");
+  } else fail("local_postgres_integration_campaign_receipt_invalid");
+  if (receipt.status === "GREEN") {
+    if (receipt.code !== "local_postgres_integration_campaign_green"
+      || receipt.phases.physicalConstruction !== 1 || receipt.readiness.diagnosticComplete !== true
+      || receipt.effects.physicalRehearsalAttemptCount !== 1
+      || receipt.effects.physicalRehearsalCompletionCount !== 1
+      || receipt.readiness.historicalResourcesAbsent !== true || receipt.readiness.physicalExecuted !== true
+      || receipt.readiness.targetPostgresObserved !== true
+      || receipt.cleanup.historicalContainerAbsent !== true || receipt.cleanup.historicalNetworkAbsent !== true
+      || receipt.cleanup.historicalVolumeAbsent !== true || receipt.cleanup.ownedContainerCount !== 0
+      || receipt.cleanup.ownedNetworkCount !== 0 || receipt.cleanup.ownedVolumeCount !== 0
+      || receipt.cleanup.ownedCredentialCount !== 0 || receipt.cleanup.ownedDockerConfigCount !== 0
+      || receipt.cleanup.ownedImportedRuntimeCount !== 0 || receipt.cleanup.activeCoordinatorResidueCount !== 0
+      || receipt.cleanup.pinnedImageCacheOnlyDaemonResidue !== true
+      || receipt.physical.status !== "GREEN" || receipt.physical.postgresServerVersionNum !== 160010
+      || canonicalJson(receipt.physical.catalog) !== canonicalJson(LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.catalog)
+      || receipt.physical.schemaApplyCount !== 3 || receipt.physical.verifyCount !== 3
+      || receipt.physical.rollbackCount !== 1 || receipt.physical.domainActionInvocationCount !== 23
+      || receipt.physical.distinctDomainActionCount !== 20 || receipt.physical.containerRestartCount !== 1
+      || receipt.physical.databaseIdentityCount !== 2) {
+      fail("local_postgres_integration_campaign_receipt_invalid");
+    }
+  } else if (receipt.readiness.physicalExecuted === true && receipt.physical.status === "NOT_RUN") {
+    fail("local_postgres_integration_campaign_receipt_invalid");
+  }
+  return receipt;
+}
+
+function integrationCampaignPhysicalGreen() {
+  return Object.freeze({
+    status: "GREEN", postgresServerVersionNum: 160010,
+    catalog: Object.freeze({ ...LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.catalog }),
+    schemaApplyCount: 3, verifyCount: 3, rollbackCount: 1, domainActionInvocationCount: 23,
+    distinctDomainActionCount: 20, containerRestartCount: 1, databaseIdentityCount: 2,
+    dockerCallCounts: INTEGRATION_CAMPAIGN_CACHED_PHYSICAL_DOCKER_CALLS,
+    cleanupStatus: "PROVEN_ABSENT",
+  });
+}
+
+function campaignClassificationError(classification) {
+  return ({
+    FOREIGN: "local_postgres_integration_campaign_foreign_resource",
+    UNLABELLED: "local_postgres_integration_campaign_unlabelled_resource",
+    MALFORMED: "local_postgres_integration_campaign_malformed_resource",
+    UNKNOWN: "local_postgres_integration_campaign_diagnostic_ambiguous",
+  })[classification] ?? "local_postgres_integration_campaign_failed";
+}
+
+function integrationCampaignReceiptCode(code, context) {
+  if (INTEGRATION_CAMPAIGN_RECEIPT_CODES.includes(code)) return code;
+  if (typeof code !== "string") return "local_postgres_integration_campaign_failed";
+  if (code.includes("cleanup") || code.includes("resource_ownership")) {
+    return context?.currentPhase === "HISTORICAL_CLEANUP"
+      ? "local_postgres_integration_campaign_cleanup_blocked"
+      : "local_postgres_integration_campaign_physical_cleanup_blocked";
+  }
+  if (code.includes("drift") || code.includes("docker_cli") || code.includes("socket_identity")) {
+    return "local_postgres_integration_campaign_host_drift";
+  }
+  if (code.includes("clock") || code.includes("grant_expired")) {
+    return "local_postgres_integration_campaign_clock_invalid";
+  }
+  if (code.includes("ceiling") || code.includes("lifecycle_limit")) {
+    return "local_postgres_integration_campaign_ceiling_exceeded";
+  }
+  if (code.includes("authority") || code.includes("binding") || code.includes("owner_approval")) {
+    return "local_postgres_integration_campaign_authority_invalid";
+  }
+  return context?.physicalAttempts > 0
+    ? "local_postgres_integration_campaign_physical_failed"
+    : "local_postgres_integration_campaign_failed";
+}
+
+async function executeIntegrationCampaignFake(input) {
+  const stable = ownedPlain(input);
+  const allowed = new Set([
+    "container", "network", "volume", "cleanupFailureAt", "physicalOutcome", "crashAt", "duplicateConsume",
+    "expired", "hostDriftAt", "clockMutation",
+  ]);
+  if (Object.keys(stable).some((key) => !allowed.has(key))) fail("local_postgres_fake_fault_invalid");
+  const classifications = Object.freeze({
+    container: stable.container ?? "MISSING", network: stable.network ?? "MISSING", volume: stable.volume ?? "MISSING",
+  });
+  for (const value of Object.values(classifications)) {
+    if (!INTEGRATION_CAMPAIGN_CLASSIFICATIONS.includes(value)) fail("local_postgres_fake_fault_invalid");
+  }
+  if (stable.cleanupFailureAt !== undefined && !INTEGRATION_CAMPAIGN_RESOURCE_KINDS.includes(stable.cleanupFailureAt)) {
+    fail("local_postgres_fake_fault_invalid");
+  }
+  if (stable.physicalOutcome !== undefined && !["GREEN", "FAILED", "CLEANUP_BLOCKED"].includes(stable.physicalOutcome)) {
+    fail("local_postgres_fake_fault_invalid");
+  }
+  if (stable.clockMutation !== undefined && ![
+    "expired_before_physical", "rollback_before_physical", "rollback_during_cleanup",
+  ].includes(stable.clockMutation)) fail("local_postgres_fake_fault_invalid");
+  const maximumFaultCalls = Object.freeze([
+    "version#1", "container.inspect#1", "container.stop#1", "container.rm#1", "container.inspect#2",
+    "network.inspect#1", "network.rm#1", "network.inspect#2", "volume.inspect#1", "volume.rm#1",
+    "volume.inspect#2", "physical:rehearsal#1",
+  ]);
+  const allowedFaults = new Set(maximumFaultCalls.flatMap((call) => [
+    `${call}:before_call`, `${call}:after_call_before_completion`,
+  ]));
+  if (stable.crashAt !== undefined && !allowedFaults.has(stable.crashAt)) fail("local_postgres_fake_fault_invalid");
+  if (stable.hostDriftAt !== undefined && !new Set(maximumFaultCalls.flatMap((call) => [
+    `${call}:before`, `${call}:after`,
+  ])).has(stable.hostDriftAt)) fail("local_postgres_fake_fault_invalid");
+  const grant = integrationCampaignFakeGrant();
+  if (stable.expired === true) {
+    try { validateLocalPostgresIntegrationCampaignGrant(grant, new Date(grant.expiresAt)); }
+    catch (error) {
+      return Object.freeze({
+        schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v1",
+        status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code,
+        receipt: null, calls: Object.freeze([]), journal: Object.freeze([]), physicalEffects: 0,
+      });
+    }
+  }
+  validateLocalPostgresIntegrationCampaignGrant(grant, new Date("2026-08-14T20:00:01.000Z"));
+  const consumedCampaignGrantSha256 = sha256Bytes(Buffer.from(`${canonicalJson(grant)}\n`, "utf8"));
+  const state = {
+    attempts: integrationCampaignEmptyDockerCalls(), completions: integrationCampaignEmptyDockerCalls(),
+    physicalAttempts: Object.create(null), physicalCompletions: Object.create(null),
+    effectOrdinal: 0, consumeCount: 0, currentPhase: "DIAGNOSTIC",
+    journal: { entries: [], headSha256: INTEGRATION_CAMPAIGN_GENESIS, totalBytes: 0 },
+    grant, nowMs: instant(grant.createdAt) + 1_000, lastNonCleanupObservedAt: null,
+  };
+  const calls = [];
+  const observations = [];
+  const phases = { diagnostic: 1, historicalCleanup: 0, physicalConstruction: 0, physicalCleanupRecoveries: 0 };
+  const absent = { container: false, network: false, volume: false };
+  let status = "FAILED";
+  let code = "local_postgres_integration_campaign_failed";
+  let physical = Object.freeze({ status: "NOT_RUN" });
+  let cleanupBlocked = false;
+  let duplicateDenied = false;
+  let duplicateDenialCode = null;
+  let duplicateSnapshot = null;
+  integrationCampaignConsumeOnce(state, consumedCampaignGrantSha256);
+  if (stable.duplicateConsume === true) {
+    const before = Object.freeze({ entryCount: state.journal.entries.length, headSha256: state.journal.headSha256 });
+    try { integrationCampaignConsumeOnce(state, consumedCampaignGrantSha256); }
+    catch (error) {
+      duplicateDenied = true;
+      duplicateDenialCode = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed";
+    }
+    duplicateSnapshot = Object.freeze({ before, after: Object.freeze({
+      entryCount: state.journal.entries.length, headSha256: state.journal.headSha256,
+    }) });
+  }
+  integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "diagnostic", ordinal: 1 });
+  const invoke = (kind, target, operation) => {
+    const nextCall = `${kind}#${kind.startsWith("physical:")
+      ? (state.physicalAttempts[kind] ?? 0) + 1 : (state.attempts[kind] ?? 0) + 1}`;
+    state.nowMs += 1;
+    if (stable.clockMutation === "expired_before_physical" && nextCall === "physical:rehearsal#1") {
+      state.nowMs = instant(grant.expiresAt);
+    } else if (stable.clockMutation === "rollback_before_physical" && nextCall === "physical:rehearsal#1") {
+      state.nowMs = (state.lastNonCleanupObservedAt ?? state.nowMs) - 1;
+    } else if (stable.clockMutation === "rollback_during_cleanup" && nextCall === "container.stop#1") {
+      state.nowMs = (state.lastNonCleanupObservedAt ?? state.nowMs) - 1;
+    }
+    const reservation = integrationCampaignReserve(state, kind, target);
+    const call = `${kind}#${reservation.ordinal}`;
+    if (stable.hostDriftAt === `${call}:before`) fail("local_postgres_integration_campaign_host_drift");
+    calls.push(Object.freeze({ kind, target, effectId: reservation.effectId }));
+    if (stable.crashAt === `${call}:before_call`) {
+      fail("local_postgres_integration_campaign_ambiguous_effect");
+    }
+    if (stable.crashAt === `${call}:after_call_before_completion`) {
+      fail("local_postgres_integration_campaign_ambiguous_effect");
+    }
+    const value = operation();
+    if (stable.hostDriftAt === `${call}:after`) fail("local_postgres_integration_campaign_host_drift");
+    integrationCampaignComplete(state, reservation);
+    return value;
+  };
+  try {
+    invoke("version", "host", () => {
+      const value = integrationCampaignObservation("version", "MATCHED", 1);
+      observations.push(value); integrationCampaignJournalAppend(state.journal, "observation.recorded", value);
+    });
+    for (const resource of INTEGRATION_CAMPAIGN_RESOURCE_KINDS) {
+      const kind = `${resource}.inspect`;
+      const classification = classifications[resource];
+      invoke(kind, INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES[resource], () => {
+        const ownership = classification === "OWNED" ? "EXACT_HISTORICAL_GRANT"
+          : classification === "MISSING" ? "NOT_PRESENT" : classification;
+        const value = integrationCampaignObservation(kind, classification, 1, ownership);
+        observations.push(value); integrationCampaignJournalAppend(state.journal, "observation.recorded", value);
+      });
+      if (classification === "MISSING") { absent[resource] = true; continue; }
+      if (classification !== "OWNED") fail(campaignClassificationError(classification));
+      if (phases.historicalCleanup === 0) {
+        phases.historicalCleanup = 1;
+        state.currentPhase = "HISTORICAL_CLEANUP";
+        integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "historical_cleanup", ordinal: 1 });
+      }
+      if (resource === "container") invoke("container.stop", INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES.container, () => true);
+      invoke(`${resource}.rm`, INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES[resource], () => {
+        if (stable.cleanupFailureAt === resource) fail("local_postgres_integration_campaign_cleanup_blocked");
+        return true;
+      });
+      invoke(kind, INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES[resource], () => {
+        const value = integrationCampaignObservation(kind, "MISSING", 2, "NOT_PRESENT");
+        observations.push(value); integrationCampaignJournalAppend(state.journal, "observation.recorded", value);
+      });
+      absent[resource] = true;
+    }
+    if (!Object.values(absent).every(Boolean)) fail("local_postgres_integration_campaign_absence_unproven");
+    phases.physicalConstruction = 1;
+    state.currentPhase = "PHYSICAL_CONSTRUCTION";
+    state.nowMs = Math.max(state.nowMs, (state.lastNonCleanupObservedAt ?? state.nowMs) + 1);
+    integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "physical_construction", ordinal: 1 });
+    const physicalOutcome = stable.physicalOutcome ?? "GREEN";
+    physical = invoke("physical:rehearsal", "fresh_disposable_postgres", () => (
+      physicalOutcome === "GREEN" ? integrationCampaignPhysicalGreen()
+        : Object.freeze({ status: physicalOutcome, code: physicalOutcome === "CLEANUP_BLOCKED"
+          ? "local_postgres_cleanup_blocked" : "local_postgres_physical_failed" })
+    ));
+    if (physicalOutcome === "CLEANUP_BLOCKED") {
+      cleanupBlocked = true; fail("local_postgres_integration_campaign_physical_cleanup_blocked");
+    }
+    if (physicalOutcome === "FAILED") fail("local_postgres_integration_campaign_physical_failed");
+    status = "GREEN"; code = "local_postgres_integration_campaign_green";
+  } catch (error) {
+    code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_integration_campaign_failed";
+    status = cleanupBlocked || code.includes("cleanup_blocked") ? "CLEANUP_BLOCKED" : "FAILED";
+  }
+  const journalFold = validateIntegrationCampaignJournal(state.journal.entries);
+  integrationCampaignJournalAppend(state.journal, "campaign.terminal", { status, code, phase: state.currentPhase });
+  const finalFold = validateIntegrationCampaignJournal(state.journal.entries);
+  const green = status === "GREEN";
+  const receipt = {
+    schemaVersion: INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA, status, code, consumedCampaignGrantSha256,
+    authority: grant.authority, lineage: grant.lineage, artifacts: grant.artifacts, historical: grant.historical,
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: grant.host.socketIdentitySha256,
+      dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1", dockerServerPlatform: IMAGE_PLATFORM,
+    }),
+    phases: Object.freeze(phases),
+    effects: Object.freeze({
+      diagnosticDockerCallAttempts: Object.freeze({ ...state.attempts }),
+      diagnosticDockerCallCompletions: Object.freeze({ ...state.completions }),
+      physicalRehearsalAttemptCount: state.physicalAttempts["physical:rehearsal"] ?? 0,
+      physicalRehearsalCompletionCount: state.physicalCompletions["physical:rehearsal"] ?? 0,
+    }),
+    observations: Object.freeze(observations), physical,
+    cleanup: Object.freeze({
+      historicalContainerAbsent: absent.container, historicalNetworkAbsent: absent.network,
+      historicalVolumeAbsent: absent.volume, ownedContainerCount: green ? 0 : cleanupBlocked ? 1 : 0,
+      ownedNetworkCount: 0, ownedVolumeCount: 0, ownedCredentialCount: 0, ownedDockerConfigCount: 0,
+      ownedImportedRuntimeCount: 0, activeCoordinatorResidueCount: 0,
+      pinnedImageCacheOnlyDaemonResidue: green,
+    }),
+    journal: Object.freeze(selectKeys(finalFold, ["entryCount", "headSha256", "openEffectCount"])),
+    readiness: Object.freeze({
+      diagnosticComplete: observations.some((value) => value.kind === "volume.inspect"),
+      historicalResourcesAbsent: Object.values(absent).every(Boolean),
+      physicalExecuted: (state.physicalAttempts["physical:rehearsal"] ?? 0) === 1,
+      targetPostgresObserved: green, productRuntimeEffects: false, productionEffects: false,
+      trafficReady: false, gateCReady: false,
+    }),
+  };
+  let receiptValid = false;
+  try { validateIntegrationCampaignReceipt(receipt, grant, state.journal); receiptValid = true; }
+  catch { receiptValid = false; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v1",
+    status, code, receipt: Object.freeze(receipt), receiptValid, calls: Object.freeze(calls),
+    journal: Object.freeze(state.journal.entries), journalBeforeTerminal: journalFold,
+    consumeCount: state.consumeCount, duplicateDenied, duplicateDenialCode, duplicateSnapshot,
+    physicalEffects: 0, dockerSocketResolutions: 0,
+    postgresConnections: 0, sqlStatements: 0, networkEffects: 0,
+  });
+}
+
+export async function runLocalPostgresIntegrationCampaignFakePlan(input = Object.freeze({})) {
+  return executeIntegrationCampaignFake(input);
+}
+
+export function runLocalPostgresIntegrationCampaignGrantValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const grant = JSON.parse(canonicalJson(integrationCampaignFakeGrant()));
+  const allowed = new Set([
+    "none", "top_extra", "nested_extra", "authority", "lineage", "artifacts", "historical", "host",
+    "ceilings", "obsolete_physical", "obsolete_rescue", "expired", "accessor",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  if (stable.mutation === "top_extra") grant.extra = true;
+  else if (stable.mutation === "nested_extra") grant.ceilings.extra = true;
+  else if (stable.mutation === "authority") grant.authority.constructionPacketSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") grant.lineage.constructionOwnerReviewHead = "f".repeat(40);
+  else if (stable.mutation === "artifacts") grant.artifacts.runnerSha256 = "bad";
+  else if (stable.mutation === "historical") grant.historical.container = "foreign";
+  else if (stable.mutation === "host") grant.host.imageReference = "postgres:latest";
+  else if (stable.mutation === "ceilings") grant.ceilings.maximumCampaignConsumptions = 2;
+  else if (stable.mutation === "obsolete_physical") grant.authority.executionCardSha256 = INTEGRATION_CAMPAIGN_OLD_PHYSICAL_GRANT_SHA256;
+  else if (stable.mutation === "obsolete_rescue") grant.authority.executionOwnerReviewSha256 = INTEGRATION_CAMPAIGN_OLD_RESCUE_GRANT_SHA256;
+  else if (stable.mutation === "accessor") Object.defineProperty(grant, "schemaVersion", { enumerable: true, get() { return INTEGRATION_CAMPAIGN_SCHEMA; } });
+  let accepted = false; let code = null;
+  try {
+    validateLocalPostgresIntegrationCampaignGrant(grant,
+      new Date(stable.mutation === "expired" ? grant.expiresAt : "2026-08-14T20:00:01.000Z"));
+    accepted = true;
+  } catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-grant-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresIntegrationCampaignJournalValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const allowed = new Set(["none", "top_extra", "sequence", "previous", "event", "detail", "detail_extra_rehashed",
+    "entry_sha", "completion_without_attempt"]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const journal = { entries: [], headSha256: INTEGRATION_CAMPAIGN_GENESIS };
+  integrationCampaignJournalAppend(journal, "campaign.consumed", { consumedCampaignGrantSha256: `sha256:${"1".repeat(64)}` });
+  integrationCampaignJournalAppend(journal, "phase.started", { phase: "diagnostic", ordinal: 1 });
+  const entries = JSON.parse(canonicalJson(journal.entries));
+  if (stable.mutation === "top_extra") entries[0].extra = true;
+  else if (stable.mutation === "sequence") entries[0].sequence = 2;
+  else if (stable.mutation === "previous") entries[0].previousSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "event") entries[1].event = "unknown";
+  else if (stable.mutation === "detail") entries[0].detail = {};
+  else if (stable.mutation === "detail_extra_rehashed") {
+    entries[0].detail.extra = true;
+    let previousSha256 = INTEGRATION_CAMPAIGN_GENESIS;
+    for (let index = 0; index < entries.length; index += 1) {
+      entries[index].sequence = index + 1;
+      entries[index].previousSha256 = previousSha256;
+      const preimage = selectKeys(entries[index], ["schemaVersion", "sequence", "previousSha256", "event", "detail"]);
+      entries[index].entrySha256 = sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8"));
+      previousSha256 = entries[index].entrySha256;
+    }
+  }
+  else if (stable.mutation === "entry_sha") entries[0].entrySha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "completion_without_attempt") {
+    const preimage = { schemaVersion: INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA, sequence: 3,
+      previousSha256: entries[1].entrySha256, event: "effect.completed",
+      detail: { effectId: "missing", kind: "version", target: "host", ordinal: 1, phase: "DIAGNOSTIC" } };
+    entries.push({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8")) });
+  }
+  let accepted = false; let code = null;
+  try { validateIntegrationCampaignJournal(entries); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-journal-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresIntegrationCampaignJournalHeadroomFakePlan() {
+  const runCase = (phase, maximumBytes, delta) => {
+    const detail = Object.freeze({ effectId: "001-container.rm", kind: "container.rm",
+      target: INTEGRATION_CAMPAIGN_HISTORICAL_RESOURCES.container, ordinal: 1, phase });
+    const probe = { entries: [], headSha256: INTEGRATION_CAMPAIGN_GENESIS, totalBytes: 0 };
+    integrationCampaignJournalAppend(probe, "effect.reserved", detail);
+    const entryBytes = probe.totalBytes;
+    const journal = { entries: [], headSha256: INTEGRATION_CAMPAIGN_GENESIS,
+      totalBytes: maximumBytes - entryBytes + delta };
+    const before = Object.freeze({ entryCount: 0, headSha256: journal.headSha256, totalBytes: journal.totalBytes });
+    let accepted = false; let code = null;
+    try { integrationCampaignJournalAppend(journal, "effect.reserved", detail); accepted = true; }
+    catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+    return Object.freeze({ accepted, code, before, after: Object.freeze({
+      entryCount: journal.entries.length, headSha256: journal.headSha256, totalBytes: journal.totalBytes,
+    }) });
+  };
+  return Object.freeze({
+    normalExact: runCase("DIAGNOSTIC", JOURNAL_NORMAL_MAXIMUM_BYTES, 0),
+    normalOverflow: runCase("DIAGNOSTIC", JOURNAL_NORMAL_MAXIMUM_BYTES, 1),
+    cleanupExact: runCase("HISTORICAL_CLEANUP", JOURNAL_TOTAL_MAXIMUM_BYTES, 0),
+    cleanupOverflow: runCase("HISTORICAL_CLEANUP", JOURNAL_TOTAL_MAXIMUM_BYTES, 1),
+    normalMaximumBytes: JOURNAL_NORMAL_MAXIMUM_BYTES, totalMaximumBytes: JOURNAL_TOTAL_MAXIMUM_BYTES,
+    physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["outcomes"]);
+  if (!Array.isArray(stable.outcomes) || stable.outcomes.length < 1 || stable.outcomes.length > 3
+    || stable.outcomes.some((value) => !["CRASH", "PROVEN_ABSENT", "BLOCKED"].includes(value))) {
+    fail("local_postgres_fake_fault_invalid");
+  }
+  const grant = integrationCampaignFakeGrant();
+  const state = {
+    attempts: integrationCampaignEmptyDockerCalls(), completions: integrationCampaignEmptyDockerCalls(),
+    physicalAttempts: Object.create(null), physicalCompletions: Object.create(null),
+    effectOrdinal: 0, currentPhase: "DIAGNOSTIC", grant,
+    nowMs: instant(grant.createdAt) + 1_000, lastNonCleanupObservedAt: null,
+    journal: { entries: [], headSha256: INTEGRATION_CAMPAIGN_GENESIS, totalBytes: 0 },
+  };
+  const consumedCampaignGrantSha256 = sha256Bytes(Buffer.from(`${canonicalJson(grant)}\n`, "utf8"));
+  integrationCampaignJournalAppend(state.journal, "campaign.consumed", { consumedCampaignGrantSha256 });
+  integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "diagnostic", ordinal: 1 });
+  state.currentPhase = "PHYSICAL_CONSTRUCTION";
+  integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "physical_construction", ordinal: 1 });
+  integrationCampaignReserve(state, "physical:rehearsal", "fresh_disposable_postgres");
+  let status = "INTERRUPTED";
+  let code = "local_postgres_integration_campaign_ambiguous_effect";
+  let deniedSnapshot = null;
+  for (let index = 0; index < stable.outcomes.length; index += 1) {
+    if (index >= LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS.maximumPhysicalCleanupRecoveryPhases) {
+      const before = Object.freeze({ entryCount: state.journal.entries.length, headSha256: state.journal.headSha256 });
+      deniedSnapshot = Object.freeze({ before, after: before });
+      status = "DENIED"; code = "local_postgres_integration_campaign_cleanup_recovery_limit";
+      break;
+    }
+    const ordinal = index + 1;
+    state.currentPhase = "PHYSICAL_CLEANUP_RECOVERY";
+    integrationCampaignJournalAppend(state.journal, "phase.started", { phase: "physical_cleanup_recovery", ordinal });
+    const reservation = integrationCampaignReserve(state, "physical:cleanup_recovery", "fresh_disposable_postgres");
+    const outcome = stable.outcomes[index];
+    if (outcome === "CRASH") continue;
+    if (outcome === "PROVEN_ABSENT") {
+      integrationCampaignComplete(state, reservation);
+      status = "FAILED"; code = "local_postgres_integration_campaign_cleanup_recovered_after_interruption";
+    } else {
+      status = "CLEANUP_BLOCKED"; code = "local_postgres_integration_campaign_cleanup_blocked";
+    }
+    integrationCampaignJournalAppend(state.journal, "campaign.terminal", {
+      status, code, phase: "PHYSICAL_CLEANUP_RECOVERY",
+    });
+    break;
+  }
+  const folded = validateIntegrationCampaignJournal(state.journal.entries);
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-cleanup-recovery-fake-result.v1",
+    status, code, journal: Object.freeze(state.journal.entries),
+    journalState: Object.freeze(selectKeys(folded, ["entryCount", "headSha256", "openEffectCount"])),
+    phases: folded.phases, physicalRehearsalAttemptCount: folded.physicalRehearsalAttemptCount,
+    physicalRehearsalCompletionCount: folded.physicalRehearsalCompletionCount,
+    cleanupRecoveryAttemptCount: state.physicalAttempts["physical:cleanup_recovery"] ?? 0,
+    cleanupRecoveryCompletionCount: state.physicalCompletions["physical:cleanup_recovery"] ?? 0,
+    deniedSnapshot, physicalEffects: 0, dockerSocketResolutions: 0, postgresConnections: 0, sqlStatements: 0,
+  });
+}
+
+export async function runLocalPostgresIntegrationCampaignReceiptValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "none", "top_extra", "nested_extra", "authority", "lineage", "artifacts", "historical", "host", "phases",
+    "effects", "observation", "physical", "cleanup", "journal", "readiness", "consumed", "status_code", "accessor",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const green = await executeIntegrationCampaignFake({});
+  const receipt = JSON.parse(canonicalJson(green.receipt));
+  const grant = integrationCampaignFakeGrant();
+  const journal = { entries: green.journal, headSha256: green.receipt.journal.headSha256 };
+  if (stable.mutation === "top_extra") receipt.extra = true;
+  else if (stable.mutation === "nested_extra") receipt.cleanup.extra = true;
+  else if (stable.mutation === "authority") receipt.authority.executionCardSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") receipt.lineage.statusHead = "f".repeat(40);
+  else if (stable.mutation === "artifacts") receipt.artifacts.runnerSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "historical") receipt.historical.labelValue = "foreign";
+  else if (stable.mutation === "host") receipt.hostObservation.dockerServerPlatform = "MISMATCH";
+  else if (stable.mutation === "phases") receipt.phases.physicalConstruction = 0;
+  else if (stable.mutation === "effects") receipt.effects.diagnosticDockerCallAttempts.version = 2;
+  else if (stable.mutation === "observation") receipt.observations[0].bodyRetained = true;
+  else if (stable.mutation === "physical") receipt.physical.schemaApplyCount = 2;
+  else if (stable.mutation === "cleanup") receipt.cleanup.ownedContainerCount = 1;
+  else if (stable.mutation === "journal") receipt.journal.headSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "readiness") receipt.readiness.gateCReady = true;
+  else if (stable.mutation === "consumed") receipt.consumedCampaignGrantSha256 = "bad";
+  else if (stable.mutation === "status_code") receipt.code = "local_postgres_integration_campaign_failed";
+  else if (stable.mutation === "accessor") Object.defineProperty(receipt, "status", { enumerable: true, get() { return "GREEN"; } });
+  let accepted = false; let code = null;
+  try { validateIntegrationCampaignReceipt(receipt, grant, journal); accepted = true; }
+  catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-receipt-validation-fake-result.v1",
+    mutation: stable.mutation, accepted, code, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresIntegrationCampaignAuthorityFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const allowed = new Set(["none", "packet", "review", "topology", "workset", "marker", "old_authority"]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const authority = {
+    packetHead: INTEGRATION_CAMPAIGN_PACKET_HEAD, packetTree: INTEGRATION_CAMPAIGN_PACKET_TREE,
+    packetSha256: INTEGRATION_CAMPAIGN_PACKET_SHA256, reviewHead: INTEGRATION_CAMPAIGN_REVIEW_HEAD,
+    reviewTree: INTEGRATION_CAMPAIGN_REVIEW_TREE, reviewSha256: INTEGRATION_CAMPAIGN_REVIEW_SHA256,
+    packetPath: INTEGRATION_CAMPAIGN_PACKET_PATH, reviewPath: INTEGRATION_CAMPAIGN_REVIEW_PATH,
+    cardPath: INTEGRATION_CAMPAIGN_CARD_PATH, executionReviewPath: INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH,
+    markerBegin: INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN, markerEnd: INTEGRATION_CAMPAIGN_AUTHORITY_END,
+    implementationPaths: ["scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts"],
+    evidencePaths: [
+      "schemas/r4/public-core/local-postgres-integration-campaign-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-evidence.schema.json",
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign.json",
+    ],
+  };
+  if (stable.mutation === "packet") authority.packetSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "review") authority.reviewHead = "f".repeat(40);
+  else if (stable.mutation === "topology") authority.packetHead = authority.reviewHead;
+  else if (stable.mutation === "workset") authority.implementationPaths.push("package-lock.json");
+  else if (stable.mutation === "marker") authority.markerBegin = `prefix${authority.markerBegin}`;
+  else if (stable.mutation === "old_authority") authority.cardPath = BODY_FREE_DIAGNOSTIC_CARD_PATH;
+  const accepted = authority.packetHead === INTEGRATION_CAMPAIGN_PACKET_HEAD
+    && authority.packetTree === INTEGRATION_CAMPAIGN_PACKET_TREE
+    && authority.packetSha256 === INTEGRATION_CAMPAIGN_PACKET_SHA256
+    && authority.reviewHead === INTEGRATION_CAMPAIGN_REVIEW_HEAD
+    && authority.reviewTree === INTEGRATION_CAMPAIGN_REVIEW_TREE
+    && authority.reviewSha256 === INTEGRATION_CAMPAIGN_REVIEW_SHA256
+    && canonicalJson(authority.implementationPaths) === canonicalJson([
+      "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
+    ])
+    && authority.markerBegin === INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN
+    && authority.cardPath === INTEGRATION_CAMPAIGN_CARD_PATH;
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-authority-fake-result.v1",
+    mutation: stable.mutation, accepted, code: accepted ? null : "local_postgres_integration_campaign_authority_invalid",
+    authority: Object.freeze(authority), physicalEffects: 0,
+  });
+}
+
+const INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS = Object.freeze([
+  "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
+]);
+const INTEGRATION_CAMPAIGN_EVIDENCE_PATHS = Object.freeze([
+  "schemas/r4/public-core/local-postgres-integration-campaign-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-evidence.schema.json",
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign.json",
+]);
+const INTEGRATION_CAMPAIGN_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const INTEGRATION_CAMPAIGN_PAYLOAD_KEYS = Object.freeze([
+  "schemaVersion", "authority", "lineage", "artifacts", "historical", "host", "ceilings",
+  "localOnly", "productionEffectsAllowed",
+]);
+const INTEGRATION_CAMPAIGN_PAYLOAD_AUTHORITY_KEYS = Object.freeze([
+  "constructionPacketSha256", "constructionOwnerReviewSha256",
+]);
+const INTEGRATION_CAMPAIGN_PAYLOAD_LINEAGE_KEYS = Object.freeze(
+  INTEGRATION_CAMPAIGN_LINEAGE_KEYS.slice(0, -4),
+);
+const INTEGRATION_CAMPAIGN_PAYLOAD_HOST_KEYS = Object.freeze([
+  "dockerCli", "dockerCliSha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+  "imageReference", "imagePlatform", "imagePlatformManifest", "imageCachePolicy",
+]);
+
+function parseIntegrationCampaignAuthorityCard(bytes) {
+  if (!Buffer.isBuffer(bytes)) fail("local_postgres_integration_campaign_authority_invalid");
+  const source = bytes.toString("utf8");
+  const lines = source.split("\n");
+  const begins = lines.flatMap((line, index) => line === INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === INTEGRATION_CAMPAIGN_AUTHORITY_END ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_integration_campaign_authority_invalid");
+  }
+  let payload;
+  try { payload = ownedPlain(parseStrictJson(lines[begins[0] + 1])); }
+  catch { fail("local_postgres_integration_campaign_authority_invalid"); }
+  if (lines[begins[0] + 1] !== canonicalJson(payload)) fail("local_postgres_integration_campaign_authority_invalid");
+  exactKeys(payload, INTEGRATION_CAMPAIGN_PAYLOAD_KEYS);
+  exactKeys(payload.authority, INTEGRATION_CAMPAIGN_PAYLOAD_AUTHORITY_KEYS);
+  exactKeys(payload.lineage, INTEGRATION_CAMPAIGN_PAYLOAD_LINEAGE_KEYS);
+  exactKeys(payload.artifacts, INTEGRATION_CAMPAIGN_ARTIFACT_KEYS);
+  exactKeys(payload.artifacts.catalog, CATALOG_KEYS);
+  exactKeys(payload.historical, INTEGRATION_CAMPAIGN_HISTORICAL_KEYS);
+  exactKeys(payload.host, INTEGRATION_CAMPAIGN_PAYLOAD_HOST_KEYS);
+  exactKeys(payload.ceilings, INTEGRATION_CAMPAIGN_CEILING_KEYS);
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-integration-campaign-authority.v1"
+    || payload.localOnly !== true || payload.productionEffectsAllowed !== false
+    || payload.authority.constructionPacketSha256 !== INTEGRATION_CAMPAIGN_PACKET_SHA256
+    || payload.authority.constructionOwnerReviewSha256 !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
+    || canonicalJson(payload.historical) !== canonicalJson(integrationCampaignHistoricalContract())
+    || canonicalJson(payload.ceilings) !== canonicalJson(LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS)) {
+    fail("local_postgres_integration_campaign_authority_invalid");
+  }
+  return Object.freeze({
+    payload,
+    sha256: sha256Bytes(Buffer.from(lines[begins[0] + 1], "utf8")),
+  });
+}
+
+function verifyIntegrationCampaignTopology(grant) {
+  const lineage = grant.lineage;
+  exactCommitStep("1e46cb589e7cdebb1566d28bbdd6e13cd4066946", INTEGRATION_CAMPAIGN_PACKET_HEAD,
+    INTEGRATION_CAMPAIGN_PACKET_TREE, new Map([[INTEGRATION_CAMPAIGN_PACKET_PATH, "A"]]),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_PACKET_HEAD, INTEGRATION_CAMPAIGN_REVIEW_HEAD,
+    INTEGRATION_CAMPAIGN_REVIEW_TREE, new Map([[INTEGRATION_CAMPAIGN_REVIEW_PATH, "A"]]),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_REVIEW_HEAD, lineage.implementationHead, lineage.implementationTree,
+    statusMap(INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS), "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(lineage.implementationHead, lineage.evidenceHead, lineage.evidenceTree,
+    statusMap(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS, new Set(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS)),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(lineage.evidenceHead, lineage.statusHead, lineage.statusTree,
+    statusMap(INTEGRATION_CAMPAIGN_STATUS_PATHS,
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md"])),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(lineage.statusHead, lineage.executionCardHead, lineage.executionCardTree,
+    new Map([[INTEGRATION_CAMPAIGN_CARD_PATH, "A"]]), "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(lineage.executionCardHead, lineage.executionOwnerReviewHead, lineage.executionOwnerReviewTree,
+    new Map([[INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH, "A"]]),
+    "local_postgres_integration_campaign_binding_invalid");
+  const implementation = artifactAggregate(lineage.implementationHead, INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS);
+  const status = artifactAggregate(lineage.statusHead, INTEGRATION_CAMPAIGN_STATUS_PATHS);
+  if (implementation.aggregateSha256 !== lineage.implementationAggregateSha256
+    || implementation.records[0].sha256 !== grant.artifacts.runnerSha256
+    || implementation.records[1].sha256 !== grant.artifacts.runnerTestSha256
+    || status.aggregateSha256 !== lineage.statusAggregateSha256
+    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_PACKET_PATH}`], true))
+      !== INTEGRATION_CAMPAIGN_PACKET_SHA256
+    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_REVIEW_PATH}`], true))
+      !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
+    || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[0]}`], true))
+      !== grant.artifacts.artifactIndexSha256
+    || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[1]}`], true))
+      !== grant.artifacts.evidenceSchemaSha256
+    || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[2]}`], true))
+      !== grant.artifacts.evidenceSha256
+    || sha256Bytes(runGit(["show", `${lineage.statusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md`], true))
+      !== grant.artifacts.constructionReportSha256) {
+    fail("local_postgres_integration_campaign_binding_invalid");
+  }
+}
+
+function deriveIntegrationCampaignAuthority(executionOwnerReviewHead) {
+  assertGit(executionOwnerReviewHead);
+  const executionCardHead = runGit(["rev-parse", `${executionOwnerReviewHead}^`]);
+  const statusHead = runGit(["rev-parse", `${executionCardHead}^`]);
+  const evidenceHead = runGit(["rev-parse", `${statusHead}^`]);
+  const implementationHead = runGit(["rev-parse", `${evidenceHead}^`]);
+  const lineage = Object.freeze({
+    constructionPacketHead: INTEGRATION_CAMPAIGN_PACKET_HEAD,
+    constructionPacketTree: INTEGRATION_CAMPAIGN_PACKET_TREE,
+    constructionOwnerReviewHead: INTEGRATION_CAMPAIGN_REVIEW_HEAD,
+    constructionOwnerReviewTree: INTEGRATION_CAMPAIGN_REVIEW_TREE,
+    implementationHead, implementationTree: runGit(["rev-parse", `${implementationHead}^{tree}`]),
+    implementationAggregateSha256: artifactAggregate(implementationHead, INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS).aggregateSha256,
+    evidenceHead, evidenceTree: runGit(["rev-parse", `${evidenceHead}^{tree}`]),
+    statusHead, statusTree: runGit(["rev-parse", `${statusHead}^{tree}`]),
+    statusAggregateSha256: artifactAggregate(statusHead, INTEGRATION_CAMPAIGN_STATUS_PATHS).aggregateSha256,
+    executionCardHead, executionCardTree: runGit(["rev-parse", `${executionCardHead}^{tree}`]),
+    executionOwnerReviewHead, executionOwnerReviewTree: runGit(["rev-parse", `${executionOwnerReviewHead}^{tree}`]),
+  });
+  const cardBytes = runGit(["show", `${executionCardHead}:${INTEGRATION_CAMPAIGN_CARD_PATH}`], true);
+  const parsed = parseIntegrationCampaignAuthorityCard(cardBytes);
+  if (canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(lineage, INTEGRATION_CAMPAIGN_PAYLOAD_LINEAGE_KEYS))) {
+    fail("local_postgres_integration_campaign_authority_invalid");
+  }
+  const authority = Object.freeze({
+    ...parsed.payload.authority,
+    executionCardSha256: sha256Bytes(cardBytes),
+    executionOwnerReviewSha256: sha256Bytes(runGit([
+      "show", `${executionOwnerReviewHead}:${INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH}`,
+    ], true)),
+    executionAuthorityPayloadSha256: parsed.sha256,
+  });
+  return Object.freeze({
+    authority, lineage, artifacts: parsed.payload.artifacts, historical: parsed.payload.historical,
+    host: parsed.payload.host, ceilings: parsed.payload.ceilings,
+  });
+}
+
+export function verifyLocalPostgresIntegrationCampaignCommittedBindings(grant) {
+  const stable = validateLocalPostgresIntegrationCampaignGrant(grant, new Date(instant(grant.createdAt) + 1));
+  verifyIntegrationCampaignTopology(stable);
+  if (runGit(["rev-parse", "HEAD^{commit}"]) !== stable.lineage.executionOwnerReviewHead
+    || runGit(["rev-parse", "HEAD^{tree}"]) !== stable.lineage.executionOwnerReviewTree
+    || runGit(["diff", "--cached", "--quiet", "--exit-code"]) !== ""
+    || runGit(["status", "--porcelain=v1", "--untracked-files=no"]) !== ""
+    || sha256StableOwnedFile(path.join(ROOT, "package-lock.json")) !== stable.artifacts.packageLockSha256
+    || sha256StableOwnedFile(fileURLToPath(import.meta.url)) !== stable.artifacts.runnerSha256
+    || sha256StableOwnedFile(path.join(ROOT, "test/r4/public-core-local-postgres.test.ts")) !== stable.artifacts.runnerTestSha256
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.schema)) !== stable.artifacts.schemaSqlSha256
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.verify)) !== stable.artifacts.verifySqlSha256
+    || sha256StableOwnedFile(path.join(ROOT, LOCAL_POSTGRES_SQL_PATHS.rollback)) !== stable.artifacts.rollbackSqlSha256) {
+    fail("local_postgres_integration_campaign_binding_invalid");
+  }
+  const boundPaths = [...new Set([
+    ...LOCAL_POSTGRES_STAGE_A_PATHS, ...INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS,
+    ...LOCAL_POSTGRES_TRANSITIVE_RUNTIME_PATHS,
+  ])].sort(binaryCompare);
+  for (const artifactPath of boundPaths) {
+    if (INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS.includes(artifactPath)) continue;
+    const committed = runGit(["show", `${stable.lineage.executionOwnerReviewHead}:${artifactPath}`], true);
+    if (sha256StableOwnedFile(path.join(ROOT, artifactPath)) !== sha256Bytes(committed)) {
+      fail("local_postgres_integration_campaign_binding_invalid");
+    }
+  }
+  const flags = runGit(["ls-files", "-v", "--", ...boundPaths]).split("\n").filter(Boolean);
+  if (flags.length !== boundPaths.length || flags.some((line) => !/^H /u.test(line))) {
+    fail("local_postgres_integration_campaign_binding_invalid");
+  }
+  return true;
+}
+
+function prepareIntegrationCampaignGrantWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["campaignRoot", "executionOwnerReviewHead", "ownerApprovalReceiptPath", "createdAt", "expiresAt"]);
+  if (typeof stable.campaignRoot !== "string" || !path.isAbsolute(stable.campaignRoot)
+    || typeof stable.ownerApprovalReceiptPath !== "string") fail("local_postgres_private_root_invalid");
+  let campaignRoot;
+  try { campaignRoot = fs.realpathSync(stable.campaignRoot); } catch { fail("local_postgres_private_root_invalid"); }
+  if (campaignRoot !== stable.campaignRoot) fail("local_postgres_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(campaignRoot);
+  const names = fs.readdirSync(campaignRoot).sort(binaryCompare);
+  if (names.length !== 1 || names[0] !== "owner-approval-receipt") fail("local_postgres_private_root_invalid");
+  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(campaignRoot, stable.ownerApprovalReceiptPath);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const derived = adapters.deriveAuthority(stable.executionOwnerReviewHead);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const observedAt = adapters.now();
+  const observedMs = observedAt instanceof Date ? observedAt.getTime() : Number.NaN;
+  const createdAt = instant(stable.createdAt);
+  const expiresAt = instant(stable.expiresAt);
+  if (!Number.isFinite(observedMs) || Math.abs(createdAt - observedMs) > 60_000 || expiresAt <= observedMs
+    || expiresAt <= createdAt || expiresAt - createdAt > MAX_GRANT_LIFETIME_MS) {
+    fail("local_postgres_integration_campaign_grant_expired");
+  }
+  const grant = Object.freeze({
+    schemaVersion: INTEGRATION_CAMPAIGN_SCHEMA,
+    campaignGrantId: adapters.randomBytes(16).toString("hex"), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    historical: derived.historical,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+  });
+  validateLocalPostgresIntegrationCampaignGrant(grant, observedAt);
+  adapters.verifyBindings(grant, observedAt);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const pending = privatePath(campaignRoot, "integration-campaign.pending.json");
+  const installed = installPendingGrant(campaignRoot, pending, grant);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const finalNames = fs.readdirSync(campaignRoot).sort(binaryCompare);
+  if (canonicalJson(finalNames) !== canonicalJson([
+    "integration-campaign.pending.json", "owner-approval-receipt",
+  ])) fail("local_postgres_private_root_invalid");
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-receipt.v1",
+    pendingCampaignGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
+    executionAuthorityPayloadSha256: grant.authority.executionAuthorityPayloadSha256,
+    observedAt: observedAt.toISOString(),
+  });
+}
+
+export function prepareLocalPostgresIntegrationCampaignGrant(input) {
+  return prepareIntegrationCampaignGrantWithAdapters(input, Object.freeze({
+    deriveAuthority: deriveIntegrationCampaignAuthority,
+    observeDockerCliIdentity, resolveSocketIdentity: resolveDockerSocketIdentity,
+    randomBytes: crypto.randomBytes, now: () => new Date(),
+    verifyBindings: verifyLocalPostgresIntegrationCampaignCommittedBindings,
+  }));
+}
+
+export function runLocalPostgresIntegrationCampaignPrepareFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  if (Object.keys(stable).some((key) => key !== "mutation")) fail("local_postgres_fake_fault_invalid");
+  const mutation = stable.mutation ?? "none";
+  if (!["none", "root_extra", "authority", "host", "expired"].includes(mutation)) {
+    fail("local_postgres_fake_fault_invalid");
+  }
+  const campaignRoot = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-campaign-prepare-")));
+  const receiptPath = path.join(campaignRoot, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake integration campaign approval", { mode: 0o600 });
+  fs.chmodSync(receiptPath, 0o600);
+  if (mutation === "root_extra") fs.writeFileSync(path.join(campaignRoot, "unknown"), "x", { mode: 0o600 });
+  const derived = integrationCampaignFakeGrant();
+  const authority = Object.freeze({
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    historical: derived.historical,
+    host: Object.freeze(selectKeys(derived.host, INTEGRATION_CAMPAIGN_PAYLOAD_HOST_KEYS)),
+    ceilings: derived.ceilings,
+  });
+  let result;
+  try {
+    const receipt = prepareIntegrationCampaignGrantWithAdapters({
+      campaignRoot, executionOwnerReviewHead: derived.lineage.executionOwnerReviewHead,
+      ownerApprovalReceiptPath: receiptPath, createdAt: derived.createdAt,
+      expiresAt: mutation === "expired" ? derived.createdAt : derived.expiresAt,
+    }, Object.freeze({
+      deriveAuthority() {
+        if (mutation === "authority") return Object.freeze({
+          ...authority, authority: Object.freeze({ ...authority.authority, constructionPacketSha256: `sha256:${"f".repeat(64)}` }),
+        });
+        return authority;
+      },
+      observeDockerCliIdentity: () => Object.freeze({ identitySha256: derived.host.dockerCliIdentitySha256 }),
+      resolveSocketIdentity: () => Object.freeze({ identitySha256: mutation === "host"
+        ? `sha256:${"f".repeat(64)}` : derived.host.socketIdentitySha256 }),
+      randomBytes: () => Buffer.alloc(16, 9), now: () => new Date("2026-08-14T20:00:01.000Z"),
+      verifyBindings(candidate) {
+        if (mutation === "host") fail("local_postgres_integration_campaign_binding_invalid");
+        validateLocalPostgresIntegrationCampaignGrant(candidate, new Date(instant(candidate.createdAt) + 1));
+      },
+    }));
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v1",
+      status: "GREEN", code: "local_postgres_integration_campaign_prepare_green", receipt,
+      grant: readPrivateJson(path.join(campaignRoot, "integration-campaign.pending.json")),
+      rootEntries: Object.freeze(fs.readdirSync(campaignRoot).sort(binaryCompare)), physicalEffects: 0,
+    });
+  } catch (error) {
+    result = Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v1",
+      status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed",
+      receipt: null, grant: null, rootEntries: Object.freeze(fs.readdirSync(campaignRoot).sort(binaryCompare)),
+      physicalEffects: 0,
+    });
+  } finally { fs.rmSync(campaignRoot, { recursive: true, force: true }); }
+  return result;
+}
+
+const INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY = "integration-campaign-journal-v1";
+
+function readIntegrationCampaignJournal(privateRoot) {
+  const directory = privatePath(privateRoot, INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY);
+  if (!coordinatorDirectoryExists(directory)) {
+    return Object.freeze({ entries: Object.freeze([]), entryCount: 0, headSha256: INTEGRATION_CAMPAIGN_GENESIS,
+      openEffectCount: 0 });
+  }
+  assertPrivateDirectory(directory);
+  const names = fs.readdirSync(directory).sort(binaryCompare);
+  if (names.some((name, index) => name !== `entry-${String(index + 1).padStart(6, "0")}.json`)) {
+    fail("local_postgres_integration_campaign_journal_invalid");
+  }
+  const entries = Object.freeze(names.map((name) => readPrivateJson(path.join(directory, name))));
+  return Object.freeze({ entries, ...validateIntegrationCampaignJournal(entries) });
+}
+
+function appendIntegrationCampaignJournal(privateRoot, event, detail) {
+  let directory = privatePath(privateRoot, INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY);
+  if (!coordinatorDirectoryExists(directory)) {
+    fs.mkdirSync(directory, { mode: 0o700 });
+    fsyncPrivateDirectory(privateRoot);
+  }
+  assertPrivateDirectory(directory);
+  const state = readIntegrationCampaignJournal(privateRoot);
+  const mutable = { entries: [...state.entries], headSha256: state.headSha256 };
+  const entry = integrationCampaignJournalAppend(mutable, event, detail);
+  const candidate = path.join(directory, `entry-${String(entry.sequence).padStart(6, "0")}.pending-${crypto.randomBytes(16).toString("hex")}.json`);
+  const finalPath = path.join(directory, `entry-${String(entry.sequence).padStart(6, "0")}.json`);
+  exactFileAbsence(finalPath);
+  writePrivateJson(candidate, entry);
+  fs.renameSync(candidate, finalPath);
+  fsyncPrivateDirectory(directory);
+  const readback = readIntegrationCampaignJournal(privateRoot);
+  if (readback.entryCount !== entry.sequence || readback.headSha256 !== entry.entrySha256) {
+    fail("local_postgres_integration_campaign_journal_invalid");
+  }
+  return entry;
+}
+
+function consumeIntegrationCampaignGrant(privateRoot) {
+  const pending = privatePath(privateRoot, "integration-campaign.pending.json");
+  const consumed = privatePath(privateRoot, "integration-campaign.consumed.json");
+  if (coordinatorDirectoryExists(consumed)) fail("local_postgres_integration_campaign_consumed_cleanup_only");
+  const record = readPrivateJsonRecord(pending);
+  const grant = validateLocalPostgresIntegrationCampaignGrant(record.value);
+  if (readOwnerApprovalReceipt(privateRoot, privatePath(privateRoot, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  verifyLocalPostgresIntegrationCampaignCommittedBindings(grant);
+  try {
+    fs.linkSync(pending, consumed); fsyncPrivateDirectory(privateRoot);
+    const left = fs.lstatSync(pending, { bigint: true });
+    const right = fs.lstatSync(consumed, { bigint: true });
+    if (left.dev !== right.dev || left.ino !== right.ino || left.nlink !== 2n || right.nlink !== 2n) {
+      fail("local_postgres_integration_campaign_consume_failed");
+    }
+    fs.unlinkSync(pending); fsyncPrivateDirectory(privateRoot);
+  } catch (error) {
+    if (authenticLocalPostgresRunnerErrorDetails(error) !== null) throw error;
+    fail("local_postgres_integration_campaign_consume_failed");
+  }
+  const committed = readPrivateJsonRecord(consumed);
+  appendIntegrationCampaignJournal(privateRoot, "campaign.consumed", {
+    consumedCampaignGrantSha256: committed.sha256,
+  });
+  return Object.freeze({ grant, consumedCampaignGrantSha256: committed.sha256 });
+}
+
+function integrationCampaignProjectedPhysicalGrant(grant) {
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-physical-projection.v1",
+    grantId: grant.campaignGrantId,
+    authority: grant.authority, lineage: grant.lineage,
+    artifacts: Object.freeze({
+      packageLockSha256: grant.artifacts.packageLockSha256,
+      pgImportClosureSha256: grant.artifacts.pgImportClosureSha256,
+      pgImportClosureFileCount: grant.artifacts.pgImportClosureFileCount,
+      pgImportClosurePackageCount: grant.artifacts.pgImportClosurePackageCount,
+      schemaSqlSha256: grant.artifacts.schemaSqlSha256, verifySqlSha256: grant.artifacts.verifySqlSha256,
+      rollbackSqlSha256: grant.artifacts.rollbackSqlSha256,
+      catalogContractSha256: grant.artifacts.catalogContractSha256, catalog: grant.artifacts.catalog,
+    }),
+    host: grant.host,
+    ceilings: Object.freeze({ ...grant.ceilings.physical, dockerCalls: grant.ceilings.physicalDockerCalls }),
+    localOnly: true, productionEffectsAllowed: false,
+    createdAt: grant.createdAt, expiresAt: grant.expiresAt,
+  });
+}
+
+function classifyIntegrationCampaignResource(kind, result, plan) {
+  if (result.found !== true) return Object.freeze({ classification: "MISSING", ownership: "NOT_PRESENT", record: null });
+  let record;
+  try { record = ownedPlain(parseStrictJson(result.stdout)); }
+  catch { return Object.freeze({ classification: "MALFORMED", ownership: "MALFORMED", record: null }); }
+  const labels = kind === "container" ? record.Config?.Labels : record.Labels;
+  if (labels === null || typeof labels !== "object" || Array.isArray(labels)) {
+    return Object.freeze({ classification: "MALFORMED", ownership: "MALFORMED", record: null });
+  }
+  if (!Object.prototype.hasOwnProperty.call(labels, plan.resources.labelKey)) {
+    return Object.freeze({ classification: "UNLABELLED", ownership: "UNLABELLED", record: null });
+  }
+  if (labels[plan.resources.labelKey] !== plan.resources.labelValue) {
+    return Object.freeze({ classification: "FOREIGN", ownership: "FOREIGN", record: null });
+  }
+  return Object.freeze({ classification: "OWNED", ownership: "EXACT_HISTORICAL_GRANT", record });
+}
+
+function integrationCampaignRealDockerCall(context, kind, target, operation) {
+  integrationCampaignCheckEffectClock(context);
+  const attempt = (context.attempts[kind] ?? 0) + 1;
+  if (attempt > INTEGRATION_CAMPAIGN_DIAGNOSTIC_DOCKER_CALLS[kind]) {
+    fail("local_postgres_integration_campaign_ceiling_exceeded");
+  }
+  const effectId = `${String(context.effectOrdinal += 1).padStart(3, "0")}-${kind}`;
+  const reservation = Object.freeze({ effectId, kind, target, ordinal: attempt, phase: context.currentPhase });
+  appendIntegrationCampaignJournal(context.privateRoot, "effect.reserved", reservation);
+  context.attempts[kind] = attempt;
+  const value = operation();
+  appendIntegrationCampaignJournal(context.privateRoot, "effect.completed", reservation);
+  context.completions[kind] = (context.completions[kind] ?? 0) + 1;
+  return value;
+}
+
+function runIntegrationCampaignHistoricalPhase(context) {
+  appendIntegrationCampaignJournal(context.privateRoot, "phase.started", { phase: "diagnostic", ordinal: 1 });
+  const version = integrationCampaignRealDockerCall(context, "version", "host",
+    () => context.docker.call("version", planStep(context.plan, "version").argv));
+  validateDockerVersion(version);
+  const versionObservation = integrationCampaignObservation("version", "MATCHED", 1);
+  context.observations.push(versionObservation);
+  appendIntegrationCampaignJournal(context.privateRoot, "observation.recorded", versionObservation);
+  let cleanupStarted = false;
+  for (const resource of INTEGRATION_CAMPAIGN_RESOURCE_KINDS) {
+    const inspectKind = `${resource}.inspect`;
+    const target = context.plan.resources[resource];
+    const first = integrationCampaignRealDockerCall(context, inspectKind, target,
+      () => context.docker.call(inspectKind, planStep(context.plan, inspectKind).argv, { missingAllowed: true }));
+    const classification = classifyIntegrationCampaignResource(resource, first, context.plan);
+    const firstObservation = integrationCampaignObservation(
+      inspectKind, classification.classification, 1, classification.ownership,
+    );
+    context.observations.push(firstObservation);
+    appendIntegrationCampaignJournal(context.privateRoot, "observation.recorded", firstObservation);
+    if (classification.classification === "MISSING") { context.absent[resource] = true; continue; }
+    if (classification.classification !== "OWNED") fail(campaignClassificationError(classification.classification));
+    if (!cleanupStarted) {
+      cleanupStarted = true; context.historicalCleanupPhases = 1;
+      context.currentPhase = "HISTORICAL_CLEANUP";
+      appendIntegrationCampaignJournal(context.privateRoot, "phase.started", { phase: "historical_cleanup", ordinal: 1 });
+    }
+    if (resource === "container" && classification.record.State?.Running === true) {
+      integrationCampaignRealDockerCall(context, "container.stop", target,
+        () => context.docker.call("container.stop", planStep(context.plan, "container.stop").argv));
+    }
+    integrationCampaignRealDockerCall(context, `${resource}.rm`, target,
+      () => context.docker.call(`${resource}.rm`, planStep(context.plan, `${resource}.rm`).argv));
+    const second = integrationCampaignRealDockerCall(context, inspectKind, target,
+      () => context.docker.call(inspectKind, planStep(context.plan, inspectKind).argv, { missingAllowed: true }));
+    if (second.found) fail("local_postgres_integration_campaign_absence_unproven");
+    const secondObservation = integrationCampaignObservation(inspectKind, "MISSING", 2, "NOT_PRESENT");
+    context.observations.push(secondObservation);
+    appendIntegrationCampaignJournal(context.privateRoot, "observation.recorded", secondObservation);
+    context.absent[resource] = true;
+  }
+  if (!Object.values(context.absent).every(Boolean)) fail("local_postgres_integration_campaign_absence_unproven");
+}
+
+async function runIntegrationCampaignPhysicalPhase(context) {
+  const physicalRoot = privatePath(context.privateRoot, "physical-runtime");
+  try { fs.mkdirSync(physicalRoot, { mode: 0o700 }); fsyncPrivateDirectory(context.privateRoot); }
+  catch { fail("local_postgres_private_root_invalid"); }
+  const projectedGrant = integrationCampaignProjectedPhysicalGrant(context.grant);
+  const journalState = readJournalState(physicalRoot);
+  journalState.grant = projectedGrant;
+  journalState.nowIso = () => new Date().toISOString();
+  journalState.checkpoint = () => {};
+  journalState.revalidateHost = () => {
+    const cli = observeDockerCliIdentity();
+    if (cli.identitySha256 !== context.grant.host.dockerCliIdentitySha256) fail("local_postgres_docker_cli_drift");
+    revalidateDockerSocketIdentity(context.socket);
+  };
+  appendPrivateJournal(physicalRoot, journalState, "grant.consumed", {
+    consumedGrantSha256: context.consumedCampaignGrantSha256,
+  });
+  const isolated = prepareIsolatedDockerHome(physicalRoot);
+  const secretPath = privatePath(physicalRoot, "postgres-password");
+  const passwordBytes = Buffer.from(crypto.randomBytes(32).toString("base64url"), "utf8");
+  let docker = null;
+  let plan = null;
+  try {
+    writePrivateBytes(secretPath, passwordBytes);
+    const pgRuntime = preparePgImportClosure(physicalRoot);
+    plan = buildLocalPostgresDockerPlan({ grantId: context.grant.campaignGrantId, secretMountSource: secretPath });
+    docker = createDockerPort(context.socket, isolated, plan, physicalRoot, journalState, projectedGrant);
+    const progress = {
+      imagePresent: null, imagePullAttempted: false, imagePulled: false, catalog: null, actionCount: 0,
+      completedActions: new Set(), databaseIdentityAttemptCount: 0, databaseIdentityCount: 0,
+      restartAttemptCount: 0, restartCount: 0, postgresServerVersionNum: null,
+      initialReadinessAttemptCount: 0, restartReadinessAttemptCount: 0, journalEffect: null,
+    };
+    progress.journalEffect = (kind, target, operation) => {
+      const reservation = reserveEffect(physicalRoot, journalState, kind, target);
+      const result = operation();
+      if (result !== null && typeof result === "object" && typeof result.then === "function") {
+        return result.then((value) => { completeEffect(physicalRoot, journalState, reservation); return value; });
+      }
+      completeEffect(physicalRoot, journalState, reservation); return result;
+    };
+    const result = await performNormalPhysicalRun({
+      grant: projectedGrant, docker, plan, journalState, privateRoot: physicalRoot,
+      password: passwordBytes.toString("utf8"), progress, pgRuntimeRoot: pgRuntime.runtimeRoot,
+    });
+    assertPhysicalTerminalResult(result, progress);
+    journalState.inCleanup = true;
+    completeOwnedCleanup(docker, plan, journalState, physicalRoot, false);
+    const durable = readJournalState(physicalRoot);
+    const effects = receiptEffects(durable.effectLedger, durable.observations);
+    if (durable.observations.catalog.catalogOutcome !== "MATCHED") {
+      fail("local_postgres_catalog_mismatch");
+    }
+    const summary = Object.freeze({
+      status: "GREEN", postgresServerVersionNum: durable.observations.postgresServerVersionNum,
+      catalog: Object.freeze(selectKeys(durable.observations.catalog, CATALOG_KEYS)), schemaApplyCount: effects.schemaApplyCount,
+      verifyCount: effects.verifyCount, rollbackCount: effects.rollbackCount,
+      domainActionInvocationCount: effects.domainActionInvocationCount,
+      distinctDomainActionCount: effects.distinctDomainActionCount,
+      containerRestartCount: effects.containerRestartCount, databaseIdentityCount: effects.databaseIdentityCount,
+      dockerCallCounts: effects.dockerCallCounts, cleanupStatus: "PROVEN_ABSENT",
+    });
+    removeOwnedPrivateTree(physicalRoot);
+    return summary;
+  } catch (error) {
+    if (docker !== null && plan !== null) {
+      try { journalState.inCleanup = true; completeOwnedCleanup(docker, plan, journalState, physicalRoot, false); }
+      catch { fail("local_postgres_integration_campaign_physical_cleanup_blocked"); }
+    }
+    try { removeOwnedPrivateTree(physicalRoot); } catch { /* exact blocked cleanup error wins below */ }
+    if (authenticLocalPostgresRunnerErrorDetails(error) !== null) throw error;
+    fail("local_postgres_integration_campaign_physical_failed");
+  } finally { passwordBytes.fill(0); }
+}
+
+function loadIntegrationCampaignCleanupContext(privateRoot) {
+  exactFileAbsence(privatePath(privateRoot, "integration-campaign.pending.json"));
+  const record = readPrivateJsonRecord(privatePath(privateRoot, "integration-campaign.consumed.json"));
+  const grant = validateLocalPostgresIntegrationCampaignGrant(record.value, new Date(), true);
+  if (readOwnerApprovalReceipt(privateRoot, privatePath(privateRoot, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  verifyLocalPostgresIntegrationCampaignCommittedBindings(grant);
+  const durable = readIntegrationCampaignJournal(privateRoot);
+  if (durable.consumedCampaignGrantSha256 !== record.sha256 || durable.terminal !== null
+    || durable.phases.physicalConstruction !== 1
+    || durable.phases.physicalCleanupRecoveries >= grant.ceilings.maximumPhysicalCleanupRecoveryPhases) {
+    fail("local_postgres_integration_campaign_consumed_cleanup_only");
+  }
+  const absent = Object.fromEntries(INTEGRATION_CAMPAIGN_RESOURCE_KINDS.map((resource) => {
+    const matches = durable.observations.filter((value) => value.kind === `${resource}.inspect`);
+    const last = matches.at(-1);
+    return [resource, last?.classification === "MISSING" && last?.ownership === "NOT_PRESENT"];
+  }));
+  if (!Object.values(absent).every(Boolean)) fail("local_postgres_integration_campaign_absence_unproven");
+  return {
+    privateRoot, grant, consumedCampaignGrantSha256: record.sha256,
+    attempts: { ...durable.attempts }, completions: { ...durable.completions },
+    physicalAttempts: durable.physicalRehearsalAttemptCount,
+    physicalCompletions: durable.physicalRehearsalCompletionCount,
+    effectOrdinal: durable.entryCount, observations: [...durable.observations],
+    historicalCleanupPhases: durable.phases.historicalCleanup,
+    physicalCleanupRecoveries: durable.phases.physicalCleanupRecoveries,
+    absent, currentPhase: "PHYSICAL_CLEANUP_RECOVERY", now: () => new Date(),
+    lastNonCleanupObservedAt: null, cleanupProven: false,
+  };
+}
+
+function runIntegrationCampaignPhysicalCleanupRecovery(context, socket) {
+  const ordinal = context.physicalCleanupRecoveries + 1;
+  appendIntegrationCampaignJournal(context.privateRoot, "phase.started", {
+    phase: "physical_cleanup_recovery", ordinal,
+  });
+  context.physicalCleanupRecoveries = ordinal;
+  const reservation = Object.freeze({
+    effectId: `${String(context.effectOrdinal += 1).padStart(3, "0")}-physical:cleanup_recovery`,
+    kind: "physical:cleanup_recovery", target: "fresh_disposable_postgres", ordinal,
+    phase: "PHYSICAL_CLEANUP_RECOVERY",
+  });
+  appendIntegrationCampaignJournal(context.privateRoot, "effect.reserved", reservation);
+  const physicalRoot = privatePath(context.privateRoot, "physical-runtime");
+  if (!coordinatorDirectoryExists(physicalRoot)) {
+    appendIntegrationCampaignJournal(context.privateRoot, "effect.completed", reservation);
+    context.cleanupProven = true;
+    return Object.freeze({ status: "CLEANUP_RECOVERED", cleanupStatus: "PROVEN_ABSENT" });
+  }
+  assertPrivateDirectory(physicalRoot);
+  const projectedGrant = integrationCampaignProjectedPhysicalGrant(context.grant);
+  const journalState = readJournalState(physicalRoot);
+  journalState.grant = projectedGrant;
+  journalState.cleanupOnly = true;
+  journalState.inCleanup = true;
+  journalState.nowIso = () => new Date().toISOString();
+  journalState.checkpoint = () => {};
+  journalState.revalidateHost = () => {
+    const cli = observeDockerCliIdentity();
+    if (cli.identitySha256 !== context.grant.host.dockerCliIdentitySha256) fail("local_postgres_docker_cli_drift");
+    revalidateDockerSocketIdentity(socket);
+  };
+  if (journalState.sequence === 0) {
+    removeOwnedPrivateTree(physicalRoot);
+  } else if (journalState.cleanupProven) {
+    exactFileAbsence(privatePath(physicalRoot, "postgres-password"));
+    exactFileAbsence(privatePath(physicalRoot, "docker-home"));
+    exactFileAbsence(privatePath(physicalRoot, "docker-config"));
+    exactFileAbsence(privatePath(physicalRoot, "pg-runtime"));
+    removeOwnedPrivateTree(physicalRoot);
+  } else {
+    if (journalState.cleanupRecoveryLifecycleCount >= projectedGrant.ceilings.maximumCleanupRecoveryLifecycles
+      || journalState.dockerLifecycleCount >= projectedGrant.ceilings.maximumDockerLifecycles) {
+      fail("local_postgres_docker_lifecycle_limit");
+    }
+    const isolated = ensureCleanupDockerHome(physicalRoot);
+    const plan = buildLocalPostgresDockerPlan({
+      grantId: context.grant.campaignGrantId,
+      secretMountSource: privatePath(physicalRoot, "postgres-password"),
+    });
+    appendPrivateJournal(physicalRoot, journalState, "docker.lifecycle_started", {
+      mode: "cleanup_recovery", ordinal: journalState.dockerLifecycleCount + 1,
+    });
+    const docker = createDockerPort(socket, isolated, plan, physicalRoot, journalState, projectedGrant);
+    completeOwnedCleanup(docker, plan, journalState, physicalRoot, true);
+    removeOwnedPrivateTree(physicalRoot);
+  }
+  appendIntegrationCampaignJournal(context.privateRoot, "effect.completed", reservation);
+  context.cleanupProven = true;
+  return Object.freeze({ status: "CLEANUP_RECOVERED", cleanupStatus: "PROVEN_ABSENT" });
+}
+
+function writeIntegrationCampaignReceipt(context, status, code, physical) {
+  const journal = readIntegrationCampaignJournal(context.privateRoot);
+  const green = status === "GREEN";
+  const clean = green || context.cleanupProven === true;
+  const receipt = Object.freeze({
+    schemaVersion: INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA, status, code,
+    consumedCampaignGrantSha256: context.consumedCampaignGrantSha256,
+    authority: context.grant.authority, lineage: context.grant.lineage, artifacts: context.grant.artifacts,
+    historical: context.grant.historical,
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: context.grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: context.grant.host.socketIdentitySha256,
+      dockerClientVersion: context.grant.host.dockerClientVersion,
+      dockerServerVersion: context.grant.host.dockerServerVersion,
+      dockerServerPlatform: context.grant.host.dockerServerPlatform,
+    }),
+    phases: Object.freeze({ diagnostic: 1, historicalCleanup: context.historicalCleanupPhases,
+      physicalConstruction: context.physicalAttempts === 0 ? 0 : 1,
+      physicalCleanupRecoveries: context.physicalCleanupRecoveries ?? 0 }),
+    effects: Object.freeze({
+      diagnosticDockerCallAttempts: Object.freeze({ ...context.attempts }),
+      diagnosticDockerCallCompletions: Object.freeze({ ...context.completions }),
+      physicalRehearsalAttemptCount: context.physicalAttempts,
+      physicalRehearsalCompletionCount: context.physicalCompletions,
+    }),
+    observations: Object.freeze(context.observations), physical,
+    cleanup: Object.freeze({
+      historicalContainerAbsent: context.absent.container, historicalNetworkAbsent: context.absent.network,
+      historicalVolumeAbsent: context.absent.volume, ownedContainerCount: clean ? 0 : 1,
+      ownedNetworkCount: clean ? 0 : 1, ownedVolumeCount: clean ? 0 : 1, ownedCredentialCount: 0,
+      ownedDockerConfigCount: 0, ownedImportedRuntimeCount: 0, activeCoordinatorResidueCount: 0,
+      pinnedImageCacheOnlyDaemonResidue: clean,
+    }),
+    journal: Object.freeze({ entryCount: journal.entryCount + 1, headSha256: "PENDING_TERMINAL", openEffectCount: journal.openEffectCount }),
+    readiness: Object.freeze({
+      diagnosticComplete: context.observations.some((value) => value.kind === "volume.inspect"),
+      historicalResourcesAbsent: Object.values(context.absent).every(Boolean),
+      physicalExecuted: physical.status !== "NOT_RUN", targetPostgresObserved: green,
+      productRuntimeEffects: false, productionEffects: false, trafficReady: false, gateCReady: false,
+    }),
+  });
+  appendIntegrationCampaignJournal(context.privateRoot, "campaign.terminal", {
+    status, code, phase: context.currentPhase,
+  });
+  const terminal = readIntegrationCampaignJournal(context.privateRoot);
+  const committed = Object.freeze({ ...receipt, journal: Object.freeze({
+    entryCount: terminal.entryCount, headSha256: terminal.headSha256, openEffectCount: terminal.openEffectCount,
+  }) });
+  validateIntegrationCampaignReceipt(committed, context.grant, terminal);
+  const evidencePath = privatePath(context.privateRoot, "integration-campaign-evidence.json");
+  writePrivateJson(evidencePath, committed);
+  validateIntegrationCampaignReceipt(readPrivateJson(evidencePath), context.grant, readIntegrationCampaignJournal(context.privateRoot));
+  return committed;
+}
+
+export async function runApprovedLocalPostgresIntegrationCampaign(input) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["campaignRoot", "evidenceOut"]);
+  if (typeof stable.campaignRoot !== "string" || !path.isAbsolute(stable.campaignRoot)
+    || stable.evidenceOut !== path.join(stable.campaignRoot, "integration-campaign-evidence.json")) {
+    fail("local_postgres_private_root_invalid");
+  }
+  let privateRoot;
+  try { privateRoot = fs.realpathSync(stable.campaignRoot); } catch { fail("local_postgres_private_root_invalid"); }
+  if (privateRoot !== stable.campaignRoot) fail("local_postgres_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(privateRoot);
+  const evidencePath = privatePath(privateRoot, "integration-campaign-evidence.json");
+  exactFileAbsence(evidencePath);
+  const lease = await acquireCoordinatorLease(privateRoot, evidencePath, async () => {}, () => {}, coordinatorLeaseIsAlive);
+  let context = null;
+  let isolated = null;
+  try {
+    if (coordinatorDirectoryExists(privatePath(privateRoot, "integration-campaign.consumed.json"))) {
+      context = loadIntegrationCampaignCleanupContext(privateRoot);
+      const cli = observeDockerCliIdentity();
+      const socket = resolveDockerSocketIdentity();
+      if (cli.identitySha256 !== context.grant.host.dockerCliIdentitySha256
+        || socket.identitySha256 !== context.grant.host.socketIdentitySha256) {
+        fail("local_postgres_integration_campaign_host_drift");
+      }
+      context.socket = socket;
+      const physical = runIntegrationCampaignPhysicalCleanupRecovery(context, socket);
+      const receipt = writeIntegrationCampaignReceipt(
+        context, "FAILED", "local_postgres_integration_campaign_cleanup_recovered_after_interruption", physical,
+      );
+      releaseCoordinatorLease(lease);
+      const names = fs.readdirSync(privateRoot).sort(binaryCompare);
+      const expected = ["integration-campaign.consumed.json", "integration-campaign-evidence.json",
+        INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY, "owner-approval-receipt"].sort(binaryCompare);
+      if (canonicalJson(names) !== canonicalJson(expected)) fail("local_postgres_cleanup_unproven");
+      assertPrivateDirectoryIdentity(rootIdentity);
+      return receipt;
+    }
+    const consumed = consumeIntegrationCampaignGrant(privateRoot);
+    const cli = observeDockerCliIdentity();
+    const socket = resolveDockerSocketIdentity();
+    if (cli.identitySha256 !== consumed.grant.host.dockerCliIdentitySha256
+      || socket.identitySha256 !== consumed.grant.host.socketIdentitySha256) {
+      fail("local_postgres_integration_campaign_host_drift");
+    }
+    isolated = prepareIsolatedDockerHome(privateRoot);
+    const plan = buildLocalPostgresDockerPlan({
+      grantId: BLOCKED_GRANT_ID, secretMountSource: path.join(privateRoot, "unused-password-file"),
+    });
+    const docker = createDockerPort(socket, isolated, plan, null, null,
+      integrationCampaignProjectedPhysicalGrant(consumed.grant));
+    context = {
+      privateRoot, rootIdentity, grant: consumed.grant,
+      consumedCampaignGrantSha256: consumed.consumedCampaignGrantSha256,
+      socket, isolated, plan, docker, attempts: integrationCampaignEmptyDockerCalls(),
+      completions: integrationCampaignEmptyDockerCalls(), effectOrdinal: 0, observations: [],
+      physicalAttempts: 0, physicalCompletions: 0,
+      currentPhase: "DIAGNOSTIC",
+      now: () => new Date(), lastNonCleanupObservedAt: null,
+      historicalCleanupPhases: 0, physicalCleanupRecoveries: 0, cleanupProven: false,
+      absent: { container: false, network: false, volume: false },
+    };
+    runIntegrationCampaignHistoricalPhase(context);
+    cleanupIsolatedDockerHome(privateRoot); isolated = null;
+    appendIntegrationCampaignJournal(privateRoot, "phase.started", { phase: "physical_construction", ordinal: 1 });
+    context.currentPhase = "PHYSICAL_CONSTRUCTION";
+    integrationCampaignCheckEffectClock(context);
+    const physicalReservation = {
+      effectId: `${String(context.effectOrdinal += 1).padStart(3, "0")}-physical:rehearsal`,
+      kind: "physical:rehearsal", target: "fresh_disposable_postgres", ordinal: 1,
+      phase: "PHYSICAL_CONSTRUCTION",
+    };
+    appendIntegrationCampaignJournal(privateRoot, "effect.reserved", physicalReservation);
+    context.physicalAttempts = 1;
+    const physical = await runIntegrationCampaignPhysicalPhase(context);
+    appendIntegrationCampaignJournal(privateRoot, "effect.completed", physicalReservation);
+    context.physicalCompletions = 1;
+    context.cleanupProven = true;
+    const receipt = writeIntegrationCampaignReceipt(context, "GREEN", "local_postgres_integration_campaign_green", physical);
+    releaseCoordinatorLease(lease);
+    const names = fs.readdirSync(privateRoot).sort(binaryCompare);
+    const expected = ["integration-campaign.consumed.json", "integration-campaign-evidence.json",
+      INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY, "owner-approval-receipt"].sort(binaryCompare);
+    if (canonicalJson(names) !== canonicalJson(expected)) fail("local_postgres_cleanup_unproven");
+    assertPrivateDirectoryIdentity(rootIdentity);
+    return receipt;
+  } catch (error) {
+    try { if (isolated !== null) cleanupIsolatedDockerHome(privateRoot); } catch { /* terminal code remains body-free */ }
+    try { releaseCoordinatorLease(lease); } catch { /* retained lock is a truthful cleanup block */ }
+    if (context !== null && !coordinatorDirectoryExists(evidencePath)) {
+      const code = integrationCampaignReceiptCode(
+        authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_integration_campaign_failed", context,
+      );
+      const physicalStatus = context.physicalAttempts === 0 ? "NOT_RUN"
+        : context.currentPhase === "PHYSICAL_CLEANUP_RECOVERY" ? "CLEANUP_BLOCKED" : "FAILED";
+      try { writeIntegrationCampaignReceipt(context, code.includes("cleanup_blocked") ? "CLEANUP_BLOCKED" : "FAILED",
+        code, physicalStatus === "NOT_RUN" ? Object.freeze({ status: "NOT_RUN" })
+          : Object.freeze({ status: physicalStatus, code })); } catch { /* original failure wins */ }
+    }
+    if (authenticLocalPostgresRunnerErrorDetails(error) !== null) throw error;
+    fail("local_postgres_integration_campaign_failed");
+  }
+}
+
 export function parseLocalPostgresRunnerArguments(argv) {
   const stable = ownedPlain(argv);
   if (stable.length === 1 && stable[0] === "fake") return Object.freeze({ mode: "fake" });
+  if (stable.length === 11 && stable[0] === "prepare-integration-campaign"
+    && stable[1] === "--campaign-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--execution-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
+    && stable[5] === "--owner-approval-receipt" && typeof stable[6] === "string" && path.isAbsolute(stable[6])
+    && stable[7] === "--created-at" && typeof stable[8] === "string"
+    && stable[9] === "--expires-at" && typeof stable[10] === "string") {
+    instant(stable[8]); instant(stable[10]);
+    return Object.freeze({
+      mode: "prepare-integration-campaign", campaignRoot: stable[2], executionOwnerReviewHead: stable[4],
+      ownerApprovalReceiptPath: stable[6], createdAt: stable[8], expiresAt: stable[10],
+    });
+  }
+  if (stable.length === 5 && stable[0] === "integration-campaign" && stable[1] === "--campaign-root"
+    && typeof stable[2] === "string" && path.isAbsolute(stable[2]) && stable[3] === "--evidence-out"
+    && typeof stable[4] === "string" && path.isAbsolute(stable[4])) {
+    return Object.freeze({ mode: "integration-campaign", campaignRoot: stable[2], evidenceOut: stable[4] });
+  }
   if (stable.length === 11 && stable[0] === "prepare" && stable[1] === "--grant-root"
     && typeof stable[2] === "string" && path.isAbsolute(stable[2])
     && stable[3] === "--execution-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
@@ -10933,6 +12851,17 @@ async function direct() {
   if (parsed.mode === "prepare") {
     const { mode: _mode, ...input } = parsed;
     process.stdout.write(`${canonicalJson(prepareLocalPostgresPendingGrantV3(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "prepare-integration-campaign") {
+    const { mode: _mode, ...input } = parsed;
+    process.stdout.write(`${canonicalJson(prepareLocalPostgresIntegrationCampaignGrant(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "integration-campaign") {
+    await runApprovedLocalPostgresIntegrationCampaign({
+      campaignRoot: parsed.campaignRoot, evidenceOut: parsed.evidenceOut,
+    });
     return;
   }
   if (parsed.mode === "prepare-rescue") {

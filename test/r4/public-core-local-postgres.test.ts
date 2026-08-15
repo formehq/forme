@@ -13,6 +13,7 @@ import {
   LOCAL_POSTGRES_PHYSICAL_LIFECYCLE_STAGES,
   LOCAL_POSTGRES_STAGE_A_PATHS,
   LOCAL_POSTGRES_V3_CEILINGS,
+  LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS,
   LocalPostgresRunnerError,
   buildLocalPostgresDockerPlan,
   createLocalPostgresPendingGrant,
@@ -21,9 +22,11 @@ import {
   prepareLocalPostgresPendingGrantV3,
   prepareLocalPostgresCleanupRescueGrant,
   prepareBodyFreeDockerInspectDiagnosticGrant,
+  prepareLocalPostgresIntegrationCampaignGrant,
   runApprovedLocalPostgresPhysical,
   runApprovedLocalPostgresCleanupRescue,
   runApprovedBodyFreeDockerInspectDiagnostic,
+  runApprovedLocalPostgresIntegrationCampaign,
   runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan,
   runLocalPostgresBodyFreeDiagnosticFakePlan,
   runLocalPostgresBodyFreeDiagnosticGrantValidationFakePlan,
@@ -38,11 +41,20 @@ import {
   runLocalPostgresCleanupRescueReceiptValidationFakePlan,
   runLocalPostgresDockerDiagnosticFakePlan,
   runLocalPostgresFakePlan,
+  runLocalPostgresIntegrationCampaignAuthorityFakePlan,
+  runLocalPostgresIntegrationCampaignFakePlan,
+  runLocalPostgresIntegrationCampaignGrantValidationFakePlan,
+  runLocalPostgresIntegrationCampaignJournalValidationFakePlan,
+  runLocalPostgresIntegrationCampaignJournalHeadroomFakePlan,
+  runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan,
+  runLocalPostgresIntegrationCampaignPrepareFakePlan,
+  runLocalPostgresIntegrationCampaignReceiptValidationFakePlan,
   runLocalPostgresCleanupLifecycleFakePlan,
   runLocalPostgresPrepareFakePlan,
   runLocalPostgresReadinessFakePlan,
   runLocalPostgresReceiptValidationFakePlan,
   validateLocalPostgresGrant,
+  validateLocalPostgresIntegrationCampaignGrant,
   validateBodyFreeDiagnosticGrant,
 // The approved runner is an executable .mjs artifact; its runtime exports are
 // contract-tested here without adding an out-of-workset declaration file.
@@ -825,7 +837,8 @@ test("authorized effect engines are constructed while ordinary tests remain fake
   const hardlinkKinds = hardlinkSites.map((site) => (
     site.includes("receipt-link") ? "fake_receipt_hardlink_mutation" : site.includes("pending, consumed") ? "grant_consume" : "unknown"
   ));
-  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 3);
+  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 4,
+    "physical, rescue, diagnostic, and integration campaign each consume one distinct grant family");
   assert.equal(hardlinkKinds.filter((kind) => kind === "fake_receipt_hardlink_mutation").length, 1);
   assert.equal(hardlinkKinds.includes("unknown"), false);
   assert.equal(source.includes("coordinator.active.json"), false);
@@ -835,6 +848,8 @@ test("authorized effect engines are constructed while ordinary tests remain fake
   assert.match(source, /physical-evidence-draft-p/u);
   assert.match(source, /r4\.public-core-local-postgres-grant\.v3/u);
   assert.match(source, /r4\.public-core-local-postgres-physical-result\.v3/u);
+  assert.match(source, /r4\.public-core-local-postgres-integration-campaign-grant\.v1/u);
+  assert.match(source, /runApprovedLocalPostgresIntegrationCampaign/u);
   assert.match(source, /journal-v3/u);
   assert.match(source, /JOURNAL_MAXIMUM_ENTRIES = 1024/u);
   assert.match(source, /SHOW server_version_num/u);
@@ -3264,4 +3279,395 @@ test("body-free diagnostic CLI is versioned, path-closed, and separate from resc
   ]) assert.throws(() => parseLocalPostgresRunnerArguments(argv), LocalPostgresRunnerError);
   assert.equal(typeof prepareBodyFreeDockerInspectDiagnosticGrant, "function");
   assert.equal(typeof runApprovedBodyFreeDockerInspectDiagnostic, "function");
+});
+
+test("integration campaign construction binds the committed Packet/Review and exact closed workset", () => {
+  const green = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation: "none" });
+  assert.equal(green.accepted, true);
+  assert.equal(green.physicalEffects, 0);
+  assert.equal(green.authority.packetHead, "1f5b9476d891d348161d4a43d918b53873a809e2");
+  assert.equal(green.authority.packetTree, "3f42dc6707d2438bd3ad92e17de938210027c80e");
+  assert.equal(green.authority.packetSha256, "sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50");
+  assert.equal(green.authority.reviewHead, "c15753d299530dfccd027f0ec2a93db77d74a1e9");
+  assert.equal(green.authority.reviewTree, "228a2ec1b9f771e7bbb747420645a45011865aa3");
+  assert.equal(green.authority.reviewSha256, "sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f");
+  assert.deepEqual(green.authority.implementationPaths, [
+    "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
+  ]);
+  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "c15753d299530dfccd027f0ec2a93db77d74a1e9^"], {
+    cwd: path.resolve(import.meta.dirname, "../.."), encoding: "utf8",
+  }).trim(), "1f5b9476d891d348161d4a43d918b53873a809e2");
+  for (const mutation of ["packet", "review", "topology", "workset", "marker", "old_authority"]) {
+    const result = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.code, "local_postgres_integration_campaign_authority_invalid", mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+});
+
+test("integration campaign all-missing path reaches one frozen physical Green and exact zero residue", async () => {
+  const result = await runLocalPostgresIntegrationCampaignFakePlan();
+  assert.equal(result.status, "GREEN");
+  assert.equal(result.code, "local_postgres_integration_campaign_green");
+  assert.equal(result.receiptValid, true);
+  assert.deepEqual(result.calls.map((call: any) => call.kind), [
+    "version", "container.inspect", "network.inspect", "volume.inspect", "physical:rehearsal",
+  ]);
+  assert.deepEqual(result.receipt.phases, {
+    diagnostic: 1, historicalCleanup: 0, physicalConstruction: 1, physicalCleanupRecoveries: 0,
+  });
+  assert.equal(result.receipt.readiness.historicalResourcesAbsent, true);
+  assert.equal(result.receipt.readiness.physicalExecuted, true);
+  assert.equal(result.receipt.readiness.targetPostgresObserved, true);
+  assert.equal(result.receipt.readiness.productRuntimeEffects, false);
+  assert.equal(result.receipt.readiness.productionEffects, false);
+  assert.equal(result.receipt.readiness.trafficReady, false);
+  assert.equal(result.receipt.readiness.gateCReady, false);
+  assert.deepEqual(result.receipt.physical.catalog, CATALOG);
+  assert.equal(result.receipt.physical.postgresServerVersionNum, 160010);
+  assert.equal(result.receipt.physical.schemaApplyCount, 3);
+  assert.equal(result.receipt.physical.verifyCount, 3);
+  assert.equal(result.receipt.physical.rollbackCount, 1);
+  assert.equal(result.receipt.physical.domainActionInvocationCount, 23);
+  assert.equal(result.receipt.physical.distinctDomainActionCount, 20);
+  assert.equal(result.receipt.physical.containerRestartCount, 1);
+  assert.equal(result.receipt.physical.databaseIdentityCount, 2);
+  assert.equal(result.receipt.effects.physicalRehearsalAttemptCount, 1);
+  assert.equal(result.receipt.effects.physicalRehearsalCompletionCount, 1);
+  assert.equal(result.receipt.cleanup.ownedContainerCount, 0);
+  assert.equal(result.receipt.cleanup.ownedNetworkCount, 0);
+  assert.equal(result.receipt.cleanup.ownedVolumeCount, 0);
+  assert.equal(result.receipt.cleanup.ownedCredentialCount, 0);
+  assert.equal(result.receipt.cleanup.ownedDockerConfigCount, 0);
+  assert.equal(result.receipt.cleanup.ownedImportedRuntimeCount, 0);
+  assert.equal(result.receipt.cleanup.activeCoordinatorResidueCount, 0);
+  assert.equal(result.receipt.cleanup.pinnedImageCacheOnlyDaemonResidue, true);
+  assert.equal(result.receipt.journal.openEffectCount, 0);
+  assert.equal(result.physicalEffects, 0);
+  assert.equal(result.dockerSocketResolutions, 0);
+  assert.equal(result.postgresConnections, 0);
+  assert.equal(result.sqlStatements, 0);
+  assert.equal(result.networkEffects, 0);
+});
+
+test("integration campaign removes only exact-owned historical resources then proves absence", async () => {
+  const cases = [
+    { resource: "container", absenceKey: "historicalContainerAbsent", expected: ["container.inspect", "container.stop", "container.rm", "container.inspect"] },
+    { resource: "network", absenceKey: "historicalNetworkAbsent", expected: ["network.inspect", "network.rm", "network.inspect"] },
+    { resource: "volume", absenceKey: "historicalVolumeAbsent", expected: ["volume.inspect", "volume.rm", "volume.inspect"] },
+  ] as const;
+  for (const item of cases) {
+    const result = await runLocalPostgresIntegrationCampaignFakePlan({ [item.resource]: "OWNED" });
+    assert.equal(result.status, "GREEN", item.resource);
+    assert.equal(result.receiptValid, true, item.resource);
+    assert.equal(result.receipt.phases.historicalCleanup, 1, item.resource);
+    const relevant = result.calls.map((call: any) => call.kind)
+      .filter((kind: string) => kind.startsWith(item.resource));
+    assert.deepEqual(relevant, item.expected, item.resource);
+    assert.equal(result.receipt.cleanup[item.absenceKey], true);
+    assert.equal(result.receipt.readiness.physicalExecuted, true, item.resource);
+    assert.equal(result.physicalEffects, 0, item.resource);
+  }
+  const all = await runLocalPostgresIntegrationCampaignFakePlan({
+    container: "OWNED", network: "OWNED", volume: "OWNED",
+  });
+  assert.equal(all.status, "GREEN");
+  assert.equal(all.receipt.phases.historicalCleanup, 1);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["container.inspect"], 2);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["network.inspect"], 2);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["volume.inspect"], 2);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["container.stop"], 1);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["container.rm"], 1);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["network.rm"], 1);
+  assert.equal(all.receipt.effects.diagnosticDockerCallAttempts["volume.rm"], 1);
+});
+
+test("integration campaign foreign, unlabelled, malformed, and unknown resources stop before cleanup and physical", async () => {
+  const expected: Record<string, string> = {
+    FOREIGN: "local_postgres_integration_campaign_foreign_resource",
+    UNLABELLED: "local_postgres_integration_campaign_unlabelled_resource",
+    MALFORMED: "local_postgres_integration_campaign_malformed_resource",
+    UNKNOWN: "local_postgres_integration_campaign_diagnostic_ambiguous",
+  };
+  for (const resource of ["container", "network", "volume"] as const) {
+    for (const classification of Object.keys(expected)) {
+      const result = await runLocalPostgresIntegrationCampaignFakePlan({ [resource]: classification });
+      assert.equal(result.status, "FAILED", `${resource}:${classification}`);
+      assert.equal(result.code, expected[classification], `${resource}:${classification}`);
+      assert.equal(result.receipt.phases.historicalCleanup, 0, `${resource}:${classification}`);
+      assert.equal(result.receipt.phases.physicalConstruction, 0, `${resource}:${classification}`);
+      assert.equal(result.receipt.readiness.physicalExecuted, false, `${resource}:${classification}`);
+      assert.equal(result.calls.some((call: any) => call.kind.endsWith(".rm") || call.kind === "container.stop"), false);
+      assert.equal(result.physicalEffects, 0);
+    }
+  }
+});
+
+test("integration campaign cleanup or physical failure never retries or crosses the next phase", async () => {
+  for (const resource of ["container", "network", "volume"] as const) {
+    const result = await runLocalPostgresIntegrationCampaignFakePlan({
+      [resource]: "OWNED", cleanupFailureAt: resource,
+    });
+    assert.equal(result.status, "CLEANUP_BLOCKED", resource);
+    assert.equal(result.code, "local_postgres_integration_campaign_cleanup_blocked", resource);
+    assert.equal(result.receipt.phases.historicalCleanup, 1, resource);
+    assert.equal(result.receipt.phases.physicalConstruction, 0, resource);
+    assert.equal(result.receipt.readiness.physicalExecuted, false, resource);
+    assert.equal(result.receipt.journal.openEffectCount, 1, resource);
+  }
+  const failed = await runLocalPostgresIntegrationCampaignFakePlan({ physicalOutcome: "FAILED" });
+  assert.equal(failed.status, "FAILED");
+  assert.equal(failed.receipt.phases.physicalConstruction, 1);
+  assert.equal(failed.receipt.physical.status, "FAILED");
+  const blocked = await runLocalPostgresIntegrationCampaignFakePlan({ physicalOutcome: "CLEANUP_BLOCKED" });
+  assert.equal(blocked.status, "CLEANUP_BLOCKED");
+  assert.equal(blocked.receipt.physical.status, "CLEANUP_BLOCKED");
+  assert.equal(blocked.receipt.phases.physicalCleanupRecoveries, 0);
+  for (const result of [failed, blocked]) {
+    assert.equal(result.consumeCount, 1);
+    assert.equal(result.physicalEffects, 0);
+  }
+});
+
+test("integration campaign write-ahead ambiguity, host drift, expiry, and duplicate entry fail closed", async () => {
+  const ambiguous = await runLocalPostgresIntegrationCampaignFakePlan({
+    crashAt: "container.inspect#1:after_call_before_completion",
+  });
+  assert.equal(ambiguous.status, "FAILED");
+  assert.equal(ambiguous.code, "local_postgres_integration_campaign_ambiguous_effect");
+  assert.equal(ambiguous.receipt.journal.openEffectCount, 1);
+  assert.equal(ambiguous.receipt.phases.physicalConstruction, 0);
+  const drift = await runLocalPostgresIntegrationCampaignFakePlan({ hostDriftAt: "network.inspect#1:before" });
+  assert.equal(drift.status, "FAILED");
+  assert.equal(drift.code, "local_postgres_integration_campaign_host_drift");
+  assert.equal(drift.calls.filter((call: any) => call.kind === "network.inspect").length, 0);
+  const expired = await runLocalPostgresIntegrationCampaignFakePlan({ expired: true });
+  assert.equal(expired.status, "FAILED");
+  assert.equal(expired.code, "local_postgres_integration_campaign_grant_expired");
+  assert.equal(expired.calls.length, 0);
+  const duplicate = await runLocalPostgresIntegrationCampaignFakePlan({ duplicateConsume: true });
+  assert.equal(duplicate.status, "GREEN");
+  assert.equal(duplicate.consumeCount, 1);
+  assert.equal(duplicate.duplicateDenied, true);
+  assert.equal(duplicate.duplicateDenialCode, "local_postgres_integration_campaign_consumed_cleanup_only");
+  assert.deepEqual(duplicate.duplicateSnapshot.after, duplicate.duplicateSnapshot.before);
+  assert.equal(duplicate.physicalEffects, 0);
+});
+
+test("integration campaign reserves every diagnostic, cleanup, and physical call before invocation", async () => {
+  const calls = [
+    "version#1", "container.inspect#1", "container.stop#1", "container.rm#1", "container.inspect#2",
+    "network.inspect#1", "network.rm#1", "network.inspect#2", "volume.inspect#1", "volume.rm#1",
+    "volume.inspect#2", "physical:rehearsal#1",
+  ];
+  for (const call of calls) {
+    for (const edge of ["before_call", "after_call_before_completion"]) {
+      const result = await runLocalPostgresIntegrationCampaignFakePlan({
+        container: "OWNED", network: "OWNED", volume: "OWNED", crashAt: `${call}:${edge}`,
+      });
+      assert.equal(result.status, "FAILED", `${call}:${edge}`);
+      assert.equal(result.code, "local_postgres_integration_campaign_ambiguous_effect", `${call}:${edge}`);
+      assert.equal(result.receipt.journal.openEffectCount, 1, `${call}:${edge}`);
+      assert.equal(result.physicalEffects, 0, `${call}:${edge}`);
+      const reservations = result.journal.filter((entry: any) => entry.event === "effect.reserved");
+      const completions = result.journal.filter((entry: any) => entry.event === "effect.completed");
+      assert.equal(reservations.length, completions.length + 1, `${call}:${edge}`);
+      assert.equal(reservations.at(-1).detail.kind + `#${reservations.at(-1).detail.ordinal}`, call, `${call}:${edge}`);
+    }
+    for (const edge of ["before", "after"]) {
+      const result = await runLocalPostgresIntegrationCampaignFakePlan({
+        container: "OWNED", network: "OWNED", volume: "OWNED", hostDriftAt: `${call}:${edge}`,
+      });
+      assert.equal(result.status, "FAILED", `${call}:${edge}`);
+      assert.equal(result.code, "local_postgres_integration_campaign_host_drift", `${call}:${edge}`);
+      assert.equal(result.receipt.journal.openEffectCount, 1, `${call}:${edge}`);
+      assert.equal(result.physicalEffects, 0, `${call}:${edge}`);
+    }
+  }
+  for (const input of [
+    { crashAt: "container.inspect:before_call" },
+    { crashAt: "container.inspect#3:before_call" },
+    { hostDriftAt: "network.inspect:before" },
+    { hostDriftAt: "physical:rehearsal#2:after" },
+  ]) {
+    await assert.rejects(() => runLocalPostgresIntegrationCampaignFakePlan(input),
+      runnerError("local_postgres_fake_fault_invalid"));
+  }
+});
+
+test("integration campaign enforces non-cleanup expiry and rollback while allowing exact cleanup rollback", async () => {
+  for (const clockMutation of ["expired_before_physical", "rollback_before_physical"]) {
+    const result = await runLocalPostgresIntegrationCampaignFakePlan({ clockMutation });
+    assert.equal(result.status, "FAILED", clockMutation);
+    assert.equal(result.code, "local_postgres_integration_campaign_clock_invalid", clockMutation);
+    assert.equal(result.receipt.effects.physicalRehearsalAttemptCount, 0, clockMutation);
+    assert.equal(result.receipt.effects.physicalRehearsalCompletionCount, 0, clockMutation);
+    assert.equal(result.receipt.readiness.physicalExecuted, false, clockMutation);
+    assert.equal(result.calls.some((call: any) => call.kind === "physical:rehearsal"), false, clockMutation);
+    assert.equal(result.physicalEffects, 0, clockMutation);
+  }
+  const cleanupRollback = await runLocalPostgresIntegrationCampaignFakePlan({
+    container: "OWNED", clockMutation: "rollback_during_cleanup",
+  });
+  assert.equal(cleanupRollback.status, "GREEN");
+  assert.equal(cleanupRollback.receipt.phases.historicalCleanup, 1);
+  assert.equal(cleanupRollback.receipt.readiness.physicalExecuted, true);
+  assert.equal(cleanupRollback.physicalEffects, 0);
+  for (const clockMutation of ["rollback", "expired", "cleanup"] as const) {
+    await assert.rejects(() => runLocalPostgresIntegrationCampaignFakePlan({ clockMutation }),
+      runnerError("local_postgres_fake_fault_invalid"));
+  }
+});
+
+test("integration campaign journal preserves exact cleanup headroom without poisoning the durable tip", () => {
+  const result = runLocalPostgresIntegrationCampaignJournalHeadroomFakePlan();
+  assert.equal(result.normalMaximumBytes, 900_000);
+  assert.equal(result.totalMaximumBytes, 1_000_000);
+  for (const name of ["normalExact", "cleanupExact"] as const) {
+    assert.equal(result[name].accepted, true, name);
+    assert.equal(result[name].after.entryCount, 1, name);
+    assert.notEqual(result[name].after.headSha256, result[name].before.headSha256, name);
+  }
+  for (const name of ["normalOverflow", "cleanupOverflow"] as const) {
+    assert.equal(result[name].accepted, false, name);
+    assert.equal(result[name].code, "local_postgres_integration_campaign_journal_headroom_exhausted", name);
+    assert.deepEqual(result[name].after, result[name].before, name);
+  }
+  assert.equal(result.physicalEffects, 0);
+});
+
+test("integration campaign permits at most two cleanup-only recoveries and never restarts construction", () => {
+  const recovered = runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan({
+    outcomes: ["CRASH", "PROVEN_ABSENT"],
+  });
+  assert.equal(recovered.status, "FAILED");
+  assert.equal(recovered.code, "local_postgres_integration_campaign_cleanup_recovered_after_interruption");
+  assert.equal(recovered.phases.physicalConstruction, 1);
+  assert.equal(recovered.phases.physicalCleanupRecoveries, 2);
+  assert.equal(recovered.physicalRehearsalAttemptCount, 1);
+  assert.equal(recovered.physicalRehearsalCompletionCount, 0);
+  assert.equal(recovered.cleanupRecoveryAttemptCount, 2);
+  assert.equal(recovered.cleanupRecoveryCompletionCount, 1);
+  assert.equal(recovered.journalState.openEffectCount, 2);
+  assert.equal(recovered.physicalEffects, 0);
+
+  const denied = runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan({
+    outcomes: ["CRASH", "CRASH", "CRASH"],
+  });
+  assert.equal(denied.status, "DENIED");
+  assert.equal(denied.code, "local_postgres_integration_campaign_cleanup_recovery_limit");
+  assert.equal(denied.phases.physicalCleanupRecoveries, 2);
+  assert.equal(denied.cleanupRecoveryAttemptCount, 2);
+  assert.deepEqual(denied.deniedSnapshot.after, denied.deniedSnapshot.before);
+  assert.equal(denied.physicalEffects, 0);
+  assert.equal(denied.dockerSocketResolutions, 0);
+  assert.equal(denied.postgresConnections, 0);
+  assert.equal(denied.sqlStatements, 0);
+
+  const blocked = runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan({ outcomes: ["BLOCKED"] });
+  assert.equal(blocked.status, "CLEANUP_BLOCKED");
+  assert.equal(blocked.phases.physicalCleanupRecoveries, 1);
+  assert.equal(blocked.cleanupRecoveryAttemptCount, 1);
+  assert.equal(blocked.cleanupRecoveryCompletionCount, 0);
+  assert.equal(blocked.physicalEffects, 0);
+  for (const outcomes of [[], ["UNKNOWN"], ["CRASH", "CRASH", "CRASH", "CRASH"]]) {
+    assert.throws(() => runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan({ outcomes }),
+      runnerError("local_postgres_fake_fault_invalid"));
+  }
+});
+
+test("integration campaign grant, journal, and receipt schemas are closed and mutation-hostile", async () => {
+  assert.equal(typeof validateLocalPostgresIntegrationCampaignGrant, "function");
+  assert.deepEqual(LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS.diagnosticDockerCalls, {
+    version: 1, "image.inspect": 0, "image.pull": 0,
+    "container.inspect": 2, "container.create": 0, "container.start": 0, "container.stop": 1,
+    "container.rm": 1, "network.inspect": 2, "network.create": 0, "network.rm": 1,
+    "volume.inspect": 2, "volume.create": 0, "volume.rm": 1,
+  });
+  assert.deepEqual(LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CEILINGS.physicalDockerCalls, LOCAL_POSTGRES_V3_CEILINGS.dockerCalls);
+  assert.equal(runLocalPostgresIntegrationCampaignGrantValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of [
+    "top_extra", "nested_extra", "authority", "lineage", "artifacts", "historical", "host", "ceilings",
+    "obsolete_physical", "obsolete_rescue", "expired", "accessor",
+  ]) {
+    const result = runLocalPostgresIntegrationCampaignGrantValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `grant:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `grant:${mutation}`);
+  }
+  assert.equal(runLocalPostgresIntegrationCampaignJournalValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of [
+    "top_extra", "sequence", "previous", "event", "detail", "detail_extra_rehashed", "entry_sha",
+    "completion_without_attempt",
+  ]) {
+    const result = runLocalPostgresIntegrationCampaignJournalValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `journal:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `journal:${mutation}`);
+  }
+  assert.equal((await runLocalPostgresIntegrationCampaignReceiptValidationFakePlan({ mutation: "none" })).accepted, true);
+  for (const mutation of [
+    "top_extra", "nested_extra", "authority", "lineage", "artifacts", "historical", "host", "phases", "effects",
+    "observation", "physical", "cleanup", "journal", "readiness", "consumed", "status_code", "accessor",
+  ]) {
+    const result = await runLocalPostgresIntegrationCampaignReceiptValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `receipt:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `receipt:${mutation}`);
+  }
+});
+
+test("integration campaign prepare is one-use, same-descriptor, exact-root, and effect-free", () => {
+  const green = runLocalPostgresIntegrationCampaignPrepareFakePlan({ mutation: "none" });
+  assert.equal(green.status, "GREEN");
+  assert.equal(green.code, "local_postgres_integration_campaign_prepare_green");
+  assert.deepEqual(green.rootEntries, ["integration-campaign.pending.json", "owner-approval-receipt"]);
+  assert.match(green.receipt.pendingCampaignGrantSha256, /^sha256:[0-9a-f]{64}$/u);
+  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v1");
+  assert.equal(green.grant.localOnly, true);
+  assert.equal(green.grant.productionEffectsAllowed, false);
+  assert.equal(green.physicalEffects, 0);
+  for (const mutation of ["root_extra", "authority", "host", "expired"]) {
+    const result = runLocalPostgresIntegrationCampaignPrepareFakePlan({ mutation });
+    assert.equal(result.status, "FAILED", mutation);
+    assert.equal(result.receipt, null, mutation);
+    assert.equal(result.grant, null, mutation);
+    assert.equal(result.rootEntries.includes("integration-campaign.pending.json"), false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(typeof prepareLocalPostgresIntegrationCampaignGrant, "function");
+  const campaignRoot = "/private/r4-integration-campaign";
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "prepare-integration-campaign", "--campaign-root", campaignRoot, "--execution-review-head", "a".repeat(40),
+    "--owner-approval-receipt", `${campaignRoot}/owner-approval-receipt`,
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ]), {
+    mode: "prepare-integration-campaign", campaignRoot, executionOwnerReviewHead: "a".repeat(40),
+    ownerApprovalReceiptPath: `${campaignRoot}/owner-approval-receipt`, createdAt: NOW,
+    expiresAt: "2026-08-11T19:00:00.000Z",
+  });
+  assert.throws(() => parseLocalPostgresRunnerArguments([
+    "prepare-integration-campaign", "--campaign-root", "relative", "--execution-review-head", "a".repeat(40),
+    "--owner-approval-receipt", `${campaignRoot}/owner-approval-receipt`,
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ]), LocalPostgresRunnerError);
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "integration-campaign", "--campaign-root", campaignRoot,
+    "--evidence-out", `${campaignRoot}/integration-campaign-evidence.json`,
+  ]), {
+    mode: "integration-campaign", campaignRoot,
+    evidenceOut: `${campaignRoot}/integration-campaign-evidence.json`,
+  });
+  assert.equal(typeof runApprovedLocalPostgresIntegrationCampaign, "function");
+});
+
+test("integration campaign real entry rejects before host or effect ports when campaign authority is absent", async () => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), "forme-integration-campaign-entry-")));
+  try {
+    await writeFile(path.join(root, "owner-approval-receipt"), "fake absent campaign approval", { mode: 0o600 });
+    await assert.rejects(
+      runApprovedLocalPostgresIntegrationCampaign({
+        campaignRoot: root, evidenceOut: path.join(root, "integration-campaign-evidence.json"),
+      }),
+      LocalPostgresRunnerError,
+    );
+    assert.deepEqual(await readdir(root), ["owner-approval-receipt"]);
+  } finally { await rm(root, { recursive: true, force: true }); }
 });
