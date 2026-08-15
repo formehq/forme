@@ -1,0 +1,373 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-evidence.schema.json",
+  "title": "R4 Public Core Local PostgreSQL Integration Campaign Image-Manifest Diagnostic Construction Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "implementation",
+    "failedCampaign",
+    "workset",
+    "diagnosticContract",
+    "validation",
+    "effectAudit",
+    "documentationScope",
+    "artifacts",
+    "audits",
+    "readiness",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4_public_core_local_postgres_integration_campaign_image_manifest_diagnostic_evidence.v1"
+    },
+    "status": {
+      "const": "LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED"
+    },
+    "generatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correctionAddendumSha256",
+        "correctionOwnerReviewSha256",
+        "correctionAddendumHead",
+        "correctionAddendumTree",
+        "correctionOwnerReviewHead",
+        "correctionOwnerReviewTree",
+        "correctionChoices",
+        "repositoryConstructionGrant",
+        "dockerDiagnosticGrant",
+        "imagePullGrant",
+        "cleanupGrant",
+        "postgresGrant",
+        "productionGrant",
+        "gateCGrant"
+      ],
+      "properties": {
+        "correctionAddendumSha256": { "const": "sha256:3791266f7cabf352d66ffafc00e9d3b6bd9db679818b172fc9f0423d26a1cdee" },
+        "correctionOwnerReviewSha256": { "const": "sha256:3af0c155276d6c7946ffb4c5196c61c38067b831e12de41c00c95c249df6b9c4" },
+        "correctionAddendumHead": { "const": "e8919ff6474bd3f61a76668da1f1bbc9cae01fc5" },
+        "correctionAddendumTree": { "const": "3ac72ec29feac2f665a271bd79d4ffe33389f794" },
+        "correctionOwnerReviewHead": { "const": "65771be7a1c17ed9170fbe592dae854f6d312759" },
+        "correctionOwnerReviewTree": { "const": "d1b7f0b69634300f5c207b8cdf33823592369ff2" },
+        "correctionChoices": { "const": "APPROVED_EXACT_NINE_CHOICES" },
+        "repositoryConstructionGrant": { "const": "CONSUMED_BY_KMD_LMD_MMD_ONLY" },
+        "dockerDiagnosticGrant": { "const": "NOT_REQUESTED" },
+        "imagePullGrant": { "const": "NOT_REQUESTED" },
+        "cleanupGrant": { "const": "NOT_REQUESTED" },
+        "postgresGrant": { "const": "NOT_REQUESTED" },
+        "productionGrant": { "const": "NOT_REQUESTED" },
+        "gateCGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "head", "tree", "parentHead", "parentTree", "exactDelta", "artifactAggregateSha256",
+        "runnerPath", "runnerByteCount", "runnerSha256", "runnerTestPath", "runnerTestByteCount", "runnerTestSha256"
+      ],
+      "properties": {
+        "head": { "const": "32abce27f7c84a83e0d2d1252ab0da5530f88cb0" },
+        "tree": { "const": "eeaceeda818e7df76effe8b1439be849c7ead86b" },
+        "parentHead": { "const": "65771be7a1c17ed9170fbe592dae854f6d312759" },
+        "parentTree": { "const": "d1b7f0b69634300f5c207b8cdf33823592369ff2" },
+        "exactDelta": { "const": "2_PATHS_0A_2M_0D_0R" },
+        "artifactAggregateSha256": { "const": "sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e" },
+        "runnerPath": { "const": "scripts/r4-public-core-local-postgres.mjs" },
+        "runnerByteCount": { "const": 826679 },
+        "runnerSha256": { "const": "sha256:cf4ab4996225b06834dfd8919ea5e0f8d3f602e172e783e69f300065275fa81a" },
+        "runnerTestPath": { "const": "test/r4/public-core-local-postgres.test.ts" },
+        "runnerTestByteCount": { "const": 212940 },
+        "runnerTestSha256": { "const": "sha256:d109b72e11abef24968de02f9fdcc1873da0a9fd4fea1d20cd41960fe31c34b2" }
+      }
+    },
+    "failedCampaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root", "approvalReceiptSha256", "approvalReceiptByteCount", "consumedGrantSha256",
+        "evidenceSha256", "evidenceByteCount", "journalEntryCount", "journalHeadSha256",
+        "terminalStatus", "innerFailureCode", "historicalResourcesAbsent", "targetPostgresObserved",
+        "rootReadOrMutatedByConstruction"
+      ],
+      "properties": {
+        "root": { "const": "/Users/zaynw/.forme-r4-integration-campaign-v2-1d96cfcf" },
+        "approvalReceiptSha256": { "const": "sha256:99541d38320a7a2aa4682eb39d3577d467fb68f8f1b78b78ff565b4b8fb4a26e" },
+        "approvalReceiptByteCount": { "const": 1128 },
+        "consumedGrantSha256": { "const": "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582" },
+        "evidenceSha256": { "const": "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889" },
+        "evidenceByteCount": { "const": 9656 },
+        "journalEntryCount": { "const": 17 },
+        "journalHeadSha256": { "const": "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b" },
+        "terminalStatus": { "const": "FAILED" },
+        "innerFailureCode": { "const": "local_postgres_image_platform_manifest_invalid" },
+        "historicalResourcesAbsent": { "const": true },
+        "targetPostgresObserved": { "const": false },
+        "rootReadOrMutatedByConstruction": { "const": false }
+      }
+    },
+    "workset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementationPathCount", "evidencePathCount", "statusPathCount", "totalPathCount",
+        "addedPathCount", "modifiedPathCount", "totalCommitCount", "implementationPaths",
+        "evidencePaths", "statusPaths"
+      ],
+      "properties": {
+        "implementationPathCount": { "const": 2 },
+        "evidencePathCount": { "const": 3 },
+        "statusPathCount": { "const": 10 },
+        "totalPathCount": { "const": 15 },
+        "addedPathCount": { "const": 4 },
+        "modifiedPathCount": { "const": 11 },
+        "totalCommitCount": { "const": 3 },
+        "implementationPaths": {
+          "const": [
+            "scripts/r4-public-core-local-postgres.mjs",
+            "test/r4/public-core-local-postgres.test.ts"
+          ]
+        },
+        "evidencePaths": {
+          "const": [
+            "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-manifest-diagnostic.json",
+            "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-artifact-index.json",
+            "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-evidence.schema.json"
+          ]
+        },
+        "statusPaths": {
+          "const": [
+            "README.md",
+            "docs/CONTROL.md",
+            "docs/DECISIONS.md",
+            "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+            "docs/PRODUCT.md",
+            "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+            "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+            "docs/README.md",
+            "docs/ROADMAP.md",
+            "docs/VALIDATION.md"
+          ]
+        }
+      }
+    },
+    "diagnosticContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "futureDiagnosticCardPath", "futureDiagnosticReviewPath", "futureCardAndReviewAreAddOnly",
+        "diagnosticAuthorityVersion", "diagnosticGrantVersion", "diagnosticReceiptVersion",
+        "maximumPrepareCount", "maximumConsumeCount", "maximumLifecycleCount", "dockerCallCeilings",
+        "typedTupleFields", "oneUseNoRetryWriteAheadConstructed", "rawOutputBodiesPersisted",
+        "rawOutputBuffersZeroed", "imagePullAuthorityConstructed", "cleanupAuthorityConstructed",
+        "postgresAuthorityConstructed", "diagnosticExecuted"
+      ],
+      "properties": {
+        "futureDiagnosticCardPath": { "const": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md" },
+        "futureDiagnosticReviewPath": { "const": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md" },
+        "futureCardAndReviewAreAddOnly": { "const": true },
+        "diagnosticAuthorityVersion": { "const": "r4.public-core-local-postgres-image-manifest-diagnostic-authority.v1" },
+        "diagnosticGrantVersion": { "const": "r4.public-core-local-postgres-image-manifest-diagnostic-grant.v1" },
+        "diagnosticReceiptVersion": { "const": "r4.public-core-local-postgres-image-manifest-diagnostic-receipt.v1" },
+        "maximumPrepareCount": { "const": 1 },
+        "maximumConsumeCount": { "const": 1 },
+        "maximumLifecycleCount": { "const": 1 },
+        "dockerCallCeilings": {
+          "const": {
+            "version": 1,
+            "image.inspect": 1,
+            "image.pull": 0,
+            "container.inspect": 0,
+            "container.create": 0,
+            "container.start": 0,
+            "container.stop": 0,
+            "container.rm": 0,
+            "network.inspect": 0,
+            "network.create": 0,
+            "network.rm": 0,
+            "volume.inspect": 0,
+            "volume.create": 0,
+            "volume.rm": 0
+          }
+        },
+        "typedTupleFields": {
+          "const": [
+            "repoDigestPresent", "imageOs", "imageArchitecture", "descriptorDigest",
+            "descriptorMediaType", "descriptorSize", "descriptorPlatformOs", "descriptorPlatformArchitecture"
+          ]
+        },
+        "oneUseNoRetryWriteAheadConstructed": { "const": true },
+        "rawOutputBodiesPersisted": { "const": false },
+        "rawOutputBuffersZeroed": { "const": true },
+        "imagePullAuthorityConstructed": { "const": false },
+        "cleanupAuthorityConstructed": { "const": false },
+        "postgresAuthorityConstructed": { "const": false },
+        "diagnosticExecuted": { "const": false }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testLanes", "checkLanes", "committedBytesOnly", "allPassed"],
+      "properties": {
+        "testLanes": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "items": { "$ref": "#/$defs/testLane" }
+        },
+        "checkLanes": {
+          "const": [
+            "node --check scripts/r4-public-core-local-postgres.mjs",
+            "npm run typecheck",
+            "npm --workspace @forme/room run check:no-ai",
+            "npm run r4:docs:audit",
+            "git diff HEAD^ HEAD --check"
+          ]
+        },
+        "committedBytesOnly": { "const": true },
+        "allPassed": { "const": true }
+      }
+    },
+    "effectAudit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constructionPaths", "constructionCommits", "dependencyChanges", "lockChanges", "sqlChanges",
+        "externalNetworkCalls", "failedCampaignRootReads", "failedCampaignRootMutations",
+        "pendingDiagnosticGrants", "consumedDiagnosticGrants", "diagnosticLifecycles", "dockerCliCalls",
+        "dockerSocketResolutions", "dockerDaemonCalls", "imagePulls", "cleanupLifecycles",
+        "postgresProcesses", "postgresConnections", "sqlRuns", "productRuntimeEffects",
+        "productionEffects", "gateCEffects"
+      ],
+      "properties": {
+        "constructionPaths": { "const": 15 },
+        "constructionCommits": { "const": 3 },
+        "dependencyChanges": { "const": 0 },
+        "lockChanges": { "const": 0 },
+        "sqlChanges": { "const": 0 },
+        "externalNetworkCalls": { "const": 0 },
+        "failedCampaignRootReads": { "const": 0 },
+        "failedCampaignRootMutations": { "const": 0 },
+        "pendingDiagnosticGrants": { "const": 0 },
+        "consumedDiagnosticGrants": { "const": 0 },
+        "diagnosticLifecycles": { "const": 0 },
+        "dockerCliCalls": { "const": 0 },
+        "dockerSocketResolutions": { "const": 0 },
+        "dockerDaemonCalls": { "const": 0 },
+        "imagePulls": { "const": 0 },
+        "cleanupLifecycles": { "const": 0 },
+        "postgresProcesses": { "const": 0 },
+        "postgresConnections": { "const": 0 },
+        "sqlRuns": { "const": 0 },
+        "productRuntimeEffects": { "const": 0 },
+        "productionEffects": { "const": 0 },
+        "gateCEffects": { "const": 0 }
+      }
+    },
+    "documentationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operationalCurrentStatusSurfacesCurrent", "wholeRepositoryDocumentationCurrentClaimed"],
+      "properties": {
+        "operationalCurrentStatusSurfacesCurrent": { "const": false },
+        "wholeRepositoryDocumentationCurrentClaimed": { "const": false }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactIndexSha256", "evidenceSchemaSha256"],
+      "properties": {
+        "artifactIndexSha256": { "$ref": "#/$defs/sha256" },
+        "evidenceSchemaSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "audits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["committedKmd", "candidateLmd"],
+      "properties": {
+        "committedKmd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["summaryText", "summaryByteCount", "summarySha256", "blockers", "important", "status"],
+          "properties": {
+            "summaryText": {
+              "const": "COMMITTED_KMD_AUDIT_V1\nhead=32abce27f7c84a83e0d2d1252ab0da5530f88cb0\ntree=eeaceeda818e7df76effe8b1439be849c7ead86b\nparentHead=65771be7a1c17ed9170fbe592dae854f6d312759\nparentTree=d1b7f0b69634300f5c207b8cdf33823592369ff2\ndelta=2_PATHS_0A_2M_0D_0R\naggregateSha256=sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e\nrunnerSha256=sha256:cf4ab4996225b06834dfd8919ea5e0f8d3f602e172e783e69f300065275fa81a\nrunnerTestSha256=sha256:d109b72e11abef24968de02f9fdcc1873da0a9fd4fea1d20cd41960fe31c34b2\nblockers=0\nimportant=0\nstatus=PASS"
+            },
+            "summaryByteCount": { "const": 541 },
+            "summarySha256": { "const": "sha256:39615ce9ff7717168980cf835b3fc5fd261e38111fd47084413d12a1ce68e763" },
+            "blockers": { "const": 0 },
+            "important": { "const": 0 },
+            "status": { "const": "PASS" }
+          }
+        },
+        "candidateLmd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope", "blockers", "important", "status", "selfDigestExcluded"],
+          "properties": {
+            "scope": { "const": "LATEST_BYTES_OF_EXACT_LMD_THREE_PATH_CANDIDATE" },
+            "blockers": { "const": 0 },
+            "important": { "const": 0 },
+            "status": { "const": "PASS" },
+            "selfDigestExcluded": { "const": true }
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diagnosticRunnerConstructed", "typedTupleContractConstructed", "committedTopologyVerifierConstructed",
+        "diagnosticPrepared", "diagnosticConsumed", "diagnosticObserved", "imageManifestCorrected",
+        "replacementCampaignAuthorized", "targetPostgresObserved", "productionReady", "gateCReady"
+      ],
+      "properties": {
+        "diagnosticRunnerConstructed": { "const": true },
+        "typedTupleContractConstructed": { "const": true },
+        "committedTopologyVerifierConstructed": { "const": true },
+        "diagnosticPrepared": { "const": false },
+        "diagnosticConsumed": { "const": false },
+        "diagnosticObserved": { "const": false },
+        "imageManifestCorrected": { "const": false },
+        "replacementCampaignAuthorized": { "const": false },
+        "targetPostgresObserved": { "const": false },
+        "productionReady": { "const": false },
+        "gateCReady": { "const": false }
+      }
+    },
+    "stop": {
+      "const": "LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN / STATUS_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "testLane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["laneId", "command", "total", "passed", "failed"],
+      "properties": {
+        "laneId": { "type": "string", "minLength": 1 },
+        "command": { "type": "string", "minLength": 1 },
+        "total": { "type": "integer", "minimum": 1 },
+        "passed": { "type": "integer", "minimum": 1 },
+        "failed": { "const": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_image_manifest_diagnostic_artifact_index.v1",
+  "status": "IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 committed Kmd image-manifest diagnostic artifacts",
+  "authority": {
+    "correctionAddendumSha256": "sha256:3791266f7cabf352d66ffafc00e9d3b6bd9db679818b172fc9f0423d26a1cdee",
+    "correctionOwnerReviewSha256": "sha256:3af0c155276d6c7946ffb4c5196c61c38067b831e12de41c00c95c249df6b9c4",
+    "correctionChoices": "APPROVED_EXACT_NINE_CHOICES",
+    "repositoryConstructionGrant": "APPROVED_EXACT_KMD_LMD_MMD_ONLY",
+    "dockerDiagnosticGrant": "NOT_REQUESTED",
+    "imagePullGrant": "NOT_REQUESTED",
+    "cleanupGrant": "NOT_REQUESTED",
+    "postgresGrant": "NOT_REQUESTED",
+    "productionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "failedCampaignOwnerReview": {
+      "head": "4611e57e3481b1b309f0d583d013e548d05e0f25",
+      "tree": "0ea6a56a36b32f38f183f9f16ccdd59e20e6d12c",
+      "parentHead": "56382c8a378e316b2e5a0a2cf2cf15ac6913d924",
+      "exactDelta": "1_PATH_1A"
+    },
+    "correctionAddendum": {
+      "head": "e8919ff6474bd3f61a76668da1f1bbc9cae01fc5",
+      "tree": "3ac72ec29feac2f665a271bd79d4ffe33389f794",
+      "parentHead": "4611e57e3481b1b309f0d583d013e548d05e0f25",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:3791266f7cabf352d66ffafc00e9d3b6bd9db679818b172fc9f0423d26a1cdee"
+    },
+    "correctionOwnerReview": {
+      "head": "65771be7a1c17ed9170fbe592dae854f6d312759",
+      "tree": "d1b7f0b69634300f5c207b8cdf33823592369ff2",
+      "parentHead": "e8919ff6474bd3f61a76668da1f1bbc9cae01fc5",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:3af0c155276d6c7946ffb4c5196c61c38067b831e12de41c00c95c249df6b9c4"
+    },
+    "implementation": {
+      "head": "32abce27f7c84a83e0d2d1252ab0da5530f88cb0",
+      "tree": "eeaceeda818e7df76effe8b1439be849c7ead86b",
+      "parentHead": "65771be7a1c17ed9170fbe592dae854f6d312759",
+      "parentTree": "d1b7f0b69634300f5c207b8cdf33823592369ff2",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "image_manifest_diagnostic_runner",
+      "gitStatus": "M",
+      "byteCount": 826679,
+      "sha256": "sha256:cf4ab4996225b06834dfd8919ea5e0f8d3f602e172e783e69f300065275fa81a"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "image_manifest_diagnostic_runner_test",
+      "gitStatus": "M",
+      "byteCount": 212940,
+      "sha256": "sha256:d109b72e11abef24968de02f9fdcc1873da0a9fd4fea1d20cd41960fe31c34b2"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-manifest-diagnostic.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "failedCampaign": {
+    "root": "/Users/zaynw/.forme-r4-integration-campaign-v2-1d96cfcf",
+    "approvalReceiptSha256": "sha256:99541d38320a7a2aa4682eb39d3577d467fb68f8f1b78b78ff565b4b8fb4a26e",
+    "approvalReceiptByteCount": 1128,
+    "consumedGrantSha256": "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582",
+    "evidenceSha256": "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889",
+    "evidenceByteCount": 9656,
+    "journalEntryCount": 17,
+    "journalHeadSha256": "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b",
+    "terminalStatus": "FAILED",
+    "innerFailureCode": "local_postgres_image_platform_manifest_invalid",
+    "historicalResourcesAbsent": true,
+    "targetPostgresObserved": false,
+    "rootReadOrMutatedByConstruction": false
+  },
+  "diagnosticContract": {
+    "futureDiagnosticCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md",
+    "futureDiagnosticReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md",
+    "futureCardGitStatus": "A",
+    "futureReviewGitStatus": "A",
+    "diagnosticAuthorityVersion": "r4.public-core-local-postgres-image-manifest-diagnostic-authority.v1",
+    "diagnosticGrantVersion": "r4.public-core-local-postgres-image-manifest-diagnostic-grant.v1",
+    "diagnosticReceiptVersion": "r4.public-core-local-postgres-image-manifest-diagnostic-receipt.v1",
+    "dockerVersionMaximum": 1,
+    "imageInspectMaximum": 1,
+    "allOtherDockerKindsMaximum": 0,
+    "oneUseNoRetryWriteAheadConstructed": true,
+    "bodyFreeTypedTupleConstructed": true,
+    "rawOutputBodiesPersisted": false,
+    "imagePullAuthorityConstructed": false,
+    "cleanupAuthorityConstructed": false,
+    "postgresAuthorityConstructed": false,
+    "diagnosticExecuted": false,
+    "physicalEffects": 0
+  }
+}
