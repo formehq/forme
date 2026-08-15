@@ -50,6 +50,7 @@ import {
   runLocalPostgresIntegrationCampaignPrepareFakePlan,
   runLocalPostgresIntegrationCampaignReceiptValidationFakePlan,
   runLocalPostgresIntegrationCampaignRawParserFakePlan,
+  verifyLocalPostgresIntegrationCampaignHistoricalPrefix,
   runLocalPostgresCleanupLifecycleFakePlan,
   runLocalPostgresPrepareFakePlan,
   runLocalPostgresReadinessFakePlan,
@@ -3300,6 +3301,79 @@ test("integration campaign correction binds the committed Addendum/Review and ex
     artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-OWNER-REVIEW.md",
     artifactSha256: "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324",
   });
+  assertHistoricalConstructionStep({
+    head: "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+    parent: "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+    tree: "14526ed95feae2da6c9c14a89ece48616822e4e8",
+    paths: {
+      "scripts/r4-public-core-local-postgres.mjs": "M",
+      "test/r4/public-core-local-postgres.test.ts": "M",
+    },
+  });
+  assertHistoricalAuthorityStep({
+    head: "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
+    parent: "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+    tree: "8860d06a9ccc821be62bf62ee79cd356b8b7fb52",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7",
+  });
+  assertHistoricalAuthorityStep({
+    head: "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+    parent: "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
+    tree: "63e69b5594aa9ba6627b825b1ac4aa636e15605e",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7",
+  });
+  assertHistoricalConstructionStep({
+    head: "98392bf19356982c884961a1425cd97ff33811bf",
+    parent: "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+    tree: "796684556d04368c3acd3926d0c86992affa205c",
+    paths: {
+      "scripts/r4-gate-b-physical-runner.mjs": "M",
+      "test/r4-gate-b-core/physical-runner.test.ts": "M",
+    },
+  });
+  assertHistoricalConstructionStep({
+    head: "614202e8765372755f75ce7fa465ef9e550971a8",
+    parent: "98392bf19356982c884961a1425cd97ff33811bf",
+    tree: "180d6a9fa048e07e72ddbab8e2e4e2e354fb902a",
+    paths: {
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json": "A",
+      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json": "A",
+      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json": "A",
+    },
+  });
+  assertHistoricalConstructionStep({
+    head: "eb209d314a1084069a15fd4c819cf5e4d5760b77",
+    parent: "614202e8765372755f75ce7fa465ef9e550971a8",
+    tree: "09e95f7d13873303dff81fcf5ec29433c8e589dd",
+    paths: {
+      "README.md": "M",
+      "docs/CONTROL.md": "M",
+      "docs/DECISIONS.md": "M",
+      "docs/NATIVE-HARNESS-ARCHITECTURE.md": "M",
+      "docs/PRODUCT.md": "M",
+      "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md": "M",
+      "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md": "A",
+      "docs/README.md": "M",
+      "docs/ROADMAP.md": "M",
+      "docs/VALIDATION.md": "M",
+    },
+  });
+  assert.equal(committedArtifactAggregate("1e93280bc3842d40e6f797a38ca4bfa2a2277813", [
+    "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
+  ]), "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f");
+  assert.equal(committedArtifactAggregate("98392bf19356982c884961a1425cd97ff33811bf", [
+    "scripts/r4-gate-b-physical-runner.mjs", "test/r4-gate-b-core/physical-runner.test.ts",
+  ]), "sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4");
+  assert.equal(committedArtifactAggregate("614202e8765372755f75ce7fa465ef9e550971a8", [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
+  ]), "sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39");
+  assert.equal(verifyLocalPostgresIntegrationCampaignHistoricalPrefix(), true);
   const green = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation: "none" });
   assert.equal(green.accepted, true);
   assert.equal(green.physicalEffects, 0);
@@ -3313,9 +3387,9 @@ test("integration campaign correction binds the committed Addendum/Review and ex
     "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
   ]);
   assert.deepEqual(green.authority.evidencePaths, [
-    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
-    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
   ]);
   assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "7e07672563201d92db14ecf3adcbf5f6ad970b9f^"], {
     cwd: path.resolve(import.meta.dirname, "../.."), encoding: "utf8",

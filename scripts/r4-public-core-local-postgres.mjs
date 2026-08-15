@@ -9916,6 +9916,26 @@ const INTEGRATION_CAMPAIGN_REVIEW_TREE = "34b9fd454725c15710946503af7d8be126fa09
 const INTEGRATION_CAMPAIGN_REVIEW_SHA256 = "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324";
 const INTEGRATION_CAMPAIGN_PACKET_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-ADDENDUM.md";
 const INTEGRATION_CAMPAIGN_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-OWNER-REVIEW.md";
+const INTEGRATION_CAMPAIGN_KIC_HEAD = "1e93280bc3842d40e6f797a38ca4bfa2a2277813";
+const INTEGRATION_CAMPAIGN_KIC_TREE = "14526ed95feae2da6c9c14a89ece48616822e4e8";
+const INTEGRATION_CAMPAIGN_KIC_AGGREGATE_SHA256 = "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD = "e21c441a6154f3c08b96ccbf7f0f7b693107b99a";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_TREE = "8860d06a9ccc821be62bf62ee79cd356b8b7fb52";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_SHA256 = "sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-ADDENDUM.md";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD = "9f178918c416bd3be54e4cbc44e0c64567a78ca1";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_TREE = "63e69b5594aa9ba6627b825b1ac4aa636e15605e";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_SHA256 = "sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7";
+const INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-OWNER-REVIEW.md";
+const INTEGRATION_CAMPAIGN_KGC_HEAD = "98392bf19356982c884961a1425cd97ff33811bf";
+const INTEGRATION_CAMPAIGN_KGC_TREE = "796684556d04368c3acd3926d0c86992affa205c";
+const INTEGRATION_CAMPAIGN_KGC_AGGREGATE_SHA256 = "sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4";
+const INTEGRATION_CAMPAIGN_LIC_HEAD = "614202e8765372755f75ce7fa465ef9e550971a8";
+const INTEGRATION_CAMPAIGN_LIC_TREE = "180d6a9fa048e07e72ddbab8e2e4e2e354fb902a";
+const INTEGRATION_CAMPAIGN_LIC_AGGREGATE_SHA256 = "sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39";
+const INTEGRATION_CAMPAIGN_MIC_HEAD = "eb209d314a1084069a15fd4c819cf5e4d5760b77";
+const INTEGRATION_CAMPAIGN_MIC_TREE = "09e95f7d13873303dff81fcf5ec29433c8e589dd";
+const INTEGRATION_CAMPAIGN_MIC_AGGREGATE_SHA256 = "sha256:c088d756b29f330dc31f626ab9fa4a33984f7c4afa92213c5f2c122349624cb5";
 const INTEGRATION_CAMPAIGN_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V2.md";
 const INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V2.md";
 const INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V2_BEGIN";
@@ -11179,9 +11199,9 @@ export function runLocalPostgresIntegrationCampaignAuthorityFakePlan(input = Obj
     markerBegin: INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN, markerEnd: INTEGRATION_CAMPAIGN_AUTHORITY_END,
     implementationPaths: ["scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts"],
     evidencePaths: [
-      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
-      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
-      "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
     ],
   };
   if (stable.mutation === "packet") authority.addendumSha256 = `sha256:${"f".repeat(64)}`;
@@ -11212,16 +11232,31 @@ export function runLocalPostgresIntegrationCampaignAuthorityFakePlan(input = Obj
 const INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS = Object.freeze([
   "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
 ]);
-const INTEGRATION_CAMPAIGN_EVIDENCE_PATHS = Object.freeze([
+const INTEGRATION_CAMPAIGN_KGC_PATHS = Object.freeze([
+  "scripts/r4-gate-b-physical-runner.mjs", "test/r4-gate-b-core/physical-runner.test.ts",
+]);
+const INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
   "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
   "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
-  "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+]);
+const INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const INTEGRATION_CAMPAIGN_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
 ]);
 const INTEGRATION_CAMPAIGN_STATUS_PATHS = Object.freeze([
   "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
   "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
-  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md",
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 const INTEGRATION_CAMPAIGN_PAYLOAD_KEYS = Object.freeze([
@@ -11274,22 +11309,75 @@ function parseIntegrationCampaignAuthorityCard(bytes) {
   });
 }
 
-function verifyIntegrationCampaignTopology(grant) {
-  const lineage = grant.lineage;
+export function verifyLocalPostgresIntegrationCampaignHistoricalPrefix() {
   exactCommitStep("542a533b2b642e6a26f8923649ecfb4de9b6e58e", INTEGRATION_CAMPAIGN_PACKET_HEAD,
     INTEGRATION_CAMPAIGN_PACKET_TREE, new Map([[INTEGRATION_CAMPAIGN_PACKET_PATH, "A"]]),
     "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(INTEGRATION_CAMPAIGN_PACKET_HEAD, INTEGRATION_CAMPAIGN_REVIEW_HEAD,
     INTEGRATION_CAMPAIGN_REVIEW_TREE, new Map([[INTEGRATION_CAMPAIGN_REVIEW_PATH, "A"]]),
     "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_REVIEW_HEAD, lineage.implementationHead, lineage.implementationTree,
+  exactCommitStep(INTEGRATION_CAMPAIGN_REVIEW_HEAD, INTEGRATION_CAMPAIGN_KIC_HEAD,
+    INTEGRATION_CAMPAIGN_KIC_TREE,
+    statusMap(INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS), "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_KIC_HEAD, INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD,
+    INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_TREE,
+    new Map([[INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_PATH, "A"]]),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD, INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD,
+    INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_TREE,
+    new Map([[INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_PATH, "A"]]),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD, INTEGRATION_CAMPAIGN_KGC_HEAD,
+    INTEGRATION_CAMPAIGN_KGC_TREE, statusMap(INTEGRATION_CAMPAIGN_KGC_PATHS),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_KGC_HEAD, INTEGRATION_CAMPAIGN_LIC_HEAD,
+    INTEGRATION_CAMPAIGN_LIC_TREE,
+    statusMap(INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS,
+      new Set(INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS)),
+    "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(INTEGRATION_CAMPAIGN_LIC_HEAD, INTEGRATION_CAMPAIGN_MIC_HEAD,
+    INTEGRATION_CAMPAIGN_MIC_TREE,
+    statusMap(INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS,
+      new Set([
+        "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md",
+      ])),
+    "local_postgres_integration_campaign_binding_invalid");
+  if (artifactAggregate(INTEGRATION_CAMPAIGN_KIC_HEAD, INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS).aggregateSha256
+      !== INTEGRATION_CAMPAIGN_KIC_AGGREGATE_SHA256
+    || artifactAggregate(INTEGRATION_CAMPAIGN_KGC_HEAD, INTEGRATION_CAMPAIGN_KGC_PATHS).aggregateSha256
+      !== INTEGRATION_CAMPAIGN_KGC_AGGREGATE_SHA256
+    || artifactAggregate(INTEGRATION_CAMPAIGN_LIC_HEAD, INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS).aggregateSha256
+      !== INTEGRATION_CAMPAIGN_LIC_AGGREGATE_SHA256
+    || artifactAggregate(INTEGRATION_CAMPAIGN_MIC_HEAD, INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS).aggregateSha256
+      !== INTEGRATION_CAMPAIGN_MIC_AGGREGATE_SHA256
+    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_PACKET_PATH}`], true))
+      !== INTEGRATION_CAMPAIGN_PACKET_SHA256
+    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_REVIEW_PATH}`], true))
+      !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
+    || sha256Bytes(runGit([
+      "show", `${INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_PATH}`,
+    ], true)) !== INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_SHA256
+    || sha256Bytes(runGit([
+      "show", `${INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_PATH}`,
+    ], true)) !== INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_SHA256) {
+    fail("local_postgres_integration_campaign_binding_invalid");
+  }
+  return true;
+}
+
+function verifyIntegrationCampaignTopology(grant) {
+  const lineage = grant.lineage;
+  verifyLocalPostgresIntegrationCampaignHistoricalPrefix();
+  exactCommitStep(INTEGRATION_CAMPAIGN_MIC_HEAD, lineage.implementationHead, lineage.implementationTree,
     statusMap(INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS), "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(lineage.implementationHead, lineage.evidenceHead, lineage.evidenceTree,
     statusMap(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS, new Set(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS)),
     "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(lineage.evidenceHead, lineage.statusHead, lineage.statusTree,
     statusMap(INTEGRATION_CAMPAIGN_STATUS_PATHS,
-      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md"])),
+      new Set([
+        "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md",
+      ])),
     "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(lineage.statusHead, lineage.executionCardHead, lineage.executionCardTree,
     new Map([[INTEGRATION_CAMPAIGN_CARD_PATH, "A"]]), "local_postgres_integration_campaign_binding_invalid");
@@ -11302,17 +11390,13 @@ function verifyIntegrationCampaignTopology(grant) {
     || implementation.records[0].sha256 !== grant.artifacts.runnerSha256
     || implementation.records[1].sha256 !== grant.artifacts.runnerTestSha256
     || status.aggregateSha256 !== lineage.statusAggregateSha256
-    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_PACKET_PATH}`], true))
-      !== INTEGRATION_CAMPAIGN_PACKET_SHA256
-    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_REVIEW_PATH}`], true))
-      !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
-    || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[0]}`], true))
-      !== grant.artifacts.artifactIndexSha256
     || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[1]}`], true))
-      !== grant.artifacts.evidenceSchemaSha256
+      !== grant.artifacts.artifactIndexSha256
     || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[2]}`], true))
+      !== grant.artifacts.evidenceSchemaSha256
+    || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[0]}`], true))
       !== grant.artifacts.evidenceSha256
-    || sha256Bytes(runGit(["show", `${lineage.statusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md`], true))
+    || sha256Bytes(runGit(["show", `${lineage.statusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`], true))
       !== grant.artifacts.constructionReportSha256) {
     fail("local_postgres_integration_campaign_binding_invalid");
   }
