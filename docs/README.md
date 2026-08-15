@@ -2,45 +2,26 @@
 
 The repository keeps a deliberately small decision surface.
 
-Current execution truth (2026-08-15): R0–R3 are Done and Owner-accepted. #66
-local Projection review is Owner-accepted and PR #72 is integrated into the R4
-branch. #67 is offline Technical Review Green on Draft PR #73, with no
-production Room/database mutation, deployment, publication, admission, real
-Guest data or Provider call. Local PostgreSQL Wiring Stage A is `bc0b520`; the
-repository-only APFS nlink correction is Technical Review Green at Kc
-`18e3a32` / Lc `32448cb`. The first approved physical `prepare` stopped before
-grant creation on the invalid fixed-nlink contract; Docker, PostgreSQL and SQL
-remained zero. The later repository-only execution-authority topology
-correction is Technical Review Green at Kt `f7d3783` / Lt `c699f9d`.
-A later approved v3 rehearsal and its separately approved cleanup rescue each
-consumed one-use authority and failed closed on the exact-name inspect result.
-They created no Docker resource and made no PostgreSQL/SQL effect; absence
-remains unknown. The repository-only body-free inspect diagnostic reached
-Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`; its approved V1
-`prepare` later failed before grant creation and before all Docker/socket
-effects with a generic runner code. Kp `eaca190` / Lp `7a31dba` froze an
-exact 19-stage body-free failure membrane and same-inode rollback proof. The
-first Integration Campaign then stopped before PostgreSQL on an inspect-missing
-parser defect. The Owner-approved parser and Gate-B concurrency validation
-corrections are repository Technical Review Green at Kic `1e93280`, Kgc
-`98392bf` and Lic `614202e`. The V2 topology verifier correction is now Green
-at Kvt `85096f6` / Lvt `27540be` and binds the complete committed prefix before
-future Kvt/Lvt/Mvt/Card V2/Review V2. Construction made zero
-Docker/socket/PostgreSQL/SQL effects. V2 Card/Review construction is approved;
-prepare, execution, cleanup, production and Gate C are not requested. R4 remains Building and is not
-on `main`; no fresh remote/CI status is asserted here. Host Binding attempts 1
-and 2 are consumed Yellow history and #71 is a bounded enabler, not #67.
+Current execution truth (2026-08-15): R0–R3 and #66 are Owner-accepted. #67
+has repository/offline Public Core and concrete Local PostgreSQL wiring, but
+remains Building and is not on `main`. The one-use Integration Campaign V2 was
+prepared and consumed, proved its historical Docker names absent, then failed
+closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
+Kmd `32abce2` / Lmd `b17a44f` now construct a separate body-free
+image-manifest diagnostic that may later call only `version` and one exact
+pinned `image inspect`. Construction made zero Docker/socket/daemon/image pull,
+cleanup, PostgreSQL and SQL effects and did not read or mutate the failed root.
+The diagnostic itself is not approved or executed, so the descriptor tuple is
+still unobserved and no manifest pin is corrected. Production, real Guest data,
+traffic and Gate C remain closed. No fresh remote/CI status is asserted here;
 August 25 remains a Progress / Vision Sharing checkpoint, not a Done date.
 
-Current V2 topology verifier correction bindings: index
-`sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
-schema
-`sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
-evidence
-`sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
-report
-`sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current image-manifest diagnostic bindings: index
+`sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -60,6 +41,7 @@ Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTI
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md) | How did one medium-grained repository campaign close diagnosis, exact-owned cleanup, absence gating and the frozen rehearsal contract without executing them? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md) | How were the inspect-missing parser and Gate-B concurrency validation corrected without authorizing a replacement campaign? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md) | How was the full committed successor topology made executable for V2 Card/Review without authorizing physical execution? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was the body-free image-manifest diagnostic constructed without authorizing its Docker call, pull, cleanup or PostgreSQL? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

@@ -1,15 +1,16 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_V2_TOPOLOGY_VERIFIER_CORRECTION_GREEN_PHYSICAL_EXECUTION_NOT_REQUESTED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_GREEN_DIAGNOSTIC_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-15
-- Current predecessor: Local PostgreSQL Integration Campaign V2 topology verifier correction
+- Current predecessor: Local PostgreSQL Integration Campaign Image-Manifest Diagnostic construction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the V2 topology verifier correction reached
-repository Technical Review Green. It cannot prepare or consume a campaign
-grant, inspect or remove a Docker resource, run PostgreSQL, migrate production,
-activate a route or carry traffic.
+Gate C is still closed after the repository-only Image-Manifest Diagnostic
+construction reached Technical Review Green. It cannot prepare or consume a
+diagnostic grant, call Docker, pull an image, inspect or remove named Docker
+resources, run PostgreSQL, migrate production, activate a route or carry
+traffic.
 
 ## Current truth
 
@@ -21,15 +22,15 @@ authorities and failed closed before PostgreSQL; the later V1 diagnostic
 prepare failed before grant creation and before Docker/socket effects. Those
 histories remain immutable and non-retryable.
 
-The first Integration Campaign stopped before PostgreSQL because its pinned
-body-free parser did not classify the observed inspect-missing result. The
-repository correction then exposed an independent false Red in default
-concurrent Gate-B validation. Kic fixed the shared parser; Kgc bound feeder
-waiting to the remaining approved authority deadline without retry; Lic froze
-strict machine evidence. Default Gate-B validation is Green twice concurrently
-and once serially. Kvt then corrected the verifier to bind that complete
-history before the future Kvt/Lvt/Mvt/Card V2/Review V2 chain. V2 Card/Review
-construction is approved, but no campaign has been prepared or executed.
+The corrected Integration Campaign V2 was later prepared and consumed once.
+It proved the historical container/network/volume names absent, then stopped
+before PostgreSQL because the pinned image descriptor did not match the
+separately pinned linux/arm64 manifest digest. Its body-free terminal receipt
+did not retain the descriptor value, so the repository cannot honestly choose
+a correction yet. Kmd/Lmd now construct a separate one-use body-free
+image-manifest diagnostic, but that diagnostic is not approved or executed.
+No image pin, campaign authority, PostgreSQL readiness or Gate C readiness has
+changed.
 
 ## Exact current bindings
 
@@ -49,6 +50,10 @@ construction is approved, but no campaign has been prepared or executed.
 | machine evidence | `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80` |
 | construction report | `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07` |
 | committed Kic / Kgc / Lic audits | `sha256:7c1ea06b0f7c1422b29ef6eba6a92a063d1e6495e3d7a5cb6adccd535b1bd094` / `sha256:aeb46997b467b5471f484de08c543b061e0caed398d9aa6c83200203252f231f` / `sha256:3623dafd4f988503955b64206fe7bb292787de7c864ea38bcd5f4f9f5f9dd9e6` |
+| Image-Manifest Correction Addendum / Review | `sha256:3791266f7cabf352d66ffafc00e9d3b6bd9db679818b172fc9f0423d26a1cdee` / `sha256:3af0c155276d6c7946ffb4c5196c61c38067b831e12de41c00c95c249df6b9c4` |
+| Kmd HEAD / tree / G2 | `32abce27f7c84a83e0d2d1252ab0da5530f88cb0` / `eeaceeda818e7df76effe8b1439be849c7ead86b` / `sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e` |
+| Lmd HEAD / tree / G3 | `b17a44f34fa9abde1e6a39504594e875a6d7d7cf` / `2609248dfc6d792c4d36947ff4bd857faaa745cf` / `sha256:a4ff525649dfd622d4171974ed3b43da863c8918e81aad08b546a5a32d00e161` |
+| Image-Manifest index / schema / evidence / report | `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c` / `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440` / `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011` / `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559` |
 
 The future local-effect proposal may use only these versioned add-only paths:
 
@@ -77,15 +82,15 @@ None can be revived, retried or interpreted as campaign authority.
 | exact-ownership cleanup guard constructed | `true` |
 | durable absence-before-physical gate constructed | `true` |
 | write-ahead/clock/host/headroom/recovery guards constructed | `true` |
-| focused correction tests | `15 / 15` |
-| local PostgreSQL runner | `176 / 176` |
-| complete offline regression | `748 / 748` |
-| Gate-B default concurrent validation | `146 / 146` twice |
-| Gate-B serial validation | `146 / 146` |
+| image-manifest diagnostic contract constructed | `true` |
+| focused image-manifest diagnostic tests | `6 / 6` |
+| local PostgreSQL runner | `182 / 182` |
+| complete offline regression | `754 / 754` |
+| Gate-B Core validation | `146 / 146` |
 | spine | `45 / 45` |
-| campaign execution approved | `false` |
-| campaign grant prepared / consumed | `false / false` |
-| historical resources observed absent | `false` |
+| image-manifest diagnostic approved / executed | `false / false` |
+| image pull / cleanup authorized | `false / false` |
+| historical resources observed absent by consumed V2 campaign | `true` |
 | target PostgreSQL / catalog observed | `false / false` |
 | disposable physical Green | `false` |
 | production pool / migration | `false / false` |
@@ -103,22 +108,25 @@ push, PR mutation, merge or spend.
 
 ## What must happen before Gate C can become approvable
 
-1. Commit and independently audit the exact Mic status freeze.
-2. Construct the fresh versioned V2 Integration Campaign Execution Card/Owner
-   Review from committed Mic bytes and return for one separate local-effect
-   approval.
-3. Under that one-use authority only, reach complete campaign Green: historical
+1. Construct and independently audit the versioned Image-Manifest Diagnostic
+   Card/Owner Review, then obtain a separate exact Owner approval.
+2. Under that one-use authority only, observe the bounded typed descriptor
+   tuple with no pull, cleanup or PostgreSQL effect.
+3. Review the observed tuple and, if justified, construct a separate repository
+   correction plus a new replacement-campaign authority; neither is implied by
+   the diagnostic result.
+4. Under that later one-use campaign authority only, reach complete Green: historical
    resource absence, PostgreSQL `160010`, target catalog `14 / 207 / 172 / 44`,
    the frozen `3 / 3 / 1` schema sequence, `23 / 20` actions and zero owned
    residue.
-4. Bind production credentials, pool, migration, runtime route, traffic and
+5. Bind production credentials, pool, migration, runtime route, traffic and
    exact product authority in a later Gate C proposal.
-5. Run and Owner-accept one real bounded Guest encounter.
+6. Run and Owner-accept one real bounded Guest encounter.
 
 No local campaign outcome automatically opens production or marks #67/R4 Done.
 
 ## Mandatory stop
 
-`LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 Gate C remains intentionally non-approvable.

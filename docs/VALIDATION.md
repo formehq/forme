@@ -2,7 +2,23 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-15
-- V2 topology verifier correction bindings: index
+- Current image-manifest diagnostic construction: Kmd `32abce2` / Lmd
+  `b17a44f`; index `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current verdict: **the one-use Integration Campaign V2 was prepared and
+  consumed, proved its historical Docker resource names absent, then failed
+  closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
+  The repository now has a strict body-free diagnostic implementation and
+  machine evidence, validated at 6/6 focused, 182/182 runner, 85/85 non-runner,
+  434/434 Public Core, 754/754 offline, 146/146 Gate-B Core and 45/45 spine.
+  Construction made zero Docker/socket/image pull/cleanup/PostgreSQL/SQL
+  effects and did not read the failed root. The diagnostic is not approved or
+  executed, so its tuple remains unobserved and no manifest pin or replacement
+  campaign is authorized.**
+- Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
   `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
@@ -10,8 +26,8 @@
   `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
   report
   `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-- Current verdict: **R3 is owner-accepted for the MVP; the privacy-first P
+- Previous topology-verifier stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Prior evidence context (historical): **R3 is owner-accepted for the MVP; the privacy-first P
   human-boundary model, R4 T1 public/private Room behavior, T2 Room control
   contract, NH1/NH2, and the exact Fresh Native Response Session T3 contract
   and T4 public lifecycle contract plus full T5 are Owner-approved; four
@@ -1351,3 +1367,32 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Only a fresh versioned V2
   Execution Card/Owner Review may be constructed next; no local effect is
   authorized by this evidence round.
+
+## Evidence round 23 — Image-manifest diagnostic construction
+
+- User outcome: preserve the consumed V2 failure as immutable evidence and
+  construct the smallest body-free diagnostic needed before choosing any image
+  manifest correction.
+- Technical evidence: Kmd `32abce27f7c84a83e0d2d1252ab0da5530f88cb0`
+  / tree `eeaceeda818e7df76effe8b1439be849c7ead86b` and Lmd
+  `b17a44f34fa9abde1e6a39504594e875a6d7d7cf` / tree
+  `2609248dfc6d792c4d36947ff4bd857faaa745cf` bind G2
+  `sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e`
+  and G3
+  `sha256:a4ff525649dfd622d4171974ed3b43da863c8918e81aad08b546a5a32d00e161`.
+  Index/schema/evidence/report are `sha256:7fd9ab11…20633c`,
+  `sha256:83888dc5…71440`, `sha256:2d66f47a…c9011` and
+  `sha256:490256a5…31559`.
+- Validation: 6/6 focused, 182/182 runner, 85/85 non-runner, 434/434 Public
+  Core, 754/754 offline, 146/146 Gate-B Core and 45/45 spine; strict Ajv,
+  TypeScript, no-AI, docs and diff checks Green.
+- Effect truth: failed-root reads/mutations, diagnostic prepare/consume,
+  Docker CLI/socket/daemon, image pull, cleanup, PostgreSQL, SQL, product
+  runtime, Production and Gate C were all zero.
+- Product judgment: the repository can now ask the right bounded question, but
+  it has not observed the answer. This is a diagnostic launchpad, not a
+  corrected campaign and not a real Public Room encounter.
+- Consequence: stop at
+  `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`.

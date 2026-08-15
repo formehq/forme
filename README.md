@@ -15,21 +15,21 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Current gate: **R4 Controlled Presence is Building on the real product
   sequence.** R1–R3 are Owner-accepted and #66 completed one real-Twin,
   local-only Projection review. #67 has repository/offline Public Core and
-  Local PostgreSQL wiring, including the concrete `pg` executor and 20-method
-  store bridge. The Integration Campaign V2 topology verifier correction is
-  repository Technical Review Green at Kvt `85096f6` and Lvt `27540be`: the
-  runner now verifies the complete Kic → concurrency Addendum/Review → Kgc →
-  Lic → Mic prefix before accepting Kvt/Lvt/Mvt/Card V2/Review V2. Validation
-  is 1/1 focused, 176/176 runner, 748/748 offline, two consecutive 146/146
-  default Gate-B runs, one 146/146 serial Gate-B run and 45/45 spine.
-  Construction made zero Docker/socket/PostgreSQL/SQL effects. It is not a
-  successful Docker or PostgreSQL integration. V2 Card/Review repository
-  construction is approved, but prepare, execution, cleanup, production and
-  Gate C remain `NOT_REQUESTED`. Vault, HTTPS transport, production
-  pool/migration, runtime route and traffic readiness remain false. #67 has not
-  created or mutated a production Room, deployed, published, admitted a
-  Projection, handled real Guest data or run a real public knock. R4 is not
-  Owner-accepted or Done.
+  concrete Local PostgreSQL wiring. The approved Integration Campaign V2 was
+  prepared and consumed once, proved the historical Docker resource names
+  absent, then failed closed before PostgreSQL at
+  `local_postgres_image_platform_manifest_invalid`. The repository-only
+  image-manifest diagnostic is now Technical Review Green at Kmd `32abce2` /
+  Lmd `b17a44f`: it can later retain only a body-free typed descriptor tuple
+  from one `version` and one exact `image inspect`, with every pull, cleanup,
+  PostgreSQL and SQL effect denied. Validation is 6/6 focused, 182/182 runner,
+  85/85 non-runner, 434/434 Public Core, 754/754 offline, 146/146 Gate-B Core
+  and 45/45 spine. Construction made zero Docker/socket/daemon/image/cleanup/
+  PostgreSQL/SQL effects and did not read or mutate the failed campaign root.
+  The diagnostic itself is not yet approved or executed, so the observed
+  descriptor remains unknown and no manifest pin has been corrected. Vault,
+  HTTPS transport, production pool/migration, runtime route, traffic and Gate C
+  remain false. R4 is not Owner-accepted or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
   and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
@@ -40,7 +40,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   Kp/Lp are `eaca190` / `7a31dba`; Integration Campaign Ki/Li are
   `76afe10` / `4c20af2`; inspect-missing Kic/Kgc/Lic are
   `1e93280` / `98392bf` / `614202e`; topology verifier correction Kvt/Lvt are
-  `85096f6` / `27540be`;
+  `85096f6` / `27540be`; image-manifest diagnostic Kmd/Lmd are `32abce2` /
+  `b17a44f`;
   Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
@@ -69,7 +70,8 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   report
   `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
   These prove repository construction only.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-manifest diagnostic bindings: index `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`, schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`, evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`, report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 

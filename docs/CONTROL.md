@@ -3,20 +3,18 @@
 - Updated: 2026-08-15
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and #67 has repository/offline Public Core plus
-  concrete Local PostgreSQL wiring. The physical rehearsal and cleanup rescue
-  failed closed before PostgreSQL. The later V1 diagnostic `prepare` also
-  failed before grant creation and before every Docker/socket effect. Kp
-  `eaca190` / Lp `7a31dba` froze its 19-stage body-free correction. The
-  Integration Campaign V2 topology verifier correction is repository
-  Technical Review Green at Kvt `85096f6` / Lvt `27540be`: the runner verifies
-  the actual complete successor chain rather than the impossible simplified
-  chain. The exact stop is
-  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN /
-  V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED /
-  PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. Campaign execution,
-  cleanup, production pool/migration, runtime route, traffic and Gate C remain
-  closed.
-  Host Binding is historical setup evidence and is not the #67 product gate.**
+  concrete Local PostgreSQL wiring. The approved Integration Campaign V2 was
+  consumed once and failed closed before PostgreSQL at the image-platform
+  manifest predicate. Kmd `32abce2` / Lmd `b17a44f` now freeze a separate
+  body-free image-manifest diagnostic with exactly one future `version` and one
+  future pinned `image inspect` ceiling; pull, cleanup, PostgreSQL, SQL,
+  Production and Gate C remain zero/closed. The diagnostic has not been
+  prepared, consumed or executed, and no descriptor value has been admitted as
+  a corrected pin. The exact stop is
+  `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Host Binding remains historical setup evidence, not
+  the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
 - P0 implementation: **R1, R2, and R3 are Owner-accepted. R4 design and Gate A
   repository mechanisms are closed/implemented. #66 proved current Twin →
@@ -49,11 +47,11 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **construct and audit a fresh versioned Integration Campaign V2
-  Execution Card/Owner Review as two add-only direct children. The corrected
-  repository campaign and machine evidence are complete; no intermediate
-  repository approval remains. Until a separate exact physical approval, do not prepare a campaign grant,
-  resolve the Docker socket, call Docker or touch any forensic root. The
+- Next action: **construct and audit the reserved versioned Image-Manifest
+  Diagnostic Card/Owner Review as two add-only direct children, then stop for
+  exact Owner approval. Until that separate approval, do not prepare a
+  diagnostic grant, resolve the Docker socket, call Docker, pull an image,
+  clean a resource or touch the failed campaign root. The
   hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
@@ -61,15 +59,12 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current V2 topology verifier correction bindings: index
-  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
-  schema
-  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
-  evidence
-  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
-  report
-  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-manifest diagnostic bindings: index
+  `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

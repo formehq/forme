@@ -6,7 +6,19 @@
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- V2 topology verifier correction bindings: index
+- Current image-manifest diagnostic construction: Kmd `32abce2` / Lmd
+  `b17a44f`; index `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current gate: the one-use Integration Campaign V2 failed closed before
+  PostgreSQL on an unrecorded image descriptor mismatch. Repository
+  construction of a body-free diagnostic is Green, but the diagnostic itself,
+  image pull, cleanup, replacement campaign, Production and Gate C are not
+  requested. The next step is an add-only Diagnostic Card/Review and a separate
+  exact Owner approval.
+- Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
   `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
@@ -14,8 +26,8 @@
   `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
   report
   `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-- Current gate: R0–R3 are Done and Owner-accepted. R4 design and Gate A
+- Previous topology-verifier stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Historical #67 path context: R0–R3 are Done and Owner-accepted. R4 design and Gate A
   repository mechanisms are complete. #66 local Projection review is Done and
   Owner-accepted; PR #72 is integrated into the R4 branch. #67 is offline
   Technical Review Green on Draft PR #73, and Draft PR #75 adds the public-only
@@ -37,7 +49,7 @@
   corrections are Technical Review Green at Kic `1e93280`, Kgc `98392bf` and
   Lic `614202e`; the default concurrent Gate-B run is Green twice and the
   serial run once. The V2 topology verifier correction is Green at Kvt
-  `85096f6` / Lvt `27540be`; the add-only V2 Card/Review package is the next repository step.
+  `85096f6` / Lvt `27540be`; the add-only V2 Card/Review package was the next repository step at that checkpoint.
   Campaign execution, cleanup, production and Gate C
   remain unrequested; #67
   remains In Progress until

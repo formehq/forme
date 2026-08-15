@@ -28,27 +28,25 @@
   diagnostic reached Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`;
   its approved V1 prepare then failed before grant creation with zero
   Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze exact 19-stage
-  body-free classification and rollback. The Integration Campaign parser and
-  concurrency corrections remain Green at Kic/Kgc/Lic, and the V2 topology
-  verifier correction is now repository Technical Review Green at Kvt
-  `85096f6` / Lvt `27540be`. The runner verifies the complete committed prefix
-  through Mic before accepting Kvt/Lvt/Mvt/Card V2/Review V2. V2 Card/Review
-  construction is approved; prepare, execution, cleanup, target PostgreSQL observation, vault, transport,
-  traffic and Gate C remain closed. Draft PR
+  body-free classification and rollback. The later Integration Campaign V2 was
+  prepared and consumed once, proved the historical resource names absent,
+  then failed closed before PostgreSQL at the image-platform manifest
+  predicate. Kmd `32abce2` / Lmd `b17a44f` now freeze a separate body-free
+  image-manifest diagnostic. Repository construction is Technical Review
+  Green, but diagnostic prepare/execution, image pull, cleanup, replacement
+  campaign, target PostgreSQL observation, vault, transport, traffic and Gate C
+  remain closed. Draft PR
   #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-15
-- V2 topology verifier correction bindings: index
-  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
-  schema
-  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
-  evidence
-  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
-  report
-  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Image-manifest diagnostic construction bindings: index
+  `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside

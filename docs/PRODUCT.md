@@ -20,19 +20,15 @@
   body-free inspect diagnostic reached Technical Review Green at Kf `bd3cdf7`
   / Lf `7384ef8`; its approved V1 prepare then failed before grant creation
   and before Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze the
-  19-stage body-free correction. The first Integration Campaign exposed an
-  inspect-missing parser defect before PostgreSQL, then its correction exposed
-  an unrelated Gate-B concurrency test defect without granting any physical
-  effect. The Owner-approved inspect correction and concurrency validation
-  correction are now repository Technical Review Green at Kic `1e93280`, Kgc
-  `98392bf` and Lic `614202e`. Production and fake diagnostics share the exact
-  pinned body-free parser, and the default concurrent Gate-B validation is
-  Green twice plus once serially. The V2 topology verifier correction is now
-  repository Technical Review Green at Kvt `85096f6` / Lvt `27540be`; it
-  verifies the actual full successor prefix and future Kvt/Lvt/Mvt/Card
-  V2/Review V2 chain. V2 Card/Review construction is approved, but no V2
-  campaign has been prepared or executed. Cleanup, target
-  PostgreSQL, vault, transport, traffic and
+  19-stage body-free correction. The later Integration Campaign V2 was
+  prepared and consumed once, proved the historical resource names absent,
+  then failed closed before PostgreSQL at
+  `local_postgres_image_platform_manifest_invalid`. Kmd `32abce2` / Lmd
+  `b17a44f` now freeze a separate body-free image-manifest diagnostic that may
+  later record one exact descriptor tuple without pulling, cleaning or
+  continuing the campaign. Repository construction is Technical Review Green;
+  the diagnostic itself has not been prepared or executed, no manifest pin is
+  corrected, and cleanup, target PostgreSQL, vault, transport, traffic and
   Gate C remain false. Draft PR #76 remains
   unmerged; production activation
   and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
@@ -40,15 +36,12 @@
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-15
-- V2 topology verifier correction bindings: index
-  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
-  schema
-  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
-  evidence
-  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
-  report
-  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
-- Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Image-manifest diagnostic construction bindings: index
+  `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
+  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

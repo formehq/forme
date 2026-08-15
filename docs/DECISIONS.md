@@ -2,6 +2,34 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-15 — Diagnose the pinned image descriptor before another campaign
+
+**Decision:** after the one-use Integration Campaign V2 failed closed at
+`local_postgres_image_platform_manifest_invalid`, construct a separate
+body-free image-manifest diagnostic before changing any manifest pin or
+acceptance predicate. Kmd `32abce27f7c84a83e0d2d1252ab0da5530f88cb0`
+and Lmd `b17a44f34fa9abde1e6a39504594e875a6d7d7cf` freeze one future
+`version` plus one exact pinned `image inspect` maximum, a strict typed tuple,
+one-use write-ahead state and zero pull/resource/cleanup/PostgreSQL/SQL
+authority. Machine bindings are index
+`sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`
+and report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+
+**Authority:** the approved construction is repository-only. The diagnostic,
+image pull, cleanup, replacement campaign, Production and Gate C remain
+`NOT_REQUESTED`. The next step is an add-only versioned Diagnostic Card/Review
+and a separate exact Owner decision. Mandatory stop:
+`LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the failed campaign receipt intentionally retained no raw Docker
+body or descriptor digest. Treating an unobserved value as corrected would
+weaken the trust boundary; the smallest honest next effect is a bounded,
+body-free observation that cannot continue the campaign automatically.
+
 ## 2026-07-17 — Preserve history and restart main
 
 **Decision:** preserve the previous implementation in `archive/v0-prototype-2026-07-17` and tag `v0-prototype-final-2026-07-17`; create a new orphan `main`.
