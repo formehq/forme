@@ -140,6 +140,9 @@ const isUnsupportedNodeRuntimeFailure = (error: unknown) => error instanceof Err
 const standaloneBlockedStartRoots = () => fs.readdirSync(CANONICAL_SYSTEM_TEMP_ROOT)
   .filter((name) => name.startsWith("forme-r4-blocked-start-"))
   .sort();
+const standaloneMacOSDirectRoots = () => fs.readdirSync(CANONICAL_SYSTEM_TEMP_ROOT)
+  .filter((name) => name.startsWith("forme-r4-macos-direct-start-"))
+  .sort();
 const constructionJournalFixtureRoot = () => {
   const fixtureRoot = fs.realpathSync(fs.mkdtempSync(path.join(CANONICAL_SYSTEM_TEMP_ROOT, "forme-r4-construction-journal-")));
   fs.chmodSync(fixtureRoot, 0o700);
@@ -407,6 +410,43 @@ test("macOS direct helper and feeder remain gated until their started journals a
     realHelperStarts: 0,
     providerCalls: 0,
   });
+});
+
+test("macOS direct feeder terminal wait uses the bounded authority deadline and remains fail closed after it", async () => {
+  const rootsBefore = standaloneMacOSDirectRoots();
+  const withinAuthority = await exerciseMacOSDirectStartProtocolForConstruction({ terminalTiming: "delayed-within-authority" });
+  assert.deepEqual(withinAuthority, {
+    status: "GREEN",
+    fakeProcessStarts: 2,
+    helperDirectPidReadyValidated: true,
+    feederDirectPidReadyValidated: true,
+    startedJournalBeforeBothReleases: true,
+    candidateBytesWritten: 1390,
+    handoffCount: 1,
+    processGroupsAbsent: true,
+    realHelperStarts: 0,
+    providerCalls: 0,
+    terminalTimingEvidence: {
+      terminalTiming: "delayed-within-authority",
+      authorityBudgetMilliseconds: 62_000,
+      virtualTerminalDelayMilliseconds: 30_000,
+    },
+  });
+  await assert.rejects(
+    exerciseMacOSDirectStartProtocolForConstruction({ terminalTiming: "after-authority" }),
+    (error: unknown) => error instanceof Error && "code" in error && error.code === "MACOS_FEEDER_TERMINAL_INVALID" && "verdict" in error && error.verdict === "YELLOW",
+  );
+  for (const terminalTiming of ["", "within", "after", "ordinary ", null, 1]) {
+    await assert.rejects(
+      exerciseMacOSDirectStartProtocolForConstruction({ terminalTiming } as never),
+      (error: unknown) => error instanceof Error && "code" in error && error.code === "MACOS_DIRECT_EXERCISE_TERMINAL_TIMING_INVALID" && "verdict" in error && error.verdict === "RED",
+    );
+  }
+  await assert.rejects(
+    exerciseMacOSDirectStartProtocolForConstruction({ terminalTiming: "ordinary", extra: true } as never),
+    (error: unknown) => error instanceof Error && "code" in error && error.code === "MACOS_DIRECT_EXERCISE_OPTIONS_INVALID" && "verdict" in error && error.verdict === "RED",
+  );
+  assert.deepEqual(standaloneMacOSDirectRoots(), rootsBefore);
 });
 
 test("construction publication is stage-anchored, no-clobber and symlink-safe", async () => {

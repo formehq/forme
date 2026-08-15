@@ -2677,6 +2677,13 @@ export async function exerciseBlockedStartProtocolForConstruction(options = {}) 
 }
 export async function exerciseMacOSDirectStartProtocolForConstruction(options = {}) {
   const ownsLifecycle = options.root === undefined && options.journal === undefined;
+  const optionKeys = Object.keys(options).sort((left, right) => Buffer.from(left).compare(Buffer.from(right)));
+  const expectedOptionKeys = ownsLifecycle
+    ? (Object.hasOwn(options, "terminalTiming") ? ["terminalTiming"] : [])
+    : ["journal", "root"];
+  if (canonicalJson(optionKeys) !== canonicalJson(expectedOptionKeys)) fail("MACOS_DIRECT_EXERCISE_OPTIONS_INVALID", "RED");
+  const terminalTiming = Object.hasOwn(options, "terminalTiming") ? options.terminalTiming : "ordinary";
+  if (!new Set(["ordinary", "delayed-within-authority", "after-authority"]).has(terminalTiming)) fail("MACOS_DIRECT_EXERCISE_TERMINAL_TIMING_INVALID", "RED");
   if (!ownsLifecycle && (options.root !== CONSTRUCTION_ROOT || options.journal === null || typeof options.journal?.append !== "function" || typeof options.journal?.records !== "function")) fail("MACOS_DIRECT_EXERCISE_EXTERNAL_AUTHORITY_INVALID", "RED");
   const root = ownsLifecycle ? path.join(CANONICAL_SYSTEM_TEMP_ROOT, `forme-r4-macos-direct-start-${crypto.randomBytes(16).toString("hex")}`) : options.root;
   const journal = ownsLifecycle ? createRetryJournal(root, `sha256:${"1".repeat(64)}`, "1".repeat(32), path.basename(root)) : options.journal;
@@ -2701,7 +2708,29 @@ export async function exerciseMacOSDirectStartProtocolForConstruction(options = 
     startProtocol: MACOS_DIRECT_START_PROTOCOL.feeder.implementation, targetStdioCount: MACOS_DIRECT_START_PROTOCOL.feeder.targetStdioCount, descriptorMap: MACOS_DIRECT_START_PROTOCOL.feeder.descriptorMap,
     readyFrameMaximumBytes: MACOS_DIRECT_START_PROTOCOL.feeder.readyFrameMaximumBytes, releaseFrame: MACOS_DIRECT_START_PROTOCOL.feeder.releaseFrame, releaseRequiresEOF: true,
   });
-  const state = { helper: null, helperEvidence: null, feederEvidence: null, runtimeIdentityValidated: true, networkSampleZero: true, syntheticCandidateFrameBytes: 1390, absoluteAuthorityDeadlineMilliseconds: Date.now() + 60_000 };
+  const exerciseStartedAtMilliseconds = Date.now();
+  const terminalTimingEvidence = { authorityBudgetMilliseconds: null, virtualTerminalDelayMilliseconds: terminalTiming === "ordinary" ? 0 : terminalTiming === "delayed-within-authority" ? 30_000 : 62_001 };
+  const awaitFeederTerminalWithTimeout = terminalTiming === "ordinary"
+    ? awaitMacOSTerminalWithTimeout
+    : async (terminalPromise, authorityBudgetMilliseconds) => {
+      terminalTimingEvidence.authorityBudgetMilliseconds = authorityBudgetMilliseconds;
+      if (terminalTimingEvidence.virtualTerminalDelayMilliseconds > authorityBudgetMilliseconds) {
+        terminalPromise.then(() => {}, () => {});
+        return null;
+      }
+      return await terminalPromise;
+    };
+  const state = {
+    helper: null,
+    helperEvidence: null,
+    feederEvidence: null,
+    runtimeIdentityValidated: true,
+    networkSampleZero: true,
+    syntheticCandidateFrameBytes: 1390,
+    absoluteAuthorityDeadlineMilliseconds: exerciseStartedAtMilliseconds + 60_000,
+    nowMilliseconds: terminalTiming === "ordinary" ? Date.now : () => exerciseStartedAtMilliseconds,
+    awaitFeederTerminalWithTimeout,
+  };
   try {
     await spawnMacOSHelper(helperStep, state, journal);
     if (state.helper?.released !== false) fail("MACOS_DIRECT_EXERCISE_HELPER_RELEASE_ORDER_INVALID", "RED");
@@ -2713,7 +2742,9 @@ export async function exerciseMacOSDirectStartProtocolForConstruction(options = 
     const processEvents = journal.records().slice(initialRecordCount).filter((record) => record.lane === "macos").map((record) => record.event);
     const expectedEvents = ["intent:helper-spawn", "started:helper-spawn", "intent:feeder-spawn", "started:feeder-spawn", "terminal:feeder-spawn", "terminal:helper-spawn"];
     if (canonicalJson(processEvents) !== canonicalJson(expectedEvents)) fail("MACOS_DIRECT_EXERCISE_JOURNAL_ORDER_INVALID", "RED");
-    return Object.freeze({ status: "GREEN", fakeProcessStarts: 2, helperDirectPidReadyValidated: true, feederDirectPidReadyValidated: true, startedJournalBeforeBothReleases: true, candidateBytesWritten: 1390, handoffCount: 1, processGroupsAbsent: true, realHelperStarts: 0, providerCalls: 0 });
+    const result = { status: "GREEN", fakeProcessStarts: 2, helperDirectPidReadyValidated: true, feederDirectPidReadyValidated: true, startedJournalBeforeBothReleases: true, candidateBytesWritten: 1390, handoffCount: 1, processGroupsAbsent: true, realHelperStarts: 0, providerCalls: 0 };
+    if (terminalTiming !== "ordinary") result.terminalTimingEvidence = Object.freeze({ terminalTiming, ...terminalTimingEvidence });
+    return Object.freeze(result);
   } finally {
     if (state.helper) {
       destroyMacOSChildStreams(state.helper.child);
@@ -3943,7 +3974,13 @@ async function spawnMacOSFeeder(step, state, journal) {
     await recordMacOSDirectRecovery(journal, "feeder-spawn", commandShapeSha256, child.pid, MACOS_FEEDER_PROCESS_RESOURCES);
     throw error;
   }
-  const terminal = await awaitMacOSTerminalWithTimeout(terminalPromise, 10_000);
+  const observedAtMilliseconds = typeof state.nowMilliseconds === "function" ? state.nowMilliseconds() : Date.now();
+  const helperStartedAtMilliseconds = state.helper?.startedAtMilliseconds;
+  if (!Number.isSafeInteger(observedAtMilliseconds) || !Number.isSafeInteger(state.absoluteAuthorityDeadlineMilliseconds) || !Number.isSafeInteger(helperStartedAtMilliseconds)) fail("MACOS_FEEDER_AUTHORITY_CLOCK_INVALID", "RED");
+  const hardDeadlineMilliseconds = Math.min(state.absoluteAuthorityDeadlineMilliseconds, helperStartedAtMilliseconds + 900_000) + 2_000;
+  const authorityBudgetMilliseconds = Math.max(0, hardDeadlineMilliseconds - observedAtMilliseconds);
+  const awaitTerminal = typeof state.awaitFeederTerminalWithTimeout === "function" ? state.awaitFeederTerminalWithTimeout : awaitMacOSTerminalWithTimeout;
+  const terminal = await awaitTerminal(terminalPromise, authorityBudgetMilliseconds);
   if (terminal === null) { destroyMacOSChildStreams(child, [1, 2, 4, 5, 6]); signalGroup(child.pid, "SIGTERM"); }
   const absent = await stopAndProveGroupAbsent(child.pid);
   try {
