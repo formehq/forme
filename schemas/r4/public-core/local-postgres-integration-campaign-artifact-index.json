@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_artifact_index.v1",
+  "status": "INTEGRATION_CAMPAIGN_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 Local PostgreSQL Integration Campaign repository-only committed Ki implementation artifacts",
+  "authority": {
+    "constructionPacketSha256": "sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50",
+    "constructionOwnerReviewSha256": "sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f",
+    "packetHead": "1f5b9476d891d348161d4a43d918b53873a809e2",
+    "packetTree": "3f42dc6707d2438bd3ad92e17de938210027c80e",
+    "ownerReviewHead": "c15753d299530dfccd027f0ec2a93db77d74a1e9",
+    "ownerReviewTree": "228a2ec1b9f771e7bbb747420645a45011865aa3",
+    "constructionEnvelope": "APPROVED",
+    "replacementDiagnostic": "NOT_REQUESTED",
+    "cleanup": "NOT_REQUESTED",
+    "physicalExecution": "NOT_REQUESTED",
+    "production": "NOT_REQUESTED",
+    "gateC": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "baseline": {
+      "head": "1e46cb589e7cdebb1566d28bbdd6e13cd4066946",
+      "tree": "a7bd77c67bb5b002cbcf6c56495e1b24fba09262",
+      "parentHead": "852744e7e1210c5faf1968b257c4221c1693ebf4",
+      "parentTree": "e01520c9d3f756919e75eb118f7cd66ba92e8a4a"
+    },
+    "packet": {
+      "head": "1f5b9476d891d348161d4a43d918b53873a809e2",
+      "tree": "3f42dc6707d2438bd3ad92e17de938210027c80e",
+      "parentHead": "1e46cb589e7cdebb1566d28bbdd6e13cd4066946",
+      "parentTree": "a7bd77c67bb5b002cbcf6c56495e1b24fba09262",
+      "addedPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-PACKET.md",
+      "artifactByteCount": 14173,
+      "artifactSha256": "sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50"
+    },
+    "ownerReview": {
+      "head": "c15753d299530dfccd027f0ec2a93db77d74a1e9",
+      "tree": "228a2ec1b9f771e7bbb747420645a45011865aa3",
+      "parentHead": "1f5b9476d891d348161d4a43d918b53873a809e2",
+      "parentTree": "3f42dc6707d2438bd3ad92e17de938210027c80e",
+      "addedPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-OWNER-REVIEW.md",
+      "artifactByteCount": 8189,
+      "artifactSha256": "sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f"
+    },
+    "implementation": {
+      "head": "76afe10ee53b81f316dbc48bd4e412771e2ae0c7",
+      "tree": "49ab93f6c3ef5b57488d4dda244aad527a9dafd6",
+      "parentHead": "c15753d299530dfccd027f0ec2a93db77d74a1e9",
+      "parentTree": "228a2ec1b9f771e7bbb747420645a45011865aa3",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, one NUL byte, sha256-prefixed lowercase digest, one NUL byte, decimal Git-blob byte count, one LF byte",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "input": "concatenation of exactly the ordered artifact records below",
+    "selfReferenceRule": "this index, its evidence schema/evidence, and every Mi report/status path are excluded",
+    "sha256": "sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc"
+  },
+  "fileCount": 2,
+  "addedFileCount": 0,
+  "modifiedFileCount": 2,
+  "deletedFileCount": 0,
+  "renamedFileCount": 0,
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "integration_campaign_runner",
+      "gitStatus": "M",
+      "byteCount": 716505,
+      "sha256": "sha256:28a278cff09b81585fbbcfef34df932cfb9bb74d541b59925bed69ab93eb6bf8"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "integration_campaign_runner_test",
+      "gitStatus": "M",
+      "byteCount": 189073,
+      "sha256": "sha256:411e05f7dead430ce980bfd7e6549d628d0fab53123c4fdfc4760aff6f19e4e9"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "immutableBindings": {
+    "packageJsonSha256": "sha256:dabd1b05643e6fcc1d1dd02cae9b649915cc40b36f8b36d2e6e1618bcf5d6652",
+    "packageLockSha256": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f",
+    "pgImportClosureSha256": "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4",
+    "pgImportClosureFileCount": 145,
+    "pgImportClosurePackageCount": 15,
+    "schemaSqlSha256": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8",
+    "verifySqlSha256": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd",
+    "rollbackSqlSha256": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4",
+    "catalogContractSha256": "sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4",
+    "catalog": {
+      "tables": 14,
+      "columns": 207,
+      "constraints": 172,
+      "indexes": 44
+    },
+    "dockerCli": "/Applications/Docker.app/Contents/Resources/bin/docker",
+    "dockerCliSha256": "sha256:10f4b83b9f681d57e7cd4f04ccbb9392475ce070ae8efe62d862ab150bec014a",
+    "imageReference": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "imagePlatform": "linux/arm64",
+    "imagePlatformManifest": "sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf"
+  },
+  "failedHistoryBindings": {
+    "physicalConsumedGrantSha256": "sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35",
+    "physicalFinalEvidenceSha256": "sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c",
+    "physicalJournalEntryCount": 34,
+    "physicalJournalSha256": "sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25",
+    "rescueConsumedGrantSha256": "sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654",
+    "rescueFinalEvidenceSha256": "sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979",
+    "rescueJournalEntryCount": 6,
+    "rescueJournalSha256": "sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491",
+    "diagnosticCardSha256": "sha256:1cd345018dc6ddbf393df873bca01a54fcb75f8e608f9f63a48c9f61fd06319e",
+    "diagnosticReviewSha256": "sha256:324af94569b0c54456e474230bc06b3e7f15573ee97ec4a46c5886d56969abed",
+    "diagnosticPayloadSha256": "sha256:53188dac86131bf4910f06dc8dd64e7f1127d29cd55f21882960ab674a24262d",
+    "acceptedByIntegrationCampaignV1": false
+  }
+}
