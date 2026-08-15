@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_v2_topology_verifier_correction_artifact_index.v1",
+  "status": "IMPLEMENTATION_FROZEN",
+  "scope": {
+    "issue": 67,
+    "outcome": "Verify the complete committed Integration Campaign successor topology before any V2 physical authority can be consumed",
+    "currentGate": "R4_CONTROLLED_PRESENCE_BUILDING",
+    "repositoryOnly": true
+  },
+  "authority": {
+    "ownerApproval": "REPOSITORY_ONLY_V2_TOPOLOGY_VERIFIER_CORRECTION_APPROVED",
+    "runnerTestEvidenceAndStatusFreeze": "APPROVED",
+    "v2CardReviewConstruction": "APPROVED",
+    "docker": "NOT_REQUESTED",
+    "cleanup": "NOT_REQUESTED",
+    "postgresql": "NOT_REQUESTED",
+    "production": "NOT_REQUESTED",
+    "gateC": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "inspectMissingAuthority": {
+      "addendumHead": "15536817efe6b0b7a5c8014e912f02429f197ef1",
+      "addendumTree": "503c9432fd2b75fd16857afe58c2eb78a24581da",
+      "addendumSha256": "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505",
+      "reviewHead": "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+      "reviewTree": "34b9fd454725c15710946503af7d8be126fa09ab",
+      "reviewSha256": "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324"
+    },
+    "inspectMissingImplementation": {
+      "head": "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
+      "tree": "14526ed95feae2da6c9c14a89ece48616822e4e8",
+      "parentHead": "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R",
+      "artifactAggregateSha256": "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f"
+    },
+    "gateBConcurrencyAuthority": {
+      "addendumHead": "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
+      "addendumTree": "8860d06a9ccc821be62bf62ee79cd356b8b7fb52",
+      "addendumSha256": "sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7",
+      "reviewHead": "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+      "reviewTree": "63e69b5594aa9ba6627b825b1ac4aa636e15605e",
+      "reviewSha256": "sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7"
+    },
+    "gateBConcurrencyImplementation": {
+      "head": "98392bf19356982c884961a1425cd97ff33811bf",
+      "tree": "796684556d04368c3acd3926d0c86992affa205c",
+      "parentHead": "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R",
+      "artifactAggregateSha256": "sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4"
+    },
+    "previousEvidenceFreeze": {
+      "head": "614202e8765372755f75ce7fa465ef9e550971a8",
+      "tree": "180d6a9fa048e07e72ddbab8e2e4e2e354fb902a",
+      "parentHead": "98392bf19356982c884961a1425cd97ff33811bf",
+      "exactDelta": "3_PATHS_3A_0M_0D_0R",
+      "artifactAggregateSha256": "sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39"
+    },
+    "previousStatusFreeze": {
+      "head": "eb209d314a1084069a15fd4c819cf5e4d5760b77",
+      "tree": "09e95f7d13873303dff81fcf5ec29433c8e589dd",
+      "parentHead": "614202e8765372755f75ce7fa465ef9e550971a8",
+      "exactDelta": "10_PATHS_1A_9M_0D_0R",
+      "artifactAggregateSha256": "sha256:c088d756b29f330dc31f626ab9fa4a33984f7c4afa92213c5f2c122349624cb5"
+    },
+    "topologyVerifierCorrectionImplementation": {
+      "head": "85096f689ed89fef97c7781c2d84d813097cadae",
+      "tree": "1af3bea05f683863c5e93ecd4351bfcd2dbbf499",
+      "parentHead": "eb209d314a1084069a15fd4c819cf5e4d5760b77",
+      "parentTree": "09e95f7d13873303dff81fcf5ec29433c8e589dd",
+      "exactDelta": "2_PATHS_0A_2M_0D_0R",
+      "artifactAggregateSha256": "sha256:85c3882e4bdd18cb05432712e643cd68485a0a6693a95671d72cad0a36c398bf"
+    }
+  },
+  "aggregate": {
+    "ordering": "unsigned UTF-8 byte order",
+    "framing": "path NUL sha256:<digest> NUL decimal-byte-count LF",
+    "frameBytes": 243,
+    "sha256": "sha256:85c3882e4bdd18cb05432712e643cd68485a0a6693a95671d72cad0a36c398bf"
+  },
+  "fileCount": 2,
+  "addedFileCount": 0,
+  "modifiedFileCount": 2,
+  "deletedFileCount": 0,
+  "renamedFileCount": 0,
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "commit": "85096f689ed89fef97c7781c2d84d813097cadae",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 741883,
+      "sha256": "sha256:7f02a4b506705565245ba5b5424dbd0f730b246a3682903aade6f88b7455df91"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "commit": "85096f689ed89fef97c7781c2d84d813097cadae",
+      "status": "M",
+      "mode": "100644",
+      "byteCount": 200151,
+      "sha256": "sha256:564def945514618ac82c9cba82d4adcc206417676f1c54caa83a0fba72143246"
+    }
+  ],
+  "constructedContract": {
+    "completeHistoricalPrefixVerified": true,
+    "futureTopology": "MIC_TO_KVT_TO_LVT_TO_MVT_TO_CARD_V2_TO_REVIEW_V2",
+    "oldSimplifiedTopologyRejected": true,
+    "grantSchemaVersion": "r4.public-core-local-postgres-integration-campaign-grant.v2",
+    "authoritySchemaVersion": "r4.public-core-local-postgres-integration-campaign-authority.v2",
+    "physicalDesignChanged": false,
+    "physicalExecutionAuthorized": false
+  },
+  "validation": {
+    "focusedCommittedTopology": "1_OF_1_GREEN",
+    "runnerFakeDenyNetwork": "176_OF_176_GREEN",
+    "r4Offline": "748_OF_748_GREEN",
+    "gateBDefaultConcurrentRun1": "146_OF_146_GREEN",
+    "gateBDefaultConcurrentRun2": "146_OF_146_GREEN",
+    "gateBSerial": "146_OF_146_GREEN",
+    "repositorySpine": "45_OF_45_GREEN",
+    "typecheck": "GREEN",
+    "noAiBoundary": "GREEN",
+    "sourceInventoryFileCount": 295,
+    "sourceInventorySha256": "sha256:b61a8030e75629497b9ba9195fa1e932cc49c5f5022b692cbf95493184f4b97e",
+    "docsRegression": "GREEN",
+    "diffCheck": "GREEN"
+  },
+  "effectAudit": {
+    "externalNetworkCalls": 0,
+    "dockerCliCalls": 0,
+    "dockerDaemonCalls": 0,
+    "dockerSocketResolutions": 0,
+    "cleanupCalls": 0,
+    "postgresConnections": 0,
+    "sqlStatements": 0,
+    "productRuntimeEffects": 0,
+    "productionEffects": 0,
+    "gateCEffects": 0
+  },
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ]
+}
