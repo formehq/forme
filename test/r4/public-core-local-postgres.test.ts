@@ -49,6 +49,7 @@ import {
   runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan,
   runLocalPostgresIntegrationCampaignPrepareFakePlan,
   runLocalPostgresIntegrationCampaignReceiptValidationFakePlan,
+  runLocalPostgresIntegrationCampaignRawParserFakePlan,
   runLocalPostgresCleanupLifecycleFakePlan,
   runLocalPostgresPrepareFakePlan,
   runLocalPostgresReadinessFakePlan,
@@ -848,7 +849,7 @@ test("authorized effect engines are constructed while ordinary tests remain fake
   assert.match(source, /physical-evidence-draft-p/u);
   assert.match(source, /r4\.public-core-local-postgres-grant\.v3/u);
   assert.match(source, /r4\.public-core-local-postgres-physical-result\.v3/u);
-  assert.match(source, /r4\.public-core-local-postgres-integration-campaign-grant\.v1/u);
+  assert.match(source, /r4\.public-core-local-postgres-integration-campaign-grant\.v2/u);
   assert.match(source, /runApprovedLocalPostgresIntegrationCampaign/u);
   assert.match(source, /journal-v3/u);
   assert.match(source, /JOURNAL_MAXIMUM_ENTRIES = 1024/u);
@@ -2684,7 +2685,7 @@ test("Docker missing diagnostics accept only the exact frozen full-line table", 
     ["volume.inspect", `Error response from daemon: get ${resources.volume}: no such volume\n`],
   ] as const;
   for (const [kind, stderr] of accepted) {
-    const result = runLocalPostgresDockerDiagnosticFakePlan({ kind, status: 1, stdout: "", stderr });
+    const result = runLocalPostgresDockerDiagnosticFakePlan({ kind, status: 1, stdout: "\n", stderr });
     assert.equal(result.outcome, "MISSING_EXACT", `${kind}: ${stderr}`);
     assert.equal(result.missingExact, true);
     assert.equal(result.physicalEffects, 0);
@@ -2699,18 +2700,19 @@ test("Docker missing diagnostics accept only the exact frozen full-line table", 
     const exactName = exactNames[kind];
     const withoutLf = stderr.slice(0, -1);
     return [
-      { kind, status: 1, stdout: "", stderr: stderr.replace(exactName, `${exactName}-other`) },
-      { kind, status: 1, stdout: "", stderr: `prefix ${stderr}` },
-      { kind, status: 1, stdout: "", stderr: `${withoutLf} suffix\n` },
-      { kind, status: 1, stdout: "", stderr: `${stderr}extra\n` },
-      { kind, status: 1, stdout: "", stderr: `${withoutLf}\r\n` },
-      { kind, status: 0, stdout: "", stderr },
+      { kind, status: 1, stdout: "\n", stderr: stderr.replace(exactName, `${exactName}-other`) },
+      { kind, status: 1, stdout: "\n", stderr: `prefix ${stderr}` },
+      { kind, status: 1, stdout: "\n", stderr: `${withoutLf} suffix\n` },
+      { kind, status: 1, stdout: "\n", stderr: `${stderr}extra\n` },
+      { kind, status: 1, stdout: "\n", stderr: `${withoutLf}\r\n` },
+      { kind, status: 0, stdout: "\n", stderr },
+      { kind, status: 1, stdout: "", stderr },
       { kind, status: 1, stdout: "unexpected", stderr },
     ];
   });
   hostile.push(
-    { kind: "network.inspect", status: 1, stdout: "", stderr: `Error: No such object: ${resources.network}\n` },
-    { kind: "volume.inspect", status: 1, stdout: "", stderr: `Error: No such object: ${resources.volume}\n` },
+    { kind: "network.inspect", status: 1, stdout: "\n", stderr: `Error: No such object: ${resources.network}\n` },
+    { kind: "volume.inspect", status: 1, stdout: "\n", stderr: `Error: No such object: ${resources.volume}\n` },
   );
   for (const candidate of hostile) {
     const result = runLocalPostgresDockerDiagnosticFakePlan(candidate);
@@ -3281,27 +3283,103 @@ test("body-free diagnostic CLI is versioned, path-closed, and separate from resc
   assert.equal(typeof runApprovedBodyFreeDockerInspectDiagnostic, "function");
 });
 
-test("integration campaign construction binds the committed Packet/Review and exact closed workset", () => {
+test("integration campaign correction binds the committed Addendum/Review and exact closed workset", () => {
+  assertHistoricalAuthorityStep({
+    head: "15536817efe6b0b7a5c8014e912f02429f197ef1",
+    parent: "542a533b2b642e6a26f8923649ecfb4de9b6e58e",
+    tree: "503c9432fd2b75fd16857afe58c2eb78a24581da",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505",
+  });
+  assertHistoricalAuthorityStep({
+    head: "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
+    parent: "15536817efe6b0b7a5c8014e912f02429f197ef1",
+    tree: "34b9fd454725c15710946503af7d8be126fa09ab",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324",
+  });
   const green = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation: "none" });
   assert.equal(green.accepted, true);
   assert.equal(green.physicalEffects, 0);
-  assert.equal(green.authority.packetHead, "1f5b9476d891d348161d4a43d918b53873a809e2");
-  assert.equal(green.authority.packetTree, "3f42dc6707d2438bd3ad92e17de938210027c80e");
-  assert.equal(green.authority.packetSha256, "sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50");
-  assert.equal(green.authority.reviewHead, "c15753d299530dfccd027f0ec2a93db77d74a1e9");
-  assert.equal(green.authority.reviewTree, "228a2ec1b9f771e7bbb747420645a45011865aa3");
-  assert.equal(green.authority.reviewSha256, "sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f");
+  assert.equal(green.authority.addendumHead, "15536817efe6b0b7a5c8014e912f02429f197ef1");
+  assert.equal(green.authority.addendumTree, "503c9432fd2b75fd16857afe58c2eb78a24581da");
+  assert.equal(green.authority.addendumSha256, "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505");
+  assert.equal(green.authority.reviewHead, "7e07672563201d92db14ecf3adcbf5f6ad970b9f");
+  assert.equal(green.authority.reviewTree, "34b9fd454725c15710946503af7d8be126fa09ab");
+  assert.equal(green.authority.reviewSha256, "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324");
   assert.deepEqual(green.authority.implementationPaths, [
     "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
   ]);
-  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "c15753d299530dfccd027f0ec2a93db77d74a1e9^"], {
+  assert.deepEqual(green.authority.evidencePaths, [
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
+  ]);
+  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "7e07672563201d92db14ecf3adcbf5f6ad970b9f^"], {
     cwd: path.resolve(import.meta.dirname, "../.."), encoding: "utf8",
-  }).trim(), "1f5b9476d891d348161d4a43d918b53873a809e2");
+  }).trim(), "15536817efe6b0b7a5c8014e912f02429f197ef1");
   for (const mutation of ["packet", "review", "topology", "workset", "marker", "old_authority"]) {
     const result = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation });
     assert.equal(result.accepted, false, mutation);
     assert.equal(result.code, "local_postgres_integration_campaign_authority_invalid", mutation);
     assert.equal(result.physicalEffects, 0, mutation);
+  }
+});
+
+test("integration campaign fake and production share the exact one-LF raw inspect parser", () => {
+  const kinds = ["image.inspect", "container.inspect", "network.inspect", "volume.inspect"] as const;
+  for (const kind of kinds) {
+    const missing = runLocalPostgresIntegrationCampaignRawParserFakePlan({ kind, scenario: "missing" });
+    assert.equal(missing.parserOutcome, "MISSING_EXACT", kind);
+    assert.equal(missing.classification, "MISSING", kind);
+    assert.equal(missing.ownership, "NOT_PRESENT", kind);
+    assert.deepEqual({
+      spawnOutcome: missing.diagnostic.spawnOutcome,
+      exitStatus: missing.diagnostic.exitStatus,
+      signal: missing.diagnostic.signal,
+      stdoutBytes: missing.diagnostic.stdoutBytes,
+      stdoutSha256: missing.diagnostic.stdoutSha256,
+      stdoutUtf8: missing.diagnostic.stdoutUtf8,
+      stdoutEmpty: missing.diagnostic.stdoutEmpty,
+      stdoutLineEndings: missing.diagnostic.stdoutLineEndings,
+      stdoutLineCount: missing.diagnostic.stdoutLineCount,
+    }, {
+      spawnOutcome: "COMPLETED", exitStatus: 1, signal: "NONE", stdoutBytes: 1,
+      stdoutSha256: "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      stdoutUtf8: true, stdoutEmpty: false, stdoutLineEndings: "LF", stdoutLineCount: 1,
+    }, kind);
+    assert.equal(missing.diagnostic.stderrUtf8, true, kind);
+    assert.equal(missing.diagnostic.stderrEmpty, false, kind);
+    assert.equal(missing.diagnostic.stderrLineEndings, "LF", kind);
+    assert.equal(missing.diagnostic.stderrLineCount, 1, kind);
+    assert.equal(missing.rawStdoutZeroed, true, kind);
+    assert.equal(missing.rawStderrZeroed, true, kind);
+    assert.equal(missing.physicalEffects, 0, kind);
+  }
+  for (const scenario of ["empty_stdout", "crlf_stdout", "double_lf_stdout", "prefix_stdout",
+    "suffix_stdout", "wrong_name", "wrong_status", "signal", "timeout"] as const) {
+    for (const kind of kinds) {
+      const result = runLocalPostgresIntegrationCampaignRawParserFakePlan({ kind, scenario });
+      assert.notEqual(result.parserOutcome, "MISSING_EXACT", `${kind}:${scenario}`);
+      assert.equal(result.classification, "UNKNOWN", `${kind}:${scenario}`);
+      assert.equal(result.ownership, "UNKNOWN", `${kind}:${scenario}`);
+      assert.equal(result.rawStdoutZeroed, true, `${kind}:${scenario}`);
+      assert.equal(result.rawStderrZeroed, true, `${kind}:${scenario}`);
+      assert.equal(result.physicalEffects, 0, `${kind}:${scenario}`);
+    }
+  }
+  for (const [scenario, classification, ownership] of [
+    ["owned", "OWNED", "EXACT_HISTORICAL_GRANT"],
+    ["foreign", "FOREIGN", "FOREIGN"],
+    ["unlabelled", "UNLABELLED", "UNLABELLED"],
+    ["malformed", "MALFORMED", "MALFORMED"],
+  ] as const) {
+    const result = runLocalPostgresIntegrationCampaignRawParserFakePlan({ kind: "container.inspect", scenario });
+    assert.equal(result.parserOutcome, "SUCCESS", scenario);
+    assert.equal(result.classification, classification, scenario);
+    assert.equal(result.ownership, ownership, scenario);
   }
 });
 
@@ -3334,9 +3412,12 @@ test("integration campaign all-missing path reaches one frozen physical Green an
   assert.equal(result.receipt.physical.databaseIdentityCount, 2);
   assert.equal(result.receipt.effects.physicalRehearsalAttemptCount, 1);
   assert.equal(result.receipt.effects.physicalRehearsalCompletionCount, 1);
-  assert.equal(result.receipt.cleanup.ownedContainerCount, 0);
-  assert.equal(result.receipt.cleanup.ownedNetworkCount, 0);
-  assert.equal(result.receipt.cleanup.ownedVolumeCount, 0);
+  assert.equal(result.receipt.cleanup.historicalContainerState, "PROVEN_ABSENT");
+  assert.equal(result.receipt.cleanup.historicalNetworkState, "PROVEN_ABSENT");
+  assert.equal(result.receipt.cleanup.historicalVolumeState, "PROVEN_ABSENT");
+  assert.equal(result.receipt.cleanup.freshContainerState, "PROVEN_ABSENT");
+  assert.equal(result.receipt.cleanup.freshNetworkState, "PROVEN_ABSENT");
+  assert.equal(result.receipt.cleanup.freshVolumeState, "PROVEN_ABSENT");
   assert.equal(result.receipt.cleanup.ownedCredentialCount, 0);
   assert.equal(result.receipt.cleanup.ownedDockerConfigCount, 0);
   assert.equal(result.receipt.cleanup.ownedImportedRuntimeCount, 0);
@@ -3352,9 +3433,9 @@ test("integration campaign all-missing path reaches one frozen physical Green an
 
 test("integration campaign removes only exact-owned historical resources then proves absence", async () => {
   const cases = [
-    { resource: "container", absenceKey: "historicalContainerAbsent", expected: ["container.inspect", "container.stop", "container.rm", "container.inspect"] },
-    { resource: "network", absenceKey: "historicalNetworkAbsent", expected: ["network.inspect", "network.rm", "network.inspect"] },
-    { resource: "volume", absenceKey: "historicalVolumeAbsent", expected: ["volume.inspect", "volume.rm", "volume.inspect"] },
+    { resource: "container", stateKey: "historicalContainerState", expected: ["container.inspect", "container.stop", "container.rm", "container.inspect"] },
+    { resource: "network", stateKey: "historicalNetworkState", expected: ["network.inspect", "network.rm", "network.inspect"] },
+    { resource: "volume", stateKey: "historicalVolumeState", expected: ["volume.inspect", "volume.rm", "volume.inspect"] },
   ] as const;
   for (const item of cases) {
     const result = await runLocalPostgresIntegrationCampaignFakePlan({ [item.resource]: "OWNED" });
@@ -3364,7 +3445,7 @@ test("integration campaign removes only exact-owned historical resources then pr
     const relevant = result.calls.map((call: any) => call.kind)
       .filter((kind: string) => kind.startsWith(item.resource));
     assert.deepEqual(relevant, item.expected, item.resource);
-    assert.equal(result.receipt.cleanup[item.absenceKey], true);
+    assert.equal(result.receipt.cleanup[item.stateKey], "PROVEN_ABSENT");
     assert.equal(result.receipt.readiness.physicalExecuted, true, item.resource);
     assert.equal(result.physicalEffects, 0, item.resource);
   }
@@ -3383,6 +3464,9 @@ test("integration campaign removes only exact-owned historical resources then pr
 });
 
 test("integration campaign foreign, unlabelled, malformed, and unknown resources stop before cleanup and physical", async () => {
+  const historicalStateKeys = {
+    container: "historicalContainerState", network: "historicalNetworkState", volume: "historicalVolumeState",
+  } as const;
   const expected: Record<string, string> = {
     FOREIGN: "local_postgres_integration_campaign_foreign_resource",
     UNLABELLED: "local_postgres_integration_campaign_unlabelled_resource",
@@ -3398,12 +3482,17 @@ test("integration campaign foreign, unlabelled, malformed, and unknown resources
       assert.equal(result.receipt.phases.physicalConstruction, 0, `${resource}:${classification}`);
       assert.equal(result.receipt.readiness.physicalExecuted, false, `${resource}:${classification}`);
       assert.equal(result.calls.some((call: any) => call.kind.endsWith(".rm") || call.kind === "container.stop"), false);
+      assert.equal(result.receipt.cleanup[historicalStateKeys[resource]], "UNKNOWN");
+      assert.equal(result.receipt.cleanup.freshContainerState, "PROVEN_ABSENT");
       assert.equal(result.physicalEffects, 0);
     }
   }
 });
 
 test("integration campaign cleanup or physical failure never retries or crosses the next phase", async () => {
+  const historicalStateKeys = {
+    container: "historicalContainerState", network: "historicalNetworkState", volume: "historicalVolumeState",
+  } as const;
   for (const resource of ["container", "network", "volume"] as const) {
     const result = await runLocalPostgresIntegrationCampaignFakePlan({
       [resource]: "OWNED", cleanupFailureAt: resource,
@@ -3414,15 +3503,21 @@ test("integration campaign cleanup or physical failure never retries or crosses 
     assert.equal(result.receipt.phases.physicalConstruction, 0, resource);
     assert.equal(result.receipt.readiness.physicalExecuted, false, resource);
     assert.equal(result.receipt.journal.openEffectCount, 1, resource);
+    assert.equal(result.receipt.cleanup[historicalStateKeys[resource]], "PROVEN_PRESENT_EXACT_OWNED", resource);
+    assert.equal(result.receipt.cleanup.freshContainerState, "PROVEN_ABSENT", resource);
   }
   const failed = await runLocalPostgresIntegrationCampaignFakePlan({ physicalOutcome: "FAILED" });
   assert.equal(failed.status, "FAILED");
   assert.equal(failed.receipt.phases.physicalConstruction, 1);
   assert.equal(failed.receipt.physical.status, "FAILED");
+  assert.equal(failed.receipt.cleanup.freshContainerState, "UNKNOWN");
+  assert.equal(failed.receipt.cleanup.freshNetworkState, "UNKNOWN");
+  assert.equal(failed.receipt.cleanup.freshVolumeState, "UNKNOWN");
   const blocked = await runLocalPostgresIntegrationCampaignFakePlan({ physicalOutcome: "CLEANUP_BLOCKED" });
   assert.equal(blocked.status, "CLEANUP_BLOCKED");
   assert.equal(blocked.receipt.physical.status, "CLEANUP_BLOCKED");
   assert.equal(blocked.receipt.phases.physicalCleanupRecoveries, 0);
+  assert.equal(blocked.receipt.cleanup.freshContainerState, "UNKNOWN");
   for (const result of [failed, blocked]) {
     assert.equal(result.consumeCount, 1);
     assert.equal(result.physicalEffects, 0);
@@ -3620,7 +3715,26 @@ test("integration campaign prepare is one-use, same-descriptor, exact-root, and 
   assert.equal(green.code, "local_postgres_integration_campaign_prepare_green");
   assert.deepEqual(green.rootEntries, ["integration-campaign.pending.json", "owner-approval-receipt"]);
   assert.match(green.receipt.pendingCampaignGrantSha256, /^sha256:[0-9a-f]{64}$/u);
-  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v1");
+  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v2");
+  assert.equal(green.grant.artifacts.dockerCliSourceTagCommit, "c2be9ccfc3cf0b4c4c4f0a3d5c91dd759ab21256");
+  assert.equal(green.grant.artifacts.dockerCliInspectorBlob, "526cfda9f8c0cf6135baef50ff4ce357b342d6b0");
+  assert.equal(green.grant.artifacts.dockerCliInspectorByteCount, 6094);
+  assert.equal(green.grant.artifacts.dockerCliInspectorSha256,
+    "sha256:e4409bad908d89c0c5eaae64342b2dbb305b7b7ca5cd693bc7e7e0dd54167c1a");
+  assert.equal(green.grant.historical.failedInitialPrepareRoot,
+    "/Users/zaynw/.forme-r4-integration-campaign-c44e629b");
+  assert.equal(green.grant.historical.failedInitialPrepareReceiptSha256,
+    "sha256:1d62c23afd46ac017274189acc67de4ea94ed7ec651b53d38e0d886891f8ec68");
+  assert.equal(green.grant.historical.failedInitialPrepareReceiptByteCount, 1116);
+  assert.equal(green.grant.historical.failedCampaignRoot,
+    "/Users/zaynw/.forme-r4-integration-campaign-c44e629b-r2");
+  assert.equal(green.grant.historical.failedCampaignGrantSha256,
+    "sha256:7fdf12a2f7bd195ef07218e724f45708ec0cac93c1175605668678df7c236e81");
+  assert.equal(green.grant.historical.failedCampaignEvidenceSha256,
+    "sha256:be312a188ec955f43bb2cb22bd276f1782ceaaa89da0d5c79d582d8f597c0501");
+  assert.equal(green.grant.historical.failedCampaignJournalEntryCount, 7);
+  assert.equal(green.grant.historical.failedCampaignJournalSha256,
+    "sha256:5f22912b70c2b4bf5f9e4007afb27763931d5c158e41a4eebb7f543bf4208a04");
   assert.equal(green.grant.localOnly, true);
   assert.equal(green.grant.productionEffectsAllowed, false);
   assert.equal(green.physicalEffects, 0);
