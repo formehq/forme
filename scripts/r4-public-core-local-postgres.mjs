@@ -12138,9 +12138,1415 @@ export async function runApprovedLocalPostgresIntegrationCampaign(input) {
   }
 }
 
+const IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD = "e8919ff6474bd3f61a76668da1f1bbc9cae01fc5";
+const IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE = "3ac72ec29feac2f665a271bd79d4ffe33389f794";
+const IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_SHA256 = "sha256:3791266f7cabf352d66ffafc00e9d3b6bd9db679818b172fc9f0423d26a1cdee";
+const IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD = "65771be7a1c17ed9170fbe592dae854f6d312759";
+const IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE = "d1b7f0b69634300f5c207b8cdf33823592369ff2";
+const IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_SHA256 = "sha256:3af0c155276d6c7946ffb4c5196c61c38067b831e12de41c00c95c249df6b9c4";
+const IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CORRECTION-ADDENDUM.md";
+const IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CORRECTION-OWNER-REVIEW.md";
+const IMAGE_MANIFEST_DIAGNOSTIC_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md";
+const IMAGE_MANIFEST_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md";
+const IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_V1_BEGIN";
+const IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_END = "R4_LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_V1_END";
+const IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY = "image-manifest-diagnostic-journal-v1";
+const IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE = "image-manifest-diagnostic-evidence.json";
+const IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE = "image-manifest-diagnostic.pending.json";
+const IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE = "image-manifest-diagnostic.consumed.json";
+const IMAGE_MANIFEST_DIAGNOSTIC_SCHEMA = "r4.public-core-local-postgres-image-manifest-diagnostic-grant.v1";
+const IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_SCHEMA = "r4.public-core-local-postgres-image-manifest-diagnostic-journal-entry.v1";
+const IMAGE_MANIFEST_DIAGNOSTIC_RECEIPT_SCHEMA = "r4.public-core-local-postgres-image-manifest-diagnostic-receipt.v1";
+const IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_PATHS = Object.freeze([
+  "scripts/r4-public-core-local-postgres.mjs",
+  "test/r4/public-core-local-postgres.test.ts",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-manifest-diagnostic.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-manifest-diagnostic-evidence.schema.json",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_STATUS_PATHS = Object.freeze([
+  "README.md",
+  "docs/CONTROL.md",
+  "docs/DECISIONS.md",
+  "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+  "docs/PRODUCT.md",
+  "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+  "docs/README.md",
+  "docs/ROADMAP.md",
+  "docs/VALIDATION.md",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_DOCKER_CALL_CEILINGS = Object.freeze(Object.fromEntries(
+  LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, kind === "version" || kind === "image.inspect" ? 1 : 0]),
+));
+const IMAGE_MANIFEST_DIAGNOSTIC_FAILED_CAMPAIGN = Object.freeze({
+  root: "/Users/zaynw/.forme-r4-integration-campaign-v2-1d96cfcf",
+  approvalReceiptSha256: "sha256:99541d38320a7a2aa4682eb39d3577d467fb68f8f1b78b78ff565b4b8fb4a26e",
+  approvalReceiptByteCount: 1128,
+  consumedGrantSha256: "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582",
+  evidenceSha256: "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889",
+  evidenceByteCount: 9656,
+  journalEntryCount: 17,
+  journalHeadSha256: "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b",
+  terminalStatus: "FAILED",
+  terminalCode: "local_postgres_integration_campaign_physical_failed",
+  innerFailureCode: "local_postgres_image_platform_manifest_invalid",
+  historicalResourcesAbsent: true,
+  targetPostgresObserved: false,
+});
+const IMAGE_MANIFEST_DIAGNOSTIC_HOST = Object.freeze({
+  dockerCli: DOCKER_CLI,
+  dockerCliSha256: DOCKER_CLI_SHA256,
+  dockerClientVersion: "29.3.1",
+  dockerServerVersion: "29.3.1",
+  dockerServerPlatform: IMAGE_PLATFORM,
+  imageReference: IMAGE_REFERENCE,
+});
+const IMAGE_MANIFEST_DIAGNOSTIC_CEILINGS = Object.freeze({
+  maximumPrepareAttempts: 1,
+  maximumConsumptions: 1,
+  maximumDiagnosticLifecycles: 1,
+  dockerCalls: IMAGE_MANIFEST_DIAGNOSTIC_DOCKER_CALL_CEILINGS,
+});
+const IMAGE_MANIFEST_DIAGNOSTIC_GRANT_KEYS = Object.freeze([
+  "schemaVersion", "diagnosticGrantId", "ownerApprovalReceiptSha256", "authority", "lineage",
+  "artifacts", "failedCampaign", "host", "ceilings", "localOnly", "productionEffectsAllowed",
+  "createdAt", "expiresAt",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS = Object.freeze([
+  "correctionAddendumSha256", "correctionOwnerReviewSha256",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_KEYS = Object.freeze([
+  ...IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS,
+  "diagnosticCardSha256", "diagnosticOwnerReviewSha256", "diagnosticAuthorityPayloadSha256",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS = Object.freeze([
+  "correctionAddendumHead", "correctionAddendumTree", "correctionOwnerReviewHead",
+  "correctionOwnerReviewTree", "implementationHead", "implementationTree",
+  "implementationAggregateSha256", "evidenceHead", "evidenceTree", "statusHead", "statusTree",
+  "statusAggregateSha256",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_LINEAGE_KEYS = Object.freeze([
+  ...IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS,
+  "diagnosticCardHead", "diagnosticCardTree", "diagnosticOwnerReviewHead", "diagnosticOwnerReviewTree",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_ARTIFACT_KEYS = Object.freeze([
+  "artifactIndexSha256", "evidenceSchemaSha256", "evidenceSha256", "constructionReportSha256",
+  "committedStatusAuditSha256", "runnerSha256", "runnerTestSha256",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_HOST_KEYS = Object.freeze([
+  ...Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_HOST), "dockerCliIdentitySha256", "socketIdentitySha256",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_TUPLE_KEYS = Object.freeze([
+  "repoDigestPresent", "imageOs", "imageArchitecture", "descriptorDigest", "descriptorMediaType",
+  "descriptorSize", "descriptorPlatformOs", "descriptorPlatformArchitecture",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_OBSERVATION_KEYS = Object.freeze([
+  "effectId", "kind", "ordinal", "spawnOutcome", "exitStatus", "signal",
+  "stdoutBytes", "stdoutSha256", "stdoutUtf8", "stdoutEmpty", "stdoutLineEndings", "stdoutLineCount",
+  "stderrBytes", "stderrSha256", "stderrUtf8", "stderrEmpty", "stderrLineEndings", "stderrLineCount",
+  "classification", "tuple",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_RECEIPT_KEYS = Object.freeze([
+  "schemaVersion", "status", "code", "consumedDiagnosticGrantSha256", "authority", "lineage",
+  "artifacts", "failedCampaign", "hostObservation", "effects", "observations", "closure", "journal",
+  "readiness",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_RETAINED_FILES = Object.freeze([
+  IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE,
+  IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE,
+  IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY,
+  "owner-approval-receipt",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_EVENTS = new Set([
+  "grant.consumed", "diagnostic.lifecycle_started", "docker.attempt", "docker.completed",
+  "observation.recorded", "docker.ambiguous", "closure.proven", "diagnostic.terminal",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_CLASSIFICATIONS = new Set([
+  "VERSION_MATCHED", "OBSERVED", "IMAGE_MISSING", "REFERENCE_MISMATCH", "PLATFORM_MISMATCH",
+  "DESCRIPTOR_INVALID", "MALFORMED", "NONZERO", "AMBIGUOUS_TRANSPORT",
+]);
+const IMAGE_MANIFEST_DIAGNOSTIC_MEDIA_TYPES = new Set([
+  "application/vnd.oci.image.index.v1+json",
+  "application/vnd.oci.image.manifest.v1+json",
+  "application/vnd.docker.distribution.manifest.list.v2+json",
+  "application/vnd.docker.distribution.manifest.v2+json",
+]);
+
+function imageManifestDiagnosticArtifactAggregate(head, paths) {
+  return artifactAggregate(head, paths).aggregateSha256;
+}
+
+function imageManifestDiagnosticFailedCampaignContract() {
+  return IMAGE_MANIFEST_DIAGNOSTIC_FAILED_CAMPAIGN;
+}
+
+function imageManifestDiagnosticHostContract() {
+  return IMAGE_MANIFEST_DIAGNOSTIC_HOST;
+}
+
+function imageManifestDiagnosticCeilings() {
+  return IMAGE_MANIFEST_DIAGNOSTIC_CEILINGS;
+}
+
+function validateImageManifestDiagnosticPayload(raw) {
+  const payload = ownedPlain(raw);
+  exactKeys(payload, [
+    "schemaVersion", "authority", "lineage", "artifacts", "failedCampaign", "host", "ceilings",
+    "localOnly", "productionEffectsAllowed",
+  ]);
+  exactKeys(payload.authority, IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS);
+  exactKeys(payload.lineage, IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS);
+  exactKeys(payload.artifacts, IMAGE_MANIFEST_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(payload.failedCampaign, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_FAILED_CAMPAIGN));
+  exactKeys(payload.host, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_HOST));
+  exactKeys(payload.ceilings, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_CEILINGS));
+  exactKeys(payload.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-image-manifest-diagnostic-authority.v1"
+    || payload.localOnly !== true || payload.productionEffectsAllowed !== false
+    || payload.authority.correctionAddendumSha256 !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_SHA256
+    || payload.authority.correctionOwnerReviewSha256 !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_SHA256
+    || payload.lineage.correctionAddendumHead !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD
+    || payload.lineage.correctionAddendumTree !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE
+    || payload.lineage.correctionOwnerReviewHead !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD
+    || payload.lineage.correctionOwnerReviewTree !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE
+    || canonicalJson(payload.failedCampaign) !== canonicalJson(imageManifestDiagnosticFailedCampaignContract())
+    || canonicalJson(payload.host) !== canonicalJson(imageManifestDiagnosticHostContract())
+    || canonicalJson(payload.ceilings) !== canonicalJson(imageManifestDiagnosticCeilings())) {
+    fail("local_postgres_image_manifest_diagnostic_authority_invalid");
+  }
+  for (const value of Object.values(payload.authority)) assertSha(value);
+  for (const [key, value] of Object.entries(payload.lineage)) {
+    if (key.endsWith("Sha256")) assertSha(value); else assertGit(value);
+  }
+  for (const value of Object.values(payload.artifacts)) assertSha(value);
+  return payload;
+}
+
+function parseImageManifestDiagnosticCard(bytes) {
+  let text;
+  try { text = new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { fail("local_postgres_image_manifest_diagnostic_authority_invalid"); }
+  const lines = text.split("\n");
+  const begins = lines.flatMap((line, index) => line === IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_END ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_image_manifest_diagnostic_authority_invalid");
+  }
+  const canonical = lines[begins[0] + 1];
+  let parsed;
+  try { parsed = parseStrictJson(canonical); }
+  catch { fail("local_postgres_image_manifest_diagnostic_authority_invalid"); }
+  if (canonical.length === 0 || canonicalJson(parsed) !== canonical) {
+    fail("local_postgres_image_manifest_diagnostic_authority_invalid");
+  }
+  return Object.freeze({ payload: validateImageManifestDiagnosticPayload(parsed), sha256: sha256Bytes(Buffer.from(canonical)) });
+}
+
+function verifyImageManifestDiagnosticTopology(grant) {
+  exactCommitStep("4611e57e3481b1b309f0d583d013e548d05e0f25", IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD,
+    IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE, new Map([[IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_PATH, "A"]]),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD, IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD,
+    IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE, new Map([[IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_PATH, "A"]]),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD, grant.lineage.implementationHead,
+    grant.lineage.implementationTree, statusMap(IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_PATHS),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.implementationHead, grant.lineage.evidenceHead, grant.lineage.evidenceTree,
+    statusMap(IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_PATHS, new Set(IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_PATHS)),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.evidenceHead, grant.lineage.statusHead, grant.lineage.statusTree,
+    statusMap(IMAGE_MANIFEST_DIAGNOSTIC_STATUS_PATHS,
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md"])),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.statusHead, grant.lineage.diagnosticCardHead, grant.lineage.diagnosticCardTree,
+    new Map([[IMAGE_MANIFEST_DIAGNOSTIC_CARD_PATH, "A"]]),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.diagnosticCardHead, grant.lineage.diagnosticOwnerReviewHead,
+    grant.lineage.diagnosticOwnerReviewTree, new Map([[IMAGE_MANIFEST_DIAGNOSTIC_EXECUTION_REVIEW_PATH, "A"]]),
+    "local_postgres_image_manifest_diagnostic_binding_invalid");
+  if (sha256Bytes(runGit(["show", `${IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD}:${IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_PATH}`], true))
+      !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_SHA256
+    || sha256Bytes(runGit(["show", `${IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD}:${IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_PATH}`], true))
+      !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_SHA256
+    || imageManifestDiagnosticArtifactAggregate(grant.lineage.implementationHead,
+      IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_PATHS) !== grant.lineage.implementationAggregateSha256
+    || imageManifestDiagnosticArtifactAggregate(grant.lineage.statusHead,
+      IMAGE_MANIFEST_DIAGNOSTIC_STATUS_PATHS) !== grant.lineage.statusAggregateSha256) {
+    fail("local_postgres_image_manifest_diagnostic_binding_invalid");
+  }
+  const parsed = parseImageManifestDiagnosticCard(runGit([
+    "show", `${grant.lineage.diagnosticCardHead}:${IMAGE_MANIFEST_DIAGNOSTIC_CARD_PATH}`,
+  ], true));
+  if (parsed.sha256 !== grant.authority.diagnosticAuthorityPayloadSha256
+    || canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(grant.lineage,
+      IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS))
+    || canonicalJson(parsed.payload.artifacts) !== canonicalJson(grant.artifacts)
+    || sha256Bytes(runGit(["show", `${grant.lineage.diagnosticCardHead}:${IMAGE_MANIFEST_DIAGNOSTIC_CARD_PATH}`], true))
+      !== grant.authority.diagnosticCardSha256
+    || sha256Bytes(runGit(["show", `${grant.lineage.diagnosticOwnerReviewHead}:${IMAGE_MANIFEST_DIAGNOSTIC_EXECUTION_REVIEW_PATH}`], true))
+      !== grant.authority.diagnosticOwnerReviewSha256) {
+    fail("local_postgres_image_manifest_diagnostic_binding_invalid");
+  }
+}
+
+function deriveImageManifestDiagnosticAuthority(diagnosticOwnerReviewHead) {
+  assertGit(diagnosticOwnerReviewHead);
+  const diagnosticCardHead = runGit(["rev-parse", `${diagnosticOwnerReviewHead}^`]);
+  const statusHead = runGit(["rev-parse", `${diagnosticCardHead}^`]);
+  const evidenceHead = runGit(["rev-parse", `${statusHead}^`]);
+  const implementationHead = runGit(["rev-parse", `${evidenceHead}^`]);
+  const lineage = Object.freeze({
+    correctionAddendumHead: IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD,
+    correctionAddendumTree: IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE,
+    correctionOwnerReviewHead: IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD,
+    correctionOwnerReviewTree: IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE,
+    implementationHead, implementationTree: runGit(["rev-parse", `${implementationHead}^{tree}`]),
+    implementationAggregateSha256: imageManifestDiagnosticArtifactAggregate(implementationHead,
+      IMAGE_MANIFEST_DIAGNOSTIC_IMPLEMENTATION_PATHS),
+    evidenceHead, evidenceTree: runGit(["rev-parse", `${evidenceHead}^{tree}`]),
+    statusHead, statusTree: runGit(["rev-parse", `${statusHead}^{tree}`]),
+    statusAggregateSha256: imageManifestDiagnosticArtifactAggregate(statusHead,
+      IMAGE_MANIFEST_DIAGNOSTIC_STATUS_PATHS),
+    diagnosticCardHead, diagnosticCardTree: runGit(["rev-parse", `${diagnosticCardHead}^{tree}`]),
+    diagnosticOwnerReviewHead, diagnosticOwnerReviewTree: runGit(["rev-parse", `${diagnosticOwnerReviewHead}^{tree}`]),
+  });
+  const cardBytes = runGit(["show", `${diagnosticCardHead}:${IMAGE_MANIFEST_DIAGNOSTIC_CARD_PATH}`], true);
+  const parsed = parseImageManifestDiagnosticCard(cardBytes);
+  if (canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(lineage,
+    IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS))) {
+    fail("local_postgres_image_manifest_diagnostic_authority_invalid");
+  }
+  return Object.freeze({
+    authority: Object.freeze({
+      ...parsed.payload.authority,
+      diagnosticCardSha256: sha256Bytes(cardBytes),
+      diagnosticOwnerReviewSha256: sha256Bytes(runGit([
+        "show", `${diagnosticOwnerReviewHead}:${IMAGE_MANIFEST_DIAGNOSTIC_EXECUTION_REVIEW_PATH}`,
+      ], true)),
+      diagnosticAuthorityPayloadSha256: parsed.sha256,
+    }),
+    lineage, artifacts: parsed.payload.artifacts, failedCampaign: parsed.payload.failedCampaign,
+    host: parsed.payload.host, ceilings: parsed.payload.ceilings,
+  });
+}
+
+function validateImageManifestDiagnosticGrant(raw, now = new Date(), allowExpired = false) {
+  const grant = ownedPlain(raw);
+  exactKeys(grant, IMAGE_MANIFEST_DIAGNOSTIC_GRANT_KEYS);
+  exactKeys(grant.authority, IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(grant.lineage, IMAGE_MANIFEST_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(grant.artifacts, IMAGE_MANIFEST_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(grant.failedCampaign, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_FAILED_CAMPAIGN));
+  exactKeys(grant.host, IMAGE_MANIFEST_DIAGNOSTIC_HOST_KEYS);
+  exactKeys(grant.ceilings, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_CEILINGS));
+  exactKeys(grant.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (grant.schemaVersion !== IMAGE_MANIFEST_DIAGNOSTIC_SCHEMA
+    || typeof grant.diagnosticGrantId !== "string" || !GRANT_ID.test(grant.diagnosticGrantId)
+    || grant.localOnly !== true || grant.productionEffectsAllowed !== false
+    || grant.authority.correctionAddendumSha256 !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_SHA256
+    || grant.authority.correctionOwnerReviewSha256 !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_SHA256
+    || grant.lineage.correctionAddendumHead !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD
+    || grant.lineage.correctionAddendumTree !== IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE
+    || grant.lineage.correctionOwnerReviewHead !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD
+    || grant.lineage.correctionOwnerReviewTree !== IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE
+    || canonicalJson(grant.failedCampaign) !== canonicalJson(imageManifestDiagnosticFailedCampaignContract())
+    || canonicalJson(selectKeys(grant.host, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_HOST)))
+      !== canonicalJson(imageManifestDiagnosticHostContract())
+    || canonicalJson(grant.ceilings) !== canonicalJson(imageManifestDiagnosticCeilings())) {
+    fail("local_postgres_image_manifest_diagnostic_grant_invalid");
+  }
+  for (const value of Object.values(grant.authority)) assertSha(value);
+  for (const [key, value] of Object.entries(grant.lineage)) {
+    if (key.endsWith("Sha256")) assertSha(value); else assertGit(value);
+  }
+  for (const value of Object.values(grant.artifacts)) assertSha(value);
+  assertSha(grant.ownerApprovalReceiptSha256);
+  assertSha(grant.host.dockerCliSha256);
+  assertSha(grant.host.dockerCliIdentitySha256);
+  assertSha(grant.host.socketIdentitySha256);
+  const created = instant(grant.createdAt);
+  const expires = instant(grant.expiresAt);
+  const observed = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(observed) || expires <= created || expires - created > MAX_GRANT_LIFETIME_MS
+    || (!allowExpired && (observed < created - 60_000 || observed >= expires))) {
+    fail("local_postgres_image_manifest_diagnostic_grant_expired");
+  }
+  return grant;
+}
+
+export function verifyLocalPostgresImageManifestDiagnosticCommittedBindings(grant) {
+  const stable = validateImageManifestDiagnosticGrant(grant, new Date(instant(grant.createdAt) + 1));
+  verifyImageManifestDiagnosticTopology(stable);
+  if (runGit(["rev-parse", "HEAD^{commit}"]) !== stable.lineage.diagnosticOwnerReviewHead
+    || runGit(["rev-parse", "HEAD^{tree}"]) !== stable.lineage.diagnosticOwnerReviewTree
+    || runGit(["diff", "--cached", "--quiet", "--exit-code"]) !== ""
+    || runGit(["status", "--porcelain=v1", "--untracked-files=no"]) !== ""
+    || sha256StableOwnedFile(fileURLToPath(import.meta.url)) !== stable.artifacts.runnerSha256
+    || sha256StableOwnedFile(path.join(ROOT, "test/r4/public-core-local-postgres.test.ts"))
+      !== stable.artifacts.runnerTestSha256) {
+    fail("local_postgres_image_manifest_diagnostic_binding_invalid");
+  }
+  return true;
+}
+
+function prepareImageManifestDiagnosticWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["diagnosticRoot", "diagnosticOwnerReviewHead", "ownerApprovalReceiptPath", "createdAt", "expiresAt"]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || typeof stable.ownerApprovalReceiptPath !== "string") {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  let diagnosticRoot;
+  try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_image_manifest_diagnostic_private_root_invalid"); }
+  if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(diagnosticRoot);
+  const names = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+  if (canonicalJson(names) !== canonicalJson(["owner-approval-receipt"])) {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(diagnosticRoot, stable.ownerApprovalReceiptPath);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const derived = adapters.deriveAuthority(stable.diagnosticOwnerReviewHead);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const observedAt = adapters.now();
+  const observedMs = observedAt instanceof Date ? observedAt.getTime() : Number.NaN;
+  const created = instant(stable.createdAt);
+  const expires = instant(stable.expiresAt);
+  if (!Number.isFinite(observedMs) || Math.abs(created - observedMs) > 60_000 || expires <= observedMs
+    || expires <= created || expires - created > MAX_GRANT_LIFETIME_MS) {
+    fail("local_postgres_image_manifest_diagnostic_grant_expired");
+  }
+  const grant = Object.freeze({
+    schemaVersion: IMAGE_MANIFEST_DIAGNOSTIC_SCHEMA,
+    diagnosticGrantId: adapters.randomBytes(16).toString("hex"), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    failedCampaign: derived.failedCampaign,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: cli.identitySha256, socketIdentitySha256: socket.identitySha256,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+  });
+  validateImageManifestDiagnosticGrant(grant, observedAt);
+  adapters.verifyBindings(grant, observedAt);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const pending = privatePath(diagnosticRoot, IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE);
+  const installed = installPendingGrant(diagnosticRoot, pending, grant);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const finalNames = fs.readdirSync(diagnosticRoot).sort(binaryCompare);
+  if (canonicalJson(finalNames) !== canonicalJson([
+    IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE, "owner-approval-receipt",
+  ].sort(binaryCompare))) fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-image-manifest-diagnostic-prepare-receipt.v1",
+    pendingDiagnosticGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
+    diagnosticAuthorityPayloadSha256: grant.authority.diagnosticAuthorityPayloadSha256,
+    observedAt: observedAt.toISOString(),
+  });
+}
+
+export function prepareLocalPostgresImageManifestDiagnosticGrant(input) {
+  return prepareImageManifestDiagnosticWithAdapters(input, Object.freeze({
+    deriveAuthority: deriveImageManifestDiagnosticAuthority, observeDockerCliIdentity,
+    resolveSocketIdentity: resolveDockerSocketIdentity, randomBytes: crypto.randomBytes,
+    now: () => new Date(), verifyBindings: verifyLocalPostgresImageManifestDiagnosticCommittedBindings,
+  }));
+}
+
+function emptyImageManifestDiagnosticJournalState() {
+  return {
+    sequence: 0, headSha256: JOURNAL_GENESIS, consumedGrantSha256: null, lifecycleCount: 0,
+    attempts: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    completions: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    openEffects: new Map(), observations: new Map(), closure: null, terminal: null,
+  };
+}
+
+function imageManifestDiagnosticJournalPath(root, create = false) {
+  const journalPath = privatePath(root, IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY);
+  if (create && !fs.existsSync(journalPath)) {
+    try { fs.mkdirSync(journalPath, { mode: 0o700 }); fsyncPrivateDirectory(root); }
+    catch { fail("local_postgres_image_manifest_diagnostic_journal_invalid"); }
+  }
+  assertPrivateDirectory(journalPath);
+  return journalPath;
+}
+
+function imageManifestDiagnosticTuple(raw) {
+  const tuple = ownedPlain(raw);
+  exactKeys(tuple, IMAGE_MANIFEST_DIAGNOSTIC_TUPLE_KEYS);
+  const tri = new Set(["TRUE", "FALSE", "INVALID", "UNKNOWN", "NOT_APPLICABLE"]);
+  const platform = new Set(["linux", "arm64", "MISSING", "MISMATCH", "INVALID", "UNKNOWN", "NOT_APPLICABLE"]);
+  if (!tri.has(tuple.repoDigestPresent) || !platform.has(tuple.imageOs) || !platform.has(tuple.imageArchitecture)
+    || !(SHA256.test(tuple.descriptorDigest) || ["MISSING", "INVALID", "UNKNOWN", "NOT_APPLICABLE"].includes(tuple.descriptorDigest))
+    || !(IMAGE_MANIFEST_DIAGNOSTIC_MEDIA_TYPES.has(tuple.descriptorMediaType)
+      || ["MISSING", "OTHER", "INVALID", "UNKNOWN", "NOT_APPLICABLE"].includes(tuple.descriptorMediaType))
+    || !(Number.isSafeInteger(tuple.descriptorSize) && tuple.descriptorSize >= 0
+      || ["MISSING", "INVALID", "UNKNOWN", "NOT_APPLICABLE"].includes(tuple.descriptorSize))
+    || !platform.has(tuple.descriptorPlatformOs) || !platform.has(tuple.descriptorPlatformArchitecture)) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  return tuple;
+}
+
+function validateImageManifestDiagnosticObservation(raw) {
+  const observation = ownedPlain(raw);
+  exactKeys(observation, IMAGE_MANIFEST_DIAGNOSTIC_OBSERVATION_KEYS);
+  if (typeof observation.effectId !== "string" || !["version", "image.inspect"].includes(observation.kind)
+    || observation.ordinal !== 1 || !BODY_FREE_DIAGNOSTIC_SPAWN_OUTCOMES.has(observation.spawnOutcome)
+    || !(Number.isSafeInteger(observation.exitStatus) || observation.exitStatus === "NOT_AVAILABLE")
+    || !BODY_FREE_DIAGNOSTIC_SIGNALS.has(observation.signal)
+    || !IMAGE_MANIFEST_DIAGNOSTIC_CLASSIFICATIONS.has(observation.classification)) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  for (const prefix of ["stdout", "stderr"]) {
+    if (!Number.isSafeInteger(observation[`${prefix}Bytes`]) || observation[`${prefix}Bytes`] < 0
+      || observation[`${prefix}Bytes`] > MAX_DOCKER_OUTPUT_BYTES || !SHA256.test(observation[`${prefix}Sha256`])
+      || typeof observation[`${prefix}Utf8`] !== "boolean" || typeof observation[`${prefix}Empty`] !== "boolean"
+      || !BODY_FREE_DIAGNOSTIC_LINE_ENDINGS.has(observation[`${prefix}LineEndings`])
+      || !Number.isSafeInteger(observation[`${prefix}LineCount`]) || observation[`${prefix}LineCount`] < 0
+      || observation[`${prefix}Empty`] !== (observation[`${prefix}Bytes`] === 0)
+      || (observation[`${prefix}Empty`] && (observation[`${prefix}LineCount`] !== 0
+        || observation[`${prefix}LineEndings`] !== "NONE"))) {
+      fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+    }
+  }
+  const tuple = imageManifestDiagnosticTuple(observation.tuple);
+  const tupleValues = IMAGE_MANIFEST_DIAGNOSTIC_TUPLE_KEYS.map((key) => tuple[key]);
+  const tupleAll = (value) => tupleValues.every((candidate) => candidate === value);
+  if (observation.spawnOutcome === "COMPLETED") {
+    if (!Number.isSafeInteger(observation.exitStatus) || observation.signal !== "NONE") {
+      fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+    }
+  } else if (observation.exitStatus !== "NOT_AVAILABLE"
+    || observation.classification !== "AMBIGUOUS_TRANSPORT" || !tupleAll("UNKNOWN")) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "VERSION_MATCHED"
+    && (observation.kind !== "version" || observation.exitStatus !== 0 || !tupleAll("NOT_APPLICABLE"))) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (["OBSERVED", "REFERENCE_MISMATCH", "DESCRIPTOR_INVALID"].includes(observation.classification)
+    && (observation.kind !== "image.inspect" || observation.exitStatus !== 0)) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "PLATFORM_MISMATCH"
+    && (observation.exitStatus !== 0
+      || !(observation.kind === "image.inspect" || observation.kind === "version" && tupleAll("NOT_APPLICABLE")))) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "OBSERVED"
+    && (tuple.repoDigestPresent !== "TRUE" || tuple.imageOs !== "linux" || tuple.imageArchitecture !== "arm64"
+      || !SHA256.test(tuple.descriptorDigest) || tuple.descriptorPlatformOs !== "linux"
+      || tuple.descriptorPlatformArchitecture !== "arm64")) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "REFERENCE_MISMATCH" && tuple.repoDigestPresent === "TRUE") {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "PLATFORM_MISMATCH"
+    && tuple.imageOs === "linux" && tuple.imageArchitecture === "arm64"
+    && tuple.descriptorPlatformOs === "linux" && tuple.descriptorPlatformArchitecture === "arm64") {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "DESCRIPTOR_INVALID" && SHA256.test(tuple.descriptorDigest)) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (observation.classification === "MALFORMED"
+    && (observation.exitStatus !== 0 || !tupleAll("INVALID"))) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  if (["IMAGE_MISSING", "NONZERO"].includes(observation.classification)
+    && (observation.spawnOutcome !== "COMPLETED" || observation.exitStatus === 0 || !tupleAll("NOT_APPLICABLE"))) {
+    fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  }
+  return observation;
+}
+
+function readImageManifestDiagnosticJournal(root, create = false) {
+  const state = emptyImageManifestDiagnosticJournalState();
+  const journalPath = imageManifestDiagnosticJournalPath(root, create);
+  const names = fs.readdirSync(journalPath).sort(binaryCompare);
+  if (names.length > 12 || names.some((name, index) => name !== `entry-${String(index + 1).padStart(6, "0")}.json`)) {
+    fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+  }
+  for (let index = 0; index < names.length; index += 1) {
+    const entry = ownedPlain(readPrivateJson(path.join(journalPath, names[index])));
+    exactKeys(entry, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    const preimage = Object.freeze({
+      schemaVersion: entry.schemaVersion, sequence: entry.sequence, previousSha256: entry.previousSha256,
+      event: entry.event, detail: entry.detail,
+    });
+    if (entry.schemaVersion !== IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_SCHEMA || entry.sequence !== index + 1
+      || entry.previousSha256 !== state.headSha256 || !IMAGE_MANIFEST_DIAGNOSTIC_EVENTS.has(entry.event)
+      || entry.entrySha256 !== sha256Bytes(Buffer.from(canonicalJson(preimage)))) {
+      fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+    }
+    if (entry.event === "grant.consumed") {
+      exactKeys(entry.detail, ["consumedDiagnosticGrantSha256"]);
+      if (state.sequence !== 0 || state.consumedGrantSha256 !== null) fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      state.consumedGrantSha256 = assertSha(entry.detail.consumedDiagnosticGrantSha256);
+    } else if (entry.event === "diagnostic.lifecycle_started") {
+      exactKeys(entry.detail, ["ordinal"]);
+      if (state.consumedGrantSha256 === null || entry.detail.ordinal !== 1 || state.lifecycleCount !== 0) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.lifecycleCount = 1;
+    } else if (entry.event === "docker.attempt") {
+      exactKeys(entry.detail, ["effectId", "kind", "ordinal"]);
+      const { effectId, kind, ordinal } = entry.detail;
+      if (state.lifecycleCount !== 1 || !["version", "image.inspect"].includes(kind)
+        || typeof effectId !== "string" || ordinal !== 1 || state.openEffects.has(effectId)
+        || state.attempts[kind] >= IMAGE_MANIFEST_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.attempts[kind] += 1;
+      state.openEffects.set(effectId, Object.freeze(entry.detail));
+    } else if (entry.event === "docker.completed") {
+      exactKeys(entry.detail, ["effectId", "kind", "ordinal"]);
+      const open = state.openEffects.get(entry.detail.effectId);
+      if (open === undefined || canonicalJson(open) !== canonicalJson(entry.detail)) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.openEffects.delete(entry.detail.effectId);
+      state.completions[entry.detail.kind] += 1;
+    } else if (entry.event === "observation.recorded" || entry.event === "docker.ambiguous") {
+      const observation = validateImageManifestDiagnosticObservation(entry.detail);
+      if (state.observations.has(observation.kind)) fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      if (entry.event === "docker.ambiguous") {
+        const open = state.openEffects.get(observation.effectId);
+        if (open === undefined || observation.classification !== "AMBIGUOUS_TRANSPORT") {
+          fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+        }
+        state.openEffects.delete(observation.effectId);
+      } else if (state.completions[observation.kind] !== 1) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.observations.set(observation.kind, observation);
+    } else if (entry.event === "closure.proven") {
+      exactKeys(entry.detail, ["localResidueCount", "dockerResourceEffects", "imagePullPerformed"]);
+      if (state.openEffects.size !== 0 || state.closure !== null || entry.detail.localResidueCount !== 0
+        || entry.detail.dockerResourceEffects !== 0 || entry.detail.imagePullPerformed !== false) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.closure = Object.freeze(entry.detail);
+    } else if (entry.event === "diagnostic.terminal") {
+      exactKeys(entry.detail, ["status", "code"]);
+      if (state.closure === null || state.terminal !== null || !["OBSERVED", "FAILED"].includes(entry.detail.status)) {
+        fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+      }
+      state.terminal = Object.freeze(entry.detail);
+    }
+    state.sequence = entry.sequence;
+    state.headSha256 = entry.entrySha256;
+  }
+  return state;
+}
+
+function appendImageManifestDiagnosticJournal(root, event, detail) {
+  const state = readImageManifestDiagnosticJournal(root, true);
+  const sequence = state.sequence + 1;
+  if (sequence > 12 || !IMAGE_MANIFEST_DIAGNOSTIC_EVENTS.has(event)) {
+    fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+  }
+  const preimage = Object.freeze({
+    schemaVersion: IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_SCHEMA,
+    sequence, previousSha256: state.headSha256, event, detail: ownedPlain(detail),
+  });
+  const entry = Object.freeze({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage))) });
+  writePrivateJson(path.join(imageManifestDiagnosticJournalPath(root, true),
+    `entry-${String(sequence).padStart(6, "0")}.json`), entry);
+  const readback = readImageManifestDiagnosticJournal(root);
+  if (readback.sequence !== sequence || readback.headSha256 !== entry.entrySha256) {
+    fail("local_postgres_image_manifest_diagnostic_journal_invalid");
+  }
+  return readback;
+}
+
+function reserveImageManifestDiagnosticCall(root, kind) {
+  const state = readImageManifestDiagnosticJournal(root);
+  if (!["version", "image.inspect"].includes(kind) || state.lifecycleCount !== 1 || state.terminal !== null
+    || state.attempts[kind] >= IMAGE_MANIFEST_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+    fail("local_postgres_image_manifest_diagnostic_effect_ceiling_exceeded");
+  }
+  const detail = Object.freeze({ effectId: `docker-${String(state.sequence + 1).padStart(6, "0")}-${kind}`, kind, ordinal: 1 });
+  appendImageManifestDiagnosticJournal(root, "docker.attempt", detail);
+  return detail;
+}
+
+function emptyImageManifestDiagnosticTuple(value = "NOT_APPLICABLE") {
+  return Object.freeze({
+    repoDigestPresent: value, imageOs: value, imageArchitecture: value, descriptorDigest: value,
+    descriptorMediaType: value, descriptorSize: value, descriptorPlatformOs: value,
+    descriptorPlatformArchitecture: value,
+  });
+}
+
+function imageManifestPlatformValue(value, expected) {
+  if (value === undefined || value === null) return "MISSING";
+  if (typeof value !== "string") return "INVALID";
+  return value === expected ? expected : "MISMATCH";
+}
+
+function observedDescriptorMediaType(value) {
+  if (value === undefined || value === null) return "MISSING";
+  if (typeof value !== "string") return "INVALID";
+  return IMAGE_MANIFEST_DIAGNOSTIC_MEDIA_TYPES.has(value) ? value : "OTHER";
+}
+
+function parseImageManifestTuple(record) {
+  const repoDigests = record?.RepoDigests;
+  const repoDigestPresent = !Array.isArray(repoDigests) || repoDigests.some((value) => typeof value !== "string")
+    ? "UNKNOWN" : repoDigests.includes(IMAGE_REFERENCE) ? "TRUE" : "FALSE";
+  const descriptorDigest = record?.Descriptor?.digest === undefined || record?.Descriptor?.digest === null
+    ? "MISSING" : typeof record.Descriptor.digest === "string" && SHA256.test(record.Descriptor.digest)
+      ? record.Descriptor.digest : "INVALID";
+  const descriptorSize = record?.Descriptor?.size === undefined || record?.Descriptor?.size === null
+    ? "MISSING" : Number.isSafeInteger(record.Descriptor.size) && record.Descriptor.size >= 0
+      ? record.Descriptor.size : "INVALID";
+  return imageManifestDiagnosticTuple(Object.freeze({
+    repoDigestPresent,
+    imageOs: imageManifestPlatformValue(record?.Os, "linux"),
+    imageArchitecture: imageManifestPlatformValue(record?.Architecture, "arm64"),
+    descriptorDigest,
+    descriptorMediaType: observedDescriptorMediaType(record?.Descriptor?.mediaType),
+    descriptorSize,
+    descriptorPlatformOs: imageManifestPlatformValue(record?.Descriptor?.platform?.os, "linux"),
+    descriptorPlatformArchitecture: imageManifestPlatformValue(record?.Descriptor?.platform?.architecture, "arm64"),
+  }));
+}
+
+function fingerprintImageManifestDiagnosticResult(kind, effect, raw) {
+  const rawStdout = Buffer.isBuffer(raw?.stdout) ? raw.stdout : null;
+  const rawStderr = Buffer.isBuffer(raw?.stderr) ? raw.stderr : null;
+  const stdout = rawStdout === null ? Buffer.alloc(0) : Buffer.from(rawStdout);
+  const stderr = rawStderr === null ? Buffer.alloc(0) : Buffer.from(rawStderr);
+  try {
+    if (stdout.length > MAX_DOCKER_OUTPUT_BYTES || stderr.length > MAX_DOCKER_OUTPUT_BYTES) {
+      fail("local_postgres_image_manifest_diagnostic_output_invalid");
+    }
+    const out = streamFingerprint(stdout);
+    const err = streamFingerprint(stderr);
+    let spawnOutcome = "COMPLETED";
+    if (raw?.error?.code === "ETIMEDOUT") spawnOutcome = "TIMED_OUT";
+    else if (raw?.signal !== null && raw?.signal !== undefined) spawnOutcome = "SIGNALED";
+    else if (raw?.error !== undefined && raw?.error !== null) spawnOutcome = "SPAWN_ERROR";
+    else if (!Number.isSafeInteger(raw?.status) || rawStdout === null || rawStderr === null) spawnOutcome = "UNKNOWN";
+    const exitStatus = spawnOutcome === "COMPLETED" ? raw.status : "NOT_AVAILABLE";
+    const signal = spawnOutcome === "COMPLETED" ? "NONE" : diagnosticSignal(raw?.signal);
+    let classification = "AMBIGUOUS_TRANSPORT";
+    let tuple = emptyImageManifestDiagnosticTuple(spawnOutcome === "COMPLETED" ? "NOT_APPLICABLE" : "UNKNOWN");
+    if (spawnOutcome === "COMPLETED" && exitStatus === 0) {
+      try {
+        const text = new TextDecoder("utf-8", { fatal: true }).decode(stdout).trim();
+        const record = ownedPlain(parseStrictJson(text));
+        if (kind === "version") {
+          const observed = observeDockerVersion(Object.freeze({ stdout: text }));
+          classification = observed.dockerClientVersion === "29.3.1"
+            && observed.dockerServerVersion === "29.3.1" && observed.dockerServerPlatform === IMAGE_PLATFORM
+            ? "VERSION_MATCHED" : "PLATFORM_MISMATCH";
+        } else {
+          tuple = parseImageManifestTuple(record);
+          classification = tuple.repoDigestPresent !== "TRUE" ? "REFERENCE_MISMATCH"
+            : tuple.imageOs !== "linux" || tuple.imageArchitecture !== "arm64" ? "PLATFORM_MISMATCH"
+              : !SHA256.test(tuple.descriptorDigest) ? "DESCRIPTOR_INVALID"
+                : tuple.descriptorPlatformOs !== "linux" || tuple.descriptorPlatformArchitecture !== "arm64"
+                  ? "PLATFORM_MISMATCH" : "OBSERVED";
+        }
+      } catch { classification = "MALFORMED"; tuple = emptyImageManifestDiagnosticTuple("INVALID"); }
+    } else if (spawnOutcome === "COMPLETED") {
+      classification = kind === "image.inspect" && exitStatus === 1 ? "IMAGE_MISSING" : "NONZERO";
+    }
+    return validateImageManifestDiagnosticObservation(Object.freeze({
+      effectId: effect.effectId, kind, ordinal: effect.ordinal, spawnOutcome, exitStatus, signal,
+      stdoutBytes: out.bytes, stdoutSha256: out.sha256, stdoutUtf8: out.utf8, stdoutEmpty: out.empty,
+      stdoutLineEndings: out.lineEndings, stdoutLineCount: out.lineCount,
+      stderrBytes: err.bytes, stderrSha256: err.sha256, stderrUtf8: err.utf8, stderrEmpty: err.empty,
+      stderrLineEndings: err.lineEndings, stderrLineCount: err.lineCount,
+      classification, tuple,
+    }));
+  } finally {
+    stdout.fill(0); stderr.fill(0); rawStdout?.fill(0); rawStderr?.fill(0);
+  }
+}
+
+function ambiguousImageManifestDiagnosticObservation(effect) {
+  const empty = sha256Bytes(Buffer.alloc(0));
+  return Object.freeze({
+    effectId: effect.effectId, kind: effect.kind, ordinal: effect.ordinal,
+    spawnOutcome: "UNKNOWN", exitStatus: "NOT_AVAILABLE", signal: "UNKNOWN",
+    stdoutBytes: 0, stdoutSha256: empty, stdoutUtf8: true, stdoutEmpty: true,
+    stdoutLineEndings: "NONE", stdoutLineCount: 0,
+    stderrBytes: 0, stderrSha256: empty, stderrUtf8: true, stderrEmpty: true,
+    stderrLineEndings: "NONE", stderrLineCount: 0,
+    classification: "AMBIGUOUS_TRANSPORT", tuple: emptyImageManifestDiagnosticTuple("UNKNOWN"),
+  });
+}
+
+function consumeImageManifestDiagnosticGrant(root, now, verifyBindings) {
+  const pending = privatePath(root, IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE);
+  const consumed = privatePath(root, IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE);
+  const names = fs.readdirSync(root).sort(binaryCompare);
+  if (canonicalJson(names) !== canonicalJson([
+    IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE, "owner-approval-receipt",
+  ].sort(binaryCompare))) fail("local_postgres_image_manifest_diagnostic_grant_invalid");
+  const record = readPrivateJsonRecord(pending);
+  const grant = validateImageManifestDiagnosticGrant(record.value, now);
+  verifyBindings(grant, now);
+  if (readOwnerApprovalReceipt(root, privatePath(root, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  try { fs.linkSync(pending, consumed); fsyncPrivateDirectory(root); }
+  catch { fail("local_postgres_image_manifest_diagnostic_duplicate_consume"); }
+  const before = fs.lstatSync(pending, { bigint: true });
+  const after = fs.lstatSync(consumed, { bigint: true });
+  if (before.dev !== after.dev || before.ino !== after.ino || before.nlink !== 2n || after.nlink !== 2n) {
+    fail("local_postgres_image_manifest_diagnostic_grant_invalid");
+  }
+  fs.unlinkSync(pending); fsyncPrivateDirectory(root);
+  const committed = readPrivateJsonRecord(consumed);
+  if (committed.sha256 !== record.sha256) fail("local_postgres_image_manifest_diagnostic_grant_invalid");
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: committed.sha256 });
+}
+
+function recoverImageManifestDiagnosticGrant(root, now, verifyBindings) {
+  const allowed = new Set([
+    IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE, IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-home", "docker-config", "owner-approval-receipt",
+  ]);
+  const names = fs.readdirSync(root).sort(binaryCompare);
+  if (!names.includes(IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE)
+    || !names.includes(IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY)
+    || names.includes(IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE)
+    || names.some((name) => !allowed.has(name))) {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  const consumedPath = privatePath(root, IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE);
+  const record = readPrivateJsonRecord(consumedPath);
+  const grant = validateImageManifestDiagnosticGrant(record.value, now, true);
+  verifyBindings(grant, now, { allowExpired: true });
+  if (readOwnerApprovalReceipt(root, privatePath(root, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  const journal = readImageManifestDiagnosticJournal(root);
+  if (journal.consumedGrantSha256 !== record.sha256 || journal.terminal !== null) {
+    fail("local_postgres_image_manifest_diagnostic_duplicate_consume");
+  }
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: record.sha256 });
+}
+
+function revalidateImageManifestDiagnosticBoundary(context) {
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+  const expected = [
+    IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE, IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-config", "docker-home", "owner-approval-receipt",
+  ].sort(binaryCompare);
+  if (canonicalJson(fs.readdirSync(context.root).sort(binaryCompare)) !== canonicalJson(expected)) {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  if (readOwnerApprovalReceipt(context.root, privatePath(context.root, "owner-approval-receipt"), false)
+    !== context.grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  if (context.adapters.observeDockerCliIdentity().identitySha256 !== context.grant.host.dockerCliIdentitySha256) {
+    fail("local_postgres_docker_cli_drift");
+  }
+  if (context.socket.identitySha256 !== context.grant.host.socketIdentitySha256) fail("local_postgres_socket_identity_drift");
+  context.adapters.revalidateSocket(context.socket);
+  const now = context.adapters.now();
+  if (!(now instanceof Date) || now.getTime() < instant(context.grant.createdAt) - 60_000
+    || now.getTime() >= instant(context.grant.expiresAt)) {
+    fail("local_postgres_image_manifest_diagnostic_grant_expired");
+  }
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+}
+
+function callImageManifestDiagnosticDocker(context, kind) {
+  if (!["version", "image.inspect"].includes(kind)) fail("local_postgres_docker_command_denied");
+  revalidateImageManifestDiagnosticBoundary(context);
+  const reservation = reserveImageManifestDiagnosticCall(context.root, kind);
+  const argv = kind === "version" ? ["version", "--format", "{{json .}}"]
+    : ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+  const raw = context.adapters.callDocker(kind, Object.freeze(argv), context);
+  revalidateImageManifestDiagnosticBoundary(context);
+  appendImageManifestDiagnosticJournal(context.root, "docker.completed", reservation);
+  const observation = fingerprintImageManifestDiagnosticResult(kind, reservation, raw);
+  appendImageManifestDiagnosticJournal(context.root, "observation.recorded", observation);
+  return observation;
+}
+
+function imageManifestDiagnosticReceipt(context, status, code) {
+  const journal = readImageManifestDiagnosticJournal(context.root);
+  const observations = Object.freeze(["version", "image.inspect"].flatMap((kind) => {
+    const value = journal.observations.get(kind); return value === undefined ? [] : [value];
+  }));
+  const version = journal.observations.get("version");
+  return Object.freeze({
+    schemaVersion: IMAGE_MANIFEST_DIAGNOSTIC_RECEIPT_SCHEMA, status, code,
+    consumedDiagnosticGrantSha256: context.consumedDiagnosticGrantSha256,
+    authority: context.grant.authority, lineage: context.grant.lineage, artifacts: context.grant.artifacts,
+    failedCampaign: context.grant.failedCampaign,
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: context.grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: context.grant.host.socketIdentitySha256,
+      dockerClientVersion: version?.classification === "VERSION_MATCHED" ? "29.3.1" : "NOT_OBSERVED",
+      dockerServerVersion: version?.classification === "VERSION_MATCHED" ? "29.3.1" : "NOT_OBSERVED",
+      dockerServerPlatform: version?.classification === "VERSION_MATCHED" ? IMAGE_PLATFORM : "NOT_OBSERVED",
+    }),
+    effects: Object.freeze({
+      dockerCallAttempts: Object.freeze({ ...journal.attempts }),
+      dockerCallCompletions: Object.freeze({ ...journal.completions }),
+      imagePullCount: 0, dockerResourceEffectCount: 0, cleanupEffectCount: 0,
+      postgresEffectCount: 0, sqlEffectCount: 0,
+    }),
+    observations,
+    closure: Object.freeze({
+      localResidueCount: journal.closure?.localResidueCount ?? 0,
+      retainedForensicFiles: IMAGE_MANIFEST_DIAGNOSTIC_RETAINED_FILES,
+    }),
+    journal: Object.freeze({ entryCount: journal.sequence, headSha256: journal.headSha256 }),
+    readiness: Object.freeze({
+      diagnosticObserved: status === "OBSERVED", manifestCorrected: false, replacementCampaignAuthorized: false,
+      targetPostgresObserved: false, productRuntimeEffects: false, productionEffects: false,
+      trafficReady: false, gateCReady: false,
+    }),
+  });
+}
+
+function validateImageManifestDiagnosticReceipt(raw, grant, journal, consumedSha) {
+  const receipt = ownedPlain(raw);
+  exactKeys(receipt, IMAGE_MANIFEST_DIAGNOSTIC_RECEIPT_KEYS);
+  exactKeys(receipt.authority, IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(receipt.lineage, IMAGE_MANIFEST_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(receipt.artifacts, IMAGE_MANIFEST_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(receipt.failedCampaign, Object.keys(IMAGE_MANIFEST_DIAGNOSTIC_FAILED_CAMPAIGN));
+  exactKeys(receipt.hostObservation, [
+    "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+  ]);
+  exactKeys(receipt.effects, [
+    "dockerCallAttempts", "dockerCallCompletions", "imagePullCount", "dockerResourceEffectCount",
+    "cleanupEffectCount", "postgresEffectCount", "sqlEffectCount",
+  ]);
+  exactKeys(receipt.effects.dockerCallAttempts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.effects.dockerCallCompletions, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.closure, ["localResidueCount", "retainedForensicFiles"]);
+  exactKeys(receipt.journal, ["entryCount", "headSha256"]);
+  exactKeys(receipt.readiness, [
+    "diagnosticObserved", "manifestCorrected", "replacementCampaignAuthorized", "targetPostgresObserved",
+    "productRuntimeEffects", "productionEffects", "trafficReady", "gateCReady",
+  ]);
+  if (!Array.isArray(receipt.observations)) fail("local_postgres_image_manifest_diagnostic_receipt_invalid");
+  const observations = receipt.observations.map(validateImageManifestDiagnosticObservation);
+  const expectedObservations = ["version", "image.inspect"].flatMap((kind) => {
+    const value = journal.observations.get(kind); return value === undefined ? [] : [value];
+  });
+  if (receipt.schemaVersion !== IMAGE_MANIFEST_DIAGNOSTIC_RECEIPT_SCHEMA
+    || !["OBSERVED", "FAILED"].includes(receipt.status)
+    || !["local_postgres_image_manifest_diagnostic_observed", "local_postgres_image_manifest_diagnostic_failed"].includes(receipt.code)
+    || receipt.consumedDiagnosticGrantSha256 !== consumedSha
+    || canonicalJson(receipt.authority) !== canonicalJson(grant.authority)
+    || canonicalJson(receipt.lineage) !== canonicalJson(grant.lineage)
+    || canonicalJson(receipt.artifacts) !== canonicalJson(grant.artifacts)
+    || canonicalJson(receipt.failedCampaign) !== canonicalJson(grant.failedCampaign)
+    || canonicalJson(receipt.effects.dockerCallAttempts) !== canonicalJson(journal.attempts)
+    || canonicalJson(receipt.effects.dockerCallCompletions) !== canonicalJson(journal.completions)
+    || canonicalJson(observations) !== canonicalJson(expectedObservations)
+    || receipt.journal.entryCount !== journal.sequence || receipt.journal.headSha256 !== journal.headSha256
+    || receipt.hostObservation.dockerCliIdentitySha256 !== grant.host.dockerCliIdentitySha256
+    || receipt.hostObservation.socketIdentitySha256 !== grant.host.socketIdentitySha256
+    || receipt.effects.imagePullCount !== 0 || receipt.effects.dockerResourceEffectCount !== 0
+    || receipt.effects.cleanupEffectCount !== 0 || receipt.effects.postgresEffectCount !== 0
+    || receipt.effects.sqlEffectCount !== 0 || receipt.closure.localResidueCount !== 0
+    || canonicalJson(receipt.closure.retainedForensicFiles) !== canonicalJson(IMAGE_MANIFEST_DIAGNOSTIC_RETAINED_FILES)
+    || receipt.readiness.manifestCorrected !== false || receipt.readiness.replacementCampaignAuthorized !== false
+    || receipt.readiness.targetPostgresObserved !== false || receipt.readiness.productRuntimeEffects !== false
+    || receipt.readiness.productionEffects !== false || receipt.readiness.trafficReady !== false
+    || receipt.readiness.gateCReady !== false) {
+    fail("local_postgres_image_manifest_diagnostic_receipt_invalid");
+  }
+  for (const kind of LOCAL_POSTGRES_DOCKER_COMMAND_KINDS) {
+    if (receipt.effects.dockerCallAttempts[kind] > IMAGE_MANIFEST_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]
+      || receipt.effects.dockerCallCompletions[kind] > receipt.effects.dockerCallAttempts[kind]) {
+      fail("local_postgres_image_manifest_diagnostic_receipt_invalid");
+    }
+  }
+  if (receipt.status === "OBSERVED") {
+    if (receipt.code !== "local_postgres_image_manifest_diagnostic_observed"
+      || receipt.readiness.diagnosticObserved !== true || observations.length !== 2
+      || observations[0].classification !== "VERSION_MATCHED" || observations[1].classification !== "OBSERVED"
+      || receipt.hostObservation.dockerClientVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerPlatform !== IMAGE_PLATFORM) {
+      fail("local_postgres_image_manifest_diagnostic_receipt_invalid");
+    }
+  } else if (receipt.code !== "local_postgres_image_manifest_diagnostic_failed"
+    || receipt.readiness.diagnosticObserved !== false) {
+    fail("local_postgres_image_manifest_diagnostic_receipt_invalid");
+  }
+  return receipt;
+}
+
+function finalizeImageManifestDiagnostic(context, forceFailed = false) {
+  let state = readImageManifestDiagnosticJournal(context.root);
+  for (const effect of [...state.openEffects.values()]) {
+    appendImageManifestDiagnosticJournal(context.root, "docker.ambiguous",
+      ambiguousImageManifestDiagnosticObservation(effect));
+    state = readImageManifestDiagnosticJournal(context.root);
+  }
+  if (state.closure === null) {
+    appendImageManifestDiagnosticJournal(context.root, "closure.proven", {
+      localResidueCount: 0, dockerResourceEffects: 0, imagePullPerformed: false,
+    });
+  }
+  state = readImageManifestDiagnosticJournal(context.root);
+  const observed = !forceFailed && state.observations.get("version")?.classification === "VERSION_MATCHED"
+    && state.observations.get("image.inspect")?.classification === "OBSERVED";
+  const status = observed ? "OBSERVED" : "FAILED";
+  const code = observed ? "local_postgres_image_manifest_diagnostic_observed"
+    : "local_postgres_image_manifest_diagnostic_failed";
+  appendImageManifestDiagnosticJournal(context.root, "diagnostic.terminal", { status, code });
+  const terminal = readImageManifestDiagnosticJournal(context.root);
+  const receipt = imageManifestDiagnosticReceipt(context, status, code);
+  const validated = validateImageManifestDiagnosticReceipt(receipt, context.grant, terminal,
+    context.consumedDiagnosticGrantSha256);
+  const evidencePath = privatePath(context.root, IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE);
+  exactFileAbsence(evidencePath);
+  writePrivateJson(evidencePath, validated);
+  validateImageManifestDiagnosticReceipt(readPrivateJson(evidencePath), context.grant,
+    readImageManifestDiagnosticJournal(context.root), context.consumedDiagnosticGrantSha256);
+  const names = fs.readdirSync(context.root).sort(binaryCompare);
+  if (canonicalJson(names) !== canonicalJson([...IMAGE_MANIFEST_DIAGNOSTIC_RETAINED_FILES].sort(binaryCompare))) {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  return validated;
+}
+
+async function runImageManifestDiagnosticWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["diagnosticRoot", "evidenceOut"]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || stable.evidenceOut !== path.join(stable.diagnosticRoot, IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE)) {
+    fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  }
+  let root;
+  try { root = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_image_manifest_diagnostic_private_root_invalid"); }
+  if (root !== stable.diagnosticRoot) fail("local_postgres_image_manifest_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(root);
+  const names = fs.readdirSync(root).sort(binaryCompare);
+  const recovery = names.includes(IMAGE_MANIFEST_DIAGNOSTIC_CONSUMED_FILE);
+  const observedAt = adapters.now();
+  const consumed = recovery
+    ? recoverImageManifestDiagnosticGrant(root, observedAt, adapters.verifyBindings)
+    : consumeImageManifestDiagnosticGrant(root, observedAt, adapters.verifyBindings);
+  const grant = consumed.grant;
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  if (cli.identitySha256 !== grant.host.dockerCliIdentitySha256
+    || socket.identitySha256 !== grant.host.socketIdentitySha256) {
+    fail("local_postgres_image_manifest_diagnostic_binding_invalid");
+  }
+  const context = {
+    root, rootIdentity, grant, socket, adapters,
+    consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256,
+    isolated: null,
+  };
+  if (recovery) {
+    try { cleanupIsolatedDockerHome(root); } catch { /* terminal evidence remains failed */ }
+    const receipt = finalizeImageManifestDiagnostic(context, true);
+    throw new LocalPostgresRunnerError(receipt.code);
+  }
+  appendImageManifestDiagnosticJournal(root, "grant.consumed", {
+    consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256,
+  });
+  appendImageManifestDiagnosticJournal(root, "diagnostic.lifecycle_started", { ordinal: 1 });
+  let failure = null;
+  let setup = false;
+  try {
+    setup = true;
+    context.isolated = prepareIsolatedDockerHome(root);
+    const version = callImageManifestDiagnosticDocker(context, "version");
+    if (version.classification !== "VERSION_MATCHED") fail("local_postgres_image_manifest_diagnostic_host_invalid");
+    const image = callImageManifestDiagnosticDocker(context, "image.inspect");
+    if (image.classification !== "OBSERVED") fail("local_postgres_image_manifest_diagnostic_observation_invalid");
+  } catch (error) { failure = error; }
+  try { if (setup) cleanupIsolatedDockerHome(root); }
+  catch (error) { failure ??= error; }
+  const receipt = finalizeImageManifestDiagnostic(context, failure !== null);
+  if (receipt.status !== "OBSERVED") throw new LocalPostgresRunnerError(receipt.code);
+  return receipt;
+}
+
+function productionImageManifestDiagnosticDockerCall(_kind, argv, context) {
+  const result = spawnSync(DOCKER_CLI, ["--host", `unix://${context.socket.socketPath}`, ...argv], {
+    cwd: "/", encoding: null, env: dockerEnvironment(context.isolated),
+    maxBuffer: MAX_DOCKER_OUTPUT_BYTES, timeout: 60_000,
+  });
+  return Object.freeze({
+    status: result.status, signal: result.signal, error: result.error,
+    stdout: Buffer.isBuffer(result.stdout) ? result.stdout : Buffer.alloc(0),
+    stderr: Buffer.isBuffer(result.stderr) ? result.stderr : Buffer.alloc(0),
+  });
+}
+
+export async function runApprovedLocalPostgresImageManifestDiagnostic(input) {
+  return runImageManifestDiagnosticWithAdapters(input, Object.freeze({
+    verifyBindings: verifyLocalPostgresImageManifestDiagnosticCommittedBindings,
+    observeDockerCliIdentity, resolveSocketIdentity: resolveDockerSocketIdentity,
+    revalidateSocket: revalidateDockerSocketIdentity,
+    callDocker: productionImageManifestDiagnosticDockerCall,
+    now: () => new Date(),
+  }));
+}
+
+function fakeImageManifestDiagnosticDerived() {
+  const fakeSha = (domain) => sha256Bytes(Buffer.from(`r4-image-manifest-diagnostic-fake-${domain}`));
+  return Object.freeze({
+    authority: Object.freeze({
+      correctionAddendumSha256: IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_SHA256,
+      correctionOwnerReviewSha256: IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_SHA256,
+      diagnosticCardSha256: fakeSha("card"), diagnosticOwnerReviewSha256: fakeSha("review"),
+      diagnosticAuthorityPayloadSha256: fakeSha("payload"),
+    }),
+    lineage: Object.freeze({
+      correctionAddendumHead: IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_HEAD,
+      correctionAddendumTree: IMAGE_MANIFEST_DIAGNOSTIC_ADDENDUM_TREE,
+      correctionOwnerReviewHead: IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_HEAD,
+      correctionOwnerReviewTree: IMAGE_MANIFEST_DIAGNOSTIC_REVIEW_TREE,
+      implementationHead: "1".repeat(40), implementationTree: "2".repeat(40),
+      implementationAggregateSha256: fakeSha("g2"), evidenceHead: "3".repeat(40),
+      evidenceTree: "4".repeat(40), statusHead: "5".repeat(40), statusTree: "6".repeat(40),
+      statusAggregateSha256: fakeSha("g10"), diagnosticCardHead: "7".repeat(40),
+      diagnosticCardTree: "8".repeat(40), diagnosticOwnerReviewHead: "9".repeat(40),
+      diagnosticOwnerReviewTree: "a".repeat(40),
+    }),
+    artifacts: Object.freeze(Object.fromEntries(IMAGE_MANIFEST_DIAGNOSTIC_ARTIFACT_KEYS.map((key) => [key, fakeSha(key)]))),
+    failedCampaign: imageManifestDiagnosticFailedCampaignContract(), host: imageManifestDiagnosticHostContract(),
+    ceilings: imageManifestDiagnosticCeilings(),
+  });
+}
+
+function fakeImageManifestDiagnosticGrant(ownerApprovalReceiptSha256) {
+  const derived = fakeImageManifestDiagnosticDerived();
+  return Object.freeze({
+    schemaVersion: IMAGE_MANIFEST_DIAGNOSTIC_SCHEMA, diagnosticGrantId: "d".repeat(32), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    failedCampaign: derived.failedCampaign,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: `sha256:${"b".repeat(64)}`,
+      socketIdentitySha256: `sha256:${"c".repeat(64)}`,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: "2026-08-15T20:00:00.000Z", expiresAt: "2026-08-15T21:00:00.000Z",
+  });
+}
+
+function fakeImageManifestDiagnosticRaw(mutation) {
+  const version = Buffer.from(JSON.stringify({
+    Client: { Version: "29.3.1" }, Server: { Version: "29.3.1", Os: "linux", Arch: "arm64" },
+  }) + "\n");
+  const digest = mutation === "platform_manifest" ? IMAGE_PLATFORM_MANIFEST
+    : mutation === "descriptor_invalid" ? "not-a-sha256-digest"
+    : mutation === "other_digest" ? `sha256:${"e".repeat(64)}` : IMAGE_REFERENCE.slice("postgres@".length);
+  const descriptor = {
+    digest,
+    mediaType: mutation === "media_other" ? "application/example" : "application/vnd.oci.image.index.v1+json",
+    size: 1234,
+    platform: { os: mutation === "platform_mismatch" ? "darwin" : "linux", architecture: "arm64" },
+  };
+  const image = Buffer.from(JSON.stringify({
+    RepoDigests: mutation === "reference_mismatch" ? [] : [IMAGE_REFERENCE],
+    Os: "linux", Architecture: "arm64",
+    UnlistedBody: "RAW-IMAGE-MANIFEST-SENTINEL",
+    ...(mutation === "descriptor_missing" ? {} : { Descriptor: descriptor }),
+  }) + "\n");
+  if (mutation === "malformed") {
+    return Object.freeze({ version, image: Buffer.from('{"RAW-IMAGE-MANIFEST-SENTINEL":\n') });
+  }
+  return Object.freeze({ version, image });
+}
+
+export async function runLocalPostgresImageManifestDiagnosticFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "index_digest";
+  const allowed = new Set([
+    "index_digest", "platform_manifest", "other_digest", "media_other", "descriptor_missing",
+    "descriptor_invalid", "platform_mismatch", "reference_mismatch", "malformed", "image_missing",
+    "nonzero", "timeout", "signal", "host_drift", "socket_drift",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-manifest-diagnostic-fake-")));
+  fs.chmodSync(root, 0o700);
+  const receiptPath = path.join(root, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake image manifest diagnostic approval", { mode: 0o600, flag: "wx" });
+  const approvalSha = readOwnerApprovalReceipt(root, receiptPath);
+  const grant = fakeImageManifestDiagnosticGrant(approvalSha);
+  writePrivateJson(path.join(root, IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE), grant);
+  const calls = [];
+  const argvVectors = [];
+  const raw = fakeImageManifestDiagnosticRaw(mutation);
+  let result;
+  try {
+    try {
+      result = await runImageManifestDiagnosticWithAdapters({
+        diagnosticRoot: root, evidenceOut: path.join(root, IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE),
+      }, Object.freeze({
+        verifyBindings(candidate) { validateImageManifestDiagnosticGrant(candidate, new Date("2026-08-15T20:30:00.000Z")); },
+        observeDockerCliIdentity: () => Object.freeze({
+          identitySha256: mutation === "host_drift" && calls.length > 0
+            ? `sha256:${"f".repeat(64)}` : grant.host.dockerCliIdentitySha256,
+        }),
+        resolveSocketIdentity: () => Object.freeze({ socketPath: "/private/fake/docker.sock", identitySha256: grant.host.socketIdentitySha256 }),
+        revalidateSocket() {
+          if (mutation === "socket_drift" && calls.length > 0) fail("local_postgres_socket_identity_drift");
+        },
+        callDocker(kind, argv) {
+          calls.push(kind);
+          argvVectors.push(Object.freeze([...argv]));
+          if (kind === "version") return Object.freeze({ status: 0, signal: null, stdout: Buffer.from(raw.version), stderr: Buffer.alloc(0) });
+          if (mutation === "timeout") return Object.freeze({ status: null, signal: null, error: { code: "ETIMEDOUT" }, stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) });
+          if (mutation === "signal") return Object.freeze({ status: null, signal: "SIGTERM", stdout: Buffer.alloc(0), stderr: Buffer.alloc(0) });
+          if (mutation === "image_missing") return Object.freeze({ status: 1, signal: null, stdout: Buffer.from("\n"), stderr: Buffer.from("missing\n") });
+          if (mutation === "nonzero") return Object.freeze({ status: 2, signal: null, stdout: Buffer.alloc(0), stderr: Buffer.from("failure\n") });
+          return Object.freeze({ status: 0, signal: null, stdout: Buffer.from(raw.image), stderr: Buffer.alloc(0) });
+        },
+        now: () => new Date("2026-08-15T20:30:00.000Z"),
+      }));
+    } catch (error) {
+      result = readPrivateJson(path.join(root, IMAGE_MANIFEST_DIAGNOSTIC_EVIDENCE_FILE));
+      if (authenticLocalPostgresRunnerErrorDetails(error)?.code !== "local_postgres_image_manifest_diagnostic_failed") throw error;
+    }
+    return Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-image-manifest-diagnostic-fake-result.v1",
+      receipt: result, dockerKinds: Object.freeze(calls), physicalEffects: 0,
+      dockerArgv: Object.freeze(argvVectors),
+      rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)),
+    });
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
+export function runLocalPostgresImageManifestDiagnosticGrantValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const grant = JSON.parse(canonicalJson(fakeImageManifestDiagnosticGrant(`sha256:${"a".repeat(64)}`)));
+  if (mutation === "top_extra") grant.extra = true;
+  else if (mutation === "nested_extra") grant.host.extra = true;
+  else if (mutation === "missing") delete grant.host.imageReference;
+  else if (mutation === "type") grant.diagnosticGrantId = 1;
+  else if (mutation === "old_schema") grant.schemaVersion = "r4.public-core-local-postgres-integration-campaign-grant.v2";
+  else if (mutation === "authority") grant.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "lineage") grant.lineage.correctionOwnerReviewHead = "f".repeat(40);
+  else if (mutation === "failed_campaign") grant.failedCampaign.journalEntryCount = 18;
+  else if (mutation === "host") grant.host.imageReference = "postgres:latest";
+  else if (mutation === "ceiling") grant.ceilings.dockerCalls["image.pull"] = 1;
+  else if (mutation === "accessor") Object.defineProperty(grant, "schemaVersion", {
+    enumerable: true, get() { throw new Error("IMAGE_MANIFEST_GRANT_ACCESSOR_CANARY"); },
+  });
+  else if (mutation !== "none") fail("local_postgres_fake_fault_invalid");
+  let accepted = false;
+  try { validateImageManifestDiagnosticGrant(grant, new Date("2026-08-15T20:30:00.000Z")); accepted = true; }
+  catch { accepted = false; }
+  return Object.freeze({ schemaVersion: "r4.image-manifest-diagnostic-grant-validation-fake.v1", mutation, accepted, physicalEffects: 0 });
+}
+
+export function runLocalPostgresImageManifestDiagnosticJournalValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set([
+    "none", "top_extra", "sequence", "previous", "event", "detail_extra", "entry_sha",
+    "completion_without_attempt",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-manifest-journal-fake-")));
+  fs.chmodSync(root, 0o700);
+  const digest = `sha256:${"a".repeat(64)}`;
+  try {
+    appendImageManifestDiagnosticJournal(root, "grant.consumed", { consumedDiagnosticGrantSha256: digest });
+    appendImageManifestDiagnosticJournal(root, "diagnostic.lifecycle_started", { ordinal: 1 });
+    const journalPath = imageManifestDiagnosticJournalPath(root);
+    const secondPath = path.join(journalPath, "entry-000002.json");
+    if (mutation !== "none" && mutation !== "completion_without_attempt") {
+      const entry = JSON.parse(canonicalJson(readPrivateJson(secondPath)));
+      if (mutation === "top_extra") entry.extra = true;
+      else if (mutation === "sequence") entry.sequence = 3;
+      else if (mutation === "previous") entry.previousSha256 = `sha256:${"f".repeat(64)}`;
+      else if (mutation === "event") entry.event = "docker.unlisted";
+      else if (mutation === "detail_extra") entry.detail.extra = true;
+      else if (mutation === "entry_sha") entry.entrySha256 = `sha256:${"f".repeat(64)}`;
+      if (!["top_extra", "entry_sha"].includes(mutation)) {
+        const preimage = selectKeys(entry, ["schemaVersion", "sequence", "previousSha256", "event", "detail"]);
+        entry.entrySha256 = sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8"));
+      }
+      fs.unlinkSync(secondPath);
+      writePrivateJson(secondPath, entry);
+    } else if (mutation === "completion_without_attempt") {
+      const state = readImageManifestDiagnosticJournal(root);
+      const detail = Object.freeze({ effectId: "docker-000003-version", kind: "version", ordinal: 1 });
+      const preimage = Object.freeze({
+        schemaVersion: IMAGE_MANIFEST_DIAGNOSTIC_JOURNAL_SCHEMA, sequence: 3,
+        previousSha256: state.headSha256, event: "docker.completed", detail,
+      });
+      writePrivateJson(path.join(journalPath, "entry-000003.json"), {
+        ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage), "utf8")),
+      });
+    }
+    let accepted = false;
+    try { readImageManifestDiagnosticJournal(root); accepted = true; } catch { accepted = false; }
+    return Object.freeze({
+      schemaVersion: "r4.image-manifest-diagnostic-journal-validation-fake.v1",
+      mutation, accepted, physicalEffects: 0,
+    });
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
+export function runLocalPostgresImageManifestDiagnosticAuthorityFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set(["none", "duplicate_marker", "prefix_marker", "top_extra", "authority", "lineage", "host", "ceiling"]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const derived = fakeImageManifestDiagnosticDerived();
+  const payload = {
+    schemaVersion: "r4.public-core-local-postgres-image-manifest-diagnostic-authority.v1",
+    authority: { ...selectKeys(derived.authority, IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS) },
+    lineage: { ...selectKeys(derived.lineage, IMAGE_MANIFEST_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS) },
+    artifacts: { ...derived.artifacts }, failedCampaign: { ...derived.failedCampaign },
+    host: { ...derived.host }, ceilings: JSON.parse(canonicalJson(derived.ceilings)),
+    localOnly: true, productionEffectsAllowed: false,
+  };
+  if (mutation === "top_extra") payload.extra = true;
+  else if (mutation === "authority") payload.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "lineage") payload.lineage.correctionOwnerReviewHead = "f".repeat(40);
+  else if (mutation === "host") payload.host.imageReference = "postgres:latest";
+  else if (mutation === "ceiling") payload.ceilings.dockerCalls["image.pull"] = 1;
+  const canonical = canonicalJson(payload);
+  let card = `proposal\n${IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "duplicate_marker") card += `${IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "prefix_marker") card = card.replace(IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN,
+    `prefix${IMAGE_MANIFEST_DIAGNOSTIC_AUTHORITY_BEGIN}`);
+  let accepted = false;
+  let payloadSha256 = null;
+  try { const parsed = parseImageManifestDiagnosticCard(Buffer.from(card)); accepted = true; payloadSha256 = parsed.sha256; }
+  catch { accepted = false; }
+  return Object.freeze({
+    schemaVersion: "r4.image-manifest-diagnostic-authority-validation-fake.v1",
+    mutation, accepted, payloadSha256, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresImageManifestDiagnosticPrepareFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  if (!["none", "root_extra", "expired", "binding"].includes(mutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-manifest-prepare-fake-")));
+  fs.chmodSync(root, 0o700);
+  const receiptPath = path.join(root, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake image manifest diagnostic approval", { mode: 0o600, flag: "wx" });
+  if (mutation === "root_extra") fs.writeFileSync(path.join(root, "unknown"), "x", { mode: 0o600, flag: "wx" });
+  const derived = fakeImageManifestDiagnosticDerived();
+  try {
+    try {
+      const receipt = prepareImageManifestDiagnosticWithAdapters({
+        diagnosticRoot: root, diagnosticOwnerReviewHead: derived.lineage.diagnosticOwnerReviewHead,
+        ownerApprovalReceiptPath: receiptPath,
+        createdAt: mutation === "expired" ? "2026-08-15T18:00:00.000Z" : "2026-08-15T20:30:00.000Z",
+        expiresAt: mutation === "expired" ? "2026-08-15T19:00:00.000Z" : "2026-08-15T21:30:00.000Z",
+      }, Object.freeze({
+        deriveAuthority: () => derived,
+        observeDockerCliIdentity: () => Object.freeze({ identitySha256: `sha256:${"b".repeat(64)}` }),
+        resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}` }),
+        randomBytes: () => Buffer.from("0123456789abcdef0123456789abcdef", "hex"),
+        now: () => new Date("2026-08-15T20:30:00.000Z"),
+        verifyBindings() { if (mutation === "binding") fail("local_postgres_image_manifest_diagnostic_binding_invalid"); },
+      }));
+      return Object.freeze({
+        schemaVersion: "r4.image-manifest-diagnostic-prepare-fake.v1", status: "GREEN", receipt,
+        grant: readPrivateJson(path.join(root, IMAGE_MANIFEST_DIAGNOSTIC_PENDING_FILE)),
+        rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)), physicalEffects: 0,
+      });
+    } catch (error) {
+      return Object.freeze({
+        schemaVersion: "r4.image-manifest-diagnostic-prepare-fake.v1", status: "FAILED",
+        code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_image_manifest_diagnostic_prepare_failed",
+        rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)), physicalEffects: 0,
+      });
+    }
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
+export async function runLocalPostgresImageManifestDiagnosticReceiptValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set([
+    "none", "top_extra", "nested_extra", "missing", "type", "status", "consumed", "authority",
+    "attempt", "tuple", "journal", "readiness", "accessor",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const green = await runLocalPostgresImageManifestDiagnosticFakePlan({ mutation: "index_digest" });
+  const receipt = JSON.parse(canonicalJson(green.receipt));
+  if (mutation === "top_extra") receipt.extra = true;
+  else if (mutation === "nested_extra") receipt.effects.extra = true;
+  else if (mutation === "missing") delete receipt.observations[1].tuple.descriptorDigest;
+  else if (mutation === "type") receipt.effects.imagePullCount = "0";
+  else if (mutation === "status") receipt.status = "GREEN";
+  else if (mutation === "consumed") receipt.consumedDiagnosticGrantSha256 = "bad";
+  else if (mutation === "authority") receipt.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "attempt") receipt.effects.dockerCallAttempts["image.pull"] = 1;
+  else if (mutation === "tuple") receipt.observations[1].tuple.descriptorDigest = "bad";
+  else if (mutation === "journal") receipt.journal.entryCount += 1;
+  else if (mutation === "readiness") receipt.readiness.manifestCorrected = true;
+  else if (mutation === "accessor") Object.defineProperty(receipt, "status", {
+    enumerable: true, get() { throw new Error("IMAGE_MANIFEST_RECEIPT_ACCESSOR_CANARY"); },
+  });
+  const grant = fakeImageManifestDiagnosticGrant(`sha256:${"a".repeat(64)}`);
+  const journal = emptyImageManifestDiagnosticJournalState();
+  journal.sequence = green.receipt.journal.entryCount;
+  journal.headSha256 = green.receipt.journal.headSha256;
+  journal.consumedGrantSha256 = green.receipt.consumedDiagnosticGrantSha256;
+  journal.lifecycleCount = 1;
+  journal.attempts = { ...green.receipt.effects.dockerCallAttempts };
+  journal.completions = { ...green.receipt.effects.dockerCallCompletions };
+  journal.observations = new Map(green.receipt.observations.map((item) => [item.kind, item]));
+  journal.closure = Object.freeze({ localResidueCount: 0, dockerResourceEffects: 0, imagePullPerformed: false });
+  journal.terminal = Object.freeze({ status: "OBSERVED", code: "local_postgres_image_manifest_diagnostic_observed" });
+  let accepted = false;
+  try { validateImageManifestDiagnosticReceipt(receipt, grant, journal, green.receipt.consumedDiagnosticGrantSha256); accepted = true; }
+  catch { accepted = false; }
+  return Object.freeze({
+    schemaVersion: "r4.image-manifest-diagnostic-receipt-validation-fake.v1", mutation, accepted, physicalEffects: 0,
+  });
+}
+
 export function parseLocalPostgresRunnerArguments(argv) {
   const stable = ownedPlain(argv);
   if (stable.length === 1 && stable[0] === "fake") return Object.freeze({ mode: "fake" });
+  if (stable.length === 11 && stable[0] === "prepare-image-manifest-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--diagnostic-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
+    && stable[5] === "--owner-approval-receipt" && typeof stable[6] === "string" && path.isAbsolute(stable[6])
+    && stable[7] === "--created-at" && typeof stable[8] === "string"
+    && stable[9] === "--expires-at" && typeof stable[10] === "string") {
+    instant(stable[8]); instant(stable[10]);
+    return Object.freeze({
+      mode: "prepare-image-manifest-diagnostic", diagnosticRoot: stable[2],
+      diagnosticOwnerReviewHead: stable[4], ownerApprovalReceiptPath: stable[6],
+      createdAt: stable[8], expiresAt: stable[10],
+    });
+  }
+  if (stable.length === 5 && stable[0] === "image-manifest-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--evidence-out" && typeof stable[4] === "string" && path.isAbsolute(stable[4])) {
+    return Object.freeze({ mode: "image-manifest-diagnostic", diagnosticRoot: stable[2], evidenceOut: stable[4] });
+  }
   if (stable.length === 11 && stable[0] === "prepare-integration-campaign"
     && stable[1] === "--campaign-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
     && stable[3] === "--execution-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
@@ -13255,6 +14661,17 @@ async function direct() {
   if (parsed.mode === "prepare") {
     const { mode: _mode, ...input } = parsed;
     process.stdout.write(`${canonicalJson(prepareLocalPostgresPendingGrantV3(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "prepare-image-manifest-diagnostic") {
+    const { mode: _mode, ...input } = parsed;
+    process.stdout.write(`${canonicalJson(prepareLocalPostgresImageManifestDiagnosticGrant(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "image-manifest-diagnostic") {
+    await runApprovedLocalPostgresImageManifestDiagnostic({
+      diagnosticRoot: parsed.diagnosticRoot, evidenceOut: parsed.evidenceOut,
+    });
     return;
   }
   if (parsed.mode === "prepare-integration-campaign") {
