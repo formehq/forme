@@ -8,18 +8,18 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
-The approved #77 PostgreSQL 16 compatibility correction has now used its one
-cached-image lifecycle. The explicit catalog text casts worked: the complete
-schema applied successfully. The run then failed cleanly in the first
-read-only verify batch with project-defined `P0001 / exec_stmt_raise`, before
-restart or rollback. Exact cleanup is Green and no pull occurred. This remains
-`0 Product Progress`; the next task is verify-contract review, not another
-Docker run. See the
+The strict body-free #77 verify diagnostic is repository Green at `8f45604`.
+Its first approved invocation stopped before PostgreSQL because the exact
+image was no longer cached. The no-pull boundary held: no Docker resource,
+PostgreSQL connection or SQL effect occurred, and exact cleanup is Green. The
+named `P0001` assertion remains unknown, so no verify correction is claimed.
+This remains `0 Product Progress`; the next decision is whether to authorize
+one exact-image acquisition. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77

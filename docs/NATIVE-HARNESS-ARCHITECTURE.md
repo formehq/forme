@@ -2,19 +2,20 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-The separately approved #77 compatibility envelope is now exhausted. The
-harness-native command reused the cached image, applied the PostgreSQL 16-
-compatible schema, then failed cleanly at the first read-only verify contract
-with `P0001 / exec_stmt_raise`. Exact cleanup remained Green and no pull ran.
+The separately approved #77 body-free verify diagnostic is repository Green.
+Its first invocation observed that the exact image was absent from cache and
+stopped before Docker resource creation or PostgreSQL under the no-pull rule.
+Cleanup remained Green; the named verify assertion was not observed.
 
 This does not alter NH1/NH2. It confirms both halves of the boundary: ordinary
-disposable computation can advance under one outcome envelope, while durable
-verify meaning returns to the Owner. No additional lifecycle, production,
-Guest/provider, public traffic or Gate C action is authorized.
+disposable computation can advance under one outcome envelope, while a missing
+runtime prerequisite stops without guessing durable meaning. Exact-image
+acquisition now returns to the Owner. Production, Guest/provider, public
+traffic and Gate C remain closed.
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

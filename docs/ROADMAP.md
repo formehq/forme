@@ -2,20 +2,19 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77 remains `Needs Decision`: the one approved compatibility lifecycle proved
-schema apply on PostgreSQL 16.10, then failed cleanly in the first read-only
-verify batch with project-defined `P0001`. No pull ran and cleanup was exact.
-This Enabler still earns `0 Product Progress`; #67 remains `Building / At
-Risk`.
+#77 remains `Needs Decision`. Its repository-Green body-free diagnostic can
+identify a committed verify assertion without exposing PostgreSQL bodies, but
+the first invocation found the exact image absent from cache and stopped
+before PostgreSQL. No pull or resource creation ran and cleanup was exact.
+This Enabler still earns `0 Product Progress`; #67 remains `Building / At Risk`.
 
-The next roadmap action is repository-only verify-contract review, not another
-physical lifecycle and not another Enabler. Identify the named assertion that
-disagrees with the produced schema, then return any durable meaning change to
-the Owner. The Public Room → knock → candidate → response path is unchanged.
+The next roadmap action is one Owner decision on exact-image acquisition. Do
+not guess or change `verify.sql` until the named assertion is observed. The
+Public Room → knock → candidate → response path is unchanged.
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

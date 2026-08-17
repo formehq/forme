@@ -1,74 +1,63 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `VERIFY_CONTRACT_REVIEW_REQUIRED`, 2026-08-17.
+Status: `IMAGE_ACQUISITION_DECISION_REQUIRED`, 2026-08-17.
 
 ## Plain-language result
 
-The approved PostgreSQL 16 compatibility correction worked: the single new
-cached-image lifecycle applied the complete Core schema successfully. That
-proves the earlier `42725 / op_error` came from the catalog-signature
-expressions that lacked explicit text casts. The correction preserved the
-signature fields, order and separators; only type resolution changed.
+The strict body-free verify diagnostic is repository Green. It can reveal only
+one of the 18 committed `P0001` assertion identifiers, and only when the error
+comes from `exec_stmt_raise` during a verify phase. Arbitrary PostgreSQL
+messages, SQL, details and data cannot cross the result membrane.
 
-The rehearsal is still **not Green**. It stopped at the first read-only verify
-batch with project-defined PostgreSQL error `P0001` from `exec_stmt_raise`.
-That means one of our verify assertions disagrees with the schema PostgreSQL
-actually produced. The body-free result does not expose the named assertion,
-so no exact verify correction is claimed. Restart persistence and rollback
-were not reached.
+The first approved diagnostic invocation did not reach that code. Docker
+`29.3.1 / 29.3.1 / linux/arm64` reported that the exact PostgreSQL image was
+not cached. The no-pull rule stopped execution immediately. No container,
+network, volume or PostgreSQL connection was created; no schema, verify or
+rollback SQL ran; cleanup and the private runtime directory ended absent.
 
-The run used the already cached exact image, performed no pull, and removed
-its unique container, network, volume, credential and runtime directory. This
-Enabler still adds `0 Product Progress`, but the open problem has moved from
-schema execution to verify-contract diagnosis.
+The named verify assertion is therefore still unknown. Repeating the same
+command while the cache remains absent would add no evidence, so the second
+approved invocation was not used.
 
-## Before and after
+## Repository proof
 
-- Before correction: two isolated runs failed at the first schema batch; the
-  second returned `42725 / op_error`.
-- Repository correction: all catalog signature identifiers and PostgreSQL
-  internal `"char"` fields now convert explicitly to text in schema, verify
-  and rollback. Removing only those casts reconstructs the prior shared frame
-  exactly.
-- After correction: schema apply completes on PostgreSQL 16.10; the first
-  read-only verify raises `P0001` before restart or rollback.
-- Observed again: Docker `29.3.1 / 29.3.1 / linux/arm64`, exact cached image,
-  PostgreSQL server `160010`, loopback publication and exact cleanup.
+- diagnostic implementation: commit `8f456041b9b98d775acd8bbfe5447b54ebb82ba8`,
+  tree `0a26ac1340d83115f913b5357ffcbc97234eb76b`;
+- runner SHA-256:
+  `ed62e206df9b002ef42922e96d5f363f8cfe8bd35d0bae1f8cd268fd75171c13`;
+- test SHA-256:
+  `162831e64e5595ff90a6b0775b204d6e911ad06450ed94ab7fd8a7cf53de6f0d`;
+- focused rehearsal tests: `11 / 11` Green;
+- offline R4 regression: `585 passed / 0 failed / 111` frozen historical
+  physical-runner tests skipped;
+- spine `45 / 45`, Gate-B Core `146 / 146`, spine/Room typecheck, docs audit
+  and `git diff --check`: Green.
 
-## Attempt and effect accounting
+## Diagnostic invocation
 
-The original budget was two full lifecycles and one anonymous exact-image
-pull; all were consumed by the two schema failures. The compatibility envelope
-then authorized exactly one cached-image lifecycle and zero pulls. That final
-lifecycle is also consumed and finished `FAILED_CLEAN`, with current-run
-container/network/volume and local credential/runtime residue at zero.
+- run: `1a4475357b9e25c1`;
+- time: `2026-08-17T23:47:27.946Z` to `23:47:29.106Z`;
+- image pull: `0`;
+- Docker resources created: `0`;
+- PostgreSQL connections and SQL batches: `0`;
+- exact-owned container/network/volume/runtime residue: `0`;
+- result: `disposable_postgres_image_not_cached` at
+  `docker.image.inspect`.
 
-Only synthetic seed data was in scope. Historical V1–V4 resources and roots,
-real Guest data, provider calls, production, public traffic and Gate C were
-untouched. The exact pinned image cache remains, as the envelope allowed.
+## What needs review
+
+No verify correction is proposed: the diagnostic did not observe an
+assertion. The next decision is whether to authorize one anonymous pull of the
+same exact `linux/arm64` digest and then use the remaining bounded diagnostic
+and corrected-rehearsal path. Production, real data, push, merge and Gate C
+remain closed.
 
 Machine-readable evidence:
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-## What needs review
-
-Do not run Docker again. The next task is repository-only: determine which
-named `P0001` assertion in `verify.sql` rejects the successfully applied
-schema, using static comparison or a separately approved body-free diagnostic
-that can preserve the assertion identifier. Any change to the verify contract
-or schema remains an Owner stop gate. Do not create a child Enabler or revive
-the historical physical runner.
-
-## Validation
-
-- focused current harness and Public Core tests: `51 / 51` Green;
-- offline R4 regression: `584 passed / 0 failed / 111 historical physical-runner tests intentionally skipped`;
-- spine and Room TypeScript checks: Green;
-- documentation audit and `git diff --check`: Green.
-
 Current stop:
 
-`DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+`BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

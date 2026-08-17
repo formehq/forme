@@ -4,20 +4,20 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77 has also consumed its separately approved one-lifecycle compatibility
-budget. Explicit catalog text casts let the complete schema apply on
-PostgreSQL 16.10. The first read-only verify batch then raised project-defined
-`P0001 / exec_stmt_raise`; restart and rollback were not reached. The cached
-image was reused without pull and cleanup was exact. The next action is a
-verify-contract review, not another Docker run or approval-document chain.
+#77 now has a repository-Green body-free diagnostic that can emit only one of
+18 committed verify assertion identifiers. Its first approved invocation
+found the exact image absent from cache and stopped under the no-pull rule.
+It created no Docker resource, reached no PostgreSQL/SQL and cleaned exactly.
+The verify assertion remains unobserved; the next decision is exact-image
+acquisition, not a guessed verify change.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

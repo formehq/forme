@@ -2,21 +2,20 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77 remains `Needs Decision`, but the approved PostgreSQL 16
-compatibility correction removed the first blocker. Its sole cached-image
-lifecycle applied the complete schema, proving the explicit catalog text
-casts. The first read-only verify batch then raised project-defined `P0001 /
-exec_stmt_raise`; restart proof and rollback were not reached. No pull occurred
-and exact cleanup was Green.
+Enabler #77 remains `Needs Decision`. The approved body-free diagnostic is
+repository Green, but its first invocation found the exact image absent from
+cache and stopped before PostgreSQL under the no-pull rule. No Docker resource
+or SQL effect occurred and exact cleanup was Green. The prior schema-apply
+proof still stands; the named verify assertion remains unknown.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`. The next action is a repository-only verify-contract review; the new
-physical budget is exhausted. See
+Risk`. The next action is an Owner decision on exact-image acquisition, not a
+guessed verify correction. See
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

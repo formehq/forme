@@ -2,6 +2,24 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Diagnose verify by closed enum and stop when the exact image is absent
+
+**Decision:** the Owner approved a strict body-free diagnostic that can emit
+only one of the 18 committed `P0001` verify assertion identifiers. Repository
+implementation is Green at `8f45604`. Its first bounded invocation observed
+that the exact `linux/arm64` image was not cached and stopped under the no-pull
+rule before Docker resource creation, PostgreSQL or SQL.
+
+**Boundary:** no arbitrary PostgreSQL message, SQL, detail or data crosses the
+diagnostic membrane. No verify correction is permitted without an observed
+identifier. The unchanged-cache invocation is not repeated. Production, real
+data, push, merge and Gate C remain closed.
+
+**Reason:** the previous body-free receipt discarded the assertion identifier,
+but guessing a durable verify change would be unsafe. The next decision is
+whether to acquire the same exact image; it is not a reason to widen schema or
+verification meaning.
+
 ## 2026-08-17 — Prove the PostgreSQL 16 schema correction and stop at verify
 
 **Decision:** the Owner approved one medium-grained #77 compatibility envelope:

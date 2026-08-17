@@ -1,7 +1,7 @@
 {
   "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v2",
   "issue": 77,
-  "status": "VERIFY_CONTRACT_REVIEW_REQUIRED",
+  "status": "VERIFY_DIAGNOSTIC_BLOCKED_IMAGE_CACHE_ABSENT",
   "productProgress": 0,
   "attemptBudget": {
     "originalEnvelope": {
@@ -13,6 +13,13 @@
     "schemaCompatibilityCorrection": {
       "fullLifecyclesAllowed": 1,
       "fullLifecyclesConsumed": 1,
+      "anonymousImagePullsAllowed": 0,
+      "anonymousImagePullsConsumed": 0
+    },
+    "bodyFreeVerifyDiagnostic": {
+      "diagnosticInvocationsAllowed": 2,
+      "diagnosticInvocationsConsumed": 1,
+      "fullLifecyclesStarted": 0,
       "anonymousImagePullsAllowed": 0,
       "anonymousImagePullsConsumed": 0
     }
@@ -31,6 +38,13 @@
       "schemaSqlSha256": "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
       "verifySqlSha256": "sha256:a34737a9f970c701013896fac996adfa9a5d76e4104c5be0656cf24ed0db8091",
       "rollbackSqlSha256": "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d"
+    },
+    "bodyFreeVerifyDiagnostic": {
+      "commit": "8f456041b9b98d775acd8bbfe5447b54ebb82ba8",
+      "tree": "0a26ac1340d83115f913b5357ffcbc97234eb76b",
+      "runnerSha256": "sha256:ed62e206df9b002ef42922e96d5f363f8cfe8bd35d0bae1f8cd268fd75171c13",
+      "testSha256": "sha256:162831e64e5595ff90a6b0775b204d6e911ad06450ed94ab7fd8a7cf53de6f0d",
+      "verifyAssertionEnumCount": 18
     }
   },
   "attempts": [
@@ -123,17 +137,60 @@
         "volume": true,
         "credentialAndRuntimeRoot": true
       }
+    },
+    {
+      "runId": "1a4475357b9e25c1",
+      "bindingSet": "bodyFreeVerifyDiagnostic",
+      "startedAt": "2026-08-17T23:47:27.946Z",
+      "finishedAt": "2026-08-17T23:47:29.106Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": false,
+      "exactImageCached": false,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": false,
+      "schemaApplied": false,
+      "verifyCount": 0,
+      "failure": {
+        "code": "disposable_postgres_image_not_cached",
+        "phase": "docker.image.inspect",
+        "verifyAssertion": null
+      },
+      "dockerCallCounts": {
+        "version": 1,
+        "image.inspect": 1,
+        "container.list": 2,
+        "network.list": 2,
+        "volume.list": 2
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
     }
   ],
   "validation": {
     "focusedHarnessTests": {
-      "passed": 51,
+      "passed": 11,
       "failed": 0
     },
     "offlineR4Regression": {
-      "passed": 584,
+      "passed": 585,
       "failed": 0,
       "skippedHistoricalPhysicalRunnerTests": 111
+    },
+    "spineRegression": {
+      "passed": 45,
+      "failed": 0
+    },
+    "gateBCoreRegression": {
+      "passed": 146,
+      "failed": 0
     },
     "spineTypecheck": "GREEN",
     "roomTypecheck": "GREEN",
@@ -149,13 +206,14 @@
     "productionEffects": 0,
     "publicTrafficEffects": 0,
     "gateCEffects": 0,
-    "pinnedImageCacheRetained": true
+    "exactImageCachedAtLatestDiagnostic": false,
+    "imagePullsInLatestDiagnostic": 0
   },
   "inference": {
-    "classification": "SCHEMA_COMPATIBILITY_CORRECTION_PROVEN_VERIFY_CONTRACT_DRIFT_REMAINS",
+    "classification": "BODY_FREE_VERIFY_DIAGNOSTIC_READY_IMAGE_CACHE_ABSENT",
     "confidence": "HIGH",
-    "basis": "The approved explicit-text correction changed no catalog signature frame and the only correction lifecycle applied the complete schema successfully on PostgreSQL 16.10. The next failure was the first read-only verify batch, which raised a project-defined P0001 exception.",
-    "suspectedArea": "One verify contract assertion disagrees with the schema PostgreSQL actually produced. The body-free diagnostic does not identify which named assertion, so no exact verify correction is claimed."
+    "basis": "The committed diagnostic maps only P0001 plus exec_stmt_raise in a verify phase to one of the 18 committed assertion identifiers and passed repository validation. Its first approved invocation observed that the exact image was no longer cached, performed no pull, created no Docker resource, and reached no PostgreSQL or SQL.",
+    "suspectedArea": "The named verify assertion remains unknown. No verify-only correction is justified until a later authorized lifecycle can run against the exact image."
   },
-  "stop": "DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN / INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED / VERIFY_CONTRACT_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "stop": "BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN / EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES / VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

@@ -15,7 +15,7 @@ Infrastructure is useful only when it removes a blocker from that story.
 
 ## Current truth
 
-Outcome after exercising this model and the later compatibility decision on #77:
+Outcome after exercising this model and the later compatibility and diagnostic decisions on #77:
 
 - the Owner approved one medium-grained two-lifecycle envelope;
 - ordinary implementation and repairs proceeded without per-hash approvals;
@@ -28,14 +28,17 @@ Outcome after exercising this model and the later compatibility decision on #77:
   lifecycle with no pull and no retry;
 - that correction applied the complete schema, then failed cleanly at the
   first read-only verify with project-defined `P0001 / exec_stmt_raise`;
-- all current-run residue is zero and the next action is repository-only
-  verify-contract review.
+- the later strict body-free diagnostic became repository Green, but its first
+  invocation found the exact image absent from cache and stopped under the
+  no-pull rule before resources, PostgreSQL or SQL;
+- all current-run residue is zero, the named assertion remains unknown, and
+  the next action is one decision on exact-image acquisition.
 
 Current stop:
 
-`DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+`BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 The reset-start truth below is retained as the checkpoint that preceded #77.

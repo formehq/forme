@@ -2,28 +2,29 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 has real local evidence but no product progress. The separately
-approved compatibility lifecycle proved that explicit catalog text casts let
-the complete schema apply on PostgreSQL 16.10. The first read-only verify then
-raised `P0001 / ERROR / exec_stmt_raise`; restart and rollback were not
-reached. The exact cached image was reused without pull.
+Enabler #77 has real local evidence but no product progress. The body-free
+verify diagnostic is repository Green and exposes only one of 18 committed
+assertion identifiers. Its first invocation found the exact image absent from
+cache, so the no-pull rule stopped before resources, PostgreSQL or SQL. The
+named verify assertion was not observed.
 
-All approved budgets are exhausted. Current-run container/network/volume,
-credential and runtime residue are zero; historical resources were untouched.
-Provider, real Guest, production, public traffic and Gate C effects are zero.
+Current-run container/network/volume, credential and runtime residue are zero;
+historical resources were untouched. Provider, real Guest, production, public
+traffic and Gate C effects are zero. The next decision is exact-image
+acquisition; repeating against the same absent cache adds no evidence.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation: focused `51/51`; offline R4 `584 passed / 0 failed /
-111 frozen historical-runner tests skipped`; spine/Room typecheck, docs audit
-and diff-check Green.
+Repository validation: focused `11/11`; offline R4 `585 passed / 0 failed /
+111 frozen historical-runner tests skipped`; spine `45/45`, Gate-B Core
+`146/146`, spine/Room typecheck, docs audit and diff-check Green.
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)

@@ -2,21 +2,20 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77 is `Needs Decision / Blocked`, not Ready. The approved PostgreSQL 16
-compatibility correction is proven: explicit catalog text casts allowed the
-complete schema to apply. Its sole cached-image lifecycle then failed cleanly
-in the first read-only verify batch with `P0001 / exec_stmt_raise`; restart and
-rollback were not reached. The run performed no pull and cleaned every owned
-resource to zero.
+#77 is `Needs Decision / Blocked`, not Ready. The strict body-free verify
+diagnostic is repository Green at `8f45604`, but its first approved invocation
+found the exact image absent from cache. The no-pull rule stopped before
+resource creation, PostgreSQL or SQL; every exact-owned resource and local
+runtime path is absent. The named verify assertion remains unobserved.
 
-Do not run Docker/PostgreSQL again or create a child Enabler/Card chain. The
-next task is repository-only verify-contract review. Any change to durable
-schema or verify meaning returns to the Owner. #67 stays `Building / At Risk`
-and earns no product progress from this Enabler.
+Do not repeat the same diagnostic against an unchanged empty cache or create a
+child Enabler/Card chain. The next task is one Owner decision on acquiring the
+same exact image. Any schema or verify meaning change still returns to the
+Owner. #67 stays `Building / At Risk` and earns no product progress here.
 
-Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
-INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
-VERIFY_CONTRACT_REVIEW_REQUIRED /
+Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
+EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
+VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
