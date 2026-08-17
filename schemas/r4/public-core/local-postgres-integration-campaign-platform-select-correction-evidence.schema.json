@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json",
+  "title": "R4 Public Core local PostgreSQL platform-select correction evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion", "status", "generatedAt", "authority", "lineage", "workset", "correction",
+    "historicalFailures", "validation", "effects", "readiness", "artifacts", "documentationScope", "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4.public-core-local-postgres-integration-campaign-platform-select-correction-evidence.v1"
+    },
+    "status": { "const": "IMPLEMENTATION_EVIDENCE_GREEN" },
+    "generatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "authority": {
+      "const": {
+        "addendumSha256": "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d",
+        "addendumHead": "5878e51dbf12999a31f99e72d734bd49a63e9f20",
+        "addendumTree": "ea74620b70369698230ceae9d172c6b7e88e254a",
+        "reviewSha256": "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8",
+        "reviewHead": "e548933a598c9e62c99dc0caaf4c52b7bf13ff32",
+        "reviewTree": "75c73c16c81ee3dafd082dfac3bf4758068f474f"
+      }
+    },
+    "lineage": {
+      "const": {
+        "implementationHead": "8af66535eb37925d9286c8b6d4f14501d372e4c5",
+        "implementationTree": "274c364c493bfd808555a60eabeac60ed4464d00",
+        "implementationParentHead": "e548933a598c9e62c99dc0caaf4c52b7bf13ff32",
+        "implementationAggregateSha256": "sha256:f48f2a8d82527423f32a7eabd1f727c31b277f57c7b9cac1d4e24e0f0650bb4c"
+      }
+    },
+    "workset": {
+      "const": {
+        "implementationPaths": 2,
+        "evidencePaths": 3,
+        "statusPaths": 10,
+        "totalPaths": 15,
+        "modifiedPaths": 11,
+        "addedPaths": 4,
+        "commits": 3
+      }
+    },
+    "correction": {
+      "const": {
+        "imageReference": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+        "imagePlatform": "linux/arm64",
+        "selectedManifestSha256": "sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf",
+        "inspectArgv": ["image", "inspect", "--platform", "linux/arm64", "--format", "{{json .}}", "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74"],
+        "mainPlanCorrected": true,
+        "manifestDiagnosticCorrected": true,
+        "acquisitionDiagnosticCorrected": true,
+        "identityChecksRelaxed": false,
+        "dockerCallCountChanged": false,
+        "retryAdded": false
+      }
+    },
+    "historicalFailures": {
+      "const": {
+        "campaignV2RootImmutable": true,
+        "campaignV2GrantSha256": "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582",
+        "campaignV2EvidenceSha256": "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889",
+        "campaignV2JournalEntryCount": 17,
+        "campaignV2JournalSha256": "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b",
+        "acquisitionV2RootImmutable": true,
+        "acquisitionV2GrantSha256": "sha256:874a96a348de7886e9e80d4f8ceaa8351b5e3a3f08c62032d2a8ca3028d060e2",
+        "acquisitionV2EvidenceSha256": "sha256:f8887a53641f73c344d3fe265940611a46ad1e38b076c39fd5f903951faee992",
+        "acquisitionV2JournalEntryCount": 16,
+        "acquisitionV2JournalSha256": "sha256:8a38c7f2a4946f67ee68bd29d1ea10ff8eb5a6d2d60589f5b590b0e19e9a0371"
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testLanes", "checkLanes", "sourceInventory", "candidateL"],
+      "properties": {
+        "testLanes": {
+          "const": [
+            { "lane": "platform_select_focused", "total": 4, "passed": 4, "failed": 0 },
+            { "lane": "integration_campaign_focused", "total": 14, "passed": 14, "failed": 0 },
+            { "lane": "local_postgres_runner", "total": 188, "passed": 188, "failed": 0 },
+            { "lane": "r4_offline", "total": 760, "passed": 760, "failed": 0 },
+            { "lane": "gate_b_core", "total": 146, "passed": 146, "failed": 0 },
+            { "lane": "spine", "total": 45, "passed": 45, "failed": 0 }
+          ]
+        },
+        "checkLanes": {
+          "const": {
+            "runnerSyntax": "GREEN",
+            "typecheck": "GREEN",
+            "noAi": "GREEN",
+            "docsAudit": "GREEN",
+            "diffCheck": "GREEN"
+          }
+        },
+        "sourceInventory": {
+          "const": {
+            "fileCount": 303,
+            "sha256": "sha256:5d8c73ce311b8127ca342ad577ef8081526c78b1fdeee2b2fe2002a15a363cc8"
+          }
+        },
+        "candidateL": {
+          "const": {
+            "jsonParsed": true,
+            "strictSchemaCompiled": true,
+            "evidenceValidated": true,
+            "hostileMutationsRejected": 8,
+            "blockers": 0,
+            "important": 0
+          }
+        }
+      }
+    },
+    "effects": {
+      "const": {
+        "repositoryPathWrites": 5,
+        "network": 0,
+        "dockerCli": 0,
+        "dockerSocket": 0,
+        "dockerDaemon": 0,
+        "imagePull": 0,
+        "cleanup": 0,
+        "postgres": 0,
+        "sql": 0,
+        "productRuntime": 0,
+        "production": 0,
+        "gateC": 0
+      }
+    },
+    "readiness": {
+      "const": {
+        "platformSelectionConstructed": true,
+        "v3GrantConstructed": true,
+        "v3JournalConstructed": true,
+        "v3ReceiptConstructed": true,
+        "v3CardConstructed": false,
+        "v3CampaignPrepared": false,
+        "v3CampaignConsumed": false,
+        "targetPostgresObserved": false,
+        "catalogObserved": false,
+        "localPostgresWiringGreen": false,
+        "productionReady": false,
+        "gateCReady": false
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactIndexSha256", "evidenceSchemaSha256", "runnerSha256", "runnerTestSha256"],
+      "properties": {
+        "artifactIndexSha256": { "const": "sha256:3944b11ddf9c0d35f13f3528c3b48ea29d9419cd59da9baef4abc33e5fb10270" },
+        "evidenceSchemaSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "runnerSha256": { "const": "sha256:b1b86023efdbd70f0344af41d16393bd9d5fbc3a00ff82fb31f123ef567fcd33" },
+        "runnerTestSha256": { "const": "sha256:c974734eee248f95e9b9418d6298d632667fdf554b904c38330374b19464e658" }
+      }
+    },
+    "documentationScope": {
+      "const": {
+        "operationalCurrentStatusSurfacesCurrent": false,
+        "wholeRepositoryDocumentationCurrentClaimed": false,
+        "statusFreezeRequired": true
+      }
+    },
+    "stop": {
+      "const": "LOCAL_POSTGRES_PLATFORM_SELECT_IMPLEMENTATION_EVIDENCE_GREEN / STATUS_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+    }
+  }
+}

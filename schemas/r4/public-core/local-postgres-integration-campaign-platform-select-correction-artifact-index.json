@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "r4.public-core-local-postgres-integration-campaign-platform-select-correction-artifact-index.v1",
+  "status": "IMPLEMENTATION_COMMITTED_VALIDATION_GREEN",
+  "authority": {
+    "addendumSha256": "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d",
+    "addendumHead": "5878e51dbf12999a31f99e72d734bd49a63e9f20",
+    "addendumTree": "ea74620b70369698230ceae9d172c6b7e88e254a",
+    "reviewSha256": "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8",
+    "reviewHead": "e548933a598c9e62c99dc0caaf4c52b7bf13ff32",
+    "reviewTree": "75c73c16c81ee3dafd082dfac3bf4758068f474f"
+  },
+  "lineage": {
+    "implementationHead": "8af66535eb37925d9286c8b6d4f14501d372e4c5",
+    "implementationTree": "274c364c493bfd808555a60eabeac60ed4464d00",
+    "implementationParentHead": "e548933a598c9e62c99dc0caaf4c52b7bf13ff32",
+    "implementationParentTree": "75c73c16c81ee3dafd082dfac3bf4758068f474f",
+    "implementationAggregateSha256": "sha256:f48f2a8d82527423f32a7eabd1f727c31b277f57c7b9cac1d4e24e0f0650bb4c",
+    "implementationAggregateFrameBytes": 243
+  },
+  "workset": {
+    "implementationPathCount": 2,
+    "evidencePathCount": 3,
+    "statusPathCount": 10,
+    "totalPathCount": 15,
+    "modifiedPathCount": 11,
+    "addedPathCount": 4,
+    "commitCount": 3,
+    "evidencePaths": [
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign-platform-select-correction.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json"
+    ],
+    "statusPaths": [
+      "README.md",
+      "docs/CONTROL.md",
+      "docs/DECISIONS.md",
+      "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+      "docs/PRODUCT.md",
+      "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+      "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md",
+      "docs/README.md",
+      "docs/ROADMAP.md",
+      "docs/VALIDATION.md"
+    ]
+  },
+  "implementationArtifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "status": "M",
+      "byteCount": 917901,
+      "sha256": "sha256:b1b86023efdbd70f0344af41d16393bd9d5fbc3a00ff82fb31f123ef567fcd33"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "status": "M",
+      "byteCount": 225276,
+      "sha256": "sha256:c974734eee248f95e9b9418d6298d632667fdf554b904c38330374b19464e658"
+    }
+  ],
+  "correction": {
+    "imageReference": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "imagePlatform": "linux/arm64",
+    "selectedManifestSha256": "sha256:a64c3894964de33920f4de7cc1e88dfdfa3284bcb0c7c760a0512680a34a8faf",
+    "inspectArgvPrefix": ["image", "inspect", "--platform", "linux/arm64"],
+    "identityChecksRelaxed": false,
+    "dockerCallCountChanged": false,
+    "retryAdded": false
+  },
+  "historicalFailures": {
+    "campaignV2ConsumedGrantSha256": "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582",
+    "campaignV2EvidenceSha256": "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889",
+    "campaignV2JournalEntryCount": 17,
+    "campaignV2JournalSha256": "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b",
+    "acquisitionV2ConsumedGrantSha256": "sha256:874a96a348de7886e9e80d4f8ceaa8351b5e3a3f08c62032d2a8ca3028d060e2",
+    "acquisitionV2EvidenceSha256": "sha256:f8887a53641f73c344d3fe265940611a46ad1e38b076c39fd5f903951faee992",
+    "acquisitionV2JournalEntryCount": 16,
+    "acquisitionV2JournalSha256": "sha256:8a38c7f2a4946f67ee68bd29d1ea10ff8eb5a6d2d60589f5b590b0e19e9a0371"
+  },
+  "immutableBindings": {
+    "packageLockSha256": "sha256:8173f0ea545f7a3ab107514fea1437601f9cf82d6e987f14aed6d74dcf722d8f",
+    "pgImportClosureSha256": "sha256:548fc49130c7a1bcc42f03f5494ed30c614838e33a45ffe35208b23e389972f4",
+    "pgImportClosureFileCount": 145,
+    "pgImportClosurePackageCount": 15,
+    "schemaSqlSha256": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8",
+    "verifySqlSha256": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd",
+    "rollbackSqlSha256": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4",
+    "catalogContractSha256": "sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4"
+  },
+  "effects": {
+    "repositoryWrites": 2,
+    "network": 0,
+    "dockerCli": 0,
+    "dockerDaemon": 0,
+    "imagePull": 0,
+    "postgres": 0,
+    "sql": 0,
+    "production": 0,
+    "gateC": 0
+  },
+  "stop": "LOCAL_POSTGRES_PLATFORM_SELECT_IMPLEMENTATION_EVIDENCE_GREEN / STATUS_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+}
