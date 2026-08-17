@@ -2,19 +2,19 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-The medium-grained #77 envelope has been exercised and is now exhausted. The
-new harness-native development command proved the local Docker/PostgreSQL
-body, unique run ownership and exact cleanup without reviving Forme authority
-documents. Two isolated PostgreSQL 16.10 runs then failed at the current
-hash-pinned schema boundary; the second returned `42725 / op_error`.
+The separately approved #77 compatibility envelope is now exhausted. The
+harness-native command reused the cached image, applied the PostgreSQL 16-
+compatible schema, then failed cleanly at the first read-only verify contract
+with `P0001 / exec_stmt_raise`. Exact cleanup remained Green and no pull ran.
 
-This does not alter NH1/NH2. It confirms that ordinary disposable computation
-can be managed by one outcome envelope, while a durable schema correction
-still returns to the Owner. No third lifecycle, schema change, production,
+This does not alter NH1/NH2. It confirms both halves of the boundary: ordinary
+disposable computation can advance under one outcome envelope, while durable
+verify meaning returns to the Owner. No additional lifecycle, production,
 Guest/provider, public traffic or Gate C action is authorized.
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

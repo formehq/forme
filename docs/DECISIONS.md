@@ -2,6 +2,27 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Prove the PostgreSQL 16 schema correction and stop at verify
+
+**Decision:** the Owner approved one medium-grained #77 compatibility envelope:
+explicit text conversion only in catalog signature expressions, necessary
+hash/test/evidence propagation, and one cached-image lifecycle with zero pull
+and no retry. Commit `7d14897` preserves the catalog signature frame while
+changing PostgreSQL operator resolution. The lifecycle applied the complete
+schema, then stopped cleanly in the first read-only verify with project-defined
+`P0001 / exec_stmt_raise`.
+
+**Boundary:** the compatibility lifecycle is consumed. Container, network,
+volume, credential and runtime residue are zero. Production, real Guest or
+provider data, public traffic, push, merge and Gate C remain closed. The
+historical physical runner keeps its old SQL authority and fails closed against
+the new bytes.
+
+**Reason:** schema apply proves the `42725` compatibility diagnosis, but a
+read-only verify assertion still disagrees with the schema PostgreSQL produced.
+The next action is repository-only verify-contract review. No additional
+Docker/PostgreSQL lifecycle or durable meaning change is implied.
+
 ## 2026-08-17 — Stop #77 at the schema boundary after two clean attempts
 
 **Decision:** the approved medium-grained #77 envelope is exhausted after two

@@ -15,20 +15,27 @@ Infrastructure is useful only when it removes a blocker from that story.
 
 ## Current truth
 
-Outcome after exercising this model on #77:
+Outcome after exercising this model and the later compatibility decision on #77:
 
 - the Owner approved one medium-grained two-lifecycle envelope;
 - ordinary implementation and repairs proceeded without per-hash approvals;
 - both isolated runs reached PostgreSQL and cleaned exactly;
 - both failed at the same first-schema boundary, with the second reporting
   PostgreSQL `42725 / op_error`;
-- the budget rule therefore moves #77 to `Needs Decision` and schema
-  architecture review, without creating another Enabler or authority tree.
+- the budget rule moved #77 to `Needs Decision` without creating another
+  Enabler or authority tree;
+- the Owner then approved one catalog-cast correction plus one cached-image
+  lifecycle with no pull and no retry;
+- that correction applied the complete schema, then failed cleanly at the
+  first read-only verify with project-defined `P0001 / exec_stmt_raise`;
+- all current-run residue is zero and the next action is repository-only
+  verify-contract review.
 
 Current stop:
 
-`DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+`DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 The reset-start truth below is retained as the checkpoint that preceded #77.

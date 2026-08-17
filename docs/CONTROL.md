@@ -2,21 +2,21 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77 is now `Needs Decision / Blocked`, not Ready. The approved simplified
-rehearsal reached Docker and PostgreSQL correctly in two isolated runs, then
-failed the same first-schema boundary twice. The second structured failure was
-PostgreSQL `42725 / op_error`. Both runs cleaned current-run
-container/network/volume/credential/runtime residue to zero; the exact image
-cache remains by design.
+#77 is `Needs Decision / Blocked`, not Ready. The approved PostgreSQL 16
+compatibility correction is proven: explicit catalog text casts allowed the
+complete schema to apply. Its sole cached-image lifecycle then failed cleanly
+in the first read-only verify batch with `P0001 / exec_stmt_raise`; restart and
+rollback were not reached. The run performed no pull and cleaned every owned
+resource to zero.
 
-Do not run Docker/PostgreSQL again, modify the hash-pinned SQL, or create a
-child Enabler/Card chain. The owner decision is one schema-compatibility
-review: confirm the ambiguous expression, choose the durable correction and
-only then decide whether to allocate a fresh physical budget. #67 stays
-`Building / At Risk` and earns no progress from this Enabler.
+Do not run Docker/PostgreSQL again or create a child Enabler/Card chain. The
+next task is repository-only verify-contract review. Any change to durable
+schema or verify meaning returns to the Owner. #67 stays `Building / At Risk`
+and earns no product progress from this Enabler.
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

@@ -4,18 +4,20 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77 has consumed its two approved local lifecycles and is now `Needs
-Decision`. Both ordinary, uniquely owned runs reached PostgreSQL 16.10 and
-cleaned exactly; both failed on the first current-schema batch. The second
-returned PostgreSQL `42725 / op_error`. The next action is a schema-
-compatibility review, not another Docker retry or approval-document chain.
+#77 has also consumed its separately approved one-lifecycle compatibility
+budget. Explicit catalog text casts let the complete schema apply on
+PostgreSQL 16.10. The first read-only verify batch then raised project-defined
+`P0001 / exec_stmt_raise`; restart and rollback were not reached. The cached
+image was reused without pull and cleanup was exact. The next action is a
+verify-contract review, not another Docker run or approval-document chain.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

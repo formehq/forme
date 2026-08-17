@@ -8,17 +8,18 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
-Enabler #77 has now used its approved two-lifecycle budget. The new ordinary
-development command reached isolated PostgreSQL 16.10 twice and cleaned every
-current-run resource both times, but the current hash-pinned schema failed at
-its first batch with PostgreSQL `42725 / op_error` (ambiguous overloaded SQL
-operator). This is `0 Product Progress`: Docker is no longer the mystery, but
-schema compatibility now needs an Owner review before any correction or new
-physical budget. See the
+The approved #77 PostgreSQL 16 compatibility correction has now used its one
+cached-image lifecycle. The explicit catalog text casts worked: the complete
+schema applied successfully. The run then failed cleanly in the first
+read-only verify batch with project-defined `P0001 / exec_stmt_raise`, before
+restart or rollback. Exact cleanup is Green and no pull occurred. This remains
+`0 Product Progress`; the next task is verify-contract review, not another
+Docker run. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77

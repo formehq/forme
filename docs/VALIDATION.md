@@ -2,24 +2,28 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 produced real local evidence but no product progress. Two isolated
-lifecycles both proved Docker `29.3.1 / linux/arm64`, the exact pinned image,
-PostgreSQL 16.10 readiness and exact current-run cleanup. Both failed cleanly
-on the first schema batch. The second preserved structural PostgreSQL evidence
-`42725 / ERROR / op_error`, identifying an overloaded-operator ambiguity.
+Enabler #77 has real local evidence but no product progress. The separately
+approved compatibility lifecycle proved that explicit catalog text casts let
+the complete schema apply on PostgreSQL 16.10. The first read-only verify then
+raised `P0001 / ERROR / exec_stmt_raise`; restart and rollback were not
+reached. The exact cached image was reused without pull.
 
-The approved budget is exhausted. Current-run container/network/volume,
-credential and runtime residue are zero; historical resources were untouched;
-the pinned image cache remains intentionally. Provider, real Guest,
-production, public traffic and Gate C effects are zero.
+All approved budgets are exhausted. Current-run container/network/volume,
+credential and runtime residue are zero; historical resources were untouched.
+Provider, real Guest, production, public traffic and Gate C effects are zero.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Repository validation: focused `51/51`; offline R4 `584 passed / 0 failed /
+111 frozen historical-runner tests skipped`; spine/Room typecheck, docs audit
+and diff-check Green.
+
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)

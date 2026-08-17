@@ -2,21 +2,21 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77 is now `Needs Decision`. Its simplified ordinary development path
-reached a real isolated PostgreSQL 16.10 twice, with the pinned image, local
-loopback connection and exact cleanup all proven. Both approved lifecycles
-then failed cleanly on the first current-schema batch. The second returned
-PostgreSQL `42725 / op_error`, identifying an overloaded-operator ambiguity in
-the hash-pinned SQL surface. No verify, restart proof or rollback was claimed.
+Enabler #77 remains `Needs Decision`, but the approved PostgreSQL 16
+compatibility correction removed the first blocker. Its sole cached-image
+lifecycle applied the complete schema, proving the explicit catalog text
+casts. The first read-only verify batch then raised project-defined `P0001 /
+exec_stmt_raise`; restart proof and rollback were not reached. No pull occurred
+and exact cleanup was Green.
 
-This is `0 Product Progress`. The #67 experience is still `Building / At Risk`.
-The next decision is a narrow schema-compatibility review; changing those
-durable bytes was outside the approved envelope, and no third lifecycle is
-available. See
+This is still `0 Product Progress`. The #67 experience remains `Building / At
+Risk`. The next action is a repository-only verify-contract review; the new
+physical budget is exhausted. See
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

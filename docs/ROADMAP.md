@@ -2,19 +2,20 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77 is `Needs Decision`: two approved isolated lifecycles reached PostgreSQL
-16.10 and cleaned exactly, then failed the same current-schema boundary. The
-second failure was PostgreSQL `42725 / op_error`. This Enabler earns `0 Product
-Progress`; #67 remains `Building / At Risk`.
+#77 remains `Needs Decision`: the one approved compatibility lifecycle proved
+schema apply on PostgreSQL 16.10, then failed cleanly in the first read-only
+verify batch with project-defined `P0001`. No pull ran and cleanup was exact.
+This Enabler still earns `0 Product Progress`; #67 remains `Building / At
+Risk`.
 
-The next roadmap action is a schema-compatibility architecture review, not a
-third retry and not another Enabler. Confirm the exact ambiguous expression,
-decide whether explicit catalog-type casts preserve the intended durable
-contract, then separately choose any replacement lifecycle budget. The Public
-Room → knock → candidate → response path remains unchanged.
+The next roadmap action is repository-only verify-contract review, not another
+physical lifecycle and not another Enabler. Identify the named assertion that
+disagrees with the produced schema, then return any durable meaning change to
+the Owner. The Public Room → knock → candidate → response path is unchanged.
 
-Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
-TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+Current stop: `DISPOSABLE_POSTGRES_SCHEMA_COMPATIBILITY_CORRECTION_PROVEN /
+INITIAL_VERIFY_FAILED_CLEAN / CORRECTION_LIFECYCLE_BUDGET_EXHAUSTED /
+VERIFY_CONTRACT_REVIEW_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
