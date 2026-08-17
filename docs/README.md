@@ -2,21 +2,25 @@
 
 The repository keeps a deliberately small decision surface.
 
-## Current execution truth — 2026-08-16
+## Current execution truth — 2026-08-17
 
-R4 #67 remains Building and off `main`. Platform selection is now corrected
-and committed at Kps `8af6653` / Lps `10fbc3c`; the exact pinned
-`linux/arm64` manifest is selected before validation without adding a call,
-pull or retry. Repository validation is Green and construction effects on
-Docker/PostgreSQL/SQL are zero. V3 Card/Review and one fresh disposable local
-campaign are next. Target PostgreSQL/catalog, production traffic and Gate C
-remain unobserved/closed. Current artifacts are index `sha256:3944b11d…0270`,
-schema `sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b` and
-[report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md)
-`sha256:348760e3…c78c`.
+R4 #67 remains Building and off `main`. Integration Campaign V3 reached the
+local Docker daemon, matched `29.3.1` / `linux/arm64`, then failed closed on a
+previously unknown body-free historical container-missing fingerprint before
+PostgreSQL. Kif `169a05f` / Lif `2d5fc50` now admit only that exact tuple;
+all mutations remain unknown and fail closed. Repository validation is Green
+and correction construction effects on Docker/PostgreSQL/SQL are zero. Target
+PostgreSQL/catalog, production traffic and Gate C remain unobserved/closed.
+Current artifacts are index `sha256:d2d06ec5…bfe3`, schema
+`sha256:a2193363…cf3f`, evidence `sha256:f981594d…479b8` and
+[report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:b277ab9d…88dd`.
 
-Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+The next bounded step is add-only V4 Card/Review followed, only after exact
+audit, by the final remaining disposable local lifecycle.
+
+Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Earlier execution snapshot (historical context)
@@ -68,6 +72,7 @@ Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was the body-free image-manifest diagnostic constructed without authorizing its Docker call, pull, cleanup or PostgreSQL? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a separate one-use image-acquisition diagnostic constructed without calling Docker, pulling an image, cleaning resources or touching PostgreSQL? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md) | How was the failed V1 acquisition authority preserved and a fresh add-only V2 replacement path constructed without calling Docker or touching PostgreSQL? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact V3 body-free missing-object fingerprint admitted without exposing its body, widening effects or claiming PostgreSQL Green? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

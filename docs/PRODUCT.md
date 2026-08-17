@@ -1,18 +1,20 @@
 # Product
 
-## Superseding R4 product status — 2026-08-16
+## Superseding R4 product status — 2026-08-17
 
 The next MVP proof is still one Green disposable local PostgreSQL rehearsal,
-not production. The platform-select correction is committed and validated at
-Kps `8af6653` / Lps `10fbc3c`: Docker is now asked for the exact
-`linux/arm64` manifest before the existing exact identity checks. This
-construction made zero Docker/PG/SQL effects. A fresh V3 Card/Review and one
-local lifecycle are next; target PostgreSQL, catalog `14/207/172/44`, product
+not production. V3 reached the real local Docker daemon, matched
+`29.3.1` / `linux/arm64`, and then stopped safely on a previously unknown
+body-free historical container-missing fingerprint before PostgreSQL. Kif
+`169a05f` / Lif `2d5fc50` now correct that exact classification without
+admitting the message body or widening effects. Construction made zero
+Docker/PG/SQL effects. A fresh V4 Card/Review and the final remaining local
+lifecycle are next; target PostgreSQL, catalog `14/207/172/44`, product
 runtime, public traffic and Gate C remain unobserved/false. R4 remains
 Building, not Owner-accepted and not Done.
 
-Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Earlier product status snapshot (historical context)

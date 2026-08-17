@@ -6,20 +6,27 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding current update — 2026-08-16
+### Superseding current update — 2026-08-17
 
-R4 #67 now has a committed platform-select correction at Kps `8af6653` and
-Lps `10fbc3c`. Exact `docker image inspect --platform linux/arm64` selection
-returns the already-pinned manifest; identity checks, call counts and no-retry
-rules are unchanged. The construction is repository-only and validated at
-188/188 runner, 760/760 offline, 146/146 Gate-B Core and 45/45 spine. Docker,
-PostgreSQL, SQL, production and Gate C effects were zero. The next bounded step
-is a fresh V3 Campaign Card/Review and one disposable local rehearsal; target
-PostgreSQL and catalog have not yet been observed. See the
-[construction report](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md).
+R4 #67 now has a committed inspect-fingerprint correction at Kif `169a05f`
+and Lif `2d5fc50`. Integration Campaign V3 remains immutable failed history:
+Docker `version` matched `29.3.1` on `linux/arm64`, then the first read-only
+historical container inspect returned a previously unknown body-free
+missing-object frame. The runner stopped before PostgreSQL and left all fresh
+resource states proven absent with zero fresh residue. The correction admits
+only the exact command/target/exit/framing/byte-count/SHA tuple; every mutated
+field still fails closed. Validation is 15/15 focused, 189/189 runner,
+761/761 offline, 146/146 Gate-B Core and 45/45 spine. Correction construction
+made zero Docker, PostgreSQL, SQL, production and Gate C effects. Target
+PostgreSQL and catalog remain unobserved. See the
+[construction report](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md).
 
-Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+The next bounded step is a fresh add-only V4 Card/Review and, only after their
+exact audit, the final remaining disposable local campaign lifecycle. No retry
+or production authority is implied.
+
+Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ### Earlier current-state snapshot (historical context)

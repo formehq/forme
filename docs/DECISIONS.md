@@ -1733,3 +1733,56 @@ effects.
 Only the two reserved add-only V2 Card/Review documents may follow. Diagnostic
 prepare/consumption still requires one separate exact Owner approval. #67 and
 R4 remain open.
+
+## 2026-08-17 — Integration Campaign inspect-fingerprint correction reached repository Technical Review Green
+
+**Decision:** preserve Integration Campaign V3 as consumed, non-retryable
+failed history and accept the narrow repository-only correction for the exact
+body-free historical `container.inspect` missing-object fingerprint. The
+diagnostic body is not admitted. Any mutation to command kind, exact target,
+process outcome, signal, UTF-8/line framing, byte count or SHA remains unknown
+and fails closed. This does not widen Docker, PostgreSQL, SQL, production or
+Gate C authority.
+
+**Failed V3 truth:** root
+`/Users/zaynw/.forme-r4-integration-campaign-v3-37adbcbb` consumed grant
+`sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7`.
+Terminal evidence is
+`sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac`
+and journal `9` ends at
+`sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5`.
+Docker version/platform matched; PostgreSQL and SQL were not reached; fresh
+container/network/volume states were proven absent and fresh residue was zero.
+
+**Result:** Addendum/Review hashes are
+`sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39`
+and
+`sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37`.
+Kif `169a05f0e00a5afdb9cc920c0d3591a90eaa4fe6` / tree
+`efabdf042824e9fcde653006cdda58484deed38c` freezes the exact two-path
+runner/test correction; G2 is
+`sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e`.
+Lif `2d5fc50db12024c8d8fb564e7b61ced96ab6d592` / tree
+`df6fbe0d9c198a13c99368b1296d0d4741b8dcc3` freezes the exact three-file
+machine-evidence delta; G3 is
+`sha256:920737b7ab3be7efdb47cc968430b07ba2016c9480f728aae359bf2eebc3a4d1`.
+The index/schema/evidence/report hashes are
+`sha256:d2d06ec56ba45098902ee862e105da8024eb1e57a6a99d926a4aacde647abfe3`,
+`sha256:a21933635e1c567405b00027c9b6b9da11860822573339022c1593c4bb63cf3f`,
+`sha256:f981594dc1c20b96c2fae2569d7612b02f1f7e44f2323ea9b8731c04ef8479b8`
+and
+`sha256:b277ab9d58cdf5354417191c9b0a124bd5302777fa9dbc3b21395e79335988dd`.
+
+**Validation and effect:** focused 15/15, runner 189/189, R4 offline
+761/761, exact Gate-B Core rerun 146/146 and spine 45/45 are Green. The first
+aggregate Gate-B attempt's 143 pass / 0 fail / 1 cancelled pending Promise is
+retained alongside focused macOS 11/11 and the exact 146/146 rerun. Strict Ajv,
+hostile mutations, TypeScript, no-AI, docs, inventory and diff checks are
+Green. Construction made zero Docker/socket/network/PostgreSQL/SQL,
+product-runtime, production, publication, Provider, message, spend or Gate C
+effects.
+
+**Stop:** `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only fresh add-only V4 Card/Review authority may precede the final remaining
+disposable local lifecycle. Target PostgreSQL/catalog remain unobserved; #67
+and R4 remain open.

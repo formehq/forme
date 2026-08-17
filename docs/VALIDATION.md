@@ -1492,3 +1492,45 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`. Only the reserved add-only V2 Card/Review may follow
   before the next one-use local-effect decision.
+
+## Evidence round 32 — V3 failure and inspect-fingerprint correction
+
+- Case: Integration Campaign V3 was prepared and consumed once. Docker
+  `version` matched `29.3.1` / `linux/arm64`; the first historical
+  `container.inspect` then completed exit `1` with a body-free missing-object
+  frame absent from the literal allowlist. The runner classified it `UNKNOWN`
+  and stopped before PostgreSQL, which was the correct conservative behavior.
+- Failed immutable evidence: consumed grant
+  `sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7`,
+  terminal evidence
+  `sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac`,
+  journal `9` / head
+  `sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5`.
+  Fresh container/network/volume states were proven absent; fresh residue was
+  zero; PostgreSQL/SQL were not reached.
+- Repository correction: Kif `169a05f` / Lif `2d5fc50` bind G2
+  `sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e`
+  and G3
+  `sha256:920737b7ab3be7efdb47cc968430b07ba2016c9480f728aae359bf2eebc3a4d1`.
+  Index/schema/evidence/report are `sha256:d2d06ec5…bfe3`,
+  `sha256:a2193363…cf3f`, `sha256:f981594d…479b8` and
+  `sha256:b277ab9d…88dd`. The exact command/target/process/framing/byte/hash tuple
+  is accepted without storing the diagnostic body; every field mutation fails
+  closed.
+- Validation: 15/15 focused, 189/189 runner, 761/761 R4 offline, 146/146
+  exact Gate-B Core rerun and 45/45 spine; strict Ajv plus eight hostile
+  mutations, TypeScript, no-AI, docs, inventory and diff checks Green. The
+  earlier interrupted Gate-B aggregate attempt is truthfully retained as
+  143 pass / 0 fail / 1 cancelled pending Promise, followed by macOS 11/11 and
+  the exact complete 146/146 rerun.
+- Effect truth: correction construction made zero Docker/socket/network,
+  PostgreSQL/SQL, product-runtime, production, publication, Provider, message,
+  spend and Gate C effects.
+- Product judgment: this closes the exact V3 classification gap and preserves
+  the final remaining disposable campaign path. It does not yet prove the
+  local PostgreSQL rehearsal or the real Public Room encounter.
+- Consequence: stop at
+  `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Freeze and audit add-only V4 Card/Review before any
+  final local lifecycle; no retry, Production or Gate C action is implied.

@@ -1,29 +1,44 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_PLATFORM_SELECT_CORRECTION_GREEN_LOCAL_V3_CAMPAIGN_NEXT_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
-- Updated: 2026-08-16
-- Current predecessor: Local PostgreSQL Integration Campaign Platform-Select Correction construction
+- Status: **`SUCCESSOR_NOT_APPROVABLE_INSPECT_FINGERPRINT_CORRECTION_GREEN_FINAL_LOCAL_V4_CAMPAIGN_NEXT_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Updated: 2026-08-17
+- Current predecessor: Local PostgreSQL Integration Campaign Inspect-Fingerprint Correction construction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the repository-only Image-Acquisition Replacement
-Authority construction reached Technical Review Green. It cannot prepare or consume a
-diagnostic grant, call Docker, pull an image, inspect or remove named Docker
+Gate C is still closed after the repository-only Inspect-Fingerprint Correction
+construction reached Technical Review Green. It cannot prepare or consume a
+campaign grant, call Docker, pull an image, inspect or remove named Docker
 resources, run PostgreSQL, migrate production, activate a route or carry
 traffic.
 
 ## Current truth
 
-Kps `8af6653` and Lps `10fbc3c` now select the exact `linux/arm64`
-manifest before the existing digest/platform checks. The correction is
-repository-only, validated, and made zero Docker/PG/SQL effects. The next
-bounded step is V3 Campaign Card/Review followed by one fresh disposable local
-campaign. Target PostgreSQL and catalog are not yet observed; production,
-traffic and Gate C remain false. This card is not Gate-C authority.
+Integration Campaign V3 reached the local Docker daemon and matched
+`29.3.1` / `linux/arm64`, then stopped before PostgreSQL because the first
+historical container inspect returned a body-free missing-object frame absent
+from the old literal allowlist. Kif `169a05f` and Lif `2d5fc50` now classify
+only that exact command/target/exit/framing/byte/hash tuple as missing; any
+mutation remains unknown and fails closed. Correction construction is
+repository-only and made zero Docker/PG/SQL effects. The next bounded step is
+V4 Campaign Card/Review followed, only after exact audit, by the final
+remaining disposable local lifecycle. Target PostgreSQL and catalog are not
+yet observed; production, traffic and Gate C remain false. This card is not
+Gate-C authority.
 
-Current construction artifacts: index `sha256:3944b11d…0270`, schema
-`sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b`, report
-`sha256:348760e3…c78c`.
+Current construction artifacts: index `sha256:d2d06ec5…bfe3`, schema
+`sha256:a2193363…cf3f`, evidence `sha256:f981594d…479b8`, report
+`sha256:b277ab9d…88dd`.
+
+### Current correction bindings
+
+| Binding | Exact value |
+|---|---|
+| Inspect-Fingerprint Addendum / Review | `sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39` / `sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37` |
+| Kif HEAD / tree / G2 | `169a05f0e00a5afdb9cc920c0d3591a90eaa4fe6` / `efabdf042824e9fcde653006cdda58484deed38c` / `sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e` |
+| Lif HEAD / tree / G3 | `2d5fc50db12024c8d8fb564e7b61ced96ab6d592` / `df6fbe0d9c198a13c99368b1296d0d4741b8dcc3` / `sha256:920737b7ab3be7efdb47cc968430b07ba2016c9480f728aae359bf2eebc3a4d1` |
+| index / schema / evidence / report | `sha256:d2d06ec56ba45098902ee862e105da8024eb1e57a6a99d926a4aacde647abfe3` / `sha256:a21933635e1c567405b00027c9b6b9da11860822573339022c1593c4bb63cf3f` / `sha256:f981594dc1c20b96c2fae2569d7612b02f1f7e44f2323ea9b8731c04ef8479b8` / `sha256:b277ab9d58cdf5354417191c9b0a124bd5302777fa9dbc3b21395e79335988dd` |
+| failed V3 grant / evidence / journal | `sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7` / `sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac` / `9` at `sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5` |
 
 ### Historical path to this stop
 
@@ -49,7 +64,7 @@ does not treat that as a machine observation. Kiar/Liar now construct the
 fresh V2 replacement authority path. No image pin, campaign authority,
 PostgreSQL readiness or Gate C readiness has changed.
 
-## Exact current bindings
+## Historical predecessor bindings
 
 | Binding | Exact value |
 |---|---|
@@ -157,6 +172,6 @@ No local campaign outcome automatically opens production or marks #67/R4 Done.
 
 ## Mandatory stop
 
-`LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 Gate C remains intentionally non-approvable.

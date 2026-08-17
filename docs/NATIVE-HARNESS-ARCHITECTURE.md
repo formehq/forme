@@ -1,17 +1,20 @@
 # Native Harness architecture contract v0.4
 
-## Superseding R4 status — 2026-08-16
+## Superseding R4 status — 2026-08-17
 
 The Native Harness boundary is unchanged. R4 #67 now has a repository-only
-platform-select correction at Kps `8af6653` / Lps `10fbc3c`; exact platform
-selection precedes the existing pinned manifest checks. All runtime, tool and
-production boundaries remain closed except for the previously confirmed
-single disposable local V3 campaign envelope. No PostgreSQL/catalog result has
-yet been observed. Production, Provider, traffic and Gate C remain
+inspect-fingerprint correction at Kif `169a05f` / Lif `2d5fc50`. V3 observed
+Docker `29.3.1` / `linux/arm64`, then failed closed on a previously unknown
+body-free historical container-missing frame before PostgreSQL. The correction
+admits only the exact captured command, target, process, framing, byte and hash
+tuple; no diagnostic body becomes Harness or Forme evidence. All runtime,
+tool, production and canonical-meaning boundaries remain closed except for the
+already confirmed final disposable local campaign envelope. Target PostgreSQL
+and catalog remain unobserved. Production, Provider, traffic and Gate C remain
 `NOT_REQUESTED`.
 
-Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Earlier architecture status snapshot (historical context)

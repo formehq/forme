@@ -1,19 +1,25 @@
 # Owner technical cockpit
 
-## Superseding current status — 2026-08-16
+## Superseding current status — 2026-08-17
 
-R4 #67 Local PostgreSQL wiring has a committed platform-select correction:
-Kps `8af6653`, Lps `10fbc3c`, index `sha256:3944b11d…0270`, schema
-`sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b`, report
-`sha256:348760e3…c78c`. The fix adds exact `--platform linux/arm64` selection
-while retaining the pinned manifest and all ceilings. Repository validation is
-Green; construction made zero Docker/PG/SQL effects. Next action is to freeze
-V3 Card/Review, then use one fresh exact-owned local campaign lifecycle. Stop
-before that lifecycle on any authority drift; Production and Gate C remain
+R4 #67 Local PostgreSQL wiring has a committed inspect-fingerprint correction:
+Kif `169a05f`, Lif `2d5fc50`, index `sha256:d2d06ec5…bfe3`, schema
+`sha256:a2193363…cf3f`, evidence `sha256:f981594d…479b8`, report
+`sha256:b277ab9d…88dd`. V3 matched Docker `29.3.1` / `linux/arm64` and then
+failed closed on a previously unknown body-free historical
+`container.inspect` missing frame. It did not reach PostgreSQL or SQL; fresh
+container/network/volume state is proven absent and fresh residue is zero.
+The correction recognizes only the exact captured fingerprint and preserves
+all one-use, write-ahead, no-retry and cleanup ceilings. Repository validation
+is Green; construction effects are zero.
+
+Next action is to freeze and audit add-only V4 Card/Review, then use the final
+remaining exact-owned disposable lifecycle only if every binding remains
+Green. Stop on any drift or ambiguous cleanup. Production and Gate C remain
 `NOT_REQUESTED`.
 
-Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Earlier cockpit snapshot (historical context)
