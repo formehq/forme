@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_image_acquisition_replacement_artifact_index.v1",
+  "status": "IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_IMPLEMENTATION_COMMITTED",
+  "scope": "R4 #67 committed Kiar image-acquisition replacement-authority artifacts",
+  "authority": {
+    "correctionAddendumSha256": "sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f",
+    "correctionOwnerReviewSha256": "sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda",
+    "correctionChoices": "APPROVED_EXACT_NINE_CHOICES",
+    "repositoryConstructionGrant": "APPROVED_EXACT_KIAR_LIAR_MIAR_ONLY",
+    "dockerDiagnosticGrant": "NOT_REQUESTED",
+    "registryGrant": "NOT_REQUESTED",
+    "imagePullGrant": "NOT_REQUESTED",
+    "cleanupGrant": "NOT_REQUESTED",
+    "postgresGrant": "NOT_REQUESTED",
+    "productionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "lineage": {
+    "predecessorCard": {
+      "head": "23e4213d934076cc85e4cd16512bdcbc4f7a0483",
+      "tree": "f753b338132db899c9a4a3b7a274ac6c5a67931e",
+      "artifactSha256": "sha256:385f82e5ffd19745da495b5ed6e1f57e33020d5ed71df84ac591b2eb93880a72"
+    },
+    "predecessorReview": {
+      "head": "33fc039675bb990180cb37f85096f217cb523eea",
+      "tree": "8d58dd8e00a728b23f144a9a1263dbd0f3e68e87",
+      "parentHead": "23e4213d934076cc85e4cd16512bdcbc4f7a0483",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:8da2273700d37e588f943194d5a9c2e2d407ad4a75ac22ca3c3b5a58b449675c",
+      "canonicalPayloadSha256": "sha256:fe44f267ac9663919a4e63ab075ed85a40bdf48b4128cdffaeed52fb107ec7ea"
+    },
+    "correctionAddendum": {
+      "head": "73ea8d2ab6ced3613756ac727433ed623b0fdb24",
+      "tree": "95d7c1150831bcc2288d80ee650cf8cc3e2b5e0b",
+      "parentHead": "33fc039675bb990180cb37f85096f217cb523eea",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f"
+    },
+    "correctionOwnerReview": {
+      "head": "56e8d29c9c29de0735667efb6be647d7cc1cd57b",
+      "tree": "8557cdc1780478c5cfe75261256c71a579234800",
+      "parentHead": "73ea8d2ab6ced3613756ac727433ed623b0fdb24",
+      "exactDelta": "1_PATH_1A",
+      "artifactSha256": "sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda"
+    },
+    "implementation": {
+      "head": "3db30607077a1c4fd2aeb87fcf8c9f6d7dfa31cf",
+      "tree": "9457a111e646ca869f403d3020986e5e8b63a63b",
+      "parentHead": "56e8d29c9c29de0735667efb6be647d7cc1cd57b",
+      "parentTree": "8557cdc1780478c5cfe75261256c71a579234800",
+      "fileCount": 2,
+      "addedFileCount": 0,
+      "modifiedFileCount": 2,
+      "deletedFileCount": 0,
+      "renamedFileCount": 0,
+      "artifactAggregateSha256": "sha256:2cca6a811e52df19942fc1b34ae38b66b12f8a5e548aa4defac39cb10159b2ae"
+    }
+  },
+  "aggregate": {
+    "algorithm": "sha256",
+    "ordering": "ascending repository-relative path by unsigned UTF-8 byte sequence",
+    "recordEncoding": "UTF-8 path bytes, NUL, sha256-prefixed lowercase digest, NUL, decimal Git-blob byte count, LF",
+    "sourceBytes": "Git blob bytes from lineage.implementation.head",
+    "frameByteCount": 243,
+    "sha256": "sha256:2cca6a811e52df19942fc1b34ae38b66b12f8a5e548aa4defac39cb10159b2ae"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "class": "image_acquisition_replacement_runner",
+      "gitStatus": "M",
+      "byteCount": 916483,
+      "sha256": "sha256:b6a002c23fe5e7ce0a30bb7a21df488c0d5fbe3af46929325a99cf9f57f3e71d"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "class": "image_acquisition_replacement_runner_test",
+      "gitStatus": "M",
+      "byteCount": 227882,
+      "sha256": "sha256:26f8cd26b688cf0e9dc648cc91a1e66712d6630e952f591f31b2ed0b047eec92"
+    }
+  ],
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-acquisition-replacement.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-replacement-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-replacement-evidence.schema.json"
+  ],
+  "excludedStatusFreezePaths": [
+    "README.md",
+    "docs/CONTROL.md",
+    "docs/DECISIONS.md",
+    "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+    "docs/PRODUCT.md",
+    "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+    "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md",
+    "docs/README.md",
+    "docs/ROADMAP.md",
+    "docs/VALIDATION.md"
+  ],
+  "priorDiagnostic": {
+    "predecessorCardSha256": "sha256:385f82e5ffd19745da495b5ed6e1f57e33020d5ed71df84ac591b2eb93880a72",
+    "predecessorCardHead": "23e4213d934076cc85e4cd16512bdcbc4f7a0483",
+    "predecessorCardTree": "f753b338132db899c9a4a3b7a274ac6c5a67931e",
+    "predecessorReviewSha256": "sha256:8da2273700d37e588f943194d5a9c2e2d407ad4a75ac22ca3c3b5a58b449675c",
+    "predecessorReviewHead": "33fc039675bb990180cb37f85096f217cb523eea",
+    "predecessorReviewTree": "8d58dd8e00a728b23f144a9a1263dbd0f3e68e87",
+    "predecessorPayloadSha256": "sha256:fe44f267ac9663919a4e63ab075ed85a40bdf48b4128cdffaeed52fb107ec7ea",
+    "root": "/Users/zaynw/.forme-r4-image-acquisition-diagnostic-385f82e5",
+    "rootDevice": 16777233,
+    "rootInode": 35611325,
+    "rootUid": 501,
+    "rootMode": "0700",
+    "retainedEntries": [
+      "image-acquisition-diagnostic.consumed.json",
+      "image-acquisition-diagnostic-evidence.json",
+      "image-acquisition-diagnostic-journal-v1",
+      "owner-approval-receipt"
+    ],
+    "ownerApprovalReceiptSha256": "sha256:63d8cc1fb12aeb0c6dd3d8927a8db90d3799fcb4fae9a598fb0b52d1be013b09",
+    "ownerApprovalReceiptByteCount": 1086,
+    "consumedGrantSha256": "sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba",
+    "consumedGrantByteCount": 5273,
+    "evidenceSha256": "sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd",
+    "evidenceByteCount": 6775,
+    "journalEntryCount": 7,
+    "journalHeadSha256": "sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa",
+    "terminalStatus": "FAILED",
+    "terminalCode": "local_postgres_image_acquisition_diagnostic_failed",
+    "terminalClassification": "NONZERO",
+    "dockerVersionCount": 1,
+    "imageInspectCount": 0,
+    "imagePullCount": 0,
+    "widerEffectCount": 0,
+    "rootReadOrMutatedByConstruction": true
+  },
+  "diagnosticContract": {
+    "futureDiagnosticCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V2.md",
+    "futureDiagnosticReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V2.md",
+    "futureCardGitStatus": "A",
+    "futureReviewGitStatus": "A",
+    "diagnosticAuthorityVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v2",
+    "diagnosticGrantVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v2",
+    "diagnosticReceiptVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-receipt.v2",
+    "dockerVersionMaximum": 1,
+    "imageInspectMaximum": 2,
+    "imagePullMaximum": 1,
+    "allResourceDockerKindsMaximum": 0,
+    "oneUseNoRetryWriteAheadConstructed": true,
+    "bodyFreeTypedTupleConstructed": true,
+    "anonymousIsolatedPullConstructed": true,
+    "cacheResidueTruthConstructed": true,
+    "rawOutputBodiesPersisted": false,
+    "cleanupAuthorityConstructed": false,
+    "postgresAuthorityConstructed": false,
+    "diagnosticExecuted": false,
+    "physicalEffects": 0
+  }
+}
