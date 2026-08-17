@@ -1,0 +1,303 @@
+{
+  "schemaVersion": "r4_public_core_local_postgres_integration_campaign_image_acquisition_diagnostic_evidence.v1",
+  "status": "LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN_STATUS_FREEZE_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED",
+  "generatedAt": "2026-08-17T03:31:53Z",
+  "authority": {
+    "correctionAddendumSha256": "sha256:592f9e2fdb080a3f9605937251943afd2fb2f822c2871b04ae9d13c581d35b6e",
+    "correctionOwnerReviewSha256": "sha256:83305354bc03c0fd1a3e945b04d4ceb6d5749f08e2c530f734502dc6921ed3a9",
+    "correctionAddendumHead": "2fe84edd9d188f35b02b226fa32ce94f5576f8de",
+    "correctionAddendumTree": "5d6fb3334608ba7032aee45646b868d88ccbd1be",
+    "correctionOwnerReviewHead": "eda416c2a3b591cad3fb16608ad78fef2031f174",
+    "correctionOwnerReviewTree": "859a5cca61d13992fdde184f9d537b049af6cfee",
+    "correctionChoices": "APPROVED_EXACT_NINE_CHOICES",
+    "repositoryConstructionGrant": "CONSUMED_BY_KIAD_LIAD_MIAD_ONLY",
+    "dockerDiagnosticGrant": "NOT_REQUESTED",
+    "registryGrant": "NOT_REQUESTED",
+    "imagePullGrant": "NOT_REQUESTED",
+    "cleanupGrant": "NOT_REQUESTED",
+    "postgresGrant": "NOT_REQUESTED",
+    "productionGrant": "NOT_REQUESTED",
+    "gateCGrant": "NOT_REQUESTED"
+  },
+  "implementation": {
+    "head": "c6fe1804b1111c19d27da64f7ca76b85c0f12adf",
+    "tree": "3d9202f81cb09dfe9f1a6d70fb7cfb92f47cdb7a",
+    "parentHead": "eda416c2a3b591cad3fb16608ad78fef2031f174",
+    "parentTree": "859a5cca61d13992fdde184f9d537b049af6cfee",
+    "exactDelta": "2_PATHS_0A_2M_0D_0R",
+    "artifactAggregateSha256": "sha256:d7f76c1a9af05f25952a65c5e561fa28186df390ac5a66c3416b45ca496b19f8",
+    "runnerPath": "scripts/r4-public-core-local-postgres.mjs",
+    "runnerByteCount": 915010,
+    "runnerSha256": "sha256:766d87ea00b3bc9863b50c9578314bacb9a50a90b247496aa763fad924f8c152",
+    "runnerTestPath": "test/r4/public-core-local-postgres.test.ts",
+    "runnerTestByteCount": 227810,
+    "runnerTestSha256": "sha256:cb072c2aaac6dac595adab0e01226020694e02dc8eef73732debcdc18dedcccb"
+  },
+  "priorDiagnostic": {
+    "predecessorCardSha256": "sha256:f0a0bf2dbe00e6a1ba2f49b6e2b58898136402e685c3cd0afe8a55883b26fdb8",
+    "predecessorCardHead": "6a040deb80dc9c22d131bcf6bb0d2eadbdca7d81",
+    "predecessorCardTree": "9774d6dab1af9bd8acea760f8b10e406bef46303",
+    "predecessorReviewSha256": "sha256:73e6b30cbec9e5abbd52a1bdddf893bf89065c77381b1c6346d903d24ff77c66",
+    "predecessorReviewHead": "b4aae98488e934d921c1deb5c526286c49d22503",
+    "predecessorReviewTree": "72ffc8ce9c19058894864846f5705d1234d7ced8",
+    "predecessorPayloadSha256": "sha256:99d17e705204a8e2bb532cffc25ee845eddd29d242f5e518bac78e9b8db39414",
+    "root": "/Users/zaynw/.forme-r4-image-manifest-diagnostic-f0a0bf2d",
+    "rootDevice": 16777231,
+    "rootInode": 35062239,
+    "rootUid": 501,
+    "rootMode": "0700",
+    "retainedEntries": [
+      "image-manifest-diagnostic.consumed.json",
+      "image-manifest-diagnostic-evidence.json",
+      "image-manifest-diagnostic-journal-v1",
+      "owner-approval-receipt"
+    ],
+    "ownerApprovalReceiptSha256": "sha256:07963ed22fbb1c96c3161bf9bc0527003907920fe44ae57f2954cbf9d1f59445",
+    "ownerApprovalReceiptByteCount": 1030,
+    "consumedGrantSha256": "sha256:f497fc8ed003aebf42d975494730f184ba1f93355b6474ff7c3526e2d2533a22",
+    "consumedGrantByteCount": 4401,
+    "evidenceSha256": "sha256:e149627976e1f2bf1927dbcec25a82e545f8d892d2b5865e288d6941dcbb9ad7",
+    "evidenceByteCount": 6639,
+    "journalEntryCount": 10,
+    "journalHeadSha256": "sha256:b9dcfb5134225497d8efc546f3ad7749ee931f29cf2db8e162037832af9a6a86",
+    "terminalStatus": "FAILED",
+    "terminalCode": "local_postgres_image_manifest_diagnostic_failed",
+    "terminalClassification": "IMAGE_MISSING",
+    "dockerVersionCount": 1,
+    "imageInspectCount": 1,
+    "imagePullCount": 0,
+    "widerEffectCount": 0,
+    "rootReadOrMutatedByConstruction": false
+  },
+  "workset": {
+    "implementationPathCount": 2,
+    "evidencePathCount": 3,
+    "statusPathCount": 10,
+    "totalPathCount": 15,
+    "addedPathCount": 4,
+    "modifiedPathCount": 11,
+    "totalCommitCount": 3,
+    "implementationPaths": [
+      "scripts/r4-public-core-local-postgres.mjs",
+      "test/r4/public-core-local-postgres.test.ts"
+    ],
+    "evidencePaths": [
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-acquisition-diagnostic.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-evidence.schema.json"
+    ],
+    "statusPaths": [
+      "README.md",
+      "docs/CONTROL.md",
+      "docs/DECISIONS.md",
+      "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+      "docs/PRODUCT.md",
+      "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+      "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+      "docs/README.md",
+      "docs/ROADMAP.md",
+      "docs/VALIDATION.md"
+    ]
+  },
+  "diagnosticContract": {
+    "futureDiagnosticCardPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md",
+    "futureDiagnosticReviewPath": "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md",
+    "futureCardAndReviewAreAddOnly": true,
+    "diagnosticAuthorityVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1",
+    "diagnosticGrantVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v1",
+    "diagnosticJournalVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-journal-entry.v1",
+    "diagnosticReceiptVersion": "r4.public-core-local-postgres-image-acquisition-diagnostic-receipt.v1",
+    "maximumPrepareCount": 1,
+    "maximumConsumeCount": 1,
+    "maximumLifecycleCount": 1,
+    "dockerCallCeilings": {
+      "version": 1,
+      "image.inspect": 2,
+      "image.pull": 1,
+      "container.inspect": 0,
+      "container.create": 0,
+      "container.start": 0,
+      "container.stop": 0,
+      "container.rm": 0,
+      "network.inspect": 0,
+      "network.create": 0,
+      "network.rm": 0,
+      "volume.inspect": 0,
+      "volume.create": 0,
+      "volume.rm": 0
+    },
+    "conditionalSequence": [
+      "VERSION",
+      "PRE_INSPECT",
+      "PULL_ONLY_AFTER_IMAGE_MISSING",
+      "POST_INSPECT_ONLY_AFTER_COMPLETED_PULL"
+    ],
+    "typedTupleFields": [
+      "repoDigestPresent",
+      "imageOs",
+      "imageArchitecture",
+      "descriptorDigest",
+      "descriptorMediaType",
+      "descriptorSize",
+      "descriptorPlatformOs",
+      "descriptorPlatformArchitecture"
+    ],
+    "cacheStates": [
+      "PRESENT",
+      "ABSENT",
+      "PARTIAL_OR_UNKNOWN",
+      "AMBIGUOUS"
+    ],
+    "oneUseNoRetryWriteAheadConstructed": true,
+    "anonymousIsolatedPullConstructed": true,
+    "rawOutputBodiesPersisted": false,
+    "rawOutputBuffersZeroed": true,
+    "registryCredentialsAllowed": false,
+    "cleanupAuthorityConstructed": false,
+    "postgresAuthorityConstructed": false,
+    "diagnosticExecuted": false
+  },
+  "validation": {
+    "testLanes": [
+      {
+        "laneId": "image_acquisition_diagnostic_focused_deny_network",
+        "command": "node --import ./scripts/deny-external-network.mjs --test --test-name-pattern='image-acquisition diagnostic' test/r4/public-core-local-postgres.test.ts",
+        "total": 6,
+        "passed": 6,
+        "failed": 0
+      },
+      {
+        "laneId": "local_postgres_runner_fake_deny_network",
+        "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-local-postgres.test.ts",
+        "total": 188,
+        "passed": 188,
+        "failed": 0
+      },
+      {
+        "laneId": "focused_public_core_non_runner_deny_network",
+        "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-application.test.ts test/r4/public-core-privacy.test.ts test/r4/public-core-postgres.test.ts test/r4/public-core-pg-executor.test.ts test/r4/public-core-postgres-application-store.test.ts",
+        "total": 85,
+        "passed": 85,
+        "failed": 0
+      },
+      {
+        "laneId": "public_core_deny_network",
+        "command": "node --import ./scripts/deny-external-network.mjs --test test/r4/public-core-*.test.ts",
+        "total": 440,
+        "passed": 440,
+        "failed": 0
+      },
+      {
+        "laneId": "r4_offline_regression",
+        "command": "npm run test:r4:offline",
+        "total": 760,
+        "passed": 760,
+        "failed": 0
+      },
+      {
+        "laneId": "gate_b_core_successor_candidate_regression",
+        "command": "npm run test:r4:gate-b-core",
+        "total": 146,
+        "passed": 146,
+        "failed": 0
+      },
+      {
+        "laneId": "spine_regression",
+        "command": "node --import ./scripts/deny-external-network.mjs --test test/*.test.ts",
+        "total": 45,
+        "passed": 45,
+        "failed": 0
+      }
+    ],
+    "checkLanes": [
+      "node --check scripts/r4-public-core-local-postgres.mjs",
+      "npm run typecheck",
+      "npm --workspace @forme/room run check:no-ai",
+      "npm run r4:docs:audit",
+      "git diff HEAD^ HEAD --check"
+    ],
+    "committedBytesOnly": true,
+    "allPassed": true
+  },
+  "effectAudit": {
+    "constructionPaths": 15,
+    "constructionCommits": 3,
+    "dependencyChanges": 0,
+    "lockChanges": 0,
+    "sqlChanges": 0,
+    "externalNetworkCalls": 0,
+    "priorDiagnosticRootReads": 0,
+    "priorDiagnosticRootMutations": 0,
+    "pendingDiagnosticGrants": 0,
+    "consumedDiagnosticGrants": 0,
+    "diagnosticLifecycles": 0,
+    "dockerCliCalls": 0,
+    "dockerSocketResolutions": 0,
+    "dockerDaemonCalls": 0,
+    "registryCalls": 0,
+    "imagePulls": 0,
+    "cleanupLifecycles": 0,
+    "postgresProcesses": 0,
+    "postgresConnections": 0,
+    "sqlRuns": 0,
+    "productRuntimeEffects": 0,
+    "productionEffects": 0,
+    "gateCEffects": 0,
+    "dockerCallsByKind": {
+      "version": 0,
+      "image.inspect": 0,
+      "image.pull": 0,
+      "container.inspect": 0,
+      "container.create": 0,
+      "container.start": 0,
+      "container.stop": 0,
+      "container.rm": 0,
+      "network.inspect": 0,
+      "network.create": 0,
+      "network.rm": 0,
+      "volume.inspect": 0,
+      "volume.create": 0,
+      "volume.rm": 0
+    }
+  },
+  "documentationScope": {
+    "operationalCurrentStatusSurfacesCurrent": false,
+    "wholeRepositoryDocumentationCurrentClaimed": false
+  },
+  "artifacts": {
+    "artifactIndexSha256": "sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9",
+    "evidenceSchemaSha256": "sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170"
+  },
+  "audits": {
+    "committedKiad": {
+      "summaryText": "COMMITTED_KIAD_AUDIT_V1\nhead=c6fe1804b1111c19d27da64f7ca76b85c0f12adf\ntree=3d9202f81cb09dfe9f1a6d70fb7cfb92f47cdb7a\nparentHead=eda416c2a3b591cad3fb16608ad78fef2031f174\nparentTree=859a5cca61d13992fdde184f9d537b049af6cfee\ndelta=2_PATHS_0A_2M_0D_0R\naggregateSha256=sha256:d7f76c1a9af05f25952a65c5e561fa28186df390ac5a66c3416b45ca496b19f8\nrunnerSha256=sha256:766d87ea00b3bc9863b50c9578314bacb9a50a90b247496aa763fad924f8c152\nrunnerTestSha256=sha256:cb072c2aaac6dac595adab0e01226020694e02dc8eef73732debcdc18dedcccb\nblockers=0\nimportant=0\nstatus=PASS",
+      "summaryByteCount": 542,
+      "summarySha256": "sha256:cf9714321974530b45be84d5d08887ffde74b8d7c95d9fe5fb5b9f12ef2672a4",
+      "blockers": 0,
+      "important": 0,
+      "status": "PASS"
+    },
+    "candidateLiad": {
+      "scope": "LATEST_BYTES_OF_EXACT_LIAD_THREE_PATH_CANDIDATE",
+      "blockers": 0,
+      "important": 0,
+      "status": "PASS",
+      "selfDigestExcluded": true
+    }
+  },
+  "readiness": {
+    "diagnosticRunnerConstructed": true,
+    "conditionalAcquisitionContractConstructed": true,
+    "committedTopologyVerifierConstructed": true,
+    "diagnosticPrepared": false,
+    "diagnosticConsumed": false,
+    "diagnosticObserved": false,
+    "imagePulled": false,
+    "manifestCorrected": false,
+    "replacementCampaignAuthorized": false,
+    "targetPostgresObserved": false,
+    "productionReady": false,
+    "gateCReady": false
+  },
+  "stop": "LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_EVIDENCE_GREEN / STATUS_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+}
