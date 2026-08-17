@@ -2,23 +2,26 @@
 
 - Status: active MVP evidence register
 - Updated: 2026-08-16
-- Current image-acquisition diagnostic construction: Kiad `c6fe180` / Liad
-  `95197de`; index `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-acquisition replacement construction: Kiar `3db3060` / Liar
+  `3e1b0cb`; index `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **the one-use Integration Campaign V2 was prepared and
   consumed, proved its historical Docker resource names absent, then failed
   closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
   A later one-use image-manifest diagnostic stopped at `IMAGE_MISSING`. The
-  repository now has a strict separate image-acquisition implementation and
-  machine evidence, validated at 6/6 focused, 188/188 runner, 85/85 non-runner,
-  440/440 Public Core, 760/760 offline, 146/146 serial Gate-B Core and 45/45
-  spine. Construction made zero Docker/socket/registry/pull/cleanup/
-  PostgreSQL/SQL effects and did not read the failed diagnostic root. The
-  acquisition diagnostic is not approved or executed, so image presence
-  remains unproved and no manifest pin or replacement campaign is authorized.**
+  first image-acquisition diagnostic then consumed its one-use authority and
+  stopped on `NONZERO / exit 1` from Docker `version`, before inspect or
+  pull. The Owner reports Docker Desktop was not running then and is running
+  now; this is not yet machine evidence. The repository now has a strict V2
+  replacement implementation and machine evidence, validated at 6/6 focused,
+  188/188 runner, 85/85 non-runner, 440/440 Public Core, 760/760 offline,
+  146/146 Gate-B Core and 45/45 spine. Replacement construction made zero
+  Docker/socket/registry/pull/cleanup/PostgreSQL/SQL effects. The replacement
+  diagnostic is not yet approved or executed, so image presence remains
+  unproved and no manifest pin or replacement campaign is authorized.**
 - Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
@@ -1436,3 +1439,36 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`. Construct the reserved add-only Card/Review, then
   return for one separate exact local-effect decision.
+
+## Evidence round 31 — failed acquisition V1 and V2 replacement authority
+
+- Case: the separately approved Image-Acquisition Diagnostic V1 was prepared
+  and consumed once. Its only Docker `version` call completed
+  `NONZERO / exit 1`; inspect, pull, resource, cleanup, PostgreSQL and SQL
+  effects remained zero. The Owner reports Docker Desktop was not running for
+  that attempt and is running now. That is contextual testimony, not a machine
+  observation admitted by the failed receipt.
+- Failed immutable evidence: consumed grant
+  `sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba`,
+  terminal evidence
+  `sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd`,
+  journal `7` / head
+  `sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa`.
+- Repository correction: Kiar `3db3060` / Liar `3e1b0cb` and the strict
+  replacement index/schema/evidence/report freeze a V2-only grant, journal and
+  receipt namespace. V1 authority is rejected rather than renewed.
+- Validation: 6/6 focused, 188/188 runner, 85/85 non-runner, 440/440 Public
+  Core, 760/760 offline, 146/146 Gate-B Core and 45/45 spine; strict Ajv and 14
+  hostile evidence mutations, syntax, TypeScript, no-AI, docs and diff checks
+  Green.
+- Effect truth: construction read the retained body-free V1 root once and
+  mutated it zero times. Replacement prepare/consume, Docker/socket/daemon,
+  registry/pull, cleanup, PostgreSQL/SQL, production, traffic and Gate C were
+  all zero.
+- Product judgment: this removes a consumed-authority dead end; it still does
+  not prove that Docker is currently reachable or that the image exists.
+- Consequence: stop at
+  `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN /
+  IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Only the reserved add-only V2 Card/Review may follow
+  before the next one-use local-effect decision.

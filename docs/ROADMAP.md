@@ -6,19 +6,22 @@
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- Current image-acquisition diagnostic construction: Kiad `c6fe180` / Liad
-  `95197de`; index `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-acquisition replacement construction: Kiar `3db3060` / Liar
+  `3e1b0cb`; index `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current gate: the one-use Integration Campaign V2 failed closed before
   PostgreSQL on an unrecorded image descriptor mismatch. A later one-use
-  image-manifest diagnostic stopped honestly at `IMAGE_MISSING`. Repository
-  construction of a separate image-acquisition diagnostic is Green, but the
-  diagnostic itself, registry, image pull, cleanup, replacement campaign,
-  Production and Gate C are not requested. The next step is an add-only
-  Image-Acquisition Diagnostic Card/Review and a separate exact Owner approval.
+  image-manifest diagnostic stopped honestly at `IMAGE_MISSING`. The first
+  image-acquisition diagnostic then stopped on a body-free nonzero Docker
+  `version` result before inspect/pull. The Owner reports Docker Desktop is
+  now running, but the replacement V2 diagnostic must prove that itself.
+  Repository construction of that replacement authority is Green; registry,
+  pull, cleanup, replacement campaign, Production and Gate C are not requested.
+  The next effectful step requires the add-only V2 Card/Review and one exact
+  Owner approval.
 - Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema

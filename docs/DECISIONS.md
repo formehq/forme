@@ -1654,3 +1654,59 @@ traffic, provider, message, deployment, release, spend or Gate C effects.
 The next repository actions are the two add-only V2 authority documents. Any
 prepare or physical campaign still requires a later separate exact Owner
 approval. #67 and R4 remain open.
+
+## 2026-08-16 — Image-Acquisition V2 replacement authority reached repository Technical Review Green
+
+**Decision:** preserve the consumed Image-Acquisition Diagnostic V1 as failed,
+non-retryable history and accept the repository-only replacement authority
+construction. V1 consumed grant
+`sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba`
+produced terminal evidence
+`sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd`
+and journal `7` / head
+`sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa`.
+Its sole Docker `version` call completed `NONZERO / exit 1`; image inspect,
+pull, resource, cleanup, PostgreSQL and SQL calls were zero. The Owner reports
+Docker Desktop was not running for that attempt and is running now. That
+statement is retained as Owner context only; the next authorized diagnostic
+must establish its own machine observation.
+
+**Result:** replacement Addendum/Review hashes are
+`sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f`
+and
+`sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda`.
+Kiar `3db30607077a1c4fd2aeb87fcf8c9f6d7dfa31cf` / tree
+`9457a111e646ca869f403d3020986e5e8b63a63b` freezes the exact two-path
+runner/test replacement; G2 is
+`sha256:2cca6a811e52df19942fc1b34ae38b66b12f8a5e548aa4defac39cb10159b2ae`.
+Liar `3e1b0cbd5394a2e3452ecb2ef9c0081c72381d9f` / tree
+`9999efe25b0c79e8d388b86b82a57297f0ff2533` freezes the exact three-file
+machine-evidence delta; G3 is
+`sha256:fc167a02ce82f20fed05ffcf4b666dfc91eb5694553f3f6730c24c1b41c356db`.
+The artifact index, strict schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+`sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+`sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`
+and
+`sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+Committed Kiar/Liar audit summaries are
+`sha256:1f154c0e67adcca225d36ad82839615d304485b857ff8f28d26f9b02e3b700e4`
+and
+`sha256:9553ca01c635f4f9ea7842d15b3ab7b6871ee61c3528c11d22a6c08914b289c3`.
+
+**Validation and effect:** focused replacement tests pass 6/6; the full local
+PostgreSQL runner 188/188; focused non-runner Public Core 85/85; Public Core
+440/440; R4 offline 760/760; Gate-B Core 146/146; spine 45/45. Strict Ajv and
+14 hostile evidence mutations, syntax, TypeScript, no-AI, docs and diff checks
+are Green. Construction read the retained V1 body-free root once, mutated it
+zero times, and made zero replacement grant, Docker/socket/daemon/registry,
+pull, cleanup, PostgreSQL/SQL, production/runtime/traffic, provider/message,
+deployment/publication/admission/Gate C, push/PR, merge/release or spend
+effects.
+
+**Stop:** `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the two reserved add-only V2 Card/Review documents may follow. Diagnostic
+prepare/consumption still requires one separate exact Owner approval. #67 and
+R4 remain open.

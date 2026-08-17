@@ -25,25 +25,27 @@
   then failed closed before PostgreSQL at
   `local_postgres_image_platform_manifest_invalid`. A later one-use
   image-manifest diagnostic was consumed and stopped at `IMAGE_MISSING`.
-  Kiad `c6fe180` / Liad `95197de` now freeze a separate body-free
-  image-acquisition diagnostic that may later make at most one anonymous exact
-  `linux/arm64` pull and retain one allowlisted descriptor tuple. Repository
-  construction is Technical Review Green; the acquisition diagnostic itself
-  has not been prepared or executed, no manifest pin is corrected, and
-  cleanup, target PostgreSQL, vault, transport, traffic and Gate C remain
-  false. Draft PR #76 remains
+  The first image-acquisition diagnostic then consumed its one-use authority;
+  its Docker `version` call completed `NONZERO / exit 1`, and it stopped
+  before inspect or pull. The Owner reports Docker Desktop was not running for
+  that attempt and is running now; this remains unverified context until a new
+  authorized diagnostic observes it. Kiar `3db3060` / Liar `3e1b0cb`
+  freeze a V2 replacement authority path without reviving V1. Repository
+  construction is Technical Review Green; no replacement diagnostic has been
+  prepared or executed, no manifest pin is corrected, and cleanup, target
+  PostgreSQL, vault, transport, traffic and Gate C remain false. Draft PR #76 remains
   unmerged; production activation
   and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
   attempts are consumed Yellow
   history, not the Controlled Presence milestone. R4 remains Building, is not
   on `main`, and is not Owner-accepted or Done
 - Updated: 2026-08-16
-- Image-acquisition diagnostic construction bindings: index
-  `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Image-acquisition replacement construction bindings: index
+  `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; no calendar date makes the MVP Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful

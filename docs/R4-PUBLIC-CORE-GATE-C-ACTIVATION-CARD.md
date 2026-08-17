@@ -1,13 +1,13 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_GREEN_DIAGNOSTIC_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_GREEN_V2_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-16
-- Current predecessor: Local PostgreSQL Integration Campaign Image-Acquisition Diagnostic construction
+- Current predecessor: Local PostgreSQL Integration Campaign Image-Acquisition Replacement Authority construction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the repository-only Image-Acquisition Diagnostic
-construction reached Technical Review Green. It cannot prepare or consume a
+Gate C is still closed after the repository-only Image-Acquisition Replacement
+Authority construction reached Technical Review Green. It cannot prepare or consume a
 diagnostic grant, call Docker, pull an image, inspect or remove named Docker
 resources, run PostgreSQL, migrate production, activate a route or carry
 traffic.
@@ -28,10 +28,13 @@ before PostgreSQL because the pinned image descriptor did not match the
 separately pinned linux/arm64 manifest digest. Its body-free terminal receipt
 did not retain the descriptor value, so the repository cannot honestly choose
 a correction yet. A separately approved one-use image-manifest diagnostic was
-later consumed and stopped at `IMAGE_MISSING`. Kiad/Liad now construct a new
-one-use body-free image-acquisition diagnostic with at most one anonymous exact
-pull, but that diagnostic is not approved or executed. No image pin, campaign
-authority, PostgreSQL readiness or Gate C readiness has changed.
+later consumed and stopped at `IMAGE_MISSING`. The first image-acquisition
+diagnostic was then prepared and consumed once; its Docker `version` call
+completed `NONZERO / exit 1`, and it stopped before inspect or pull. The Owner
+reports Docker Desktop was not running then and is running now, but this card
+does not treat that as a machine observation. Kiar/Liar now construct the
+fresh V2 replacement authority path. No image pin, campaign authority,
+PostgreSQL readiness or Gate C readiness has changed.
 
 ## Exact current bindings
 
@@ -59,11 +62,15 @@ authority, PostgreSQL readiness or Gate C readiness has changed.
 | Kiad HEAD / tree / G2 | `c6fe1804b1111c19d27da64f7ca76b85c0f12adf` / `3d9202f81cb09dfe9f1a6d70fb7cfb92f47cdb7a` / `sha256:d7f76c1a9af05f25952a65c5e561fa28186df390ac5a66c3416b45ca496b19f8` |
 | Liad HEAD / tree / G3 | `95197de9f65469cb52e569245cf4e08190c82471` / `872cbc1fb4c0ea05bcf852ae0cc2d4c50d6469e7` / `sha256:11131eb2354616482e689fb3fc082d1ac33c7aea2ff8133e57101ac6d5a7922b` |
 | Image-Acquisition index / schema / evidence / report | `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9` / `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170` / `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7` / `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11` |
+| Replacement Addendum / Review | `sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f` / `sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda` |
+| Kiar HEAD / tree / G2 | `3db30607077a1c4fd2aeb87fcf8c9f6d7dfa31cf` / `9457a111e646ca869f403d3020986e5e8b63a63b` / `sha256:2cca6a811e52df19942fc1b34ae38b66b12f8a5e548aa4defac39cb10159b2ae` |
+| Liar HEAD / tree / G3 | `3e1b0cbd5394a2e3452ecb2ef9c0081c72381d9f` / `9999efe25b0c79e8d388b86b82a57297f0ff2533` / `sha256:fc167a02ce82f20fed05ffcf4b666dfc91eb5694553f3f6730c24c1b41c356db` |
+| Replacement index / schema / evidence / report | `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3` / `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130` / `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88` / `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156` |
 
 The future local-effect proposal may use only these versioned add-only paths:
 
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md`;
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md`.
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V2.md`;
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V2.md`.
 
 They are not Gate C authority. They may authorize only one disposable local
 diagnostic after a separate exact Owner decision.
@@ -75,6 +82,8 @@ diagnostic after a separate exact Owner decision.
 | physical grant / evidence / journal | `sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35` / `sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c` / `34` / `sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25` |
 | rescue grant / evidence / journal | `sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654` / `sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979` / `6` / `sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491` |
 | failed Diagnostic V1 Card / Review / payload | `sha256:1cd345018dc6ddbf393df873bca01a54fcb75f8e608f9f63a48c9f61fd06319e` / `sha256:324af94569b0c54456e474230bc06b3e7f15573ee97ec4a46c5886d56969abed` / `sha256:53188dac86131bf4910f06dc8dd64e7f1127d29cd55f21882960ab674a24262d` |
+| failed Image-Acquisition V1 Card / Review / payload | `sha256:385f82e5ffd19745da495b5ed6e1f57e33020d5ed71df84ac591b2eb93880a72` / `sha256:8da2273700d37e588f943194d5a9c2e2d407ad4a75ac22ca3c3b5a58b449675c` / `sha256:fe44f267ac9663919a4e63ab075ed85a40bdf48b4128cdffaeed52fb107ec7ea` |
+| failed Image-Acquisition V1 grant / evidence / journal | `sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba` / `sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd` / `7` / `sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa` |
 
 None can be revived, retried or interpreted as campaign authority.
 
@@ -93,7 +102,8 @@ None can be revived, retried or interpreted as campaign authority.
 | complete offline regression | `760 / 760` |
 | Gate-B Core validation | `146 / 146` |
 | spine | `45 / 45` |
-| image-acquisition diagnostic approved / executed | `false / false` |
+| failed V1 image-acquisition diagnostic approved / executed | `true / true` |
+| replacement V2 diagnostic approved / executed | `false / false` |
 | image pull / cleanup authorized | `false / false` |
 | historical resources observed absent by consumed V2 campaign | `true` |
 | target PostgreSQL / catalog observed | `false / false` |
@@ -105,7 +115,8 @@ None can be revived, retried or interpreted as campaign authority.
 
 ## Current zero-effect boundary
 
-Repository construction made no forensic-root read or mutation, campaign grant,
+Replacement construction made one body-free read of the retained V1 root and
+no mutation. It made no replacement grant,
 Docker/socket/OCI call, PostgreSQL process/connection/database/SQL effect,
 production database/runtime/Room/Projection/Curator/Guest effect, Provider,
 message, traffic, deployment, publication, admission, release, Gate C action,
@@ -113,7 +124,7 @@ push, PR mutation, merge or spend.
 
 ## What must happen before Gate C can become approvable
 
-1. Construct and independently audit the versioned Image-Acquisition Diagnostic
+1. Construct and independently audit the versioned V2 Image-Acquisition Diagnostic
    Card/Owner Review, then obtain a separate exact Owner approval.
 2. Under that one-use authority only, use the cached path or at most one exact
    anonymous pull and observe the bounded typed descriptor tuple, with no
@@ -133,6 +144,6 @@ No local campaign outcome automatically opens production or marks #67/R4 Done.
 
 ## Mandatory stop
 
-`LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 Gate C remains intentionally non-approvable.

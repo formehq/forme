@@ -8,23 +8,25 @@ remains Building and is not on `main`. The one-use Integration Campaign V2 was
 prepared and consumed, proved its historical Docker names absent, then failed
 closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
 A later one-use image-manifest diagnostic was consumed and stopped at
-`IMAGE_MISSING`. Kiad `c6fe180` / Liad `95197de` now construct a separate
-body-free image-acquisition diagnostic that may later call `version`, inspect
-the exact pin at most twice and make at most one anonymous exact
-`linux/arm64` pull. Construction made zero Docker/socket/daemon/registry/pull,
-cleanup, PostgreSQL and SQL effects and did not read or mutate the failed
-diagnostic root. The acquisition diagnostic itself is not approved or
-executed, so image presence is still unproved and no manifest pin is corrected.
+`IMAGE_MISSING`. The first image-acquisition diagnostic was then prepared and
+consumed once; Docker `version` completed `NONZERO / exit 1`, so inspect and
+pull remained zero. The Owner reports Docker Desktop was not running for that
+attempt and is running now, but a replacement must re-observe the host rather
+than trust that report as machine evidence. Kiar `3db3060` / Liar `3e1b0cb`
+now construct the add-only V2 replacement authority path. Construction made
+zero Docker/socket/daemon/registry/pull, cleanup, PostgreSQL and SQL effects.
+The replacement diagnostic is not yet approved or executed, so image presence
+is still unproved and no manifest pin is corrected.
 Production, real Guest data, traffic and Gate C remain closed. No fresh
 remote/CI status is asserted here; August 25 remains a Progress / Vision
 Sharing checkpoint, not a Done date.
 
-Current image-acquisition diagnostic bindings: index
-`sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current image-acquisition replacement bindings: index
+`sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -46,6 +48,7 @@ Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICA
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md) | How was the full committed successor topology made executable for V2 Card/Review without authorizing physical execution? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was the body-free image-manifest diagnostic constructed without authorizing its Docker call, pull, cleanup or PostgreSQL? |
 | [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a separate one-use image-acquisition diagnostic constructed without calling Docker, pulling an image, cleaning resources or touching PostgreSQL? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md) | How was the failed V1 acquisition authority preserved and a fresh add-only V2 replacement path constructed without calling Docker or touching PostgreSQL? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |

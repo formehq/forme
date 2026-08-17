@@ -32,10 +32,14 @@
   prepared and consumed once, proved the historical resource names absent,
   then failed closed before PostgreSQL at the image-platform manifest
   predicate. A later one-use image-manifest diagnostic was consumed and stopped
-  at `IMAGE_MISSING`. Kiad `c6fe180` / Liad `95197de` now freeze a separate
-  body-free image-acquisition diagnostic with a one-version/two-inspect/
-  one-anonymous-pull ceiling. Repository construction is Technical Review
-  Green, but diagnostic prepare/execution, registry, image pull, cleanup,
+  at `IMAGE_MISSING`. The first image-acquisition diagnostic was then consumed
+  and its exact Docker `version` call returned `NONZERO / exit 1`, before
+  inspect or pull. The Owner reports Docker Desktop is now running; no current
+  machine observation has yet admitted that claim. Kiar `3db3060` / Liar
+  `3e1b0cb` now freeze the V2 replacement authority path with the same
+  one-version/two-inspect/one-anonymous-pull ceiling. Repository construction
+  is Technical Review Green, but replacement prepare/execution, registry,
+  image pull, cleanup,
   replacement campaign, target PostgreSQL observation, vault, transport,
   traffic and Gate C remain closed. Draft PR
   #76 remains unmerged. PR #74
@@ -43,12 +47,12 @@
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
 - Updated: 2026-08-16
-- Image-acquisition diagnostic construction bindings: index
-  `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Image-acquisition replacement construction bindings: index
+  `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside

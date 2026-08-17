@@ -3,19 +3,18 @@
 - Updated: 2026-08-16
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and #67 has repository/offline Public Core plus
-  concrete Local PostgreSQL wiring. The approved Integration Campaign V2 was
-  consumed once and failed closed before PostgreSQL at the image-platform
-  manifest predicate. A later one-use image-manifest diagnostic stopped at
-  `IMAGE_MISSING`; that root remains immutable failed history. Kiad `c6fe180` /
-  Liad `95197de` now freeze a separate body-free image-acquisition diagnostic
-  with one future `version`, at most two exact `image inspect` calls and at
-  most one anonymous pinned `linux/arm64` pull. Docker diagnostic execution,
-  registry, pull, cleanup, PostgreSQL, SQL, Production and Gate C remain
-  zero/closed. The acquisition diagnostic has not been prepared, consumed or
-  executed, and no descriptor value has been admitted as a corrected pin. The
-  exact stop is
-  `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-  IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  concrete Local PostgreSQL wiring. The approved Integration Campaign V2 and
+  image-manifest diagnostic remain consumed failed history. The first
+  image-acquisition diagnostic was also consumed once; its exact Docker
+  `version` call completed `NONZERO / exit 1`, so inspect and pull remained
+  zero. The Owner reports Docker Desktop was not running then and is running
+  now, but that has not yet been re-observed by the diagnostic. Kiar `3db3060`
+  / Liar `3e1b0cb` now freeze a separate V2 replacement authority path with the
+  same one-version/two-inspect/one-pull ceiling and immutable V1 bindings.
+  Replacement construction made zero Docker/socket/daemon/registry/pull,
+  cleanup, PostgreSQL or SQL effects. The exact stop is
+  `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN /
+  IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`. Host Binding remains historical setup evidence, not
   the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
@@ -50,11 +49,12 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **construct and audit the reserved versioned Image-Acquisition
-  Diagnostic Card/Owner Review as two add-only direct children, then stop for
-  exact Owner approval. Until that separate approval, do not prepare a
+- Next action: **freeze the repository-only replacement package and add the
+  reserved V2 Image-Acquisition Diagnostic Card/Owner Review as two add-only
+  direct children, then stop once for exact Owner approval. Until that
+  separate approval, do not prepare a
   diagnostic grant, resolve the Docker socket, call Docker, pull an image,
-  clean a resource or touch the failed campaign root. The
+  clean a resource or touch either failed diagnostic root. The
   hash-pinned
   [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) remains
   non-approvable; do not activate it.** Repository-only Construction has
@@ -62,12 +62,12 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current image-acquisition diagnostic bindings: index
-  `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
-  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
-  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
-  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-acquisition replacement bindings: index
+  `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 
