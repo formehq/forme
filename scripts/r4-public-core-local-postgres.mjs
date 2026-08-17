@@ -13526,9 +13526,1446 @@ export async function runLocalPostgresImageManifestDiagnosticReceiptValidationFa
   });
 }
 
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD = "2fe84edd9d188f35b02b226fa32ce94f5576f8de";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE = "5d6fb3334608ba7032aee45646b868d88ccbd1be";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256 = "sha256:592f9e2fdb080a3f9605937251943afd2fb2f822c2871b04ae9d13c581d35b6e";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD = "eda416c2a3b591cad3fb16608ad78fef2031f174";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE = "859a5cca61d13992fdde184f9d537b049af6cfee";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256 = "sha256:83305354bc03c0fd1a3e945b04d4ceb6d5749f08e2c530f734502dc6921ed3a9";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD = "6a040deb80dc9c22d131bcf6bb0d2eadbdca7d81";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE = "9774d6dab1af9bd8acea760f8b10e406bef46303";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256 = "sha256:f0a0bf2dbe00e6a1ba2f49b6e2b58898136402e685c3cd0afe8a55883b26fdb8";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD = "b4aae98488e934d921c1deb5c526286c49d22503";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE = "72ffc8ce9c19058894864846f5705d1234d7ced8";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_SHA256 = "sha256:73e6b30cbec9e5abbd52a1bdddf893bf89065c77381b1c6346d903d24ff77c66";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256 = "sha256:99d17e705204a8e2bb532cffc25ee845eddd29d242f5e518bac78e9b8db39414";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-ADDENDUM.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-OWNER-REVIEW.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_BEGIN";
+const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_END";
+const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY = "image-acquisition-diagnostic-journal-v1";
+const IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE = "image-acquisition-diagnostic-evidence.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE = "image-acquisition-diagnostic.pending.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE = "image-acquisition-diagnostic.consumed.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v1";
+const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-journal-entry.v1";
+const IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-receipt.v1";
+const IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_PATHS = Object.freeze([
+  "scripts/r4-public-core-local-postgres.mjs",
+  "test/r4/public-core-local-postgres.test.ts",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_PATHS = Object.freeze([
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-acquisition-diagnostic.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-evidence.schema.json",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS = Object.freeze([
+  "README.md", "docs/CONTROL.md", "docs/DECISIONS.md", "docs/NATIVE-HARNESS-ARCHITECTURE.md",
+  "docs/PRODUCT.md", "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+  "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS = Object.freeze(Object.fromEntries(
+  LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind,
+    kind === "version" || kind === "image.pull" ? 1 : kind === "image.inspect" ? 2 : 0]),
+));
+const IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR = Object.freeze({
+  predecessorCardSha256: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256,
+  predecessorCardHead: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD,
+  predecessorCardTree: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE,
+  predecessorReviewSha256: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_SHA256,
+  predecessorReviewHead: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD,
+  predecessorReviewTree: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE,
+  predecessorPayloadSha256: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256,
+  root: "/Users/zaynw/.forme-r4-image-manifest-diagnostic-f0a0bf2d",
+  rootDevice: 16777231,
+  rootInode: 35062239,
+  rootUid: 501,
+  rootMode: "0700",
+  retainedEntries: Object.freeze([
+    "image-manifest-diagnostic.consumed.json", "image-manifest-diagnostic-evidence.json",
+    "image-manifest-diagnostic-journal-v1", "owner-approval-receipt",
+  ]),
+  ownerApprovalReceiptSha256: "sha256:07963ed22fbb1c96c3161bf9bc0527003907920fe44ae57f2954cbf9d1f59445",
+  ownerApprovalReceiptByteCount: 1030,
+  consumedGrantSha256: "sha256:f497fc8ed003aebf42d975494730f184ba1f93355b6474ff7c3526e2d2533a22",
+  consumedGrantByteCount: 4401,
+  evidenceSha256: "sha256:e149627976e1f2bf1927dbcec25a82e545f8d892d2b5865e288d6941dcbb9ad7",
+  evidenceByteCount: 6639,
+  journalEntryCount: 10,
+  journalHeadSha256: "sha256:b9dcfb5134225497d8efc546f3ad7749ee931f29cf2db8e162037832af9a6a86",
+  terminalStatus: "FAILED",
+  terminalCode: "local_postgres_image_manifest_diagnostic_failed",
+  terminalClassification: "IMAGE_MISSING",
+  dockerVersionCount: 1,
+  imageInspectCount: 1,
+  imagePullCount: 0,
+  widerEffectCount: 0,
+});
+const IMAGE_ACQUISITION_DIAGNOSTIC_HOST = Object.freeze({
+  dockerCli: DOCKER_CLI, dockerCliSha256: DOCKER_CLI_SHA256,
+  dockerClientVersion: "29.3.1", dockerServerVersion: "29.3.1",
+  dockerServerPlatform: IMAGE_PLATFORM, imageReference: IMAGE_REFERENCE,
+  imagePlatform: IMAGE_PLATFORM,
+});
+const IMAGE_ACQUISITION_DIAGNOSTIC_CEILINGS = Object.freeze({
+  maximumPrepareAttempts: 1, maximumConsumptions: 1, maximumDiagnosticLifecycles: 1,
+  dockerCalls: IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS,
+});
+const IMAGE_ACQUISITION_DIAGNOSTIC_GRANT_KEYS = Object.freeze([
+  "schemaVersion", "diagnosticGrantId", "ownerApprovalReceiptSha256", "authority", "lineage",
+  "artifacts", "priorDiagnostic", "host", "ceilings", "localOnly", "productionEffectsAllowed",
+  "createdAt", "expiresAt",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS = Object.freeze([
+  "correctionAddendumSha256", "correctionOwnerReviewSha256",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_KEYS = Object.freeze([
+  ...IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS,
+  "diagnosticCardSha256", "diagnosticOwnerReviewSha256", "diagnosticAuthorityPayloadSha256",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS = Object.freeze([
+  "correctionAddendumHead", "correctionAddendumTree", "correctionOwnerReviewHead",
+  "correctionOwnerReviewTree", "implementationHead", "implementationTree",
+  "implementationAggregateSha256", "evidenceHead", "evidenceTree", "statusHead", "statusTree",
+  "statusAggregateSha256",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_LINEAGE_KEYS = Object.freeze([
+  ...IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS,
+  "diagnosticCardHead", "diagnosticCardTree", "diagnosticOwnerReviewHead", "diagnosticOwnerReviewTree",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_ARTIFACT_KEYS = Object.freeze([
+  "artifactIndexSha256", "evidenceSchemaSha256", "evidenceSha256", "constructionReportSha256",
+  "committedStatusAuditSha256", "runnerSha256", "runnerTestSha256",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_HOST_KEYS = Object.freeze([
+  ...Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_HOST), "dockerCliIdentitySha256", "socketIdentitySha256",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_STAGES = Object.freeze([
+  "VERSION", "PRE_INSPECT", "PULL", "POST_INSPECT",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_OBSERVATION_KEYS = Object.freeze([
+  "stage", ...IMAGE_MANIFEST_DIAGNOSTIC_OBSERVATION_KEYS,
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_CLASSIFICATIONS = new Set([
+  ...IMAGE_MANIFEST_DIAGNOSTIC_CLASSIFICATIONS, "PULL_COMPLETED", "PULL_NONZERO",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_EVENTS = new Set([
+  "grant.consumed", "diagnostic.lifecycle_started", "docker.attempt", "docker.completed",
+  "observation.recorded", "docker.ambiguous", "closure.proven", "diagnostic.terminal",
+]);
+const IMAGE_ACQUISITION_DIAGNOSTIC_RETAINED_FILES = Object.freeze([
+  IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE, IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE,
+  IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY, "owner-approval-receipt",
+]);
+
+function imageAcquisitionDiagnosticAggregate(head, paths) {
+  return artifactAggregate(head, paths).aggregateSha256;
+}
+
+function imageAcquisitionDiagnosticPriorContract() { return IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR; }
+function imageAcquisitionDiagnosticHostContract() { return IMAGE_ACQUISITION_DIAGNOSTIC_HOST; }
+function imageAcquisitionDiagnosticCeilings() { return IMAGE_ACQUISITION_DIAGNOSTIC_CEILINGS; }
+
+function validateImageAcquisitionDiagnosticPayload(raw) {
+  const payload = ownedPlain(raw);
+  exactKeys(payload, [
+    "schemaVersion", "authority", "lineage", "artifacts", "priorDiagnostic", "host", "ceilings",
+    "localOnly", "productionEffectsAllowed",
+  ]);
+  exactKeys(payload.authority, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS);
+  exactKeys(payload.lineage, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS);
+  exactKeys(payload.artifacts, IMAGE_ACQUISITION_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(payload.priorDiagnostic, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR));
+  exactKeys(payload.host, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_HOST));
+  exactKeys(payload.ceilings, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_CEILINGS));
+  exactKeys(payload.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1"
+    || payload.localOnly !== true || payload.productionEffectsAllowed !== false
+    || payload.authority.correctionAddendumSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256
+    || payload.authority.correctionOwnerReviewSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256
+    || payload.lineage.correctionAddendumHead !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD
+    || payload.lineage.correctionAddendumTree !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE
+    || payload.lineage.correctionOwnerReviewHead !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD
+    || payload.lineage.correctionOwnerReviewTree !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE
+    || canonicalJson(payload.priorDiagnostic) !== canonicalJson(imageAcquisitionDiagnosticPriorContract())
+    || canonicalJson(payload.host) !== canonicalJson(imageAcquisitionDiagnosticHostContract())
+    || canonicalJson(payload.ceilings) !== canonicalJson(imageAcquisitionDiagnosticCeilings())) {
+    fail("local_postgres_image_acquisition_diagnostic_authority_invalid");
+  }
+  for (const value of Object.values(payload.authority)) assertSha(value);
+  for (const [key, value] of Object.entries(payload.lineage)) {
+    if (key.endsWith("Sha256")) assertSha(value); else assertGit(value);
+  }
+  for (const value of Object.values(payload.artifacts)) assertSha(value);
+  return payload;
+}
+
+function parseImageAcquisitionDiagnosticCard(bytes) {
+  let text;
+  try { text = new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_authority_invalid"); }
+  const lines = text.split("\n");
+  const begins = lines.flatMap((line, index) => line === IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_image_acquisition_diagnostic_authority_invalid");
+  }
+  const canonical = lines[begins[0] + 1];
+  let parsed;
+  try { parsed = parseStrictJson(canonical); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_authority_invalid"); }
+  if (canonical.length === 0 || canonicalJson(parsed) !== canonical) {
+    fail("local_postgres_image_acquisition_diagnostic_authority_invalid");
+  }
+  return Object.freeze({
+    payload: validateImageAcquisitionDiagnosticPayload(parsed),
+    sha256: sha256Bytes(Buffer.from(canonical)),
+  });
+}
+
+function verifyImageAcquisitionDiagnosticTopology(grant) {
+  exactCommitStep(IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD,
+    IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD,
+    IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE,
+    new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH, "A"]]),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep("b4aae98488e934d921c1deb5c526286c49d22503", IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD,
+    IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE,
+    new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH, "A"]]),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD, IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD,
+    IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE,
+    new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_PATH, "A"]]),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD, grant.lineage.implementationHead,
+    grant.lineage.implementationTree, statusMap(IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_PATHS),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.implementationHead, grant.lineage.evidenceHead, grant.lineage.evidenceTree,
+    statusMap(IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_PATHS,
+      new Set(IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_PATHS)),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.evidenceHead, grant.lineage.statusHead, grant.lineage.statusTree,
+    statusMap(IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS,
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md"])),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.statusHead, grant.lineage.diagnosticCardHead, grant.lineage.diagnosticCardTree,
+    new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH, "A"]]),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  exactCommitStep(grant.lineage.diagnosticCardHead, grant.lineage.diagnosticOwnerReviewHead,
+    grant.lineage.diagnosticOwnerReviewTree,
+    new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH, "A"]]),
+    "local_postgres_image_acquisition_diagnostic_binding_invalid");
+  const predecessorCardBytes = runGit(["show",
+    `${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD}:${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_PATH}`], true);
+  if (runGit(["rev-parse", `${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD}^{tree}`])
+      !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE
+    || sha256Bytes(predecessorCardBytes) !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256
+    || parseImageManifestDiagnosticCard(predecessorCardBytes).sha256
+      !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256
+    || sha256Bytes(runGit(["show",
+      `${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD}:${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH}`], true))
+      !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_SHA256
+    || sha256Bytes(runGit(["show", `${IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD}:${IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH}`], true))
+      !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256
+    || sha256Bytes(runGit(["show", `${IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD}:${IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_PATH}`], true))
+      !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256
+    || imageAcquisitionDiagnosticAggregate(grant.lineage.implementationHead,
+      IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_PATHS) !== grant.lineage.implementationAggregateSha256
+    || imageAcquisitionDiagnosticAggregate(grant.lineage.statusHead,
+      IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS) !== grant.lineage.statusAggregateSha256) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+  const cardBytes = runGit(["show", `${grant.lineage.diagnosticCardHead}:${IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH}`], true);
+  const parsed = parseImageAcquisitionDiagnosticCard(cardBytes);
+  if (parsed.sha256 !== grant.authority.diagnosticAuthorityPayloadSha256
+    || canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(grant.lineage,
+      IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS))
+    || canonicalJson(parsed.payload.artifacts) !== canonicalJson(grant.artifacts)
+    || sha256Bytes(cardBytes) !== grant.authority.diagnosticCardSha256
+    || sha256Bytes(runGit(["show", `${grant.lineage.diagnosticOwnerReviewHead}:${IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH}`], true))
+      !== grant.authority.diagnosticOwnerReviewSha256) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+}
+
+function deriveImageAcquisitionDiagnosticAuthority(diagnosticOwnerReviewHead) {
+  assertGit(diagnosticOwnerReviewHead);
+  const diagnosticCardHead = runGit(["rev-parse", `${diagnosticOwnerReviewHead}^`]);
+  const statusHead = runGit(["rev-parse", `${diagnosticCardHead}^`]);
+  const evidenceHead = runGit(["rev-parse", `${statusHead}^`]);
+  const implementationHead = runGit(["rev-parse", `${evidenceHead}^`]);
+  const lineage = Object.freeze({
+    correctionAddendumHead: IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD,
+    correctionAddendumTree: IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE,
+    correctionOwnerReviewHead: IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD,
+    correctionOwnerReviewTree: IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE,
+    implementationHead, implementationTree: runGit(["rev-parse", `${implementationHead}^{tree}`]),
+    implementationAggregateSha256: imageAcquisitionDiagnosticAggregate(implementationHead,
+      IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_PATHS),
+    evidenceHead, evidenceTree: runGit(["rev-parse", `${evidenceHead}^{tree}`]),
+    statusHead, statusTree: runGit(["rev-parse", `${statusHead}^{tree}`]),
+    statusAggregateSha256: imageAcquisitionDiagnosticAggregate(statusHead,
+      IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS),
+    diagnosticCardHead, diagnosticCardTree: runGit(["rev-parse", `${diagnosticCardHead}^{tree}`]),
+    diagnosticOwnerReviewHead,
+    diagnosticOwnerReviewTree: runGit(["rev-parse", `${diagnosticOwnerReviewHead}^{tree}`]),
+  });
+  const cardBytes = runGit(["show", `${diagnosticCardHead}:${IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH}`], true);
+  const parsed = parseImageAcquisitionDiagnosticCard(cardBytes);
+  if (canonicalJson(parsed.payload.lineage) !== canonicalJson(selectKeys(lineage,
+    IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS))) {
+    fail("local_postgres_image_acquisition_diagnostic_authority_invalid");
+  }
+  return Object.freeze({
+    authority: Object.freeze({
+      ...parsed.payload.authority,
+      diagnosticCardSha256: sha256Bytes(cardBytes),
+      diagnosticOwnerReviewSha256: sha256Bytes(runGit([
+        "show", `${diagnosticOwnerReviewHead}:${IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH}`,
+      ], true)),
+      diagnosticAuthorityPayloadSha256: parsed.sha256,
+    }),
+    lineage, artifacts: parsed.payload.artifacts, priorDiagnostic: parsed.payload.priorDiagnostic,
+    host: parsed.payload.host, ceilings: parsed.payload.ceilings,
+  });
+}
+
+function validateImageAcquisitionDiagnosticGrant(raw, now = new Date(), allowExpired = false) {
+  const grant = ownedPlain(raw);
+  exactKeys(grant, IMAGE_ACQUISITION_DIAGNOSTIC_GRANT_KEYS);
+  exactKeys(grant.authority, IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(grant.lineage, IMAGE_ACQUISITION_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(grant.artifacts, IMAGE_ACQUISITION_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(grant.priorDiagnostic, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR));
+  exactKeys(grant.host, IMAGE_ACQUISITION_DIAGNOSTIC_HOST_KEYS);
+  exactKeys(grant.ceilings, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_CEILINGS));
+  exactKeys(grant.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  if (grant.schemaVersion !== IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA
+    || typeof grant.diagnosticGrantId !== "string" || !GRANT_ID.test(grant.diagnosticGrantId)
+    || grant.localOnly !== true || grant.productionEffectsAllowed !== false
+    || grant.authority.correctionAddendumSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256
+    || grant.authority.correctionOwnerReviewSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256
+    || grant.lineage.correctionAddendumHead !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD
+    || grant.lineage.correctionAddendumTree !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE
+    || grant.lineage.correctionOwnerReviewHead !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD
+    || grant.lineage.correctionOwnerReviewTree !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE
+    || canonicalJson(grant.priorDiagnostic) !== canonicalJson(imageAcquisitionDiagnosticPriorContract())
+    || canonicalJson(selectKeys(grant.host, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_HOST)))
+      !== canonicalJson(imageAcquisitionDiagnosticHostContract())
+    || canonicalJson(grant.ceilings) !== canonicalJson(imageAcquisitionDiagnosticCeilings())) {
+    fail("local_postgres_image_acquisition_diagnostic_grant_invalid");
+  }
+  for (const value of Object.values(grant.authority)) assertSha(value);
+  for (const [key, value] of Object.entries(grant.lineage)) {
+    if (key.endsWith("Sha256")) assertSha(value); else assertGit(value);
+  }
+  for (const value of Object.values(grant.artifacts)) assertSha(value);
+  assertSha(grant.ownerApprovalReceiptSha256);
+  assertSha(grant.host.dockerCliSha256);
+  assertSha(grant.host.dockerCliIdentitySha256);
+  assertSha(grant.host.socketIdentitySha256);
+  const created = instant(grant.createdAt);
+  const expires = instant(grant.expiresAt);
+  const observed = now instanceof Date ? now.getTime() : Number.NaN;
+  if (!Number.isFinite(observed) || expires <= created || expires - created > MAX_GRANT_LIFETIME_MS
+    || (!allowExpired && (observed < created - 60_000 || observed >= expires))) {
+    fail("local_postgres_image_acquisition_diagnostic_grant_expired");
+  }
+  return grant;
+}
+
+export function verifyLocalPostgresImageAcquisitionDiagnosticCommittedBindings(grant) {
+  const stable = validateImageAcquisitionDiagnosticGrant(grant, new Date(instant(grant.createdAt) + 1));
+  verifyImageAcquisitionDiagnosticTopology(stable);
+  if (runGit(["rev-parse", "HEAD^{commit}"]) !== stable.lineage.diagnosticOwnerReviewHead
+    || runGit(["rev-parse", "HEAD^{tree}"]) !== stable.lineage.diagnosticOwnerReviewTree
+    || runGit(["diff", "--cached", "--quiet", "--exit-code"]) !== ""
+    || runGit(["status", "--porcelain=v1", "--untracked-files=no"]) !== ""
+    || sha256StableOwnedFile(fileURLToPath(import.meta.url)) !== stable.artifacts.runnerSha256
+    || sha256StableOwnedFile(path.join(ROOT, "test/r4/public-core-local-postgres.test.ts"))
+      !== stable.artifacts.runnerTestSha256) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+  return true;
+}
+
+function prepareImageAcquisitionDiagnosticWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["diagnosticRoot", "diagnosticOwnerReviewHead", "ownerApprovalReceiptPath", "createdAt", "expiresAt"]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || typeof stable.ownerApprovalReceiptPath !== "string") {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  let diagnosticRoot;
+  try { diagnosticRoot = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_private_root_invalid"); }
+  if (diagnosticRoot !== stable.diagnosticRoot) fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(diagnosticRoot);
+  if (canonicalJson(fs.readdirSync(diagnosticRoot).sort(binaryCompare)) !== canonicalJson(["owner-approval-receipt"])) {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  const ownerApprovalReceiptSha256 = readOwnerApprovalReceipt(diagnosticRoot, stable.ownerApprovalReceiptPath);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const derived = adapters.deriveAuthority(stable.diagnosticOwnerReviewHead);
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const observedAt = adapters.now();
+  const observedMs = observedAt instanceof Date ? observedAt.getTime() : Number.NaN;
+  const created = instant(stable.createdAt);
+  const expires = instant(stable.expiresAt);
+  if (!Number.isFinite(observedMs) || Math.abs(created - observedMs) > 60_000 || expires <= observedMs
+    || expires <= created || expires - created > MAX_GRANT_LIFETIME_MS) {
+    fail("local_postgres_image_acquisition_diagnostic_grant_expired");
+  }
+  const grant = Object.freeze({
+    schemaVersion: IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA,
+    diagnosticGrantId: adapters.randomBytes(16).toString("hex"), ownerApprovalReceiptSha256,
+    authority: derived.authority, lineage: derived.lineage, artifacts: derived.artifacts,
+    priorDiagnostic: derived.priorDiagnostic,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: cli.identitySha256,
+      socketIdentitySha256: socket.identitySha256,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: stable.createdAt, expiresAt: stable.expiresAt,
+  });
+  validateImageAcquisitionDiagnosticGrant(grant, observedAt);
+  adapters.verifyBindings(grant, observedAt);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  const pending = privatePath(diagnosticRoot, IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE);
+  const installed = installPendingGrant(diagnosticRoot, pending, grant);
+  assertPrivateDirectoryIdentity(rootIdentity);
+  if (canonicalJson(fs.readdirSync(diagnosticRoot).sort(binaryCompare)) !== canonicalJson([
+    IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE, "owner-approval-receipt",
+  ].sort(binaryCompare))) fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  return Object.freeze({
+    schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-prepare-receipt.v1",
+    pendingDiagnosticGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
+    diagnosticAuthorityPayloadSha256: grant.authority.diagnosticAuthorityPayloadSha256,
+    observedAt: observedAt.toISOString(),
+  });
+}
+
+export function prepareLocalPostgresImageAcquisitionDiagnosticGrant(input) {
+  return prepareImageAcquisitionDiagnosticWithAdapters(input, Object.freeze({
+    deriveAuthority: deriveImageAcquisitionDiagnosticAuthority, observeDockerCliIdentity,
+    resolveSocketIdentity: resolveDockerSocketIdentity, randomBytes: crypto.randomBytes,
+    now: () => new Date(), verifyBindings: verifyLocalPostgresImageAcquisitionDiagnosticCommittedBindings,
+  }));
+}
+
+function emptyImageAcquisitionDiagnosticJournalState() {
+  return {
+    sequence: 0, headSha256: JOURNAL_GENESIS, consumedGrantSha256: null, lifecycleCount: 0,
+    attempts: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    completions: Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind) => [kind, 0])),
+    openEffects: new Map(), completedEffects: new Map(), observations: new Map(), closure: null, terminal: null,
+  };
+}
+
+function imageAcquisitionDiagnosticJournalPath(root, create = false) {
+  const journalPath = privatePath(root, IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY);
+  if (create && !fs.existsSync(journalPath)) {
+    try { fs.mkdirSync(journalPath, { mode: 0o700 }); fsyncPrivateDirectory(root); }
+    catch { fail("local_postgres_image_acquisition_diagnostic_journal_invalid"); }
+  }
+  assertPrivateDirectory(journalPath);
+  return journalPath;
+}
+
+function acquisitionStageContract(stage) {
+  if (stage === "VERSION") return Object.freeze({ kind: "version", ordinal: 1 });
+  if (stage === "PRE_INSPECT") return Object.freeze({ kind: "image.inspect", ordinal: 1 });
+  if (stage === "PULL") return Object.freeze({ kind: "image.pull", ordinal: 1 });
+  if (stage === "POST_INSPECT") return Object.freeze({ kind: "image.inspect", ordinal: 2 });
+  fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+}
+
+function validateImageAcquisitionDiagnosticObservation(raw) {
+  const observation = ownedPlain(raw);
+  exactKeys(observation, IMAGE_ACQUISITION_DIAGNOSTIC_OBSERVATION_KEYS);
+  const contract = acquisitionStageContract(observation.stage);
+  if (observation.kind !== contract.kind || observation.ordinal !== contract.ordinal
+    || typeof observation.effectId !== "string" || !BODY_FREE_DIAGNOSTIC_SPAWN_OUTCOMES.has(observation.spawnOutcome)
+    || !(Number.isSafeInteger(observation.exitStatus) || observation.exitStatus === "NOT_AVAILABLE")
+    || !BODY_FREE_DIAGNOSTIC_SIGNALS.has(observation.signal)
+    || !IMAGE_ACQUISITION_DIAGNOSTIC_CLASSIFICATIONS.has(observation.classification)) {
+    fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+  }
+  for (const prefix of ["stdout", "stderr"]) {
+    if (!Number.isSafeInteger(observation[`${prefix}Bytes`]) || observation[`${prefix}Bytes`] < 0
+      || observation[`${prefix}Bytes`] > MAX_DOCKER_OUTPUT_BYTES || !SHA256.test(observation[`${prefix}Sha256`])
+      || typeof observation[`${prefix}Utf8`] !== "boolean" || typeof observation[`${prefix}Empty`] !== "boolean"
+      || !BODY_FREE_DIAGNOSTIC_LINE_ENDINGS.has(observation[`${prefix}LineEndings`])
+      || !Number.isSafeInteger(observation[`${prefix}LineCount`]) || observation[`${prefix}LineCount`] < 0
+      || observation[`${prefix}Empty`] !== (observation[`${prefix}Bytes`] === 0)) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+  }
+  const tuple = imageManifestDiagnosticTuple(observation.tuple);
+  const tupleValues = IMAGE_MANIFEST_DIAGNOSTIC_TUPLE_KEYS.map((key) => tuple[key]);
+  const tupleAll = (value) => tupleValues.every((candidate) => candidate === value);
+  if (observation.spawnOutcome !== "COMPLETED") {
+    if (observation.exitStatus !== "NOT_AVAILABLE" || observation.classification !== "AMBIGUOUS_TRANSPORT"
+      || !tupleAll("UNKNOWN")) fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    return observation;
+  }
+  if (!Number.isSafeInteger(observation.exitStatus) || observation.signal !== "NONE") {
+    fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+  }
+  if (observation.stage === "VERSION") {
+    if (!["VERSION_MATCHED", "PLATFORM_MISMATCH", "MALFORMED", "NONZERO"].includes(observation.classification)
+      || !(["VERSION_MATCHED", "PLATFORM_MISMATCH", "NONZERO"].includes(observation.classification)
+        ? tupleAll("NOT_APPLICABLE") : tupleAll("INVALID"))) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+  } else if (observation.stage === "PULL") {
+    if (!tupleAll("NOT_APPLICABLE")
+      || observation.classification === "PULL_COMPLETED" && observation.exitStatus !== 0
+      || observation.classification === "PULL_NONZERO" && observation.exitStatus === 0
+      || !["PULL_COMPLETED", "PULL_NONZERO"].includes(observation.classification)) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+  } else {
+    if (!["OBSERVED", "REFERENCE_MISMATCH", "PLATFORM_MISMATCH", "DESCRIPTOR_INVALID", "MALFORMED",
+      "IMAGE_MISSING", "NONZERO"].includes(observation.classification)) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+    if (observation.classification === "OBSERVED"
+      && (observation.exitStatus !== 0 || tuple.repoDigestPresent !== "TRUE" || tuple.imageOs !== "linux"
+        || tuple.imageArchitecture !== "arm64" || !SHA256.test(tuple.descriptorDigest)
+        || tuple.descriptorPlatformOs !== "linux" || tuple.descriptorPlatformArchitecture !== "arm64")) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+    if (observation.classification === "IMAGE_MISSING"
+      && (observation.exitStatus === 0 || !tupleAll("NOT_APPLICABLE"))) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+    if (observation.classification === "MALFORMED" && !tupleAll("INVALID")) {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+  }
+  return observation;
+}
+
+function imageAcquisitionStageAllowed(state, stage) {
+  if (stage === "VERSION") return state.observations.size === 0;
+  if (stage === "PRE_INSPECT") return state.observations.get("VERSION")?.classification === "VERSION_MATCHED";
+  if (stage === "PULL") return state.observations.get("PRE_INSPECT")?.classification === "IMAGE_MISSING";
+  if (stage === "POST_INSPECT") return state.observations.get("PULL")?.classification === "PULL_COMPLETED";
+  return false;
+}
+
+function readImageAcquisitionDiagnosticJournal(root, create = false) {
+  const state = emptyImageAcquisitionDiagnosticJournalState();
+  const journalPath = imageAcquisitionDiagnosticJournalPath(root, create);
+  const names = fs.readdirSync(journalPath).sort(binaryCompare);
+  if (names.length > 18 || names.some((name, index) => name !== `entry-${String(index + 1).padStart(6, "0")}.json`)) {
+    fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+  }
+  for (let index = 0; index < names.length; index += 1) {
+    const entry = ownedPlain(readPrivateJson(path.join(journalPath, names[index])));
+    exactKeys(entry, ["schemaVersion", "sequence", "previousSha256", "event", "detail", "entrySha256"]);
+    const preimage = Object.freeze({
+      schemaVersion: entry.schemaVersion, sequence: entry.sequence, previousSha256: entry.previousSha256,
+      event: entry.event, detail: entry.detail,
+    });
+    if (entry.schemaVersion !== IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_SCHEMA || entry.sequence !== index + 1
+      || entry.previousSha256 !== state.headSha256 || !IMAGE_ACQUISITION_DIAGNOSTIC_EVENTS.has(entry.event)
+      || entry.entrySha256 !== sha256Bytes(Buffer.from(canonicalJson(preimage)))) {
+      fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+    }
+    if (entry.event === "grant.consumed") {
+      exactKeys(entry.detail, ["consumedDiagnosticGrantSha256"]);
+      if (state.sequence !== 0 || state.consumedGrantSha256 !== null) fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      state.consumedGrantSha256 = assertSha(entry.detail.consumedDiagnosticGrantSha256);
+    } else if (entry.event === "diagnostic.lifecycle_started") {
+      exactKeys(entry.detail, ["ordinal"]);
+      if (state.consumedGrantSha256 === null || entry.detail.ordinal !== 1 || state.lifecycleCount !== 0) {
+        fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      }
+      state.lifecycleCount = 1;
+    } else if (entry.event === "docker.attempt") {
+      exactKeys(entry.detail, ["effectId", "kind", "ordinal", "stage"]);
+      const { effectId, kind, ordinal, stage } = entry.detail;
+      const contract = acquisitionStageContract(stage);
+      if (state.lifecycleCount !== 1 || state.terminal !== null || kind !== contract.kind || ordinal !== contract.ordinal
+        || typeof effectId !== "string" || state.openEffects.has(effectId) || state.completedEffects.has(effectId)
+        || state.observations.has(stage) || !imageAcquisitionStageAllowed(state, stage)
+        || state.attempts[kind] >= IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]) {
+        fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      }
+      state.attempts[kind] += 1;
+      state.openEffects.set(effectId, Object.freeze(entry.detail));
+    } else if (entry.event === "docker.completed") {
+      exactKeys(entry.detail, ["effectId", "kind", "ordinal", "stage"]);
+      const open = state.openEffects.get(entry.detail.effectId);
+      if (open === undefined || canonicalJson(open) !== canonicalJson(entry.detail)) {
+        fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      }
+      state.openEffects.delete(entry.detail.effectId);
+      state.completedEffects.set(entry.detail.effectId, open);
+      state.completions[entry.detail.kind] += 1;
+    } else if (entry.event === "observation.recorded" || entry.event === "docker.ambiguous") {
+      const observation = validateImageAcquisitionDiagnosticObservation(entry.detail);
+      if (state.observations.has(observation.stage)) fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      if (entry.event === "docker.ambiguous") {
+        const open = state.openEffects.get(observation.effectId);
+        if (open === undefined || observation.classification !== "AMBIGUOUS_TRANSPORT") {
+          fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+        }
+        state.openEffects.delete(observation.effectId);
+      } else {
+        const complete = state.completedEffects.get(observation.effectId);
+        if (complete === undefined || complete.stage !== observation.stage) {
+          fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+        }
+        state.completedEffects.delete(observation.effectId);
+      }
+      state.observations.set(observation.stage, observation);
+    } else if (entry.event === "closure.proven") {
+      exactKeys(entry.detail, ["localResidueCount", "dockerResourceEffectCount", "cacheResidue"]);
+      if (state.openEffects.size !== 0 || state.completedEffects.size !== 0 || state.closure !== null
+        || entry.detail.localResidueCount !== 0 || entry.detail.dockerResourceEffectCount !== 0
+        || !["NONE", "PREEXISTING_CACHE", "EXACT_IMAGE_CACHE", "PARTIAL_OR_UNKNOWN", "AMBIGUOUS"].includes(entry.detail.cacheResidue)) {
+        fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      }
+      state.closure = Object.freeze(entry.detail);
+    } else if (entry.event === "diagnostic.terminal") {
+      exactKeys(entry.detail, ["status", "code"]);
+      if (state.closure === null || state.terminal !== null || !["OBSERVED", "FAILED"].includes(entry.detail.status)) {
+        fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+      }
+      state.terminal = Object.freeze(entry.detail);
+    }
+    state.sequence = entry.sequence;
+    state.headSha256 = entry.entrySha256;
+  }
+  return state;
+}
+
+function appendImageAcquisitionDiagnosticJournal(root, event, detail) {
+  const state = readImageAcquisitionDiagnosticJournal(root, true);
+  const sequence = state.sequence + 1;
+  if (sequence > 18 || !IMAGE_ACQUISITION_DIAGNOSTIC_EVENTS.has(event)) {
+    fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+  }
+  const preimage = Object.freeze({
+    schemaVersion: IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_SCHEMA, sequence,
+    previousSha256: state.headSha256, event, detail: ownedPlain(detail),
+  });
+  const entry = Object.freeze({ ...preimage, entrySha256: sha256Bytes(Buffer.from(canonicalJson(preimage))) });
+  writePrivateJson(path.join(imageAcquisitionDiagnosticJournalPath(root, true),
+    `entry-${String(sequence).padStart(6, "0")}.json`), entry);
+  const readback = readImageAcquisitionDiagnosticJournal(root);
+  if (readback.sequence !== sequence || readback.headSha256 !== entry.entrySha256) {
+    fail("local_postgres_image_acquisition_diagnostic_journal_invalid");
+  }
+  return readback;
+}
+
+function reserveImageAcquisitionDiagnosticCall(root, stage) {
+  const state = readImageAcquisitionDiagnosticJournal(root);
+  const contract = acquisitionStageContract(stage);
+  if (state.lifecycleCount !== 1 || state.terminal !== null || !imageAcquisitionStageAllowed(state, stage)
+    || state.attempts[contract.kind] >= IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS[contract.kind]) {
+    fail("local_postgres_image_acquisition_diagnostic_effect_ceiling_exceeded");
+  }
+  const detail = Object.freeze({
+    effectId: `docker-${String(state.sequence + 1).padStart(6, "0")}-${contract.kind}`,
+    kind: contract.kind, ordinal: contract.ordinal, stage,
+  });
+  appendImageAcquisitionDiagnosticJournal(root, "docker.attempt", detail);
+  return detail;
+}
+
+function fingerprintImageAcquisitionDiagnosticResult(stage, effect, raw) {
+  const rawStdout = Buffer.isBuffer(raw?.stdout) ? raw.stdout : null;
+  const rawStderr = Buffer.isBuffer(raw?.stderr) ? raw.stderr : null;
+  const stdout = rawStdout === null ? Buffer.alloc(0) : Buffer.from(rawStdout);
+  const stderr = rawStderr === null ? Buffer.alloc(0) : Buffer.from(rawStderr);
+  try {
+    if (stdout.length > MAX_DOCKER_OUTPUT_BYTES || stderr.length > MAX_DOCKER_OUTPUT_BYTES) {
+      fail("local_postgres_image_acquisition_diagnostic_output_invalid");
+    }
+    const out = streamFingerprint(stdout);
+    const err = streamFingerprint(stderr);
+    let spawnOutcome = "COMPLETED";
+    if (raw?.error?.code === "ETIMEDOUT") spawnOutcome = "TIMED_OUT";
+    else if (raw?.signal !== null && raw?.signal !== undefined) spawnOutcome = "SIGNALED";
+    else if (raw?.error !== undefined && raw?.error !== null) spawnOutcome = "SPAWN_ERROR";
+    else if (!Number.isSafeInteger(raw?.status) || rawStdout === null || rawStderr === null) spawnOutcome = "UNKNOWN";
+    const exitStatus = spawnOutcome === "COMPLETED" ? raw.status : "NOT_AVAILABLE";
+    const signal = spawnOutcome === "COMPLETED" ? "NONE" : diagnosticSignal(raw?.signal);
+    let classification = "AMBIGUOUS_TRANSPORT";
+    let tuple = emptyImageManifestDiagnosticTuple(spawnOutcome === "COMPLETED" ? "NOT_APPLICABLE" : "UNKNOWN");
+    if (spawnOutcome === "COMPLETED" && stage === "PULL") {
+      classification = exitStatus === 0 ? "PULL_COMPLETED" : "PULL_NONZERO";
+    } else if (spawnOutcome === "COMPLETED" && exitStatus === 0) {
+      try {
+        const text = new TextDecoder("utf-8", { fatal: true }).decode(stdout).trim();
+        const record = ownedPlain(parseStrictJson(text));
+        if (stage === "VERSION") {
+          const observed = observeDockerVersion(Object.freeze({ stdout: text }));
+          classification = observed.dockerClientVersion === "29.3.1"
+            && observed.dockerServerVersion === "29.3.1" && observed.dockerServerPlatform === IMAGE_PLATFORM
+            ? "VERSION_MATCHED" : "PLATFORM_MISMATCH";
+        } else {
+          tuple = parseImageManifestTuple(record);
+          classification = tuple.repoDigestPresent !== "TRUE" ? "REFERENCE_MISMATCH"
+            : tuple.imageOs !== "linux" || tuple.imageArchitecture !== "arm64" ? "PLATFORM_MISMATCH"
+              : !SHA256.test(tuple.descriptorDigest) ? "DESCRIPTOR_INVALID"
+                : tuple.descriptorPlatformOs !== "linux" || tuple.descriptorPlatformArchitecture !== "arm64"
+                  ? "PLATFORM_MISMATCH" : "OBSERVED";
+        }
+      } catch { classification = "MALFORMED"; tuple = emptyImageManifestDiagnosticTuple("INVALID"); }
+    } else if (spawnOutcome === "COMPLETED") {
+      classification = effect.kind === "image.inspect" && exitStatus === 1 ? "IMAGE_MISSING" : "NONZERO";
+    }
+    return validateImageAcquisitionDiagnosticObservation(Object.freeze({
+      stage, effectId: effect.effectId, kind: effect.kind, ordinal: effect.ordinal,
+      spawnOutcome, exitStatus, signal,
+      stdoutBytes: out.bytes, stdoutSha256: out.sha256, stdoutUtf8: out.utf8, stdoutEmpty: out.empty,
+      stdoutLineEndings: out.lineEndings, stdoutLineCount: out.lineCount,
+      stderrBytes: err.bytes, stderrSha256: err.sha256, stderrUtf8: err.utf8, stderrEmpty: err.empty,
+      stderrLineEndings: err.lineEndings, stderrLineCount: err.lineCount,
+      classification, tuple,
+    }));
+  } finally {
+    stdout.fill(0); stderr.fill(0); rawStdout?.fill(0); rawStderr?.fill(0);
+  }
+}
+
+function ambiguousImageAcquisitionDiagnosticObservation(effect) {
+  const empty = sha256Bytes(Buffer.alloc(0));
+  return Object.freeze({
+    stage: effect.stage, effectId: effect.effectId, kind: effect.kind, ordinal: effect.ordinal,
+    spawnOutcome: "UNKNOWN", exitStatus: "NOT_AVAILABLE", signal: "UNKNOWN",
+    stdoutBytes: 0, stdoutSha256: empty, stdoutUtf8: true, stdoutEmpty: true,
+    stdoutLineEndings: "NONE", stdoutLineCount: 0,
+    stderrBytes: 0, stderrSha256: empty, stderrUtf8: true, stderrEmpty: true,
+    stderrLineEndings: "NONE", stderrLineCount: 0,
+    classification: "AMBIGUOUS_TRANSPORT", tuple: emptyImageManifestDiagnosticTuple("UNKNOWN"),
+  });
+}
+
+function consumeImageAcquisitionDiagnosticGrant(root, now, verifyBindings) {
+  const pending = privatePath(root, IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE);
+  const consumed = privatePath(root, IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE);
+  if (canonicalJson(fs.readdirSync(root).sort(binaryCompare)) !== canonicalJson([
+    IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE, "owner-approval-receipt",
+  ].sort(binaryCompare))) fail("local_postgres_image_acquisition_diagnostic_grant_invalid");
+  const record = readPrivateJsonRecord(pending);
+  const grant = validateImageAcquisitionDiagnosticGrant(record.value, now);
+  verifyBindings(grant, now);
+  if (readOwnerApprovalReceipt(root, privatePath(root, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  try {
+    fs.linkSync(pending, consumed);
+    fsyncPrivateDirectory(root);
+    fs.unlinkSync(pending);
+    fsyncPrivateDirectory(root);
+  } catch { fail("local_postgres_image_acquisition_diagnostic_grant_invalid"); }
+  const installed = readPrivateJsonRecord(consumed);
+  if (installed.sha256 !== record.sha256 || canonicalJson(installed.value) !== canonicalJson(grant)) {
+    fail("local_postgres_image_acquisition_diagnostic_grant_invalid");
+  }
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: installed.sha256 });
+}
+
+function recoverImageAcquisitionDiagnosticGrant(root, now, verifyBindings) {
+  const allowed = new Set([
+    IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE, IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-config", "docker-home", "owner-approval-receipt",
+  ]);
+  const names = fs.readdirSync(root).sort(binaryCompare);
+  if (!names.includes(IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE)
+    || !names.includes(IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY)
+    || names.includes(IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE)
+    || names.some((name) => !allowed.has(name))) {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  const record = readPrivateJsonRecord(privatePath(root, IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE));
+  const grant = validateImageAcquisitionDiagnosticGrant(record.value, now, true);
+  verifyBindings(grant, now, { allowExpired: true });
+  if (readOwnerApprovalReceipt(root, privatePath(root, "owner-approval-receipt"), false)
+    !== grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  const journal = readImageAcquisitionDiagnosticJournal(root);
+  if (journal.consumedGrantSha256 !== record.sha256 || journal.terminal !== null) {
+    fail("local_postgres_image_acquisition_diagnostic_duplicate_consume");
+  }
+  return Object.freeze({ grant, consumedDiagnosticGrantSha256: record.sha256 });
+}
+
+function revalidateImageAcquisitionDiagnosticBoundary(context) {
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+  const expected = [
+    IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE, IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY,
+    "docker-config", "docker-home", "owner-approval-receipt",
+  ].sort(binaryCompare);
+  if (canonicalJson(fs.readdirSync(context.root).sort(binaryCompare)) !== canonicalJson(expected)) {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  if (readOwnerApprovalReceipt(context.root, privatePath(context.root, "owner-approval-receipt"), false)
+    !== context.grant.ownerApprovalReceiptSha256) fail("local_postgres_owner_approval_receipt_drift");
+  if (context.adapters.observeDockerCliIdentity().identitySha256 !== context.grant.host.dockerCliIdentitySha256) {
+    fail("local_postgres_docker_cli_drift");
+  }
+  if (context.socket.identitySha256 !== context.grant.host.socketIdentitySha256) {
+    fail("local_postgres_socket_identity_drift");
+  }
+  context.adapters.revalidateSocket(context.socket);
+  const now = context.adapters.now();
+  if (!(now instanceof Date) || now.getTime() < instant(context.grant.createdAt) - 60_000
+    || now.getTime() >= instant(context.grant.expiresAt)) {
+    fail("local_postgres_image_acquisition_diagnostic_grant_expired");
+  }
+  assertPrivateDirectoryIdentity(context.rootIdentity);
+}
+
+function callImageAcquisitionDiagnosticDocker(context, stage) {
+  revalidateImageAcquisitionDiagnosticBoundary(context);
+  const reservation = reserveImageAcquisitionDiagnosticCall(context.root, stage);
+  const argv = stage === "VERSION" ? ["version", "--format", "{{json .}}"]
+    : stage === "PULL" ? ["image", "pull", "--platform", IMAGE_PLATFORM, IMAGE_REFERENCE]
+      : ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+  let raw;
+  let observation;
+  try {
+    raw = context.adapters.callDocker(reservation.kind, Object.freeze(argv), context);
+    revalidateImageAcquisitionDiagnosticBoundary(context);
+    observation = fingerprintImageAcquisitionDiagnosticResult(stage, reservation, raw);
+  } finally {
+    if (observation === undefined) {
+      if (Buffer.isBuffer(raw?.stdout)) raw.stdout.fill(0);
+      if (Buffer.isBuffer(raw?.stderr)) raw.stderr.fill(0);
+    }
+  }
+  if (observation.spawnOutcome === "COMPLETED") {
+    appendImageAcquisitionDiagnosticJournal(context.root, "docker.completed", reservation);
+    appendImageAcquisitionDiagnosticJournal(context.root, "observation.recorded", observation);
+  } else {
+    appendImageAcquisitionDiagnosticJournal(context.root, "docker.ambiguous", observation);
+  }
+  return observation;
+}
+
+function imageAcquisitionCacheState(journal) {
+  const pre = journal.observations.get("PRE_INSPECT");
+  const pull = journal.observations.get("PULL");
+  const post = journal.observations.get("POST_INSPECT");
+  const cacheBefore = pre?.classification === "OBSERVED" ? "PRESENT"
+    : pre?.classification === "IMAGE_MISSING" ? "ABSENT" : "UNKNOWN";
+  const cacheAfter = pull?.classification === "AMBIGUOUS_TRANSPORT" ? "AMBIGUOUS"
+    : post?.classification === "OBSERVED" ? "PRESENT"
+    : pre?.classification === "OBSERVED" ? "PRESENT"
+      : pull === undefined ? cacheBefore : "PARTIAL_OR_UNKNOWN";
+  const cacheResidue = pull?.classification === "AMBIGUOUS_TRANSPORT" ? "AMBIGUOUS"
+    : post?.classification === "OBSERVED" ? "EXACT_IMAGE_CACHE"
+    : pre?.classification === "OBSERVED" ? "PREEXISTING_CACHE"
+      : pull === undefined ? "NONE" : "PARTIAL_OR_UNKNOWN";
+  return Object.freeze({ cacheBefore, cacheAfter, cacheResidue });
+}
+
+function imageAcquisitionDiagnosticReceipt(context, status, code) {
+  const journal = readImageAcquisitionDiagnosticJournal(context.root);
+  const observations = Object.freeze(IMAGE_ACQUISITION_DIAGNOSTIC_STAGES.flatMap((stage) => {
+    const value = journal.observations.get(stage); return value === undefined ? [] : [value];
+  }));
+  const version = journal.observations.get("VERSION");
+  const cache = imageAcquisitionCacheState(journal);
+  return Object.freeze({
+    schemaVersion: IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_SCHEMA, status, code,
+    consumedDiagnosticGrantSha256: context.consumedDiagnosticGrantSha256,
+    authority: context.grant.authority, lineage: context.grant.lineage,
+    artifacts: context.grant.artifacts, priorDiagnostic: context.grant.priorDiagnostic,
+    hostObservation: Object.freeze({
+      dockerCliIdentitySha256: context.grant.host.dockerCliIdentitySha256,
+      socketIdentitySha256: context.grant.host.socketIdentitySha256,
+      dockerClientVersion: version?.classification === "VERSION_MATCHED" ? "29.3.1" : "NOT_OBSERVED",
+      dockerServerVersion: version?.classification === "VERSION_MATCHED" ? "29.3.1" : "NOT_OBSERVED",
+      dockerServerPlatform: version?.classification === "VERSION_MATCHED" ? IMAGE_PLATFORM : "NOT_OBSERVED",
+    }),
+    effects: Object.freeze({
+      dockerCallAttempts: Object.freeze({ ...journal.attempts }),
+      dockerCallCompletions: Object.freeze({ ...journal.completions }),
+      imagePullAttemptCount: journal.attempts["image.pull"],
+      dockerResourceEffectCount: 0, cleanupEffectCount: 0, postgresEffectCount: 0, sqlEffectCount: 0,
+    }),
+    observations,
+    cache: Object.freeze({ cacheBefore: cache.cacheBefore, cacheAfter: cache.cacheAfter }),
+    closure: Object.freeze({
+      localResidueCount: journal.closure?.localResidueCount ?? 0,
+      dockerResourceEffectCount: 0, cacheResidue: journal.closure?.cacheResidue ?? cache.cacheResidue,
+      retainedForensicFiles: IMAGE_ACQUISITION_DIAGNOSTIC_RETAINED_FILES,
+    }),
+    journal: Object.freeze({ entryCount: journal.sequence, headSha256: journal.headSha256 }),
+    readiness: Object.freeze({
+      acquisitionObserved: status === "OBSERVED", manifestCorrected: false,
+      replacementCampaignAuthorized: false, targetPostgresObserved: false,
+      productRuntimeEffects: false, productionEffects: false, trafficReady: false, gateCReady: false,
+    }),
+  });
+}
+
+const IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_KEYS = Object.freeze([
+  "schemaVersion", "status", "code", "consumedDiagnosticGrantSha256", "authority", "lineage",
+  "artifacts", "priorDiagnostic", "hostObservation", "effects", "observations", "cache", "closure",
+  "journal", "readiness",
+]);
+
+function validateImageAcquisitionDiagnosticReceipt(raw, grant, journal, consumedSha) {
+  const receipt = ownedPlain(raw);
+  exactKeys(receipt, IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_KEYS);
+  exactKeys(receipt.authority, IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_KEYS);
+  exactKeys(receipt.lineage, IMAGE_ACQUISITION_DIAGNOSTIC_LINEAGE_KEYS);
+  exactKeys(receipt.artifacts, IMAGE_ACQUISITION_DIAGNOSTIC_ARTIFACT_KEYS);
+  exactKeys(receipt.priorDiagnostic, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR));
+  exactKeys(receipt.hostObservation, [
+    "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion", "dockerServerVersion", "dockerServerPlatform",
+  ]);
+  exactKeys(receipt.effects, [
+    "dockerCallAttempts", "dockerCallCompletions", "imagePullAttemptCount", "dockerResourceEffectCount",
+    "cleanupEffectCount", "postgresEffectCount", "sqlEffectCount",
+  ]);
+  exactKeys(receipt.effects.dockerCallAttempts, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.effects.dockerCallCompletions, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
+  exactKeys(receipt.cache, ["cacheBefore", "cacheAfter"]);
+  exactKeys(receipt.closure, ["localResidueCount", "dockerResourceEffectCount", "cacheResidue", "retainedForensicFiles"]);
+  exactKeys(receipt.journal, ["entryCount", "headSha256"]);
+  exactKeys(receipt.readiness, [
+    "acquisitionObserved", "manifestCorrected", "replacementCampaignAuthorized", "targetPostgresObserved",
+    "productRuntimeEffects", "productionEffects", "trafficReady", "gateCReady",
+  ]);
+  if (!Array.isArray(receipt.observations)) fail("local_postgres_image_acquisition_diagnostic_receipt_invalid");
+  const observations = receipt.observations.map(validateImageAcquisitionDiagnosticObservation);
+  const expected = IMAGE_ACQUISITION_DIAGNOSTIC_STAGES.flatMap((stage) => {
+    const value = journal.observations.get(stage); return value === undefined ? [] : [value];
+  });
+  const cache = imageAcquisitionCacheState(journal);
+  if (receipt.schemaVersion !== IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_SCHEMA
+    || !["OBSERVED", "FAILED"].includes(receipt.status)
+    || !["local_postgres_image_acquisition_diagnostic_observed", "local_postgres_image_acquisition_diagnostic_failed"].includes(receipt.code)
+    || receipt.consumedDiagnosticGrantSha256 !== consumedSha
+    || canonicalJson(receipt.authority) !== canonicalJson(grant.authority)
+    || canonicalJson(receipt.lineage) !== canonicalJson(grant.lineage)
+    || canonicalJson(receipt.artifacts) !== canonicalJson(grant.artifacts)
+    || canonicalJson(receipt.priorDiagnostic) !== canonicalJson(grant.priorDiagnostic)
+    || canonicalJson(receipt.effects.dockerCallAttempts) !== canonicalJson(journal.attempts)
+    || canonicalJson(receipt.effects.dockerCallCompletions) !== canonicalJson(journal.completions)
+    || canonicalJson(observations) !== canonicalJson(expected)
+    || receipt.effects.imagePullAttemptCount !== journal.attempts["image.pull"]
+    || receipt.effects.dockerResourceEffectCount !== 0 || receipt.effects.cleanupEffectCount !== 0
+    || receipt.effects.postgresEffectCount !== 0 || receipt.effects.sqlEffectCount !== 0
+    || receipt.cache.cacheBefore !== cache.cacheBefore || receipt.cache.cacheAfter !== cache.cacheAfter
+    || receipt.closure.localResidueCount !== 0 || receipt.closure.dockerResourceEffectCount !== 0
+    || receipt.closure.cacheResidue !== cache.cacheResidue
+    || canonicalJson(receipt.closure.retainedForensicFiles) !== canonicalJson(IMAGE_ACQUISITION_DIAGNOSTIC_RETAINED_FILES)
+    || receipt.journal.entryCount !== journal.sequence || receipt.journal.headSha256 !== journal.headSha256
+    || receipt.hostObservation.dockerCliIdentitySha256 !== grant.host.dockerCliIdentitySha256
+    || receipt.hostObservation.socketIdentitySha256 !== grant.host.socketIdentitySha256
+    || receipt.readiness.manifestCorrected !== false || receipt.readiness.replacementCampaignAuthorized !== false
+    || receipt.readiness.targetPostgresObserved !== false || receipt.readiness.productRuntimeEffects !== false
+    || receipt.readiness.productionEffects !== false || receipt.readiness.trafficReady !== false
+    || receipt.readiness.gateCReady !== false) {
+    fail("local_postgres_image_acquisition_diagnostic_receipt_invalid");
+  }
+  for (const kind of LOCAL_POSTGRES_DOCKER_COMMAND_KINDS) {
+    if (receipt.effects.dockerCallAttempts[kind] > IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS[kind]
+      || receipt.effects.dockerCallCompletions[kind] > receipt.effects.dockerCallAttempts[kind]) {
+      fail("local_postgres_image_acquisition_diagnostic_receipt_invalid");
+    }
+  }
+  const pre = journal.observations.get("PRE_INSPECT");
+  const post = journal.observations.get("POST_INSPECT");
+  const observed = pre?.classification === "OBSERVED" || post?.classification === "OBSERVED";
+  if (receipt.status === "OBSERVED") {
+    if (!observed || receipt.code !== "local_postgres_image_acquisition_diagnostic_observed"
+      || receipt.readiness.acquisitionObserved !== true
+      || receipt.hostObservation.dockerClientVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerVersion !== "29.3.1"
+      || receipt.hostObservation.dockerServerPlatform !== IMAGE_PLATFORM) {
+      fail("local_postgres_image_acquisition_diagnostic_receipt_invalid");
+    }
+  } else if (observed || receipt.code !== "local_postgres_image_acquisition_diagnostic_failed"
+    || receipt.readiness.acquisitionObserved !== false) {
+    fail("local_postgres_image_acquisition_diagnostic_receipt_invalid");
+  }
+  return receipt;
+}
+
+function finalizeImageAcquisitionDiagnostic(context, forceFailed = false) {
+  let state = readImageAcquisitionDiagnosticJournal(context.root);
+  for (const effect of [...state.openEffects.values()]) {
+    appendImageAcquisitionDiagnosticJournal(context.root, "docker.ambiguous",
+      ambiguousImageAcquisitionDiagnosticObservation(effect));
+    state = readImageAcquisitionDiagnosticJournal(context.root);
+  }
+  const cache = imageAcquisitionCacheState(state);
+  if (state.closure === null) {
+    appendImageAcquisitionDiagnosticJournal(context.root, "closure.proven", {
+      localResidueCount: 0, dockerResourceEffectCount: 0, cacheResidue: cache.cacheResidue,
+    });
+  }
+  state = readImageAcquisitionDiagnosticJournal(context.root);
+  const observed = !forceFailed && (state.observations.get("PRE_INSPECT")?.classification === "OBSERVED"
+    || state.observations.get("POST_INSPECT")?.classification === "OBSERVED");
+  const status = observed ? "OBSERVED" : "FAILED";
+  const code = observed ? "local_postgres_image_acquisition_diagnostic_observed"
+    : "local_postgres_image_acquisition_diagnostic_failed";
+  appendImageAcquisitionDiagnosticJournal(context.root, "diagnostic.terminal", { status, code });
+  const terminal = readImageAcquisitionDiagnosticJournal(context.root);
+  const receipt = imageAcquisitionDiagnosticReceipt(context, status, code);
+  const candidate = typeof context.adapters.mutateReceipt === "function"
+    ? context.adapters.mutateReceipt(receipt) : receipt;
+  const validated = validateImageAcquisitionDiagnosticReceipt(candidate, context.grant, terminal,
+    context.consumedDiagnosticGrantSha256);
+  const evidencePath = privatePath(context.root, IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE);
+  exactFileAbsence(evidencePath);
+  writePrivateJson(evidencePath, validated);
+  validateImageAcquisitionDiagnosticReceipt(readPrivateJson(evidencePath), context.grant,
+    readImageAcquisitionDiagnosticJournal(context.root), context.consumedDiagnosticGrantSha256);
+  if (canonicalJson(fs.readdirSync(context.root).sort(binaryCompare))
+    !== canonicalJson([...IMAGE_ACQUISITION_DIAGNOSTIC_RETAINED_FILES].sort(binaryCompare))) {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  return validated;
+}
+
+async function runImageAcquisitionDiagnosticWithAdapters(input, adapters) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["diagnosticRoot", "evidenceOut"]);
+  if (typeof stable.diagnosticRoot !== "string" || !path.isAbsolute(stable.diagnosticRoot)
+    || stable.evidenceOut !== path.join(stable.diagnosticRoot, IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE)) {
+    fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  }
+  let root;
+  try { root = fs.realpathSync(stable.diagnosticRoot); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_private_root_invalid"); }
+  if (root !== stable.diagnosticRoot) fail("local_postgres_image_acquisition_diagnostic_private_root_invalid");
+  const rootIdentity = privateDirectoryIdentity(root);
+  const recovery = fs.readdirSync(root).includes(IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE);
+  const observedAt = adapters.now();
+  const consumed = recovery
+    ? recoverImageAcquisitionDiagnosticGrant(root, observedAt, adapters.verifyBindings)
+    : consumeImageAcquisitionDiagnosticGrant(root, observedAt, adapters.verifyBindings);
+  const grant = consumed.grant;
+  const cli = adapters.observeDockerCliIdentity();
+  const socket = adapters.resolveSocketIdentity();
+  if (cli.identitySha256 !== grant.host.dockerCliIdentitySha256
+    || socket.identitySha256 !== grant.host.socketIdentitySha256) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+  const context = {
+    root, rootIdentity, grant, socket, adapters,
+    consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256, isolated: null,
+  };
+  if (recovery) {
+    try { cleanupIsolatedDockerHome(root); } catch { /* retain truthful failed evidence */ }
+    const receipt = finalizeImageAcquisitionDiagnostic(context, true);
+    throw new LocalPostgresRunnerError(receipt.code);
+  }
+  appendImageAcquisitionDiagnosticJournal(root, "grant.consumed", {
+    consumedDiagnosticGrantSha256: consumed.consumedDiagnosticGrantSha256,
+  });
+  appendImageAcquisitionDiagnosticJournal(root, "diagnostic.lifecycle_started", { ordinal: 1 });
+  let failure = null;
+  let setup = false;
+  try {
+    setup = true;
+    context.isolated = prepareIsolatedDockerHome(root);
+    const version = callImageAcquisitionDiagnosticDocker(context, "VERSION");
+    if (version.classification !== "VERSION_MATCHED") fail("local_postgres_image_acquisition_diagnostic_host_invalid");
+    const pre = callImageAcquisitionDiagnosticDocker(context, "PRE_INSPECT");
+    if (pre.classification === "IMAGE_MISSING") {
+      const pull = callImageAcquisitionDiagnosticDocker(context, "PULL");
+      if (pull.classification !== "PULL_COMPLETED") fail("local_postgres_image_acquisition_diagnostic_pull_failed");
+      const post = callImageAcquisitionDiagnosticDocker(context, "POST_INSPECT");
+      if (post.classification !== "OBSERVED") fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    } else if (pre.classification !== "OBSERVED") {
+      fail("local_postgres_image_acquisition_diagnostic_observation_invalid");
+    }
+  } catch (error) { failure = error; }
+  try { if (setup) cleanupIsolatedDockerHome(root); }
+  catch (error) { failure ??= error; }
+  const receipt = finalizeImageAcquisitionDiagnostic(context, failure !== null);
+  if (receipt.status !== "OBSERVED") throw new LocalPostgresRunnerError(receipt.code);
+  return receipt;
+}
+
+function productionImageAcquisitionDiagnosticDockerCall(_kind, argv, context) {
+  const result = spawnSync(DOCKER_CLI, ["--host", `unix://${context.socket.socketPath}`, ...argv], {
+    cwd: "/", encoding: null, env: dockerEnvironment(context.isolated),
+    maxBuffer: MAX_DOCKER_OUTPUT_BYTES, timeout: 600_000,
+  });
+  return Object.freeze({
+    status: result.status, signal: result.signal, error: result.error,
+    stdout: Buffer.isBuffer(result.stdout) ? result.stdout : Buffer.alloc(0),
+    stderr: Buffer.isBuffer(result.stderr) ? result.stderr : Buffer.alloc(0),
+  });
+}
+
+export async function runApprovedLocalPostgresImageAcquisitionDiagnostic(input) {
+  return runImageAcquisitionDiagnosticWithAdapters(input, Object.freeze({
+    verifyBindings: verifyLocalPostgresImageAcquisitionDiagnosticCommittedBindings,
+    observeDockerCliIdentity, resolveSocketIdentity: resolveDockerSocketIdentity,
+    revalidateSocket: revalidateDockerSocketIdentity,
+    callDocker: productionImageAcquisitionDiagnosticDockerCall, now: () => new Date(),
+  }));
+}
+
+function fakeImageAcquisitionDiagnosticDerived() {
+  const fakeSha = (domain) => sha256Bytes(Buffer.from(`r4-image-acquisition-diagnostic-fake-${domain}`));
+  return Object.freeze({
+    authority: Object.freeze({
+      correctionAddendumSha256: IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256,
+      correctionOwnerReviewSha256: IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256,
+      diagnosticCardSha256: fakeSha("card"), diagnosticOwnerReviewSha256: fakeSha("review"),
+      diagnosticAuthorityPayloadSha256: fakeSha("payload"),
+    }),
+    lineage: Object.freeze({
+      correctionAddendumHead: IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD,
+      correctionAddendumTree: IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE,
+      correctionOwnerReviewHead: IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD,
+      correctionOwnerReviewTree: IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE,
+      implementationHead: "1".repeat(40), implementationTree: "2".repeat(40),
+      implementationAggregateSha256: fakeSha("g2"), evidenceHead: "3".repeat(40),
+      evidenceTree: "4".repeat(40), statusHead: "5".repeat(40), statusTree: "6".repeat(40),
+      statusAggregateSha256: fakeSha("g10"), diagnosticCardHead: "7".repeat(40),
+      diagnosticCardTree: "8".repeat(40), diagnosticOwnerReviewHead: "9".repeat(40),
+      diagnosticOwnerReviewTree: "a".repeat(40),
+    }),
+    artifacts: Object.freeze(Object.fromEntries(IMAGE_ACQUISITION_DIAGNOSTIC_ARTIFACT_KEYS.map((key) => [key, fakeSha(key)]))),
+    priorDiagnostic: imageAcquisitionDiagnosticPriorContract(), host: imageAcquisitionDiagnosticHostContract(),
+    ceilings: imageAcquisitionDiagnosticCeilings(),
+  });
+}
+
+function fakeImageAcquisitionDiagnosticGrant(ownerApprovalReceiptSha256) {
+  const derived = fakeImageAcquisitionDiagnosticDerived();
+  return Object.freeze({
+    schemaVersion: IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA, diagnosticGrantId: "d".repeat(32),
+    ownerApprovalReceiptSha256, authority: derived.authority, lineage: derived.lineage,
+    artifacts: derived.artifacts, priorDiagnostic: derived.priorDiagnostic,
+    host: Object.freeze({
+      ...derived.host, dockerCliIdentitySha256: `sha256:${"b".repeat(64)}`,
+      socketIdentitySha256: `sha256:${"c".repeat(64)}`,
+    }),
+    ceilings: derived.ceilings, localOnly: true, productionEffectsAllowed: false,
+    createdAt: "2026-08-16T20:00:00.000Z", expiresAt: "2026-08-16T21:00:00.000Z",
+  });
+}
+
+function fakeImageAcquisitionInspectRaw(mutation = "observed") {
+  const descriptor = {
+    digest: mutation === "descriptor_invalid" ? "INVALID" : `sha256:${"e".repeat(64)}`,
+    mediaType: "application/vnd.oci.image.manifest.v1+json",
+    size: 1234, platform: { os: mutation === "platform_mismatch" ? "darwin" : "linux", architecture: "arm64" },
+  };
+  if (mutation === "malformed") return Buffer.from('{"RAW-ACQUISITION-SENTINEL":\n');
+  return Buffer.from(JSON.stringify({
+    RepoDigests: mutation === "reference_mismatch" ? [] : [IMAGE_REFERENCE],
+    Os: "linux", Architecture: "arm64", Descriptor: descriptor,
+    UnlistedBody: "RAW-ACQUISITION-SENTINEL",
+  }) + "\n");
+}
+
+export async function runLocalPostgresImageAcquisitionDiagnosticFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  const inputKeys = [];
+  if (stable.mutation !== undefined) inputKeys.push("mutation");
+  if (stable.receiptMutation !== undefined) inputKeys.push("receiptMutation");
+  exactKeys(stable, inputKeys);
+  const mutation = stable.mutation ?? "missing_then_observed";
+  const receiptMutation = stable.receiptMutation ?? "none";
+  const allowed = new Set([
+    "missing_then_observed", "cached_present", "pull_nonzero", "pull_timeout", "pull_signal",
+    "pull_crash", "host_drift", "post_missing", "post_malformed", "post_reference_mismatch",
+    "post_platform_mismatch", "post_descriptor_invalid",
+  ]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const receiptMutations = new Set([
+    "none", "top_extra", "nested_extra", "missing", "status", "consumed", "authority",
+    "attempt", "cache", "journal", "readiness", "accessor",
+  ]);
+  if (!receiptMutations.has(receiptMutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-acquisition-diagnostic-fake-")));
+  fs.chmodSync(root, 0o700);
+  const receiptPath = path.join(root, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake image acquisition diagnostic approval", { mode: 0o600, flag: "wx" });
+  const approvalSha = sha256File(receiptPath);
+  writePrivateJson(path.join(root, IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE),
+    fakeImageAcquisitionDiagnosticGrant(approvalSha));
+  const calls = [];
+  const version = Buffer.from(JSON.stringify({
+    Client: { Version: "29.3.1" }, Server: { Version: "29.3.1", Os: "linux", Arch: "arm64" },
+  }) + "\n");
+  let inspectOrdinal = 0;
+  let hostDriftArmed = false;
+  let result;
+  try {
+    try {
+      result = await runImageAcquisitionDiagnosticWithAdapters({
+        diagnosticRoot: root,
+        evidenceOut: path.join(root, IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE),
+      }, Object.freeze({
+        verifyBindings(candidate) {
+          validateImageAcquisitionDiagnosticGrant(candidate, new Date("2026-08-16T20:30:00.000Z"));
+        },
+        observeDockerCliIdentity: () => Object.freeze({
+          identitySha256: hostDriftArmed ? `sha256:${"d".repeat(64)}` : `sha256:${"b".repeat(64)}`,
+        }),
+        resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}`, socketPath: "/fake/docker.sock" }),
+        revalidateSocket() {}, now: () => new Date("2026-08-16T20:30:00.000Z"),
+        mutateReceipt(receipt) {
+          if (receiptMutation === "none") return receipt;
+          const candidate = JSON.parse(canonicalJson(receipt));
+          if (receiptMutation === "top_extra") candidate.extra = true;
+          else if (receiptMutation === "nested_extra") candidate.effects.extra = true;
+          else if (receiptMutation === "missing") delete candidate.artifacts;
+          else if (receiptMutation === "status") candidate.status = "GREEN";
+          else if (receiptMutation === "consumed") candidate.consumedDiagnosticGrantSha256 = `sha256:${"f".repeat(64)}`;
+          else if (receiptMutation === "authority") candidate.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+          else if (receiptMutation === "attempt") candidate.effects.dockerCallAttempts["image.pull"] = 2;
+          else if (receiptMutation === "cache") candidate.cache.cacheAfter = "ABSENT";
+          else if (receiptMutation === "journal") candidate.journal.entryCount += 1;
+          else if (receiptMutation === "readiness") candidate.readiness.gateCReady = true;
+          else if (receiptMutation === "accessor") Object.defineProperty(candidate, "status", { get() { return "OBSERVED"; } });
+          return candidate;
+        },
+        callDocker(kind, argv) {
+          calls.push(Object.freeze({ kind, argv: Object.freeze([...argv]) }));
+          if (kind === "version") return { status: 0, signal: null, error: null, stdout: Buffer.from(version), stderr: Buffer.alloc(0) };
+          if (kind === "image.inspect") {
+            inspectOrdinal += 1;
+            if (mutation === "cached_present") {
+              return { status: 0, signal: null, error: null, stdout: fakeImageAcquisitionInspectRaw(), stderr: Buffer.alloc(0) };
+            }
+            if (inspectOrdinal === 1 || mutation === "post_missing") {
+              return { status: 1, signal: null, error: null, stdout: Buffer.from("\n"), stderr: Buffer.from("missing\n") };
+            }
+            const suffix = mutation === "post_malformed" ? "malformed"
+              : mutation === "post_reference_mismatch" ? "reference_mismatch"
+                : mutation === "post_platform_mismatch" ? "platform_mismatch"
+                  : mutation === "post_descriptor_invalid" ? "descriptor_invalid" : "observed";
+            return { status: 0, signal: null, error: null, stdout: fakeImageAcquisitionInspectRaw(suffix), stderr: Buffer.alloc(0) };
+          }
+          if (mutation === "pull_nonzero") {
+            return { status: 1, signal: null, error: null, stdout: Buffer.from("progress\n"), stderr: Buffer.from("failed\n") };
+          }
+          if (mutation === "pull_timeout") {
+            return { status: null, signal: null, error: { code: "ETIMEDOUT" }, stdout: Buffer.from("progress\n"), stderr: Buffer.alloc(0) };
+          }
+          if (mutation === "pull_signal") {
+            return { status: null, signal: "SIGTERM", error: null, stdout: Buffer.from("progress\n"), stderr: Buffer.alloc(0) };
+          }
+          if (mutation === "pull_crash") throw new LocalPostgresRunnerError("local_postgres_fake_crash");
+          if (mutation === "host_drift") hostDriftArmed = true;
+          return { status: 0, signal: null, error: null, stdout: Buffer.from("pulled\n"), stderr: Buffer.alloc(0) };
+        },
+      }));
+    } catch (error) {
+      if (authenticLocalPostgresRunnerErrorDetails(error) === null) throw error;
+      const evidencePath = path.join(root, IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE);
+      result = fs.existsSync(evidencePath) ? readPrivateJson(evidencePath) : Object.freeze({
+        schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-validation-rejection.v1",
+        status: "VALIDATION_REJECTED", code: authenticLocalPostgresRunnerErrorDetails(error).code,
+      });
+    }
+    return Object.freeze({
+      schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-fake-result.v1",
+      mutation, receipt: result, calls: Object.freeze(calls),
+      rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)), physicalEffects: 0,
+    });
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
+export async function runLocalPostgresImageAcquisitionDiagnosticReceiptValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const result = await runLocalPostgresImageAcquisitionDiagnosticFakePlan({
+    mutation: "cached_present", receiptMutation: stable.mutation,
+  });
+  return Object.freeze({
+    schemaVersion: "r4.image-acquisition-diagnostic-receipt-validation-fake.v1",
+    mutation: stable.mutation, accepted: result.receipt.status !== "VALIDATION_REJECTED", physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresImageAcquisitionDiagnosticJournalValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input); exactKeys(stable, ["mutation"]);
+  const allowed = new Set([
+    "none", "top_extra", "sequence", "previous", "event", "detail_extra", "entry_sha", "completion_without_attempt",
+  ]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-acquisition-journal-fake-")));
+  fs.chmodSync(root, 0o700);
+  let accepted = false;
+  try {
+    appendImageAcquisitionDiagnosticJournal(root, "grant.consumed", {
+      consumedDiagnosticGrantSha256: `sha256:${"a".repeat(64)}`,
+    });
+    appendImageAcquisitionDiagnosticJournal(root, "diagnostic.lifecycle_started", { ordinal: 1 });
+    if (stable.mutation !== "none") {
+      const entryPath = path.join(root, IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY, "entry-000002.json");
+      const entry = JSON.parse(canonicalJson(readPrivateJson(entryPath)));
+      if (stable.mutation === "top_extra") entry.extra = true;
+      else if (stable.mutation === "sequence") entry.sequence = 3;
+      else if (stable.mutation === "previous") entry.previousSha256 = `sha256:${"f".repeat(64)}`;
+      else if (stable.mutation === "event") entry.event = "unknown";
+      else if (stable.mutation === "detail_extra") entry.detail.extra = true;
+      else if (stable.mutation === "entry_sha") entry.entrySha256 = `sha256:${"f".repeat(64)}`;
+      else if (stable.mutation === "completion_without_attempt") {
+        entry.event = "docker.completed";
+        entry.detail = { effectId: "docker-000003-version", kind: "version", ordinal: 1, stage: "VERSION" };
+      }
+      if (!["top_extra", "entry_sha"].includes(stable.mutation)) {
+        const preimage = {
+          schemaVersion: entry.schemaVersion, sequence: entry.sequence, previousSha256: entry.previousSha256,
+          event: entry.event, detail: entry.detail,
+        };
+        entry.entrySha256 = sha256Bytes(Buffer.from(canonicalJson(preimage)));
+      }
+      fs.writeFileSync(entryPath, `${canonicalJson(entry)}\n`, { mode: 0o600 });
+    }
+    try { readImageAcquisitionDiagnosticJournal(root); accepted = true; }
+    catch { accepted = false; }
+    return Object.freeze({
+      schemaVersion: "r4.image-acquisition-diagnostic-journal-validation-fake.v1",
+      mutation: stable.mutation, accepted, physicalEffects: 0,
+    });
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
+export function runLocalPostgresImageAcquisitionDiagnosticGrantValidationFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, ["mutation"]);
+  const allowed = new Set(["none", "top_extra", "missing", "schema", "authority", "lineage", "prior", "host", "ceiling", "expired"]);
+  if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
+  const grant = JSON.parse(canonicalJson(fakeImageAcquisitionDiagnosticGrant(`sha256:${"a".repeat(64)}`)));
+  if (stable.mutation === "top_extra") grant.extra = true;
+  else if (stable.mutation === "missing") delete grant.artifacts;
+  else if (stable.mutation === "schema") grant.schemaVersion = "v0";
+  else if (stable.mutation === "authority") grant.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (stable.mutation === "lineage") grant.lineage.correctionOwnerReviewHead = "f".repeat(40);
+  else if (stable.mutation === "prior") grant.priorDiagnostic.journalEntryCount = 11;
+  else if (stable.mutation === "host") grant.host.imageReference = "postgres:latest";
+  else if (stable.mutation === "ceiling") grant.ceilings.dockerCalls["image.pull"] = 2;
+  else if (stable.mutation === "expired") grant.expiresAt = grant.createdAt;
+  let accepted = false;
+  try { validateImageAcquisitionDiagnosticGrant(grant, new Date("2026-08-16T20:30:00.000Z")); accepted = true; }
+  catch { accepted = false; }
+  return Object.freeze({
+    schemaVersion: "r4.image-acquisition-diagnostic-grant-validation-fake.v1",
+    mutation: stable.mutation, accepted, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  const allowed = new Set(["none", "duplicate_marker", "prefix_marker", "top_extra", "authority", "lineage", "prior", "host", "ceiling"]);
+  if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
+  const derived = fakeImageAcquisitionDiagnosticDerived();
+  const payload = {
+    schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1",
+    authority: { ...selectKeys(derived.authority, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS) },
+    lineage: { ...selectKeys(derived.lineage, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS) },
+    artifacts: { ...derived.artifacts }, priorDiagnostic: { ...derived.priorDiagnostic },
+    host: { ...derived.host }, ceilings: JSON.parse(canonicalJson(derived.ceilings)),
+    localOnly: true, productionEffectsAllowed: false,
+  };
+  if (mutation === "top_extra") payload.extra = true;
+  else if (mutation === "authority") payload.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
+  else if (mutation === "lineage") payload.lineage.correctionOwnerReviewHead = "f".repeat(40);
+  else if (mutation === "prior") payload.priorDiagnostic.journalEntryCount = 11;
+  else if (mutation === "host") payload.host.imageReference = "postgres:latest";
+  else if (mutation === "ceiling") payload.ceilings.dockerCalls["image.pull"] = 2;
+  const canonical = canonicalJson(payload);
+  let card = `proposal\n${IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "duplicate_marker") card += `${IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN}\n${canonical}\n${IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END}\n`;
+  if (mutation === "prefix_marker") card = card.replace(IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN,
+    `prefix${IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN}`);
+  let accepted = false;
+  let payloadSha256 = null;
+  try {
+    const parsed = parseImageAcquisitionDiagnosticCard(Buffer.from(card));
+    accepted = true; payloadSha256 = parsed.sha256;
+  } catch { accepted = false; }
+  return Object.freeze({
+    schemaVersion: "r4.image-acquisition-diagnostic-authority-validation-fake.v1",
+    mutation, accepted, payloadSha256, physicalEffects: 0,
+  });
+}
+
+export function runLocalPostgresImageAcquisitionDiagnosticPrepareFakePlan(input = Object.freeze({})) {
+  const stable = ownedPlain(input);
+  exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
+  const mutation = stable.mutation ?? "none";
+  if (!["none", "root_extra", "expired", "binding"].includes(mutation)) fail("local_postgres_fake_fault_invalid");
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), "forme-image-acquisition-prepare-fake-")));
+  fs.chmodSync(root, 0o700);
+  const receiptPath = path.join(root, "owner-approval-receipt");
+  fs.writeFileSync(receiptPath, "fake image acquisition approval", { mode: 0o600, flag: "wx" });
+  if (mutation === "root_extra") fs.writeFileSync(path.join(root, "unknown"), "x", { mode: 0o600, flag: "wx" });
+  const derived = fakeImageAcquisitionDiagnosticDerived();
+  try {
+    try {
+      const receipt = prepareImageAcquisitionDiagnosticWithAdapters({
+        diagnosticRoot: root, diagnosticOwnerReviewHead: derived.lineage.diagnosticOwnerReviewHead,
+        ownerApprovalReceiptPath: receiptPath,
+        createdAt: mutation === "expired" ? "2026-08-16T19:00:00.000Z" : "2026-08-16T20:30:00.000Z",
+        expiresAt: mutation === "expired" ? "2026-08-16T19:00:00.000Z" : "2026-08-16T21:30:00.000Z",
+      }, Object.freeze({
+        deriveAuthority: () => derived,
+        observeDockerCliIdentity: () => Object.freeze({ identitySha256: `sha256:${"b".repeat(64)}` }),
+        resolveSocketIdentity: () => Object.freeze({ identitySha256: `sha256:${"c".repeat(64)}` }),
+        randomBytes: () => Buffer.from("0123456789abcdef0123456789abcdef", "hex"),
+        now: () => new Date("2026-08-16T20:30:00.000Z"),
+        verifyBindings() { if (mutation === "binding") fail("local_postgres_image_acquisition_diagnostic_binding_invalid"); },
+      }));
+      return Object.freeze({
+        schemaVersion: "r4.image-acquisition-diagnostic-prepare-fake.v1", status: "GREEN", receipt,
+        grant: readPrivateJson(path.join(root, IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE)),
+        rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)), physicalEffects: 0,
+      });
+    } catch (error) {
+      return Object.freeze({
+        schemaVersion: "r4.image-acquisition-diagnostic-prepare-fake.v1", status: "FAILED",
+        code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_image_acquisition_diagnostic_prepare_failed",
+        rootEntries: Object.freeze(fs.readdirSync(root).sort(binaryCompare)), physicalEffects: 0,
+      });
+    }
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+}
+
 export function parseLocalPostgresRunnerArguments(argv) {
   const stable = ownedPlain(argv);
   if (stable.length === 1 && stable[0] === "fake") return Object.freeze({ mode: "fake" });
+  if (stable.length === 11 && stable[0] === "prepare-image-acquisition-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--diagnostic-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
+    && stable[5] === "--owner-approval-receipt" && typeof stable[6] === "string" && path.isAbsolute(stable[6])
+    && stable[7] === "--created-at" && typeof stable[8] === "string"
+    && stable[9] === "--expires-at" && typeof stable[10] === "string") {
+    instant(stable[8]); instant(stable[10]);
+    return Object.freeze({
+      mode: "prepare-image-acquisition-diagnostic", diagnosticRoot: stable[2],
+      diagnosticOwnerReviewHead: stable[4], ownerApprovalReceiptPath: stable[6],
+      createdAt: stable[8], expiresAt: stable[10],
+    });
+  }
+  if (stable.length === 5 && stable[0] === "image-acquisition-diagnostic"
+    && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
+    && stable[3] === "--evidence-out" && typeof stable[4] === "string" && path.isAbsolute(stable[4])) {
+    return Object.freeze({ mode: "image-acquisition-diagnostic", diagnosticRoot: stable[2], evidenceOut: stable[4] });
+  }
   if (stable.length === 11 && stable[0] === "prepare-image-manifest-diagnostic"
     && stable[1] === "--diagnostic-root" && typeof stable[2] === "string" && path.isAbsolute(stable[2])
     && stable[3] === "--diagnostic-review-head" && typeof stable[4] === "string" && GIT_OBJECT.test(stable[4])
@@ -14661,6 +16098,17 @@ async function direct() {
   if (parsed.mode === "prepare") {
     const { mode: _mode, ...input } = parsed;
     process.stdout.write(`${canonicalJson(prepareLocalPostgresPendingGrantV3(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "prepare-image-acquisition-diagnostic") {
+    const { mode: _mode, ...input } = parsed;
+    process.stdout.write(`${canonicalJson(prepareLocalPostgresImageAcquisitionDiagnosticGrant(input))}\n`);
+    return;
+  }
+  if (parsed.mode === "image-acquisition-diagnostic") {
+    await runApprovedLocalPostgresImageAcquisitionDiagnostic({
+      diagnosticRoot: parsed.diagnosticRoot, evidenceOut: parsed.evidenceOut,
+    });
     return;
   }
   if (parsed.mode === "prepare-image-manifest-diagnostic") {

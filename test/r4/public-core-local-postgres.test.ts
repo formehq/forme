@@ -22,11 +22,13 @@ import {
   prepareLocalPostgresPendingGrantV3,
   prepareLocalPostgresCleanupRescueGrant,
   prepareBodyFreeDockerInspectDiagnosticGrant,
+  prepareLocalPostgresImageAcquisitionDiagnosticGrant,
   prepareLocalPostgresImageManifestDiagnosticGrant,
   prepareLocalPostgresIntegrationCampaignGrant,
   runApprovedLocalPostgresPhysical,
   runApprovedLocalPostgresCleanupRescue,
   runApprovedBodyFreeDockerInspectDiagnostic,
+  runApprovedLocalPostgresImageAcquisitionDiagnostic,
   runApprovedLocalPostgresImageManifestDiagnostic,
   runApprovedLocalPostgresIntegrationCampaign,
   runLocalPostgresBodyFreeDiagnosticAuthorityFakePlan,
@@ -58,6 +60,12 @@ import {
   runLocalPostgresImageManifestDiagnosticJournalValidationFakePlan,
   runLocalPostgresImageManifestDiagnosticPrepareFakePlan,
   runLocalPostgresImageManifestDiagnosticReceiptValidationFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticGrantValidationFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticJournalValidationFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticPrepareFakePlan,
+  runLocalPostgresImageAcquisitionDiagnosticReceiptValidationFakePlan,
   verifyLocalPostgresIntegrationCampaignHistoricalPrefix,
   runLocalPostgresCleanupLifecycleFakePlan,
   runLocalPostgresPrepareFakePlan,
@@ -841,14 +849,14 @@ test("authorized effect engines are constructed while ordinary tests remain fake
   assert.match(source, /consumeLocalPostgresGrant/u);
   assert.match(source, /performNormalPhysicalRun/u);
   assert.match(source, /cleanupOwnedDocker/u);
-  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 4,
-    "general physical, cleanup-rescue, body-free inspect, and image-manifest diagnostic each own one closed Docker port");
+  assert.equal((source.match(/spawnSync\(DOCKER_CLI/gu) ?? []).length, 5,
+    "general physical, cleanup-rescue, body-free inspect, image-manifest, and image-acquisition diagnostic each own one closed Docker port");
   const hardlinkSites = source.match(/fs\.linkSync\([^\n]+/gu) ?? [];
   const hardlinkKinds = hardlinkSites.map((site) => (
     site.includes("receipt-link") ? "fake_receipt_hardlink_mutation" : site.includes("pending, consumed") ? "grant_consume" : "unknown"
   ));
-  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 5,
-    "physical, rescue, body-free inspect, integration campaign, and image-manifest diagnostic each consume one distinct grant family");
+  assert.equal(hardlinkKinds.filter((kind) => kind === "grant_consume").length, 6,
+    "physical, rescue, body-free inspect, integration campaign, image-manifest, and image-acquisition diagnostic each consume one distinct grant family");
   assert.equal(hardlinkKinds.filter((kind) => kind === "fake_receipt_hardlink_mutation").length, 1);
   assert.equal(hardlinkKinds.includes("unknown"), false);
   assert.equal(source.includes("coordinator.active.json"), false);
@@ -4051,6 +4059,208 @@ test("image-manifest diagnostic real entry rejects before host or Docker effects
     await writeFile(path.join(root, "owner-approval-receipt"), "fake absent diagnostic approval", { mode: 0o600 });
     await assert.rejects(runApprovedLocalPostgresImageManifestDiagnostic({
       diagnosticRoot: root, evidenceOut: path.join(root, "image-manifest-diagnostic-evidence.json"),
+    }), LocalPostgresRunnerError);
+    assert.deepEqual(await readdir(root), ["owner-approval-receipt"]);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test("image-acquisition diagnostic correction proposal lineage and committed bytes are exact", () => {
+  const predecessorCardHead = "6a040deb80dc9c22d131bcf6bb0d2eadbdca7d81";
+  const predecessorReviewHead = "b4aae98488e934d921c1deb5c526286c49d22503";
+  const predecessorCardPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md";
+  const predecessorReviewPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md";
+  const addendumHead = "2fe84edd9d188f35b02b226fa32ce94f5576f8de";
+  const reviewHead = "eda416c2a3b591cad3fb16608ad78fef2031f174";
+  const addendumPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-ADDENDUM.md";
+  const reviewPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-OWNER-REVIEW.md";
+  assert.equal(gitText(["rev-parse", `${predecessorCardHead}^{tree}`]), "9774d6dab1af9bd8acea760f8b10e406bef46303");
+  assert.equal(gitText(["rev-parse", `${predecessorReviewHead}^`]), predecessorCardHead);
+  assert.equal(gitText(["rev-parse", `${predecessorReviewHead}^{tree}`]), "72ffc8ce9c19058894864846f5705d1234d7ced8");
+  assert.equal(gitText(["diff-tree", "--no-commit-id", "--name-status", "-r", predecessorReviewHead]), `A\t${predecessorReviewPath}`);
+  assert.equal(`sha256:${createHash("sha256").update(gitBytes(["show", `${predecessorCardHead}:${predecessorCardPath}`])).digest("hex")}`,
+    "sha256:f0a0bf2dbe00e6a1ba2f49b6e2b58898136402e685c3cd0afe8a55883b26fdb8");
+  assert.equal(`sha256:${createHash("sha256").update(gitBytes(["show", `${predecessorReviewHead}:${predecessorReviewPath}`])).digest("hex")}`,
+    "sha256:73e6b30cbec9e5abbd52a1bdddf893bf89065c77381b1c6346d903d24ff77c66");
+  assert.equal(gitText(["rev-parse", `${addendumHead}^`]), predecessorReviewHead);
+  assert.equal(gitText(["rev-parse", `${addendumHead}^{tree}`]), "5d6fb3334608ba7032aee45646b868d88ccbd1be");
+  assert.equal(gitText(["diff-tree", "--no-commit-id", "--name-status", "-r", addendumHead]), `A\t${addendumPath}`);
+  assert.equal(gitText(["rev-parse", `${reviewHead}^`]), addendumHead);
+  assert.equal(gitText(["rev-parse", `${reviewHead}^{tree}`]), "859a5cca61d13992fdde184f9d537b049af6cfee");
+  assert.equal(gitText(["diff-tree", "--no-commit-id", "--name-status", "-r", reviewHead]), `A\t${reviewPath}`);
+  assert.equal(`sha256:${createHash("sha256").update(gitBytes(["show", `${addendumHead}:${addendumPath}`])).digest("hex")}`,
+    "sha256:592f9e2fdb080a3f9605937251943afd2fb2f822c2871b04ae9d13c581d35b6e");
+  assert.equal(`sha256:${createHash("sha256").update(gitBytes(["show", `${reviewHead}:${reviewPath}`])).digest("hex")}`,
+    "sha256:83305354bc03c0fd1a3e945b04d4ceb6d5749f08e2c530f734502dc6921ed3a9");
+});
+
+test("image-acquisition diagnostic authority, grant, journal, and receipt contracts fail closed without effects", async () => {
+  assert.equal(runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of [
+    "duplicate_marker", "prefix_marker", "top_extra", "authority", "lineage", "prior", "host", "ceiling",
+  ]) {
+    const result = runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan({ mutation });
+    assert.equal(result.accepted, false, `authority:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `authority:${mutation}`);
+  }
+  assert.equal(runLocalPostgresImageAcquisitionDiagnosticGrantValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of ["top_extra", "missing", "schema", "authority", "lineage", "prior", "host", "ceiling", "expired"]) {
+    const result = runLocalPostgresImageAcquisitionDiagnosticGrantValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `grant:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `grant:${mutation}`);
+  }
+  assert.equal(runLocalPostgresImageAcquisitionDiagnosticJournalValidationFakePlan({ mutation: "none" }).accepted, true);
+  for (const mutation of ["top_extra", "sequence", "previous", "event", "detail_extra", "entry_sha", "completion_without_attempt"]) {
+    const result = runLocalPostgresImageAcquisitionDiagnosticJournalValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `journal:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `journal:${mutation}`);
+  }
+  assert.equal((await runLocalPostgresImageAcquisitionDiagnosticReceiptValidationFakePlan({ mutation: "none" })).accepted, true);
+  for (const mutation of [
+    "top_extra", "nested_extra", "missing", "status", "consumed", "authority", "attempt",
+    "cache", "journal", "readiness", "accessor",
+  ]) {
+    const result = await runLocalPostgresImageAcquisitionDiagnosticReceiptValidationFakePlan({ mutation });
+    assert.equal(result.accepted, false, `receipt:${mutation}`);
+    assert.equal(result.physicalEffects, 0, `receipt:${mutation}`);
+  }
+});
+
+test("image-acquisition diagnostic prepare is one-use, exact-root, and repository-test-only", () => {
+  const green = runLocalPostgresImageAcquisitionDiagnosticPrepareFakePlan({ mutation: "none" });
+  assert.equal(green.status, "GREEN");
+  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v1");
+  assert.deepEqual(green.rootEntries, ["image-acquisition-diagnostic.pending.json", "owner-approval-receipt"]);
+  assert.equal(green.grant.priorDiagnostic.root, "/Users/zaynw/.forme-r4-image-manifest-diagnostic-f0a0bf2d");
+  assert.equal(green.grant.priorDiagnostic.predecessorCardSha256,
+    "sha256:f0a0bf2dbe00e6a1ba2f49b6e2b58898136402e685c3cd0afe8a55883b26fdb8");
+  assert.equal(green.grant.priorDiagnostic.predecessorReviewSha256,
+    "sha256:73e6b30cbec9e5abbd52a1bdddf893bf89065c77381b1c6346d903d24ff77c66");
+  assert.equal(green.grant.priorDiagnostic.predecessorPayloadSha256,
+    "sha256:99d17e705204a8e2bb532cffc25ee845eddd29d242f5e518bac78e9b8db39414");
+  assert.equal(green.grant.priorDiagnostic.rootDevice, 16777231);
+  assert.equal(green.grant.priorDiagnostic.rootInode, 35062239);
+  assert.equal(green.grant.priorDiagnostic.rootUid, 501);
+  assert.equal(green.grant.priorDiagnostic.rootMode, "0700");
+  assert.deepEqual(green.grant.priorDiagnostic.retainedEntries, [
+    "image-manifest-diagnostic.consumed.json", "image-manifest-diagnostic-evidence.json",
+    "image-manifest-diagnostic-journal-v1", "owner-approval-receipt",
+  ]);
+  assert.equal(green.grant.priorDiagnostic.consumedGrantSha256,
+    "sha256:f497fc8ed003aebf42d975494730f184ba1f93355b6474ff7c3526e2d2533a22");
+  assert.equal(green.grant.priorDiagnostic.evidenceSha256,
+    "sha256:e149627976e1f2bf1927dbcec25a82e545f8d892d2b5865e288d6941dcbb9ad7");
+  assert.equal(green.grant.priorDiagnostic.journalEntryCount, 10);
+  assert.equal(green.grant.priorDiagnostic.journalHeadSha256,
+    "sha256:b9dcfb5134225497d8efc546f3ad7749ee931f29cf2db8e162037832af9a6a86");
+  assert.equal(green.physicalEffects, 0);
+  for (const mutation of ["root_extra", "expired", "binding"]) {
+    const result = runLocalPostgresImageAcquisitionDiagnosticPrepareFakePlan({ mutation });
+    assert.equal(result.status, "FAILED", mutation);
+    assert.equal(result.rootEntries.includes("image-acquisition-diagnostic.pending.json"), false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  const diagnosticRoot = "/private/r4-image-acquisition-diagnostic";
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "prepare-image-acquisition-diagnostic", "--diagnostic-root", diagnosticRoot,
+    "--diagnostic-review-head", "a".repeat(40), "--owner-approval-receipt", `${diagnosticRoot}/owner-approval-receipt`,
+    "--created-at", NOW, "--expires-at", "2026-08-11T19:00:00.000Z",
+  ]), {
+    mode: "prepare-image-acquisition-diagnostic", diagnosticRoot, diagnosticOwnerReviewHead: "a".repeat(40),
+    ownerApprovalReceiptPath: `${diagnosticRoot}/owner-approval-receipt`, createdAt: NOW,
+    expiresAt: "2026-08-11T19:00:00.000Z",
+  });
+  assert.deepEqual(parseLocalPostgresRunnerArguments([
+    "image-acquisition-diagnostic", "--diagnostic-root", diagnosticRoot,
+    "--evidence-out", `${diagnosticRoot}/image-acquisition-diagnostic-evidence.json`,
+  ]), {
+    mode: "image-acquisition-diagnostic", diagnosticRoot,
+    evidenceOut: `${diagnosticRoot}/image-acquisition-diagnostic-evidence.json`,
+  });
+  assert.equal(typeof prepareLocalPostgresImageAcquisitionDiagnosticGrant, "function");
+});
+
+test("image-acquisition diagnostic closes cached and one-pull success paths exactly", async () => {
+  const zeroVector = Object.fromEntries(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.map((kind: string) => [kind, 0]));
+  const retained = [
+    "image-acquisition-diagnostic-evidence.json", "image-acquisition-diagnostic-journal-v1",
+    "image-acquisition-diagnostic.consumed.json", "owner-approval-receipt",
+  ];
+  for (const mutation of ["cached_present", "missing_then_observed"] as const) {
+    const result = await runLocalPostgresImageAcquisitionDiagnosticFakePlan({ mutation });
+    const pulled = mutation === "missing_then_observed";
+    assert.equal(result.receipt.status, "OBSERVED", mutation);
+    assert.deepEqual(result.calls.map((call: { kind: string }) => call.kind),
+      pulled ? ["version", "image.inspect", "image.pull", "image.inspect"] : ["version", "image.inspect"], mutation);
+    const versionArgv = ["version", "--format", "{{json .}}"];
+    const inspectArgv = ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+    const pullArgv = ["image", "pull", "--platform", IMAGE_PLATFORM, IMAGE_REFERENCE];
+    assert.deepEqual(result.calls.map((call: { argv: string[] }) => call.argv),
+      pulled ? [versionArgv, inspectArgv, pullArgv, inspectArgv] : [versionArgv, inspectArgv], mutation);
+    assert.deepEqual(result.rootEntries, retained, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+    assert.deepEqual({ ...result.receipt.effects.dockerCallAttempts }, {
+      ...zeroVector, version: 1, "image.inspect": pulled ? 2 : 1, "image.pull": pulled ? 1 : 0,
+    }, mutation);
+    assert.deepEqual(result.receipt.effects.dockerCallCompletions,
+      result.receipt.effects.dockerCallAttempts, mutation);
+    assert.equal(result.receipt.effects.imagePullAttemptCount, pulled ? 1 : 0, mutation);
+    assert.equal(result.receipt.effects.dockerResourceEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.cleanupEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.postgresEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.sqlEffectCount, 0, mutation);
+    assert.equal(result.receipt.cache.cacheBefore, pulled ? "ABSENT" : "PRESENT", mutation);
+    assert.equal(result.receipt.cache.cacheAfter, "PRESENT", mutation);
+    assert.equal(result.receipt.closure.cacheResidue, pulled ? "EXACT_IMAGE_CACHE" : "PREEXISTING_CACHE", mutation);
+    assert.equal(result.receipt.closure.localResidueCount, 0, mutation);
+    assert.equal(result.receipt.readiness.acquisitionObserved, true, mutation);
+    assert.equal(result.receipt.readiness.replacementCampaignAuthorized, false, mutation);
+    assert.equal(result.receipt.readiness.targetPostgresObserved, false, mutation);
+    assert.equal(result.receipt.readiness.productionEffects, false, mutation);
+    assert.equal(result.receipt.readiness.gateCReady, false, mutation);
+  }
+});
+
+test("image-acquisition diagnostic preserves body-free failures and never retries or widens", async () => {
+  const expected = new Map([
+    ["pull_nonzero", ["PULL_NONZERO", 1, 1]],
+    ["pull_timeout", ["AMBIGUOUS_TRANSPORT", 1, 0]],
+    ["pull_signal", ["AMBIGUOUS_TRANSPORT", 1, 0]],
+    ["pull_crash", ["AMBIGUOUS_TRANSPORT", 1, 0]],
+    ["host_drift", ["AMBIGUOUS_TRANSPORT", 1, 0]],
+    ["post_missing", ["IMAGE_MISSING", 2, 1]],
+    ["post_malformed", ["MALFORMED", 2, 1]],
+    ["post_reference_mismatch", ["REFERENCE_MISMATCH", 2, 1]],
+    ["post_platform_mismatch", ["PLATFORM_MISMATCH", 2, 1]],
+    ["post_descriptor_invalid", ["DESCRIPTOR_INVALID", 2, 1]],
+  ] as const);
+  for (const [mutation, [classification, inspectAttempts, pullCompletions]] of expected) {
+    const result = await runLocalPostgresImageAcquisitionDiagnosticFakePlan({ mutation });
+    assert.equal(result.receipt.status, "FAILED", mutation);
+    assert.equal(result.receipt.observations.at(-1)?.classification, classification, mutation);
+    assert.equal(result.receipt.effects.dockerCallAttempts.version, 1, mutation);
+    assert.equal(result.receipt.effects.dockerCallAttempts["image.inspect"], inspectAttempts, mutation);
+    assert.equal(result.receipt.effects.dockerCallAttempts["image.pull"], 1, mutation);
+    assert.equal(result.receipt.effects.dockerCallCompletions["image.pull"], pullCompletions, mutation);
+    assert.equal(result.receipt.effects.dockerResourceEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.cleanupEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.postgresEffectCount, 0, mutation);
+    assert.equal(result.receipt.effects.sqlEffectCount, 0, mutation);
+    assert.equal(result.receipt.closure.localResidueCount, 0, mutation);
+    assert.equal(result.receipt.readiness.acquisitionObserved, false, mutation);
+    assert.equal(JSON.stringify(result.receipt).includes("progress"), false, mutation);
+    if (["pull_timeout", "pull_signal", "pull_crash", "host_drift"].includes(mutation)) {
+      assert.equal(result.receipt.cache.cacheAfter, "AMBIGUOUS", mutation);
+      assert.equal(result.receipt.closure.cacheResidue, "AMBIGUOUS", mutation);
+    }
+  }
+});
+
+test("image-acquisition diagnostic real entry rejects before socket or Docker without authority", async () => {
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), "forme-image-acquisition-diagnostic-entry-")));
+  try {
+    await writeFile(path.join(root, "owner-approval-receipt"), "fake absent image acquisition approval", { mode: 0o600 });
+    await assert.rejects(runApprovedLocalPostgresImageAcquisitionDiagnostic({
+      diagnosticRoot: root, evidenceOut: path.join(root, "image-acquisition-diagnostic-evidence.json"),
     }), LocalPostgresRunnerError);
     assert.deepEqual(await readdir(root), ["owner-approval-receipt"]);
   } finally { await rm(root, { recursive: true, force: true }); }
