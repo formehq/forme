@@ -1,12 +1,12 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_GREEN_DIAGNOSTIC_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
-- Updated: 2026-08-15
-- Current predecessor: Local PostgreSQL Integration Campaign Image-Manifest Diagnostic construction
+- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_GREEN_DIAGNOSTIC_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Updated: 2026-08-16
+- Current predecessor: Local PostgreSQL Integration Campaign Image-Acquisition Diagnostic construction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
-Gate C is still closed after the repository-only Image-Manifest Diagnostic
+Gate C is still closed after the repository-only Image-Acquisition Diagnostic
 construction reached Technical Review Green. It cannot prepare or consume a
 diagnostic grant, call Docker, pull an image, inspect or remove named Docker
 resources, run PostgreSQL, migrate production, activate a route or carry
@@ -27,10 +27,11 @@ It proved the historical container/network/volume names absent, then stopped
 before PostgreSQL because the pinned image descriptor did not match the
 separately pinned linux/arm64 manifest digest. Its body-free terminal receipt
 did not retain the descriptor value, so the repository cannot honestly choose
-a correction yet. Kmd/Lmd now construct a separate one-use body-free
-image-manifest diagnostic, but that diagnostic is not approved or executed.
-No image pin, campaign authority, PostgreSQL readiness or Gate C readiness has
-changed.
+a correction yet. A separately approved one-use image-manifest diagnostic was
+later consumed and stopped at `IMAGE_MISSING`. Kiad/Liad now construct a new
+one-use body-free image-acquisition diagnostic with at most one anonymous exact
+pull, but that diagnostic is not approved or executed. No image pin, campaign
+authority, PostgreSQL readiness or Gate C readiness has changed.
 
 ## Exact current bindings
 
@@ -54,14 +55,18 @@ changed.
 | Kmd HEAD / tree / G2 | `32abce27f7c84a83e0d2d1252ab0da5530f88cb0` / `eeaceeda818e7df76effe8b1439be849c7ead86b` / `sha256:a795d00b5875acedc13a320687c660f4c7c475ecf8e54373b6d55ca5e0de053e` |
 | Lmd HEAD / tree / G3 | `b17a44f34fa9abde1e6a39504594e875a6d7d7cf` / `2609248dfc6d792c4d36947ff4bd857faaa745cf` / `sha256:a4ff525649dfd622d4171974ed3b43da863c8918e81aad08b546a5a32d00e161` |
 | Image-Manifest index / schema / evidence / report | `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c` / `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440` / `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011` / `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559` |
+| Image-Acquisition Correction Addendum / Review | `sha256:592f9e2fdb080a3f9605937251943afd2fb2f822c2871b04ae9d13c581d35b6e` / `sha256:83305354bc03c0fd1a3e945b04d4ceb6d5749f08e2c530f734502dc6921ed3a9` |
+| Kiad HEAD / tree / G2 | `c6fe1804b1111c19d27da64f7ca76b85c0f12adf` / `3d9202f81cb09dfe9f1a6d70fb7cfb92f47cdb7a` / `sha256:d7f76c1a9af05f25952a65c5e561fa28186df390ac5a66c3416b45ca496b19f8` |
+| Liad HEAD / tree / G3 | `95197de9f65469cb52e569245cf4e08190c82471` / `872cbc1fb4c0ea05bcf852ae0cc2d4c50d6469e7` / `sha256:11131eb2354616482e689fb3fc082d1ac33c7aea2ff8133e57101ac6d5a7922b` |
+| Image-Acquisition index / schema / evidence / report | `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9` / `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170` / `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7` / `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11` |
 
 The future local-effect proposal may use only these versioned add-only paths:
 
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V2.md`;
-- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V2.md`.
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md`;
+- `R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md`.
 
 They are not Gate C authority. They may authorize only one disposable local
-campaign after a separate exact Owner decision.
+diagnostic after a separate exact Owner decision.
 
 ## Frozen failed history
 
@@ -82,13 +87,13 @@ None can be revived, retried or interpreted as campaign authority.
 | exact-ownership cleanup guard constructed | `true` |
 | durable absence-before-physical gate constructed | `true` |
 | write-ahead/clock/host/headroom/recovery guards constructed | `true` |
-| image-manifest diagnostic contract constructed | `true` |
-| focused image-manifest diagnostic tests | `6 / 6` |
-| local PostgreSQL runner | `182 / 182` |
-| complete offline regression | `754 / 754` |
+| image-acquisition diagnostic contract constructed | `true` |
+| focused image-acquisition diagnostic tests | `6 / 6` |
+| local PostgreSQL runner | `188 / 188` |
+| complete offline regression | `760 / 760` |
 | Gate-B Core validation | `146 / 146` |
 | spine | `45 / 45` |
-| image-manifest diagnostic approved / executed | `false / false` |
+| image-acquisition diagnostic approved / executed | `false / false` |
 | image pull / cleanup authorized | `false / false` |
 | historical resources observed absent by consumed V2 campaign | `true` |
 | target PostgreSQL / catalog observed | `false / false` |
@@ -108,10 +113,11 @@ push, PR mutation, merge or spend.
 
 ## What must happen before Gate C can become approvable
 
-1. Construct and independently audit the versioned Image-Manifest Diagnostic
+1. Construct and independently audit the versioned Image-Acquisition Diagnostic
    Card/Owner Review, then obtain a separate exact Owner approval.
-2. Under that one-use authority only, observe the bounded typed descriptor
-   tuple with no pull, cleanup or PostgreSQL effect.
+2. Under that one-use authority only, use the cached path or at most one exact
+   anonymous pull and observe the bounded typed descriptor tuple, with no
+   Docker resource, cleanup or PostgreSQL effect.
 3. Review the observed tuple and, if justified, construct a separate repository
    correction plus a new replacement-campaign authority; neither is implied by
    the diagnostic result.
@@ -127,6 +133,6 @@ No local campaign outcome automatically opens production or marks #67/R4 Done.
 
 ## Mandatory stop
 
-`LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
+`LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`
 
 Gate C remains intentionally non-approvable.

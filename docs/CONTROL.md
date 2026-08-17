@@ -1,18 +1,21 @@
 # Owner technical cockpit
 
-- Updated: 2026-08-15
+- Updated: 2026-08-16
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and #67 has repository/offline Public Core plus
   concrete Local PostgreSQL wiring. The approved Integration Campaign V2 was
   consumed once and failed closed before PostgreSQL at the image-platform
-  manifest predicate. Kmd `32abce2` / Lmd `b17a44f` now freeze a separate
-  body-free image-manifest diagnostic with exactly one future `version` and one
-  future pinned `image inspect` ceiling; pull, cleanup, PostgreSQL, SQL,
-  Production and Gate C remain zero/closed. The diagnostic has not been
-  prepared, consumed or executed, and no descriptor value has been admitted as
-  a corrected pin. The exact stop is
-  `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-  IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  manifest predicate. A later one-use image-manifest diagnostic stopped at
+  `IMAGE_MISSING`; that root remains immutable failed history. Kiad `c6fe180` /
+  Liad `95197de` now freeze a separate body-free image-acquisition diagnostic
+  with one future `version`, at most two exact `image inspect` calls and at
+  most one anonymous pinned `linux/arm64` pull. Docker diagnostic execution,
+  registry, pull, cleanup, PostgreSQL, SQL, Production and Gate C remain
+  zero/closed. The acquisition diagnostic has not been prepared, consumed or
+  executed, and no descriptor value has been admitted as a corrected pin. The
+  exact stop is
+  `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`. Host Binding remains historical setup evidence, not
   the #67 product gate.**
 - Active issue: [#67 — Public Room and one real bounded knock](https://github.com/formehq/forme/issues/67), under [#52 — R4 Controlled Presence](https://github.com/formehq/forme/issues/52)
@@ -47,7 +50,7 @@
   complete/repeatable-MVP deadline. #67–#70 remain intact and gate-driven;
   Technical Review plus Owner Experience Acceptance—not the date—defines Done.
   R5 starts only after the real R4 chain is accepted.**
-- Next action: **construct and audit the reserved versioned Image-Manifest
+- Next action: **construct and audit the reserved versioned Image-Acquisition
   Diagnostic Card/Owner Review as two add-only direct children, then stop for
   exact Owner approval. Until that separate approval, do not prepare a
   diagnostic grant, resolve the Docker socket, call Docker, pull an image,
@@ -59,12 +62,12 @@
   `sha256:45414f18…1480` is phase-specific and explicitly non-publishable. No
   deploy, Room creation, publication, Curator admission, real Guest knock,
   Retry, or Provider call is active or implied.
-- Current image-manifest diagnostic bindings: index
-  `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
-  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
-  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
-  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-acquisition diagnostic bindings: index
+  `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
+  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 This is the owner's single re-entry page. Read it before implementation details. It should answer, in a few minutes: what Forme is, where the build is, what truth is durable, what an agent may see or change, and what the owner must decide next.
 

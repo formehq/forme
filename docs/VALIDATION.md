@@ -1,23 +1,24 @@
 # Product validation and learning log
 
 - Status: active MVP evidence register
-- Updated: 2026-08-15
-- Current image-manifest diagnostic construction: Kmd `32abce2` / Lmd
-  `b17a44f`; index `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
-  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
-  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
-  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Updated: 2026-08-16
+- Current image-acquisition diagnostic construction: Kiad `c6fe180` / Liad
+  `95197de`; index `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
+  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current verdict: **the one-use Integration Campaign V2 was prepared and
   consumed, proved its historical Docker resource names absent, then failed
   closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
-  The repository now has a strict body-free diagnostic implementation and
-  machine evidence, validated at 6/6 focused, 182/182 runner, 85/85 non-runner,
-  434/434 Public Core, 754/754 offline, 146/146 Gate-B Core and 45/45 spine.
-  Construction made zero Docker/socket/image pull/cleanup/PostgreSQL/SQL
-  effects and did not read the failed root. The diagnostic is not approved or
-  executed, so its tuple remains unobserved and no manifest pin or replacement
-  campaign is authorized.**
+  A later one-use image-manifest diagnostic stopped at `IMAGE_MISSING`. The
+  repository now has a strict separate image-acquisition implementation and
+  machine evidence, validated at 6/6 focused, 188/188 runner, 85/85 non-runner,
+  440/440 Public Core, 760/760 offline, 146/146 serial Gate-B Core and 45/45
+  spine. Construction made zero Docker/socket/registry/pull/cleanup/
+  PostgreSQL/SQL effects and did not read the failed diagnostic root. The
+  acquisition diagnostic is not approved or executed, so image presence
+  remains unproved and no manifest pin or replacement campaign is authorized.**
 - Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
@@ -1396,3 +1397,42 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
   IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`.
+
+## Evidence round 30 — Image-acquisition diagnostic construction
+
+- User outcome: preserve the consumed Image-Manifest Diagnostic and its
+  `IMAGE_MISSING` result as immutable evidence, then construct the smallest
+  separate one-use acquisition envelope capable of testing one exact anonymous
+  pinned pull without continuing into PostgreSQL or a replacement campaign.
+- Technical evidence: Kiad
+  `c6fe1804b1111c19d27da64f7ca76b85c0f12adf` / tree
+  `3d9202f81cb09dfe9f1a6d70fb7cfb92f47cdb7a` and Liad
+  `95197de9f65469cb52e569245cf4e08190c82471` / tree
+  `872cbc1fb4c0ea05bcf852ae0cc2d4c50d6469e7` bind G2
+  `sha256:d7f76c1a9af05f25952a65c5e561fa28186df390ac5a66c3416b45ca496b19f8`
+  and G3
+  `sha256:11131eb2354616482e689fb3fc082d1ac33c7aea2ff8133e57101ac6d5a7922b`.
+  Index/schema/evidence/report are
+  `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+  `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+  `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`
+  and
+  `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+- Validation: 6/6 focused, 188/188 runner, 85/85 non-runner, 440/440
+  Public Core, 760/760 offline, 146/146 serial Gate-B Core and 45/45 spine;
+  strict Ajv, hostile grant/journal/receipt matrices, TypeScript, no-AI, docs
+  and diff checks Green. An initial parallel Gate-B Core stress run exposed an
+  unrelated existing Host Binding error-code ordering failure; only the
+  required serial Green result is acceptance evidence.
+- Effect truth: failed-root reads/mutations, diagnostic prepare/consume,
+  Docker CLI/socket/daemon/registry, image pull, cleanup, PostgreSQL, SQL,
+  product runtime, Production and Gate C were all zero.
+- Product judgment: the repository now contains a bounded way to acquire and
+  classify the exact image, but it has not acquired or observed it. This is a
+  diagnostic launchpad, not a replacement campaign or real Public Room
+  encounter.
+- Consequence: stop at
+  `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+  IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+  GATE_C_NOT_REQUESTED`. Construct the reserved add-only Card/Review, then
+  return for one separate exact local-effect decision.

@@ -2,6 +2,36 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-16 — Construct one bounded image-acquisition diagnostic
+
+**Decision:** preserve the consumed Image-Manifest Diagnostic and its
+`IMAGE_MISSING` result as immutable history, while constructing a separate
+one-use Image-Acquisition Diagnostic family. Kiad
+`c6fe1804b1111c19d27da64f7ca76b85c0f12adf` and Liad
+`95197de9f65469cb52e569245cf4e08190c82471` freeze strict v1 grant,
+journal, receipt, prepare and execution surfaces. The diagnostic may later use
+one `version`, at most two exact pinned `image inspect` calls and, only after
+an exact missing result, at most one anonymous `linux/arm64` pull. Machine
+bindings are index
+`sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`
+and report
+`sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+
+**Authority:** construction is repository-only. Docker Diagnostic, registry,
+image pull, cleanup, PostgreSQL, replacement campaign, Production and Gate C
+remain `NOT_REQUESTED`. The next action is the reserved add-only versioned
+Card/Review followed by a separate exact Owner decision. Mandatory stop:
+`LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the previous diagnostic proved the image was missing but had no
+pull authority. A separate closed acquisition envelope can answer whether one
+exact anonymous pull produces the pinned descriptor without silently turning
+diagnosis into a campaign retry.
+
 ## 2026-08-15 — Diagnose the pinned image descriptor before another campaign
 
 **Decision:** after the one-use Integration Campaign V2 failed closed at

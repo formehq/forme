@@ -1,23 +1,24 @@
 # MVP rebuild roadmap
 
-- Updated: 2026-08-15
+- Updated: 2026-08-16
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; there is no calendar-date substitute for Done
 - Progress / Vision Sharing: 2026-08-25 (Tuesday) — share the truthful state
   reached by then; complete/repeatable MVP delivery is not required that day
 - Scope model: P0 committed, P1 conditional, P2 future/separate scope decision
-- Current image-manifest diagnostic construction: Kmd `32abce2` / Lmd
-  `b17a44f`; index `sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
-  schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
-  evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`,
-  report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+- Current image-acquisition diagnostic construction: Kiad `c6fe180` / Liad
+  `95197de`; index `sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+  schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+  evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`,
+  report `sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Current gate: the one-use Integration Campaign V2 failed closed before
-  PostgreSQL on an unrecorded image descriptor mismatch. Repository
-  construction of a body-free diagnostic is Green, but the diagnostic itself,
-  image pull, cleanup, replacement campaign, Production and Gate C are not
-  requested. The next step is an add-only Diagnostic Card/Review and a separate
-  exact Owner approval.
+  PostgreSQL on an unrecorded image descriptor mismatch. A later one-use
+  image-manifest diagnostic stopped honestly at `IMAGE_MISSING`. Repository
+  construction of a separate image-acquisition diagnostic is Green, but the
+  diagnostic itself, registry, image pull, cleanup, replacement campaign,
+  Production and Gate C are not requested. The next step is an add-only
+  Image-Acquisition Diagnostic Card/Review and a separate exact Owner approval.
 - Historical V2 topology verifier correction bindings: index
   `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
   schema
