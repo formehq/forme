@@ -51,6 +51,7 @@ import {
   runLocalPostgresIntegrationCampaignJournalValidationFakePlan,
   runLocalPostgresIntegrationCampaignJournalHeadroomFakePlan,
   runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan,
+  runLocalPostgresIntegrationCampaignMissingFingerprintFakePlan,
   runLocalPostgresIntegrationCampaignPrepareFakePlan,
   runLocalPostgresIntegrationCampaignReceiptValidationFakePlan,
   runLocalPostgresIntegrationCampaignRawParserFakePlan,
@@ -3338,27 +3339,59 @@ test("integration campaign correction binds the committed Addendum/Review and ex
     artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-OWNER-REVIEW.md",
     artifactSha256: "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8",
   });
+  assertHistoricalAuthorityStep({
+    head: "b9494e1989d45cab9c35463f9182e1d6ee2c82bb",
+    parent: "27bbb085c63e7c4b6d6ffbe4fa3d51ab3984649d",
+    tree: "6a75a8965d30f5f228655b866dd95bd685fbdd3c",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V3.md",
+    artifactSha256: "sha256:37adbcbb3dcf568b21a93a3392f079ef9155533105829b6710a88557917c28d9",
+  });
+  assertHistoricalAuthorityStep({
+    head: "c0382bedf25afc9464254f0d3b3f461e4a364e12",
+    parent: "b9494e1989d45cab9c35463f9182e1d6ee2c82bb",
+    tree: "1268459f984087419b24db66f2a11fb322eb4f78",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V3.md",
+    artifactSha256: "sha256:c00dece66c93e03143e1bf85bfe3f57e5bdd24c5ffe1bb75df09976311e46a0d",
+  });
+  assertHistoricalAuthorityStep({
+    head: "25cf2b400d96a86c8017f7dbc2e2186fff7e9180",
+    parent: "c0382bedf25afc9464254f0d3b3f461e4a364e12",
+    tree: "d858b46c9f6e83edd57db22033ce7458952f774f",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39",
+  });
+  assertHistoricalAuthorityStep({
+    head: "eb9b3904131a682da6a85677494e97e5e2149bdb",
+    parent: "25cf2b400d96a86c8017f7dbc2e2186fff7e9180",
+    tree: "d92ce1354685205ddc64c3c3e1dc455cd8ecbce1",
+    status: "A",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37",
+  });
   assert.equal(verifyLocalPostgresIntegrationCampaignHistoricalPrefix(), true);
   const green = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation: "none" });
   assert.equal(green.accepted, true);
   assert.equal(green.physicalEffects, 0);
-  assert.equal(green.authority.addendumHead, "5878e51dbf12999a31f99e72d734bd49a63e9f20");
-  assert.equal(green.authority.addendumTree, "ea74620b70369698230ceae9d172c6b7e88e254a");
-  assert.equal(green.authority.addendumSha256, "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d");
-  assert.equal(green.authority.reviewHead, "e548933a598c9e62c99dc0caaf4c52b7bf13ff32");
-  assert.equal(green.authority.reviewTree, "75c73c16c81ee3dafd082dfac3bf4758068f474f");
-  assert.equal(green.authority.reviewSha256, "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8");
+  assert.equal(green.authority.addendumHead, "25cf2b400d96a86c8017f7dbc2e2186fff7e9180");
+  assert.equal(green.authority.addendumTree, "d858b46c9f6e83edd57db22033ce7458952f774f");
+  assert.equal(green.authority.addendumSha256, "sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39");
+  assert.equal(green.authority.reviewHead, "eb9b3904131a682da6a85677494e97e5e2149bdb");
+  assert.equal(green.authority.reviewTree, "d92ce1354685205ddc64c3c3e1dc455cd8ecbce1");
+  assert.equal(green.authority.reviewSha256, "sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37");
   assert.deepEqual(green.authority.implementationPaths, [
     "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
   ]);
   assert.deepEqual(green.authority.evidencePaths, [
-    "docs/evidence/r4-public-core-local-postgres-integration-campaign-platform-select-correction.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-artifact-index.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json",
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-fingerprint-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-fingerprint-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-fingerprint-correction-evidence.schema.json",
   ]);
-  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "e548933a598c9e62c99dc0caaf4c52b7bf13ff32^"], {
+  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "eb9b3904131a682da6a85677494e97e5e2149bdb^"], {
     cwd: path.resolve(import.meta.dirname, "../.."), encoding: "utf8",
-  }).trim(), "5878e51dbf12999a31f99e72d734bd49a63e9f20");
+  }).trim(), "25cf2b400d96a86c8017f7dbc2e2186fff7e9180");
   for (const mutation of ["packet", "review", "topology", "workset", "marker", "old_authority"]) {
     const result = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation });
     assert.equal(result.accepted, false, mutation);
@@ -3420,6 +3453,23 @@ test("integration campaign fake and production share the exact one-LF raw inspec
     assert.equal(result.classification, classification, scenario);
     assert.equal(result.ownership, ownership, scenario);
   }
+});
+
+test("integration campaign admits only the captured body-free container-missing fingerprint", () => {
+  const green = runLocalPostgresIntegrationCampaignMissingFingerprintFakePlan({ mutation: "none" });
+  assert.equal(green.accepted, true);
+  assert.equal(green.physicalEffects, 0);
+  for (const mutation of [
+    "kind", "target", "spawn", "exit", "signal",
+    "stdout_bytes", "stdout_sha", "stdout_utf8", "stdout_empty", "stdout_endings", "stdout_lines",
+    "stderr_bytes", "stderr_sha", "stderr_utf8", "stderr_empty", "stderr_endings", "stderr_lines",
+  ]) {
+    const result = runLocalPostgresIntegrationCampaignMissingFingerprintFakePlan({ mutation });
+    assert.equal(result.accepted, false, mutation);
+    assert.equal(result.physicalEffects, 0, mutation);
+  }
+  assert.equal(green.schemaVersion,
+    "r4.public-core-local-postgres-integration-campaign-missing-fingerprint-fake-result.v4");
 });
 
 test("integration campaign all-missing path reaches one frozen physical Green and exact zero residue", async () => {
@@ -3754,7 +3804,7 @@ test("integration campaign prepare is one-use, same-descriptor, exact-root, and 
   assert.equal(green.code, "local_postgres_integration_campaign_prepare_green");
   assert.deepEqual(green.rootEntries, ["integration-campaign.pending.json", "owner-approval-receipt"]);
   assert.match(green.receipt.pendingCampaignGrantSha256, /^sha256:[0-9a-f]{64}$/u);
-  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v3");
+  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v4");
   assert.equal(green.grant.artifacts.dockerCliSourceTagCommit, "c2be9ccfc3cf0b4c4c4f0a3d5c91dd759ab21256");
   assert.equal(green.grant.artifacts.dockerCliInspectorBlob, "526cfda9f8c0cf6135baef50ff4ce357b342d6b0");
   assert.equal(green.grant.artifacts.dockerCliInspectorByteCount, 6094);
