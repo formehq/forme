@@ -13526,47 +13526,47 @@ export async function runLocalPostgresImageManifestDiagnosticReceiptValidationFa
   });
 }
 
-const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD = "2fe84edd9d188f35b02b226fa32ce94f5576f8de";
-const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE = "5d6fb3334608ba7032aee45646b868d88ccbd1be";
-const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256 = "sha256:592f9e2fdb080a3f9605937251943afd2fb2f822c2871b04ae9d13c581d35b6e";
-const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD = "eda416c2a3b591cad3fb16608ad78fef2031f174";
-const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE = "859a5cca61d13992fdde184f9d537b049af6cfee";
-const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256 = "sha256:83305354bc03c0fd1a3e945b04d4ceb6d5749f08e2c530f734502dc6921ed3a9";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD = "6a040deb80dc9c22d131bcf6bb0d2eadbdca7d81";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE = "9774d6dab1af9bd8acea760f8b10e406bef46303";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256 = "sha256:f0a0bf2dbe00e6a1ba2f49b6e2b58898136402e685c3cd0afe8a55883b26fdb8";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD = "b4aae98488e934d921c1deb5c526286c49d22503";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE = "72ffc8ce9c19058894864846f5705d1234d7ced8";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_SHA256 = "sha256:73e6b30cbec9e5abbd52a1bdddf893bf89065c77381b1c6346d903d24ff77c66";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256 = "sha256:99d17e705204a8e2bb532cffc25ee845eddd29d242f5e518bac78e9b8db39414";
-const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-ADDENDUM.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CORRECTION-OWNER-REVIEW.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CARD-V1.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-OWNER-REVIEW-V1.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md";
-const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_BEGIN";
-const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_END";
-const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY = "image-acquisition-diagnostic-journal-v1";
-const IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE = "image-acquisition-diagnostic-evidence.json";
-const IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE = "image-acquisition-diagnostic.pending.json";
-const IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE = "image-acquisition-diagnostic.consumed.json";
-const IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v1";
-const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-journal-entry.v1";
-const IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-receipt.v1";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD = "73ea8d2ab6ced3613756ac727433ed623b0fdb24";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE = "95d7c1150831bcc2288d80ee650cf8cc3e2b5e0b";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256 = "sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_HEAD = "56e8d29c9c29de0735667efb6be647d7cc1cd57b";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_TREE = "8557cdc1780478c5cfe75261256c71a579234800";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256 = "sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD = "23e4213d934076cc85e4cd16512bdcbc4f7a0483";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE = "f753b338132db899c9a4a3b7a274ac6c5a67931e";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256 = "sha256:385f82e5ffd19745da495b5ed6e1f57e33020d5ed71df84ac591b2eb93880a72";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD = "33fc039675bb990180cb37f85096f217cb523eea";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE = "8d58dd8e00a728b23f144a9a1263dbd0f3e68e87";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_SHA256 = "sha256:8da2273700d37e588f943194d5a9c2e2d407ad4a75ac22ca3c3b5a58b449675c";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256 = "sha256:fe44f267ac9663919a4e63ab075ed85a40bdf48b4128cdffaeed52fb107ec7ea";
+const IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-AUTHORITY-CORRECTION-ADDENDUM.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-AUTHORITY-CORRECTION-OWNER-REVIEW.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V1.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V2.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V2.md";
+const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V2_BEGIN";
+const IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_END = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V2_END";
+const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_DIRECTORY = "image-acquisition-diagnostic-journal-v2";
+const IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_FILE = "image-acquisition-diagnostic-evidence-v2.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_PENDING_FILE = "image-acquisition-diagnostic-v2.pending.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_CONSUMED_FILE = "image-acquisition-diagnostic-v2.consumed.json";
+const IMAGE_ACQUISITION_DIAGNOSTIC_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v2";
+const IMAGE_ACQUISITION_DIAGNOSTIC_JOURNAL_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-journal-entry.v2";
+const IMAGE_ACQUISITION_DIAGNOSTIC_RECEIPT_SCHEMA = "r4.public-core-local-postgres-image-acquisition-diagnostic-receipt.v2";
 const IMAGE_ACQUISITION_DIAGNOSTIC_IMPLEMENTATION_PATHS = Object.freeze([
   "scripts/r4-public-core-local-postgres.mjs",
   "test/r4/public-core-local-postgres.test.ts",
 ]);
 const IMAGE_ACQUISITION_DIAGNOSTIC_EVIDENCE_PATHS = Object.freeze([
-  "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-acquisition-diagnostic.json",
-  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-artifact-index.json",
-  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-diagnostic-evidence.schema.json",
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-image-acquisition-replacement.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-replacement-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-image-acquisition-replacement-evidence.schema.json",
 ]);
 const IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS = Object.freeze([
   "README.md", "docs/CONTROL.md", "docs/DECISIONS.md", "docs/NATIVE-HARNESS-ARCHITECTURE.md",
   "docs/PRODUCT.md", "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
-  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md",
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 const IMAGE_ACQUISITION_DIAGNOSTIC_DOCKER_CALL_CEILINGS = Object.freeze(Object.fromEntries(
@@ -13581,28 +13581,28 @@ const IMAGE_ACQUISITION_DIAGNOSTIC_PRIOR = Object.freeze({
   predecessorReviewHead: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD,
   predecessorReviewTree: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE,
   predecessorPayloadSha256: IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256,
-  root: "/Users/zaynw/.forme-r4-image-manifest-diagnostic-f0a0bf2d",
-  rootDevice: 16777231,
-  rootInode: 35062239,
+  root: "/Users/zaynw/.forme-r4-image-acquisition-diagnostic-385f82e5",
+  rootDevice: 16777233,
+  rootInode: 35611325,
   rootUid: 501,
   rootMode: "0700",
   retainedEntries: Object.freeze([
-    "image-manifest-diagnostic.consumed.json", "image-manifest-diagnostic-evidence.json",
-    "image-manifest-diagnostic-journal-v1", "owner-approval-receipt",
+    "image-acquisition-diagnostic.consumed.json", "image-acquisition-diagnostic-evidence.json",
+    "image-acquisition-diagnostic-journal-v1", "owner-approval-receipt",
   ]),
-  ownerApprovalReceiptSha256: "sha256:07963ed22fbb1c96c3161bf9bc0527003907920fe44ae57f2954cbf9d1f59445",
-  ownerApprovalReceiptByteCount: 1030,
-  consumedGrantSha256: "sha256:f497fc8ed003aebf42d975494730f184ba1f93355b6474ff7c3526e2d2533a22",
-  consumedGrantByteCount: 4401,
-  evidenceSha256: "sha256:e149627976e1f2bf1927dbcec25a82e545f8d892d2b5865e288d6941dcbb9ad7",
-  evidenceByteCount: 6639,
-  journalEntryCount: 10,
-  journalHeadSha256: "sha256:b9dcfb5134225497d8efc546f3ad7749ee931f29cf2db8e162037832af9a6a86",
+  ownerApprovalReceiptSha256: "sha256:63d8cc1fb12aeb0c6dd3d8927a8db90d3799fcb4fae9a598fb0b52d1be013b09",
+  ownerApprovalReceiptByteCount: 1086,
+  consumedGrantSha256: "sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba",
+  consumedGrantByteCount: 5273,
+  evidenceSha256: "sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd",
+  evidenceByteCount: 6775,
+  journalEntryCount: 7,
+  journalHeadSha256: "sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa",
   terminalStatus: "FAILED",
-  terminalCode: "local_postgres_image_manifest_diagnostic_failed",
-  terminalClassification: "IMAGE_MISSING",
+  terminalCode: "local_postgres_image_acquisition_diagnostic_failed",
+  terminalClassification: "NONZERO",
   dockerVersionCount: 1,
-  imageInspectCount: 1,
+  imageInspectCount: 0,
   imagePullCount: 0,
   widerEffectCount: 0,
 });
@@ -13684,7 +13684,7 @@ function validateImageAcquisitionDiagnosticPayload(raw) {
   exactKeys(payload.host, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_HOST));
   exactKeys(payload.ceilings, Object.keys(IMAGE_ACQUISITION_DIAGNOSTIC_CEILINGS));
   exactKeys(payload.ceilings.dockerCalls, LOCAL_POSTGRES_DOCKER_COMMAND_KINDS);
-  if (payload.schemaVersion !== "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1"
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v2"
     || payload.localOnly !== true || payload.productionEffectsAllowed !== false
     || payload.authority.correctionAddendumSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_SHA256
     || payload.authority.correctionOwnerReviewSha256 !== IMAGE_ACQUISITION_DIAGNOSTIC_REVIEW_SHA256
@@ -13728,13 +13728,35 @@ function parseImageAcquisitionDiagnosticCard(bytes) {
   });
 }
 
+function historicalImageAcquisitionDiagnosticV1PayloadSha256(bytes) {
+  let text;
+  try { text = new TextDecoder("utf-8", { fatal: true }).decode(bytes); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_binding_invalid"); }
+  const lines = text.split("\n");
+  const begin = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_BEGIN";
+  const end = "R4_LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_AUTHORITY_V1_END";
+  const begins = lines.flatMap((line, index) => line === begin ? [index] : []);
+  const ends = lines.flatMap((line, index) => line === end ? [index] : []);
+  if (begins.length !== 1 || ends.length !== 1 || ends[0] !== begins[0] + 2) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+  const canonical = lines[begins[0] + 1];
+  let parsed;
+  try { parsed = parseStrictJson(canonical); }
+  catch { fail("local_postgres_image_acquisition_diagnostic_binding_invalid"); }
+  if (canonical.length === 0 || canonicalJson(parsed) !== canonical) {
+    fail("local_postgres_image_acquisition_diagnostic_binding_invalid");
+  }
+  return sha256Bytes(Buffer.from(canonical));
+}
+
 function verifyImageAcquisitionDiagnosticTopology(grant) {
   exactCommitStep(IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD,
     IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD,
     IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_TREE,
     new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH, "A"]]),
     "local_postgres_image_acquisition_diagnostic_binding_invalid");
-  exactCommitStep("b4aae98488e934d921c1deb5c526286c49d22503", IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD,
+  exactCommitStep(IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD, IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_HEAD,
     IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_TREE,
     new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_ADDENDUM_PATH, "A"]]),
     "local_postgres_image_acquisition_diagnostic_binding_invalid");
@@ -13751,7 +13773,7 @@ function verifyImageAcquisitionDiagnosticTopology(grant) {
     "local_postgres_image_acquisition_diagnostic_binding_invalid");
   exactCommitStep(grant.lineage.evidenceHead, grant.lineage.statusHead, grant.lineage.statusTree,
     statusMap(IMAGE_ACQUISITION_DIAGNOSTIC_STATUS_PATHS,
-      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md"])),
+      new Set(["docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md"])),
     "local_postgres_image_acquisition_diagnostic_binding_invalid");
   exactCommitStep(grant.lineage.statusHead, grant.lineage.diagnosticCardHead, grant.lineage.diagnosticCardTree,
     new Map([[IMAGE_ACQUISITION_DIAGNOSTIC_CARD_PATH, "A"]]),
@@ -13765,7 +13787,7 @@ function verifyImageAcquisitionDiagnosticTopology(grant) {
   if (runGit(["rev-parse", `${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_HEAD}^{tree}`])
       !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_TREE
     || sha256Bytes(predecessorCardBytes) !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_CARD_SHA256
-    || parseImageManifestDiagnosticCard(predecessorCardBytes).sha256
+    || historicalImageAcquisitionDiagnosticV1PayloadSha256(predecessorCardBytes)
       !== IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_PAYLOAD_SHA256
     || sha256Bytes(runGit(["show",
       `${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_HEAD}:${IMAGE_ACQUISITION_DIAGNOSTIC_PREDECESSOR_REVIEW_PATH}`], true))
@@ -14845,12 +14867,13 @@ export function runLocalPostgresImageAcquisitionDiagnosticJournalValidationFakeP
 export function runLocalPostgresImageAcquisitionDiagnosticGrantValidationFakePlan(input = Object.freeze({})) {
   const stable = ownedPlain(input);
   exactKeys(stable, ["mutation"]);
-  const allowed = new Set(["none", "top_extra", "missing", "schema", "authority", "lineage", "prior", "host", "ceiling", "expired"]);
+  const allowed = new Set(["none", "top_extra", "missing", "schema", "v1", "authority", "lineage", "prior", "host", "ceiling", "expired"]);
   if (!allowed.has(stable.mutation)) fail("local_postgres_fake_fault_invalid");
   const grant = JSON.parse(canonicalJson(fakeImageAcquisitionDiagnosticGrant(`sha256:${"a".repeat(64)}`)));
   if (stable.mutation === "top_extra") grant.extra = true;
   else if (stable.mutation === "missing") delete grant.artifacts;
   else if (stable.mutation === "schema") grant.schemaVersion = "v0";
+  else if (stable.mutation === "v1") grant.schemaVersion = "r4.public-core-local-postgres-image-acquisition-diagnostic-grant.v1";
   else if (stable.mutation === "authority") grant.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
   else if (stable.mutation === "lineage") grant.lineage.correctionOwnerReviewHead = "f".repeat(40);
   else if (stable.mutation === "prior") grant.priorDiagnostic.journalEntryCount = 11;
@@ -14870,11 +14893,11 @@ export function runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan(inpu
   const stable = ownedPlain(input);
   exactKeys(stable, stable.mutation === undefined ? [] : ["mutation"]);
   const mutation = stable.mutation ?? "none";
-  const allowed = new Set(["none", "duplicate_marker", "prefix_marker", "top_extra", "authority", "lineage", "prior", "host", "ceiling"]);
+  const allowed = new Set(["none", "duplicate_marker", "prefix_marker", "top_extra", "v1", "authority", "lineage", "prior", "host", "ceiling"]);
   if (!allowed.has(mutation)) fail("local_postgres_fake_fault_invalid");
   const derived = fakeImageAcquisitionDiagnosticDerived();
   const payload = {
-    schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1",
+    schemaVersion: "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v2",
     authority: { ...selectKeys(derived.authority, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_AUTHORITY_KEYS) },
     lineage: { ...selectKeys(derived.lineage, IMAGE_ACQUISITION_DIAGNOSTIC_PAYLOAD_LINEAGE_KEYS) },
     artifacts: { ...derived.artifacts }, priorDiagnostic: { ...derived.priorDiagnostic },
@@ -14882,6 +14905,7 @@ export function runLocalPostgresImageAcquisitionDiagnosticAuthorityFakePlan(inpu
     localOnly: true, productionEffectsAllowed: false,
   };
   if (mutation === "top_extra") payload.extra = true;
+  else if (mutation === "v1") payload.schemaVersion = "r4.public-core-local-postgres-image-acquisition-diagnostic-authority.v1";
   else if (mutation === "authority") payload.authority.correctionAddendumSha256 = `sha256:${"f".repeat(64)}`;
   else if (mutation === "lineage") payload.lineage.correctionOwnerReviewHead = "f".repeat(40);
   else if (mutation === "prior") payload.priorDiagnostic.journalEntryCount = 11;
