@@ -1,6 +1,24 @@
 # Product validation and learning log
 
-## Current verdict — platform-select correction
+## Current verdict — R4 execution management reset
+
+The latest physical evidence remains Integration Campaign V4 failed-clean:
+PostgreSQL and SQL were not reached, fresh resources were absent and owned
+residue was zero. The management reset adds no product or runtime evidence. It
+corrects how work is counted and stopped: #67 is `Building / At Risk`, the
+historical runner is frozen, linked Enabler
+[#77](https://github.com/formehq/forme/issues/77) may proceed only under a later
+medium-grained envelope, and two same-boundary failures or two full attempts
+force redesign.
+
+Product progress in this round: `0`. Docker, PostgreSQL, provider, Guest,
+publication, production and Gate C effects: `0`.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Earlier current verdict — platform-select correction (historical)
 
 Kps `8af6653` / Lps `10fbc3c` construct and prove exact
 `--platform linux/arm64` selection without relaxing the pinned manifest or

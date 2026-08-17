@@ -51,6 +51,26 @@ failed test that can be repaired inside the envelope is not by itself a new
 approval gate. Passing tests remains Technical Review, not Owner Experience
 Acceptance.
 
+## Drift control and escalation
+
+- Keep at most one active Walking Slice and one linked Enabler.
+- An Enabler earns no product-progress credit by itself. Every status update
+  starts by naming the new user capability, or says `0 Product Progress`.
+- Unless an approved outcome envelope says otherwise, an Enabler has a
+  two-working-day and two-full-attempt budget. Reaching either limit without
+  the promised result moves it to `Needs Decision`; do not create a child
+  Enabler, Card, Addendum, or approval chain to continue the same approach.
+- Two consecutive failures at the same abstraction boundary require an
+  architecture review before another attempt. Fixing an ordinary bug inside
+  an existing envelope remains ordinary implementation work.
+- Exact hashes are evidence, not the unit of Owner decision. Recomputed hashes,
+  platform wording, and low-level diagnostic variants do not reopen a gate
+  unless they expose ambiguous effects, a trust-boundary change, or an
+  exhausted ceiling.
+- GitHub Project, the active issue, the integration PR, and the current-status
+  repository documents must describe the same blocker and next action. If they
+  diverge, reconcile them before more implementation.
+
 ## Non-negotiable boundaries
 
 - The owner retains final authority over meaning and authorship.
@@ -103,10 +123,12 @@ Acceptance.
 Every implementation pull request must include:
 
 - the user outcome;
+- whether the change creates product progress or only enables later progress;
 - before/after behavior;
 - data and permission impact;
 - validation evidence;
 - a runnable demo path;
+- the Enabler time/attempt budget and stop condition when applicable;
 - what the owner should challenge;
 - documentation updates when the system understanding changes.
 

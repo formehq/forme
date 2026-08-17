@@ -1,6 +1,27 @@
 # Owner technical cockpit
 
-## Superseding current status — 2026-08-17
+## Superseding current status — execution management reset, 2026-08-17
+
+R4 is now managed as one product Walking Slice (#67) plus at most one linked
+Enabler. #67 is `Building / At Risk`, not complete Technical Review. The
+historical physical runner and its Correction/Card/Review chain are frozen;
+V4 remains immutable failed-clean evidence and receives no retry or routine
+fingerprint extension.
+
+The next decision surface is one medium-grained envelope for
+[#77](https://github.com/formehq/forme/issues/77), a simplified disposable
+PostgreSQL rehearsal. Its default budget is two working days and
+two full lifecycles; two same-boundary failures or an Enabler needing another
+Enabler forces redesign. Until that envelope is separately confirmed, do not
+call Docker or PostgreSQL. Production and Gate C remain closed.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+Execution rules: [`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
+
+## Integration Campaign V4 status before the reset (historical)
 
 Integration Campaign V4 consumed its one-use grant and failed cleanly before
 PostgreSQL. Docker `29.3.1 / linux/arm64` and the corrected historical

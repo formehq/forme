@@ -1,6 +1,30 @@
 # Product
 
-## Superseding R4 product status — 2026-08-17
+## Superseding R4 execution status — 2026-08-17
+
+The Owner has reset R4 execution management around the product outcome rather
+than the historical local-infrastructure authority chain. #67 remains
+`Building / At Risk`: the Public Room, one bounded knock, durable local pull,
+fresh candidate and exact Owner response are still the outcome. Integration
+Campaign V4 and the existing physical runner are frozen as failed-clean
+historical evidence; another stderr-fingerprint Correction chain is not the
+next product step.
+
+The next proposed Enabler is
+[#77](https://github.com/formehq/forme/issues/77), one simplified disposable
+local PostgreSQL rehearsal with unique run ownership, semantic Docker results, synthetic data,
+schema/restart/rollback proof and exact cleanup. It defaults to two working
+days and two full lifecycles after a separate medium-grained runtime envelope.
+This management reset itself makes no Docker, PostgreSQL, provider, Guest,
+publication, production or Gate C effect.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+See [`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
+
+## Integration Campaign V4 status before the reset (historical)
 
 The MVP still needs one Green disposable local PostgreSQL rehearsal. V4
 consumed the final lifecycle in the confirmed autonomous envelope, proved the

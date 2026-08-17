@@ -1,6 +1,26 @@
 # MVP rebuild roadmap
 
-## Superseding current gate — 2026-08-17
+## Superseding current gate — R4 execution management reset, 2026-08-17
+
+R4 #67 is `Building / At Risk`. The product path is unchanged: complete one
+Public Room knock, then #68 candidate, #69 exact response and #70 bounded
+continuation/private denial. The existing local physical runner and V4
+Correction chain are frozen as historical evidence.
+
+Only one Enabler may be active beside #67:
+[#77](https://github.com/formehq/forme/issues/77), a simplified disposable
+PostgreSQL rehearsal. It receives no product-progress credit, defaults to two
+working days/two full lifecycles after a separate runtime envelope, and must redesign
+after two same-boundary failures instead of creating a successor approval
+tree. GitHub Project is the current execution control surface.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+See [`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
+
+## Integration Campaign V4 gate before the reset (historical)
 
 R4 #67 is at `INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN`. V4 proved the current
 Docker host and corrected historical container absence, then failed safely on

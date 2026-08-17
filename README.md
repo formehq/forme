@@ -6,7 +6,24 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding current update — 2026-08-17
+### Superseding execution update — 2026-08-17
+
+R4 execution management has been reset around the #67 user experience. #67 is
+`Building / At Risk`; infrastructure proof does not count as product progress.
+The existing physical runner and V4 correction chain are frozen as historical
+failed-clean evidence. The next possible Enabler is
+[#77](https://github.com/formehq/forme/issues/77), one simplified disposable
+PostgreSQL rehearsal, limited by a later medium-grained envelope to two working
+days and two full lifecycles. This reset authorizes no Docker, PostgreSQL,
+production or Gate C action.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+See the [R4 execution management reset](docs/R4-EXECUTION-MANAGEMENT-RESET.md).
+
+### Integration Campaign V4 update before the reset (historical)
 
 Integration Campaign V4 was prepared and consumed once. Docker matched
 `29.3.1 / linux/arm64`; the corrected historical container inspect was proven

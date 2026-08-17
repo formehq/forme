@@ -1831,3 +1831,44 @@ bounded lifecycle budget, or stop this local proof.
 
 **Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN / LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 #67 and R4 remain open.
+
+## 2026-08-17 — Reset R4 execution management around product progress
+
+**Decision:** manage R4 as one active Walking Slice (#67) plus at most one
+linked Enabler. Infrastructure evidence does not move the product gate by
+itself. Every status update names the new user capability or records
+`0 Product Progress`. The existing physical runner, Integration Campaign V4
+and their Correction/Card/Review chain remain immutable historical evidence;
+routine Docker wording or platform variants no longer create a successor
+authority-document tree.
+
+**Enabler rule:** the next proposed Enabler is
+[#77](https://github.com/formehq/forme/issues/77), one simplified disposable local
+PostgreSQL rehearsal using unique run ownership, synthetic data, semantic
+Docker results, bounded non-ambiguous readiness retry, schema/restart/rollback
+proof and exact-owned cleanup. After a separate medium-grained runtime envelope
+is approved, its default budget is two working days and two full lifecycles.
+Two same-boundary failures, an exhausted budget, ambiguous effects, or an
+Enabler needing another Enabler moves the work to `Needs Decision` and an
+architecture review.
+
+**Owner boundary:** ordinary repository implementation, tests, docs and repairs
+inside a confirmed envelope proceed review-by-exception. Owner approval is
+reserved for schema/durable-meaning/trust changes, first real Guest/provider/
+external-message use, and production/public/Gate C effects. Exact hashes remain
+evidence rather than the unit of Owner decision.
+
+**Integration truth:** at reset start, local HEAD `679176a` was 108 commits and
+151 changed paths beyond the remote Draft PR #76 head; 99 changed paths were
+documents and 33 were schemas. No open PR represents that local line. GitHub
+Project, #67, the linked Enabler, integration PR and current-status documents
+must be reconciled before more implementation. Draft PR #65 is therefore
+`Needs Decision / Blocked`, not active Building work.
+
+**Effect:** this reset changes repository and GitHub execution management only.
+It makes zero Docker, PostgreSQL, provider, Guest, publication, production,
+push, merge, spend or Gate C effect.
+
+**Stop:** `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

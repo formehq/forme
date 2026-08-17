@@ -1,6 +1,23 @@
 # Native Harness architecture contract v0.4
 
-## Superseding R4 status — 2026-08-17
+## Superseding R4 execution status — 2026-08-17
+
+The NH1/NH2 architecture and every product trust boundary remain unchanged.
+Execution management now distinguishes ordinary local disposable engineering
+from Forme-authoritative product and production effects. The historical V4
+runner is frozen; low-level Docker wording no longer creates a successor
+authority-document chain. The future simplified PostgreSQL Enabler
+[#77](https://github.com/formehq/forme/issues/77) still needs
+one medium-grained runtime envelope, exact-owned cleanup and honest evidence.
+
+This reset grants no runtime, Docker, PostgreSQL, provider, Guest, publication,
+production or Gate C authority.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Integration Campaign V4 architecture status before the reset (historical)
 
 The Native Harness boundary is unchanged. Integration Campaign V4 consumed
 the final local lifecycle in the confirmed envelope and failed closed before

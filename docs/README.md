@@ -2,7 +2,25 @@
 
 The repository keeps a deliberately small decision surface.
 
-## Current execution truth — 2026-08-17
+## Current execution truth — management reset, 2026-08-17
+
+R4 is managed as one active Walking Slice (#67) plus at most one linked
+Enabler. #67 remains `Building / At Risk`; the complete public encounter has
+not reached Technical Review. The historical physical runner and V4 correction
+chain are frozen. The next proposal is
+[#77](https://github.com/formehq/forme/issues/77), a simplified disposable
+PostgreSQL rehearsal with a two-day/two-lifecycle default budget after
+separate approval. This reset makes no Docker, PostgreSQL, production or Gate
+C effect.
+
+Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+The operating rules are in
+[`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
+
+## Integration Campaign V4 truth before the reset (historical)
 
 R4 #67 remains Building and off `main`. Integration Campaign V4 consumed the
 final lifecycle in the confirmed local envelope. Docker matched
