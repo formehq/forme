@@ -8,6 +8,7 @@ import {
   IMAGE_REFERENCE,
   POSTGRES_SERVER_VERSION_NUM,
   SQL_BINDINGS,
+  VERIFY_ASSERTION_IDS,
   buildContainerCreateArguments,
   createRunSpec,
   projectPostgresDiagnostic,
@@ -199,22 +200,36 @@ test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback byt
   });
 });
 
-test("PostgreSQL diagnostics retain only closed structural fields", () => {
+test("PostgreSQL diagnostics retain only closed structural fields and an allowlisted verify assertion", () => {
   const hostile = {
-    code: "42601",
+    code: "P0001",
     severity: "ERROR",
-    position: "1234",
-    routine: "scanner_yyerror",
-    message: "must not cross the result membrane",
+    position: undefined,
+    routine: "exec_stmt_raise",
+    message: "public_core_index_predicate_or_collation_drift",
     detail: "must not cross the result membrane",
   };
-  assert.deepEqual(projectPostgresDiagnostic(hostile), {
-    pgCode: "42601",
+  assert.deepEqual(projectPostgresDiagnostic(hostile, "postgres.verify.initial"), {
+    pgCode: "P0001",
     severity: "ERROR",
-    position: "1234",
-    routine: "scanner_yyerror",
+    position: null,
+    routine: "exec_stmt_raise",
+    verifyAssertion: "public_core_index_predicate_or_collation_drift",
   });
+  assert.equal("message" in (projectPostgresDiagnostic(hostile, "postgres.verify.initial") ?? {}), false);
+  assert.equal("detail" in (projectPostgresDiagnostic(hostile, "postgres.verify.initial") ?? {}), false);
+  assert.equal(projectPostgresDiagnostic(hostile, "postgres.schema")?.verifyAssertion, null);
+  assert.equal(projectPostgresDiagnostic({ ...hostile, message: "unknown body" }, "postgres.verify.initial")?.verifyAssertion, null);
   assert.equal(projectPostgresDiagnostic({ code: "not-a-pg-code", message: "secret" }), null);
+});
+
+test("the verify assertion diagnostic enum exactly covers every committed P0001 identifier", async () => {
+  const verifySql = await readFile(new URL("../../schemas/r4/public-core/verify.sql", import.meta.url), "utf8");
+  const identifiers = [...verifySql.matchAll(
+    /RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = '([a-z0-9_]+)'/gu,
+  )].map((match) => match[1]).sort();
+  assert.deepEqual([...VERIFY_ASSERTION_IDS].sort(), identifiers);
+  assert.equal(new Set(VERIFY_ASSERTION_IDS).size, VERIFY_ASSERTION_IDS.length);
 });
 
 test("cached-image rehearsal proves schema, restart, rollback and exact cleanup", async () => {

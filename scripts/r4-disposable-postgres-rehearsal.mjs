@@ -12,6 +12,27 @@ const { Client } = require("pg");
 export const IMAGE_REFERENCE = "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74";
 export const IMAGE_PLATFORM = "linux/arm64";
 export const POSTGRES_SERVER_VERSION_NUM = 160010;
+export const VERIFY_ASSERTION_IDS = Object.freeze([
+  "public_core_table_inventory_drift",
+  "public_core_index_inventory_drift",
+  "public_core_constraint_inventory_drift",
+  "public_core_constraint_definition_drift",
+  "public_core_key_constraint_definition_drift",
+  "public_core_foreign_key_definition_drift",
+  "public_core_index_definition_drift",
+  "public_core_index_predicate_or_collation_drift",
+  "public_core_column_definition_drift",
+  "public_core_catalog_manifest_drift",
+  "public_core_singleton_seed_invalid",
+  "public_core_unexpected_durable_rows",
+  "public_core_unexpected_object_present",
+  "public_core_check_constraint_definition_drift",
+  "public_core_forbidden_column_present",
+  "public_core_body_free_table_drift",
+  "public_core_encrypted_field_inventory_drift",
+  "public_core_composite_room_scope_drift",
+]);
+const VERIFY_ASSERTION_ID_SET = new Set(VERIFY_ASSERTION_IDS);
 export const SQL_BINDINGS = Object.freeze({
   schema: Object.freeze({
     path: "schemas/r4/public-core/schema.sql",
@@ -69,15 +90,20 @@ function sanitizeError(error) {
   return Object.freeze({ code: "disposable_postgres_unexpected_failure", phase: "unknown", ambiguous: true });
 }
 
-export function projectPostgresDiagnostic(error) {
+export function projectPostgresDiagnostic(error, phase = null) {
   if (error === null || typeof error !== "object") return null;
   const value = error;
   const pgCode = typeof value.code === "string" && /^[0-9A-Z]{5}$/u.test(value.code) ? value.code : null;
   const severity = typeof value.severity === "string" && /^[A-Z ]{3,20}$/u.test(value.severity) ? value.severity : null;
   const position = typeof value.position === "string" && /^[1-9][0-9]{0,8}$/u.test(value.position) ? value.position : null;
   const routine = typeof value.routine === "string" && /^[A-Za-z_][A-Za-z0-9_]{0,63}$/u.test(value.routine) ? value.routine : null;
+  const verifyAssertion = typeof phase === "string" && phase.startsWith("postgres.verify.")
+    && pgCode === "P0001" && routine === "exec_stmt_raise"
+    && typeof value.message === "string" && VERIFY_ASSERTION_ID_SET.has(value.message)
+    ? value.message
+    : null;
   if (pgCode === null && severity === null && position === null && routine === null) return null;
-  return Object.freeze({ pgCode, severity, position, routine });
+  return Object.freeze({ pgCode, severity, position, routine, verifyAssertion });
 }
 
 function exactObject(value, phase) {
@@ -439,7 +465,7 @@ function createPhysicalPostgres(spec, runtime) {
       return await operation(client);
     } catch (error) {
       if (error instanceof RehearsalError) throw error;
-      fail("disposable_postgres_sql_failed", phase, { ambiguous: true, diagnostic: projectPostgresDiagnostic(error) });
+      fail("disposable_postgres_sql_failed", phase, { ambiguous: true, diagnostic: projectPostgresDiagnostic(error, phase) });
     } finally {
       if (connected) {
         try { await client.end(); }
