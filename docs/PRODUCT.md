@@ -2,6 +2,25 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
+Enabler #77 is now `Needs Decision`. Its simplified ordinary development path
+reached a real isolated PostgreSQL 16.10 twice, with the pinned image, local
+loopback connection and exact cleanup all proven. Both approved lifecycles
+then failed cleanly on the first current-schema batch. The second returned
+PostgreSQL `42725 / op_error`, identifying an overloaded-operator ambiguity in
+the hash-pinned SQL surface. No verify, restart proof or rollback was claimed.
+
+This is `0 Product Progress`. The #67 experience is still `Building / At Risk`.
+The next decision is a narrow schema-compatibility review; changing those
+durable bytes was outside the approved envelope, and no third lifecycle is
+available. See
+[`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
 The Owner has reset R4 execution management around the product outcome rather
 than the historical local-infrastructure authority chain. #67 remains
 `Building / At Risk`: the Public Room, one bounded knock, durable local pull,
@@ -18,7 +37,7 @@ days and two full lifecycles after a separate medium-grained runtime envelope.
 This management reset itself makes no Docker, PostgreSQL, provider, Guest,
 publication, production or Gate C effect.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

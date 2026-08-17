@@ -15,6 +15,24 @@ Infrastructure is useful only when it removes a blocker from that story.
 
 ## Current truth
 
+Outcome after exercising this model on #77:
+
+- the Owner approved one medium-grained two-lifecycle envelope;
+- ordinary implementation and repairs proceeded without per-hash approvals;
+- both isolated runs reached PostgreSQL and cleaned exactly;
+- both failed at the same first-schema boundary, with the second reporting
+  PostgreSQL `42725 / op_error`;
+- the budget rule therefore moves #77 to `Needs Decision` and schema
+  architecture review, without creating another Enabler or authority tree.
+
+Current stop:
+
+`DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+The reset-start truth below is retained as the checkpoint that preceded #77.
+
 - #67 remains `Building / At Risk`; the complete experience is not in
   Technical Review or Owner Acceptance.
 - Integration Campaign V4 is immutable failed-clean history. It reached no
@@ -82,7 +100,7 @@ linked Enabler, integration PR and current-status documents must agree on the
 same blocker and next action. Correction details remain evidence or subtasks;
 they do not become independent product milestones.
 
-Current stop:
+Reset-start stop:
 
 `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /

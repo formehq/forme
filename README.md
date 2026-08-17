@@ -8,6 +8,21 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
+Enabler #77 has now used its approved two-lifecycle budget. The new ordinary
+development command reached isolated PostgreSQL 16.10 twice and cleaned every
+current-run resource both times, but the current hash-pinned schema failed at
+its first batch with PostgreSQL `42725 / op_error` (ambiguous overloaded SQL
+operator). This is `0 Product Progress`: Docker is no longer the mystery, but
+schema compatibility now needs an Owner review before any correction or new
+physical budget. See the
+[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+### Execution-management reset that preceded #77
+
 R4 execution management has been reset around the #67 user experience. #67 is
 `Building / At Risk`; infrastructure proof does not count as product progress.
 The existing physical runner and V4 correction chain are frozen as historical
@@ -17,7 +32,7 @@ PostgreSQL rehearsal, limited by a later medium-grained envelope to two working
 days and two full lifecycles. This reset authorizes no Docker, PostgreSQL,
 production or Gate C action.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop at that checkpoint: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

@@ -19,9 +19,11 @@ continuation and negative Private boundary.
 - The historical Integration Campaign V4 failed cleanly before PostgreSQL and
   exhausted its lifecycle budget. Its runner and Correction/Card/Review chain
   are frozen as evidence.
-- One linked Enabler may become active: #77, simplified disposable local
-  PostgreSQL rehearsal. It is Ready for a medium-grained runtime envelope;
-  Docker and PostgreSQL are not authorized by this board update.
+- The one linked Enabler #77 is now `Needs Decision / Blocked`. Its approved
+  two lifecycles reached isolated PostgreSQL 16.10 and cleaned exactly, but
+  both failed at the first hash-pinned schema batch. The second returned
+  PostgreSQL `42725 / op_error`. No third lifecycle or schema correction is
+  authorized; the next action is a schema-compatibility architecture review.
 - #71 Setup/Doctor remains Planned for #68 and is not the active #67 Enabler.
 - The current local R4 head is not represented by the open Draft PR stack;
   Draft PR #65 is `Needs Decision / Blocked` until product code and historical

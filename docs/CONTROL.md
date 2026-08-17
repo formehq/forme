@@ -2,6 +2,25 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
+#77 is now `Needs Decision / Blocked`, not Ready. The approved simplified
+rehearsal reached Docker and PostgreSQL correctly in two isolated runs, then
+failed the same first-schema boundary twice. The second structured failure was
+PostgreSQL `42725 / op_error`. Both runs cleaned current-run
+container/network/volume/credential/runtime residue to zero; the exact image
+cache remains by design.
+
+Do not run Docker/PostgreSQL again, modify the hash-pinned SQL, or create a
+child Enabler/Card chain. The owner decision is one schema-compatibility
+review: confirm the ambiguous expression, choose the durable correction and
+only then decide whether to allocate a fresh physical budget. #67 stays
+`Building / At Risk` and earns no progress from this Enabler.
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
 R4 is now managed as one product Walking Slice (#67) plus at most one linked
 Enabler. #67 is `Building / At Risk`, not complete Technical Review. The
 historical physical runner and its Correction/Card/Review chain are frozen;
@@ -15,7 +34,7 @@ two full lifecycles; two same-boundary failures or an Enabler needing another
 Enabler forces redesign. Until that envelope is separately confirmed, do not
 call Docker or PostgreSQL. Production and Gate C remain closed.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

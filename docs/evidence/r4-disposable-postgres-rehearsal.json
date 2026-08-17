@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v1",
+  "issue": 77,
+  "status": "NEEDS_DECISION",
+  "productProgress": 0,
+  "attemptBudget": {
+    "fullLifecyclesAllowed": 2,
+    "fullLifecyclesConsumed": 2,
+    "anonymousImagePullsAllowed": 1,
+    "anonymousImagePullsConsumed": 1
+  },
+  "bindings": {
+    "imageReference": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+    "imagePlatform": "linux/arm64",
+    "postgresServerVersionNum": 160010,
+    "schemaSqlSha256": "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8",
+    "verifySqlSha256": "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd",
+    "rollbackSqlSha256": "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4"
+  },
+  "attempts": [
+    {
+      "runId": "f8b6a9d8bd814e98",
+      "startedAt": "2026-08-17T08:24:53.992Z",
+      "finishedAt": "2026-08-17T08:24:58.728Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": true,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": true,
+      "initialReadinessAttempts": 3,
+      "failure": {
+        "code": "disposable_postgres_sql_failed",
+        "phase": "postgres.schema",
+        "structuredDiagnosticAvailable": false
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
+    },
+    {
+      "runId": "0404fb21a4cc2f88",
+      "startedAt": "2026-08-17T08:27:01.851Z",
+      "finishedAt": "2026-08-17T08:27:03.351Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": false,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": true,
+      "initialReadinessAttempts": 2,
+      "failure": {
+        "code": "disposable_postgres_sql_failed",
+        "phase": "postgres.schema",
+        "postgres": {
+          "pgCode": "42725",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "op_error"
+        }
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
+    }
+  ],
+  "validation": {
+    "focusedHarnessTests": {
+      "passed": 9,
+      "failed": 0
+    },
+    "finalHarnessAndRelatedPublicCoreTests": {
+      "passed": 69,
+      "failed": 0
+    },
+    "spineTypecheck": "GREEN",
+    "roomTypecheck": "GREEN",
+    "docsAudit": "GREEN",
+    "diffCheck": "GREEN"
+  },
+  "effects": {
+    "syntheticDataOnly": true,
+    "historicalResourcesTouched": false,
+    "ownedResidue": 0,
+    "providerCalls": 0,
+    "realGuestRecords": 0,
+    "productionEffects": 0,
+    "publicTrafficEffects": 0,
+    "gateCEffects": 0,
+    "pinnedImageCacheRetained": true
+  },
+  "inference": {
+    "classification": "CURRENT_HASH_PINNED_SCHEMA_SQL_COMPATIBILITY_DEFECT",
+    "confidence": "HIGH",
+    "basis": "Both isolated PostgreSQL 16.10 runs reached readiness and then failed at the first schema batch; the second returned PostgreSQL 42725 from op_error, which means an overloaded operator could not be resolved uniquely.",
+    "suspectedArea": "The catalog-manifest DO block concatenates PostgreSQL internal catalog types into text without explicit casts; this is a review target, not yet proven as the exact expression."
+  },
+  "stop": "DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN / TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+}

@@ -2,6 +2,23 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
+#77 is `Needs Decision`: two approved isolated lifecycles reached PostgreSQL
+16.10 and cleaned exactly, then failed the same current-schema boundary. The
+second failure was PostgreSQL `42725 / op_error`. This Enabler earns `0 Product
+Progress`; #67 remains `Building / At Risk`.
+
+The next roadmap action is a schema-compatibility architecture review, not a
+third retry and not another Enabler. Confirm the exact ambiguous expression,
+decide whether explicit catalog-type casts preserve the intended durable
+contract, then separately choose any replacement lifecycle budget. The Public
+Room → knock → candidate → response path remains unchanged.
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
 R4 #67 is `Building / At Risk`. The product path is unchanged: complete one
 Public Room knock, then #68 candidate, #69 exact response and #70 bounded
 continuation/private denial. The existing local physical runner and V4
@@ -14,7 +31,7 @@ working days/two full lifecycles after a separate runtime envelope, and must red
 after two same-boundary failures instead of creating a successor approval
 tree. GitHub Project is the current execution control surface.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

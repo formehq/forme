@@ -2,6 +2,28 @@
 
 ## Current verdict — R4 execution management reset
 
+Enabler #77 produced real local evidence but no product progress. Two isolated
+lifecycles both proved Docker `29.3.1 / linux/arm64`, the exact pinned image,
+PostgreSQL 16.10 readiness and exact current-run cleanup. Both failed cleanly
+on the first schema batch. The second preserved structural PostgreSQL evidence
+`42725 / ERROR / op_error`, identifying an overloaded-operator ambiguity.
+
+The approved budget is exhausted. Current-run container/network/volume,
+credential and runtime residue are zero; historical resources were untouched;
+the pinned image cache remains intentionally. Provider, real Guest,
+production, public traffic and Gate C effects are zero.
+
+Evidence:
+[`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
+and
+[`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset verdict before #77 (historical checkpoint)
+
 The latest physical evidence remains Integration Campaign V4 failed-clean:
 PostgreSQL and SQL were not reached, fresh resources were absent and owned
 residue was zero. The management reset adds no product or runtime evidence. It
@@ -14,7 +36,7 @@ force redesign.
 Product progress in this round: `0`. Docker, PostgreSQL, provider, Guest,
 publication, production and Gate C effects: `0`.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

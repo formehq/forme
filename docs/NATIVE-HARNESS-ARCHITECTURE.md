@@ -2,6 +2,23 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
+The medium-grained #77 envelope has been exercised and is now exhausted. The
+new harness-native development command proved the local Docker/PostgreSQL
+body, unique run ownership and exact cleanup without reviving Forme authority
+documents. Two isolated PostgreSQL 16.10 runs then failed at the current
+hash-pinned schema boundary; the second returned `42725 / op_error`.
+
+This does not alter NH1/NH2. It confirms that ordinary disposable computation
+can be managed by one outcome envelope, while a durable schema correction
+still returns to the Owner. No third lifecycle, schema change, production,
+Guest/provider, public traffic or Gate C action is authorized.
+
+Current stop: `DISPOSABLE_POSTGRES_REHEARSAL_FAILED_CLEAN /
+TWO_LIFECYCLE_BUDGET_EXHAUSTED / SCHEMA_COMPATIBILITY_REVIEW_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
 The NH1/NH2 architecture and every product trust boundary remain unchanged.
 Execution management now distinguishes ordinary local disposable engineering
 from Forme-authoritative product and production effects. The historical V4
@@ -13,7 +30,7 @@ one medium-grained runtime envelope, exact-owned cleanup and honest evidence.
 This reset grants no runtime, Docker, PostgreSQL, provider, Guest, publication,
 production or Gate C authority.
 
-Current stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 

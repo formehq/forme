@@ -2,6 +2,24 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Stop #77 at the schema boundary after two clean attempts
+
+**Decision:** the approved medium-grained #77 envelope is exhausted after two
+isolated lifecycles. Both reached PostgreSQL 16.10 and exact-owned cleanup;
+both failed at the first current-schema batch, with the second returning
+`42725 / op_error`. Move #77 to `Needs Decision` and hold all further physical
+execution. Do not create a child Enabler or revive the Card/Addendum chain.
+
+**Authority:** the completed envelope covered implementation, one anonymous
+exact-image pull and two local synthetic lifecycles. It did not authorize a
+hash-pinned schema correction. Production, real Guest/provider use, public
+traffic and Gate C remain closed.
+
+**Reason:** the management reset requires architecture review after two
+same-boundary failures, and durable schema meaning remains an Owner stop gate.
+The next review must identify the exact ambiguous operator and decide whether
+the intended contract is preserved by a narrow compatibility correction.
+
 ## 2026-08-16 — Select the exact platform manifest before campaign identity checks
 
 **Decision:** preserve both consumed V2 roots and keep the exact image/index
