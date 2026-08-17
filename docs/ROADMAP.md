@@ -1,5 +1,21 @@
 # MVP rebuild roadmap
 
+## Superseding current gate — 2026-08-16
+
+R4 #67 is at `PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN`.
+Kps `8af6653` / Lps `10fbc3c` retain the exact pinned image identity while
+selecting `linux/arm64` before inspect validation. The next bounded milestone
+is one Green disposable V3 local PostgreSQL campaign; after that, Owner
+experience review decides whether #67 is accepted. Production and Gate C stay
+closed. This keeps the MVP path focused: local DB/restart/rollback proof first,
+then the remaining real public encounter chain.
+
+Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier roadmap snapshot (historical context)
+
 - Updated: 2026-08-16
 - Completion: gate-driven through Technical Review and Owner Experience
   Acceptance; there is no calendar-date substitute for Done

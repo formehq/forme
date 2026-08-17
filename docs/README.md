@@ -2,6 +2,25 @@
 
 The repository keeps a deliberately small decision surface.
 
+## Current execution truth — 2026-08-16
+
+R4 #67 remains Building and off `main`. Platform selection is now corrected
+and committed at Kps `8af6653` / Lps `10fbc3c`; the exact pinned
+`linux/arm64` manifest is selected before validation without adding a call,
+pull or retry. Repository validation is Green and construction effects on
+Docker/PostgreSQL/SQL are zero. V3 Card/Review and one fresh disposable local
+campaign are next. Target PostgreSQL/catalog, production traffic and Gate C
+remain unobserved/closed. Current artifacts are index `sha256:3944b11d…0270`,
+schema `sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b` and
+[report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:348760e3…c78c`.
+
+Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier execution snapshot (historical context)
+
 Current execution truth (2026-08-16): R0–R3 and #66 are Owner-accepted. #67
 has repository/offline Public Core and concrete Local PostgreSQL wiring, but
 remains Building and is not on `main`. The one-use Integration Campaign V2 was

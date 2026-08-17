@@ -1,5 +1,23 @@
 # Owner technical cockpit
 
+## Superseding current status — 2026-08-16
+
+R4 #67 Local PostgreSQL wiring has a committed platform-select correction:
+Kps `8af6653`, Lps `10fbc3c`, index `sha256:3944b11d…0270`, schema
+`sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b`, report
+`sha256:348760e3…c78c`. The fix adds exact `--platform linux/arm64` selection
+while retaining the pinned manifest and all ceilings. Repository validation is
+Green; construction made zero Docker/PG/SQL effects. Next action is to freeze
+V3 Card/Review, then use one fresh exact-owned local campaign lifecycle. Stop
+before that lifecycle on any authority drift; Production and Gate C remain
+`NOT_REQUESTED`.
+
+Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier cockpit snapshot (historical context)
+
 - Updated: 2026-08-16
 - Active gate: **R4 Controlled Presence remains Building. #66 local Projection
   review is Owner-accepted and #67 has repository/offline Public Core plus

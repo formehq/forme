@@ -2,6 +2,29 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-16 — Select the exact platform manifest before campaign identity checks
+
+**Decision:** preserve both consumed V2 roots and keep the exact image/index
+reference plus selected-manifest digest, while adding
+`--platform linux/arm64` to every relevant exact-image inspect. Kps
+`8af66535eb37925d9286c8b6d4f14501d372e4c5` and Lps
+`10fbc3c799adf9e7071b85c9889ae3830909f478` freeze a V3-only campaign
+authority surface. The correction does not add a call, pull, retry or relaxed
+identity rule. Index/schema/evidence/report are `sha256:3944b11d…0270`,
+`sha256:49725136…6410`, `sha256:8f1c5aed…c43b` and
+`sha256:348760e3…c78c`.
+
+**Authority:** repository construction and one later exact-owned disposable
+local campaign are within the confirmed local MVP advancement envelope.
+Production, real data, public traffic and Gate C remain unauthorized. Current
+stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the failed acquisition observed the top-level OCI image index.
+Exact platform selection returns the already-pinned linux/arm64 manifest, so
+the honest fix is selection before validation, not weakening validation.
+
 ## 2026-08-16 — Construct one bounded image-acquisition diagnostic
 
 **Decision:** preserve the consumed Image-Manifest Diagnostic and its

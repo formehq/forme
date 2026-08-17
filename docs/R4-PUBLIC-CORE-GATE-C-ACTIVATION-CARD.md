@@ -1,8 +1,8 @@
 # R4 #67 Successor Gate C Activation Card
 
-- Status: **`SUCCESSOR_NOT_APPROVABLE_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_GREEN_V2_APPROVAL_REQUIRED_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
+- Status: **`SUCCESSOR_NOT_APPROVABLE_PLATFORM_SELECT_CORRECTION_GREEN_LOCAL_V3_CAMPAIGN_NEXT_PRODUCTION_NOT_REQUESTED_GATE_C_NOT_REQUESTED`**
 - Updated: 2026-08-16
-- Current predecessor: Local PostgreSQL Integration Campaign Image-Acquisition Replacement Authority construction
+- Current predecessor: Local PostgreSQL Integration Campaign Platform-Select Correction construction
 - Gate C authority: **NOT_REQUESTED**
 
 This remains a deliberately non-approvable current-state card. It records why
@@ -13,6 +13,19 @@ resources, run PostgreSQL, migrate production, activate a route or carry
 traffic.
 
 ## Current truth
+
+Kps `8af6653` and Lps `10fbc3c` now select the exact `linux/arm64`
+manifest before the existing digest/platform checks. The correction is
+repository-only, validated, and made zero Docker/PG/SQL effects. The next
+bounded step is V3 Campaign Card/Review followed by one fresh disposable local
+campaign. Target PostgreSQL and catalog are not yet observed; production,
+traffic and Gate C remain false. This card is not Gate-C authority.
+
+Current construction artifacts: index `sha256:3944b11d…0270`, schema
+`sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b`, report
+`sha256:348760e3…c78c`.
+
+### Historical path to this stop
 
 R1–R3 are Owner-accepted and #66 completed Owner Experience Acceptance for its
 local-only Projection review. #67 has repository/offline Public Core,

@@ -1,5 +1,21 @@
 # Native Harness architecture contract v0.4
 
+## Superseding R4 status — 2026-08-16
+
+The Native Harness boundary is unchanged. R4 #67 now has a repository-only
+platform-select correction at Kps `8af6653` / Lps `10fbc3c`; exact platform
+selection precedes the existing pinned manifest checks. All runtime, tool and
+production boundaries remain closed except for the previously confirmed
+single disposable local V3 campaign envelope. No PostgreSQL/catalog result has
+yet been observed. Production, Provider, traffic and Gate C remain
+`NOT_REQUESTED`.
+
+Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier architecture status snapshot (historical context)
+
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
   R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on

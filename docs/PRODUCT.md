@@ -1,5 +1,22 @@
 # Product
 
+## Superseding R4 product status — 2026-08-16
+
+The next MVP proof is still one Green disposable local PostgreSQL rehearsal,
+not production. The platform-select correction is committed and validated at
+Kps `8af6653` / Lps `10fbc3c`: Docker is now asked for the exact
+`linux/arm64` manifest before the existing exact identity checks. This
+construction made zero Docker/PG/SQL effects. A fresh V3 Card/Review and one
+local lifecycle are next; target PostgreSQL, catalog `14/207/172/44`, product
+runtime, public traffic and Gate C remain unobserved/false. R4 remains
+Building, not Owner-accepted and not Done.
+
+Current stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier product status snapshot (historical context)
+
 - Status: owner-approved product frame and R4 P/T1–T5/NH1/NH2 contracts;
   reconciled Technical Control Packet v0.2 and Gate A repository mechanisms are
   complete. #66 local Projection review is Owner-accepted; #67 is offline

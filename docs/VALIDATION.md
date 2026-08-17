@@ -1,5 +1,25 @@
 # Product validation and learning log
 
+## Current verdict — platform-select correction
+
+Kps `8af6653` / Lps `10fbc3c` construct and prove exact
+`--platform linux/arm64` selection without relaxing the pinned manifest or
+adding a Docker call/retry. Validation is 4/4 platform-focused, 14/14 campaign,
+188/188 runner, 760/760 offline, 146/146 Gate-B Core and 45/45 spine; strict
+Ajv, TypeScript, no-AI, docs, inventory and diff checks are Green. Construction
+effects on Docker, registry, PostgreSQL and SQL are zero. V3 campaign is not
+yet prepared or consumed, so target PG/catalog remain unobserved and local
+wiring is not yet Green.
+
+Artifacts: index `sha256:3944b11d…0270`, schema
+`sha256:49725136…6410`, evidence `sha256:8f1c5aed…c43b`, report
+`sha256:348760e3…c78c`. Current stop:
+`LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Earlier validation snapshot (historical context)
+
 - Status: active MVP evidence register
 - Updated: 2026-08-16
 - Current image-acquisition replacement construction: Kiar `3db3060` / Liar
