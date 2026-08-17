@@ -1231,6 +1231,11 @@ test("Docker plan is a closed exact-name surface with loopback-only random publi
     { order: 13, kind: "network.rm" },
     { order: 14, kind: "volume.rm" },
   ]);
+  const imageInspect = (plan.steps as readonly Readonly<{ kind: string; argv: readonly string[] }>[])
+    .find((step) => step.kind === "image.inspect");
+  assert.deepEqual(imageInspect?.argv, [
+    "image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE,
+  ]);
   for (const step of plan.steps as readonly Readonly<{ kind: string; argv: readonly string[] }>[]) {
     assert.ok(LOCAL_POSTGRES_DOCKER_COMMAND_KINDS.includes(step.kind as never));
     const text = step.argv.join(" ");
@@ -3302,114 +3307,58 @@ test("body-free diagnostic CLI is versioned, path-closed, and separate from resc
 
 test("integration campaign correction binds the committed Addendum/Review and exact closed workset", () => {
   assertHistoricalAuthorityStep({
-    head: "15536817efe6b0b7a5c8014e912f02429f197ef1",
-    parent: "542a533b2b642e6a26f8923649ecfb4de9b6e58e",
-    tree: "503c9432fd2b75fd16857afe58c2eb78a24581da",
+    head: "98d0a4998252c5f14cf86b9dc8d17469da1325d2",
+    parent: "00acfdaecc9e2e3e5141d163188a50efca066b75",
+    tree: "8a2e4dc284d86f826e8f48fb7d4a9c4f586a109b",
     status: "A",
-    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-ADDENDUM.md",
-    artifactSha256: "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V2.md",
+    artifactSha256: "sha256:03954591d737ff89ffd8bdd61a366cdbeed8691c0d7519abbebde154ae3d142a",
   });
   assertHistoricalAuthorityStep({
-    head: "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
-    parent: "15536817efe6b0b7a5c8014e912f02429f197ef1",
-    tree: "34b9fd454725c15710946503af7d8be126fa09ab",
+    head: "4118a5ec7ae5f1d8a04caeb4cfbcca5715177270",
+    parent: "98d0a4998252c5f14cf86b9dc8d17469da1325d2",
+    tree: "ed97f07f5b1a80d3331ae6ab424366b1527a7728",
     status: "A",
-    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-OWNER-REVIEW.md",
-    artifactSha256: "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324",
-  });
-  assertHistoricalConstructionStep({
-    head: "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
-    parent: "7e07672563201d92db14ecf3adcbf5f6ad970b9f",
-    tree: "14526ed95feae2da6c9c14a89ece48616822e4e8",
-    paths: {
-      "scripts/r4-public-core-local-postgres.mjs": "M",
-      "test/r4/public-core-local-postgres.test.ts": "M",
-    },
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V2.md",
+    artifactSha256: "sha256:0cdfad9f1ab7da65692fe5ed3ca02c0c6060610b4233f3e74824e851c276aa50",
   });
   assertHistoricalAuthorityStep({
-    head: "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
-    parent: "1e93280bc3842d40e6f797a38ca4bfa2a2277813",
-    tree: "8860d06a9ccc821be62bf62ee79cd356b8b7fb52",
+    head: "5878e51dbf12999a31f99e72d734bd49a63e9f20",
+    parent: "4118a5ec7ae5f1d8a04caeb4cfbcca5715177270",
+    tree: "ea74620b70369698230ceae9d172c6b7e88e254a",
     status: "A",
-    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-ADDENDUM.md",
-    artifactSha256: "sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-ADDENDUM.md",
+    artifactSha256: "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d",
   });
   assertHistoricalAuthorityStep({
-    head: "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
-    parent: "e21c441a6154f3c08b96ccbf7f0f7b693107b99a",
-    tree: "63e69b5594aa9ba6627b825b1ac4aa636e15605e",
+    head: "e548933a598c9e62c99dc0caaf4c52b7bf13ff32",
+    parent: "5878e51dbf12999a31f99e72d734bd49a63e9f20",
+    tree: "75c73c16c81ee3dafd082dfac3bf4758068f474f",
     status: "A",
-    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-GATE-B-CONCURRENCY-CORRECTION-OWNER-REVIEW.md",
-    artifactSha256: "sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7",
+    artifactPath: "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-OWNER-REVIEW.md",
+    artifactSha256: "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8",
   });
-  assertHistoricalConstructionStep({
-    head: "98392bf19356982c884961a1425cd97ff33811bf",
-    parent: "9f178918c416bd3be54e4cbc44e0c64567a78ca1",
-    tree: "796684556d04368c3acd3926d0c86992affa205c",
-    paths: {
-      "scripts/r4-gate-b-physical-runner.mjs": "M",
-      "test/r4-gate-b-core/physical-runner.test.ts": "M",
-    },
-  });
-  assertHistoricalConstructionStep({
-    head: "614202e8765372755f75ce7fa465ef9e550971a8",
-    parent: "98392bf19356982c884961a1425cd97ff33811bf",
-    tree: "180d6a9fa048e07e72ddbab8e2e4e2e354fb902a",
-    paths: {
-      "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json": "A",
-      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json": "A",
-      "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json": "A",
-    },
-  });
-  assertHistoricalConstructionStep({
-    head: "eb209d314a1084069a15fd4c819cf5e4d5760b77",
-    parent: "614202e8765372755f75ce7fa465ef9e550971a8",
-    tree: "09e95f7d13873303dff81fcf5ec29433c8e589dd",
-    paths: {
-      "README.md": "M",
-      "docs/CONTROL.md": "M",
-      "docs/DECISIONS.md": "M",
-      "docs/NATIVE-HARNESS-ARCHITECTURE.md": "M",
-      "docs/PRODUCT.md": "M",
-      "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md": "M",
-      "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md": "A",
-      "docs/README.md": "M",
-      "docs/ROADMAP.md": "M",
-      "docs/VALIDATION.md": "M",
-    },
-  });
-  assert.equal(committedArtifactAggregate("1e93280bc3842d40e6f797a38ca4bfa2a2277813", [
-    "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
-  ]), "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f");
-  assert.equal(committedArtifactAggregate("98392bf19356982c884961a1425cd97ff33811bf", [
-    "scripts/r4-gate-b-physical-runner.mjs", "test/r4-gate-b-core/physical-runner.test.ts",
-  ]), "sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4");
-  assert.equal(committedArtifactAggregate("614202e8765372755f75ce7fa465ef9e550971a8", [
-    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-missing-correction.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-artifact-index.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-missing-correction-evidence.schema.json",
-  ]), "sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39");
   assert.equal(verifyLocalPostgresIntegrationCampaignHistoricalPrefix(), true);
   const green = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation: "none" });
   assert.equal(green.accepted, true);
   assert.equal(green.physicalEffects, 0);
-  assert.equal(green.authority.addendumHead, "15536817efe6b0b7a5c8014e912f02429f197ef1");
-  assert.equal(green.authority.addendumTree, "503c9432fd2b75fd16857afe58c2eb78a24581da");
-  assert.equal(green.authority.addendumSha256, "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505");
-  assert.equal(green.authority.reviewHead, "7e07672563201d92db14ecf3adcbf5f6ad970b9f");
-  assert.equal(green.authority.reviewTree, "34b9fd454725c15710946503af7d8be126fa09ab");
-  assert.equal(green.authority.reviewSha256, "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324");
+  assert.equal(green.authority.addendumHead, "5878e51dbf12999a31f99e72d734bd49a63e9f20");
+  assert.equal(green.authority.addendumTree, "ea74620b70369698230ceae9d172c6b7e88e254a");
+  assert.equal(green.authority.addendumSha256, "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d");
+  assert.equal(green.authority.reviewHead, "e548933a598c9e62c99dc0caaf4c52b7bf13ff32");
+  assert.equal(green.authority.reviewTree, "75c73c16c81ee3dafd082dfac3bf4758068f474f");
+  assert.equal(green.authority.reviewSha256, "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8");
   assert.deepEqual(green.authority.implementationPaths, [
     "scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts",
   ]);
   assert.deepEqual(green.authority.evidencePaths, [
-    "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
-    "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-platform-select-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json",
   ]);
-  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "7e07672563201d92db14ecf3adcbf5f6ad970b9f^"], {
+  assert.equal(execFileSync("/usr/bin/git", ["rev-parse", "e548933a598c9e62c99dc0caaf4c52b7bf13ff32^"], {
     cwd: path.resolve(import.meta.dirname, "../.."), encoding: "utf8",
-  }).trim(), "15536817efe6b0b7a5c8014e912f02429f197ef1");
+  }).trim(), "5878e51dbf12999a31f99e72d734bd49a63e9f20");
   for (const mutation of ["packet", "review", "topology", "workset", "marker", "old_authority"]) {
     const result = runLocalPostgresIntegrationCampaignAuthorityFakePlan({ mutation });
     assert.equal(result.accepted, false, mutation);
@@ -3805,7 +3754,7 @@ test("integration campaign prepare is one-use, same-descriptor, exact-root, and 
   assert.equal(green.code, "local_postgres_integration_campaign_prepare_green");
   assert.deepEqual(green.rootEntries, ["integration-campaign.pending.json", "owner-approval-receipt"]);
   assert.match(green.receipt.pendingCampaignGrantSha256, /^sha256:[0-9a-f]{64}$/u);
-  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v2");
+  assert.equal(green.grant.schemaVersion, "r4.public-core-local-postgres-integration-campaign-grant.v3");
   assert.equal(green.grant.artifacts.dockerCliSourceTagCommit, "c2be9ccfc3cf0b4c4c4f0a3d5c91dd759ab21256");
   assert.equal(green.grant.artifacts.dockerCliInspectorBlob, "526cfda9f8c0cf6135baef50ff4ce357b342d6b0");
   assert.equal(green.grant.artifacts.dockerCliInspectorByteCount, 6094);
@@ -3989,7 +3938,7 @@ test("image-manifest diagnostic captures only the bounded tuple and never widens
     assert.deepEqual(result.dockerKinds, ["version", "image.inspect"], mutation);
     assert.deepEqual(result.dockerArgv, [
       ["version", "--format", "{{json .}}"],
-      ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE],
+      ["image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE],
     ], mutation);
     assert.deepEqual(result.rootEntries, retained, mutation);
     assert.equal(result.physicalEffects, 0, mutation);
@@ -4192,7 +4141,7 @@ test("image-acquisition diagnostic closes cached and one-pull success paths exac
     assert.deepEqual(result.calls.map((call: { kind: string }) => call.kind),
       pulled ? ["version", "image.inspect", "image.pull", "image.inspect"] : ["version", "image.inspect"], mutation);
     const versionArgv = ["version", "--format", "{{json .}}"];
-    const inspectArgv = ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+    const inspectArgv = ["image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE];
     const pullArgv = ["image", "pull", "--platform", IMAGE_PLATFORM, IMAGE_REFERENCE];
     assert.deepEqual(result.calls.map((call: { argv: string[] }) => call.argv),
       pulled ? [versionArgv, inspectArgv, pullArgv, inspectArgv] : [versionArgv, inspectArgv], mutation);

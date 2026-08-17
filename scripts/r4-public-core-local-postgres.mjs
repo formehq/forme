@@ -3493,7 +3493,7 @@ export function buildLocalPostgresDockerPlan(input) {
   const label = `${resources.labelKey}=${resources.labelValue}`;
   const steps = [
     ["version", ["version", "--format", "{{json .}}"]],
-    ["image.inspect", ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE]],
+    ["image.inspect", ["image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE]],
     ["image.pull", ["image", "pull", "--platform", "linux/arm64", IMAGE_REFERENCE]],
     ["network.inspect", ["network", "inspect", "--format", "{{json .}}", resources.network]],
     ["network.create", ["network", "create", "--internal", "--label", label, resources.network]],
@@ -9904,18 +9904,18 @@ export function runLocalPostgresBodyFreeDiagnosticJournalValidationFakePlan(inpu
   });
 }
 
-// Integration Campaign v2 is a fresh authority family. It corrects the pinned
-// Docker v29.3.1 template-inspect frame and preserves the consumed V1 campaign
-// as immutable history. A later V2 Card/Review supplies final Kic/Lic/Mic
-// hashes before any real prepare can become reachable.
-const INTEGRATION_CAMPAIGN_PACKET_HEAD = "15536817efe6b0b7a5c8014e912f02429f197ef1";
-const INTEGRATION_CAMPAIGN_PACKET_TREE = "503c9432fd2b75fd16857afe58c2eb78a24581da";
-const INTEGRATION_CAMPAIGN_PACKET_SHA256 = "sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505";
-const INTEGRATION_CAMPAIGN_REVIEW_HEAD = "7e07672563201d92db14ecf3adcbf5f6ad970b9f";
-const INTEGRATION_CAMPAIGN_REVIEW_TREE = "34b9fd454725c15710946503af7d8be126fa09ab";
-const INTEGRATION_CAMPAIGN_REVIEW_SHA256 = "sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324";
-const INTEGRATION_CAMPAIGN_PACKET_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-ADDENDUM.md";
-const INTEGRATION_CAMPAIGN_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-OWNER-REVIEW.md";
+// Integration Campaign v3 selects the exact linux/arm64 platform manifest
+// before applying the already-pinned manifest digest. It preserves the two
+// consumed V2 roots as immutable history. A later V3 Card/Review supplies the
+// final Kps/Lps/Mps hashes before any real prepare can become reachable.
+const INTEGRATION_CAMPAIGN_PACKET_HEAD = "5878e51dbf12999a31f99e72d734bd49a63e9f20";
+const INTEGRATION_CAMPAIGN_PACKET_TREE = "ea74620b70369698230ceae9d172c6b7e88e254a";
+const INTEGRATION_CAMPAIGN_PACKET_SHA256 = "sha256:c338c17b796d911c8cd7f9733193dda4f37515bd0f2e30733b1b6d0f589d560d";
+const INTEGRATION_CAMPAIGN_REVIEW_HEAD = "e548933a598c9e62c99dc0caaf4c52b7bf13ff32";
+const INTEGRATION_CAMPAIGN_REVIEW_TREE = "75c73c16c81ee3dafd082dfac3bf4758068f474f";
+const INTEGRATION_CAMPAIGN_REVIEW_SHA256 = "sha256:f2eec2aef67784f08567abc6bf2354e906a61c92527cc9813b6315a6030466a8";
+const INTEGRATION_CAMPAIGN_PACKET_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-ADDENDUM.md";
+const INTEGRATION_CAMPAIGN_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-OWNER-REVIEW.md";
 const INTEGRATION_CAMPAIGN_KIC_HEAD = "1e93280bc3842d40e6f797a38ca4bfa2a2277813";
 const INTEGRATION_CAMPAIGN_KIC_TREE = "14526ed95feae2da6c9c14a89ece48616822e4e8";
 const INTEGRATION_CAMPAIGN_KIC_AGGREGATE_SHA256 = "sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f";
@@ -9936,13 +9936,13 @@ const INTEGRATION_CAMPAIGN_LIC_AGGREGATE_SHA256 = "sha256:1dd72f64a6683a50e4f606
 const INTEGRATION_CAMPAIGN_MIC_HEAD = "eb209d314a1084069a15fd4c819cf5e4d5760b77";
 const INTEGRATION_CAMPAIGN_MIC_TREE = "09e95f7d13873303dff81fcf5ec29433c8e589dd";
 const INTEGRATION_CAMPAIGN_MIC_AGGREGATE_SHA256 = "sha256:c088d756b29f330dc31f626ab9fa4a33984f7c4afa92213c5f2c122349624cb5";
-const INTEGRATION_CAMPAIGN_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V2.md";
-const INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V2.md";
-const INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V2_BEGIN";
-const INTEGRATION_CAMPAIGN_AUTHORITY_END = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V2_END";
-const INTEGRATION_CAMPAIGN_SCHEMA = "r4.public-core-local-postgres-integration-campaign-grant.v2";
-const INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA = "r4.public-core-local-postgres-integration-campaign-receipt.v2";
-const INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA = "r4.public-core-local-postgres-integration-campaign-journal-entry.v2";
+const INTEGRATION_CAMPAIGN_CARD_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-CARD-V3.md";
+const INTEGRATION_CAMPAIGN_EXECUTION_REVIEW_PATH = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-EXECUTION-OWNER-REVIEW-V3.md";
+const INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V3_BEGIN";
+const INTEGRATION_CAMPAIGN_AUTHORITY_END = "R4_LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_AUTHORITY_V3_END";
+const INTEGRATION_CAMPAIGN_SCHEMA = "r4.public-core-local-postgres-integration-campaign-grant.v3";
+const INTEGRATION_CAMPAIGN_RECEIPT_SCHEMA = "r4.public-core-local-postgres-integration-campaign-receipt.v3";
+const INTEGRATION_CAMPAIGN_JOURNAL_SCHEMA = "r4.public-core-local-postgres-integration-campaign-journal-entry.v3";
 const INTEGRATION_CAMPAIGN_GENESIS = `sha256:${"0".repeat(64)}`;
 const INTEGRATION_CAMPAIGN_RECEIPT_CODES = Object.freeze([
   "local_postgres_integration_campaign_green",
@@ -10048,6 +10048,14 @@ const INTEGRATION_CAMPAIGN_HISTORICAL_KEYS = Object.freeze([
   "failedCampaignEvidenceSha256", "failedCampaignJournalEntryCount", "failedCampaignJournalSha256",
   "failedCampaignApprovalReceiptSha256", "failedInitialPrepareRoot", "failedInitialPrepareReceiptSha256",
   "failedInitialPrepareReceiptByteCount",
+  "failedV2CampaignCardSha256", "failedV2CampaignReviewSha256", "failedV2CampaignPayloadSha256",
+  "failedV2CampaignRoot", "failedV2CampaignApprovalReceiptSha256", "failedV2CampaignApprovalReceiptByteCount",
+  "failedV2CampaignGrantSha256", "failedV2CampaignEvidenceSha256", "failedV2CampaignEvidenceByteCount",
+  "failedV2CampaignJournalEntryCount", "failedV2CampaignJournalSha256",
+  "failedAcquisitionCardSha256", "failedAcquisitionReviewSha256", "failedAcquisitionPayloadSha256",
+  "failedAcquisitionRoot", "failedAcquisitionApprovalReceiptSha256", "failedAcquisitionApprovalReceiptByteCount",
+  "failedAcquisitionGrantSha256", "failedAcquisitionEvidenceSha256", "failedAcquisitionEvidenceByteCount",
+  "failedAcquisitionJournalEntryCount", "failedAcquisitionJournalSha256",
 ]);
 const INTEGRATION_CAMPAIGN_HOST_KEYS = Object.freeze([
   "dockerCli", "dockerCliSha256", "dockerCliIdentitySha256", "socketIdentitySha256", "dockerClientVersion",
@@ -10083,6 +10091,28 @@ function integrationCampaignHistoricalContract() {
     failedInitialPrepareRoot: "/Users/zaynw/.forme-r4-integration-campaign-c44e629b",
     failedInitialPrepareReceiptSha256: "sha256:1d62c23afd46ac017274189acc67de4ea94ed7ec651b53d38e0d886891f8ec68",
     failedInitialPrepareReceiptByteCount: 1116,
+    failedV2CampaignCardSha256: "sha256:1d96cfcf1cdef5131df1b0d150d0b99390ccb985389bc61fafedbc7591c21811",
+    failedV2CampaignReviewSha256: "sha256:d6e936df53e0a33318436b24c96837d75a0b275cd0748d6d4c60691c5ffe97d1",
+    failedV2CampaignPayloadSha256: "sha256:ad67c1555bdbb0c1928fb377ad597ac56de9bfd93f2e2df0955c831a0e21a28f",
+    failedV2CampaignRoot: "/Users/zaynw/.forme-r4-integration-campaign-v2-1d96cfcf",
+    failedV2CampaignApprovalReceiptSha256: "sha256:99541d38320a7a2aa4682eb39d3577d467fb68f8f1b78b78ff565b4b8fb4a26e",
+    failedV2CampaignApprovalReceiptByteCount: 1128,
+    failedV2CampaignGrantSha256: "sha256:a75886cb79162404fce61703aa64b85036060e2f632a98fbf2ce0cb344d53582",
+    failedV2CampaignEvidenceSha256: "sha256:3d89b0dc937adcf1eeb0dec4d5b995cde3905baf8111ee6298af8b6112813889",
+    failedV2CampaignEvidenceByteCount: 9656,
+    failedV2CampaignJournalEntryCount: 17,
+    failedV2CampaignJournalSha256: "sha256:465c4cb46ffbde05da3b51b27f714872ec8687055e210e2389988416f925c26b",
+    failedAcquisitionCardSha256: "sha256:03954591d737ff89ffd8bdd61a366cdbeed8691c0d7519abbebde154ae3d142a",
+    failedAcquisitionReviewSha256: "sha256:0cdfad9f1ab7da65692fe5ed3ca02c0c6060610b4233f3e74824e851c276aa50",
+    failedAcquisitionPayloadSha256: "sha256:a70b3ae15087d5640d23bcacef33a8f3c32c3e4ae1d9eb69d174e9bbe1fd4662",
+    failedAcquisitionRoot: "/Users/zaynw/.forme-r4-image-acquisition-diagnostic-v2-03954591",
+    failedAcquisitionApprovalReceiptSha256: "sha256:4f109f1766bbd9be6442a948a8f8f6b8b472d5b393764122df432c8c12e9b3d7",
+    failedAcquisitionApprovalReceiptByteCount: 1089,
+    failedAcquisitionGrantSha256: "sha256:874a96a348de7886e9e80d4f8ceaa8351b5e3a3f08c62032d2a8ca3028d060e2",
+    failedAcquisitionEvidenceSha256: "sha256:f8887a53641f73c344d3fe265940611a46ad1e38b076c39fd5f903951faee992",
+    failedAcquisitionEvidenceByteCount: 9471,
+    failedAcquisitionJournalEntryCount: 16,
+    failedAcquisitionJournalSha256: "sha256:8a38c7f2a4946f67ee68bd29d1ea10ff8eb5a6d2d60589f5b590b0e19e9a0371",
   });
 }
 
@@ -10748,7 +10778,7 @@ export function runLocalPostgresIntegrationCampaignRawParserFakePlan(input = Obj
     classification = classified.classification; ownership = classified.ownership;
   }
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-raw-parser-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-raw-parser-fake-result.v3",
     kind: stable.kind, scenario: stable.scenario, parserOutcome: parsed.outcome, classification, ownership,
     diagnostic: parsed.diagnostic,
     rawStdoutZeroed: stdoutRef.every((byte) => byte === 0), rawStderrZeroed: stderrRef.every((byte) => byte === 0),
@@ -10798,7 +10828,7 @@ async function executeIntegrationCampaignFake(input) {
     try { validateLocalPostgresIntegrationCampaignGrant(grant, new Date(grant.expiresAt)); }
     catch (error) {
       return Object.freeze({
-        schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v2",
+        schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v3",
         status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code,
         receipt: null, calls: Object.freeze([]), journal: Object.freeze([]), physicalEffects: 0,
       });
@@ -10977,7 +11007,7 @@ async function executeIntegrationCampaignFake(input) {
   try { validateIntegrationCampaignReceipt(receipt, grant, state.journal); receiptValid = true; }
   catch { receiptValid = false; }
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-fake-result.v3",
     status, code, receipt: Object.freeze(receipt), receiptValid, calls: Object.freeze(calls),
     journal: Object.freeze(state.journal.entries), journalBeforeTerminal: journalFold,
     consumeCount: state.consumeCount, duplicateDenied, duplicateDenialCode, duplicateSnapshot,
@@ -11016,7 +11046,7 @@ export function runLocalPostgresIntegrationCampaignGrantValidationFakePlan(input
     accepted = true;
   } catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-grant-validation-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-grant-validation-fake-result.v3",
     mutation: stable.mutation, accepted, code, physicalEffects: 0,
   });
 }
@@ -11057,7 +11087,7 @@ export function runLocalPostgresIntegrationCampaignJournalValidationFakePlan(inp
   try { validateIntegrationCampaignJournal(entries); accepted = true; }
   catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-journal-validation-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-journal-validation-fake-result.v3",
     mutation: stable.mutation, accepted, code, physicalEffects: 0,
   });
 }
@@ -11138,7 +11168,7 @@ export function runLocalPostgresIntegrationCampaignCleanupRecoveryFakePlan(input
   }
   const folded = validateIntegrationCampaignJournal(state.journal.entries);
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-cleanup-recovery-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-cleanup-recovery-fake-result.v3",
     status, code, journal: Object.freeze(state.journal.entries),
     journalState: Object.freeze(selectKeys(folded, ["entryCount", "headSha256", "openEffectCount"])),
     phases: folded.phases, physicalRehearsalAttemptCount: folded.physicalRehearsalAttemptCount,
@@ -11181,7 +11211,7 @@ export async function runLocalPostgresIntegrationCampaignReceiptValidationFakePl
   try { validateIntegrationCampaignReceipt(receipt, grant, journal); accepted = true; }
   catch (error) { code = authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed"; }
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-receipt-validation-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-receipt-validation-fake-result.v3",
     mutation: stable.mutation, accepted, code, physicalEffects: 0,
   });
 }
@@ -11199,9 +11229,9 @@ export function runLocalPostgresIntegrationCampaignAuthorityFakePlan(input = Obj
     markerBegin: INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN, markerEnd: INTEGRATION_CAMPAIGN_AUTHORITY_END,
     implementationPaths: ["scripts/r4-public-core-local-postgres.mjs", "test/r4/public-core-local-postgres.test.ts"],
     evidencePaths: [
-      "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
-      "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
-      "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
+      "docs/evidence/r4-public-core-local-postgres-integration-campaign-platform-select-correction.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-artifact-index.json",
+      "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json",
     ],
   };
   if (stable.mutation === "packet") authority.addendumSha256 = `sha256:${"f".repeat(64)}`;
@@ -11223,7 +11253,7 @@ export function runLocalPostgresIntegrationCampaignAuthorityFakePlan(input = Obj
     && authority.markerBegin === INTEGRATION_CAMPAIGN_AUTHORITY_BEGIN
     && authority.cardPath === INTEGRATION_CAMPAIGN_CARD_PATH;
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-authority-fake-result.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-authority-fake-result.v3",
     mutation: stable.mutation, accepted, code: accepted ? null : "local_postgres_integration_campaign_authority_invalid",
     authority: Object.freeze(authority), physicalEffects: 0,
   });
@@ -11248,15 +11278,15 @@ const INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS = Object.freeze([
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 const INTEGRATION_CAMPAIGN_EVIDENCE_PATHS = Object.freeze([
-  "docs/evidence/r4-public-core-local-postgres-integration-campaign-v2-topology-verifier-correction.json",
-  "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-artifact-index.json",
-  "schemas/r4/public-core/local-postgres-integration-campaign-v2-topology-verifier-correction-evidence.schema.json",
+  "docs/evidence/r4-public-core-local-postgres-integration-campaign-platform-select-correction.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-artifact-index.json",
+  "schemas/r4/public-core/local-postgres-integration-campaign-platform-select-correction-evidence.schema.json",
 ]);
 const INTEGRATION_CAMPAIGN_STATUS_PATHS = Object.freeze([
   "README.md", "docs/CONTROL.md", "docs/DECISIONS.md",
   "docs/NATIVE-HARNESS-ARCHITECTURE.md", "docs/PRODUCT.md",
   "docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md",
-  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md",
+  "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md",
   "docs/README.md", "docs/ROADMAP.md", "docs/VALIDATION.md",
 ]);
 const INTEGRATION_CAMPAIGN_PAYLOAD_KEYS = Object.freeze([
@@ -11295,7 +11325,7 @@ function parseIntegrationCampaignAuthorityCard(bytes) {
   exactKeys(payload.historical, INTEGRATION_CAMPAIGN_HISTORICAL_KEYS);
   exactKeys(payload.host, INTEGRATION_CAMPAIGN_PAYLOAD_HOST_KEYS);
   exactKeys(payload.ceilings, INTEGRATION_CAMPAIGN_CEILING_KEYS);
-  if (payload.schemaVersion !== "r4.public-core-local-postgres-integration-campaign-authority.v2"
+  if (payload.schemaVersion !== "r4.public-core-local-postgres-integration-campaign-authority.v3"
     || payload.localOnly !== true || payload.productionEffectsAllowed !== false
     || payload.authority.correctionAddendumSha256 !== INTEGRATION_CAMPAIGN_PACKET_SHA256
     || payload.authority.correctionOwnerReviewSha256 !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
@@ -11310,56 +11340,31 @@ function parseIntegrationCampaignAuthorityCard(bytes) {
 }
 
 export function verifyLocalPostgresIntegrationCampaignHistoricalPrefix() {
-  exactCommitStep("542a533b2b642e6a26f8923649ecfb4de9b6e58e", INTEGRATION_CAMPAIGN_PACKET_HEAD,
+  const priorStatusHead = "00acfdaecc9e2e3e5141d163188a50efca066b75";
+  const acquisitionCardHead = "98d0a4998252c5f14cf86b9dc8d17469da1325d2";
+  const acquisitionCardTree = "8a2e4dc284d86f826e8f48fb7d4a9c4f586a109b";
+  const acquisitionReviewHead = "4118a5ec7ae5f1d8a04caeb4cfbcca5715177270";
+  const acquisitionReviewTree = "ed97f07f5b1a80d3331ae6ab424366b1527a7728";
+  const acquisitionCardPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CARD-V2.md";
+  const acquisitionReviewPath = "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-OWNER-REVIEW-V2.md";
+  exactCommitStep(priorStatusHead, acquisitionCardHead, acquisitionCardTree,
+    new Map([[acquisitionCardPath, "A"]]), "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(acquisitionCardHead, acquisitionReviewHead, acquisitionReviewTree,
+    new Map([[acquisitionReviewPath, "A"]]), "local_postgres_integration_campaign_binding_invalid");
+  exactCommitStep(acquisitionReviewHead, INTEGRATION_CAMPAIGN_PACKET_HEAD,
     INTEGRATION_CAMPAIGN_PACKET_TREE, new Map([[INTEGRATION_CAMPAIGN_PACKET_PATH, "A"]]),
     "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(INTEGRATION_CAMPAIGN_PACKET_HEAD, INTEGRATION_CAMPAIGN_REVIEW_HEAD,
     INTEGRATION_CAMPAIGN_REVIEW_TREE, new Map([[INTEGRATION_CAMPAIGN_REVIEW_PATH, "A"]]),
     "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_REVIEW_HEAD, INTEGRATION_CAMPAIGN_KIC_HEAD,
-    INTEGRATION_CAMPAIGN_KIC_TREE,
-    statusMap(INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS), "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_KIC_HEAD, INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD,
-    INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_TREE,
-    new Map([[INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_PATH, "A"]]),
-    "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD, INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD,
-    INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_TREE,
-    new Map([[INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_PATH, "A"]]),
-    "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD, INTEGRATION_CAMPAIGN_KGC_HEAD,
-    INTEGRATION_CAMPAIGN_KGC_TREE, statusMap(INTEGRATION_CAMPAIGN_KGC_PATHS),
-    "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_KGC_HEAD, INTEGRATION_CAMPAIGN_LIC_HEAD,
-    INTEGRATION_CAMPAIGN_LIC_TREE,
-    statusMap(INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS,
-      new Set(INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS)),
-    "local_postgres_integration_campaign_binding_invalid");
-  exactCommitStep(INTEGRATION_CAMPAIGN_LIC_HEAD, INTEGRATION_CAMPAIGN_MIC_HEAD,
-    INTEGRATION_CAMPAIGN_MIC_TREE,
-    statusMap(INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS,
-      new Set([
-        "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md",
-      ])),
-    "local_postgres_integration_campaign_binding_invalid");
-  if (artifactAggregate(INTEGRATION_CAMPAIGN_KIC_HEAD, INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS).aggregateSha256
-      !== INTEGRATION_CAMPAIGN_KIC_AGGREGATE_SHA256
-    || artifactAggregate(INTEGRATION_CAMPAIGN_KGC_HEAD, INTEGRATION_CAMPAIGN_KGC_PATHS).aggregateSha256
-      !== INTEGRATION_CAMPAIGN_KGC_AGGREGATE_SHA256
-    || artifactAggregate(INTEGRATION_CAMPAIGN_LIC_HEAD, INTEGRATION_CAMPAIGN_PREVIOUS_EVIDENCE_PATHS).aggregateSha256
-      !== INTEGRATION_CAMPAIGN_LIC_AGGREGATE_SHA256
-    || artifactAggregate(INTEGRATION_CAMPAIGN_MIC_HEAD, INTEGRATION_CAMPAIGN_PREVIOUS_STATUS_PATHS).aggregateSha256
-      !== INTEGRATION_CAMPAIGN_MIC_AGGREGATE_SHA256
-    || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_PACKET_PATH}`], true))
+  if (sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_PACKET_PATH}`], true))
       !== INTEGRATION_CAMPAIGN_PACKET_SHA256
     || sha256Bytes(runGit(["show", `${INTEGRATION_CAMPAIGN_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_REVIEW_PATH}`], true))
       !== INTEGRATION_CAMPAIGN_REVIEW_SHA256
-    || sha256Bytes(runGit([
-      "show", `${INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_HEAD}:${INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_PATH}`,
-    ], true)) !== INTEGRATION_CAMPAIGN_CONCURRENCY_PACKET_SHA256
-    || sha256Bytes(runGit([
-      "show", `${INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_HEAD}:${INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_PATH}`,
-    ], true)) !== INTEGRATION_CAMPAIGN_CONCURRENCY_REVIEW_SHA256) {
+    || sha256Bytes(runGit(["show", `${acquisitionCardHead}:${acquisitionCardPath}`], true))
+      !== "sha256:03954591d737ff89ffd8bdd61a366cdbeed8691c0d7519abbebde154ae3d142a"
+    || sha256Bytes(runGit(["show", `${acquisitionReviewHead}:${acquisitionReviewPath}`], true))
+      !== "sha256:0cdfad9f1ab7da65692fe5ed3ca02c0c6060610b4233f3e74824e851c276aa50") {
     fail("local_postgres_integration_campaign_binding_invalid");
   }
   return true;
@@ -11368,7 +11373,7 @@ export function verifyLocalPostgresIntegrationCampaignHistoricalPrefix() {
 function verifyIntegrationCampaignTopology(grant) {
   const lineage = grant.lineage;
   verifyLocalPostgresIntegrationCampaignHistoricalPrefix();
-  exactCommitStep(INTEGRATION_CAMPAIGN_MIC_HEAD, lineage.implementationHead, lineage.implementationTree,
+  exactCommitStep(INTEGRATION_CAMPAIGN_REVIEW_HEAD, lineage.implementationHead, lineage.implementationTree,
     statusMap(INTEGRATION_CAMPAIGN_IMPLEMENTATION_PATHS), "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(lineage.implementationHead, lineage.evidenceHead, lineage.evidenceTree,
     statusMap(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS, new Set(INTEGRATION_CAMPAIGN_EVIDENCE_PATHS)),
@@ -11376,7 +11381,7 @@ function verifyIntegrationCampaignTopology(grant) {
   exactCommitStep(lineage.evidenceHead, lineage.statusHead, lineage.statusTree,
     statusMap(INTEGRATION_CAMPAIGN_STATUS_PATHS,
       new Set([
-        "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md",
+        "docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md",
       ])),
     "local_postgres_integration_campaign_binding_invalid");
   exactCommitStep(lineage.statusHead, lineage.executionCardHead, lineage.executionCardTree,
@@ -11396,7 +11401,7 @@ function verifyIntegrationCampaignTopology(grant) {
       !== grant.artifacts.evidenceSchemaSha256
     || sha256Bytes(runGit(["show", `${lineage.evidenceHead}:${INTEGRATION_CAMPAIGN_EVIDENCE_PATHS[0]}`], true))
       !== grant.artifacts.evidenceSha256
-    || sha256Bytes(runGit(["show", `${lineage.statusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`], true))
+    || sha256Bytes(runGit(["show", `${lineage.statusHead}:docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-PLATFORM-SELECT-CORRECTION-CONSTRUCTION-REPORT.md`], true))
       !== grant.artifacts.constructionReportSha256) {
     fail("local_postgres_integration_campaign_binding_invalid");
   }
@@ -11521,7 +11526,7 @@ function prepareIntegrationCampaignGrantWithAdapters(input, adapters) {
     "integration-campaign.pending.json", "owner-approval-receipt",
   ])) fail("local_postgres_private_root_invalid");
   return Object.freeze({
-    schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-receipt.v2",
+    schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-receipt.v3",
     pendingCampaignGrantSha256: installed.sha256, ownerApprovalReceiptSha256,
     executionAuthorityPayloadSha256: grant.authority.executionAuthorityPayloadSha256,
     observedAt: observedAt.toISOString(),
@@ -11579,14 +11584,14 @@ export function runLocalPostgresIntegrationCampaignPrepareFakePlan(input = Objec
       },
     }));
     result = Object.freeze({
-      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v2",
+      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v3",
       status: "GREEN", code: "local_postgres_integration_campaign_prepare_green", receipt,
       grant: readPrivateJson(path.join(campaignRoot, "integration-campaign.pending.json")),
       rootEntries: Object.freeze(fs.readdirSync(campaignRoot).sort(binaryCompare)), physicalEffects: 0,
     });
   } catch (error) {
     result = Object.freeze({
-      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v2",
+      schemaVersion: "r4.public-core-local-postgres-integration-campaign-prepare-fake-result.v3",
       status: "FAILED", code: authenticLocalPostgresRunnerErrorDetails(error)?.code ?? "local_postgres_runner_failed",
       receipt: null, grant: null, rootEntries: Object.freeze(fs.readdirSync(campaignRoot).sort(binaryCompare)),
       physicalEffects: 0,
@@ -11595,7 +11600,7 @@ export function runLocalPostgresIntegrationCampaignPrepareFakePlan(input = Objec
   return result;
 }
 
-const INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY = "integration-campaign-journal-v2";
+const INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY = "integration-campaign-journal-v3";
 
 function readIntegrationCampaignJournal(privateRoot) {
   const directory = privatePath(privateRoot, INTEGRATION_CAMPAIGN_JOURNAL_DIRECTORY);
@@ -12970,7 +12975,7 @@ function callImageManifestDiagnosticDocker(context, kind) {
   revalidateImageManifestDiagnosticBoundary(context);
   const reservation = reserveImageManifestDiagnosticCall(context.root, kind);
   const argv = kind === "version" ? ["version", "--format", "{{json .}}"]
-    : ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+    : ["image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE];
   const raw = context.adapters.callDocker(kind, Object.freeze(argv), context);
   revalidateImageManifestDiagnosticBoundary(context);
   appendImageManifestDiagnosticJournal(context.root, "docker.completed", reservation);
@@ -14356,7 +14361,7 @@ function callImageAcquisitionDiagnosticDocker(context, stage) {
   const reservation = reserveImageAcquisitionDiagnosticCall(context.root, stage);
   const argv = stage === "VERSION" ? ["version", "--format", "{{json .}}"]
     : stage === "PULL" ? ["image", "pull", "--platform", IMAGE_PLATFORM, IMAGE_REFERENCE]
-      : ["image", "inspect", "--format", "{{json .}}", IMAGE_REFERENCE];
+      : ["image", "inspect", "--platform", IMAGE_PLATFORM, "--format", "{{json .}}", IMAGE_REFERENCE];
   let raw;
   let observation;
   try {
