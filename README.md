@@ -8,26 +8,25 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding current update — 2026-08-17
 
-R4 #67 now has a committed inspect-fingerprint correction at Kif `169a05f`
-and Lif `2d5fc50`. Integration Campaign V3 remains immutable failed history:
-Docker `version` matched `29.3.1` on `linux/arm64`, then the first read-only
-historical container inspect returned a previously unknown body-free
-missing-object frame. The runner stopped before PostgreSQL and left all fresh
-resource states proven absent with zero fresh residue. The correction admits
-only the exact command/target/exit/framing/byte-count/SHA tuple; every mutated
-field still fails closed. Validation is 15/15 focused, 189/189 runner,
-761/761 offline, 146/146 Gate-B Core and 45/45 spine. Correction construction
-made zero Docker, PostgreSQL, SQL, production and Gate C effects. Target
-PostgreSQL and catalog remain unobserved. See the
-[construction report](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md).
+Integration Campaign V4 was prepared and consumed once. Docker matched
+`29.3.1 / linux/arm64`; the corrected historical container inspect was proven
+missing, then historical `network.inspect` returned a second previously
+unadmitted body-free missing-object fingerprint. The runner failed closed
+before image use, fresh construction, PostgreSQL or SQL. Fresh
+container/network/volume are proven absent, all owned residue is zero, and the
+terminal root is exact. See the
+[V4 outcome](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+(`sha256:820f9878…f67b`).
 
-The next bounded step is a fresh add-only V4 Card/Review and, only after their
-exact audit, the final remaining disposable local campaign lifecycle. No retry
-or production authority is implied.
+All three disposable local lifecycle slots in the confirmed autonomous
+envelope are now consumed. There will be no retry. Target PostgreSQL and
+catalog remain unobserved; R4 #67 remains Building. The next step is a new
+Owner decision on a narrow historical network/volume fingerprint correction
+and any new lifecycle budget. Production and Gate C remain closed.
 
-Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Earlier current-state snapshot (historical context)
 

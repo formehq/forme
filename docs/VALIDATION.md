@@ -1534,3 +1534,34 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
   GATE_C_NOT_REQUESTED`. Freeze and audit add-only V4 Card/Review before any
   final local lifecycle; no retry, Production or Gate C action is implied.
+
+## Evidence round 33 — Integration Campaign V4 failed cleanly at historical network inspection
+
+- Case: V4 prepare was Green and its one-use grant was consumed once. Docker
+  `version` matched `29.3.1 / linux/arm64`; the corrected historical container
+  missing fingerprint matched; the next historical network inspect completed
+  exit `1` with a distinct body-free frame and remained `UNKNOWN`. The runner
+  stopped before image use, fresh construction, PostgreSQL or SQL.
+- Exact evidence: grant `sha256:544f8036…d517`, terminal evidence
+  `sha256:fb44fbd9…1166b`, journal `12` / head
+  `sha256:df1e0c8c…d60f`, and outcome report
+  `sha256:820f9878…f67b`. The network tuple is stdout `1` byte / one LF /
+  `sha256:01ba4719…546b`; stderr `108` bytes / one LF /
+  `sha256:d746c7e6…4616`. No message body was admitted.
+- Cleanup truth: fresh container/network/volume `PROVEN_ABSENT`; historical
+  container `PROVEN_ABSENT`; historical network/volume `UNKNOWN`; all owned
+  credential/config/runtime/coordinator residue zero; journal open effects
+  zero.
+- Effect truth: version, container inspect and network inspect each completed
+  exactly once. Every other Docker kind was zero. Physical rehearsal was
+  `0/0`; PostgreSQL/SQL/product-runtime/Production/Gate C were zero.
+- Product judgment: the current host and fail-closed cleanup are real positive
+  evidence, but local persistence and the public encounter remain unproved.
+  This is the end of the previously confirmed three-lifecycle autonomous
+  envelope, not permission to keep iterating.
+- Consequence: stop at
+  `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+  LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+  PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`. A new Owner decision must
+  explicitly choose a narrow network/volume fingerprint correction and new
+  bounded lifecycle budget, or stop the local PostgreSQL proof.

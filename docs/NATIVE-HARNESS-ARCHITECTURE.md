@@ -2,20 +2,20 @@
 
 ## Superseding R4 status — 2026-08-17
 
-The Native Harness boundary is unchanged. R4 #67 now has a repository-only
-inspect-fingerprint correction at Kif `169a05f` / Lif `2d5fc50`. V3 observed
-Docker `29.3.1` / `linux/arm64`, then failed closed on a previously unknown
-body-free historical container-missing frame before PostgreSQL. The correction
-admits only the exact captured command, target, process, framing, byte and hash
-tuple; no diagnostic body becomes Harness or Forme evidence. All runtime,
-tool, production and canonical-meaning boundaries remain closed except for the
-already confirmed final disposable local campaign envelope. Target PostgreSQL
-and catalog remain unobserved. Production, Provider, traffic and Gate C remain
+The Native Harness boundary is unchanged. Integration Campaign V4 consumed
+the final local lifecycle in the confirmed envelope and failed closed before
+PostgreSQL. Docker/version and the exact historical container-missing tuple
+matched; a distinct historical network-missing tuple remained unknown. No
+diagnostic body became Harness/Forme evidence. Fresh resources are proven
+absent, owned residue is zero, and PostgreSQL/SQL/product runtime were not
+reached. The three-lifecycle budget is exhausted; there is no implicit retry.
+Any network/volume classifier correction and any additional local lifecycle
+require a new Owner decision. Production, Provider, traffic and Gate C remain
 `NOT_REQUESTED`.
 
-Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Earlier architecture status snapshot (historical context)
 

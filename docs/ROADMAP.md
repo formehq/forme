@@ -2,20 +2,19 @@
 
 ## Superseding current gate — 2026-08-17
 
-R4 #67 is at
-`INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN`. V3
-proved current Docker version/platform and then failed safely before
-PostgreSQL on one previously unknown body-free historical missing-container
-frame. Kif `169a05f` / Lif `2d5fc50` correct exactly that classification.
-The next bounded milestone is the final remaining disposable V4 local
-PostgreSQL campaign; after a Green DB/restart/rollback rehearsal, Owner
-experience review decides whether #67 is accepted. Production and Gate C stay
-closed. This keeps the MVP path focused: local persistence proof first, then
-the remaining real public encounter chain.
+R4 #67 is at `INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN`. V4 proved the current
+Docker host and corrected historical container absence, then failed safely on
+a distinct historical network-missing body-free fingerprint before
+PostgreSQL. Fresh resources are proven absent and cleanup is exact. All three
+local lifecycles in the confirmed autonomous envelope are consumed; no retry
+is authorized. The next milestone is an Owner decision: either authorize a
+narrow network/volume classifier correction plus a new bounded lifecycle, or
+stop the local persistence proof. Production and Gate C stay closed. The MVP
+path remains local DB/restart/rollback proof, then the real public encounter.
 
-Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Earlier roadmap snapshot (historical context)
 

@@ -2,25 +2,25 @@
 
 ## Superseding current status — 2026-08-17
 
-R4 #67 Local PostgreSQL wiring has a committed inspect-fingerprint correction:
-Kif `169a05f`, Lif `2d5fc50`, index `sha256:d2d06ec5…bfe3`, schema
-`sha256:a2193363…cf3f`, evidence `sha256:f981594d…479b8`, report
-`sha256:b277ab9d…88dd`. V3 matched Docker `29.3.1` / `linux/arm64` and then
-failed closed on a previously unknown body-free historical
-`container.inspect` missing frame. It did not reach PostgreSQL or SQL; fresh
-container/network/volume state is proven absent and fresh residue is zero.
-The correction recognizes only the exact captured fingerprint and preserves
-all one-use, write-ahead, no-retry and cleanup ceilings. Repository validation
-is Green; construction effects are zero.
+Integration Campaign V4 consumed its one-use grant and failed cleanly before
+PostgreSQL. Docker `29.3.1 / linux/arm64` and the corrected historical
+container-missing fingerprint matched; the next historical network inspect
+completed exit `1` with a distinct, unadmitted body-free fingerprint, so the
+runner stopped. Terminal evidence is `sha256:fb44fbd…1166b`, journal `12` at
+`sha256:df1e0c8c…d60f`, and the
+[outcome report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+is `sha256:820f9878…f67b`. Fresh resources are proven absent and all owned
+residue is zero; PostgreSQL/SQL were not reached.
 
-Next action is to freeze and audit add-only V4 Card/Review, then use the final
-remaining exact-owned disposable lifecycle only if every binding remains
-Green. Stop on any drift or ambiguous cleanup. Production and Gate C remain
-`NOT_REQUESTED`.
+The confirmed autonomous envelope's three local lifecycle slots are exhausted.
+Do not retry, create another campaign authority or call Docker. The next action
+is an Owner decision on the narrow network/volume fingerprint correction and a
+new bounded lifecycle budget, or an explicit decision to stop this local proof.
+Production and Gate C remain `NOT_REQUESTED`.
 
-Current stop: `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
-FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Earlier cockpit snapshot (historical context)
 

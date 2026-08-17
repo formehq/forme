@@ -1786,3 +1786,48 @@ effects.
 Only fresh add-only V4 Card/Review authority may precede the final remaining
 disposable local lifecycle. Target PostgreSQL/catalog remain unobserved; #67
 and R4 remain open.
+
+## 2026-08-17 — Integration Campaign V4 consumed the final local lifecycle and failed cleanly
+
+**Decision:** record V4 as immutable, consumed, non-retryable history. Card
+`sha256:f867ee4fc7ede804d45913b4a8afe28bce7b0510c82dd19dd620715b51c777ec`,
+Review
+`sha256:a3bf61dd54aafe999ee9c0056a6e35a78c8d36e263a054985c5e63e02351f29f`
+and payload
+`sha256:780a4afc94fb32f4748354519e88bb0528d544ce1d2b78c5d9b4a7015601f859`
+were prepared under the confirmed local MVP outcome envelope. The grant was
+consumed once and is not renewable.
+
+**Result:** root `/Users/zaynw/.forme-r4-integration-campaign-v4-f867ee4f`
+retains consumed grant
+`sha256:544f8036b712b1766805fc795fe737ce630c36ee1db4b8091ab538c4c876d517`,
+terminal evidence
+`sha256:fb44fbd9bbbd0b39f31beff266f4a6795ac4ccc74946d3543a88bf0a8ee1166b`
+and journal `12` / head
+`sha256:df1e0c8cd7dec7cc1f02748395e41f8890fb250de7d1bc21d6a6069455b7d60f`.
+Docker matched `29.3.1 / linux/arm64`; the corrected historical container
+fingerprint matched. Historical network inspection then completed exit `1`
+with a distinct body-free fingerprint: stdout `1` byte / one LF /
+`sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b`,
+stderr `108` bytes / one LF /
+`sha256:d746c7e623df324cd3ef6ce071393d7c166c3273ca0b69f3c69408b713064616`.
+Because that tuple was not admitted, the runner stopped before image use,
+fresh construction, PostgreSQL or SQL.
+
+**Cleanup and effect:** fresh container/network/volume are `PROVEN_ABSENT`;
+historical container is `PROVEN_ABSENT`; historical network/volume remain
+`UNKNOWN`. Owned credential, Docker-config, imported-runtime and active
+coordinator residue are zero. Physical rehearsal attempt/completion is `0/0`;
+PostgreSQL, SQL, product runtime, production, publication, Provider, message,
+spend and Gate C effects are zero. The
+[V4 Outcome](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+is `sha256:820f98788f44bf18d0ecf857f45ec69a0d966a2e43f27c1da4e40da068d9f67b`.
+
+**Boundary:** all three disposable local lifecycle slots in the confirmed
+autonomous envelope are now consumed. No retry, fingerprint correction,
+successor campaign authority or Docker call is implied. A new Owner decision
+must choose whether to authorize a narrow network/volume correction plus a new
+bounded lifecycle budget, or stop this local proof.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN / LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+#67 and R4 remain open.
