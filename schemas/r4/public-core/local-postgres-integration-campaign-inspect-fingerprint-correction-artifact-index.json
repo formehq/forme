@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "r4.public-core-local-postgres-integration-campaign-inspect-fingerprint-correction-artifact-index.v1",
+  "status": "GREEN",
+  "authority": {
+    "addendumSha256": "sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39",
+    "addendumHead": "25cf2b400d96a86c8017f7dbc2e2186fff7e9180",
+    "addendumTree": "d858b46c9f6e83edd57db22033ce7458952f774f",
+    "ownerReviewSha256": "sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37",
+    "ownerReviewHead": "eb9b3904131a682da6a85677494e97e5e2149bdb",
+    "ownerReviewTree": "d92ce1354685205ddc64c3c3e1dc455cd8ecbce1"
+  },
+  "implementation": {
+    "head": "169a05f0e00a5afdb9cc920c0d3591a90eaa4fe6",
+    "tree": "efabdf042824e9fcde653006cdda58484deed38c",
+    "parentHead": "eb9b3904131a682da6a85677494e97e5e2149bdb",
+    "pathCount": 2,
+    "addedPathCount": 0,
+    "modifiedPathCount": 2,
+    "deletedPathCount": 0,
+    "aggregateSha256": "sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e"
+  },
+  "artifacts": [
+    {
+      "path": "scripts/r4-public-core-local-postgres.mjs",
+      "mode": "M",
+      "byteCount": 928052,
+      "sha256": "sha256:8742fdc0daa1617a70cfac8c0a2f53a17997c76681b9c6fc1b147e491e314fb0"
+    },
+    {
+      "path": "test/r4/public-core-local-postgres.test.ts",
+      "mode": "M",
+      "byteCount": 227971,
+      "sha256": "sha256:a04165d988cdfcde105a569ce629e57b6b3851119b30fb27f998707a207b6097"
+    }
+  ],
+  "failedV3": {
+    "root": "/Users/zaynw/.forme-r4-integration-campaign-v3-37adbcbb",
+    "grantSha256": "sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7",
+    "evidenceSha256": "sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac",
+    "evidenceByteCount": 10460,
+    "journalEntryCount": 9,
+    "journalHeadSha256": "sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5"
+  },
+  "excludedEvidencePaths": [
+    "docs/evidence/r4-public-core-local-postgres-integration-campaign-inspect-fingerprint-correction.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-fingerprint-correction-artifact-index.json",
+    "schemas/r4/public-core/local-postgres-integration-campaign-inspect-fingerprint-correction-evidence.schema.json"
+  ],
+  "excludedStatusPathCount": 10,
+  "effects": {
+    "docker": 0,
+    "network": 0,
+    "postgres": 0,
+    "sql": 0,
+    "production": 0,
+    "gateC": 0
+  }
+}

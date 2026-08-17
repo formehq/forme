@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/public-core/local-postgres-integration-campaign-inspect-fingerprint-correction-evidence.schema.json",
+  "title": "R4 Public Core local PostgreSQL inspect-fingerprint correction evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "status",
+    "generatedAt",
+    "authority",
+    "implementation",
+    "artifacts",
+    "capturedFingerprint",
+    "failedV3",
+    "validation",
+    "effects",
+    "readiness",
+    "documentationScope",
+    "stop"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "r4.public-core-local-postgres-integration-campaign-inspect-fingerprint-correction-evidence.v1"
+    },
+    "status": { "const": "GREEN" },
+    "generatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["addendumSha256", "addendumHead", "addendumTree", "ownerReviewSha256", "ownerReviewHead", "ownerReviewTree"],
+      "properties": {
+        "addendumSha256": { "const": "sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39" },
+        "addendumHead": { "const": "25cf2b400d96a86c8017f7dbc2e2186fff7e9180" },
+        "addendumTree": { "const": "d858b46c9f6e83edd57db22033ce7458952f774f" },
+        "ownerReviewSha256": { "const": "sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37" },
+        "ownerReviewHead": { "const": "eb9b3904131a682da6a85677494e97e5e2149bdb" },
+        "ownerReviewTree": { "const": "d92ce1354685205ddc64c3c3e1dc455cd8ecbce1" }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["head", "tree", "parentHead", "pathCount", "aggregateSha256"],
+      "properties": {
+        "head": { "const": "169a05f0e00a5afdb9cc920c0d3591a90eaa4fe6" },
+        "tree": { "const": "efabdf042824e9fcde653006cdda58484deed38c" },
+        "parentHead": { "const": "eb9b3904131a682da6a85677494e97e5e2149bdb" },
+        "pathCount": { "const": 2 },
+        "aggregateSha256": { "const": "sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e" }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactIndexSha256", "evidenceSchemaSha256", "runnerSha256", "runnerTestSha256"],
+      "properties": {
+        "artifactIndexSha256": { "const": "sha256:d2d06ec56ba45098902ee862e105da8024eb1e57a6a99d926a4aacde647abfe3" },
+        "evidenceSchemaSha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "runnerSha256": { "const": "sha256:8742fdc0daa1617a70cfac8c0a2f53a17997c76681b9c6fc1b147e491e314fb0" },
+        "runnerTestSha256": { "const": "sha256:a04165d988cdfcde105a569ce629e57b6b3851119b30fb27f998707a207b6097" }
+      }
+    },
+    "capturedFingerprint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "target", "spawnOutcome", "exitStatus", "signal", "stdoutBytes", "stdoutSha256", "stdoutUtf8", "stdoutLineEndings", "stdoutLineCount", "stderrBytes", "stderrSha256", "stderrUtf8", "stderrLineEndings", "stderrLineCount"],
+      "properties": {
+        "kind": { "const": "container.inspect" },
+        "target": { "const": "forme-r4-public-core-local-b92ae04555cc3d69" },
+        "spawnOutcome": { "const": "COMPLETED" },
+        "exitStatus": { "const": 1 },
+        "signal": { "const": "NONE" },
+        "stdoutBytes": { "const": 1 },
+        "stdoutSha256": { "const": "sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b" },
+        "stdoutUtf8": { "const": true },
+        "stdoutLineEndings": { "const": "LF" },
+        "stdoutLineCount": { "const": 1 },
+        "stderrBytes": { "const": 105 },
+        "stderrSha256": { "const": "sha256:36557984fb7353759773898446bc48f3ccc9ad3489f53f5b52ee2c7b3cdf83f3" },
+        "stderrUtf8": { "const": true },
+        "stderrLineEndings": { "const": "LF" },
+        "stderrLineCount": { "const": 1 }
+      }
+    },
+    "failedV3": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "grantSha256", "evidenceSha256", "evidenceByteCount", "journalEntryCount", "journalHeadSha256", "physicalExecuted", "postgresObserved", "freshResidueCount"],
+      "properties": {
+        "root": { "const": "/Users/zaynw/.forme-r4-integration-campaign-v3-37adbcbb" },
+        "grantSha256": { "const": "sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7" },
+        "evidenceSha256": { "const": "sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac" },
+        "evidenceByteCount": { "const": 10460 },
+        "journalEntryCount": { "const": 9 },
+        "journalHeadSha256": { "const": "sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5" },
+        "physicalExecuted": { "const": false },
+        "postgresObserved": { "const": false },
+        "freshResidueCount": { "const": 0 }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["focused", "runner", "r4Offline", "gateBCore", "spine", "typecheck", "roomNoAi", "docsAudit", "inventory", "diffCheck", "aggregateHarnessObservation"],
+      "properties": {
+        "focused": { "$ref": "#/$defs/greenCount" },
+        "runner": { "$ref": "#/$defs/greenCount" },
+        "r4Offline": { "$ref": "#/$defs/greenCount" },
+        "gateBCore": { "$ref": "#/$defs/greenCount" },
+        "spine": { "$ref": "#/$defs/greenCount" },
+        "typecheck": { "const": "GREEN" },
+        "roomNoAi": { "const": "GREEN" },
+        "docsAudit": { "const": "GREEN" },
+        "inventory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "fileCount", "sha256"],
+          "properties": {
+            "status": { "const": "GREEN" },
+            "fileCount": { "const": 305 },
+            "sha256": { "const": "sha256:7b768d9c10f3dd96c765672243212e097d941d0860aec63368c46082c11d29b8" }
+          }
+        },
+        "diffCheck": { "const": "GREEN" },
+        "aggregateHarnessObservation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["firstAttempt", "focusedMacos", "exactRerun"],
+          "properties": {
+            "firstAttempt": { "const": "143_PASS_0_FAIL_1_CANCELLED_PENDING_PROMISE" },
+            "focusedMacos": { "const": "11_PASS" },
+            "exactRerun": { "const": "146_PASS" }
+          }
+        }
+      }
+    },
+    "effects": { "$ref": "#/$defs/zeroEffects" },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runnerCorrected", "bodyFreeFingerprintClosed", "statusFreezeComplete", "finalAuthorityFrozen", "physicalExecuted", "targetPostgresObserved", "productionReady", "gateCReady"],
+      "properties": {
+        "runnerCorrected": { "const": true },
+        "bodyFreeFingerprintClosed": { "const": true },
+        "statusFreezeComplete": { "const": false },
+        "finalAuthorityFrozen": { "const": false },
+        "physicalExecuted": { "const": false },
+        "targetPostgresObserved": { "const": false },
+        "productionReady": { "const": false },
+        "gateCReady": { "const": false }
+      }
+    },
+    "documentationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operationalCurrentStatusSurfacesCurrent", "wholeRepositoryDocumentationCurrentClaimed"],
+      "properties": {
+        "operationalCurrentStatusSurfacesCurrent": { "const": false },
+        "wholeRepositoryDocumentationCurrentClaimed": { "const": false }
+      }
+    },
+    "stop": {
+      "const": "LOCAL_POSTGRES_INSPECT_FINGERPRINT_IMPLEMENTATION_EVIDENCE_GREEN / STATUS_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+    }
+  },
+  "$defs": {
+    "greenCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "pass", "fail", "cancelled"],
+      "properties": {
+        "status": { "const": "GREEN" },
+        "pass": { "type": "integer", "minimum": 1 },
+        "fail": { "const": 0 },
+        "cancelled": { "const": 0 }
+      }
+    },
+    "zeroEffects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["docker", "network", "postgres", "sql", "productRuntime", "production", "publication", "provider", "message", "spend", "gateC"],
+      "properties": {
+        "docker": { "const": 0 },
+        "network": { "const": 0 },
+        "postgres": { "const": 0 },
+        "sql": { "const": 0 },
+        "productRuntime": { "const": 0 },
+        "production": { "const": 0 },
+        "publication": { "const": 0 },
+        "provider": { "const": 0 },
+        "message": { "const": 0 },
+        "spend": { "const": 0 },
+        "gateC": { "const": 0 }
+      }
+    }
+  }
+}
