@@ -92,7 +92,7 @@ BEGIN
   END IF;
 
   SELECT array_agg(
-           (owner.relname || '|' || c.conname || '|' || c.contype)::text
+           owner.relname::text || '|' || c.conname::text || '|' || c.contype::text
            ORDER BY owner.relname, c.conname
          )
     INTO actual_constraints
@@ -120,7 +120,7 @@ BEGIN
   IF (
     SELECT array_agg(signature ORDER BY signature)
       FROM (
-        SELECT owner.relname || '|' || c.conname || '|' || c.contype || '|' ||
+        SELECT owner.relname::text || '|' || c.conname::text || '|' || c.contype::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.conkey) WITH ORDINALITY key(attnum, ordinal)
@@ -141,14 +141,14 @@ BEGIN
   IF (
     SELECT array_agg(signature ORDER BY signature)
       FROM (
-        SELECT owner.relname || '|' || c.conname || '|' ||
+        SELECT owner.relname::text || '|' || c.conname::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.conkey) WITH ORDINALITY key(attnum, ordinal)
                    JOIN pg_catalog.pg_attribute a
                      ON a.attrelid = c.conrelid AND a.attnum = key.attnum
                   ORDER BY key.ordinal
-               ), '+') || '|' || referenced.relname || '|' ||
+               ), '+') || '|' || referenced.relname::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.confkey) WITH ORDINALITY key(attnum, ordinal)
@@ -180,7 +180,7 @@ BEGIN
   IF (
     SELECT array_agg(signature ORDER BY signature)
       FROM (
-        SELECT owner.relname || '|' || idx.relname || '|' ||
+        SELECT owner.relname::text || '|' || idx.relname::text || '|' ||
                CASE WHEN i.indisunique THEN 'U' ELSE 'N' END || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
@@ -269,7 +269,7 @@ BEGIN
     ), actual AS (
       SELECT c.relname::text AS table_name,
              string_agg(
-               a.attnum::text || ':' || a.attname || ':' ||
+               a.attnum::text || ':' || a.attname::text || ':' ||
                CASE t.typname
                  WHEN 'bool' THEN 'boolean'
                  WHEN 'int2' THEN 'smallint'
@@ -277,7 +277,7 @@ BEGIN
                  WHEN 'int8' THEN 'bigint'
                  WHEN '_text' THEN 'text[]'
                  WHEN '_int8' THEN 'bigint[]'
-                 ELSE t.typname
+                 ELSE t.typname::text
                END || ':' || a.atttypmod::text || ':' ||
                CASE WHEN a.attnotnull THEN 'N' ELSE 'Y' END || ':' ||
                COALESCE(pg_catalog.pg_get_expr(d.adbin, d.adrelid, true), '-'),
@@ -312,16 +312,16 @@ BEGIN
          pg_catalog.md5(string_agg(signature, E'\n' ORDER BY signature))
     INTO actual_catalog_manifest
     FROM (
-      SELECT 'relation|' || c.relname || '|' || c.relkind || '|' || c.relpersistence || '|' ||
+      SELECT 'relation|' || c.relname::text || '|' || c.relkind::text || '|' || c.relpersistence::text || '|' ||
              c.relispartition::text || '|' || c.relrowsecurity::text || '|' ||
              c.relforcerowsecurity::text AS signature
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'column|' || c.relname || '|' || a.attnum::text || '|' || a.attname || '|' ||
-             t.typname || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
-             a.attidentity || '|' || a.attgenerated || '|' ||
+      SELECT 'column|' || c.relname::text || '|' || a.attnum::text || '|' || a.attname::text || '|' ||
+             t.typname::text || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
+             a.attidentity::text || '|' || a.attgenerated::text || '|' ||
              COALESCE(pg_catalog.pg_get_expr(d.adbin, d.adrelid, false), '-')
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
@@ -331,8 +331,8 @@ BEGIN
        WHERE n.nspname = 'forme_r4_public_core'
          AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
       UNION ALL
-      SELECT 'constraint|' || owner.relname || '|' || constraint_row.conname || '|' ||
-             constraint_row.contype || '|' || constraint_row.condeferrable::text || '|' ||
+      SELECT 'constraint|' || owner.relname::text || '|' || constraint_row.conname::text || '|' ||
+             constraint_row.contype::text || '|' || constraint_row.condeferrable::text || '|' ||
              constraint_row.condeferred::text || '|' || constraint_row.convalidated::text || '|' ||
              constraint_row.connoinherit::text || '|' ||
              pg_catalog.pg_get_constraintdef(constraint_row.oid, false)
@@ -341,7 +341,7 @@ BEGIN
         JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'index|' || owner.relname || '|' || idx.relname || '|' || access_method.amname || '|' ||
+      SELECT 'index|' || owner.relname::text || '|' || idx.relname::text || '|' || access_method.amname::text || '|' ||
              index_row.indisunique::text || '|' || index_row.indisprimary::text || '|' ||
              index_row.indisvalid::text || '|' || index_row.indisready::text || '|' ||
              index_row.indislive::text || '|' || index_row.indisclustered::text || '|' ||
@@ -354,7 +354,7 @@ BEGIN
         JOIN pg_catalog.pg_am access_method ON access_method.oid = idx.relam
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'type|' || item.typname || '|' || item.typtype || '|' || item.typcategory
+      SELECT 'type|' || item.typname::text || '|' || item.typtype::text || '|' || item.typcategory::text
         FROM pg_catalog.pg_type item
         JOIN pg_catalog.pg_namespace n ON n.oid = item.typnamespace
        WHERE n.nspname = 'forme_r4_public_core'
@@ -412,7 +412,7 @@ BEGIN
          OR c.relforcerowsecurity
        )
   ) OR (
-    SELECT array_agg((t.typname || '|' || t.typtype)::text ORDER BY t.typname)
+    SELECT array_agg(t.typname::text || '|' || t.typtype::text ORDER BY t.typname)
       FROM pg_catalog.pg_type t
       JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
      WHERE n.nspname = 'forme_r4_public_core'

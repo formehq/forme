@@ -15,15 +15,15 @@ export const POSTGRES_SERVER_VERSION_NUM = 160010;
 export const SQL_BINDINGS = Object.freeze({
   schema: Object.freeze({
     path: "schemas/r4/public-core/schema.sql",
-    sha256: "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8",
+    sha256: "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
   }),
   verify: Object.freeze({
     path: "schemas/r4/public-core/verify.sql",
-    sha256: "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd",
+    sha256: "sha256:a34737a9f970c701013896fac996adfa9a5d76e4104c5be0656cf24ed0db8091",
   }),
   rollback: Object.freeze({
     path: "schemas/r4/public-core/rollback.sql",
-    sha256: "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4",
+    sha256: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
   }),
 });
 
@@ -512,7 +512,9 @@ function expectedSeed() {
   });
 }
 
-export async function runRehearsal({ spec, docker, postgres, sql, startedAt = new Date().toISOString() }) {
+export async function runRehearsal({
+  spec, docker, postgres, sql, startedAt = new Date().toISOString(), allowImagePull = false,
+}) {
   const state = {
     host: null,
     imagePulled: false,
@@ -536,6 +538,7 @@ export async function runRehearsal({ spec, docker, postgres, sql, startedAt = ne
     state.host = await docker.version();
     state.image = await docker.inspectImage();
     if (state.image === null) {
+      if (!allowImagePull) fail("disposable_postgres_image_not_cached", "docker.image.inspect");
       await docker.pullImage();
       state.imagePulled = true;
       state.image = await docker.inspectImage();

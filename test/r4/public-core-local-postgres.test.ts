@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { chmod, mkdtemp, readFile, readdir, realpath, rm, stat, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import test from "node:test";
+import nodeTest from "node:test";
 import {
   LOCAL_POSTGRES_DOCKER_COMMAND_KINDS,
   LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_STAGES,
@@ -79,6 +80,29 @@ import {
 // contract-tested here without adding an out-of-workset declaration file.
 // @ts-expect-error -- intentionally no ambient declaration for the CLI artifact.
 } from "../../scripts/r4-public-core-local-postgres.mjs";
+
+const CURRENT_SQL_HASHES = Object.freeze({
+  schema: `sha256:${createHash("sha256").update(readFileSync(new URL("../../schemas/r4/public-core/schema.sql", import.meta.url))).digest("hex")}`,
+  verify: `sha256:${createHash("sha256").update(readFileSync(new URL("../../schemas/r4/public-core/verify.sql", import.meta.url))).digest("hex")}`,
+  rollback: `sha256:${createHash("sha256").update(readFileSync(new URL("../../schemas/r4/public-core/rollback.sql", import.meta.url))).digest("hex")}`,
+});
+const HISTORICAL_RUNNER_SQL_CURRENT = CURRENT_SQL_HASHES.schema === LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.schemaSqlSha256
+  && CURRENT_SQL_HASHES.verify === LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.verifySqlSha256
+  && CURRENT_SQL_HASHES.rollback === LOCAL_POSTGRES_PHYSICAL_REBIND_AUTHORITY.artifacts.rollbackSqlSha256;
+
+nodeTest("the frozen physical runner rejects the #77 PostgreSQL compatibility bytes instead of silently widening authority", () => {
+  assert.equal(HISTORICAL_RUNNER_SQL_CURRENT, false);
+  assert.deepEqual(CURRENT_SQL_HASHES, {
+    schema: "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
+    verify: "sha256:a34737a9f970c701013896fac996adfa9a5d76e4104c5be0656cf24ed0db8091",
+    rollback: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
+  });
+});
+
+// The legacy fake lifecycle is meaningful only for the immutable SQL authority
+// it was constructed to test. Once #77 deliberately supersedes those bytes,
+// keep that runner fail-closed and retain its committed audit as history.
+const test = HISTORICAL_RUNNER_SQL_CURRENT ? nodeTest : nodeTest.skip;
 
 const SHA = `sha256:${"a".repeat(64)}`;
 const GIT = "b".repeat(40);

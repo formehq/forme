@@ -183,7 +183,7 @@ test("#77 binds one unique, loopback-only, secret-file Docker plan", () => {
   assert.equal(args.some((value: string) => value.includes("POSTGRES_PASSWORD=")), false);
 });
 
-test("#77 pins the unchanged Core schema, verify and rollback bytes", () => {
+test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback bytes", () => {
   const sql = readPinnedSql();
   assert.match(sql.schema, /CREATE SCHEMA forme_r4_public_core/u);
   assert.match(sql.verify, /BEGIN TRANSACTION READ ONLY/u);
@@ -193,9 +193,9 @@ test("#77 pins the unchanged Core schema, verify and rollback bytes", () => {
     verify: SQL_BINDINGS.verify.sha256,
     rollback: SQL_BINDINGS.rollback.sha256,
   }, {
-    schema: "sha256:a0040e8cd91e0eb1d61e8fb14476d0a12243ace7035032657ae2dd08d829eec8",
-    verify: "sha256:807cdaf0e85cc5d4a98cc739e46899d538ba35e5d8d174795202170e150bf9bd",
-    rollback: "sha256:67bfe857c5c93afb1694bb31b8ded76414a5f9dae79e761c249866c2e0d724a4",
+    schema: "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
+    verify: "sha256:a34737a9f970c701013896fac996adfa9a5d76e4104c5be0656cf24ed0db8091",
+    rollback: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
   });
 });
 
@@ -248,11 +248,20 @@ test("cached-image rehearsal proves schema, restart, rollback and exact cleanup"
 
 test("an absent exact image permits one pull and no second pull", async () => {
   const input = fixture({ imageCached: false });
-  const result = await runRehearsal({ ...input });
+  const result = await runRehearsal({ ...input, allowImagePull: true });
   assert.equal(result.status, "GREEN");
   assert.equal(result.observation.imagePulled, true);
   assert.equal(input.docker.calls.filter((kind) => kind === "image.pull").length, 1);
   assert.equal(input.docker.calls.filter((kind) => kind === "image.inspect").length, 2);
+});
+
+test("the approved compatibility lifecycle refuses an image pull when the cache is absent", async () => {
+  const input = fixture({ imageCached: false });
+  const result = await runRehearsal({ ...input });
+  assert.equal(result.status, "FAILED_CLEAN");
+  assert.equal(result.failure.code, "disposable_postgres_image_not_cached");
+  assert.equal(input.docker.calls.includes("image.pull"), false);
+  assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
 });
 
 test("an ordinary schema failure remains failed-clean and never verifies", async () => {

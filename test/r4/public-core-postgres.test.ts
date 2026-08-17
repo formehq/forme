@@ -32,6 +32,14 @@ const VERIFY = readFileSync(new URL("../../schemas/r4/public-core/verify.sql", i
 const ROLLBACK = readFileSync(new URL("../../schemas/r4/public-core/rollback.sql", import.meta.url), "utf8");
 const ADAPTER = readFileSync(new URL("../../apps/room/src/public-core-postgres.ts", import.meta.url), "utf8");
 
+function catalogManifestRows(sql: string): string {
+  const start = sql.indexOf("SELECT 'relation|'");
+  const endMarker = ") catalog_rows;";
+  const end = sql.indexOf(endMarker, start);
+  assert.ok(start >= 0 && end >= 0, "catalog manifest row query must exist");
+  return sql.slice(start, end + endMarker.length).replace(/\s+/gu, " ").trim();
+}
+
 const NOW = "2026-08-10T12:00:00.000Z";
 const HOUR = "2026-08-10T12:00:00.000Z";
 const DAY = "2026-08-10T00:00:00.000Z";
@@ -2357,6 +2365,37 @@ test("verify is read-only and rollback refuses durable rows, seed drift, and une
   assert.match(ROLLBACK, /DROP SCHEMA forme_r4_public_core RESTRICT/u);
   assert.doesNotMatch(ROLLBACK, /\bCASCADE\b/u);
   assert.doesNotMatch(`${SCHEMA}\n${VERIFY}\n${ROLLBACK}`, /\\connect|\bpsql\b|docker|postgres:\/\//iu);
+});
+
+test("catalog signatures cast PostgreSQL catalog identifiers and internal char fields without changing their frame", () => {
+  const manifestRows = [SCHEMA, VERIFY, ROLLBACK].map(catalogManifestRows);
+  assert.equal(manifestRows[1], manifestRows[0]);
+  assert.equal(manifestRows[2], manifestRows[0]);
+  for (const signatureRows of manifestRows) {
+    for (const expression of [
+      "c.relname::text", "c.relkind::text", "c.relpersistence::text",
+      "a.attname::text", "t.typname::text", "a.attidentity::text", "a.attgenerated::text",
+      "owner.relname::text", "constraint_row.conname::text", "constraint_row.contype::text",
+      "idx.relname::text", "access_method.amname::text",
+      "item.typname::text", "item.typtype::text", "item.typcategory::text",
+    ]) assert.match(signatureRows, new RegExp(expression.replaceAll(".", "\\."), "u"));
+    assert.doesNotMatch(
+      signatureRows,
+      /(?:relkind|relpersistence|attidentity|attgenerated|contype|typtype|typcategory)(?!::text)\s*\|\|/u,
+    );
+  }
+  const preCorrectionFrame = manifestRows[0]?.replace(
+    /(?<identifier>(?:c\.(?:relname|relkind|relpersistence)|a\.(?:attname|attidentity|attgenerated)|t\.typname|owner\.relname|constraint_row\.(?:conname|contype)|idx\.relname|access_method\.amname|item\.(?:typname|typtype|typcategory)))::text/gu,
+    "$<identifier>",
+  );
+  assert.equal(
+    createHash("sha256").update(preCorrectionFrame ?? "").digest("hex"),
+    "7b911e0b0b89a759b73052baeb08fa037c0539b3606b827f35bcb87eb2d7ece8",
+    "the shared catalog signature frame changes only by explicit text casts",
+  );
+  assert.match(VERIFY, /owner\.relname::text \|\| '\|' \|\| c\.conname::text \|\| '\|' \|\| c\.contype::text/u);
+  assert.match(VERIFY, /a\.attnum::text \|\| ':' \|\| a\.attname::text/u);
+  assert.match(VERIFY, /array_agg\(t\.typname::text \|\| '\|' \|\| t\.typtype::text/u);
 });
 
 test("construction has no driver, runtime, network, migration or body diagnostics", () => {
