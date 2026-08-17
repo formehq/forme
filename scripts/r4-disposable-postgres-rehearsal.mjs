@@ -123,6 +123,17 @@ function assertRunId(runId) {
   if (typeof runId !== "string" || !/^[0-9a-f]{16}$/u.test(runId)) fail("disposable_postgres_run_id_invalid", "input");
 }
 
+export function parseCliArguments(argv) {
+  if (!Array.isArray(argv) || argv.some((value) => typeof value !== "string")) {
+    fail("disposable_postgres_cli_invalid", "input");
+  }
+  if (argv.length === 0) return Object.freeze({ allowImagePull: false });
+  if (argv.length === 1 && argv[0] === "--allow-image-pull") {
+    return Object.freeze({ allowImagePull: true });
+  }
+  fail("disposable_postgres_cli_invalid", "input");
+}
+
 export function createRunSpec(runId, runtimeRoot = `/private/tmp/forme-r4-pg-${runId}`) {
   assertRunId(runId);
   const labels = Object.freeze({
@@ -668,6 +679,7 @@ async function main() {
   let runtime = null;
   let result = null;
   try {
+    const cli = parseCliArguments(process.argv.slice(2));
     verifyDockerCli();
     const socketPath = resolveDockerSocket();
     runtime = createPrivateRuntimeRoot(runId);
@@ -675,7 +687,7 @@ async function main() {
     const sql = readPinnedSql();
     const docker = createPhysicalDocker(spec, runtime, socketPath);
     const postgres = createPhysicalPostgres(spec, runtime);
-    result = await runRehearsal({ spec, docker, postgres, sql });
+    result = await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
   } catch (error) {
     result = Object.freeze({
       schemaVersion: "r4.disposable-postgres-rehearsal-result.v1",

@@ -11,6 +11,7 @@ import {
   VERIFY_ASSERTION_IDS,
   buildContainerCreateArguments,
   createRunSpec,
+  parseCliArguments,
   projectPostgresDiagnostic,
   readPinnedSql,
   runRehearsal,
@@ -198,6 +199,23 @@ test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback byt
     verify: "sha256:a34737a9f970c701013896fac996adfa9a5d76e4104c5be0656cf24ed0db8091",
     rollback: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
   });
+});
+
+test("image acquisition is available only through one exact explicit CLI switch", () => {
+  assert.deepEqual(parseCliArguments([]), { allowImagePull: false });
+  assert.deepEqual(parseCliArguments(["--allow-image-pull"]), { allowImagePull: true });
+  for (const argv of [
+    ["--allow-image-pull", "--allow-image-pull"],
+    ["--allow-image-pull=true"],
+    ["--pull"],
+    ["--allow-image-pull", "extra"],
+  ]) {
+    assert.throws(
+      () => parseCliArguments(argv),
+      (error: unknown) => error instanceof Error
+        && (error as Error & { code?: string }).code === "disposable_postgres_cli_invalid",
+    );
+  }
 });
 
 test("PostgreSQL diagnostics retain only closed structural fields and an allowlisted verify assertion", () => {
