@@ -1,7 +1,8 @@
 # R4 reviewable integration package
 
 Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_BRANCH_REFRESH_APPROVED / MERGE_NOT_REQUESTED`,
+REVIEWABLE_INTEGRATION_DRAFT_PR_OPEN / REMOTE_CI_GREEN /
+MERGE_NOT_REQUESTED`,
 2026-08-18.
 
 ## User outcome
@@ -64,6 +65,17 @@ The approved refresh adds only the later proof-closing implementation/evidence
 and current operating truth. Historical authority documents and failed-run
 artifacts remain outside the review branch as archive evidence.
 
+The refreshed branch is published as
+[Draft PR #78](https://github.com/formehq/forme/pull/78), stacked directly on
+Draft PR #76. Its current head is
+`93a84c5bf7935e69120c4e29e849a5bfdc89705c`; the review diff contains 40
+paths. Two historical Gate-B tests prove that the approved successor lock is
+rejected by old runners before effects, and one historical PostgreSQL test no
+longer assumes that every checkout directory is literally named `forme`.
+Historical authority bytes remain unchanged.
+
+Opening the Draft PR and passing CI grant no merge or activation authority.
+
 ## Validation and demo
 
 Current source validation before the branch refresh:
@@ -74,15 +86,25 @@ Current source validation before the branch refresh:
 - document audit and `git diff --check`: Green;
 - final physical proof: `GREEN`, exact-owned residue `0`.
 
+Validation of Draft PR #78 head `93a84c5`:
+
+- complete `npm run check`: spine `45 / 45`, R4 `601 / 601`, and historical
+  Gate-B `145 / 145`;
+- focused product persistence tests: `88 / 88`;
+- focused disposable PostgreSQL tests: `26 / 26`;
+- document audit and `git diff --check`: Green;
+- GitHub Actions run
+  [`32182230017`](https://github.com/formehq/forme/actions/runs/32182230017):
+  `verify` Green.
+
 Runnable repository-only proof:
 
 ```sh
 node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-postgres-rehearsal.test.ts
 ```
 
-The Draft PR must also run the product persistence tests, full offline R4,
-typecheck and document audit against its own bytes. Remote CI is not inferred
-until that branch is pushed and checked.
+The next bounded step is Owner/reviewer judgment on Draft PR #78. Merge,
+activation and the first real Guest encounter remain separate decisions.
 
 ## Owner review focus
 
@@ -101,5 +123,6 @@ bounded Guest knock, not another PostgreSQL rehearsal.
 Current stop:
 
 `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_DRAFT_PR_REQUIRED / MERGE_NOT_REQUESTED /
+REVIEWABLE_INTEGRATION_CI_GREEN / OWNER_INTEGRATION_REVIEW_REQUIRED /
+MERGE_NOT_REQUESTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

@@ -9,12 +9,15 @@ The sole rollback guard mismatch was a missing pinned `search_path` during
 catalog deparse; commit `360ed6c` corrected only that observation context.
 
 The Enabler no longer blocks the roadmap. #67 remains `Building / At Risk`
-because the next milestone is user-facing: integrate the proven persistence
-boundary into Public Room, activate the bounded path and complete one
-Owner-experienced Guest encounter. No more database rehearsal is proposed.
+because the next milestone is user-facing. The 40-path integration shape is
+now Draft PR #78 at remote-CI-Green head `93a84c5`; the immediate gate is
+Owner/reviewer integration judgment. Only after separately controlled merge
+and activation may the team complete one Owner-experienced Guest encounter.
+No more database rehearsal is proposed.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+REVIEWABLE_INTEGRATION_CI_GREEN / OWNER_INTEGRATION_REVIEW_REQUIRED /
+MERGE_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

@@ -17,11 +17,15 @@ persistence, rollback, schema-absence proof and exact cleanup. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
 The Public Room experience remains `Building / At Risk`: the database boundary
-is proven, but #67 still needs product integration, activation and one
+is proven, and the 40-path integration shape is now reviewable in
+[Draft PR #78](https://github.com/formehq/forme/pull/78). Its exact head
+`93a84c5` passed remote CI. #67 still needs Owner/reviewer integration
+judgment, a separately controlled merge/activation path and one
 Owner-experienced Guest encounter.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+REVIEWABLE_INTEGRATION_CI_GREEN / OWNER_INTEGRATION_REVIEW_REQUIRED /
+MERGE_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77

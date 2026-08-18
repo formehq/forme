@@ -91,11 +91,14 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - The broader integration Draft PR #65 and the open Draft PR stack likewise do
   not provide remote or CI coverage for the implementation baseline or this
   governance correction.
-- The Owner approved refreshing `codex/r4-reviewable-integration` with the
-  final PostgreSQL Green proof, validating its own bytes, pushing it and
-  creating a Draft PR. This grants remote review and status reconciliation,
-  not merge. Until push completes, Draft PR #76 remains historical evidence
-  only and no remote CI claim covers the Green local bytes.
+- [Draft PR #78](https://github.com/formehq/forme/pull/78) now carries the
+  refreshed 40-path `codex/r4-reviewable-integration` diff on top of Draft PR
+  #76. Head `93a84c5bf7935e69120c4e29e849a5bfdc89705c` passed GitHub Actions
+  `verify` in run `32182230017`: spine `45/45`, R4 `601/601`, historical
+  Gate-B `145/145`, plus TypeScript. The three compatibility-test paths keep
+  old lock authority fail-closed and remove one checkout-name assumption;
+  they do not alter historical authority or product behavior. This grants
+  remote review and status reconciliation, not merge or activation.
 
 ### Current-truth routing
 

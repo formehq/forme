@@ -21,8 +21,15 @@ or catalog signature. Repository validation is focused `26/26`, offline R4
 diff Green. Every exact-owned resource and local runtime byte is absent.
 Provider, Guest, production, public-traffic and Gate C effects are `0`.
 
+The reviewable successor is now Draft PR
+[#78](https://github.com/formehq/forme/pull/78), head `93a84c5`. Its 40-path
+diff passed local `npm run check` (spine `45/45`, R4 `601/601`, historical
+Gate-B `145/145`) and remote GitHub Actions run `32182230017`. This is remote
+Technical Review evidence, not Product Progress, merge or activation.
+
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+REVIEWABLE_INTEGRATION_CI_GREEN / OWNER_INTEGRATION_REVIEW_REQUIRED /
+MERGE_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
