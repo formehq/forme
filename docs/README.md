@@ -2,14 +2,13 @@
 
 The repository keeps a deliberately small decision surface.
 
-## Current execution truth — rollback guard boundary, 2026-08-18
+## Current execution truth — disposable PostgreSQL Green, 2026-08-18
 
-#77's bounded local campaign physically proved schema apply, initial verify,
-same-container restart, restart readiness, post-restart verify, seed persistence
-and exact cleanup. Two runs reached that boundary. Both stopped in rollback
-with the same body-free `P0001 / ERROR / exec_stmt_raise` diagnostic, which does
-not identify the predefined guard. All three repair rounds and all four full
-lifecycles are consumed.
+#77 now physically proves schema apply, both verify passes around a
+same-container restart, seed persistence, rollback, schema absence and exact
+cleanup. The closed rollback vector isolated the sole mismatch to catalog
+deparse context; commit `360ed6c` added the pinned local `search_path` already
+used by schema and verify. No schema shape or business meaning changed.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
@@ -17,10 +16,9 @@ See the
 the current
 [`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
 
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

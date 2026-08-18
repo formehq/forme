@@ -8,26 +8,21 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-18
 
-The larger local #77 campaign physically proved exact schema apply, initial
-verify, same-container restart, bounded restart readiness, post-restart verify,
-seed persistence and exact cleanup. Two independent runs reached that boundary.
-This closes the previous restart-readiness and random-port defects.
+#77's disposable PostgreSQL Enabler is Technical Review Green. A closed
+10-guard diagnostic isolated rollback's only failure to catalog text deparse;
+commit `360ed6c` aligned rollback with schema/verify's pinned local
+`search_path` without changing schema shape or business meaning. Final run
+`69ac02f4e8dfbf01` passed schema, both verify passes, same-container restart,
+persistence, rollback, schema-absence proof and exact cleanup. See the
+[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Rollback still stops in one predefined guard with the body-free diagnostic
-`P0001 / ERROR / exec_stmt_raise`. The result does not name which guard fired.
-All three repository repairs and all four lifecycle slots are consumed, so
-there will be no blind fifth run. See the
-[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
-[reviewable integration package](docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
+The Public Room experience remains `Building / At Risk`: the database boundary
+is proven, but #67 still needs product integration, activation and one
+Owner-experienced Guest encounter.
 
-The Public Room experience is still `Building / At Risk`: this is substantial
-infrastructure proof, not yet Owner-visible MVP completion. The next proposed
-step is one medium-sized strict rollback-assertion diagnostic campaign.
-
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
 

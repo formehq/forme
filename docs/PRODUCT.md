@@ -2,33 +2,23 @@
 
 ## Superseding R4 execution status — 2026-08-18
 
-Enabler #77 has now physically proved almost the entire disposable PostgreSQL
-chain: exact schema apply, initial verify, same-container restart, bounded
-restart readiness, post-restart verify, seed persistence and exact cleanup.
-Two independent runs reached the same boundary. The old restart-readiness and
-random-port uncertainties are closed.
-
-The only remaining #77 failure is the rollback guard. It returns the closed
-diagnostic `P0001 / ERROR / exec_stmt_raise`, but the current body-free result
-does not name which predefined guard fired. Three repository repairs and four
-full lifecycles are consumed, so another blind correction or retry is not
-authorized. See the
+Enabler #77 is Technical Review Green. The disposable PostgreSQL path now
+physically passes schema apply, both verify passes, same-container restart,
+seed persistence, rollback, schema absence and exact cleanup. The last failure
+was not a data-model defect: rollback omitted the pinned local `search_path`
+used when schema and verify deparse PostgreSQL 16 catalog text. Commit
+`360ed6c` corrected only that observation context. See the
 [`rehearsal result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-This is substantial technical risk reduction, but not yet a user-visible MVP
-milestone: #67 remains `Building / At Risk`, and the Owner still cannot complete
-the real Public Room → bounded knock → durable local pull → fresh candidate →
-exact response experience. After rollback proof, #67 still needs integration,
-activation and one Owner-experienced Guest encounter.
+This removes the local database blocker but is not itself a user-visible MVP
+milestone. #67 remains `Building / At Risk`: the Owner still needs the real
+Public Room → bounded knock → durable local pull → fresh candidate → exact
+response experience. Work now returns to integration, activation and one
+Owner-experienced Guest encounter rather than more database rehearsal.
 
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-The next useful proposal is one medium-sized strict body-free rollback-assertion
-diagnostic campaign, not another authority micro-chain and not another blind
-lifecycle. Production, real/private data, push, merge and Gate C remain closed.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

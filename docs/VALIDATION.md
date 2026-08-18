@@ -1,34 +1,29 @@
 # Product validation and learning log
 
-## Current verdict — local campaign reaches the rollback guard
+## Current verdict — disposable PostgreSQL Enabler is Green
 
-Enabler #77 has physically proved schema apply, initial verify, same-container
-restart, restart readiness, post-restart verify, seed persistence and exact
-cleanup. Runs `2be1317fe91bd165` and `7dca9ef5bf763039` independently reached
-that boundary. Both stopped in the rollback guard with the same closed
-`P0001 / ERROR / exec_stmt_raise` diagnostic.
+Enabler #77 now physically proves schema apply, initial verify, same-container
+restart, restart readiness, post-restart verify, seed persistence, rollback,
+schema absence and exact cleanup. Diagnostic run `4aff3665a92bc4d8`
+evaluated all 10 closed rollback guards and isolated the sole mismatch to
+`public_core_rollback_catalog_manifest_drift`. Final run
+`69ac02f4e8dfbf01` passed the corrected complete lifecycle.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation after the third repair: focused assertion-vector harness
-`17/17`; constraint set `172/172`; corrected rehearsal harness `22/22`; offline R4
-`598 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
-`45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
-diff-check Green.
+The rollback-only correction adds the same transaction-local `search_path`
+already used by schema and verify. It changes no schema shape, business meaning
+or catalog signature. Repository validation is focused `26/26`, offline R4
+`602 passed / 0 failed / 111` frozen historical skips, plus typecheck, docs and
+diff Green. Every exact-owned resource and local runtime byte is absent.
+Provider, Guest, production, public-traffic and Gate C effects are `0`.
 
-The campaign used repository repairs `3/3`, full lifecycles `4/4`, one exact
-pull and one of two acquisition attempts. Every exact-owned resource and local
-runtime byte is absent. Provider, Guest, production, public-traffic and Gate C
-effects are `0`. The next validation need is not another blind run; it is a
-closed rollback-assertion identifier followed by a separately bounded campaign.
-
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
 

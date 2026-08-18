@@ -1,54 +1,46 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `FAILED_CLEAN / RESTART_PERSISTENCE_GREEN / ROLLBACK_GUARD_UNIDENTIFIED`,
-2026-08-17 through 2026-08-18.
+Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN`, 2026-08-18.
 
 ## Plain-language result
 
-The larger local campaign materially narrowed #77. The exact PostgreSQL 16
-image was acquired once. Run `eec5b2c54651d075` exposed a startup-handshake
-disconnect, and run `ac4b54f5c5fe0be8` proved schema plus initial verify before
-Docker assigned the restarted container a new random loopback port. Two
-bounded repository corrections closed those two controller defects.
+The successor campaign closed #77's last local database blocker. Commit
+`6088dad` added a read-only, body-free vector for all 10 rollback guards. Run
+`4aff3665a92bc4d8` completed schema apply, two verify passes around one
+same-container restart and seed-persistence proof, then identified exactly one
+failed guard: `public_core_rollback_catalog_manifest_drift`.
 
-Runs `2be1317fe91bd165` and `7dca9ef5bf763039` then both applied the exact
-schema, passed initial verify, restarted the same owned container, reached
-restart readiness on its freshly observed loopback port, passed post-restart
-verify and proved seed persistence. This is the first direct physical proof of
-that complete chain in the simplified harness.
+The catalog itself was not different. Schema and verify computed their catalog
+deparse under the same pinned `search_path`; rollback omitted that local
+setting, so PostgreSQL 16 rendered equivalent index definitions differently.
+Commit `360ed6c` adds only that missing transaction-local setting and updates
+the exact rollback hash. It changes no table, constraint, business meaning,
+catalog inventory or signature algorithm.
 
-Both runs stopped at the rollback guard with the same body-free PostgreSQL
-diagnostic: `P0001 / ERROR / exec_stmt_raise`. The third and final repository
-repair aligned rollback's table/index inventory ordering with verify's explicit
-text `C` ordering, but the final lifecycle returned the same closed diagnostic.
-The result membrane does not identify which allowlisted rollback guard raised
-it, so another blind SQL change or fifth lifecycle would be guesswork.
+Final run `69ac02f4e8dfbf01` used the cached exact PostgreSQL `linux/arm64`
+digest and passed the complete chain: schema apply, initial verify,
+same-container restart, restart readiness, post-restart verify, seed
+persistence, rollback apply and schema-absence proof. It then removed the
+exact-owned container, network, volume, credential and runtime directory.
+Production, real/private data, provider/public effects and Gate C stayed zero.
 
-Every run removed its exact-owned container, network, volume, credential and
-runtime directory. The final run used the cached image and performed no pull.
-Production, real/private data, provider/public effects and Gate C remained
-zero. The campaign budget is exhausted at repository repairs `3 / 3`, full
-lifecycles `4 / 4`, acquisition attempts `1 / 2` and pulls `1`.
+Repository validation is Green: focused rehearsal `26 / 26`, offline R4
+`602 / 602` with `111` frozen historical skips, TypeScript, documentation audit
+and `git diff --check`.
 
-Repository validation after the final repair is Green: focused rehearsal
-`22 / 22`, offline R4 `598 / 598` with `111` frozen historical skips,
-TypeScript, documentation audit and `git diff --check`.
+## Next product step
 
-## Next bounded decision
-
-Do not rerun the current harness. The next useful change is a strict body-free
-rollback-assertion vector that reports only the predefined rollback guard ID.
-A future medium-sized campaign can then use one diagnostic lifecycle, make at
-most one contract-preserving rollback-only correction if the result warrants
-it, and use at most one final lifecycle. That is a new campaign boundary, not
-an ordinary retry.
+The disposable PostgreSQL Enabler is Technical Review Green and should not be
+rerun. #67 can return to product integration and activation: connect the proven
+local persistence boundary to the Public Room walking slice, then perform one
+Owner-experienced Guest encounter under its still-separate authority. This
+local proof does not authorize Production or Gate C.
 
 Current stop:
 
-`LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Historical pre-campaign result
 

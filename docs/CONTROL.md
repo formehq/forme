@@ -1,48 +1,32 @@
 # Owner technical cockpit
 
-## Superseding current status — #77 local campaign exhausted at rollback, 2026-08-18
+## Superseding current status — #77 disposable PostgreSQL Green, 2026-08-18
 
-**The Public Room experience is still not Done, but the infrastructure gap is
-now much smaller.** The Owner-confirmed local campaign used all three repository
-repair rounds and all four full disposable lifecycles. It used one exact image
-acquisition/pull and never crossed into Production, real/private data,
-provider/public effects or Gate C.
+**The local persistence Enabler is Technical Review Green; the Public Room
+experience is still Building.** A strict 10-item body-free diagnostic isolated
+the rollback failure to `public_core_rollback_catalog_manifest_drift`. The
+catalog was unchanged: rollback alone lacked the pinned transaction-local
+`search_path` used by schema and verify, so PostgreSQL 16 deparsed equivalent
+catalog text differently.
 
-The campaign physically proved PostgreSQL `160010`, exact schema apply, initial
-verify, one same-container restart, readiness on the freshly observed loopback
-port, post-restart verify, seed persistence and exact cleanup. Runs
-`2be1317fe91bd165` and `7dca9ef5bf763039` independently reached that same
-boundary. This closes the old restart-readiness and port-binding uncertainty.
+Commit `360ed6c` adds only that setting and updates the exact rollback binding.
+Final run `69ac02f4e8dfbf01` physically passed schema apply, initial verify,
+same-container restart, restart readiness, post-restart verify, seed
+persistence, rollback apply and schema-absence proof. Exact container, network,
+volume, credential and runtime residue is `0`; no pull was used in the final
+run. Focused `26/26`, offline R4 `602/602` with `111` frozen historical skips,
+typecheck, docs audit and diff check are Green.
 
-The remaining failure is narrower: rollback stops inside its guard with the
-closed diagnostic `P0001 / ERROR / exec_stmt_raise`. The final repair aligned
-rollback's table/index inventory with verify's explicit text `C` ordering, but
-the final lifecycle returned the same diagnostic. The current result membrane
-does not reveal which predefined rollback guard fired, so another blind fix or
-fifth lifecycle is prohibited.
+#77 is ready to leave the active Enabler slot. #67 remains `Building / At Risk`
+because the proven persistence boundary is not yet integrated into the Public
+Room walking slice and no Owner-experienced Guest encounter has run. The next
+work is product integration and activation, not another database rehearsal.
+Push, merge, Production, real/private data, provider/public effects and Gate C
+remain closed.
 
-The implementation repairs are `bfac7cf` (bounded startup-handshake retry),
-`b9765e6` (fresh restart loopback-port binding) and `236ac1b` (rollback
-inventory C-ordering). Repository validation is Green: focused `22/22`, offline
-R4 `598/598` with `111` frozen historical skips, typecheck, docs audit and diff
-check. Every physical run ended with exact container/network/volume/runtime
-residue `0`.
-
-The current local branch has no upstream and remains ahead of Draft PR #76;
-remote CI does not cover these bytes. GitHub #77/#67, Project #1 and PR #76
-must describe this as `Building / At Risk`, not Technical Review Green. Push,
-merge, Production, real/private data, provider/public effects and Gate C remain
-closed.
-
-Next useful step: review a medium-sized, strict body-free rollback-assertion
-diagnostic campaign. It should allow one diagnostic lifecycle, at most one
-rollback-only contract-preserving repair and at most one final lifecycle. No
-new campaign or Docker call is currently authorized.
-
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Historical checkpoint — #77 final failed-clean lifecycle, 2026-08-17
 

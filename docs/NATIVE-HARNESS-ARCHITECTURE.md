@@ -2,20 +2,19 @@
 
 ## Superseding R4 execution status — 2026-08-18
 
-NH1/NH2 are unchanged. The bounded local #77 campaign physically proved the
-disposable PostgreSQL path through schema, both verify passes, same-container
-restart readiness and seed persistence. Both latest runs then failed cleanly
-inside the rollback guard with a body-free `P0001` identifier class, and exact
-cleanup passed. No production, provider, Guest or Gate C boundary changed.
+NH1/NH2 are unchanged. #77's disposable PostgreSQL boundary is now physically
+Green through schema, both verify passes, same-container restart, persistence,
+rollback, schema absence and exact cleanup. The only correction was a pinned
+transaction-local `search_path` for rollback catalog deparse; it grants no new
+runtime, file, provider, Guest, publication or Production authority.
 
-The next architectural question is deliberately narrow: add a strict closed
-rollback-guard identifier before any further lifecycle. The present campaign
-has exhausted repairs `3/3` and lifecycles `4/4`.
+The architecture question now returns to #67 integration: admit this proven
+local persistence mechanism through the existing typed Forme contracts, then
+validate the Owner-visible encounter. Gate C remains separate.
 
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
-SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
-ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 
