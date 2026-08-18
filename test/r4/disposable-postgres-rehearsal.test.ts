@@ -214,13 +214,15 @@ test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback byt
 test("image acquisition is available only through one exact explicit CLI switch", () => {
   assert.deepEqual(parseCliArguments([]), { mode: "rehearse", allowImagePull: false });
   assert.deepEqual(parseCliArguments(["diagnose"]), { mode: "diagnose", allowImagePull: false });
+  assert.deepEqual(parseCliArguments(["diagnose", "--allow-image-pull"]), { mode: "diagnose", allowImagePull: true });
   assert.deepEqual(parseCliArguments(["--allow-image-pull"]), { mode: "rehearse", allowImagePull: true });
   for (const argv of [
     ["--allow-image-pull", "--allow-image-pull"],
     ["--allow-image-pull=true"],
     ["--pull"],
     ["--allow-image-pull", "extra"],
-    ["diagnose", "--allow-image-pull"],
+    ["diagnose", "--allow-image-pull", "extra"],
+    ["--allow-image-pull", "diagnose"],
   ]) {
     assert.throws(
       () => parseCliArguments(argv),
@@ -340,6 +342,18 @@ test("diagnostic refuses image acquisition and malformed assertion vectors", asy
   }
 });
 
+test("replacement diagnostic permits exactly one explicit pull before its complete vector", async () => {
+  const input = fixture({ imageCached: false, diagnosticFailedAssertions: ["public_core_unexpected_object_present"] });
+  const result = await runVerifyDiagnosticRehearsal({ ...input, allowImagePull: true });
+  assert.equal(result.status, "DIAGNOSTIC_COMPLETE_CLEAN");
+  assert.equal(result.observation.imagePulled, true);
+  assert.equal(result.effects.imagePulls, 1);
+  assert.equal(input.docker.calls.filter((kind) => kind === "image.pull").length, 1);
+  assert.equal(input.docker.calls.filter((kind) => kind === "image.inspect").length, 2);
+  assert.deepEqual(result.outcome.failedAssertionIds, ["public_core_unexpected_object_present"]);
+  assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+});
+
 test("cached-image rehearsal proves schema, restart, rollback and exact cleanup", async () => {
   const input = fixture();
   const result = await runRehearsal({ ...input, startedAt: "2026-08-17T00:00:00.000Z" });
@@ -421,6 +435,7 @@ test("the ordinary command is separate from the frozen historical runner", async
   const packageJson = JSON.parse(await readFile(path.join(repositoryRoot, "package.json"), "utf8")) as { scripts: Record<string, string> };
   assert.equal(packageJson.scripts["r4:postgres:rehearse"], "node scripts/r4-disposable-postgres-rehearsal.mjs");
   assert.equal(packageJson.scripts["r4:postgres:diagnose"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose");
+  assert.equal(packageJson.scripts["r4:postgres:diagnose:pull"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose --allow-image-pull");
   assert.doesNotMatch(source, /grant\.pending|owner-approval-receipt|INTEGRATION_CAMPAIGN/u);
   assert.match(source, /historicalResourcesTouched: false/u);
 });

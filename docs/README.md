@@ -4,11 +4,10 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77's complete body-free 18-predicate diagnostic is repository Technical
-Review Green. Its one cached-image invocation found the exact digest absent
-and stopped with zero pull, zero resource creation, zero PostgreSQL/SQL and
-exact cleanup. The vector is unobserved; correction and final rehearsal remain
-locked pending a new Owner decision.
+#77's complete body-free 18-predicate diagnostic and one-pull replacement entry
+are repository Technical Review Green. The Owner authorized one exact pull and
+one replacement diagnostic; correction and one final lifecycle remain
+conditional on the complete vector.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
@@ -16,10 +15,11 @@ See the
 the
 [`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

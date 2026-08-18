@@ -27,6 +27,13 @@ and stopped before resource creation, PostgreSQL or SQL. Pull remained zero and
 cleanup was exact. The vector is unobserved, so correction and final rehearsal
 remain locked pending a new Owner decision.
 
+**Replacement decision:** the Owner subsequently authorized one exact image
+pull and one replacement complete-vector diagnostic. A vector consisting only
+of already reviewed PostgreSQL catalog-expression assumptions may proceed
+directly to one consolidated verify-only correction and at most one final
+cached-image lifecycle. A second pull, a second replacement diagnostic, a
+third run, Production, real data, push, merge and Gate C remain closed.
+
 ## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
 
 **Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL

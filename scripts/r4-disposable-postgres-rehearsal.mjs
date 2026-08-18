@@ -178,6 +178,9 @@ export function parseCliArguments(argv) {
   if (argv.length === 1 && argv[0] === "diagnose") {
     return Object.freeze({ mode: "diagnose", allowImagePull: false });
   }
+  if (argv.length === 2 && argv[0] === "diagnose" && argv[1] === "--allow-image-pull") {
+    return Object.freeze({ mode: "diagnose", allowImagePull: true });
+  }
   if (argv.length === 1 && argv[0] === "--allow-image-pull") {
     return Object.freeze({ mode: "rehearse", allowImagePull: true });
   }
@@ -767,10 +770,11 @@ export async function runRehearsal({
 }
 
 export async function runVerifyDiagnosticRehearsal({
-  spec, docker, postgres, sql, startedAt = new Date().toISOString(),
+  spec, docker, postgres, sql, startedAt = new Date().toISOString(), allowImagePull = false,
 }) {
   const state = {
     host: null,
+    imagePulled: false,
     image: null,
     port: null,
     readinessAttempts: 0,
@@ -785,7 +789,13 @@ export async function runVerifyDiagnosticRehearsal({
   try {
     state.host = await docker.version();
     state.image = await docker.inspectImage();
-    if (state.image === null) fail("disposable_postgres_image_not_cached", "docker.image.inspect");
+    if (state.image === null) {
+      if (!allowImagePull) fail("disposable_postgres_image_not_cached", "docker.image.inspect");
+      await docker.pullImage();
+      state.imagePulled = true;
+      state.image = await docker.inspectImage();
+      if (state.image === null) fail("disposable_postgres_image_missing_after_pull", "docker.image.inspect", { ambiguous: true });
+    }
     if (state.image.platform !== IMAGE_PLATFORM) fail("disposable_postgres_image_platform_mismatch", "docker.image.inspect");
     await docker.requireAbsent("container", spec.names.container);
     await docker.requireAbsent("network", spec.names.network);
@@ -835,7 +845,7 @@ export async function runVerifyDiagnosticRehearsal({
     }),
     observation: Object.freeze({
       host: state.host,
-      imagePulled: false,
+      imagePulled: state.imagePulled,
       image: state.image,
       publishedHost: state.port === null ? null : "127.0.0.1",
       publishedPort: state.port,
@@ -850,7 +860,7 @@ export async function runVerifyDiagnosticRehearsal({
     effects: Object.freeze({
       syntheticDataOnly: true,
       historicalResourcesTouched: false,
-      imagePulls: 0,
+      imagePulls: state.imagePulled ? 1 : 0,
       providerCalls: 0,
       realGuestRecords: 0,
       productionEffects: 0,
@@ -877,7 +887,7 @@ async function main() {
     const docker = createPhysicalDocker(spec, runtime, socketPath);
     const postgres = createPhysicalPostgres(spec, runtime);
     result = cli.mode === "diagnose"
-      ? await runVerifyDiagnosticRehearsal({ spec, docker, postgres, sql })
+      ? await runVerifyDiagnosticRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull })
       : await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
   } catch (error) {
     result = Object.freeze({

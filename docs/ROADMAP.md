@@ -2,17 +2,17 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77's complete 18-predicate body-free diagnostic is repository Technical
-Review Green, but its one cached-image invocation found the exact digest absent
-and stopped before resource creation or SQL. No pull occurred and cleanup is
-exact. The complete vector is unobserved, so a new Owner decision is required;
-this Enabler still earns `0 Product Progress` and #67 remains `Building / At
-Risk`.
+#77's complete 18-predicate body-free diagnostic and one-pull replacement entry
+are repository Technical Review Green. The next step is one exact pull plus one
+replacement vector diagnostic, then only on a matching vector one consolidated
+verify-only correction and one final lifecycle. This Enabler still earns
+`0 Product Progress`; #67 remains `Building / At Risk`.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

@@ -2,16 +2,17 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77's complete assertion-vector command is repository Technical Review Green,
-but its single cached-image invocation failed cleanly because the exact digest
-was no longer cached. It made no pull, created no resources and reached no
-PostgreSQL/SQL. The vector is unobserved; correction and final rehearsal remain
-locked. #67 stays `Building / At Risk` and earns no product progress here.
+#77's complete assertion-vector command and its one-pull replacement entry are
+repository Technical Review Green. The Owner authorized one exact image pull
+and one replacement vector diagnostic; correction and one final lifecycle are
+conditional on the resulting complete vector. No second pull, replacement
+diagnostic or third run exists. #67 stays `Building / At Risk`.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

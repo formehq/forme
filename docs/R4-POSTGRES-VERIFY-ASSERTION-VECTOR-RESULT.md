@@ -1,7 +1,20 @@
 # R4 PostgreSQL complete assertion-vector result
 
-Status: `REPOSITORY_TECHNICAL_REVIEW_GREEN / DIAGNOSTIC_FAILED_CLEAN`,
+Status: `REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN / DIAGNOSTIC_AUTHORIZED`,
 2026-08-17.
+
+## Replacement envelope
+
+The Owner authorized one exact anonymous image pull followed by one replacement
+complete-vector diagnostic. The exact CLI is
+`npm run r4:postgres:diagnose:pull`. Repository tests prove this is the only
+diagnostic-with-pull argument shape, performs at most one pull and two image
+inspects, and cannot fall through to a second pull. The prior failed-clean
+cache-only invocation remains immutable history.
+
+If and only if the complete vector contains reviewed PostgreSQL 16 catalog
+expression assumptions, the same envelope permits one consolidated verify-only
+correction and at most one final cached-image lifecycle. No third run exists.
 
 ## Physical diagnostic outcome
 
@@ -57,12 +70,16 @@ rehearsal proves restart persistence and rollback.
 - runner candidate:
   `sha256:edee318bae6cf070631afb21aa9eca305150d8434ebd81f15bc7a2c6a5057aab`;
 - test candidate:
-  `sha256:84973553ad3ea9bfe870683a251dd6a9df1a8c878b2eaabfe9aa71e51187b914`.
+  `sha256:84973553ad3ea9bfe870683a251dd6a9df1a8c878b2eaabfe9aa71e51187b914`;
+- replacement runner candidate:
+  `sha256:e4315d2835e1fbb4554dbfd3c558f14e6d45db984a7e737c2482e3be0c26a30b`;
+- replacement test candidate:
+  `sha256:62d8155fbeb1d149287fb9138dfd0be0760718906ad9b282c26253f27339f2bb`.
 
 ## Validation evidence
 
-- focused #77 harness: `16 passed / 0 failed`;
-- offline R4: `591 passed / 0 failed / 111` frozen historical physical tests
+- focused #77 harness: `17 passed / 0 failed`;
+- offline R4: `592 passed / 0 failed / 111` frozen historical physical tests
   skipped;
 - spine: `45 passed / 0 failed`;
 - Gate-B Core: one unrelated concurrent path-chain test initially failed, then
@@ -72,8 +89,8 @@ rehearsal proves restart persistence and rollback.
 
 ## Runnable path and challenge points
 
-The consumed diagnostic command was `npm run r4:postgres:diagnose`; do not
-repeat it without a new Owner decision.
+The replacement command is `npm run r4:postgres:diagnose:pull`. It is authorized
+once and must not be repeated.
 
 The Owner should challenge any result that is not
 `DIAGNOSTIC_COMPLETE_CLEAN`, does not report `evaluatedAssertionCount: 18`,
@@ -83,7 +100,8 @@ envelope and cannot authorize a verify correction.
 
 ## Current stop
 
-`POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.

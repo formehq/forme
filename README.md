@@ -9,18 +9,18 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 ### Superseding execution update — 2026-08-17
 
 The complete body-free 18-predicate diagnostic is repository Technical Review
-Green. Its single authorized cached-image invocation observed Docker
-`29.3.1 / linux/arm64`, but the exact image was not cached. It made no pull,
-created no resources and reached no PostgreSQL or SQL; cleanup is exact. The
-complete vector was therefore not observed, and correction/final rehearsal
-remain locked. This remains `0 Product Progress`. See the
+Green. After its cached-image stop, the Owner authorized one exact pull and one
+replacement diagnostic. The pull-enabled diagnostic entry is now repository
+Green and cannot pull twice. Correction and one final lifecycle remain
+conditional on the complete vector. This remains `0 Product Progress`. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
 [assertion-vector result](docs/R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
 

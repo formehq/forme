@@ -3,26 +3,26 @@
 ## Current verdict — R4 execution management reset
 
 Enabler #77 still has no product progress. Its complete body-free assertion
-vector is repository Technical Review Green, but the single cached-image
-invocation found the exact digest absent. It made no pull, created no resource,
-reached no PostgreSQL/SQL and cleaned exactly. Zero of 18 predicates were
-physically evaluated; restart/rollback proof remains absent.
+vector and exact one-pull replacement entry are repository Technical Review
+Green. One pull and one replacement diagnostic are authorized; correction and
+one final lifecycle remain conditional on the complete vector.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation: focused assertion-vector harness `16/16`; constraint
+Repository validation: focused assertion-vector harness `17/17`; constraint
 set `172/172`; offline R4
-`591 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
+`592 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
 `45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
 diff-check Green.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
 
