@@ -2,6 +2,24 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
+
+**Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL
+`linux/arm64` digest and two full body-free lifecycles. The first named
+`public_core_constraint_inventory_drift`. Repository proof showed the exact
+same 172 signatures with four ordering-only positions, so commit `f005cbe`
+changed only the verify comparator. The final lifecycle passed that assertion
+and stopped at `public_core_unexpected_object_present`.
+
+**Boundary:** the one pull and both lifecycle slots are consumed. Both runs
+cleaned exact-owned resources and used synthetic data only. Restart, rollback,
+Production, real data, push, merge and Gate C remain unproved or closed.
+
+**Reason:** the first correction is now physically proven, but a second
+independent assertion at the same verify boundary means another narrow
+patch/run loop would violate the reset's drift-control rule. Review the whole
+remaining verify contract before seeking any new runtime envelope.
+
 ## 2026-08-17 — Diagnose verify by closed enum and stop when the exact image is absent
 
 **Decision:** the Owner approved a strict body-free diagnostic that can emit

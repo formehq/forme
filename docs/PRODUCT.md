@@ -2,21 +2,22 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77 remains `Needs Decision`. The approved body-free diagnostic is
-repository Green, but its first invocation found the exact image absent from
-cache and stopped before PostgreSQL under the no-pull rule. No Docker resource
-or SQL effect occurred and exact cleanup was Green. The prior schema-apply
-proof still stands; the named verify assertion remains unknown.
+Enabler #77 remains `Needs Decision`. The approved continuation pulled the
+exact image once and used both full lifecycles. It proved and corrected one
+verify-only ordering defect without changing the 172-constraint set, then the
+final lifecycle stopped at `public_core_unexpected_object_present`. Both runs
+were synthetic and cleaned exactly; restart and rollback proof remain absent.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`. The next action is an Owner decision on exact-image acquisition, not a
-guessed verify correction. See
+Risk`. The next action is a repository-only architecture review of the whole
+remaining verify contract, not another one-assertion patch/run loop. See
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

@@ -4,21 +4,21 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77 now has a repository-Green body-free diagnostic that can emit only one of
-18 committed verify assertion identifiers. Its first approved invocation
-found the exact image absent from cache and stopped under the no-pull rule.
-It created no Docker resource, reached no PostgreSQL/SQL and cleaned exactly.
-The verify assertion remains unobserved; the next decision is exact-image
-acquisition, not a guessed verify change.
+#77 consumed its one exact image pull and two full PostgreSQL lifecycles. The
+first named a constraint-ordering defect; `f005cbe` corrected only that verify
+comparison and the final lifecycle passed it. The final run then stopped at
+`public_core_unexpected_object_present`. Both runs cleaned exactly, but the
+complete restart/rollback proof remains absent and no runtime budget remains.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

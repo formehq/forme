@@ -8,19 +8,20 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
-The strict body-free #77 verify diagnostic is repository Green at `8f45604`.
-Its first approved invocation stopped before PostgreSQL because the exact
-image was no longer cached. The no-pull boundary held: no Docker resource,
-PostgreSQL connection or SQL effect occurred, and exact cleanup is Green. The
-named `P0001` assertion remains unknown, so no verify correction is claimed.
-This remains `0 Product Progress`; the next decision is whether to authorize
-one exact-image acquisition. See the
+The approved #77 continuation consumed its one exact image pull and two full
+PostgreSQL lifecycles. The first named a constraint-inventory ordering drift;
+verify-only commit `f005cbe` proved the same 172 constraints and corrected only
+their comparison order. The final lifecycle passed that check, then stopped at
+`public_core_unexpected_object_present`. Both runs cleaned exactly, but
+restart/rollback proof is still absent. This remains `0 Product Progress` and
+#77 is `Needs Decision`; no further pull or lifecycle is authorized. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
 

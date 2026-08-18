@@ -2,30 +2,32 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 has real local evidence but no product progress. The body-free
-verify diagnostic is repository Green and exposes only one of 18 committed
-assertion identifiers. Its first invocation found the exact image absent from
-cache, so the no-pull rule stopped before resources, PostgreSQL or SQL. The
-named verify assertion was not observed.
+Enabler #77 has real local evidence but no product progress. One exact image
+pull enabled two full PostgreSQL lifecycles. The first identified
+`public_core_constraint_inventory_drift`; static proof showed the same 172
+signatures with four ordering-only positions, and `f005cbe` corrected that
+comparison. The final lifecycle advanced to
+`public_core_unexpected_object_present` and stopped.
 
-Current-run container/network/volume, credential and runtime residue are zero;
-historical resources were untouched. Provider, real Guest, production, public
-traffic and Gate C effects are zero. The next decision is exact-image
-acquisition; repeating against the same absent cache adds no evidence.
+Each run removed its container, network, volume, credential and runtime root.
+Provider, real Guest, production, public traffic and Gate C effects are zero.
+The complete verify/restart/rollback proof is absent and the budget is
+exhausted; the next action is architecture review, not another retry.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation: focused `11/11`; offline R4 `585 passed / 0 failed /
-111 frozen historical-runner tests skipped`; spine `45/45`, Gate-B Core
-`146/146`, spine/Room typecheck, docs audit and diff-check Green.
+Repository validation: focused `12/12`; constraint set `172/172`; offline R4
+`587 passed / 0 failed / 111 frozen historical-runner tests skipped`;
+spine/Room typecheck, docs audit and diff-check Green.
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
 

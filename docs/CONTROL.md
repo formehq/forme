@@ -2,21 +2,21 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77 is `Needs Decision / Blocked`, not Ready. The strict body-free verify
-diagnostic is repository Green at `8f45604`, but its first approved invocation
-found the exact image absent from cache. The no-pull rule stopped before
-resource creation, PostgreSQL or SQL; every exact-owned resource and local
-runtime path is absent. The named verify assertion remains unobserved.
+#77 is `Needs Decision / Blocked`, not Ready. One exact image pull and both
+approved full lifecycles are consumed. The constraint inventory mismatch was
+proved to be a four-position ordering-only defect and corrected at `f005cbe`;
+the final lifecycle passed it and stopped at the independent body-free
+assertion `public_core_unexpected_object_present`. Both runs cleaned exactly.
 
-Do not repeat the same diagnostic against an unchanged empty cache or create a
-child Enabler/Card chain. The next task is one Owner decision on acquiring the
-same exact image. Any schema or verify meaning change still returns to the
-Owner. #67 stays `Building / At Risk` and earns no product progress here.
+Do not run again, pull again, or start another narrow correction chain. The
+next task is one repository-only architecture review of the remaining verify
+contract. #67 stays `Building / At Risk` and earns no product progress here.
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

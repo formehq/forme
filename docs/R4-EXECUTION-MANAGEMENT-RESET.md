@@ -28,18 +28,24 @@ Outcome after exercising this model and the later compatibility and diagnostic d
   lifecycle with no pull and no retry;
 - that correction applied the complete schema, then failed cleanly at the
   first read-only verify with project-defined `P0001 / exec_stmt_raise`;
-- the later strict body-free diagnostic became repository Green, but its first
-  invocation found the exact image absent from cache and stopped under the
-  no-pull rule before resources, PostgreSQL or SQL;
-- all current-run residue is zero, the named assertion remains unknown, and
-  the next action is one decision on exact-image acquisition.
+- the later strict body-free diagnostic became repository Green; one approved
+  pull then acquired the exact image and the first full lifecycle named
+  `public_core_constraint_inventory_drift`;
+- static proof found the same 172 constraints with four ordering-only
+  positions; verify-only commit `f005cbe` corrected that comparison;
+- the final lifecycle passed the corrected assertion and stopped at
+  `public_core_unexpected_object_present`;
+- all current-run residue is zero, both full lifecycle slots are consumed, and
+  the next action is repository-only architecture review rather than another
+  child correction or runtime attempt.
 
 Current stop:
 
-`BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+`DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 The reset-start truth below is retained as the checkpoint that preceded #77.
 

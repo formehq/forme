@@ -2,21 +2,22 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-The separately approved #77 body-free verify diagnostic is repository Green.
-Its first invocation observed that the exact image was absent from cache and
-stopped before Docker resource creation or PostgreSQL under the no-pull rule.
-Cleanup remained Green; the named verify assertion was not observed.
+The separately approved #77 continuation consumed one exact pull and two
+disposable PostgreSQL lifecycles. It proved one verify-only ordering defect,
+then stopped cleanly at the next independent allowlisted assertion. Exact
+resource cleanup held; no provider, Guest, production, public or Gate C effect
+occurred.
 
-This does not alter NH1/NH2. It confirms both halves of the boundary: ordinary
-disposable computation can advance under one outcome envelope, while a missing
-runtime prerequisite stops without guessing durable meaning. Exact-image
-acquisition now returns to the Owner. Production, Guest/provider, public
-traffic and Gate C remain closed.
+NH1/NH2 are unchanged. The result reinforces the boundary: local computation
+may diagnose under an outcome envelope, but exhausted evidence budgets stop
+before repeated meaning changes. The next action is repository-only
+architecture review; no further runtime is implicit.
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v2",
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v3",
   "issue": 77,
-  "status": "VERIFY_DIAGNOSTIC_BLOCKED_IMAGE_CACHE_ABSENT",
+  "status": "VERIFY_FAILED_CLEAN_LIFECYCLE_BUDGET_EXHAUSTED",
   "productProgress": 0,
   "attemptBudget": {
     "originalEnvelope": {
@@ -16,12 +16,13 @@
       "anonymousImagePullsAllowed": 0,
       "anonymousImagePullsConsumed": 0
     },
-    "bodyFreeVerifyDiagnostic": {
-      "diagnosticInvocationsAllowed": 2,
-      "diagnosticInvocationsConsumed": 1,
-      "fullLifecyclesStarted": 0,
-      "anonymousImagePullsAllowed": 0,
-      "anonymousImagePullsConsumed": 0
+    "bodyFreeVerifyContinuation": {
+      "cacheProbeInvocationsAllowed": 1,
+      "cacheProbeInvocationsConsumed": 1,
+      "fullPostgresLifecyclesAllowed": 2,
+      "fullPostgresLifecyclesConsumed": 2,
+      "anonymousImagePullsAllowed": 1,
+      "anonymousImagePullsConsumed": 1
     }
   },
   "bindings": {
@@ -45,6 +46,20 @@
       "runnerSha256": "sha256:ed62e206df9b002ef42922e96d5f363f8cfe8bd35d0bae1f8cd268fd75171c13",
       "testSha256": "sha256:162831e64e5595ff90a6b0775b204d6e911ad06450ed94ab7fd8a7cf53de6f0d",
       "verifyAssertionEnumCount": 18
+    },
+    "singlePullSwitch": {
+      "commit": "62ec61403c6432155e248c8448bf45baf657b15c",
+      "tree": "1a54b5e1203254d10ecff3266fc5e84b06c33be5"
+    },
+    "constraintInventoryCorrection": {
+      "commit": "f005cbef7b8f1f08e937f97626defb2c22e5e303",
+      "tree": "4be485cc5a163123524dd06774b3235d80f416cc",
+      "schemaSqlSha256": "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
+      "verifySqlSha256": "sha256:f964e22b4a2b0a7989e6286e018d1436c3cec889216a9eb87a06a62e5c27df97",
+      "rollbackSqlSha256": "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
+      "runnerSha256": "sha256:4d3f93638882a5718b9208b1613f16f84cac56315bab23f68e536bed52a2b432",
+      "rehearsalTestSha256": "sha256:4ff46b22b648bbd308d2ca757780b4dee5e82531a8d3ef592a414879f61ca022",
+      "postgresContractTestSha256": "sha256:a817cf9fb73468591bb540cd65679ce3f17d4f2799d8a1b8d1db150f19a32b72"
     }
   },
   "attempts": [
@@ -172,15 +187,103 @@
         "volume": true,
         "credentialAndRuntimeRoot": true
       }
+    },
+    {
+      "runId": "5198b53151ef8858",
+      "bindingSet": "schemaCompatibilityCorrection+bodyFreeVerifyDiagnostic+singlePullSwitch",
+      "startedAt": "2026-08-17T23:59:24.857Z",
+      "finishedAt": "2026-08-17T23:59:29.559Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": true,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": true,
+      "initialReadinessAttempts": 3,
+      "schemaApplied": true,
+      "verifyCount": 0,
+      "failure": {
+        "code": "disposable_postgres_sql_failed",
+        "phase": "postgres.verify.initial",
+        "postgres": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise",
+          "verifyAssertion": "public_core_constraint_inventory_drift"
+        }
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
+    },
+    {
+      "runId": "c431461828c2a578",
+      "bindingSet": "constraintInventoryCorrection",
+      "startedAt": "2026-08-18T00:03:42.786Z",
+      "finishedAt": "2026-08-18T00:03:44.311Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": false,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": true,
+      "initialReadinessAttempts": 2,
+      "schemaApplied": true,
+      "verifyCount": 0,
+      "restartCount": 0,
+      "rollbackApplied": false,
+      "failure": {
+        "code": "disposable_postgres_sql_failed",
+        "phase": "postgres.verify.initial",
+        "postgres": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise",
+          "verifyAssertion": "public_core_unexpected_object_present"
+        }
+      },
+      "dockerCallCounts": {
+        "version": 1,
+        "image.inspect": 1,
+        "container.list": 3,
+        "network.list": 3,
+        "volume.list": 3,
+        "network.create": 1,
+        "network.inspect": 2,
+        "volume.create": 1,
+        "volume.inspect": 2,
+        "container.create": 1,
+        "container.inspect": 4,
+        "container.start": 1,
+        "container.stop": 1,
+        "container.rm": 1,
+        "network.rm": 1,
+        "volume.rm": 1
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
     }
   ],
   "validation": {
     "focusedHarnessTests": {
-      "passed": 11,
+      "passed": 12,
       "failed": 0
     },
     "offlineR4Regression": {
-      "passed": 585,
+      "passed": 587,
       "failed": 0,
       "skippedHistoricalPhysicalRunnerTests": 111
     },
@@ -206,14 +309,16 @@
     "productionEffects": 0,
     "publicTrafficEffects": 0,
     "gateCEffects": 0,
-    "exactImageCachedAtLatestDiagnostic": false,
-    "imagePullsInLatestDiagnostic": 0
+    "exactImageCachedAtLatestDiagnostic": true,
+    "imagePullsInApprovedContinuation": 1,
+    "imagePullsInLatestLifecycle": 0,
+    "fullPostgresLifecyclesInApprovedContinuation": 2
   },
   "inference": {
-    "classification": "BODY_FREE_VERIFY_DIAGNOSTIC_READY_IMAGE_CACHE_ABSENT",
+    "classification": "VERIFY_SUCCESSOR_ASSERTION_OBSERVED_BUDGET_EXHAUSTED",
     "confidence": "HIGH",
-    "basis": "The committed diagnostic maps only P0001 plus exec_stmt_raise in a verify phase to one of the 18 committed assertion identifiers and passed repository validation. Its first approved invocation observed that the exact image was no longer cached, performed no pull, created no Docker resource, and reached no PostgreSQL or SQL.",
-    "suspectedArea": "The named verify assertion remains unknown. No verify-only correction is justified until a later authorized lifecycle can run against the exact image."
+    "basis": "The only authorized anonymous pull acquired the exact linux/arm64 digest. The first full lifecycle applied the schema and named public_core_constraint_inventory_drift. Repository comparison proved that the same 172 signatures differed only at four positions because the query ordered table/name while the fixed inventory used full signatures. Commit f005cbef corrected only that ordering. The final lifecycle passed that assertion and stopped at the next allowlisted assertion, public_core_unexpected_object_present. Both lifecycles cleaned their exact-owned resources and runtime roots.",
+    "suspectedArea": "The broad unexpected-object assertion combines several catalog predicates, so the physical evidence does not identify which predicate disagreed. Static review finds another mixed ordering domain in the pg_type inventory (catalog name order versus text-signature order), but that is a hypothesis, not a proven correction. No lifecycle, pull, or further verify change remains authorized."
   },
-  "stop": "BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN / EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES / VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "stop": "DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN / CONSTRAINT_INVENTORY_CORRECTION_PROVEN / UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED / ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

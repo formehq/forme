@@ -2,20 +2,22 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77 remains `Needs Decision`. Its repository-Green body-free diagnostic can
-identify a committed verify assertion without exposing PostgreSQL bodies, but
-the first invocation found the exact image absent from cache and stopped
-before PostgreSQL. No pull or resource creation ran and cleanup was exact.
-This Enabler still earns `0 Product Progress`; #67 remains `Building / At Risk`.
+#77 remains `Needs Decision`. Its one pull and two full lifecycles are consumed.
+The first run proved a verify-only constraint ordering defect; `f005cbe`
+corrected it, and the final run advanced to the independent
+`public_core_unexpected_object_present` assertion. Both cleaned exactly. This
+Enabler still earns `0 Product Progress`; #67 remains `Building / At Risk`.
 
-The next roadmap action is one Owner decision on exact-image acquisition. Do
-not guess or change `verify.sql` until the named assertion is observed. The
-Public Room → knock → candidate → response path is unchanged.
+The next roadmap action is one repository-only architecture review of all
+remaining verify predicates. Do not run or pull again, and do not create a
+child correction chain. The Public Room → knock → candidate → response path
+is unchanged.
 
-Current stop: `BODY_FREE_VERIFY_DIAGNOSTIC_REPOSITORY_GREEN /
-EXACT_IMAGE_CACHE_ABSENT / DIAGNOSTIC_STOPPED_BEFORE_POSTGRES /
-VERIFY_ASSERTION_NOT_OBSERVED / IMAGE_ACQUISITION_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
+CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
+UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
+ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 
