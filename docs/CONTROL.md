@@ -28,7 +28,26 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
   bounded check. The execution budget is exhausted, so another local run is
   not an ordinary retry.
 - **Next action:** architecture review of restart readiness and the integration
-  shape. No Docker or PostgreSQL attempt is currently authorized.
+  shape is complete. Review the three current integration slices and the
+  repository-only readiness correction. No Docker or PostgreSQL attempt is
+  currently authorized.
+
+### Repository-only restart-readiness correction
+
+- One shared controller now drives production and focused readiness tests.
+- Failure preserves the exact attempt count and one of seven closed body-free
+  outcome classes instead of reporting restart attempts as zero.
+- Restart re-inspects the exact-owned container, running state and unchanged
+  loopback port before PostgreSQL probing.
+- Focused tests are `22/22`; offline R4 is `598/598` with `111` historical
+  physical skips; typecheck, docs and diff checks are Green.
+- Review routing is frozen in
+  [`R4-REVIEWABLE-INTEGRATION-PACKAGE.md`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
+- Physical execution, push, merge, Production and Gate C remain unrequested.
+
+Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
+REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Current local and remote integration truth
 

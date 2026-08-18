@@ -2,6 +2,25 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Replace blind restart retry with one reviewable integration outcome
+
+**Decision:** the Owner approved one medium-grained repository-only envelope to
+correct restart readiness and organize the current local line for review. The
+Agent may implement and validate the controller, tests, concise evidence and
+three-slice integration package without per-hash approvals, then must stop
+before Docker/PostgreSQL execution, push or merge.
+
+**Architecture:** production and tests share one readiness state machine. It
+records exact failed attempts, retries only a closed transient-connect class,
+stops body-free on six other failure classes, and re-proves container running
+state plus the stable loopback port after restart. Product persistence,
+disposable proof and operating truth form the current review; historical
+Cards/Addenda/Reviews remain immutable archive evidence.
+
+**Outcome:** focused `22/22`, offline R4 `598/598` with `111` historical skips,
+typecheck/docs/diff Green. This is Technical Review, not a new physical result
+or Product Progress. Restart persistence and rollback remain unproved.
+
 ## 2026-08-17 — Replace serial verify discovery with one complete assertion vector
 
 **Decision:** the Owner approved one consolidated #77 envelope. Repository

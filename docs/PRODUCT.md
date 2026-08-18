@@ -17,6 +17,15 @@ INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
 EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
+The subsequent repository-only architecture correction is Green. It makes the
+restart gate observable through exact attempt counts and seven closed body-free
+outcomes, rechecks the running container and stable loopback port, and makes
+tests execute the production readiness controller. It does not change the
+physical truth above or earn Product Progress. The next integration review is
+organized by the
+[`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md), and
+physical execution remains unrequested.
+
 ## Execution-management reset before #77 (historical checkpoint)
 
 The Owner has reset R4 execution management around the product outcome rather

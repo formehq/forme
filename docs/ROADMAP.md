@@ -14,6 +14,16 @@ INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
 EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
+Repository follow-up: the restart-readiness controller correction and
+three-slice integration package are Technical Review Green. The next gate is a
+review of current product persistence, disposable proof and operating truth;
+historical authority artifacts remain archive evidence. No new lifecycle,
+Docker/PostgreSQL effect, push or merge is authorized by this correction.
+
+Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
+REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
 ## Execution-management reset before #77 (historical checkpoint)
 
 R4 #67 is `Building / At Risk`. The product path is unchanged: complete one
