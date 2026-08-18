@@ -4,10 +4,11 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77's complete body-free 18-predicate diagnostic and one-pull replacement entry
-are repository Technical Review Green. The Owner authorized one exact pull and
-one replacement diagnostic; correction and one final lifecycle remain
-conditional on the complete vector.
+#77's replacement diagnostic consumed one exact pull, evaluated all 18
+predicates and found only the reviewed catalog-ordering assertion. The
+consolidated verify-only correction passed repository validation. The final
+lifecycle passed initial verify, then failed cleanly at restart readiness;
+cleanup passed and all execution allowances are exhausted.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
@@ -15,11 +16,10 @@ See the
 the
 [`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

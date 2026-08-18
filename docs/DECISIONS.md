@@ -34,6 +34,17 @@ directly to one consolidated verify-only correction and at most one final
 cached-image lifecycle. A second pull, a second replacement diagnostic, a
 third run, Production, real data, push, merge and Gate C remain closed.
 
+**Replacement outcome:** run `0dddf25aee37504c` consumed the one pull and
+evaluated all 18 predicates. Its only failure was
+`public_core_unexpected_object_present`, matching the reviewed mixed catalog
+ordering assumption. Commit `e8db0e47` applied one consolidated verify-only
+text/`C` ordering correction without changing schema, expected inventories or
+catalog signature. Repository validation passed. Final run
+`71ac0e393653db72` then passed schema apply and initial verify, performed one
+restart, and failed cleanly at bounded restart readiness before persistence
+proof or rollback. Exact cleanup passed. The envelope is exhausted and any
+further local execution requires a new Owner decision.
+
 ## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
 
 **Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL

@@ -8,19 +8,20 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
-The complete body-free 18-predicate diagnostic is repository Technical Review
-Green. After its cached-image stop, the Owner authorized one exact pull and one
-replacement diagnostic. The pull-enabled diagnostic entry is now repository
-Green and cannot pull twice. Correction and one final lifecycle remain
-conditional on the complete vector. This remains `0 Product Progress`. See the
+The replacement diagnostic pulled the exact image once, evaluated all 18
+predicates and found only the reviewed catalog-ordering assertion. The
+consolidated verify-only correction then passed repository validation and the
+final lifecycle passed schema apply plus initial verify. It failed cleanly at
+restart readiness before persistence proof or rollback. Every resource was
+removed, every execution allowance is consumed, and this remains
+`0 Product Progress`. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
 [assertion-vector result](docs/R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
 

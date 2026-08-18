@@ -1,16 +1,26 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `FAILED_CLEAN / COMPLETE_VECTOR_NOT_OBSERVED`, 2026-08-17.
+Status: `FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED`,
+2026-08-17.
 
 ## Plain-language result
 
-The complete 18-predicate body-free diagnostic reached repository Technical
-Review Green at commit `934e760`. Its single cached-image invocation, run
-`58fde18b4ff6cde3`, observed Docker `29.3.1 / linux/arm64` but found the exact
-image absent. It made no pull, created no resource and reached no PostgreSQL or
-SQL. All exact-owned names and the private runtime root are absent. Because no
-assertion vector was observed, the conditional correction and final lifecycle
-remain locked.
+Replacement diagnostic run `0dddf25aee37504c` pulled the exact image once,
+evaluated all 18 assertions and returned one closed failure identifier:
+`public_core_unexpected_object_present`. This exactly matched the reviewed
+PostgreSQL catalog-ordering class. The run cleaned every exact-owned resource.
+
+The consolidated verify-only correction at `e8db0e47` gave every fixed
+inventory comparison the same explicit text `C` ordering. It changed no
+schema, rollback, expected set, catalog-manifest query/result or business
+meaning. Full repository validation passed.
+
+Final run `71ac0e393653db72` applied the schema and passed the corrected initial
+verify, then performed one container stop/start. PostgreSQL did not become
+ready within the bounded restart window. Post-restart verify, persistence
+proof and rollback were not reached. Image pull was `0`; container, network,
+volume, credential and runtime root were all removed. The final run budget is
+consumed and no retry is authorized.
 
 Earlier in the same #77 history, the one approved anonymous pull acquired the
 exact PostgreSQL `linux/arm64` digest. The first full diagnostic lifecycle
@@ -51,8 +61,14 @@ wiring is not Green and this remains `0 Product Progress`.
   `934e76009c4628c557f533e5e5bc0657d6071b04`, tree
   `0823d0ca15bf1dff391ccb4b985fa634352cef67`, derived diagnostic SQL
   `sha256:395403c01b38f259f76a986af84a9cc7082cfbd01b90ec79522bb2a65c9fb8fc`;
-- current validation: focused `16/16`, offline R4
-  `591/591` with `111` historical physical skips, spine `45/45`, Gate-B Core
+- replacement diagnostic entry: commit `16bd930a3e0171c9d5b26d1d09cdbb1111be5f24`,
+  tree `6a4daf093a2c8355fa393487bf0aaacf5ea2e45a`;
+- consolidated inventory-ordering correction: commit
+  `e8db0e47bccdf51d47cc98f0ce17278bc5ea1115`, tree
+  `5618016267368b52f47204fd06d6f187205584df`, corrected verify
+  `sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e`;
+- current validation: focused `17/17`, offline R4
+  `593/593` with `111` historical physical skips, spine `45/45`, Gate-B Core
   final rerun `146/146`, typecheck/docs/diff Green.
 
 ## Diagnostic invocation
@@ -64,26 +80,32 @@ wiring is not Green and this remains `0 Product Progress`.
 - complete-vector run `58fde18b4ff6cde3`: cached-only image inspect reported
   exact image absent; zero pull, zero resource creation, zero PostgreSQL/SQL,
   exact residue `0`;
+- replacement vector run `0dddf25aee37504c`: one exact pull, schema apply,
+  all `18/18` assertions evaluated, sole identifier
+  `public_core_unexpected_object_present`, exact residue `0`;
+- final run `71ac0e393653db72`: cached image, schema apply and initial verify
+  Green, one restart, then `disposable_postgres_readiness_exhausted` at
+  `postgres.readiness.restart`; rollback not reached; exact residue `0`;
 - Docker host: client/server `29.3.1`, platform `linux/arm64`;
-- all approved continuation ceilings are exhausted: pull `1 / 1`, full
-  PostgreSQL lifecycles `2 / 2`;
+- all replacement ceilings are exhausted: pull `1 / 1`, diagnostic `1 / 1`,
+  consolidated correction `1 / 1`, final lifecycle `1 / 1`;
 - provider calls, real Guest records, production effects, public traffic and
   Gate C effects: `0`.
 
 ## What needs review
 
-Do not rerun or apply a catalog patch. The complete vector remains unobserved
-because the exact cache entry disappeared. A new Owner decision would need to
-choose whether one exact pull plus one replacement diagnostic and the retained
-conditional final lifecycle are worthwhile. Production, real data, push,
-merge and Gate C remain closed.
+Do not rerun. The catalog-expression correction is physically proved through
+the initial verify, but restart readiness, post-restart verification,
+persistence and rollback are not Green. A new Owner decision is required for
+any further diagnosis or lifecycle. Production, real data, push, merge and
+Gate C remain closed.
 
 Machine-readable evidence:
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
 Current stop:
 
-`POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
+`POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

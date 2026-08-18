@@ -2,17 +2,17 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77's complete 18-predicate body-free diagnostic and one-pull replacement entry
-are repository Technical Review Green. The next step is one exact pull plus one
-replacement vector diagnostic, then only on a matching vector one consolidated
-verify-only correction and one final lifecycle. This Enabler still earns
-`0 Product Progress`; #67 remains `Building / At Risk`.
+#77 consumed its one-pull replacement vector, consolidated verify correction
+and final lifecycle. The correction is physically Green through initial verify,
+but restart readiness failed before persistence proof and rollback. Cleanup is
+Green. This Enabler still earns `0 Product Progress`; #67 remains
+`Building / At Risk`, and a new Owner decision is required before more local
+execution.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

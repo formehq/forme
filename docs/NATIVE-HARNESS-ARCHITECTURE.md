@@ -2,16 +2,16 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-NH1/NH2 are unchanged. The complete 18-predicate body-free diagnostic and its
-one-pull replacement entry are repository Technical Review Green. One exact
-pull and one replacement diagnostic are authorized; correction and one final
-lifecycle remain conditional on the complete vector.
+NH1/NH2 are unchanged. The complete 18-predicate replacement diagnostic used
+one exact pull and returned only the reviewed catalog-ordering failure. The
+consolidated verify-only correction passed repository validation. The final
+lifecycle passed initial verify but failed cleanly at restart readiness; exact
+cleanup passed and no execution authority remains.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

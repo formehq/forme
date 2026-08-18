@@ -2,17 +2,17 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77's complete assertion-vector command and its one-pull replacement entry are
-repository Technical Review Green. The Owner authorized one exact image pull
-and one replacement vector diagnostic; correction and one final lifecycle are
-conditional on the resulting complete vector. No second pull, replacement
-diagnostic or third run exists. #67 stays `Building / At Risk`.
+#77's replacement diagnostic consumed one exact pull and evaluated all 18
+assertions. Its sole failure was the reviewed catalog-ordering class. The
+consolidated verify-only correction passed every repository lane, and the final
+lifecycle passed schema apply and initial verify before failing cleanly at
+restart readiness. Exact cleanup is Green; all run budgets are exhausted and
+#67 stays `Building / At Risk`.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

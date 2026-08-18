@@ -2,10 +2,12 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 still has no product progress. Its complete body-free assertion
-vector and exact one-pull replacement entry are repository Technical Review
-Green. One pull and one replacement diagnostic are authorized; correction and
-one final lifecycle remain conditional on the complete vector.
+Enabler #77 still has no product progress. Its replacement diagnostic used one
+exact pull and evaluated all 18 predicates. The sole failure matched the
+reviewed catalog-ordering class; the consolidated verify-only correction passed
+repository validation. Final run `71ac0e393653db72` passed schema apply and
+initial verify, then failed cleanly at restart readiness. Exact cleanup passed
+and all execution allowances are consumed.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
@@ -14,15 +16,14 @@ and
 
 Repository validation: focused assertion-vector harness `17/17`; constraint
 set `172/172`; offline R4
-`592 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
+`593 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
 `45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
 diff-check Green.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
 

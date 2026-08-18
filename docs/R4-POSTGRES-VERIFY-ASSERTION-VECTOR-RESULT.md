@@ -1,6 +1,6 @@
 # R4 PostgreSQL complete assertion-vector result
 
-Status: `REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN / DIAGNOSTIC_AUTHORIZED`,
+Status: `FINAL_LIFECYCLE_FAILED_CLEAN / EXECUTION_BUDGET_EXHAUSTED`,
 2026-08-17.
 
 ## Replacement envelope
@@ -16,15 +16,26 @@ If and only if the complete vector contains reviewed PostgreSQL 16 catalog
 expression assumptions, the same envelope permits one consolidated verify-only
 correction and at most one final cached-image lifecycle. No third run exists.
 
-## Physical diagnostic outcome
+## Physical diagnostic and final outcome
 
-The single authorized invocation, run `58fde18b4ff6cde3`, observed Docker
-client/server `29.3.1` on `linux/arm64`, then proved that the exact image digest
-was not cached. It stopped before resource creation, PostgreSQL and SQL. Image
-pulls were `0`; the exact container, network and volume names were absent and
-the private runtime root was removed. The complete assertion vector was not
-observed, so neither the conditional correction nor the final lifecycle is
-unlocked.
+Replacement diagnostic run `0dddf25aee37504c` used the one authorized exact
+image pull, applied the schema and evaluated all 18 predicates. Its complete
+closed vector contained only `public_core_unexpected_object_present`, exactly
+the reviewed PostgreSQL catalog-ordering class. It removed its container,
+network, volume, credential and runtime root.
+
+Commit `e8db0e47bccdf51d47cc98f0ce17278bc5ea1115` then made one consolidated
+verify-only correction: every fixed inventory comparison now converts to text
+and uses explicit `C` ordering. Schema, rollback, expected sets, business
+meaning and the catalog-manifest query/result stayed unchanged. All repository
+validation lanes passed.
+
+Final run `71ac0e393653db72` physically proved schema apply and the corrected
+initial verify. It stopped after the one required container restart because
+bounded restart readiness exhausted. Post-restart verify, persistence proof
+and rollback were not reached. The run pulled no image and again removed every
+exact-owned resource and runtime byte. The final lifecycle and all run budgets
+are consumed; there is no retry under this envelope.
 
 ## User-visible outcome
 
@@ -34,9 +45,9 @@ ordered subset of the 18 predefined assertion identifiers plus fixed
 structural counts. It does not return arbitrary PostgreSQL messages, SQL,
 catalog names or data values.
 
-No Docker, PostgreSQL or SQL effect was made while constructing and validating
-this repository result. This remains `0 Product Progress` until the disposable
-rehearsal proves restart persistence and rollback.
+The catalog correction is now physically proved by the initial verify, but
+this remains `0 Product Progress` because restart persistence and rollback are
+still unproved.
 
 ## Before and after
 
@@ -56,14 +67,15 @@ rehearsal proves restart persistence and rollback.
 - schema shape, expected inventories, catalog-manifest algorithm/result,
   rollback and business meaning: unchanged;
 - synthetic local data only;
-- image pull: `0`;
+- replacement image pull: `1 / 1`; final lifecycle image pull: `0`;
 - provider, Guest, production, public traffic and Gate C effects: `0`;
 - push and merge: not requested.
 
 ## Frozen repository bindings
 
 - schema: `sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00`;
-- verify source: `sha256:f964e22b4a2b0a7989e6286e018d1436c3cec889216a9eb87a06a62e5c27df97`;
+- corrected verify source:
+  `sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e`;
 - rollback: `sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d`;
 - derived diagnostic SQL:
   `sha256:395403c01b38f259f76a986af84a9cc7082cfbd01b90ec79522bb2a65c9fb8fc`;
@@ -75,11 +87,16 @@ rehearsal proves restart persistence and rollback.
   `sha256:e4315d2835e1fbb4554dbfd3c558f14e6d45db984a7e737c2482e3be0c26a30b`;
 - replacement test candidate:
   `sha256:62d8155fbeb1d149287fb9138dfd0be0760718906ad9b282c26253f27339f2bb`.
+- replacement entry commit/tree: `16bd930a3e0171c9d5b26d1d09cdbb1111be5f24` /
+  `6a4daf093a2c8355fa393487bf0aaacf5ea2e45a`;
+- consolidated correction commit/tree:
+  `e8db0e47bccdf51d47cc98f0ce17278bc5ea1115` /
+  `5618016267368b52f47204fd06d6f187205584df`.
 
 ## Validation evidence
 
 - focused #77 harness: `17 passed / 0 failed`;
-- offline R4: `592 passed / 0 failed / 111` frozen historical physical tests
+- offline R4: `593 passed / 0 failed / 111` frozen historical physical tests
   skipped;
 - spine: `45 passed / 0 failed`;
 - Gate-B Core: one unrelated concurrent path-chain test initially failed, then
@@ -89,19 +106,14 @@ rehearsal proves restart persistence and rollback.
 
 ## Runnable path and challenge points
 
-The replacement command is `npm run r4:postgres:diagnose:pull`. It is authorized
-once and must not be repeated.
-
-The Owner should challenge any result that is not
-`DIAGNOSTIC_COMPLETE_CLEAN`, does not report `evaluatedAssertionCount: 18`,
-contains an identifier outside the closed list, reports an image pull, or
-fails exact container/network/volume/runtime cleanup. Such a result stops the
-envelope and cannot authorize a verify correction.
+Both authorized commands are consumed and must not be repeated. The Owner
+should challenge any claim that the restart or rollback was proved: the final
+receipt says initial verify `1`, restart `1`, restart persistence `false`,
+rollback `false`, and exact cleanup `true`.
 
 ## Current stop
 
-`POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+`POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

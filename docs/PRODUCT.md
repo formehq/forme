@@ -2,20 +2,20 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77's complete body-free assertion vector and exact one-pull
-replacement entry are repository Technical Review Green. One pull and one
-replacement diagnostic are now authorized. A consolidated verify-only
-correction and one final lifecycle remain conditional on the complete vector.
+Enabler #77's replacement vector used one exact pull and evaluated all 18
+predicates. One reviewed catalog-ordering failure unlocked one consolidated
+verify-only correction. The final lifecycle passed schema apply and initial
+verify, then failed cleanly at restart readiness before persistence or
+rollback. Exact cleanup passed and the execution budget is exhausted.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
 Risk`; restart, persistence and rollback are still unproved. See the
 [`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPLACEMENT_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_EXACT_IMAGE_PULL_AUTHORIZED / ONE_REPLACEMENT_DIAGNOSTIC_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
-ONE_FINAL_LIFECYCLE_CONDITIONAL / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 
