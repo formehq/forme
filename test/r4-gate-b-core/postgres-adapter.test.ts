@@ -34,7 +34,7 @@ test("closed PostgreSQL plan pins image, platform, network, ports and stdin SQL"
       continue;
     }
     if (!("argv" in step)) continue;
-    assert.equal(step.cwd.endsWith("/forme"), true);
+    assert.equal(step.cwd, fs.realpathSync(path.resolve(import.meta.dirname, "../..")));
     assert.deepEqual(step.environment, {});
     assert.ok(!step.argv.includes("postgres:16.10-bookworm"));
     if (step.kind === "psql-stdin") {

@@ -97,8 +97,11 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
   governance correction.
 - [Draft PR #78](https://github.com/formehq/forme/pull/78) now represents the
   refreshed `codex/r4-reviewable-integration` bytes, stacked directly on Draft
-  PR #76. It contains the final PostgreSQL Green proof and the 37-path review
-  shape. This grants remote review and status reconciliation, not merge; CI is
+  PR #76. It contains the final PostgreSQL Green proof and the 40-path review
+  shape. Two additional paths keep historical Gate-B tests honest about the
+  approved successor lock without rewriting historical authority bytes; one
+  removes an invalid assumption that every checkout directory is named `forme`.
+  This grants remote review and status reconciliation, not merge; CI is
   claimed only from #78's actual checks.
 
 ### Current-truth routing

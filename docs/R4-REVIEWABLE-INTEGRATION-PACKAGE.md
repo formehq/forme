@@ -68,6 +68,12 @@ The refreshed branch is published for review as
 [Draft PR #78](https://github.com/formehq/forme/pull/78), stacked directly on
 Draft PR #76. Opening the Draft PR grants no merge or activation authority.
 
+The final review diff contains 40 paths. Two historical Gate-B test files now
+prove the successor `package-lock.json` is rejected before any old physical
+effect, and one historical PostgreSQL test no longer assumes the checkout
+directory is literally named `forme`. These changes do not rewrite historical
+authority or reopen closed execution authority.
+
 The two proof-closing commits already frozen on the refreshed branch are:
 
 4. final runner, SQL, test and package bytes
@@ -92,6 +98,8 @@ Validation of the refreshed review branch's own bytes:
 
 - focused disposable PostgreSQL tests: `26 / 26`;
 - focused product persistence tests: `88 / 88`;
+- complete `npm run check`: spine `45 / 45`, R4 `601 / 601`, and
+  historical Gate-B `145 / 145`;
 - offline R4 regression: `601 passed / 0 failed / 0 skipped`;
 - spine and Room TypeScript checks: Green;
 - document audit and `git diff --check`: Green.
