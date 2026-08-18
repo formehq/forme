@@ -70,6 +70,42 @@ Default Owner touchpoints are:
 A failed test that can be repaired inside the envelope is not a new approval
 gate. Passing tests remains Technical Review, not Owner Experience Acceptance.
 
+## Default local disposable integration campaign
+
+The Owner confirmed this standing collaboration default on 2026-08-17. When
+the requested outcome is a local, synthetic, loopback-only R4 integration
+proof and no narrower envelope is stated, use one campaign with these ceilings:
+
+- up to three working days;
+- up to three repository-only repair rounds;
+- up to four full disposable lifecycles; and
+- up to two acquisition attempts for the same exact approved dependency or
+  image digest, only when it is proven absent or the prior acquisition ended
+  with a definite non-ambiguous failure.
+
+The campaign includes ordinary repository edits, tests, evidence, current
+status docs, local commits, body-free host and Docker diagnostics, exact pinned
+image acquisition, synthetic loopback PostgreSQL/SQL, contract-preserving
+compatibility repairs, bounded reruns, and exact cleanup. The exact image cache
+may remain as named local residue; disposable containers, networks, volumes,
+credentials, databases, runtime roots, and coordinator state may not.
+
+Inspect, acquire, re-inspect, and consume the exact dependency in one
+continuous campaign whenever feasible. A cache miss discovered before any
+runtime resource is created consumes an acquisition attempt, not a full
+lifecycle. Do not ask the Owner to approve the pull, the resulting hash, the
+repair, and the rerun separately when all remain inside this campaign.
+
+After two failures at the same abstraction boundary, pause physical attempts
+and perform an architecture review. Continue autonomously if that review finds
+a reversible repair inside the same product meaning, trust boundary, and
+remaining budgets. Return to the Owner only if the envelope must change, an
+effect is ambiguous, cleanup is unproved, or the campaign budget is exhausted.
+
+This standing campaign never grants real/private data, provider, publication,
+messaging, credentials, spend, production, public traffic, push, merge,
+deployment, or Gate C authority.
+
 ## Anti-ceremony and escalation
 
 - Do not create a new Card, Addendum, Owner Review, issue, or authority tree
@@ -79,12 +115,14 @@ gate. Passing tests remains Technical Review, not Owner Experience Acceptance.
   ordinary repair, verification, and exact cleanup. A physical-attempt ceiling
   counts physical attempts, not Owner approvals.
 - Keep at most one active Walking Slice and one linked Enabler.
-- Unless an approved envelope says otherwise, an Enabler has a two-working-day
-  and two-full-attempt budget. Reaching either limit without the promised
-  result moves it to `Needs Decision`; do not create a child Enabler to extend
-  the same approach.
+- Unless an approved envelope says otherwise, a non-runtime Enabler has a
+  two-working-day and two-full-attempt budget. A local disposable integration
+  campaign uses the larger standing ceilings above. Reaching the applicable
+  limit without the promised result moves it to `Needs Decision`; do not
+  create a child Enabler to extend the same approach.
 - Two failures at the same abstraction boundary require architecture review
-  before another attempt.
+  before another physical attempt; that review is not itself a new Owner gate
+  when its repair remains inside the confirmed campaign.
 - Exact hashes are evidence, not units of Owner decision.
 - When implementation details are uncertain but the boundary is not, choose
   the most reversible in-envelope path and continue.
