@@ -13,11 +13,14 @@ used when schema and verify deparse PostgreSQL 16 catalog text. Commit
 This removes the local database blocker but is not itself a user-visible MVP
 milestone. #67 remains `Building / At Risk`: the Owner still needs the real
 Public Room → bounded knock → durable local pull → fresh candidate → exact
-response experience. Work now returns to integration, activation and one
+response experience. The reviewed repository tree is consolidated in Draft
+PR #78 targeting `main`; the former stacked Draft PRs are closed without
+merge. Work now returns to product runtime integration, activation and one
 Owner-experienced Guest encounter rather than more database rehearsal.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

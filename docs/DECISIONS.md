@@ -1323,7 +1323,7 @@ validates against schema
 `sha256:9bc0d1dbf3a1a74a272e17e4f1ad6bce9d0c33b65bcf7d4ae9fc00567f76902f`;
 the 19-artifact index is
 `sha256:6e63d94ce473e5d8386c46860a3e398b8331f8955003437576710c49ebe759d9`.
-The [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+The [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:060e6d05e91101ee95786600698b699c3796758083a2d862a23d3c907ca9ef14`;
 the successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
 is `sha256:b63aa612206af85671af44cdad1fac2727e6c0c3fc96459636f59cec8359f5bb`.
@@ -1363,7 +1363,7 @@ strict evidence schema
 `sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`;
 machine evidence
 `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`;
-[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md)
+[Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 `sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`;
 successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
 `sha256:e12b2fc8c86bb9c82d8df560f9feeb7ed75817bb14bfba342580cd2ec56f69a0`.
@@ -1410,7 +1410,7 @@ the exact entry and no-follow membranes remain closed. Index
 `sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
 schema `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
 evidence `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`
-and [Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md)
+and [Correction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 `sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`
 freeze the result. The current non-approvable successor
 [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
@@ -1455,7 +1455,7 @@ schema
 `sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
 evidence
 `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`
-and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md)
+and [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 `sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`
 freeze the machine and human evidence. The current non-approvable
 [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
@@ -1518,7 +1518,7 @@ the strict schema is
 `sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`;
 machine evidence is
 `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`;
-the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md)
+the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`;
 and the current non-approvable
 [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
@@ -1586,7 +1586,7 @@ the strict schema is
 `sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`;
 machine evidence is
 `sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`;
-the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md)
+the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`;
 and the current non-approvable
 [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
@@ -1642,7 +1642,7 @@ the strict schema is
 `sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`;
 machine evidence is
 `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`;
-the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md)
+the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`;
 and the current non-approvable
 [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
@@ -1698,7 +1698,7 @@ the strict schema is
 `sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`;
 machine evidence is
 `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`;
-the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`;
 and the current non-approvable [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
 is `sha256:deeb16cff4c6ba3082306bbf7c62f7f45a193260a1ee94cd8b344fbae4b296b4`.
@@ -1762,7 +1762,7 @@ Lic `614202e8765372755f75ce7fa465ef9e550971a8` / tree
 machine evidence delta; G3 is
 `sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39`.
 The artifact index, schema, evidence and
-[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md)
+[Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 are respectively
 `sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
 `sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
@@ -1815,7 +1815,7 @@ Kvt → Lvt → Mvt → Card V2 → Review V2. Lvt
 direct child; G3 is
 `sha256:e9b439cb6fbafa339991ea6cb56a59efb3eba1273633b399da57dc4986ba417f`.
 The artifact index, strict schema, evidence and
-[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md)
+[Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 are respectively
 `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
 `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
@@ -1869,7 +1869,7 @@ Liar `3e1b0cbd5394a2e3452ecb2ef9c0081c72381d9f` / tree
 machine-evidence delta; G3 is
 `sha256:fc167a02ce82f20fed05ffcf4b666dfc91eb5694553f3f6730c24c1b41c356db`.
 The artifact index, strict schema, evidence and
-[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md)
+[Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 are respectively
 `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
 `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
@@ -1982,7 +1982,7 @@ historical container is `PROVEN_ABSENT`; historical network/volume remain
 coordinator residue are zero. Physical rehearsal attempt/completion is `0/0`;
 PostgreSQL, SQL, product runtime, production, publication, Provider, message,
 spend and Gate C effects are zero. The
-[V4 Outcome](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+[V4 Outcome](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:820f98788f44bf18d0ecf857f45ec69a0d966a2e43f27c1da4e40da068d9f67b`.
 
 **Boundary:** all three disposable local lifecycle slots in the confirmed

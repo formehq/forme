@@ -50,6 +50,33 @@ function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
 }
 
+function assertTrackedMarkdownLinksResolve() {
+  const markdownPaths = execFileSync("/usr/bin/git", ["ls-files", "*.md"], {
+    cwd: root,
+    encoding: "utf8",
+  })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+
+  let checkedLinkCount = 0;
+  for (const markdownPath of markdownPaths) {
+    const document = text(markdownPath);
+    for (const match of document.matchAll(/\[[^\]]*\]\(([^)]+)\)/gu)) {
+      const rawTarget = match[1].trim();
+      if (!rawTarget || rawTarget.startsWith("#") || /^[a-z][a-z0-9+.-]*:/iu.test(rawTarget)) continue;
+      const target = rawTarget.split("#", 1)[0].split("?", 1)[0];
+      if (!target) continue;
+      const resolvedTarget = resolve(root, dirname(markdownPath), target);
+      if (!existsSync(resolvedTarget)) throw new Error(`broken tracked Markdown link:${markdownPath}:${target}`);
+      checkedLinkCount += 1;
+    }
+  }
+  return checkedLinkCount;
+}
+
+const trackedMarkdownLinkCount = assertTrackedMarkdownLinksResolve();
+
 function filesBelow(relativeRoot) {
   const absoluteRoot = join(root, relativeRoot);
   function collect(path) {
@@ -999,10 +1026,7 @@ const report = {
   mode: hostBindingReattemptMode ? "host-binding-reattempt" : physicalConstructionMode ? (physicalConstructionFinalMode ? "physical-construction-final" : "physical-construction-phase-a") : finalMode ? (coreConstructionMode ? "core-construction-final" : "final") : "draft",
   approvedPacketSha256: `sha256:${packetHash}`,
   crosswalkRowCount: actualRows.length,
-  localLinksChecked: Object.values(documents).reduce(
-    (count, document) => count + [...document.matchAll(/\[[^\]]+\]\(\.\/[^)]+\)/gu)].length,
-    0,
-  ),
+  localLinksChecked: trackedMarkdownLinkCount,
   firstProviderCallGrant: "not_requested",
   ...(retryConstruction === null ? {} : { retryConstruction }),
   ...(coreConstruction === null ? {} : { coreConstruction }),

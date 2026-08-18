@@ -24,10 +24,13 @@ Provider, Guest, production, public-traffic and Gate C effects are `0`.
 The refreshed review branch deliberately excludes the historical physical
 runner archive and independently passes product persistence `89/89`,
 disposable proof `26/26`, offline R4 `602/602` with zero skips, typecheck,
-docs audit and diff check.
+docs audit and diff check. It is now consolidated as Draft PR #78 targeting
+`main`; fresh main-base CI is Green and the former stacked Draft PRs are closed
+without merge.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
@@ -1185,7 +1188,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
 - Technical evidence: K `bcfe3349e01a655c2d52d6abbca0038cc3bff6e2`, L
   `beeb55b662372e2b4f2a16f8768c16905a7a9978`, machine evidence
   `sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`
-  and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md).
+  and [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
   The exact deny-network totals are 139 / 85 / 391 / 711 / 145 / 45; strict
   Ajv, typecheck, no-AI, docs regression, blob/hash-DAG and diff checks pass.
 - Product judgment: the physical runner is now an auditable future capability,
@@ -1209,7 +1212,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
 - Technical evidence: Kc `18e3a325cceabdf5168b5ffb328ee2580b069a76`,
   Lc `32448cb962c823d39205cc83d11aa3f6571cf65d`, machine evidence
   `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`
-  and [Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md).
+  and [Correction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
   Exact deny-network totals are 141 / 85 / 393 / 713 / 145 / 45; strict Ajv,
   authority/lineage, portable APFS, hostile root identity, TypeScript, no-AI,
   docs and diff checks pass.
@@ -1234,7 +1237,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   `f7d37830044ca2ad098b4c031feb62de77e209c3`, Lt
   `c699f9d9b023e5185baebbf429a3044bfae0366a`, machine evidence
   `sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`
-  and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md).
+  and [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
   Exact deny-network totals are 142 / 85 / 394 / 714 / 145 / 45; strict Ajv,
   complete historical lineage, committed blobs, versioned-path contract,
   TypeScript, no-AI, docs and diff checks pass.
@@ -1271,7 +1274,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   The correction freezes Kd `0fdf68c7c786085189c3df0787df07f366c6df5b`,
   Ld `62d0c98d7052998b7bb69b76c83f60576091836b`, machine evidence
   `sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`
-  and the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md).
+  and the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
   Exact deny-network totals are 151 / 85 / 403 / 723 / 145 / 45; strict Ajv,
   authority/lineage, exact diagnostics, future rescue grant/receipt, crash,
   root/host drift, real-port denial, TypeScript, no-AI, docs and diff checks
@@ -1309,7 +1312,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   and Li `4c20af20b24f21cce4566ba6c511e5ac39b527df` freeze one closed
   diagnosis/cleanup/absence/rehearsal state machine. Machine evidence is
   `sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`;
-  the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+  the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
   records the human audit. Focused 14/14, offline 747/747, Gate-B Core 145/145
   and spine 45/45 are Green; strict Ajv rejected 11 hostile evidence
   mutations. All construction effects remain zero.
@@ -1338,7 +1341,7 @@ Do not rewrite prior feedback to fit later architecture. Supersede it explicitly
   prepare stages, distinct ordinary/rollback codes, same-inode cleanup and
   body-free CLI output. The machine evidence is
   `sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`;
-  the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md)
+  the [Construction Report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
   records the human audit. Exact deny-network totals are 162 / 734 / 145 / 45;
   strict Ajv and nine hostile mutations, committed hashes, TypeScript, docs and
   diff checks are Green.

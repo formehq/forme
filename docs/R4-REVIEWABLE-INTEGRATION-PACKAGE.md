@@ -1,143 +1,111 @@
-# R4 reviewable integration package
+# R4 consolidated integration package
 
 Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_DRAFT_PR_OPEN / MERGE_NOT_REQUESTED`,
-2026-08-18.
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`, 2026-08-18.
 
 ## User outcome
 
-Present the current Durable Public Core and physically Green disposable
-PostgreSQL boundary as one reviewable #67 integration change. A reviewer should
-not need to reconstruct the historical one-use Card/Addendum/Review chain.
+Present the current R4 repository result as one understandable integration
+change targeting `main`: the offline Public Room boundary, Durable Public Core,
+concrete PostgreSQL persistence bridge and physically Green disposable
+PostgreSQL proof.
 
-This package creates no direct Product Progress. It makes the already-built
-product persistence boundary reviewable so #67 can proceed to integration,
-activation and one Owner-experienced Guest encounter.
+This package removes the persistence blocker. It creates no direct Product
+Progress and does not claim that a real visitor can complete the #67 encounter.
 
-## What is now proven
+## Consolidated review shape
 
-Final local run `69ac02f4e8dfbf01` used the exact PostgreSQL 16
-`linux/arm64` digest and passed:
+[Draft PR #78](https://github.com/formehq/forme/pull/78) now targets `main`
+directly. Its reviewed code baseline is
+`5338f04f3d4fa557957af6a5b7ce6bfbcab4c189`. At consolidation time the
+main-to-head history contained 63 commits and 352 changed paths; the GitHub
+merge tree was byte-identical to the reviewed head tree. Fresh main-base CI
+run `32185336840` passed.
+
+The former stacked Draft PRs #65, #73, #75 and #76 are closed without merge.
+They remain historical review surfaces. Their branches are not activation or
+production authority and no longer form the current review route.
+
+Later documentation-only hygiene commits may move the PR tip while preserving
+the reviewed code baseline above. PR metadata and its exact CI checks are the
+outer binding for the current tip; this file never self-binds its own commit.
+
+## What the tree proves
+
+### Product persistence
+
+- a closed walking-slice application boundary;
+- a concrete `pg` executor and 20-method PostgreSQL application-store bridge;
+- exact, data-only snapshot/config membranes;
+- the approved public-only policy, retention, one-use and replay contracts;
+- PostgreSQL schema, verify and rollback artifacts with fixed catalog
+  signatures.
+
+### Disposable physical proof
+
+Final run `69ac02f4e8dfbf01` used the exact PostgreSQL 16 `linux/arm64`
+image and passed:
 
 1. schema apply;
-2. initial verify;
+2. initial verification;
 3. one same-container stop/start;
-4. restart readiness on the freshly observed loopback port;
-5. post-restart verify;
+4. readiness on the freshly observed loopback port;
+5. post-restart verification;
 6. installation-seed persistence;
-7. rollback apply;
+7. rollback;
 8. schema-absence proof; and
 9. exact container, network, volume, credential and runtime cleanup.
 
-The preceding body-free diagnostic evaluated all 10 rollback guards and named
-only `public_core_rollback_catalog_manifest_drift`. The catalog was unchanged:
-rollback lacked the transaction-local `search_path` used by schema and verify
-when PostgreSQL deparsed catalog text. Commit `360ed6c` corrected only that
-observation context. It changed no table, constraint, business meaning,
-inventory or catalog-signature algorithm.
+The preceding closed diagnostic named only
+`public_core_rollback_catalog_manifest_drift`. Rollback lacked the
+transaction-local `search_path` already used by schema and verify when
+PostgreSQL deparsed equivalent catalog text. Commit `360ed6c` corrected only
+that observation context; schema shape, business meaning, inventory and
+catalog-signature logic did not change.
 
-Production, real/private data, provider/public effects and Gate C remained
-zero. The exact image may remain in the local cache; every disposable runtime
-resource is absent.
+## Validation
 
-## Three review slices
+The reviewed code baseline passes:
 
-The historical local line is too large to review as one chronological diff.
-The integration branch therefore preserves three conceptual slices:
+- repository spine `45 / 45`;
+- R4 `602 / 602`;
+- historical Gate-B `145 / 145`;
+- focused product persistence `89 / 89`;
+- disposable PostgreSQL proof `26 / 26`;
+- TypeScript and Room no-AI checks;
+- documentation and diff checks; and
+- GitHub Actions run `32185336840`.
 
-1. **Product persistence.** The `public-core-*` application, Postgres store and
-   executor, the three SQL artifacts, contract tests and package bindings.
-2. **Disposable proof.** The bounded rehearsal runner, focused tests, concise
-   result and machine evidence. This is development infrastructure, not a
-   product capability.
-3. **Operating truth.** The working agreement and the small current-status
-   surfaces that explain the present gate and Owner-review path.
-
-The already-constructed branch begins directly above Draft PR #76 head
-`c831b4d5253049c4581d3c576aea59648d699d97` with these three commits:
-
-1. product persistence `30822612145e46dee6c9210e484abf2715907f3b`;
-2. disposable PostgreSQL proof `773ac10b2cd47fb5584a93412cb8bf588e6b3510`;
-3. operating truth `1aa5c18a06a60bd3b3fc1fbac750ee8f75edcc52`.
-
-The approved refresh adds only the later proof-closing implementation/evidence
-and current operating truth. Historical authority documents and failed-run
-artifacts remain outside the review branch as archive evidence.
-
-The refreshed branch is published for review as
-[Draft PR #78](https://github.com/formehq/forme/pull/78), stacked directly on
-Draft PR #76. Opening the Draft PR grants no merge or activation authority.
-
-The final review diff contains 40 paths. Two historical Gate-B test files now
-prove the successor `package-lock.json` is rejected before any old physical
-effect, and one historical PostgreSQL test no longer assumes the checkout
-directory is literally named `forme`. These changes do not rewrite historical
-authority or reopen closed execution authority.
-
-The two proof-closing commits already frozen on the refreshed branch are:
-
-4. final runner, SQL, test and package bytes
-   `370c5d695258a080241fbedfb25b3dcb650aad08`;
-5. final physical result and machine evidence
-   `8190b7c56518520c4d4286d4cfb16292fcaf4dc1`.
-
-The following operating-truth commit intentionally does not self-bind its own
-hash. Git and the Draft PR provide that outer binding.
-
-Independent code review then closed one narrow bridge-membrane omission in
+Independent review found and fixed one ordinary bridge-membrane omission in
 commit `c698955b0a8c884de03fe7cea6a550b745192667`: constructor configuration is
-now exact data-only input, and prepared-store arrays can no longer hide
-non-index properties or exceed the bounded snapshot size. This changes no SQL,
-schema, durable data, runtime authority or physical result.
+exact data-only input, and prepared-store arrays cannot hide non-index
+properties or exceed the bounded snapshot size. No SQL, schema, durable data,
+runtime authority or physical result changed.
 
-## Validation and demo
+## Data and permission impact
 
-Current source validation before the branch refresh:
+- Synthetic disposable PostgreSQL data only; exact owned residue is zero.
+- No production migration, deployment, real/private Guest data, Provider call,
+  publication, public traffic, external message, production secret, spend or
+  Gate C effect.
+- The reviewable branch intentionally omits the large chronological physical
+  authority archive. Hash-bound history remains evidence; it is not copied
+  back into the integration solely for completeness.
 
-- focused disposable PostgreSQL tests: `26 / 26`;
-- offline R4 regression: `602 passed / 0 failed / 111` historical skips;
-- spine and Room TypeScript checks: Green;
-- document audit and `git diff --check`: Green;
-- final physical proof: `GREEN`, exact-owned residue `0`.
+## Remaining product gate
 
-Validation of the refreshed review branch's own bytes:
+Passing this package is Technical Review, not R4 Done. Before merge and Owner
+Experience Acceptance, #67 still needs one separately bounded activation
+outcome covering:
 
-- focused disposable PostgreSQL tests: `26 / 26`;
-- focused product persistence tests: `89 / 89`;
-- complete `npm run check`: spine `45 / 45`, R4 `602 / 602`, and
-  historical Gate-B `145 / 145`;
-- offline R4 regression: `602 passed / 0 failed / 0 skipped`;
-- spine and Room TypeScript checks: Green;
-- document audit and `git diff --check`: Green.
+1. product runtime wiring;
+2. publication and Curator admission;
+3. one real bounded Guest encounter;
+4. exact response review; and
+5. Owner acceptance of the experienced flow.
 
-The review branch intentionally omits the historical physical-runner archive;
-that is why its offline suite has no historical skips and a different total
-from the chronological source line.
-
-Runnable repository-only proof:
-
-```sh
-node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-postgres-rehearsal.test.ts
-```
-
-Remote CI is reported only from Draft PR #78's actual check state.
-
-## Owner review focus
-
-- Is the product-persistence slice understandable without the governance
-  archive?
-- Does the typed PostgreSQL adapter preserve the already-approved privacy,
-  one-use, replay, retention and rollback contracts?
-- Does the result clearly distinguish Enabler Green from #67 Product Progress?
-- Is the next activation boundary explicit enough to prevent an accidental
-  Production, publication, real Guest or Gate C effect?
-
-Passing this review is Technical Review only. Merge remains separately
-controlled. The next user-visible acceptance point is one real Public Room and
-bounded Guest knock, not another PostgreSQL rehearsal.
-
-Current stop:
-
-`LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_DRAFT_PR_OPEN / MERGE_NOT_REQUESTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Draft PR review does not authorize Production or Gate C. The next review
+surface should be one medium/large outcome envelope, not another per-file or
+per-hash approval chain.

@@ -21,15 +21,17 @@ The review branch's smaller, archive-free byte set separately passes product
 persistence `89/89`, disposable proof `26/26`, offline R4 `602/602` with zero
 skips, typecheck, docs audit and diff check.
 
-#77 is ready to leave the active Enabler slot. #67 remains `Building / At Risk`
-because the proven persistence boundary is not yet integrated into the Public
-Room walking slice and no Owner-experienced Guest encounter has run. The next
-work is product integration and activation, not another database rehearsal.
-Push, merge, Production, real/private data, provider/public effects and Gate C
-remain closed.
+#77 has reached its Green technical exit. #67 remains `Building / At Risk`
+because no Owner-experienced Guest encounter has run. The reviewed repository
+tree is consolidated in Draft PR #78 targeting `main`; fresh main-base CI is
+Green and the former stacked Draft PRs are closed without merge. The next work
+is product runtime integration and activation, not another database rehearsal.
+Production, real/private data, provider/public effects and Gate C remain
+closed.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Historical checkpoint — #77 final failed-clean lifecycle, 2026-08-17
@@ -86,23 +88,19 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 - The physically Green implementation/evidence is frozen through local commit
   `3b53154` on `codex/r4-public-core-local-postgres-wiring`. That source branch
-  has no upstream and its physical proof is not remote CI evidence.
-- The chronological source line is more than 120 commits and 160 paths beyond
-  Draft PR #76's remote head `c831b4d5253049c4581d3c576aea59648d699d97`;
-  it is historical construction truth, not the proposed review shape.
-- Draft PR #76 remains accurate historical evidence for Durable Public Core
-  Construction, but it does not contain or validate the current local line.
-- The broader integration Draft PR #65 and the open Draft PR stack likewise do
-  not provide remote or CI coverage for the implementation baseline or this
-  governance correction.
-- [Draft PR #78](https://github.com/formehq/forme/pull/78) now represents the
-  refreshed `codex/r4-reviewable-integration` bytes, stacked directly on Draft
-  PR #76. It contains the final PostgreSQL Green proof and the 40-path review
-  shape. Two additional paths keep historical Gate-B tests honest about the
-  approved successor lock without rewriting historical authority bytes; one
-  removes an invalid assumption that every checkout directory is named `forme`.
-  This grants remote review and status reconciliation, not merge; CI is
-  claimed only from #78's actual checks.
+  has no upstream and is retained as chronological construction history, not
+  the current review route.
+- [Draft PR #78](https://github.com/formehq/forme/pull/78) is the single current
+  integration PR and targets `main` directly. Its reviewed code baseline is
+  `5338f04`; the GitHub main-base merge tree was byte-identical and fresh CI
+  run `32185336840` passed.
+- Former Draft PRs #65, #73, #75 and #76 are closed without merge. Their
+  review discussion remains historical evidence, but their branches and old
+  checks are no longer the current integration surface.
+- The reviewable tree intentionally excludes the large physical-authority
+  archive. Current docs route omitted historical files through the
+  [documentation map](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
+  rather than publishing broken relative links.
 
 ### Current-truth routing
 
@@ -142,7 +140,7 @@ container-missing fingerprint matched; the next historical network inspect
 completed exit `1` with a distinct, unadmitted body-free fingerprint, so the
 runner stopped. Terminal evidence is `sha256:fb44fbd…1166b`, journal `12` at
 `sha256:df1e0c8c…d60f`, and the
-[outcome report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+[outcome report](./README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 is `sha256:820f9878…f67b`. Fresh resources are proven absent and all owned
 residue is zero; PostgreSQL/SQL were not reached.
 

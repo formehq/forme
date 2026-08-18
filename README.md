@@ -6,7 +6,7 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding execution update — 2026-08-18
+### Superseding integration update — 2026-08-18
 
 #77's disposable PostgreSQL Enabler is Technical Review Green. A closed
 10-guard diagnostic isolated rollback's only failure to catalog text deparse;
@@ -15,16 +15,19 @@ commit `360ed6c` aligned rollback with schema/verify's pinned local
 `69ac02f4e8dfbf01` passed schema, both verify passes, same-container restart,
 persistence, rollback, schema-absence proof and exact cleanup. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
-The current review shape is published as
-[Draft PR #78](https://github.com/formehq/forme/pull/78); merge remains
-separately controlled.
+The complete reviewed tree is now one
+[Draft PR #78](https://github.com/formehq/forme/pull/78) targeting `main`.
+The four former stacked Draft PRs are closed without merge, and fresh
+main-base CI is Green.
 
 The Public Room experience remains `Building / At Risk`: the database boundary
-is proven, but #67 still needs product integration, activation and one
-Owner-experienced Guest encounter.
+is proven, but #67 still needs product runtime integration, activation and one
+Owner-experienced Guest encounter. Repository integration does not substitute
+for that experience or authorize Production.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
@@ -53,7 +56,7 @@ unadmitted body-free missing-object fingerprint. The runner failed closed
 before image use, fresh construction, PostgreSQL or SQL. Fresh
 container/network/volume are proven absent, all owned residue is zero, and the
 terminal root is exact. See the
-[V4 outcome](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+[V4 outcome](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 (`sha256:820f9878…f67b`).
 
 All three disposable local lifecycle slots in the confirmed autonomous
@@ -160,14 +163,14 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 9. [`docs/README.md`](./docs/README.md) — complete map of frozen Gate B/Host
    history, including both Host Binding attempt envelopes
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
-11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md),
-    [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
-    [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
-    [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
-    [`Docker Diagnostic/Rescue Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md),
-    [`Body-Free Docker Inspect Diagnostic Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md),
-    [`Prepare-Failure Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md),
-    and [`Integration Campaign Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+11. [`Local PostgreSQL Wiring Construction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`Physical Rebind Construction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`APFS nlink Correction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`Execution-Authority Topology Correction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`Docker Diagnostic/Rescue Correction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`Body-Free Docker Inspect Diagnostic Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    [`Prepare-Failure Correction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree),
+    and [`Integration Campaign Construction Report`](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree)
     — the Phase-1, rebind, repository corrections and current medium-grained campaign stop
 12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
     — the current non-approvable activation boundary
@@ -349,7 +352,7 @@ and its Owner Review were exactly approved on 2026-08-10; Addendum A was
 approved on 2026-08-11. That durable-construction snapshot remains historical
 Green at `bcd4259`. The current Local PostgreSQL Wiring successor is
 repository-only Technical Review Green at `bc0b520`, with exact
-[machine-backed evidence](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+[machine-backed evidence](docs/README.md#historical-material-intentionally-omitted-from-current-integration-tree)
 and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
 A precisely approved first physical prepare stopped before grant creation on
 the invalid fixed APFS nlink contract. After the APFS and topology corrections,

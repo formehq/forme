@@ -11,10 +11,13 @@ catalog deparse; commit `360ed6c` corrected only that observation context.
 The Enabler no longer blocks the roadmap. #67 remains `Building / At Risk`
 because the next milestone is user-facing: integrate the proven persistence
 boundary into Public Room, activate the bounded path and complete one
-Owner-experienced Guest encounter. No more database rehearsal is proposed.
+Owner-experienced Guest encounter. The repository tree is consolidated in
+Draft PR #78 targeting `main`; the prior stacked Draft PRs are closed without
+merge. No more database rehearsal is proposed.
 
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
@@ -379,19 +382,19 @@ The repository-only executor/bridge and corrected static SQL contract are
 Technical Review Green at Stage-A `bc0b520`. The rebind remains historical at
 K/L `bcfe334` / `beeb55b`, and the APFS nlink correction is current at Kc/Lc
 `18e3a32` / `32448cb`, as recorded in the
-[`Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md).
+[`Construction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The current Effect-0 result is the
-[`Physical Rebind Construction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md).
+[`Physical Rebind Construction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The APFS correction result is the
-[`APFS nlink Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md).
+[`APFS nlink Correction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The execution-authority correction result is the
-[`Execution-Authority Topology Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md).
+[`Execution-Authority Topology Correction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The Docker rescue-correction result is the
-[`Docker Diagnostic/Rescue Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md).
+[`Docker Diagnostic/Rescue Correction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The predecessor construction result is the
-[`Body-Free Docker Inspect Diagnostic Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md).
+[`Body-Free Docker Inspect Diagnostic Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The current correction result is the
-[`Prepare-Failure Correction Report`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md).
+[`Prepare-Failure Correction Report`](./README.md#historical-material-intentionally-omitted-from-current-integration-tree).
 The hash-pinned [`Gate C Card`](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
 remains non-approvable. The next review is a medium-grained local integration
 campaign whose first possible external effect is a replacement body-free
