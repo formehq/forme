@@ -2,22 +2,20 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77 remains `Needs Decision`. The approved continuation pulled the
-exact image once and used both full lifecycles. It proved and corrected one
-verify-only ordering defect without changing the 172-constraint set, then the
-final lifecycle stopped at `public_core_unexpected_object_present`. Both runs
-were synthetic and cleaned exactly; restart and rollback proof remain absent.
+Enabler #77 now has one approved consolidated continuation. Its complete
+body-free assertion vector is repository Technical Review Green and evaluates
+all 18 verify predicates in one read-only pass. Construction made no physical
+effect. One cached-image, no-pull diagnostic lifecycle is authorized; only a
+matching catalog-expression vector may unlock one consolidated verify-only
+correction and one final lifecycle.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`. The [architecture review](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md)
-is complete and replaces another one-assertion patch/run loop with one complete
-body-free assertion vector followed, only if it matches, by one consolidated
-verify correction. See the
-[`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+Risk`; restart, persistence and rollback are still unproved. See the
+[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

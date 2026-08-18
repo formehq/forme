@@ -2,20 +2,17 @@
 
 ## Superseding current gate — R4 execution management reset, 2026-08-17
 
-#77 remains `Needs Decision`. Its one pull and two full lifecycles are consumed.
-The first run proved a verify-only constraint ordering defect; `f005cbe`
-corrected it, and the final run advanced to the independent
-`public_core_unexpected_object_present` assertion. Both cleaned exactly. This
-Enabler still earns `0 Product Progress`; #67 remains `Building / At Risk`.
+#77's consolidated continuation is active. The complete 18-predicate body-free
+diagnostic is repository Technical Review Green and made no physical effect.
+The next step is its one cached-image, no-pull diagnostic lifecycle, followed
+only on a matching vector by one consolidated verify-only correction and one
+final lifecycle. This Enabler still earns `0 Product Progress`; #67 remains
+`Building / At Risk` and the Public Room → knock → candidate → response path
+is unchanged.
 
-The architecture review is complete. The next roadmap decision is one
-repository-only complete-assertion diagnostic and consolidated-correction
-envelope; no pull or physical run is currently authorized. The Public Room →
-knock → candidate → response path is unchanged.
-
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

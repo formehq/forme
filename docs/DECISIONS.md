@@ -2,6 +2,25 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Replace serial verify discovery with one complete assertion vector
+
+**Decision:** the Owner approved one consolidated #77 envelope. Repository
+construction may derive a strict body-free diagnostic from the exact pinned
+verify source and evaluate all 18 predicates in one pass. After repository
+Green, it may use the cached exact image for one no-pull diagnostic lifecycle.
+Only a vector consisting entirely of reviewed PostgreSQL 16 catalog-expression
+assumptions may unlock one consolidated verify-only correction and at most one
+final full lifecycle.
+
+**Boundary:** schema shape, business meaning, expected inventories and the
+catalog-manifest algorithm/result cannot change. Cleanup must be exact.
+Production, real data, provider/public effects, push, merge and Gate C remain
+closed. No third lifecycle or assertion-by-assertion continuation exists.
+
+**Reason:** the original fail-fast protocol could reveal only one of 18
+assertions per physical run. A complete closed vector keeps diagnostic content
+body-free while preventing another serial patch/run chain.
+
 ## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
 
 **Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL

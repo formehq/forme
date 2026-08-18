@@ -2,32 +2,27 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 has real local evidence but no product progress. One exact image
-pull enabled two full PostgreSQL lifecycles. The first identified
-`public_core_constraint_inventory_drift`; static proof showed the same 172
-signatures with four ordering-only positions, and `f005cbe` corrected that
-comparison. The final lifecycle advanced to
-`public_core_unexpected_object_present` and stopped.
-
-Each run removed its container, network, volume, credential and runtime root.
-Provider, real Guest, production, public traffic and Gate C effects are zero.
-The complete verify/restart/rollback proof is absent and the budget is
-exhausted. The completed architecture review requires one body-free vector of
-all assertions before any consolidated correction, not another immediate
-retry.
+Enabler #77 still has no product progress, but its complete body-free
+assertion-vector command is repository Technical Review Green. It derives and
+evaluates all 18 original predicates without first-failure short-circuiting,
+accepts only their closed identifiers and refuses image pull. Construction
+made zero Docker/PostgreSQL effects. One cached-image diagnostic lifecycle is
+authorized; restart/rollback proof remains absent.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation: focused `12/12`; constraint set `172/172`; offline R4
-`587 passed / 0 failed / 111 frozen historical-runner tests skipped`;
-spine/Room typecheck, docs audit and diff-check Green.
+Repository validation: focused assertion-vector harness `16/16`; constraint
+set `172/172`; offline R4
+`591 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
+`45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
+diff-check Green.
 
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)

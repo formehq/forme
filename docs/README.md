@@ -4,21 +4,20 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77 consumed its one exact image pull and two full PostgreSQL lifecycles. The
-first named a constraint-ordering defect; `f005cbe` corrected only that verify
-comparison and the final lifecycle passed it. The final run then stopped at
-`public_core_unexpected_object_present`. Both runs cleaned exactly, but the
-complete restart/rollback proof remains absent and no runtime budget remains.
+#77 now has one approved consolidated continuation. Its complete body-free
+18-predicate diagnostic is repository Technical Review Green with zero
+physical effects. Exactly one cached-image, no-pull diagnostic lifecycle is
+authorized; a correction remains conditional on the resulting complete vector.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json), plus
-the completed
-[`verify architecture review`](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md).
+the
+[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

@@ -8,21 +8,19 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ### Superseding execution update — 2026-08-17
 
-The approved #77 continuation consumed its one exact image pull and two full
-PostgreSQL lifecycles. The first named a constraint-inventory ordering drift;
-verify-only commit `f005cbe` proved the same 172 constraints and corrected only
-their comparison order. The final lifecycle passed that check, then stopped at
-`public_core_unexpected_object_present`. Both runs cleaned exactly, but
-restart/rollback proof is still absent. This remains `0 Product Progress` and
-#77 is `Needs Decision`; no further pull or lifecycle is authorized. The
-completed architecture review requires one complete body-free assertion vector
-before any consolidated correction. See the
+The Owner approved one consolidated #77 continuation. The complete body-free
+assertion-vector command is now repository Technical Review Green: it derives
+all 18 predicates from the hash-pinned verify source, evaluates them without
+first-failure short-circuiting and can expose only closed identifiers. No
+Docker or PostgreSQL was used during construction. One cached-image, no-pull
+diagnostic lifecycle is now authorized; any correction remains conditional on
+that complete vector. This remains `0 Product Progress`. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
-[verify review](docs/R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md).
+[assertion-vector result](docs/R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77

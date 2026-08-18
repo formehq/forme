@@ -2,21 +2,18 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77 is `Needs Decision / Blocked`, not Ready. One exact image pull and both
-approved full lifecycles are consumed. The constraint inventory mismatch was
-proved to be a four-position ordering-only defect and corrected at `f005cbe`;
-the final lifecycle passed it and stopped at the independent body-free
-assertion `public_core_unexpected_object_present`. Both runs cleaned exactly.
+#77 has one active consolidated continuation. The
+[complete assertion-vector result](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md)
+is repository Technical Review Green: all 18 original predicates are derived
+from the pinned verify source and the output membrane accepts only their closed
+identifiers. Construction made zero Docker/PostgreSQL effects. The next effect
+is exactly one cached-image, no-pull diagnostic lifecycle. A verify-only change
+is allowed only if its full vector matches reviewed catalog-expression
+assumptions. #67 stays `Building / At Risk` and earns no product progress here.
 
-Do not run again, pull again, or start another narrow correction chain. The
-[architecture review](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md) is complete:
-the next decision surface is one complete body-free assertion-vector
-diagnostic plus a consolidated correction boundary. #67 stays
-`Building / At Risk` and earns no product progress here.
-
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

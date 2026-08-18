@@ -9,12 +9,15 @@ import {
   POSTGRES_SERVER_VERSION_NUM,
   SQL_BINDINGS,
   VERIFY_ASSERTION_IDS,
+  buildVerifyAssertionDiagnosticSql,
   buildContainerCreateArguments,
   createRunSpec,
   parseCliArguments,
   projectPostgresDiagnostic,
+  projectVerifyAssertionNotice,
   readPinnedSql,
   runRehearsal,
+  runVerifyDiagnosticRehearsal,
 // The development harness is an executable .mjs artifact; its exports are
 // tested directly without adding a declaration-only maintenance surface.
 // @ts-expect-error -- intentional executable artifact import.
@@ -26,6 +29,7 @@ type FakeOptions = Readonly<{
   postgresVersion?: number;
   failSqlPhase?: string | null;
   cleanupOwnershipMismatch?: boolean;
+  diagnosticFailedAssertions?: readonly string[];
 }>;
 
 class FakeDocker {
@@ -135,6 +139,12 @@ class FakePostgres {
     return true;
   }
 
+  async diagnose(_port: number, sql: string, phase: string): Promise<readonly string[]> {
+    this.calls.push(phase);
+    assert.match(sql, /PUBLIC_CORE_ASSERTION_VECTOR_COMPLETE/u);
+    return this.options.diagnosticFailedAssertions ?? [];
+  }
+
   async installationSeed(): Promise<Readonly<Record<string, string>>> {
     this.calls.push("postgres.seed");
     if (!this.schemaPresent) throw new Error("seed before schema");
@@ -202,13 +212,15 @@ test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback byt
 });
 
 test("image acquisition is available only through one exact explicit CLI switch", () => {
-  assert.deepEqual(parseCliArguments([]), { allowImagePull: false });
-  assert.deepEqual(parseCliArguments(["--allow-image-pull"]), { allowImagePull: true });
+  assert.deepEqual(parseCliArguments([]), { mode: "rehearse", allowImagePull: false });
+  assert.deepEqual(parseCliArguments(["diagnose"]), { mode: "diagnose", allowImagePull: false });
+  assert.deepEqual(parseCliArguments(["--allow-image-pull"]), { mode: "rehearse", allowImagePull: true });
   for (const argv of [
     ["--allow-image-pull", "--allow-image-pull"],
     ["--allow-image-pull=true"],
     ["--pull"],
     ["--allow-image-pull", "extra"],
+    ["diagnose", "--allow-image-pull"],
   ]) {
     assert.throws(
       () => parseCliArguments(argv),
@@ -248,6 +260,84 @@ test("the verify assertion diagnostic enum exactly covers every committed P0001 
   )].map((match) => match[1]).sort();
   assert.deepEqual([...VERIFY_ASSERTION_IDS].sort(), identifiers);
   assert.equal(new Set(VERIFY_ASSERTION_IDS).size, VERIFY_ASSERTION_IDS.length);
+});
+
+test("the complete diagnostic deterministically evaluates all 18 original predicates without copying them", () => {
+  const sql = readPinnedSql();
+  assert.equal(sql.verifyDiagnostic, buildVerifyAssertionDiagnosticSql(sql.verify));
+  assert.equal((sql.verifyDiagnostic.match(/RAISE NOTICE USING ERRCODE = '00000'/gu) ?? []).length, 18);
+  assert.equal(sql.verifyDiagnostic.includes("RAISE EXCEPTION USING ERRCODE = 'P0001'"), false);
+  assert.match(sql.verifyDiagnostic, /BEGIN TRANSACTION READ ONLY/u);
+  assert.match(sql.verifyDiagnostic, /PUBLIC_CORE_ASSERTION_VECTOR_COMPLETE/u);
+  assert.match(sql.verifyDiagnostic, /18::integer AS assertion_count/u);
+  assert.match(sql.verifyDiagnostic, /ROLLBACK;/u);
+  for (const identifier of VERIFY_ASSERTION_IDS) {
+    assert.equal(sql.verifyDiagnostic.split(`MESSAGE = '${identifier}'`).length - 1, 1);
+  }
+  assert.throws(
+    () => buildVerifyAssertionDiagnosticSql(sql.verify.replace("public_core_table_inventory_drift", "public_core_unknown_drift")),
+    /disposable_postgres_verify_diagnostic_source_invalid/u,
+  );
+  assert.throws(
+    () => buildVerifyAssertionDiagnosticSql(sql.verify.replace(/\s*RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_table_inventory_drift';/u, "")),
+    /disposable_postgres_verify_diagnostic_source_invalid/u,
+  );
+});
+
+test("diagnostic notices cross the membrane only as closed assertion identifiers", () => {
+  assert.equal(projectVerifyAssertionNotice({
+    code: "00000", severity: "NOTICE", routine: "exec_stmt_raise",
+    message: "public_core_unexpected_object_present", detail: "must not cross",
+  }), "public_core_unexpected_object_present");
+  for (const hostile of [
+    { code: "P0001", severity: "NOTICE", routine: "exec_stmt_raise", message: "public_core_unexpected_object_present" },
+    { code: "00000", severity: "WARNING", routine: "exec_stmt_raise", message: "public_core_unexpected_object_present" },
+    { code: "00000", severity: "NOTICE", routine: "exec_stmt_raise", message: "arbitrary catalog body" },
+  ]) assert.equal(projectVerifyAssertionNotice(hostile), null);
+});
+
+test("cached-image diagnostic returns one complete ordered body-free vector and cleans without restart or rollback", async () => {
+  const failedAssertions = [
+    "public_core_unexpected_object_present",
+    "public_core_encrypted_field_inventory_drift",
+  ];
+  const input = fixture({ diagnosticFailedAssertions: failedAssertions });
+  const result = await runVerifyDiagnosticRehearsal({ ...input, startedAt: "2026-08-17T00:00:00.000Z" });
+  assert.equal(result.status, "DIAGNOSTIC_COMPLETE_CLEAN");
+  assert.deepEqual(result.outcome, {
+    schemaApplied: true,
+    assertionCount: 18,
+    evaluatedAssertionCount: 18,
+    failedAssertionIds: failedAssertions,
+  });
+  assert.equal(result.observation.imagePulled, false);
+  assert.equal(input.docker.calls.includes("image.pull"), false);
+  assert.equal(input.docker.calls.filter((kind) => kind === "container.start").length, 1);
+  assert.equal(input.postgres.calls.includes("postgres.verify-diagnostic"), true);
+  assert.equal(input.postgres.calls.some((phase) => phase.includes("restart") || phase.includes("rollback")), false);
+  assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+  const serialized = JSON.stringify(result);
+  assert.equal(serialized.includes("must not cross"), false);
+  assert.equal(serialized.includes("catalog body"), false);
+});
+
+test("diagnostic refuses image acquisition and malformed assertion vectors", async () => {
+  const absent = fixture({ imageCached: false });
+  const absentResult = await runVerifyDiagnosticRehearsal({ ...absent });
+  assert.equal(absentResult.status, "FAILED_CLEAN");
+  assert.equal(absentResult.failure.code, "disposable_postgres_image_not_cached");
+  assert.equal(absent.docker.calls.includes("image.pull"), false);
+
+  for (const diagnosticFailedAssertions of [
+    ["public_core_unknown_drift"],
+    ["public_core_table_inventory_drift", "public_core_table_inventory_drift"],
+    ["public_core_index_inventory_drift", "public_core_table_inventory_drift"],
+  ]) {
+    const input = fixture({ diagnosticFailedAssertions });
+    const result = await runVerifyDiagnosticRehearsal({ ...input });
+    assert.equal(result.status, "FAILED_CLEAN");
+    assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+  }
 });
 
 test("cached-image rehearsal proves schema, restart, rollback and exact cleanup", async () => {
@@ -330,6 +420,7 @@ test("the ordinary command is separate from the frozen historical runner", async
   const source = await readFile(path.join(repositoryRoot, "scripts/r4-disposable-postgres-rehearsal.mjs"), "utf8");
   const packageJson = JSON.parse(await readFile(path.join(repositoryRoot, "package.json"), "utf8")) as { scripts: Record<string, string> };
   assert.equal(packageJson.scripts["r4:postgres:rehearse"], "node scripts/r4-disposable-postgres-rehearsal.mjs");
+  assert.equal(packageJson.scripts["r4:postgres:diagnose"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose");
   assert.doesNotMatch(source, /grant\.pending|owner-approval-receipt|INTEGRATION_CAMPAIGN/u);
   assert.match(source, /historicalResourcesTouched: false/u);
 });

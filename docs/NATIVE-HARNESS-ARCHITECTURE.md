@@ -2,21 +2,16 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-The separately approved #77 continuation consumed one exact pull and two
-disposable PostgreSQL lifecycles. It proved one verify-only ordering defect,
-then stopped cleanly at the next independent allowlisted assertion. Exact
-resource cleanup held; no provider, Guest, production, public or Gate C effect
-occurred.
+NH1/NH2 are unchanged. Under the newly approved consolidated #77 envelope, the
+complete 18-predicate body-free diagnostic is repository Technical Review
+Green. It derives from the pinned verify source instead of copying catalog
+logic and accepts no arbitrary database message. Construction made zero
+physical effects. Exactly one cached-image, no-pull diagnostic lifecycle is
+authorized; later correction remains conditional on its complete vector.
 
-NH1/NH2 are unchanged. The result reinforces the boundary: local computation
-may diagnose under an outcome envelope, but exhausted evidence budgets stop
-before repeated meaning changes. The repository-only architecture review is
-complete; it proposes a complete body-free assertion vector before any later
-consolidated correction. No runtime is implicit.
-
-Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
+ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
+CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

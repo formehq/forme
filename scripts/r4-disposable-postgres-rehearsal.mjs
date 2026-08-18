@@ -33,6 +33,7 @@ export const VERIFY_ASSERTION_IDS = Object.freeze([
   "public_core_composite_room_scope_drift",
 ]);
 const VERIFY_ASSERTION_ID_SET = new Set(VERIFY_ASSERTION_IDS);
+const VERIFY_DIAGNOSTIC_STATUS = "PUBLIC_CORE_ASSERTION_VECTOR_COMPLETE";
 export const SQL_BINDINGS = Object.freeze({
   schema: Object.freeze({
     path: "schemas/r4/public-core/schema.sql",
@@ -106,6 +107,52 @@ export function projectPostgresDiagnostic(error, phase = null) {
   return Object.freeze({ pgCode, severity, position, routine, verifyAssertion });
 }
 
+export function projectVerifyAssertionNotice(notice) {
+  if (notice === null || typeof notice !== "object" || Array.isArray(notice)) return null;
+  return notice.code === "00000"
+    && notice.severity === "NOTICE"
+    && notice.routine === "exec_stmt_raise"
+    && typeof notice.message === "string"
+    && VERIFY_ASSERTION_ID_SET.has(notice.message)
+    ? notice.message
+    : null;
+}
+
+export function normalizeVerifyAssertionVector(assertionIds) {
+  if (!Array.isArray(assertionIds) || assertionIds.some((value) => typeof value !== "string")) {
+    fail("disposable_postgres_verify_diagnostic_invalid", "postgres.verify-diagnostic", { ambiguous: true });
+  }
+  const positions = assertionIds.map((value) => VERIFY_ASSERTION_IDS.indexOf(value));
+  if (positions.some((position) => position < 0)
+      || new Set(assertionIds).size !== assertionIds.length
+      || positions.some((position, index) => index > 0 && position <= positions[index - 1])) {
+    fail("disposable_postgres_verify_diagnostic_invalid", "postgres.verify-diagnostic", { ambiguous: true });
+  }
+  return Object.freeze([...assertionIds]);
+}
+
+export function buildVerifyAssertionDiagnosticSql(verifySql) {
+  if (typeof verifySql !== "string" || !verifySql.startsWith("-- R4 #67 Durable Public Core proposed verification.")) {
+    fail("disposable_postgres_verify_diagnostic_source_invalid", "sql.verify-diagnostic");
+  }
+  const raisePattern = /RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = '([a-z0-9_]+)';/gu;
+  const identifiers = [...verifySql.matchAll(raisePattern)].map((match) => match[1]);
+  if (canonicalJson(identifiers) !== canonicalJson(VERIFY_ASSERTION_IDS)) {
+    fail("disposable_postgres_verify_diagnostic_source_invalid", "sql.verify-diagnostic");
+  }
+  const completionPattern = /SELECT\s+'PUBLIC_CORE_SCHEMA_PROPOSED_VERIFIED'::text AS status,\s+14::integer AS application_table_count,\s+0::integer AS migration_executions,\s+false AS traffic_ready,\s+false AS gate_c_ready;/u;
+  const completionMatches = verifySql.match(new RegExp(completionPattern.source, "gu")) ?? [];
+  if (completionMatches.length !== 1) fail("disposable_postgres_verify_diagnostic_source_invalid", "sql.verify-diagnostic");
+  const diagnosticSql = verifySql
+    .replace(raisePattern, (_statement, identifier) => `RAISE NOTICE USING ERRCODE = '00000', MESSAGE = '${identifier}';`)
+    .replace(completionPattern, `SELECT '${VERIFY_DIAGNOSTIC_STATUS}'::text AS status, ${VERIFY_ASSERTION_IDS.length}::integer AS assertion_count;`);
+  if (diagnosticSql.includes("RAISE EXCEPTION USING ERRCODE = 'P0001'")
+      || (diagnosticSql.match(/RAISE NOTICE USING ERRCODE = '00000'/gu) ?? []).length !== VERIFY_ASSERTION_IDS.length) {
+    fail("disposable_postgres_verify_diagnostic_source_invalid", "sql.verify-diagnostic");
+  }
+  return diagnosticSql;
+}
+
 function exactObject(value, phase) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) fail("disposable_postgres_docker_result_invalid", phase, { ambiguous: true });
   return value;
@@ -127,9 +174,12 @@ export function parseCliArguments(argv) {
   if (!Array.isArray(argv) || argv.some((value) => typeof value !== "string")) {
     fail("disposable_postgres_cli_invalid", "input");
   }
-  if (argv.length === 0) return Object.freeze({ allowImagePull: false });
+  if (argv.length === 0) return Object.freeze({ mode: "rehearse", allowImagePull: false });
+  if (argv.length === 1 && argv[0] === "diagnose") {
+    return Object.freeze({ mode: "diagnose", allowImagePull: false });
+  }
   if (argv.length === 1 && argv[0] === "--allow-image-pull") {
-    return Object.freeze({ allowImagePull: true });
+    return Object.freeze({ mode: "rehearse", allowImagePull: true });
   }
   fail("disposable_postgres_cli_invalid", "input");
 }
@@ -167,7 +217,12 @@ export function readPinnedSql(repositoryRoot = REPOSITORY_ROOT) {
     if (sha256(bytes) !== binding.sha256) fail("disposable_postgres_sql_binding_invalid", `sql.${kind}`);
     result[kind] = bytes.toString("utf8");
   }
-  return Object.freeze(result);
+  const verifyDiagnostic = buildVerifyAssertionDiagnosticSql(result.verify);
+  return Object.freeze({
+    ...result,
+    verifyDiagnostic,
+    verifyDiagnosticSha256: sha256(Buffer.from(verifyDiagnostic, "utf8")),
+  });
 }
 
 function labelArgs(labels) {
@@ -520,6 +575,43 @@ function createPhysicalPostgres(spec, runtime) {
     });
   }
 
+  async function diagnose(port, sql, phase) {
+    const client = new Client(config(port));
+    const assertionIds = [];
+    let unexpectedNotice = false;
+    let connected = false;
+    const onNotice = (notice) => {
+      const identifier = projectVerifyAssertionNotice(notice);
+      if (identifier === null) unexpectedNotice = true;
+      else assertionIds.push(identifier);
+    };
+    client.on("notice", onNotice);
+    try {
+      await client.connect();
+      connected = true;
+      const rawResult = await client.query(sql);
+      if (unexpectedNotice) fail("disposable_postgres_verify_diagnostic_invalid", phase, { ambiguous: true });
+      const results = Array.isArray(rawResult) ? rawResult : [rawResult];
+      const markers = results.flatMap((result) => Array.isArray(result?.rows) ? result.rows : [])
+        .filter((row) => row?.status === VERIFY_DIAGNOSTIC_STATUS);
+      if (markers.length !== 1
+          || canonicalJson(Object.keys(markers[0]).sort()) !== canonicalJson(["assertion_count", "status"])
+          || markers[0].assertion_count !== VERIFY_ASSERTION_IDS.length) {
+        fail("disposable_postgres_verify_diagnostic_invalid", phase, { ambiguous: true });
+      }
+      return normalizeVerifyAssertionVector(assertionIds);
+    } catch (error) {
+      if (error instanceof RehearsalError) throw error;
+      fail("disposable_postgres_sql_failed", phase, { ambiguous: true });
+    } finally {
+      client.off("notice", onNotice);
+      if (connected) {
+        try { await client.end(); }
+        catch { /* the disposable container/volume cleanup is the final closure */ }
+      }
+    }
+  }
+
   async function installationSeed(port) {
     return withClient(port, "postgres.seed", async (client) => {
       const result = await client.query(
@@ -537,7 +629,7 @@ function createPhysicalPostgres(spec, runtime) {
     });
   }
 
-  return Object.freeze({ waitReady, serverVersion, execute, installationSeed, schemaAbsent });
+  return Object.freeze({ waitReady, serverVersion, execute, diagnose, installationSeed, schemaAbsent });
 }
 
 function expectedSeed() {
@@ -674,6 +766,103 @@ export async function runRehearsal({
   });
 }
 
+export async function runVerifyDiagnosticRehearsal({
+  spec, docker, postgres, sql, startedAt = new Date().toISOString(),
+}) {
+  const state = {
+    host: null,
+    image: null,
+    port: null,
+    readinessAttempts: 0,
+    schemaApplied: false,
+    assertionIds: null,
+    resourceIds: { container: null, network: null, volume: null },
+  };
+  let primaryFailure = null;
+  let cleanupFailure = null;
+  let cleanup = Object.freeze({ container: false, network: false, volume: false });
+
+  try {
+    state.host = await docker.version();
+    state.image = await docker.inspectImage();
+    if (state.image === null) fail("disposable_postgres_image_not_cached", "docker.image.inspect");
+    if (state.image.platform !== IMAGE_PLATFORM) fail("disposable_postgres_image_platform_mismatch", "docker.image.inspect");
+    await docker.requireAbsent("container", spec.names.container);
+    await docker.requireAbsent("network", spec.names.network);
+    await docker.requireAbsent("volume", spec.names.volume);
+    state.resourceIds.network = await docker.createNetwork();
+    state.resourceIds.volume = await docker.createVolume();
+    state.resourceIds.container = await docker.createContainer();
+    await docker.startContainer();
+    state.port = await docker.publishedPort();
+    state.readinessAttempts = await postgres.waitReady(state.port, "postgres.readiness.diagnostic");
+    const version = await postgres.serverVersion(state.port);
+    if (version !== POSTGRES_SERVER_VERSION_NUM) fail("disposable_postgres_version_mismatch", "postgres.version");
+    await postgres.execute(state.port, sql.schema, "postgres.schema");
+    state.schemaApplied = true;
+    state.assertionIds = normalizeVerifyAssertionVector(
+      await postgres.diagnose(state.port, sql.verifyDiagnostic, "postgres.verify-diagnostic"),
+    );
+  } catch (error) {
+    primaryFailure = sanitizeError(error);
+  } finally {
+    try { cleanup = await docker.cleanup(); }
+    catch (error) { cleanupFailure = sanitizeError(error); }
+  }
+
+  const cleanupGreen = cleanupFailure === null && cleanup.container && cleanup.network && cleanup.volume;
+  const diagnosticComplete = primaryFailure === null && state.schemaApplied && state.assertionIds !== null;
+  return Object.freeze({
+    schemaVersion: "r4.disposable-postgres-verify-diagnostic-result.v1",
+    status: diagnosticComplete && cleanupGreen ? "DIAGNOSTIC_COMPLETE_CLEAN"
+      : cleanupGreen ? "FAILED_CLEAN" : "FAILED_CLEANUP_AMBIGUOUS",
+    runId: spec.runId,
+    startedAt,
+    finishedAt: new Date().toISOString(),
+    outcome: Object.freeze({
+      schemaApplied: state.schemaApplied,
+      assertionCount: VERIFY_ASSERTION_IDS.length,
+      evaluatedAssertionCount: state.assertionIds === null ? 0 : VERIFY_ASSERTION_IDS.length,
+      failedAssertionIds: state.assertionIds,
+    }),
+    bindings: Object.freeze({
+      imageReference: IMAGE_REFERENCE,
+      imagePlatform: IMAGE_PLATFORM,
+      postgresServerVersionNum: POSTGRES_SERVER_VERSION_NUM,
+      schemaSha256: SQL_BINDINGS.schema.sha256,
+      verifySourceSha256: SQL_BINDINGS.verify.sha256,
+      verifyDiagnosticSha256: sql.verifyDiagnosticSha256,
+    }),
+    observation: Object.freeze({
+      host: state.host,
+      imagePulled: false,
+      image: state.image,
+      publishedHost: state.port === null ? null : "127.0.0.1",
+      publishedPort: state.port,
+      readinessAttempts: state.readinessAttempts,
+    }),
+    resources: Object.freeze({
+      names: spec.names,
+      labels: spec.labels,
+      ids: Object.freeze({ ...state.resourceIds }),
+      finalAbsent: cleanup,
+    }),
+    effects: Object.freeze({
+      syntheticDataOnly: true,
+      historicalResourcesTouched: false,
+      imagePulls: 0,
+      providerCalls: 0,
+      realGuestRecords: 0,
+      productionEffects: 0,
+      publicTrafficEffects: 0,
+      gateCEffects: 0,
+      dockerCallCounts: Object.freeze({ ...docker.callCounts }),
+    }),
+    failure: primaryFailure,
+    cleanupFailure,
+  });
+}
+
 async function main() {
   const runId = randomBytes(8).toString("hex");
   let runtime = null;
@@ -687,7 +876,9 @@ async function main() {
     const sql = readPinnedSql();
     const docker = createPhysicalDocker(spec, runtime, socketPath);
     const postgres = createPhysicalPostgres(spec, runtime);
-    result = await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
+    result = cli.mode === "diagnose"
+      ? await runVerifyDiagnosticRehearsal({ spec, docker, postgres, sql })
+      : await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
   } catch (error) {
     result = Object.freeze({
       schemaVersion: "r4.disposable-postgres-rehearsal-result.v1",
@@ -713,7 +904,7 @@ async function main() {
     result = Object.freeze({ ...result, localRuntimeResidueAbsent: localCleanupGreen });
   }
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
-  process.exitCode = result.status === "GREEN" && result.localRuntimeResidueAbsent ? 0 : 1;
+  process.exitCode = ["GREEN", "DIAGNOSTIC_COMPLETE_CLEAN"].includes(result.status) && result.localRuntimeResidueAbsent ? 0 : 1;
 }
 
 const invokedPath = process.argv[1] === undefined ? null : path.resolve(process.argv[1]);
