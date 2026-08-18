@@ -1,124 +1,105 @@
 # R4 reviewable integration package
 
-Status: repository-only construction Green; the later bounded local campaign
-physically proved schema, both verify passes, restart readiness and persistence,
-then exhausted its budget at an unidentified rollback guard. See
-[`CONTROL.md`](./CONTROL.md) for current operational truth.
+Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+REVIEWABLE_INTEGRATION_BRANCH_REFRESH_APPROVED / MERGE_NOT_REQUESTED`,
+2026-08-18.
 
 ## User outcome
 
-Make the current Durable Public Core and disposable PostgreSQL proof reviewable
-as one product outcome, without asking the reviewer to reconstruct the historical
-one-use authority chain.
+Present the current Durable Public Core and physically Green disposable
+PostgreSQL boundary as one reviewable #67 integration change. A reviewer should
+not need to reconstruct the historical one-use Card/Addendum/Review chain.
 
-## What the restart failure taught us
+This package creates no direct Product Progress. It makes the already-built
+product persistence boundary reviewable so #67 can proceed to integration,
+activation and one Owner-experienced Guest encounter.
 
-Run `71ac0e393653db72` proved schema apply and the corrected initial verify, then
-failed cleanly after one container stop/start. The old result collapsed every
-restart connection failure into `disposable_postgres_readiness_exhausted`,
-reported `0` observed restart attempts on failure, and did not re-prove the
-container running state or published port after the second start. Its fake test
-returned a hard-coded successful attempt count instead of executing the
-production readiness controller. The retained evidence therefore cannot tell
-whether the container exited, its port changed, connection was transiently
-refused, authentication/configuration failed, the readiness query failed, or
-the result was malformed.
+## What is now proven
 
-The repository correction now:
+Final local run `69ac02f4e8dfbf01` used the exact PostgreSQL 16
+`linux/arm64` digest and passed:
 
-- uses one shared production readiness controller in code and tests;
-- preserves every attempted readiness probe even when the gate fails;
-- permits retries only for a closed transient-connect class;
-- stops immediately and body-free on authentication/configuration, query,
-  result, client-close, clock, container-state, or port-binding failure;
-- uses a fresh client with readiness-specific 1.5-second query/statement limits;
-- bounds the gate to at most 60 attempts and 60 seconds;
-- re-inspects the restarted exact-owned container, proves that it is running
-  with one loopback-only published port, and uses that freshly observed port
-  before another PostgreSQL probe;
-- emits result schema `r4.disposable-postgres-rehearsal-result.v2` with exact
-  readiness attempt counts and closed outcome classes.
+1. schema apply;
+2. initial verify;
+3. one same-container stop/start;
+4. restart readiness on the freshly observed loopback port;
+5. post-restart verify;
+6. installation-seed persistence;
+7. rollback apply;
+8. schema-absence proof; and
+9. exact container, network, volume, credential and runtime cleanup.
 
-No Docker, socket, PostgreSQL, SQL, provider, Guest, production, public traffic
-or Gate C effect was used to construct or validate this correction.
+The preceding body-free diagnostic evaluated all 10 rollback guards and named
+only `public_core_rollback_catalog_manifest_drift`. The catalog was unchanged:
+rollback lacked the transaction-local `search_path` used by schema and verify
+when PostgreSQL deparsed catalog text. Commit `360ed6c` corrected only that
+observation context. It changed no table, constraint, business meaning,
+inventory or catalog-signature algorithm.
 
-## What the later local campaign proved
-
-The Owner-confirmed campaign subsequently exercised the corrected controller.
-Runs `2be1317fe91bd165` and `7dca9ef5bf763039` each applied the exact schema,
-passed initial verify, restarted the same container, became ready on the newly
-observed loopback port, passed post-restart verify and proved seed persistence.
-Every exact-owned resource was then removed. The remaining failure is confined
-to a body-free rollback guard `P0001`; its exact predefined guard identifier is
-not present in result v2. Three repairs and four lifecycles are consumed, so no
-further run is authorized by this package.
+Production, real/private data, provider/public effects and Gate C remained
+zero. The exact image may remain in the local cache; every disposable runtime
+resource is absent.
 
 ## Three review slices
 
-The existing local line is 123 commits and 163 changed paths beyond Draft PR
-#76. It contains 99 governance-only commits and 24 commits that touch an
-implementation surface. The final integration review should be narrated as
-three slices even if they remain one PR:
+The historical local line is too large to review as one chronological diff.
+The integration branch therefore preserves three conceptual slices:
 
-1. **Product persistence.** The five `apps/room/src/public-core-*` changes, the
-   three PostgreSQL SQL artifacts, their application/store/executor/privacy
-   tests, and required package bindings. This is the durable product behavior.
-2. **Disposable proof.** `scripts/r4-disposable-postgres-rehearsal.mjs`, its one
-   focused test, this package, the concise rehearsal result and its machine
-   evidence. This is development infrastructure, not product progress.
+1. **Product persistence.** The `public-core-*` application, Postgres store and
+   executor, the three SQL artifacts, contract tests and package bindings.
+2. **Disposable proof.** The bounded rehearsal runner, focused tests, concise
+   result and machine evidence. This is development infrastructure, not a
+   product capability.
 3. **Operating truth.** The working agreement and the small current-status
-   surfaces (`README`, `PRODUCT`, `CONTROL`, `ROADMAP`, `VALIDATION`, project
-   metadata). These explain the current gate and review path.
+   surfaces that explain the present gate and Owner-review path.
 
-All historical Physical Runner Cards, Addenda, Owner Reviews, construction
-reports, artifact indexes and frozen machine-evidence schemas remain immutable
-archive evidence. They are not required reading for the current implementation
-review and must not be presented as separate active product decisions.
-
-## Constructed local review branch
-
-Local branch `codex/r4-reviewable-integration` is constructed directly above
-Draft PR #76 head `c831b4d5253049c4581d3c576aea59648d699d97` as exactly three commits:
+The already-constructed branch begins directly above Draft PR #76 head
+`c831b4d5253049c4581d3c576aea59648d699d97` with these three commits:
 
 1. product persistence `30822612145e46dee6c9210e484abf2715907f3b`;
 2. disposable PostgreSQL proof `773ac10b2cd47fb5584a93412cb8bf588e6b3510`;
-3. current operating truth `1aa5c18a06a60bd3b3fc1fbac750ee8f75edcc52`.
+3. operating truth `1aa5c18a06a60bd3b3fc1fbac750ee8f75edcc52`.
 
-The branch has no upstream and has not been pushed or merged. An isolated
-worktree validation of its own bytes passed the focused disposable proof
-`22/22`, product persistence tests `88/88`, spine/Room typecheck and document
-audit. The temporary validation worktree was removed afterward.
+The approved refresh adds only the later proof-closing implementation/evidence
+and current operating truth. Historical authority documents and failed-run
+artifacts remain outside the review branch as archive evidence.
 
-## Validation
+## Validation and demo
 
-- focused disposable PostgreSQL tests: `22 passed / 0 failed`;
-- offline R4 regression: `598 passed / 0 failed / 111 historical physical tests skipped`;
+Current source validation before the branch refresh:
+
+- focused disposable PostgreSQL tests: `26 / 26`;
+- offline R4 regression: `602 passed / 0 failed / 111` historical skips;
 - spine and Room TypeScript checks: Green;
-- document audit: Green;
-- `git diff --check`: Green.
+- document audit and `git diff --check`: Green;
+- final physical proof: `GREEN`, exact-owned residue `0`.
 
-Runnable repository-only demo:
+Runnable repository-only proof:
 
 ```sh
 node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-postgres-rehearsal.test.ts
 ```
 
-## What the Owner should challenge
+The Draft PR must also run the product persistence tests, full offline R4,
+typecheck and document audit against its own bytes. Remote CI is not inferred
+until that branch is pushed and checked.
 
-- Are the seven closed readiness outcomes enough to decide the next correction
-  without retaining arbitrary Docker or PostgreSQL bodies?
-- Is 60 attempts / 60 seconds a reasonable local-development bound?
-- Does the final integration PR make the product-persistence slice obvious
-  without rewriting immutable history?
+## Owner review focus
 
-Passing these tests is Technical Review only. Restart persistence and
-post-restart verify are now physically proved; rollback remains unproved. The
-next review target is a strict predefined rollback-assertion diagnostic and a
-bounded successor campaign. That continuation does not alter the repository
-construction proof in this package.
+- Is the product-persistence slice understandable without the governance
+  archive?
+- Does the typed PostgreSQL adapter preserve the already-approved privacy,
+  one-use, replay, retention and rollback contracts?
+- Does the result clearly distinguish Enabler Green from #67 Product Progress?
+- Is the next activation boundary explicit enough to prevent an accidental
+  Production, publication, real Guest or Gate C effect?
 
-Historical construction stop:
+Passing this review is Technical Review only. Merge remains separately
+controlled. The next user-visible acceptance point is one real Public Room and
+bounded Guest knock, not another PostgreSQL rehearsal.
 
-`POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
-REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop:
+
+`LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+REVIEWABLE_INTEGRATION_DRAFT_PR_REQUIRED / MERGE_NOT_REQUESTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
