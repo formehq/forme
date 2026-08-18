@@ -5,6 +5,7 @@
 -- seeds created by schema.sql are eligible for removal.
 
 BEGIN;
+SET LOCAL search_path = pg_catalog, forme_r4_public_core;
 
 DO $rollback_guard$
 DECLARE

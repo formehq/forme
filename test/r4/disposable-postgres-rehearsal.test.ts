@@ -401,7 +401,7 @@ test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback byt
   }, {
     schema: "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
     verify: "sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e",
-    rollback: "sha256:d20b9da9fbb2287390d16ba230c25b840d9daeee207662d59d79bf5b3448334a",
+    rollback: "sha256:618f5de12e7d5b0aeae56229c055aacf1ea9936adfad8c14bed87b80d5650c61",
   });
 });
 
@@ -503,6 +503,7 @@ test("the rollback assertion enum and derived SQL exactly cover all ten committe
   )].map((match) => match[1]);
   assert.deepEqual(ROLLBACK_ASSERTION_IDS, identifiers);
   assert.equal(new Set(ROLLBACK_ASSERTION_IDS).size, ROLLBACK_ASSERTION_IDS.length);
+  assert.match(rollbackSql, /^BEGIN;\nSET LOCAL search_path = pg_catalog, forme_r4_public_core;/mu);
 
   const sql = readPinnedSql();
   assert.equal(sql.rollbackDiagnostic, buildRollbackAssertionDiagnosticSql(sql.rollback));
