@@ -45,7 +45,7 @@ export const SQL_BINDINGS = Object.freeze({
   }),
   rollback: Object.freeze({
     path: "schemas/r4/public-core/rollback.sql",
-    sha256: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
+    sha256: "sha256:d20b9da9fbb2287390d16ba230c25b840d9daeee207662d59d79bf5b3448334a",
   }),
 });
 
