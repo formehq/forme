@@ -1,11 +1,11 @@
 {
-  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v6",
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v8",
   "issue": 77,
-  "status": "FINAL_LIFECYCLE_RESTART_READINESS_FAILED_CLEAN",
+  "status": "LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN",
   "productProgress": 0,
   "repositoryCorrection": {
-    "status": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN",
-    "physicalExecutionPerformed": false,
+    "status": "ROLLBACK_ASSERTION_DIAGNOSTIC_AND_DEPARSE_CORRECTION_GREEN",
+    "physicalExecutionPerformed": true,
     "resultSchemaVersion": "r4.disposable-postgres-rehearsal-result.v2",
     "maximumReadinessAttempts": 60,
     "maximumReadinessDurationMs": 60000,
@@ -22,6 +22,11 @@
     "productionControllerUsedByTests": true,
     "restartContainerRunningRechecked": true,
     "restartLoopbackPortRechecked": true,
+    "startupHandshakeDisconnectRetryBounded": true,
+    "restartUsesFreshlyObservedLoopbackPort": true,
+    "rollbackInventoryUsesExplicitTextCOrdering": true,
+    "rollbackCatalogDeparseUsesPinnedSearchPath": true,
+    "rollbackAppliedAndSchemaAbsencePhysicallyProven": true,
     "reviewableIntegrationPackage": "docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md"
   },
   "attemptBudget": {
@@ -62,6 +67,256 @@
       "finalFullLifecyclesConsumed": 1,
       "anonymousImagePullsAllowed": 1,
       "anonymousImagePullsConsumed": 1
+    },
+    "localDisposableCampaign": {
+      "workingDaysAllowed": 3,
+      "repositoryRepairsAllowed": 3,
+      "repositoryRepairsConsumed": 3,
+      "fullLifecyclesAllowed": 4,
+      "fullLifecyclesConsumed": 4,
+      "imageAcquisitionAttemptsAllowed": 2,
+      "imageAcquisitionAttemptsConsumed": 1,
+      "imagePullsConsumed": 1
+    },
+    "rollbackAssertionCampaign": {
+      "diagnosticLifecyclesAllowed": 1,
+      "diagnosticLifecyclesConsumed": 1,
+      "rollbackOnlyCorrectionsAllowed": 1,
+      "rollbackOnlyCorrectionsConsumed": 1,
+      "finalFullLifecyclesAllowed": 1,
+      "finalFullLifecyclesConsumed": 1,
+      "exactImageAcquisitionsAllowedIfAbsent": 1,
+      "exactImageAcquisitionsConsumed": 0,
+      "imagePullsConsumed": 0
+    }
+  },
+  "localDisposableCampaign": {
+    "preCampaignAcquisitionObservation": {
+      "runId": "5bfaf0bfacaede47",
+      "status": "FAILED_CLEAN",
+      "failureCode": "disposable_postgres_image_not_cached",
+      "beforeResourceCreation": true,
+      "countedAsFullLifecycle": false,
+      "imagePulled": false,
+      "ownedResidue": 0
+    },
+    "repositoryRepairs": [
+      {
+        "commit": "bfac7cf8ee642807231867296ce84d47518ff93e",
+        "tree": "3a5948ae57290a5ce6d9da393711b4f0c0fa2906",
+        "outcome": "BOUNDED_STARTUP_HANDSHAKE_DISCONNECT_RETRY"
+      },
+      {
+        "commit": "b9765e673819662f9e26c25402f5b88f6423f663",
+        "tree": "156b2fe4a2174f33c5b25a2ab511610fce0e7ecd",
+        "outcome": "RESTART_BINDS_FRESHLY_OBSERVED_LOOPBACK_PORT"
+      },
+      {
+        "commit": "236ac1b9a78c4f28686b006faa390ac7c9902326",
+        "tree": "8121ee2b8638efe9396b54d5afd21599d0db6c00",
+        "outcome": "ROLLBACK_INVENTORY_EXPLICIT_TEXT_C_ORDERING",
+        "rollbackSqlSha256": "sha256:d20b9da9fbb2287390d16ba230c25b840d9daeee207662d59d79bf5b3448334a"
+      }
+    ],
+    "lifecycles": [
+      {
+        "runId": "eec5b2c54651d075",
+        "status": "FAILED_CLEAN",
+        "imagePulled": true,
+        "failureCode": "disposable_postgres_readiness_connect_failed",
+        "failurePhase": "postgres.readiness.initial",
+        "schemaApplied": false,
+        "ownedResidue": 0
+      },
+      {
+        "runId": "ac4b54f5c5fe0be8",
+        "status": "FAILED_CLEAN",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_port_binding_changed",
+        "failurePhase": "docker.container.restart",
+        "schemaApplied": true,
+        "verifyCount": 1,
+        "restartCount": 1,
+        "ownedResidue": 0
+      },
+      {
+        "runId": "2be1317fe91bd165",
+        "status": "FAILED_CLEAN",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_sql_failed",
+        "failurePhase": "postgres.rollback",
+        "schemaApplied": true,
+        "verifyCount": 2,
+        "restartCount": 1,
+        "restartPersistenceProven": true,
+        "rollbackApplied": false,
+        "postgresDiagnostic": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise"
+        },
+        "ownedResidue": 0
+      },
+      {
+        "runId": "7dca9ef5bf763039",
+        "status": "FAILED_CLEAN",
+        "startedAt": "2026-08-18T04:06:16.927Z",
+        "finishedAt": "2026-08-18T04:06:20.346Z",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_sql_failed",
+        "failurePhase": "postgres.rollback",
+        "schemaApplied": true,
+        "verifyCount": 2,
+        "restartCount": 1,
+        "restartPersistenceProven": true,
+        "rollbackApplied": false,
+        "postgresDiagnostic": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise"
+        },
+        "publishedHost": "127.0.0.1",
+        "publishedPort": 56232,
+        "initialReadinessAttempts": 2,
+        "restartReadinessAttempts": 2,
+        "ownedResidue": 0
+      }
+    ],
+    "physicallyProven": {
+      "postgresServerVersionNum": 160010,
+      "schemaApplied": true,
+      "initialVerify": true,
+      "sameContainerRestart": true,
+      "restartReadiness": true,
+      "postRestartVerify": true,
+      "restartPersistence": true,
+      "exactCleanup": true
+    },
+    "notProven": {
+      "rollbackGuardIdentity": true,
+      "rollbackApplied": true,
+      "rollbackSchemaAbsence": true,
+      "production": true,
+      "gateC": true
+    }
+  },
+  "rollbackAssertionCampaign": {
+    "preDiagnosticCacheObservation": {
+      "runId": "f72c93e0085df276",
+      "status": "FAILED_CLEAN",
+      "failureCode": "disposable_postgres_image_not_cached",
+      "beforeResourceCreation": true,
+      "countedAsDiagnosticLifecycle": false,
+      "imagePulled": false,
+      "ownedResidue": 0
+    },
+    "diagnosticConstruction": {
+      "commit": "6088dad2591633fcf9b7dac4889170f3d8f1c38d",
+      "reviewBranchEquivalentCommit": "370c5d695258a080241fbedfb25b3dcb650aad08",
+      "tree": "49bbd08b5382bbb3113eb0c2a785a3ee2dbe680a",
+      "rollbackAssertionCount": 10,
+      "rollbackDiagnosticSqlSha256": "sha256:533a1563022d7a1db9b194df873bdab1ed4a95eae847685c98ea51d1d1a8e23a"
+    },
+    "diagnosticLifecycle": {
+      "runId": "4aff3665a92bc4d8",
+      "status": "DIAGNOSTIC_COMPLETE_CLEAN",
+      "schemaApplied": true,
+      "verifyCount": 2,
+      "restartCount": 1,
+      "restartPersistenceProven": true,
+      "evaluatedAssertionCount": 10,
+      "failedAssertionIds": [
+        "public_core_rollback_catalog_manifest_drift"
+      ],
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "imagePulled": false,
+      "dockerCallCounts": {
+        "version": 1,
+        "image.inspect": 1,
+        "container.list": 4,
+        "network.list": 3,
+        "volume.list": 3,
+        "network.create": 1,
+        "network.inspect": 2,
+        "volume.create": 1,
+        "volume.inspect": 2,
+        "container.create": 1,
+        "container.inspect": 7,
+        "container.start": 2,
+        "container.stop": 2,
+        "container.rm": 1,
+        "network.rm": 1,
+        "volume.rm": 1
+      },
+      "ownedResidue": 0
+    },
+    "rollbackOnlyCorrection": {
+      "commit": "360ed6c9de4602ca830d5f7b6e5a60e62d0386e8",
+      "reviewBranchEquivalentCommit": "370c5d695258a080241fbedfb25b3dcb650aad08",
+      "tree": "93836cfd49f17339c8671cac06388aca42af7551",
+      "outcome": "ROLLBACK_CATALOG_DEPARSE_USES_SCHEMA_AND_VERIFY_SEARCH_PATH",
+      "schemaShapeChanged": false,
+      "businessMeaningChanged": false,
+      "catalogSignatureAlgorithmChanged": false,
+      "rollbackSqlSha256": "sha256:618f5de12e7d5b0aeae56229c055aacf1ea9936adfad8c14bed87b80d5650c61"
+    },
+    "finalLifecycle": {
+      "runId": "69ac02f4e8dfbf01",
+      "status": "GREEN",
+      "schemaApplied": true,
+      "verifyCount": 2,
+      "restartCount": 1,
+      "restartPersistenceProven": true,
+      "rollbackApplied": true,
+      "rollbackProven": true,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "imagePulled": false,
+      "dockerCallCounts": {
+        "version": 1,
+        "image.inspect": 1,
+        "container.list": 4,
+        "network.list": 3,
+        "volume.list": 3,
+        "network.create": 1,
+        "network.inspect": 2,
+        "volume.create": 1,
+        "volume.inspect": 2,
+        "container.create": 1,
+        "container.inspect": 7,
+        "container.start": 2,
+        "container.stop": 2,
+        "container.rm": 1,
+        "network.rm": 1,
+        "volume.rm": 1
+      },
+      "ownedResidue": 0
+    },
+    "physicallyProven": {
+      "postgresServerVersionNum": 160010,
+      "schemaApplied": true,
+      "initialVerify": true,
+      "sameContainerRestart": true,
+      "restartReadiness": true,
+      "postRestartVerify": true,
+      "restartPersistence": true,
+      "rollbackApplied": true,
+      "rollbackSchemaAbsence": true,
+      "exactCleanup": true
+    },
+    "notProven": {
+      "productIntegration": true,
+      "production": true,
+      "gateC": true
     }
   },
   "bindings": {
@@ -127,6 +382,21 @@
       "rehearsalTestSha256": "sha256:6795da29482ba8dbb019896b4b43921515ef818d78f8f8ce5b06770de66e7439",
       "postgresContractTestSha256": "sha256:fce31011a41701fa850f607884fb5e9c7040dc0417af115d0c8b987cd85f6dde",
       "historicalRunnerTestSha256": "sha256:76b450075a7f1992e61c7fbea0024ec2f3c9d1e1a1f561b219fd03bad366ed49"
+    },
+    "rollbackAssertionCampaign": {
+      "diagnosticCommit": "6088dad2591633fcf9b7dac4889170f3d8f1c38d",
+      "correctionCommit": "360ed6c9de4602ca830d5f7b6e5a60e62d0386e8",
+      "correctionTree": "93836cfd49f17339c8671cac06388aca42af7551",
+      "reviewBranchEquivalentCommit": "370c5d695258a080241fbedfb25b3dcb650aad08",
+      "reviewBranchEquivalentTree": "df0855cb3e09ecd38e6db63ef23d88390d99b561",
+      "schemaSqlSha256": "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
+      "verifySqlSha256": "sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e",
+      "rollbackSqlSha256": "sha256:618f5de12e7d5b0aeae56229c055aacf1ea9936adfad8c14bed87b80d5650c61",
+      "rollbackDiagnosticSqlSha256": "sha256:533a1563022d7a1db9b194df873bdab1ed4a95eae847685c98ea51d1d1a8e23a",
+      "runnerSha256": "sha256:cd0ecf088321b14c7970dc2ee03a7b0d2db930fa47bf6c22e2f5ac5a571afd84",
+      "rehearsalTestSha256": "sha256:2c3d368411f15ef3a19935eb7c0e0a3a1192b03cfcc62d3c1f08b62dceedb736",
+      "historicalRunnerTestSha256": "sha256:adbe12eaad0734c8c000f2299d22a030b4600bdd4d18272d2a83a8ced467fd24",
+      "packageSha256": "sha256:781d77b3a9b48e98dcfc0cdd6153709461a84713e7023bd92fbbe4dc3a6382e4"
     }
   },
   "attempts": [
@@ -475,15 +745,65 @@
         "volume": true,
         "credentialAndRuntimeRoot": true
       }
+    },
+    {
+      "runId": "4aff3665a92bc4d8",
+      "bindingSet": "rollbackAssertionDiagnosticConstruction",
+      "startedAt": "2026-08-18T06:50:12.552Z",
+      "finishedAt": "2026-08-18T06:50:16.216Z",
+      "status": "DIAGNOSTIC_COMPLETE_CLEAN",
+      "imagePulled": false,
+      "schemaApplied": true,
+      "verifyCount": 2,
+      "restartCount": 1,
+      "restartPersistenceProven": true,
+      "evaluatedAssertionCount": 10,
+      "failedAssertionIds": [
+        "public_core_rollback_catalog_manifest_drift"
+      ],
+      "initialReadinessAttempts": 2,
+      "restartReadinessAttempts": 2,
+      "publishedHost": "127.0.0.1",
+      "publishedPort": 58030,
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
+    },
+    {
+      "runId": "69ac02f4e8dfbf01",
+      "bindingSet": "rollbackCatalogDeparseCorrection",
+      "startedAt": "2026-08-18T06:52:28.649Z",
+      "finishedAt": "2026-08-18T06:52:32.292Z",
+      "status": "GREEN",
+      "imagePulled": false,
+      "schemaApplied": true,
+      "verifyCount": 2,
+      "restartCount": 1,
+      "restartPersistenceProven": true,
+      "rollbackApplied": true,
+      "rollbackProven": true,
+      "initialReadinessAttempts": 2,
+      "restartReadinessAttempts": 2,
+      "publishedHost": "127.0.0.1",
+      "publishedPort": 58092,
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
     }
   ],
   "validation": {
     "focusedHarnessTests": {
-      "passed": 22,
+      "passed": 26,
       "failed": 0
     },
     "offlineR4Regression": {
-      "passed": 598,
+      "passed": 602,
       "failed": 0,
       "skippedHistoricalPhysicalRunnerTests": 111
     },
@@ -518,14 +838,23 @@
     "imagePullsInCompleteVectorReplacement": 1,
     "diagnosticInvocationsInCompleteVectorReplacement": 1,
     "verifyCorrectionsInCompleteVectorReplacement": 1,
-    "fullPostgresLifecyclesInCompleteVectorReplacement": 1
+    "fullPostgresLifecyclesInCompleteVectorReplacement": 1,
+    "repositoryRepairsInLocalDisposableCampaign": 3,
+    "fullPostgresLifecyclesInLocalDisposableCampaign": 4,
+    "imageAcquisitionAttemptsInLocalDisposableCampaign": 1,
+    "imagePullsInLocalDisposableCampaign": 1,
+    "diagnosticLifecyclesInRollbackAssertionCampaign": 1,
+    "rollbackOnlyCorrectionsInRollbackAssertionCampaign": 1,
+    "finalFullLifecyclesInRollbackAssertionCampaign": 1,
+    "imagePullsInRollbackAssertionCampaign": 0,
+    "latestLifecycleOwnedResidue": 0
   },
   "inference": {
-    "classification": "INITIAL_VERIFY_GREEN_RESTART_READINESS_FAILED_CLEAN",
+    "classification": "LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN",
     "confidence": "HIGH",
-    "basis": "Replacement diagnostic run 0dddf25aee37504c consumed the one authorized exact image pull, evaluated all 18 predicates and returned only public_core_unexpected_object_present. That vector exactly matched the reviewed PostgreSQL catalog-ordering class. Commit e8db0e47 applied one consolidated verify-only C-ordering correction and repository validation passed. Final run 71ac0e393653db72 then applied the schema and passed initial verify, stopped after one container restart when readiness exhausted, and removed every exact-owned resource and runtime byte.",
-    "suspectedArea": "The catalog-expression correction is physically proved through the initial verify. Restart persistence and rollback remain unproved because the single final lifecycle exhausted readiness after restart. The retained v1 result cannot distinguish container exit, port drift, transient connect refusal, authentication/configuration failure, query failure or malformed readiness result. The repository-only v2 controller can distinguish those closed classes on a future separately authorized lifecycle, but it does not retroactively identify the old run's cause."
+    "basis": "Rollback diagnostic run 4aff3665a92bc4d8 evaluated all 10 closed guards and isolated public_core_rollback_catalog_manifest_drift after two verify passes and restart persistence. The rollback-only correction fixed the missing pinned search_path without changing schema shape, business meaning or catalog signature. Final run 69ac02f4e8dfbf01 then applied schema, passed both verifies around one same-container restart, proved persistence, applied rollback, proved schema absence and removed every exact-owned resource and runtime byte.",
+    "remainingWork": "The disposable PostgreSQL Enabler is Green. #67 still needs product integration, activation and one Owner-experienced Public Room encounter; Production and Gate C remain closed."
   },
-  "physicalStop": "POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED / EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED",
-  "stop": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN / REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "physicalStop": "LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED",
+  "stop": "DISPOSABLE_POSTGRES_ENABLER_GREEN / PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

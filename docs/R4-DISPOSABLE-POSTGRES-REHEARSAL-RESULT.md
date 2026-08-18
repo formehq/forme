@@ -1,26 +1,51 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED`,
-2026-08-17.
+Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN`, 2026-08-18.
 
 ## Plain-language result
 
-Replacement diagnostic run `0dddf25aee37504c` pulled the exact image once,
-evaluated all 18 assertions and returned one closed failure identifier:
-`public_core_unexpected_object_present`. This exactly matched the reviewed
-PostgreSQL catalog-ordering class. The run cleaned every exact-owned resource.
+The successor campaign closed #77's last local database blocker. Commit
+`6088dad` added a read-only, body-free vector for all 10 rollback guards. Run
+`4aff3665a92bc4d8` completed schema apply, two verify passes around one
+same-container restart and seed-persistence proof, then identified exactly one
+failed guard: `public_core_rollback_catalog_manifest_drift`.
 
-The consolidated verify-only correction at `e8db0e47` gave every fixed
-inventory comparison the same explicit text `C` ordering. It changed no
-schema, rollback, expected set, catalog-manifest query/result or business
-meaning. Full repository validation passed.
+The catalog itself was not different. Schema and verify computed their catalog
+deparse under the same pinned `search_path`; rollback omitted that local
+setting, so PostgreSQL 16 rendered equivalent index definitions differently.
+Commit `360ed6c` adds only that missing transaction-local setting and updates
+the exact rollback hash. It changes no table, constraint, business meaning,
+catalog inventory or signature algorithm.
 
-Final run `71ac0e393653db72` applied the schema and passed the corrected initial
-verify, then performed one container stop/start. PostgreSQL did not become
-ready within the bounded restart window. Post-restart verify, persistence
-proof and rollback were not reached. Image pull was `0`; container, network,
-volume, credential and runtime root were all removed. The final run budget is
-consumed and no retry is authorized.
+Review branch commit `370c5d6` carries the byte-equivalent final runner, SQL,
+tests and package bindings directly above the three original review slices.
+
+Final run `69ac02f4e8dfbf01` used the cached exact PostgreSQL `linux/arm64`
+digest and passed the complete chain: schema apply, initial verify,
+same-container restart, restart readiness, post-restart verify, seed
+persistence, rollback apply and schema-absence proof. It then removed the
+exact-owned container, network, volume, credential and runtime directory.
+Production, real/private data, provider/public effects and Gate C stayed zero.
+
+Repository validation is Green: focused rehearsal `26 / 26`, offline R4
+`602 / 602` with `111` frozen historical skips, TypeScript, documentation audit
+and `git diff --check`.
+
+## Next product step
+
+The disposable PostgreSQL Enabler is Technical Review Green and should not be
+rerun. #67 can return to product integration and activation: connect the proven
+local persistence boundary to the Public Room walking slice, then perform one
+Owner-experienced Guest encounter under its still-separate authority. This
+local proof does not authorize Production or Gate C.
+
+Current stop:
+
+`LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Historical pre-campaign result
 
 ## Repository-only restart-readiness correction
 
@@ -29,8 +54,10 @@ persist the 30 attempted restart probes and did not record a post-start running
 state or stable-port proof. The Owner-approved repository correction replaces
 that blind spot with result v2: exact failed attempt counts, seven closed
 body-free readiness outcomes, a shared production/test controller, and a
-post-restart running-container plus unchanged-loopback-port check. The gate is
-bounded to at most 60 attempts and 60 seconds.
+post-restart running-container plus freshly observed loopback-port check.
+Docker may assign a new random host port when the same exact container starts
+again; the controller binds the restart probe to that newly proven single
+loopback port. The gate is bounded to at most 60 attempts and 60 seconds.
 
 This correction used no Docker, socket, PostgreSQL or SQL effect and does not
 reinterpret the old run. It is organized for review in
@@ -106,7 +133,7 @@ wiring is not Green and this remains `0 Product Progress`.
 - provider calls, real Guest records, production effects, public traffic and
   Gate C effects: `0`.
 
-## What needs review
+## Historical review stop (superseded by the local campaign above)
 
 Do not rerun. The catalog-expression correction is physically proved through
 the initial verify, but restart readiness, post-restart verification,
