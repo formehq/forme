@@ -8,16 +8,20 @@ import {
   IMAGE_REFERENCE,
   POSTGRES_SERVER_VERSION_NUM,
   READINESS_OUTCOMES,
+  ROLLBACK_ASSERTION_IDS,
   SQL_BINDINGS,
   VERIFY_ASSERTION_IDS,
+  buildRollbackAssertionDiagnosticSql,
   buildVerifyAssertionDiagnosticSql,
   buildContainerCreateArguments,
   createRunSpec,
   parseCliArguments,
   projectPostgresDiagnostic,
+  projectRollbackAssertionNotice,
   projectVerifyAssertionNotice,
   readPinnedSql,
   runRehearsal,
+  runRollbackDiagnosticRehearsal,
   runVerifyDiagnosticRehearsal,
   validateRunningPublishedPort,
   waitForPostgresReadiness,
@@ -33,6 +37,7 @@ type FakeOptions = Readonly<{
   failSqlPhase?: string | null;
   cleanupOwnershipMismatch?: boolean;
   diagnosticFailedAssertions?: readonly string[];
+  rollbackDiagnosticFailedAssertions?: readonly string[];
   restartReadinessExhausted?: boolean;
   restartPublishedPort?: number;
 }>;
@@ -163,6 +168,12 @@ class FakePostgres {
     this.calls.push(phase);
     assert.match(sql, /PUBLIC_CORE_ASSERTION_VECTOR_COMPLETE/u);
     return this.options.diagnosticFailedAssertions ?? [];
+  }
+
+  async diagnoseRollback(_port: number, sql: string, phase: string): Promise<readonly string[]> {
+    this.calls.push(phase);
+    assert.match(sql, /PUBLIC_CORE_ROLLBACK_ASSERTION_VECTOR_COMPLETE/u);
+    return this.options.rollbackDiagnosticFailedAssertions ?? [];
   }
 
   async installationSeed(): Promise<Readonly<Record<string, string>>> {
@@ -398,6 +409,8 @@ test("image acquisition is available only through one exact explicit CLI switch"
   assert.deepEqual(parseCliArguments([]), { mode: "rehearse", allowImagePull: false });
   assert.deepEqual(parseCliArguments(["diagnose"]), { mode: "diagnose", allowImagePull: false });
   assert.deepEqual(parseCliArguments(["diagnose", "--allow-image-pull"]), { mode: "diagnose", allowImagePull: true });
+  assert.deepEqual(parseCliArguments(["diagnose-rollback"]), { mode: "diagnose-rollback", allowImagePull: false });
+  assert.deepEqual(parseCliArguments(["diagnose-rollback", "--allow-image-pull"]), { mode: "diagnose-rollback", allowImagePull: true });
   assert.deepEqual(parseCliArguments(["--allow-image-pull"]), { mode: "rehearse", allowImagePull: true });
   for (const argv of [
     ["--allow-image-pull", "--allow-image-pull"],
@@ -405,7 +418,9 @@ test("image acquisition is available only through one exact explicit CLI switch"
     ["--pull"],
     ["--allow-image-pull", "extra"],
     ["diagnose", "--allow-image-pull", "extra"],
+    ["diagnose-rollback", "--allow-image-pull", "extra"],
     ["--allow-image-pull", "diagnose"],
+    ["--allow-image-pull", "diagnose-rollback"],
   ]) {
     assert.throws(
       () => parseCliArguments(argv),
@@ -479,6 +494,108 @@ test("diagnostic notices cross the membrane only as closed assertion identifiers
     { code: "00000", severity: "WARNING", routine: "exec_stmt_raise", message: "public_core_unexpected_object_present" },
     { code: "00000", severity: "NOTICE", routine: "exec_stmt_raise", message: "arbitrary catalog body" },
   ]) assert.equal(projectVerifyAssertionNotice(hostile), null);
+});
+
+test("the rollback assertion enum and derived SQL exactly cover all ten committed guards", async () => {
+  const rollbackSql = await readFile(new URL("../../schemas/r4/public-core/rollback.sql", import.meta.url), "utf8");
+  const identifiers = [...rollbackSql.matchAll(
+    /RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = '([a-z0-9_]+)'/gu,
+  )].map((match) => match[1]);
+  assert.deepEqual(ROLLBACK_ASSERTION_IDS, identifiers);
+  assert.equal(new Set(ROLLBACK_ASSERTION_IDS).size, ROLLBACK_ASSERTION_IDS.length);
+
+  const sql = readPinnedSql();
+  assert.equal(sql.rollbackDiagnostic, buildRollbackAssertionDiagnosticSql(sql.rollback));
+  assert.equal((sql.rollbackDiagnostic.match(/RAISE NOTICE USING ERRCODE = '00000'/gu) ?? []).length, 10);
+  assert.equal(sql.rollbackDiagnostic.includes("RAISE EXCEPTION USING ERRCODE = 'P0001'"), false);
+  assert.match(sql.rollbackDiagnostic, /BEGIN TRANSACTION READ ONLY/u);
+  assert.match(sql.rollbackDiagnostic, /PUBLIC_CORE_ROLLBACK_ASSERTION_VECTOR_COMPLETE/u);
+  assert.match(sql.rollbackDiagnostic, /10::integer AS assertion_count/u);
+  assert.match(sql.rollbackDiagnostic, /ROLLBACK;/u);
+  assert.doesNotMatch(sql.rollbackDiagnostic, /\b(?:ALTER|DROP|COMMIT)\b/u);
+  for (const identifier of ROLLBACK_ASSERTION_IDS) {
+    assert.equal(sql.rollbackDiagnostic.split(`MESSAGE = '${identifier}'`).length - 1, 1);
+  }
+  assert.throws(
+    () => buildRollbackAssertionDiagnosticSql(sql.rollback.replace("public_core_schema_absent", "public_core_unknown_guard")),
+    /disposable_postgres_rollback_diagnostic_source_invalid/u,
+  );
+  assert.throws(
+    () => buildRollbackAssertionDiagnosticSql(sql.rollback.replace(/\s*RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_schema_absent';/u, "")),
+    /disposable_postgres_rollback_diagnostic_source_invalid/u,
+  );
+});
+
+test("rollback notices cross the membrane only as closed assertion identifiers", () => {
+  assert.equal(projectRollbackAssertionNotice({
+    code: "00000", severity: "NOTICE", routine: "exec_stmt_raise",
+    message: "public_core_rollback_catalog_manifest_drift", detail: "must not cross",
+  }), "public_core_rollback_catalog_manifest_drift");
+  for (const hostile of [
+    { code: "P0001", severity: "NOTICE", routine: "exec_stmt_raise", message: "public_core_rollback_catalog_manifest_drift" },
+    { code: "00000", severity: "WARNING", routine: "exec_stmt_raise", message: "public_core_rollback_catalog_manifest_drift" },
+    { code: "00000", severity: "NOTICE", routine: "exec_stmt_raise", message: "arbitrary rollback body" },
+  ]) assert.equal(projectRollbackAssertionNotice(hostile), null);
+});
+
+test("rollback diagnostic proves both verify passes and persistence before returning one closed vector", async () => {
+  const failedAssertions = [
+    "public_core_rollback_catalog_manifest_drift",
+    "public_core_rollback_external_dependency",
+  ];
+  const input = fixture({ restartPublishedPort: 55433, rollbackDiagnosticFailedAssertions: failedAssertions });
+  const result = await runRollbackDiagnosticRehearsal({ ...input, startedAt: "2026-08-18T00:00:00.000Z" });
+  assert.equal(result.schemaVersion, "r4.disposable-postgres-rollback-diagnostic-result.v1");
+  assert.equal(result.status, "DIAGNOSTIC_COMPLETE_CLEAN");
+  assert.deepEqual(result.outcome, {
+    schemaApplied: true,
+    verifyCount: 2,
+    restartCount: 1,
+    restartPersistenceProven: true,
+    assertionCount: 10,
+    evaluatedAssertionCount: 10,
+    failedAssertionIds: failedAssertions,
+  });
+  assert.equal(input.postgres.calls.includes("postgres.rollback-diagnostic"), true);
+  assert.equal(input.postgres.calls.includes("postgres.rollback"), false);
+  assert.equal(input.postgres.calls.includes("postgres.rollback-proof"), false);
+  assert.equal(input.docker.calls.filter((kind) => kind === "container.start").length, 2);
+  assert.equal(result.observation.imagePulled, false);
+  assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+  assert.equal(JSON.stringify(result).includes("must not cross"), false);
+});
+
+test("rollback diagnostic rejects malformed vectors and permits at most one explicit acquisition", async () => {
+  for (const rollbackDiagnosticFailedAssertions of [
+    ["public_core_unknown_guard"],
+    ["public_core_schema_absent", "public_core_schema_absent"],
+    ["public_core_rollback_inventory_drift", "public_core_schema_absent"],
+  ]) {
+    const input = fixture({ rollbackDiagnosticFailedAssertions });
+    const result = await runRollbackDiagnosticRehearsal({ ...input });
+    assert.equal(result.status, "FAILED_CLEAN");
+    assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+  }
+
+  const absent = fixture({ imageCached: false });
+  const absentResult = await runRollbackDiagnosticRehearsal({ ...absent });
+  assert.equal(absentResult.status, "FAILED_CLEAN");
+  assert.equal(absentResult.failure.code, "disposable_postgres_image_not_cached");
+  assert.equal(absent.docker.calls.includes("image.pull"), false);
+
+  const replacement = fixture({
+    imageCached: false,
+    rollbackDiagnosticFailedAssertions: ["public_core_rollback_catalog_manifest_drift"],
+  });
+  const replacementResult = await runRollbackDiagnosticRehearsal({
+    ...replacement,
+    allowImagePull: true,
+  });
+  assert.equal(replacementResult.status, "DIAGNOSTIC_COMPLETE_CLEAN");
+  assert.equal(replacementResult.observation.imagePulled, true);
+  assert.equal(replacement.docker.calls.filter((kind) => kind === "image.pull").length, 1);
+  assert.equal(replacement.docker.calls.filter((kind) => kind === "image.inspect").length, 2);
+  assert.deepEqual(replacementResult.outcome.failedAssertionIds, ["public_core_rollback_catalog_manifest_drift"]);
 });
 
 test("cached-image diagnostic returns one complete ordered body-free vector and cleans without restart or rollback", async () => {
@@ -640,6 +757,8 @@ test("the ordinary command is separate from the frozen historical runner", async
   assert.equal(packageJson.scripts["r4:postgres:rehearse"], "node scripts/r4-disposable-postgres-rehearsal.mjs");
   assert.equal(packageJson.scripts["r4:postgres:diagnose"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose");
   assert.equal(packageJson.scripts["r4:postgres:diagnose:pull"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose --allow-image-pull");
+  assert.equal(packageJson.scripts["r4:postgres:diagnose-rollback"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose-rollback");
+  assert.equal(packageJson.scripts["r4:postgres:diagnose-rollback:pull"], "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose-rollback --allow-image-pull");
   assert.doesNotMatch(source, /grant\.pending|owner-approval-receipt|INTEGRATION_CAMPAIGN/u);
   assert.match(source, /historicalResourcesTouched: false/u);
 });
