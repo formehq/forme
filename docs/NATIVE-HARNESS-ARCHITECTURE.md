@@ -1,5 +1,54 @@
 # Native Harness architecture contract v0.4
 
+## Superseding R4 execution status — 2026-08-17
+
+NH1/NH2 are unchanged. The complete 18-predicate replacement diagnostic used
+one exact pull and returned only the reviewed catalog-ordering failure. The
+consolidated verify-only correction passed repository validation. The final
+lifecycle passed initial verify but failed cleanly at restart readiness; exact
+cleanup passed and no execution authority remains.
+
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
+The NH1/NH2 architecture and every product trust boundary remain unchanged.
+Execution management now distinguishes ordinary local disposable engineering
+from Forme-authoritative product and production effects. The historical V4
+runner is frozen; low-level Docker wording no longer creates a successor
+authority-document chain. The future simplified PostgreSQL Enabler
+[#77](https://github.com/formehq/forme/issues/77) still needs
+one medium-grained runtime envelope, exact-owned cleanup and honest evidence.
+
+This reset grants no runtime, Docker, PostgreSQL, provider, Guest, publication,
+production or Gate C authority.
+
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Integration Campaign V4 architecture status before the reset (historical)
+
+The Native Harness boundary is unchanged. Integration Campaign V4 consumed
+the final local lifecycle in the confirmed envelope and failed closed before
+PostgreSQL. Docker/version and the exact historical container-missing tuple
+matched; a distinct historical network-missing tuple remained unknown. No
+diagnostic body became Harness/Forme evidence. Fresh resources are proven
+absent, owned residue is zero, and PostgreSQL/SQL/product runtime were not
+reached. The three-lifecycle budget is exhausted; there is no implicit retry.
+Any network/volume classifier correction and any additional local lifecycle
+require a new Owner decision. Production, Provider, traffic and Gate C remain
+`NOT_REQUESTED`.
+
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Earlier architecture status snapshot (historical context)
+
 - Status: **Owner-confirmed architecture clarification; NH1 and NH2
   Owner-approved; Fresh Native Response Session (Option 2B) selected as the
   R4 P0 direction on 2026-08-01 and its exact T3 contract Owner-approved on
@@ -15,12 +64,44 @@
   closed. #67 is now offline Technical Review Green on Draft PR #73 at
   `5e93196`, with a public-only boundary foundation on Draft PR #75 at
   `09401a0`; the Owner-approved Durable Public Core Construction and Addendum A
-  are Technical Review Green at Stage-A `bcd4259`. Draft PR #76 remains
-  unmerged; vault, transport, traffic and Gate C readiness remain false. PR #74
+  are Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring
+  Stage A is `bc0b520`. The first physical prepare stopped before grant
+  creation on an invalid fixed APFS directory-nlink precondition, with zero
+  Docker/PostgreSQL/SQL effects. The repository-only APFS correction is
+  Technical Review Green at Kc `18e3a32` / Lc `32448cb`; the later
+  execution-authority topology correction is Technical Review Green at Kt
+  `f7d3783` / Lt `c699f9d`. A later one-use v3 rehearsal and its separately
+  approved cleanup rescue each consumed one grant and failed closed on the
+  exact-name inspect result. No Docker resource or PostgreSQL/SQL effect was
+  created; absence remains unknown. The repository-only body-free inspect
+  diagnostic reached Technical Review Green at Kf `bd3cdf7` / Lf `7384ef8`;
+  its approved V1 prepare then failed before grant creation with zero
+  Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze exact 19-stage
+  body-free classification and rollback. The later Integration Campaign V2 was
+  prepared and consumed once, proved the historical resource names absent,
+  then failed closed before PostgreSQL at the image-platform manifest
+  predicate. A later one-use image-manifest diagnostic was consumed and stopped
+  at `IMAGE_MISSING`. The first image-acquisition diagnostic was then consumed
+  and its exact Docker `version` call returned `NONZERO / exit 1`, before
+  inspect or pull. The Owner reports Docker Desktop is now running; no current
+  machine observation has yet admitted that claim. Kiar `3db3060` / Liar
+  `3e1b0cb` now freeze the V2 replacement authority path with the same
+  one-version/two-inspect/one-anonymous-pull ceiling. Repository construction
+  is Technical Review Green, but replacement prepare/execution, registry,
+  image pull, cleanup,
+  replacement campaign, target PostgreSQL observation, vault, transport,
+  traffic and Gate C remain closed. Draft PR
+  #76 remains unmerged. PR #74
   is merged as a deterministic Linux fixture-only
   repair. #71 is a bounded Setup/Doctor enabler before the later #68 Fresh local
   Codex slice, not the #67 Public Room/knock product gate**
-- Updated: 2026-08-11
+- Updated: 2026-08-16
+- Image-acquisition replacement construction bindings: index
+  `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - Schedule policy: **2026-08-25 is a Progress / Vision Sharing checkpoint, not
   a complete/repeatable-MVP deadline. #67–#70 remain gate-driven and are not
   cut merely to meet that date; previously excluded Full extras remain outside

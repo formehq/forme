@@ -6,6 +6,79 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
+### Superseding execution update — 2026-08-17
+
+The replacement diagnostic pulled the exact image once, evaluated all 18
+predicates and found only the reviewed catalog-ordering assertion. The
+consolidated verify-only correction then passed repository validation and the
+final lifecycle passed schema apply plus initial verify. It failed cleanly at
+restart readiness before persistence proof or rollback. Every resource was
+removed, every execution allowance is consumed, and this remains
+`0 Product Progress`. See the
+[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
+[assertion-vector result](docs/R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+### Repository-only restart-readiness correction
+
+The Owner approved one medium-grained repository envelope after the failed
+restart. The corrected rehearsal now preserves failed attempt counts, uses one
+shared production readiness state machine in code and tests, distinguishes
+seven closed body-free outcomes, and re-proves container running state plus the
+unchanged loopback port after restart. Focused tests are `22/22` and the offline
+R4 regression is `598 passed / 0 failed / 111 historical skips`. No Docker or
+PostgreSQL call was made. See the
+[reviewable integration package](docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
+
+Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
+REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+### Execution-management reset that preceded #77
+
+R4 execution management has been reset around the #67 user experience. #67 is
+`Building / At Risk`; infrastructure proof does not count as product progress.
+The existing physical runner and V4 correction chain are frozen as historical
+failed-clean evidence. The next possible Enabler is
+[#77](https://github.com/formehq/forme/issues/77), one simplified disposable
+PostgreSQL rehearsal, limited by a later medium-grained envelope to two working
+days and two full lifecycles. This reset authorizes no Docker, PostgreSQL,
+production or Gate C action.
+
+Reset stop at that checkpoint: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+See the [R4 execution management reset](docs/R4-EXECUTION-MANAGEMENT-RESET.md).
+
+### Integration Campaign V4 update before the reset (historical)
+
+Integration Campaign V4 was prepared and consumed once. Docker matched
+`29.3.1 / linux/arm64`; the corrected historical container inspect was proven
+missing, then historical `network.inspect` returned a second previously
+unadmitted body-free missing-object fingerprint. The runner failed closed
+before image use, fresh construction, PostgreSQL or SQL. Fresh
+container/network/volume are proven absent, all owned residue is zero, and the
+terminal root is exact. See the
+[V4 outcome](docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+(`sha256:820f9878…f67b`).
+
+All three disposable local lifecycle slots in the confirmed autonomous
+envelope are now consumed. There will be no retry. Target PostgreSQL and
+catalog remain unobserved; R4 #67 remains Building. The next step is a new
+Owner decision on a narrow historical network/volume fingerprint correction
+and any new lifecycle budget. Production and Gate C remain closed.
+
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+### Earlier current-state snapshot (historical context)
+
 This repository is an owner-controlled rebuild started on 2026-07-17.
 
 - Completion: **gate-driven; Technical Review plus Owner Experience Acceptance,
@@ -13,23 +86,38 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
 - Progress / Vision Sharing: **2026-08-25 (Tuesday)** — share the truthful state
   reached by then; a complete or repeatable MVP is not required for the sharing
 - Current gate: **R4 Controlled Presence is Building on the real product
-  sequence, not on Host Binding.** R1–R3 are Owner-accepted. #66 completed one
-  real-Twin, local-only Projection review and Owner acceptance; PR #72 is
-  integrated into the R4 integration branch. #67 has an offline Technical
-  Review Green on Draft PR #73 for Room-bound reapproval, deterministic public
-  Room/knock rehearsal, restart recovery, and the richer visitor surface.
-  Draft PR #75 adds the public-only production-boundary foundation. The Owner
-  approved Draft PR #76's exact Durable Public Core Construction Packet on
-  2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is now
-  Technical Review Green at Stage-A `bcd4259`: the application and durable
-  persistence adapters are constructed, while vault, transport, traffic and
-  Gate C readiness remain false. #67 has not created or
-  mutated a production Room, deployed, published, admitted a Projection,
-  handled real Guest data, or run a real public knock. R4 is not Owner-accepted
-  or Done.
+  sequence.** R1–R3 are Owner-accepted and #66 completed one real-Twin,
+  local-only Projection review. #67 has repository/offline Public Core and
+  concrete Local PostgreSQL wiring. The approved Integration Campaign V2
+  proved the historical Docker names absent, then failed before PostgreSQL;
+  the later image-manifest diagnostic stopped at `IMAGE_MISSING`. The first
+  image-acquisition diagnostic was subsequently prepared and consumed once.
+  Its sole Docker `version` call returned a body-free `NONZERO / exit 1`, so it
+  failed closed before inspect or pull. The Owner reports Docker Desktop was
+  not running for that attempt and is running now; the repository records that
+  only as Owner context, not as a machine observation. Kiar `3db3060` / Liar
+  `3e1b0cb` now freeze a replacement V2 authority path that preserves the
+  failed V1 root and may later repeat the same bounded acquisition diagnostic
+  only under a fresh one-use approval. Validation is 6/6 focused, 188/188
+  runner, 85/85 non-runner, 440/440 Public Core, 760/760 offline, 146/146
+  Gate-B Core and 45/45 spine. Replacement construction made zero Docker,
+  socket, daemon, registry, pull, cleanup, PostgreSQL or SQL effects. Vault,
+  HTTPS transport, production pool/migration, runtime route, traffic and Gate C
+  remain false. R4 is not Owner-accepted or Done.
 - Integration truth: **R4 is not on `main`.** `main` remains at `7c1f7bd`; the
   current inherited Draft stack is PR #65 at `cbadd8a`, PR #73 at `5e93196`
-  and PR #75 at `09401a0`. Construction Stage A is `bcd4259`; Draft PR #76
+  and PR #75 at `09401a0`. Local PostgreSQL Wiring Stage A is `bc0b520`;
+  APFS nlink correction Kc/Lc are `18e3a32` / `32448cb`; execution-authority
+  topology correction Kt/Lt are `f7d3783` / `c699f9d`; Docker diagnostic
+  rescue correction Kd/Ld are `0fdf68c` / `62d0c98`; body-free inspect
+  diagnostic Kf/Lf are `bd3cdf7` / `7384ef8`; prepare-failure correction
+  Kp/Lp are `eaca190` / `7a31dba`; Integration Campaign Ki/Li are
+  `76afe10` / `4c20af2`; inspect-missing Kic/Kgc/Lic are
+  `1e93280` / `98392bf` / `614202e`; topology verifier correction Kvt/Lvt are
+  `85096f6` / `27540be`; image-manifest diagnostic Kmd/Lmd are `32abce2` /
+  `b17a44f`; image-acquisition diagnostic Kiad/Liad are `c6fe180` / `95197de`;
+  replacement authority Kiar/Liar are `3db3060` / `3e1b0cb`;
+  Draft PR #76
   remains the unmerged proposal surface, with its current remote head and CI
   recorded in PR metadata rather than self-bound here. PR #74 is
   merged and changed only the deterministic Linux inode-reuse test fixture; it
@@ -41,10 +129,24 @@ This repository is an owner-controlled rebuild started on 2026-07-17.
   first provider-call grant remain `NOT_REQUESTED`. Host Setup/Doctor is tracked
   in #71 as an enabler for the later Fresh local Codex slice; it is not #67's
   product milestone or a substitute for a real encounter.
-- Production gap: the current Public Core is repository/offline proof only. No
-  production PostgreSQL migration, Gate C deployment/provisioning, production
-  Room mutation, public traffic, external email, Provider call, production
-  secret, or spend has occurred.
+- Production gap: the current Public Core has repository/offline proof and a
+  full-history-verifying local Integration Campaign V2 contract, not a PostgreSQL rehearsal
+  Green. Historical resource absence remains unknown, all forensic roots are
+  retained unchanged, and no Docker resource, PostgreSQL process, database or
+  SQL effect ran during correction construction. No production PostgreSQL migration,
+  Gate C deployment/provisioning, production Room mutation, public traffic,
+  external email, Provider call, production secret or spend has occurred.
+- V2 topology verifier correction bindings: index
+  `sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
+  schema
+  `sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
+  evidence
+  `sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`,
+  report
+  `sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+  These prove repository construction only.
+- Current image-acquisition replacement bindings: index `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`, schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`, evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`, report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 Planning lives in milestone [`R4 Progress & Vision Sharing — 2026-08-25`](https://github.com/formehq/forme/milestone/11), parent epic [#47](https://github.com/formehq/forme/issues/47), completed R1–R3 issues [#49](https://github.com/formehq/forme/issues/49), [#50](https://github.com/formehq/forme/issues/50), and [#51](https://github.com/formehq/forme/issues/51), and the R4 product sequence [#66](https://github.com/formehq/forme/issues/66)–[#70](https://github.com/formehq/forme/issues/70). [#71](https://github.com/formehq/forme/issues/71) is a bounded Setup/Doctor enabler, not a product gate.
 
@@ -69,6 +171,17 @@ The previous implementation remains available at [`archive/v0-prototype-2026-07-
 9. [`docs/README.md`](./docs/README.md) — complete map of frozen Gate B/Host
    history, including both Host Binding attempt envelopes
 10. [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — initial system boundaries, not a frozen implementation
+11. [`Local PostgreSQL Wiring Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md),
+    [`Physical Rebind Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md),
+    [`APFS nlink Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md),
+    [`Execution-Authority Topology Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md),
+    [`Docker Diagnostic/Rescue Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md),
+    [`Body-Free Docker Inspect Diagnostic Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md),
+    [`Prepare-Failure Correction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md),
+    and [`Integration Campaign Construction Report`](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+    — the Phase-1, rebind, repository corrections and current medium-grained campaign stop
+12. [`successor Gate C Card`](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+    — the current non-approvable activation boundary
 
 Repository work is tracked in GitHub. An issue is complete only after technical evidence and owner acceptance are both recorded.
 
@@ -244,10 +357,21 @@ Technical Review Green on Draft PR #73 at `5e93196`; Draft PR #75 at `09401a0`
 adds only the public-only production boundary foundation. The exact
 [`Durable Public Core Construction Packet`](./docs/R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md)
 and its Owner Review were exactly approved on 2026-08-10; Addendum A was
-approved on 2026-08-11. Repository-only Construction is Technical Review Green
-at Stage-A `bcd4259`, with exact machine evidence and a non-approvable Gate C
-Card. A separately approved Gate C decision,
-publication-stable successor approval and one real Guest knock follow later.
+approved on 2026-08-11. That durable-construction snapshot remains historical
+Green at `bcd4259`. The current Local PostgreSQL Wiring successor is
+repository-only Technical Review Green at `bc0b520`, with exact
+[machine-backed evidence](./docs/R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+and a non-approvable [successor Gate C Card](./docs/R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md).
+A precisely approved first physical prepare stopped before grant creation on
+the invalid fixed APFS nlink contract. After the APFS and topology corrections,
+a later approved v3 rehearsal and one cleanup rescue each consumed one grant
+and failed closed on exact resource-absence proof. They created no Docker
+resource and reached no PostgreSQL or SQL effect. Kf/Lf `bd3cdf7` / `7384ef8`
+froze the repository-only body-free observation membrane. Its approved V1
+prepare failed before grant creation; Kp/Lp `eaca190` / `7a31dba` now freeze
+exact body-free stage classification and rollback. A replacement diagnostic
+requires a new bounded integration review. Cleanup, Physical Execution and
+Gate C remain later independent gates.
 Host Setup/Doctor #71 belongs before the later Fresh local
 Codex/provider slice, not before #67's product meaning review. Provider/model
 calls, real Guest-data handling, external email, production schema migration,

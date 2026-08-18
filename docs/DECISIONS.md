@@ -2,6 +2,224 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-17 — Replace blind restart retry with one reviewable integration outcome
+
+**Decision:** the Owner approved one medium-grained repository-only envelope to
+correct restart readiness and organize the current local line for review. The
+Agent may implement and validate the controller, tests, concise evidence and
+three-slice integration package without per-hash approvals, then must stop
+before Docker/PostgreSQL execution, push or merge.
+
+**Architecture:** production and tests share one readiness state machine. It
+records exact failed attempts, retries only a closed transient-connect class,
+stops body-free on six other failure classes, and re-proves container running
+state plus the stable loopback port after restart. Product persistence,
+disposable proof and operating truth form the current review; historical
+Cards/Addenda/Reviews remain immutable archive evidence.
+
+**Outcome:** focused `22/22`, offline R4 `598/598` with `111` historical skips,
+typecheck/docs/diff Green. This is Technical Review, not a new physical result
+or Product Progress. Restart persistence and rollback remain unproved.
+
+## 2026-08-17 — Replace serial verify discovery with one complete assertion vector
+
+**Decision:** the Owner approved one consolidated #77 envelope. Repository
+construction may derive a strict body-free diagnostic from the exact pinned
+verify source and evaluate all 18 predicates in one pass. After repository
+Green, it may use the cached exact image for one no-pull diagnostic lifecycle.
+Only a vector consisting entirely of reviewed PostgreSQL 16 catalog-expression
+assumptions may unlock one consolidated verify-only correction and at most one
+final full lifecycle.
+
+**Boundary:** schema shape, business meaning, expected inventories and the
+catalog-manifest algorithm/result cannot change. Cleanup must be exact.
+Production, real data, provider/public effects, push, merge and Gate C remain
+closed. No third lifecycle or assertion-by-assertion continuation exists.
+
+**Reason:** the original fail-fast protocol could reveal only one of 18
+assertions per physical run. A complete closed vector keeps diagnostic content
+body-free while preventing another serial patch/run chain.
+
+**Outcome:** repository construction reached Technical Review Green at
+`934e760`. The one cached-image invocation then found the exact digest absent
+and stopped before resource creation, PostgreSQL or SQL. Pull remained zero and
+cleanup was exact. The vector is unobserved, so correction and final rehearsal
+remain locked pending a new Owner decision.
+
+**Replacement decision:** the Owner subsequently authorized one exact image
+pull and one replacement complete-vector diagnostic. A vector consisting only
+of already reviewed PostgreSQL catalog-expression assumptions may proceed
+directly to one consolidated verify-only correction and at most one final
+cached-image lifecycle. A second pull, a second replacement diagnostic, a
+third run, Production, real data, push, merge and Gate C remain closed.
+
+**Replacement outcome:** run `0dddf25aee37504c` consumed the one pull and
+evaluated all 18 predicates. Its only failure was
+`public_core_unexpected_object_present`, matching the reviewed mixed catalog
+ordering assumption. Commit `e8db0e47` applied one consolidated verify-only
+text/`C` ordering correction without changing schema, expected inventories or
+catalog signature. Repository validation passed. Final run
+`71ac0e393653db72` then passed schema apply and initial verify, performed one
+restart, and failed cleanly at bounded restart readiness before persistence
+proof or rollback. Exact cleanup passed. The envelope is exhausted and any
+further local execution requires a new Owner decision.
+
+## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
+
+**Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL
+`linux/arm64` digest and two full body-free lifecycles. The first named
+`public_core_constraint_inventory_drift`. Repository proof showed the exact
+same 172 signatures with four ordering-only positions, so commit `f005cbe`
+changed only the verify comparator. The final lifecycle passed that assertion
+and stopped at `public_core_unexpected_object_present`.
+
+**Boundary:** the one pull and both lifecycle slots are consumed. Both runs
+cleaned exact-owned resources and used synthetic data only. Restart, rollback,
+Production, real data, push, merge and Gate C remain unproved or closed.
+
+**Reason:** the first correction is now physically proven, but a second
+independent assertion at the same verify boundary means another narrow
+patch/run loop would violate the reset's drift-control rule. Review the whole
+remaining verify contract before seeking any new runtime envelope.
+
+## 2026-08-17 — Diagnose verify by closed enum and stop when the exact image is absent
+
+**Decision:** the Owner approved a strict body-free diagnostic that can emit
+only one of the 18 committed `P0001` verify assertion identifiers. Repository
+implementation is Green at `8f45604`. Its first bounded invocation observed
+that the exact `linux/arm64` image was not cached and stopped under the no-pull
+rule before Docker resource creation, PostgreSQL or SQL.
+
+**Boundary:** no arbitrary PostgreSQL message, SQL, detail or data crosses the
+diagnostic membrane. No verify correction is permitted without an observed
+identifier. The unchanged-cache invocation is not repeated. Production, real
+data, push, merge and Gate C remain closed.
+
+**Reason:** the previous body-free receipt discarded the assertion identifier,
+but guessing a durable verify change would be unsafe. The next decision is
+whether to acquire the same exact image; it is not a reason to widen schema or
+verification meaning.
+
+## 2026-08-17 — Prove the PostgreSQL 16 schema correction and stop at verify
+
+**Decision:** the Owner approved one medium-grained #77 compatibility envelope:
+explicit text conversion only in catalog signature expressions, necessary
+hash/test/evidence propagation, and one cached-image lifecycle with zero pull
+and no retry. Commit `7d14897` preserves the catalog signature frame while
+changing PostgreSQL operator resolution. The lifecycle applied the complete
+schema, then stopped cleanly in the first read-only verify with project-defined
+`P0001 / exec_stmt_raise`.
+
+**Boundary:** the compatibility lifecycle is consumed. Container, network,
+volume, credential and runtime residue are zero. Production, real Guest or
+provider data, public traffic, push, merge and Gate C remain closed. The
+historical physical runner keeps its old SQL authority and fails closed against
+the new bytes.
+
+**Reason:** schema apply proves the `42725` compatibility diagnosis, but a
+read-only verify assertion still disagrees with the schema PostgreSQL produced.
+The next action is repository-only verify-contract review. No additional
+Docker/PostgreSQL lifecycle or durable meaning change is implied.
+
+## 2026-08-17 — Stop #77 at the schema boundary after two clean attempts
+
+**Decision:** the approved medium-grained #77 envelope is exhausted after two
+isolated lifecycles. Both reached PostgreSQL 16.10 and exact-owned cleanup;
+both failed at the first current-schema batch, with the second returning
+`42725 / op_error`. Move #77 to `Needs Decision` and hold all further physical
+execution. Do not create a child Enabler or revive the Card/Addendum chain.
+
+**Authority:** the completed envelope covered implementation, one anonymous
+exact-image pull and two local synthetic lifecycles. It did not authorize a
+hash-pinned schema correction. Production, real Guest/provider use, public
+traffic and Gate C remain closed.
+
+**Reason:** the management reset requires architecture review after two
+same-boundary failures, and durable schema meaning remains an Owner stop gate.
+The next review must identify the exact ambiguous operator and decide whether
+the intended contract is preserved by a narrow compatibility correction.
+
+## 2026-08-16 — Select the exact platform manifest before campaign identity checks
+
+**Decision:** preserve both consumed V2 roots and keep the exact image/index
+reference plus selected-manifest digest, while adding
+`--platform linux/arm64` to every relevant exact-image inspect. Kps
+`8af66535eb37925d9286c8b6d4f14501d372e4c5` and Lps
+`10fbc3c799adf9e7071b85c9889ae3830909f478` freeze a V3-only campaign
+authority surface. The correction does not add a call, pull, retry or relaxed
+identity rule. Index/schema/evidence/report are `sha256:3944b11d…0270`,
+`sha256:49725136…6410`, `sha256:8f1c5aed…c43b` and
+`sha256:348760e3…c78c`.
+
+**Authority:** repository construction and one later exact-owned disposable
+local campaign are within the confirmed local MVP advancement envelope.
+Production, real data, public traffic and Gate C remain unauthorized. Current
+stop: `LOCAL_POSTGRES_PLATFORM_SELECT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+LOCAL_V3_CAMPAIGN_AUTHORITY_FREEZE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the failed acquisition observed the top-level OCI image index.
+Exact platform selection returns the already-pinned linux/arm64 manifest, so
+the honest fix is selection before validation, not weakening validation.
+
+## 2026-08-16 — Construct one bounded image-acquisition diagnostic
+
+**Decision:** preserve the consumed Image-Manifest Diagnostic and its
+`IMAGE_MISSING` result as immutable history, while constructing a separate
+one-use Image-Acquisition Diagnostic family. Kiad
+`c6fe1804b1111c19d27da64f7ca76b85c0f12adf` and Liad
+`95197de9f65469cb52e569245cf4e08190c82471` freeze strict v1 grant,
+journal, receipt, prepare and execution surfaces. The diagnostic may later use
+one `version`, at most two exact pinned `image inspect` calls and, only after
+an exact missing result, at most one anonymous `linux/arm64` pull. Machine
+bindings are index
+`sha256:8da9ebd53e26c91de44ad277db00b5d25b22aa1e3d262dd3db0e9bb7a8bb82e9`,
+schema `sha256:2aecd08011be498edef3f7da1f27c8fc00850701183325f09dbec9fc4d7f7170`,
+evidence `sha256:2b0a029f48e74fb9c1d7f3b5878465b40861cfa8c45528e9a68e5cbbd8cb74f7`
+and report
+`sha256:16ed0f8a78e141063f9943e42c5a8f02e14ad1da4008d576ac788614ba8d0e11`.
+
+**Authority:** construction is repository-only. Docker Diagnostic, registry,
+image pull, cleanup, PostgreSQL, replacement campaign, Production and Gate C
+remain `NOT_REQUESTED`. The next action is the reserved add-only versioned
+Card/Review followed by a separate exact Owner decision. Mandatory stop:
+`LOCAL_POSTGRES_IMAGE_ACQUISITION_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+IMAGE_ACQUISITION_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the previous diagnostic proved the image was missing but had no
+pull authority. A separate closed acquisition envelope can answer whether one
+exact anonymous pull produces the pinned descriptor without silently turning
+diagnosis into a campaign retry.
+
+## 2026-08-15 — Diagnose the pinned image descriptor before another campaign
+
+**Decision:** after the one-use Integration Campaign V2 failed closed at
+`local_postgres_image_platform_manifest_invalid`, construct a separate
+body-free image-manifest diagnostic before changing any manifest pin or
+acceptance predicate. Kmd `32abce27f7c84a83e0d2d1252ab0da5530f88cb0`
+and Lmd `b17a44f34fa9abde1e6a39504594e875a6d7d7cf` freeze one future
+`version` plus one exact pinned `image inspect` maximum, a strict typed tuple,
+one-use write-ahead state and zero pull/resource/cleanup/PostgreSQL/SQL
+authority. Machine bindings are index
+`sha256:7fd9ab11d2fa7435f13c316f33eda9bedc89a7fccd64b7df22b55a7bb020633c`,
+schema `sha256:83888dc57ec378d04bba5872de443e6e06170a159524ccb8b74966c51a971440`,
+evidence `sha256:2d66f47aa0f96e65abec303eeaa4988a8e19f51381b6d1241737c68ae5ec9011`
+and report `sha256:490256a560bb3b910d38214c9190365ac64b087100cb3d17bd7ced353f631559`.
+
+**Authority:** the approved construction is repository-only. The diagnostic,
+image pull, cleanup, replacement campaign, Production and Gate C remain
+`NOT_REQUESTED`. The next step is an add-only versioned Diagnostic Card/Review
+and a separate exact Owner decision. Mandatory stop:
+`LOCAL_POSTGRES_IMAGE_MANIFEST_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN /
+IMAGE_MANIFEST_DIAGNOSTIC_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+**Reason:** the failed campaign receipt intentionally retained no raw Docker
+body or descriptor digest. Treating an unobserved value as corrected would
+weaken the trust boundary; the smallest honest next effect is a bounded,
+body-free observation that cannot continue the campaign automatically.
+
 ## 2026-07-17 — Preserve history and restart main
 
 **Decision:** preserve the previous implementation in `archive/v0-prototype-2026-07-17` and tag `v0-prototype-final-2026-07-17`; create a new orphan `main`.
@@ -1052,3 +1270,780 @@ product/runtime Provider/email call, merge or spend occurred.
 #67 and R4 remain open; the next artifact is a separately authorized and
 independently reviewed production-wiring successor, not activation of the
 current Card.
+
+## 2026-08-11 — R4 #67 Local PostgreSQL Wiring Phase 1 reached its exact stop
+
+**Decision:** record the Owner-approved Local PostgreSQL Wiring Construction
+Packet `sha256:be32f425fb3d5e4fa1b4fae611fadbb65d4eaf097b65ecc90a8ea6395cbe1258`
+and Review `sha256:4f050d5b79fe860d2989eed8a0b6607aa815de1e2a94cf8fae8b941701815aca`,
+Addendum B `sha256:a85dcd2c893e2290f15b0082b93ae0163a1012bb210c00f908ec08747c17415f`
+and Review `sha256:ce7acc0ff9c45af9286595449ebce32ec893d70e9092d0be654a20a7bab96eb2`,
+and Addendum C `sha256:6efa791732a7f3b28e728c39bd182a73286e23d6fecba90f5be39924ff133d5d`
+and Review `sha256:2aaa4d1243e2813b4030a37bae2cd7f14b41ca29c3814f4bce70c4c0161f65b7`.
+Their last authority wrapper is `deb12a045f5d84281bc9da0f110e049748949970` /
+tree `4b9028a942d4ac436527586aee64fbc23ec3488d`.
+
+**Result:** exact Stage A `bc0b52023bb19d4e41fc4daa4a1e232961e1a19b` /
+tree `d5cb758467d06bfd7f17b6ae6a34664e659e1e3d` freezes 19 artifacts
+(6 added / 13 modified) with aggregate
+`sha256:d25ebe21a75be81371209699f072dc404947b3f2f7fb6a69c12c5c2d71d5e417`.
+The application, durable persistence, concrete `pg` executor and 20-method
+application-store bridge are constructed. The corrected committed static SQL
+contract is 14 tables / 207 columns / 172 constraints / 44 indexes, including
+`interactions.interaction_type text NOT NULL` with its exact three-value check.
+It is not a target PostgreSQL observation.
+
+Machine evidence `sha256:37a6ce9b39279281dc9a94e9ee166bf4c8b1ee70caefd3168ef556c8ff8f539d`
+validates against schema
+`sha256:9bc0d1dbf3a1a74a272e17e4f1ad6bce9d0c33b65bcf7d4ae9fc00567f76902f`;
+the 19-artifact index is
+`sha256:6e63d94ce473e5d8386c46860a3e398b8331f8955003437576710c49ebe759d9`.
+The [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-WIRING-CONSTRUCTION-REPORT.md)
+is `sha256:060e6d05e91101ee95786600698b699c3796758083a2d862a23d3c907ca9ef14`;
+the successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+is `sha256:b63aa612206af85671af44cdad1fac2727e6c0c3fc96459636f59cec8359f5bb`.
+
+**Validation and boundary:** focused, runner, complete Public Core, full offline,
+current-successor Gate-B candidate and spine lanes pass 85/85, 66/66, 318/318,
+638/638, 145/145 and 45/45 respectively; TypeScript and static checks pass;
+independent Stage-A/index audit reports 0 Blocker / 0 Important. The Gate-B
+145/145 result proves four exact pre-effect successor-lock denials and does not
+rebind historical Gate-B authority or change its Yellow state. No repository
+command/package/source-control external network, Docker/OCI, PostgreSQL/SQL,
+product data-plane, production/runtime/real-data, product Provider/model/email,
+deployment/publication/admission, push/PR, merge/release or spend effect
+occurred in Phase 1.
+
+**Stop:** `INTERACTION_TYPE_SCHEMA_CORRECTION_TECHNICAL_REVIEW_GREEN /
+PHYSICAL_REBIND_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`. The current runner
+still binds the prior 17-path wrapper and cannot physically consume this
+19-path state. Physical Rebind requires a new exact Packet, Review and Owner
+approval. Gate C, #67 Done and R4 Done remain false.
+
+## 2026-08-13 — R4 #67 Physical Rebind Effect 0 reached Technical Review Green
+
+**Decision:** record the Owner-approved repository-only Physical Rebind
+construction at implementation K `bcfe3349e01a655c2d52d6abbca0038cc3bff6e2` /
+tree `c34372a7cd121f157ade1fa86841fdebc69bb4ed` and evidence L
+`beeb55b662372e2b4f2a16f8768c16905a7a9978` / tree
+`10cb87830e37f8070320df09fb0b0dbdaef3268b`.
+
+**Authority and artifacts:** Packet
+`sha256:3478089d16059968b69974496701a636c5dd32e449fbb31907e652d523b673fa`
+and Owner Review
+`sha256:9ce9a8dfedca0e85deabb9b490055eda9662e492d3b3b51cabeaab1ec2afc9bf`;
+artifact index
+`sha256:b3e95a61af0de08b3ddeb5dab7c92309f97eb8a7991126f47d71d638bea9c554`;
+strict evidence schema
+`sha256:06eeead4377ebcdd7d7d145e704b0b313ba54a958659f31cba7475be49ac3d27`;
+machine evidence
+`sha256:c9b9e48590d501023eda000f49dd6c1f58b5f757ff07095e035678fbc17acaf3`;
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md)
+`sha256:23a010a39cfa7c093dcf1edd8da2ed4b44730e588ea00460219b63c2683cc43e`;
+successor [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+`sha256:e12b2fc8c86bb9c82d8df560f9feeb7ed75817bb14bfba342580cd2ec56f69a0`.
+Committed K/L audit summaries are
+`sha256:0d87de0d35468577eec9dde967f7c5d6d4b5db4b3442231e0254e329096ada00`
+and
+`sha256:bccef86f5103b56f5ea1672aa276cb9d0c41f6ae58e10b8ba193eebd1ce54d69`.
+
+**Validation:** exact deny-network lanes pass 139/139, 85/85, 391/391,
+711/711, 145/145 and 45/45. Runner syntax, TypeScript, no-server-AI, legacy
+documentation regression, strict Ajv/mutations, committed blob/hash-DAG and
+diff checks pass with 0 Blocker / 0 Important.
+
+**Effect:** the runner now rejects obsolete 17-path/14-artifact/v1/v2 authority
+and constructs the v3 one-use grant/receipt, durable effect ledger, bounded
+cleanup recovery and identity-drift stops. It does not prove a physical run.
+Repository-command/package/source-control network, Docker/OCI,
+PostgreSQL/database/SQL, product network/production/runtime/real-data,
+Provider/model/email, deploy/publication/admission, Gate C, push/PR,
+merge/release and spend effects are all zero.
+
+**Stop:** `LOCAL_POSTGRES_PHYSICAL_REBIND_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+A new Physical Execution Card, Owner Review and exact Owner approval must bind
+the final status commit and its external committed-byte audit before any
+pending grant or physical effect. #67 and R4 remain open.
+
+## 2026-08-13 — APFS nlink correction reached repository Technical Review Green
+
+**Decision:** record the failed one-use Physical Execution prepare as
+historical zero-effect evidence and accept only the precisely approved
+repository correction. The failed Card
+`sha256:461de2a2ffdf58ae5aaae7d7a0401d10d47fc6f15d3794bf8be8ee4dc5e9fb77`,
+Review `sha256:192c57c598133674965a3a689bb8237d8197ff583bfaae976cdd7c18f5d5495e`,
+canonical payload and private receipt
+`sha256:0652fe3ac3125335728788bacc3e1cc2cee4a0f4b2417db662fb0a898fd6dd2a`
+are non-executable and cannot authorize a corrected pending grant.
+
+**Result:** Kc `18e3a325cceabdf5168b5ffb328ee2580b069a76` / tree
+`184d9a4147fbb9baea22b1303ca24a09c2687a79` and Lc
+`32448cb962c823d39205cc83d11aa3f6571cf65d` / tree
+`02b377385a0e68a60021f878027f41ab34399f63` remove only the fixed directory
+link-count equality. Stable identity remains exact path/dev/ino/uid/gid/mode;
+the exact entry and no-follow membranes remain closed. Index
+`sha256:d3b2ce01350636bbcd6fbde1ee938c6cd5c55f7b8d5e38e72fa4f6dbd5d67056`,
+schema `sha256:1cbd487272b052ef9116e473249824476b954e4e07818eb7d90b6079ffd6826a`,
+evidence `sha256:19788c80464ca23e03d5dab6aaf8d810c8541362f414e96d25ab7b9495a1300c`
+and [Correction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:0c462d2798c61c4a12a085e465f360c888b234e897fd0a3d8dd5c6e0c9e0e175`
+freeze the result. The current non-approvable successor
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:986dfecbd439bdb36e1a0f23041c249cf556382a5e4eb2acd2e1daea4dc9c1ce`.
+Committed Kc/Lc audit summaries are
+`sha256:eadd61948def5d6f14e8cab56bc06a30c8807d3711157876b12ab63a6bf5eb00`
+and `sha256:01344b279f87b722a9898bda40b27c226e9a67ae24742ecbed82724b86bce58f`.
+
+**Validation and effect:** deny-network lanes pass 141/141, 85/85, 393/393,
+713/713, 145/145 and 45/45. Strict Ajv, authority topology, committed blobs,
+syntax, TypeScript, no-server-AI, docs and diff checks pass. Pending/consumed
+grants, Docker/OCI/PostgreSQL/SQL, production/runtime/traffic/Gate C,
+push/PR/merge/release and spend effects are zero.
+
+**Stop:** `LOCAL_POSTGRES_APFS_NLINK_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+Only a fresh Card, Review and exact Owner approval bound to committed Mc and
+its external audit may open a later local physical attempt. #67 and R4 remain
+open.
+## 2026-08-13 — execution-authority topology correction reached repository Technical Review Green
+
+**Decision:** accept the precisely approved Topology Correction Addendum
+`sha256:5c0aaed3f0386b3501548631be9f514c0c1bfcea5ee283d0d152bcccc4e2db22`
+and Owner Review
+`sha256:ce5be9d958e45e05450a19d56aa093344f9e28003ca2534ecf0d13e72d3b9c2b`.
+The failed unversioned Physical Execution Card/Review remain immutable
+historical evidence. Any future authority proposal must add the unique
+`PHYSICAL-EXECUTION-CARD-V2.md` and
+`PHYSICAL-EXECUTION-OWNER-REVIEW-V2.md` paths. This decision grants
+repository construction only; Physical Execution and Gate C are not requested.
+
+**Result:** Kt `f7d37830044ca2ad098b4c031feb62de77e209c3` / tree
+`edbe46a65a5008c3221087e83345407a3a197d5e` and Lt
+`c699f9d9b023e5185baebbf429a3044bfae0366a` / tree
+`53bf1fb2877003251e2468dc7c3e70f2175ae3d6` freeze the corrected verifier,
+historical lineage and versioned add-only successor contract. G2t is
+`sha256:3443602d4f7b1561088f6815c8fcbc866ec75f8915eebf94ab7c0cf1d5d359d6`;
+G3t is
+`sha256:8a34840526c11e5ab3318157992d55180d45da6d3cc649a5d0ad1527ae717535`.
+The index
+`sha256:50db6a2f64ca9e9a3f1a600a7d7a37d17fca5c955a57d1ce461cf626d44dc2c5`,
+schema
+`sha256:406ece284dc381839265c3b9fc4940e935f64e18444679428ca725c525a19bc3`,
+evidence
+`sha256:6ed602d102f9bf2399182c17abb2370cc5cd1e8678c5198e9ca76fe5fb6bcd57`
+and [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md)
+`sha256:99a0c1e119ff9324e2cfec292db7c8ea4f08fff26a7d71ffdf6922dd66efaf64`
+freeze the machine and human evidence. The current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:b8474436e2e83e2b918ff34e469c4d6b4c9d3f93291b17318f4a0056f612a53f`.
+Committed Kt/Lt audit summaries are
+`sha256:193c18fad8f845c1fbaffdc09aea35f9e3d82cbd7c44651e7b2e0daf3c0a74f0`
+and
+`sha256:4b313ae973f8dcdd07bb519bf0c2372763b5918e10e71be3f3d214c0e24b7d94`.
+
+**Validation and effect:** deny-network lanes pass 142/142, 85/85, 394/394,
+714/714, 145/145 and 45/45. Strict Ajv, complete committed topology,
+committed blobs, syntax, TypeScript, no-server-AI, docs and diff checks pass.
+Canonical payload v1, grant v3, receipt v3, SQL, dependencies, locks and
+effect ceilings are unchanged. Pending/consumed grants,
+Docker/OCI/PostgreSQL/SQL, production/runtime/traffic/Gate C,
+push/PR/merge/release and spend effects are zero.
+
+**Stop:** `LOCAL_POSTGRES_EXECUTION_AUTHORITY_TOPOLOGY_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_ONE_USE_PHYSICAL_EXECUTION_APPROVAL_REQUIRED / GATE_C_NOT_REQUESTED`.
+Only the fresh versioned Card/Review proposal may be constructed next. Grant
+preparation or physical execution still requires a later separate exact Owner
+approval. #67 and R4 remain open.
+
+## 2026-08-14 — Docker diagnostic/rescue correction reached repository Technical Review Green
+
+**Decision:** preserve the consumed v3 Physical Execution and its final
+`FAILED / cleanup BLOCKED` result as immutable history, and accept only the
+precisely approved repository correction. The Docker Diagnostic and
+Blocked-Cleanup Rescue Correction Addendum is
+`sha256:b85d2cd57322e050996e3ec943334e187c2ab29e9f68aff49e4cab66e297c8c9`;
+its Owner Review is
+`sha256:1951a47f27bfb671e105a174f8a2dac3fe174a8bbf0ea36ed88620595939aed4`.
+This decision grants no cleanup rescue, further Physical Execution or Gate C.
+
+**Historical physical truth:** Card V2
+`sha256:1ca420578f3e16c75b8242d71b93ea7be18baa1815c0f83e610807f9ded7c795`
+and Review V2
+`sha256:e92a125cdf1f8c4df8448836275bd98225ec8ce0b764dd70dfbabc479366e377`
+authorized one v3 prepare and one disposable local rehearsal. Grant
+`sha256:a4f782b8da35b8a2afe7d881b87949326e50f81b0493e2e7ea3dfc70dfc5ba35`
+was prepared and consumed. Docker client/server `29.3.1` and `linux/arm64`
+matched; the run then failed on the first exact container-absence diagnostic.
+The cleanup-only recovery also stopped `BLOCKED`. Final evidence is
+`sha256:b3de0db43bf85ead32019266c73d9e9c397f8c7c576f2e5284b8496e980f985c`;
+the journal is 34 entries with head
+`sha256:2efe5233f94b9f57f17c08aaa792adb2c2353ee75f03ee326b16dcdcd4f10a25`.
+No Docker resource was created or mutated and PostgreSQL/SQL/domain counts are
+zero. The consumed grant cannot be retried or converted into rescue authority.
+
+**Result:** Kd `0fdf68c7c786085189c3df0787df07f366c6df5b` / tree
+`5f091925b8b48cbd515700b275465506a391ccde` and Ld
+`62d0c98d7052998b7bb69b76c83f60576091836b` / tree
+`4673f445021f0d4a92c6e01e4bdccbb303141e0a` freeze the exact diagnostic
+correction and inert future rescue membrane. G2d is
+`sha256:25dba2e75ca042e8c20e096ddaf9f5ee24506fab678a0a0f33366edd8ecebe22`;
+G3d is
+`sha256:6a0ee94a92e7b5f153c269300e98f1a86108c63e4b3f8a88f951b1648fb3c749`.
+The artifact index is
+`sha256:0dc154f786646243a13d500b0a41ae31cbcba42b15d1ed426503bf72d6ba2b4b`;
+the strict schema is
+`sha256:57a96cf603e393e1eb8849e2c6a3e7b10f9d143a3c249456936dd48a05d440be`;
+machine evidence is
+`sha256:9a6296c94ab0d4dee89449b7873a6cf04fec3a8e89f64170bca5eda9043a4ee3`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md)
+is `sha256:ccae05f1b44caea794b7b55e4a5bbf9796482dc1ad4d2a7a84771f1ebf9ad19f`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:80174c78baf223f7a7f2e7129749f7a4b00ca3f3d6cef72ce1f6c3952b564f8d`.
+Committed Kd/Ld audit summaries are
+`sha256:450160411b61707c244bbe2e7de3d22ede0aa2a0d27cb2c469fc7e05e0eafdc7`
+and
+`sha256:0de8f47a573d2a1f00836881858166bc5db2d0e541ab2e02c4b43989a739c94a`.
+
+**Validation and effect:** exact deny-network lanes pass 151/151, 85/85,
+403/403, 723/723, 145/145 and 45/45. Strict Ajv, authority topology,
+committed blobs, full-line diagnostic positives/near misses, future rescue
+grant/receipt, crash recovery, root/host drift, real-port denial, syntax,
+TypeScript, no-server-AI, docs and diff checks pass with 0 Blocker / 0
+Important. This construction made zero external-network, old-root, pending or
+consumed rescue-grant, Docker/OCI, PostgreSQL/SQL, production/runtime/traffic,
+Provider/model/email, deploy/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_DOCKER_DIAGNOSTIC_RESCUE_CORRECTION_TECHNICAL_REVIEW_GREEN / BLOCKED_CLEANUP_RESCUE_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the unique Blocked-Cleanup Rescue Card/Review proposal may be constructed
+next. Rescue prepare/execute requires a later separate exact Owner approval;
+another Physical Execution and Gate C remain still-later independent gates.
+#67 and R4 remain open.
+
+## 2026-08-14 — body-free Docker inspect diagnostic construction reached repository Technical Review Green
+
+**Decision:** preserve both consumed one-use grants, both forensic roots and
+both `FAILED / BLOCKED` receipts as immutable history. Accept the precisely
+approved Body-Free Docker Inspect Diagnostic Capture Addendum
+`sha256:790917ab0076e65c091117a67373d7e2d7c59c3690b786bc45fd588886529c13`,
+its Owner Review
+`sha256:a3dbb56df2fefbb05eef9a1175c49b9afb1a83982909309d5ba230c735222579`,
+the Authority-Path Correction Addendum
+`sha256:b77a4149667d42952f57d14fdd3aa23c7fe89314b059da112393727d381a0c00`
+and its Owner Review
+`sha256:a7448857f699507babb31477e67e6cf1491d3297a74ed1479de92300e00be1f7`.
+The correction selects only the future versioned `-CARD-V1.md` and
+`-OWNER-REVIEW-V1.md` effect-authority paths. This decision grants repository
+construction only; Docker Diagnostic, cleanup, Physical Execution, production
+and Gate C are not requested.
+
+**Historical rescue truth:** Rescue grant
+`sha256:fc0af89348695275b789c17578fc3c856e150a42f999ba1efdc6e05d62889654`
+was consumed once. Final evidence is
+`sha256:b138dcff20f1085cb8f237c505d6b2a8bb760926981cf4eef325a6e3b213a979`;
+the journal is 6 entries with head
+`sha256:e4c8e688464ad9ec6ac897be68d537e558c31ab505e4151e0458767265f84491`.
+The result remains `FAILED / local_postgres_docker_call_failed / BLOCKED`.
+No Docker resource was created, started, stopped or removed; no PostgreSQL,
+SQL or domain effect ran; resource absence remains unknown. The earlier
+physical grant/evidence/journal remain separately frozen and non-retryable.
+
+**Result:** Kf `bd3cdf71055136dce2731d7da3bef9dc89e6f4d7` / tree
+`66af8e43a3372d6d871a1a778b4822b8a7307a16` and Lf
+`7384ef89e70209657f1bb8714d9f708004bacc13` / tree
+`fb3539a4013679c7cf1626eedc4e4227b4c55ca4` freeze the strict one-use,
+write-ahead, no-retry body-free diagnostic membrane. G2f is
+`sha256:9909862f7016dfc8074408d4b59a9d6b1eb394b9e894e458d900243324ef8bd4`;
+G3f is
+`sha256:b51e1e01bc2bd2228ddb5a4d84ff58d002e65c30bd977e135f2215591c3e59ff`.
+The artifact index is
+`sha256:c61143957b8323609f93420013a207ae1a3f72ce7a6e5d7b32b3fc10a411ade8`;
+the strict schema is
+`sha256:0462c9cd5f921e76610e377211015735c064e9a5ef73ffd653a02b735fdc5bd9`;
+machine evidence is
+`sha256:8b3443916e3660913704dffe3d6d89fc47882d582c43ebc985aebcda90cd5149`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md)
+is `sha256:0d4911b1e26671c33d016deb6f5fa92be542add857216f72397e15e1294800da`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:2ec719b52f7fe730d616e7347401abc4cb453c67a0c8ee5c326cd83d832d135e`.
+Committed Kf/Lf audit summaries are
+`sha256:3614d5fc8d023c343c6c60b8be5a21569177f1c86be5007cc3feb122788e9edd`
+and
+`sha256:a5282e9c0ba83ee92cec45c06b7801a43b22822aa586aaebd67d47ff527efba4`.
+
+**Validation and effect:** exact deny-network lanes pass 160/160, 85/85,
+410/410, 732/732, 145/145 and 45/45. Strict Ajv, four authority steps,
+committed blobs, body-free fingerprints, hostile grant/journal/receipt,
+consume/journal/call crash, duplicate consume, expiry and drift, syntax,
+TypeScript, no-server-AI, docs and diff checks pass with 0 Blocker / 0
+Important. Construction made zero external-network, forensic-root, pending or
+consumed diagnostic-grant, Docker/socket/OCI, PostgreSQL/SQL,
+production/runtime/traffic, Provider/model/email,
+deploy/publication/admission/Gate C, push/PR, merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_BODY_FREE_DOCKER_INSPECT_DIAGNOSTIC_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_DOCKER_INSPECT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the versioned Diagnostic Card V1/Review V1 proposal may be constructed
+next. Diagnostic prepare/execute, cleanup, another Physical Execution,
+production and Gate C each require later separate exact Owner authority. #67
+and R4 remain open.
+
+## 2026-08-14 — failed V1 diagnostic prepare corrected; outcome-envelope collaboration adopted
+
+**Decision:** preserve the approved Diagnostic Card V1/Review V1 and failed
+pre-grant `prepare` as immutable history. Accept the bounded repository
+correction authorized by Prepare-Failure Addendum
+`sha256:ae774a9233b1b0c5a69d40f1ce19634f9d6ae4b6a264cb7c289548ddc06dc060`,
+Owner Review
+`sha256:258a1fea0bf77d2be4aa09f655575c8c9afba5ab3f188e9189eb80cc1662eaaa`,
+Root-nlink Addendum
+`sha256:5f573a18da85cb13f46d887e06a24d31a4acc390e9673432a185850e44645f5b`
+and Owner Review
+`sha256:9697d3171451518f7445dbf80b5f0b7545ef6b68649bb4541c18267278933b1c`.
+The result identifies 19 closed prepare stages, returns body-free failure codes
+and preserves exact same-inode rollback without authorizing a replacement
+diagnostic.
+
+**Result:** Kp `eaca190eb36fa45ea12077956a4a4b1433102c16` / tree
+`ec98c83bab6c12be04e7c02e1738ed113da73f64` and Lp
+`7a31dbaa385be561acac4fc21f017a804be4a68c` / tree
+`d6e2dc39b693091069ed92f6bcef8ce79e533cc4` form exact `2M` then `3A`
+commits. G2p is
+`sha256:84254f0f408be406b8e87a3468dbb0f67abfc49b183abf65db6fa74f4d6929e0`;
+G3p is
+`sha256:6aec3a9e4c867403ec7e3f0c08f4892aa40129b39a83850a4eb04d6894538a26`.
+The artifact index is
+`sha256:7854774fc10c58e5da6475fc97da6997102822fd406f6abdb0d8cbf209794bc0`;
+the strict schema is
+`sha256:2a44cf5e6a8f19ed1d8db4ed75b533c5fb42c650f76dea03cf885ca86b55a532`;
+machine evidence is
+`sha256:58a56f97e6eb79ed6c7871c5dd2bb98eeab44283151ffaedfbfa703d38b8d8a1`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md)
+is `sha256:1ab67cdd1b0c0c8359570c74999a21fb77a86943de4aeca21a531a54679d8aac`;
+and the current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:50300238c5cf28bd9dfd42fcaea3d22ae6d0038a3c8d0e0f54547332ed86356e`.
+Committed Kp/Lp audit summaries are
+`sha256:28a08418c5964143584d8bdb3b26621950efc6c17b9143acbdb66be563a2c55e`
+and
+`sha256:18c40a216a286cd8fef1a7112cd7d206bc9d50b1d3f81546a7f56c108882364f`.
+
+**Validation and effect:** deny-network lanes pass 162/162, 734/734,
+145/145 and 45/45. TypeScript, strict Ajv, nine hostile evidence mutations,
+cross-hashes, docs and diff checks are Green. Repository construction made
+zero external-network, Docker/socket/OCI, forensic-root, PostgreSQL/SQL,
+runtime/traffic, production, Provider/message, deploy/publication/admission,
+release or spend effects.
+
+**Collaboration rule:** future work should use Owner-approved outcome
+envelopes. Within an exact outcome, path/effect ceiling and stop condition,
+the agent may implement, test, repair, freeze evidence, reconcile current
+status documents and commit without returning for per-file, per-commit or
+recomputed-hash approval. Review returns when authority, durable state, schema
+or trust boundaries expand; an external effect begins; scope/date/public
+behavior changes; evidence becomes ambiguous; or a ceiling/failure stop is
+reached. This reduces ceremonial approval without weakening Owner authority.
+
+**Stop:** `LOCAL_POSTGRES_BODY_FREE_DIAGNOSTIC_PREPARE_FAILURE_CORRECTION_TECHNICAL_REVIEW_GREEN / REPLACEMENT_DIAGNOSTIC_APPROVAL_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The next review is a medium-grained local integration campaign. No replacement
+diagnostic, cleanup, Physical Execution, production action or Gate C action is
+authorized by this decision. #67 and R4 remain open.
+
+## 2026-08-15 — Local PostgreSQL Integration Campaign reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved medium-grained outcome envelope and all
+nine choices in the committed Construction Packet
+`sha256:1bfcb75483b359d335812b573b42e3eac0ce669c734295248f2447daf5262d50`
+and Owner Review
+`sha256:3ad46ae641bdc1573341ff1221f27589c480b7bad9f4fe41e2a5641758d3296f`.
+The approval authorized exactly 15 paths and three repository-only commits,
+while keeping replacement diagnostic, cleanup, Physical Execution, production
+and Gate C not requested.
+
+**Result:** Ki `76afe10ee53b81f316dbc48bd4e412771e2ae0c7` / tree
+`49ab93f6c3ef5b57488d4dda244aad527a9dafd6` freezes the exact `2M` campaign
+runner/test delta. Li `4c20af20b24f21cce4566ba6c511e5ac39b527df` / tree
+`621943118f9f4699b57bed954bfb602cdd125361` freezes the exact `3A` machine
+evidence delta. G2 is
+`sha256:5a8faefbb7e5014e16e786269c5fae36f56b9900e2a162e8a3633e698154eacc`;
+G3 is
+`sha256:6e9c4f9394c70641fd4fb75d378ef75d6f82ccae37c4f7557d5020ac1d3a8868`.
+The artifact index is
+`sha256:937a31206a914bbff1203435816fe058653cd225883041a0d56854eba4bf260a`;
+the strict schema is
+`sha256:537598a79c107bb297e3777dbacc2367426470d10baed14d662bbb8ca666d2bb`;
+machine evidence is
+`sha256:526476f0779411f5d4b94c650cbbef2c58a540c773ca7cbd115bde32edd24ea3`;
+the [Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md)
+is `sha256:a608fae0e17122badccccb1cd8daef07d9ae7bd08f5b85d25739f2e7635e9dd2`;
+and the current non-approvable [Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md)
+is `sha256:deeb16cff4c6ba3082306bbf7c62f7f45a193260a1ee94cd8b344fbae4b296b4`.
+Committed Ki/Li audit summaries are
+`sha256:c1f5aafb2df9ac07c21fa72f652801f97ba2987d3c52e82d5c312823ef5bab4e`
+and
+`sha256:9bafd4a36e5261679ba54fb179c68d69bc89ce1283eab4cb2ddbea0811a0dcc1`.
+
+**Constructed contract:** one future one-use campaign may, only after a
+separate exact execution approval, perform a body-free diagnostic over the
+three historical exact names, remove only exact-owned resources, prove all
+three absent, and run the frozen disposable PostgreSQL rehearsal. It uses a
+closed v1 grant/journal/receipt family, write-ahead reservations, one campaign
+consumption, one diagnostic, at most one historical cleanup, one physical
+construction, at most two cleanup-only physical recoveries, one anonymous
+image pull and no retry. Foreign, unlabelled, malformed, unknown, ambiguous,
+expired, drifted or ceiling-exhausted state stops.
+
+**Validation and effect:** focused campaign tests pass 14/14; the complete R4
+offline regression passes 747/747; Gate-B Core passes 145/145; spine passes
+45/45. Strict Ajv, 11 hostile evidence mutations, committed topology and blob
+bindings, 48 write-ahead crash cases, clock/host/headroom/recovery ceilings,
+TypeScript, no-server-AI, inventory, docs and diff checks pass with 0 Blocker /
+0 Important. Construction made zero forensic-root, campaign-grant,
+Docker/socket/OCI, PostgreSQL/SQL, production/runtime/traffic,
+Provider/model/email, deploy/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / ONE_USE_LOCAL_INTEGRATION_CAMPAIGN_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the final versioned Integration Campaign Execution Card/Owner Review may
+be added next. Campaign prepare/execute, cleanup, production and Gate C require
+a later separate exact Owner approval. #67 and R4 remain open.
+
+## 2026-08-15 — inspect-missing and Gate-B concurrency corrections reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved Integration Campaign Inspect-Missing
+Correction and Gate-B Concurrency Validation Correction as one closed
+repository-only successor. The inspect correction Addendum/Review are
+`sha256:a43fbb5ac8e795ab6b6bf51507d3489c9e803161419af50179d7f7e9bed97505`
+and
+`sha256:ed73deb10f3ec9dcd5501f6d25f40ec7b140838494521ddd4cc9574b95afe324`.
+The concurrency Addendum
+`sha256:f18dce72f2a53ce11e530499156852e815c132093962ab7bdd5cee6dec587ae7`
+at `e21c441a6154f3c08b96ccbf7f0f7b693107b99a` / tree
+`8860d06a9ccc821be62bf62ee79cd356b8b7fb52` and Owner Review
+`sha256:310c408393dc7aff38c935137f89690096869b3259c3e28bc03325b4dfd225c7`
+at `9f178918c416bd3be54e4cbc44e0c64567a78ca1` / tree
+`63e69b5594aa9ba6627b825b1ac4aa636e15605e` authorize exactly Kgc → Lic →
+Mic, 15 paths and three commits, with all external effects zero.
+
+**Result:** Kic `1e93280bc3842d40e6f797a38ca4bfa2a2277813` / tree
+`14526ed95feae2da6c9c14a89ece48616822e4e8` freezes the shared pinned
+inspect parser; its G2 is
+`sha256:5dea77a0e5391f3283caab8a9b1d67f4a6ed8758be6be3631bad5283ca530f1f`.
+Kgc `98392bf19356982c884961a1425cd97ff33811bf` / tree
+`796684556d04368c3acd3926d0c86992affa205c` freezes the authority-deadline
+feeder wait without retry; its G2 is
+`sha256:0101d889a77749a0671e26490bf2bb8a1aeab14b8678ce54d959a250388f83b4`.
+Lic `614202e8765372755f75ce7fa465ef9e550971a8` / tree
+`180d6a9fa048e07e72ddbab8e2e4e2e354fb902a` freezes the strict three-file
+machine evidence delta; G3 is
+`sha256:1dd72f64a6683a50e4f606a9601ab94d674a8b9757082f4318a2b532bec15d39`.
+The artifact index, schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:d90271f5d15e1b2ac42b23211283257822f74ac9795b244a8db306ed0e157125`,
+`sha256:942e1ddcf5e65303e5d4a7df02a929d6c04ee5f92a4f8db615670c5aa5c8d204`,
+`sha256:4877ab9d24352187cd15ac3a7e88833f4cb5d46d60c324c7b5419572c32a5cf1`
+and
+`sha256:f1009d82c42edb480bee96dd0df3c1381a5f177325c9c181c4daf2e505b2e78d`.
+Committed Kic/Kgc/Lic audit summaries are
+`sha256:7c1ea06b0f7c1422b29ef6eba6a92a063d1e6495e3d7a5cb6adccd535b1bd094`,
+`sha256:aeb46997b467b5471f484de08c543b061e0caed398d9aa6c83200203252f231f`
+and
+`sha256:3623dafd4f988503955b64206fe7bb292787de7c864ea38bcd5f4f9f5f9dd9e6`.
+The current non-approvable
+[Gate C Card](./R4-PUBLIC-CORE-GATE-C-ACTIVATION-CARD.md) is
+`sha256:9b28a9fc61417f31de26a45b6ecc320019c375f9ca1fe233573cb151b09be05a`.
+
+**Validation and effect:** focused correction tests pass 15/15, the complete
+local PostgreSQL runner 176/176, the complete R4 offline suite 748/748, Gate-B
+146/146 twice under default concurrency and once serially, and spine 45/45.
+Strict Ajv, hostile evidence mutations, committed topology and blobs,
+TypeScript, no-server-AI, inventory, docs and diff checks are Green with 0
+Blocker / 0 Important. Construction made zero forensic-root, grant,
+Docker/socket/OCI, cleanup, PostgreSQL/SQL, production/runtime/traffic,
+Provider/message, deployment/publication/admission/Gate C, push/PR,
+merge/release or spend effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_INSPECT_MISSING_CORRECTION_TECHNICAL_REVIEW_GREEN / FRESH_INTEGRATION_CAMPAIGN_V2_EXECUTION_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only a fresh versioned V2 Integration Campaign Execution Card/Owner Review may
+be constructed next. Replacement Campaign, Docker, cleanup, PostgreSQL,
+production and Gate C each require later separate exact Owner authority. #67
+and R4 remain open.
+
+## 2026-08-15 — Integration Campaign V2 topology verifier correction reached repository Technical Review Green
+
+**Decision:** accept the Owner-approved repository-only V2 topology verifier
+correction as the executable bridge from the actual committed Integration
+Campaign history to future versioned V2 authority. The Owner authorized runner
+and test correction, strict evidence and status freeze, and direct construction
+and audit of the add-only V2 Card/Review. Docker, cleanup, PostgreSQL,
+production and Gate C remain unrequested.
+
+**Result:** Kvt `85096f689ed89fef97c7781c2d84d813097cadae` / tree
+`1af3bea05f683863c5e93ecd4351bfcd2dbbf499` is the exact two-path direct
+child of Mic `eb209d314a1084069a15fd4c819cf5e4d5760b77`; G2 is
+`sha256:85c3882e4bdd18cb05432712e643cd68485a0a6693a95671d72cad0a36c398bf`.
+It verifies the complete V1 Review → Inspect Addendum/Review → Kic →
+Concurrency Addendum/Review → Kgc → Lic → Mic prefix and then requires Mic →
+Kvt → Lvt → Mvt → Card V2 → Review V2. Lvt
+`27540be8753424b841a79b785bfa658911cbfbb1` / tree
+`a978e0ba70d69844242cf7b0ca627c861091e89a` is the exact three-addition
+direct child; G3 is
+`sha256:e9b439cb6fbafa339991ea6cb56a59efb3eba1273633b399da57dc4986ba417f`.
+The artifact index, strict schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:9a2cce7c176694be205abedd6d3ef5775e345ed7f8871e4b0631c08ad7d99929`,
+`sha256:31e54f83927a514fe8392c689e9cf1f4105d2b4021ed91a7c0959944992dee7f`,
+`sha256:4d469990dd17fefe0478e280c6d4c998a8a5e6058ac3089c4fa496cd7aff5e80`
+and
+`sha256:e449db8b2a94ea03a16545206e491f78069555bee1bfe7c9b67619ac627cef07`.
+Committed Kvt/Lvt audit summaries are
+`sha256:a3415dca563387720991bb0c29f4a38c692b2032e3877149008d499f5b91145c`
+and
+`sha256:cc80574dfbe4dabecfbba6814ed47d8a7531e3891b95d18f2587666101d05813`.
+
+**Validation and effect:** committed topology passes 1/1; local PostgreSQL
+runner 176/176; R4 offline 748/748; Gate-B 146/146 twice under default
+concurrency and once serially; spine 45/45. Strict Ajv and eight hostile
+machine-evidence mutations, syntax, TypeScript, no-AI boundary, inventory,
+docs and diff checks are Green. Construction made zero forensic-root, network,
+Docker/socket/OCI, cleanup, PostgreSQL/SQL, product runtime, production,
+traffic, provider, message, deployment, release, spend or Gate C effects.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V2_TOPOLOGY_VERIFIER_CORRECTION_TECHNICAL_REVIEW_GREEN / V2_CARD_REVIEW_CONSTRUCTION_APPROVED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The next repository actions are the two add-only V2 authority documents. Any
+prepare or physical campaign still requires a later separate exact Owner
+approval. #67 and R4 remain open.
+
+## 2026-08-16 — Image-Acquisition V2 replacement authority reached repository Technical Review Green
+
+**Decision:** preserve the consumed Image-Acquisition Diagnostic V1 as failed,
+non-retryable history and accept the repository-only replacement authority
+construction. V1 consumed grant
+`sha256:76800f6b88c8e024d9ee3e527e3bf285c3163ae39360c903f698547b7cbbb7ba`
+produced terminal evidence
+`sha256:d1364db823a82d44da0b36044a66538ba47ff5027980843ea65dc69e3dad4afd`
+and journal `7` / head
+`sha256:0b2f01174fd8ad418f77558db3acae420278e7afb8ea259d6a76fbbb8309b6aa`.
+Its sole Docker `version` call completed `NONZERO / exit 1`; image inspect,
+pull, resource, cleanup, PostgreSQL and SQL calls were zero. The Owner reports
+Docker Desktop was not running for that attempt and is running now. That
+statement is retained as Owner context only; the next authorized diagnostic
+must establish its own machine observation.
+
+**Result:** replacement Addendum/Review hashes are
+`sha256:dd685d694d8ba6a4b14eca1202e3ee4710bf127242591fef0aec30af18d0033f`
+and
+`sha256:62bf1aa8865202980a8ea2fe22e0ca40993aec43752f9f6b5acfa9d29e8cbcda`.
+Kiar `3db30607077a1c4fd2aeb87fcf8c9f6d7dfa31cf` / tree
+`9457a111e646ca869f403d3020986e5e8b63a63b` freezes the exact two-path
+runner/test replacement; G2 is
+`sha256:2cca6a811e52df19942fc1b34ae38b66b12f8a5e548aa4defac39cb10159b2ae`.
+Liar `3e1b0cbd5394a2e3452ecb2ef9c0081c72381d9f` / tree
+`9999efe25b0c79e8d388b86b82a57297f0ff2533` freezes the exact three-file
+machine-evidence delta; G3 is
+`sha256:fc167a02ce82f20fed05ffcf4b666dfc91eb5694553f3f6730c24c1b41c356db`.
+The artifact index, strict schema, evidence and
+[Construction Report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md)
+are respectively
+`sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+`sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+`sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`
+and
+`sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+Committed Kiar/Liar audit summaries are
+`sha256:1f154c0e67adcca225d36ad82839615d304485b857ff8f28d26f9b02e3b700e4`
+and
+`sha256:9553ca01c635f4f9ea7842d15b3ab7b6871ee61c3528c11d22a6c08914b289c3`.
+
+**Validation and effect:** focused replacement tests pass 6/6; the full local
+PostgreSQL runner 188/188; focused non-runner Public Core 85/85; Public Core
+440/440; R4 offline 760/760; Gate-B Core 146/146; spine 45/45. Strict Ajv and
+14 hostile evidence mutations, syntax, TypeScript, no-AI, docs and diff checks
+are Green. Construction read the retained V1 body-free root once, mutated it
+zero times, and made zero replacement grant, Docker/socket/daemon/registry,
+pull, cleanup, PostgreSQL/SQL, production/runtime/traffic, provider/message,
+deployment/publication/admission/Gate C, push/PR, merge/release or spend
+effects.
+
+**Stop:** `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only the two reserved add-only V2 Card/Review documents may follow. Diagnostic
+prepare/consumption still requires one separate exact Owner approval. #67 and
+R4 remain open.
+
+## 2026-08-17 — Integration Campaign inspect-fingerprint correction reached repository Technical Review Green
+
+**Decision:** preserve Integration Campaign V3 as consumed, non-retryable
+failed history and accept the narrow repository-only correction for the exact
+body-free historical `container.inspect` missing-object fingerprint. The
+diagnostic body is not admitted. Any mutation to command kind, exact target,
+process outcome, signal, UTF-8/line framing, byte count or SHA remains unknown
+and fails closed. This does not widen Docker, PostgreSQL, SQL, production or
+Gate C authority.
+
+**Failed V3 truth:** root
+`/Users/zaynw/.forme-r4-integration-campaign-v3-37adbcbb` consumed grant
+`sha256:b172216dc673fe42456b94f3e64790e7866ec097c59039a4952ccc8ea2714fa7`.
+Terminal evidence is
+`sha256:06c21a912e1082078ccd14d36b68e564f979fbde3b7133e3743bbe8886026cac`
+and journal `9` ends at
+`sha256:696c92d3f404e4ea44d315c4bb1eb86f8e1ae9b1c7c6ffbda616bd488223b9b5`.
+Docker version/platform matched; PostgreSQL and SQL were not reached; fresh
+container/network/volume states were proven absent and fresh residue was zero.
+
+**Result:** Addendum/Review hashes are
+`sha256:ef63d738a208c3c2469e8c7f290daaf9ffe2e8166b696239436a3b22abf4bf39`
+and
+`sha256:f09f4b010a535dca9f9d11d9e07a31e82bd5a6e9b607def85648808130756c37`.
+Kif `169a05f0e00a5afdb9cc920c0d3591a90eaa4fe6` / tree
+`efabdf042824e9fcde653006cdda58484deed38c` freezes the exact two-path
+runner/test correction; G2 is
+`sha256:a3d507759c341d58f19a5aea7324641f8de86335ef9b1b21e32e1c0b1d73406e`.
+Lif `2d5fc50db12024c8d8fb564e7b61ced96ab6d592` / tree
+`df6fbe0d9c198a13c99368b1296d0d4741b8dcc3` freezes the exact three-file
+machine-evidence delta; G3 is
+`sha256:920737b7ab3be7efdb47cc968430b07ba2016c9480f728aae359bf2eebc3a4d1`.
+The index/schema/evidence/report hashes are
+`sha256:d2d06ec56ba45098902ee862e105da8024eb1e57a6a99d926a4aacde647abfe3`,
+`sha256:a21933635e1c567405b00027c9b6b9da11860822573339022c1593c4bb63cf3f`,
+`sha256:f981594dc1c20b96c2fae2569d7612b02f1f7e44f2323ea9b8731c04ef8479b8`
+and
+`sha256:b277ab9d58cdf5354417191c9b0a124bd5302777fa9dbc3b21395e79335988dd`.
+
+**Validation and effect:** focused 15/15, runner 189/189, R4 offline
+761/761, exact Gate-B Core rerun 146/146 and spine 45/45 are Green. The first
+aggregate Gate-B attempt's 143 pass / 0 fail / 1 cancelled pending Promise is
+retained alongside focused macOS 11/11 and the exact 146/146 rerun. Strict Ajv,
+hostile mutations, TypeScript, no-AI, docs, inventory and diff checks are
+Green. Construction made zero Docker/socket/network/PostgreSQL/SQL,
+product-runtime, production, publication, Provider, message, spend or Gate C
+effects.
+
+**Stop:** `LOCAL_POSTGRES_INSPECT_FINGERPRINT_CORRECTION_CONSTRUCTION_TECHNICAL_REVIEW_GREEN / FINAL_LOCAL_CAMPAIGN_AUTHORITY_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Only fresh add-only V4 Card/Review authority may precede the final remaining
+disposable local lifecycle. Target PostgreSQL/catalog remain unobserved; #67
+and R4 remain open.
+
+## 2026-08-17 — Integration Campaign V4 consumed the final local lifecycle and failed cleanly
+
+**Decision:** record V4 as immutable, consumed, non-retryable history. Card
+`sha256:f867ee4fc7ede804d45913b4a8afe28bce7b0510c82dd19dd620715b51c777ec`,
+Review
+`sha256:a3bf61dd54aafe999ee9c0056a6e35a78c8d36e263a054985c5e63e02351f29f`
+and payload
+`sha256:780a4afc94fb32f4748354519e88bb0528d544ce1d2b78c5d9b4a7015601f859`
+were prepared under the confirmed local MVP outcome envelope. The grant was
+consumed once and is not renewable.
+
+**Result:** root `/Users/zaynw/.forme-r4-integration-campaign-v4-f867ee4f`
+retains consumed grant
+`sha256:544f8036b712b1766805fc795fe737ce630c36ee1db4b8091ab538c4c876d517`,
+terminal evidence
+`sha256:fb44fbd9bbbd0b39f31beff266f4a6795ac4ccc74946d3543a88bf0a8ee1166b`
+and journal `12` / head
+`sha256:df1e0c8cd7dec7cc1f02748395e41f8890fb250de7d1bc21d6a6069455b7d60f`.
+Docker matched `29.3.1 / linux/arm64`; the corrected historical container
+fingerprint matched. Historical network inspection then completed exit `1`
+with a distinct body-free fingerprint: stdout `1` byte / one LF /
+`sha256:01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b`,
+stderr `108` bytes / one LF /
+`sha256:d746c7e623df324cd3ef6ce071393d7c166c3273ca0b69f3c69408b713064616`.
+Because that tuple was not admitted, the runner stopped before image use,
+fresh construction, PostgreSQL or SQL.
+
+**Cleanup and effect:** fresh container/network/volume are `PROVEN_ABSENT`;
+historical container is `PROVEN_ABSENT`; historical network/volume remain
+`UNKNOWN`. Owned credential, Docker-config, imported-runtime and active
+coordinator residue are zero. Physical rehearsal attempt/completion is `0/0`;
+PostgreSQL, SQL, product runtime, production, publication, Provider, message,
+spend and Gate C effects are zero. The
+[V4 Outcome](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+is `sha256:820f98788f44bf18d0ecf857f45ec69a0d966a2e43f27c1da4e40da068d9f67b`.
+
+**Boundary:** all three disposable local lifecycle slots in the confirmed
+autonomous envelope are now consumed. No retry, fingerprint correction,
+successor campaign authority or Docker call is implied. A new Owner decision
+must choose whether to authorize a narrow network/volume correction plus a new
+bounded lifecycle budget, or stop this local proof.
+
+**Stop:** `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN / LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+#67 and R4 remain open.
+
+## 2026-08-17 — Reset R4 execution management around product progress
+
+**Decision:** manage R4 as one active Walking Slice (#67) plus at most one
+linked Enabler. Infrastructure evidence does not move the product gate by
+itself. Every status update names the new user capability or records
+`0 Product Progress`. The existing physical runner, Integration Campaign V4
+and their Correction/Card/Review chain remain immutable historical evidence;
+routine Docker wording or platform variants no longer create a successor
+authority-document tree.
+
+**Enabler rule:** the next proposed Enabler is
+[#77](https://github.com/formehq/forme/issues/77), one simplified disposable local
+PostgreSQL rehearsal using unique run ownership, synthetic data, semantic
+Docker results, bounded non-ambiguous readiness retry, schema/restart/rollback
+proof and exact-owned cleanup. After a separate medium-grained runtime envelope
+is approved, its default budget is two working days and two full lifecycles.
+Two same-boundary failures, an exhausted budget, ambiguous effects, or an
+Enabler needing another Enabler moves the work to `Needs Decision` and an
+architecture review.
+
+**Owner boundary:** ordinary repository implementation, tests, docs and repairs
+inside a confirmed envelope proceed review-by-exception. Owner approval is
+reserved for schema/durable-meaning/trust changes, first real Guest/provider/
+external-message use, and production/public/Gate C effects. Exact hashes remain
+evidence rather than the unit of Owner decision.
+
+**Integration truth:** at reset start, local HEAD `679176a` was 108 commits and
+151 changed paths beyond the remote Draft PR #76 head; 99 changed paths were
+documents and 33 were schemas. No open PR represents that local line. GitHub
+Project, #67, the linked Enabler, integration PR and current-status documents
+must be reconciled before more implementation. Draft PR #65 is therefore
+`Needs Decision / Blocked`, not active Building work.
+
+**Effect:** this reset changes repository and GitHub execution management only.
+It makes zero Docker, PostgreSQL, provider, Guest, publication, production,
+push, merge, spend or Gate C effect.
+
+**Stop:** `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## 2026-08-17 — Make medium-grained autonomy the persistent Codex working model
+
+**Decision:** persist the Owner's preferred collaboration model at both Codex
+global scope and Forme repository scope. One confirmed outcome envelope covers
+ordinary implementation, tests, body-free diagnostics, bounded repairs,
+evidence, current-status reconciliation and local commits. Exact hashes and
+implementation details are evidence, not separate decisions. The default
+Owner touchpoints are envelope confirmation, a real boundary exception if one
+appears, and Owner Experience Acceptance.
+
+**Stop gates:** return to the Owner for product meaning, persisted schema or
+durable meaning, trust/privacy/representation changes, foundational
+dependencies, new source/provider/effect classes, real data or external
+representation, expanded or ambiguous physical effects, production/public
+behavior, push, merge or Gate C. An ordinary in-envelope defect does not open
+a new Card/Addendum/Review chain. Two failures at the same abstraction boundary
+force architecture review instead of another narrow approval.
+
+**Current-truth hierarchy:** `PRODUCT.md` and `ROADMAP.md` hold stable product
+meaning; `CONTROL.md` and the active issue hold the current blocker and next
+action; the active integration PR holds remote-byte and CI truth; reports,
+evidence, Cards, Addenda and Reviews are dated or immutable proof. The reset
+document is policy plus historical checkpoints, not a competing live cockpit.
+
+**Current reconciliation:** #77 remains `Needs Decision / Blocked` with
+`0 Product Progress`. The final isolated lifecycle applied the schema and
+passed initial verify, then failed cleanly at restart readiness before
+persistence and rollback; exact cleanup passed and the execution budget is
+exhausted. The local implementation/evidence baseline `a2ce379` and the
+working-model correction layered above it have no upstream representation in
+Draft PR #76 or the wider Draft PR stack. No remote CI claim applies to those
+local bytes.
+
+**Effect:** this decision changes instructions, repository/GitHub control
+surfaces and local commits only. Docker, PostgreSQL, provider, Guest,
+publication, production, push, merge, spend and Gate C remain
+`NOT_REQUESTED`.

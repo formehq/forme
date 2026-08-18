@@ -1,0 +1,65 @@
+name: Bounded enabler
+description: Propose one time-boxed prerequisite for an active Walking Slice.
+title: "[Enabler] "
+labels:
+  - type:enabler
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Walking Slice
+      description: Link the single user-visible issue this enables.
+      placeholder: "#67"
+    validations:
+      required: true
+  - type: textarea
+    id: unblock
+    attributes:
+      label: Exact unblock result
+      description: Name the technical fact this must prove. Do not describe the Enabler as product progress.
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Data, authority, and effect boundary
+      description: List what may be read, written, executed, called, retained, or spent, and what stays forbidden.
+    validations:
+      required: true
+  - type: input
+    id: timebox
+    attributes:
+      label: Time budget
+      description: Default maximum is two working days.
+      placeholder: "2 working days"
+    validations:
+      required: true
+  - type: input
+    id: attempts
+    attributes:
+      label: Full-attempt budget
+      description: Default maximum is two full attempts.
+      placeholder: "2"
+    validations:
+      required: true
+  - type: textarea
+    id: exit
+    attributes:
+      label: Green exit condition
+      description: Give the runnable proof that unblocks the parent slice.
+    validations:
+      required: true
+  - type: textarea
+    id: stop
+    attributes:
+      label: Mandatory redesign condition
+      description: Two same-boundary failures, exhausted time/attempt budget, an Enabler needing its own Enabler, or ambiguous effects must stop the approach.
+    validations:
+      required: true
+  - type: textarea
+    id: owner
+    attributes:
+      label: Owner decision boundary
+      description: Name only the schema/trust, real-data/provider, or production/public boundary that still needs Owner approval.
+    validations:
+      required: true

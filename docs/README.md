@@ -2,15 +2,90 @@
 
 The repository keeps a deliberately small decision surface.
 
-Current execution truth (2026-08-10): R0–R3 are Done and Owner-accepted. #66
-local Projection review is Owner-accepted and PR #72 is integrated into the R4
-branch. #67 is offline Technical Review Green on Draft PR #73, with no
-production Room/database mutation, deployment, publication, admission, real
-Guest data or Provider call. R4 remains Building and is not on `main`; Draft
-integration PR #65 currently has one Red Linux CI check. Host Binding attempts
-1 and 2 are consumed Yellow history and #71 treats Setup/Doctor as a bounded
-enabler for the later Fresh local Codex slice, not as the #67 product milestone.
-The current target is repeatable-ready 2026-08-24 and Demo Day 2026-08-25.
+## Current execution truth — management reset, 2026-08-17
+
+#77's replacement diagnostic consumed one exact pull, evaluated all 18
+predicates and found only the reviewed catalog-ordering assertion. The
+consolidated verify-only correction passed repository validation. The final
+lifecycle passed initial verify, then failed cleanly at restart readiness;
+cleanup passed and all execution allowances are exhausted.
+
+See the
+[`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
+[`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json), plus
+the
+[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+
+Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Execution-management reset before #77 (historical checkpoint)
+
+R4 is managed as one active Walking Slice (#67) plus at most one linked
+Enabler. #67 remains `Building / At Risk`; the complete public encounter has
+not reached Technical Review. The historical physical runner and V4 correction
+chain are frozen. The next proposal is
+[#77](https://github.com/formehq/forme/issues/77), a simplified disposable
+PostgreSQL rehearsal with a two-day/two-lifecycle default budget after
+separate approval. This reset makes no Docker, PostgreSQL, production or Gate
+C effect.
+
+Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+The operating rules are in
+[`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
+
+## Integration Campaign V4 truth before the reset (historical)
+
+R4 #67 remains Building and off `main`. Integration Campaign V4 consumed the
+final lifecycle in the confirmed local envelope. Docker matched
+`29.3.1 / linux/arm64`; the corrected historical container absence matched;
+historical network inspection then returned a distinct unknown body-free
+missing fingerprint and the runner stopped before PostgreSQL. Fresh resources
+are proven absent and owned residue is zero. Terminal evidence is
+`sha256:fb44fbd…1166b`; the
+[V4 outcome report](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md)
+is `sha256:820f9878…f67b`. Target PostgreSQL/catalog, production traffic and
+Gate C remain unobserved/closed.
+
+No lifecycle remains and no retry is authorized. A new Owner decision is
+required before a network/volume fingerprint correction or another local run.
+
+Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
+LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Earlier execution snapshot (historical context)
+
+Current execution truth (2026-08-16): R0–R3 and #66 are Owner-accepted. #67
+has repository/offline Public Core and concrete Local PostgreSQL wiring, but
+remains Building and is not on `main`. The one-use Integration Campaign V2 was
+prepared and consumed, proved its historical Docker names absent, then failed
+closed before PostgreSQL at `local_postgres_image_platform_manifest_invalid`.
+A later one-use image-manifest diagnostic was consumed and stopped at
+`IMAGE_MISSING`. The first image-acquisition diagnostic was then prepared and
+consumed once; Docker `version` completed `NONZERO / exit 1`, so inspect and
+pull remained zero. The Owner reports Docker Desktop was not running for that
+attempt and is running now, but a replacement must re-observe the host rather
+than trust that report as machine evidence. Kiar `3db3060` / Liar `3e1b0cb`
+now construct the add-only V2 replacement authority path. Construction made
+zero Docker/socket/daemon/registry/pull, cleanup, PostgreSQL and SQL effects.
+The replacement diagnostic is not yet approved or executed, so image presence
+is still unproved and no manifest pin is corrected.
+Production, real Guest data, traffic and Gate C remain closed. No fresh
+remote/CI status is asserted here; August 25 remains a Progress / Vision
+Sharing checkpoint, not a Done date.
+
+Current image-acquisition replacement bindings: index
+`sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
+schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
+evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
+report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
+Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 | Document | Question it answers |
 |---|---|
@@ -21,6 +96,20 @@ The current target is repeatable-ready 2026-08-24 and Demo Day 2026-08-25.
 | [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) | Owner-approved NH1/NH2 and exact R4 Fresh Native Response Session T3 contracts: Native Harness Workbench default, Codex-first/OpenCode architectural target, and the two-class native-work/Forme-authority boundary. |
 | [`DECISIONS.md`](./DECISIONS.md) | Which important choices have been made, and why? |
 | [`VALIDATION.md`](./VALIDATION.md) | What have real demos proved, what remains unproven, and what did owner feedback change? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-PHYSICAL-REBIND-CONSTRUCTION-REPORT.md) | What did repository-only Physical Rebind Effect 0 construct, validate and leave closed? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-APFS-NLINK-CORRECTION-CONSTRUCTION-REPORT.md) | How was the invalid fixed APFS directory-link-count contract corrected without weakening root identity or granting execution? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-EXECUTION-AUTHORITY-TOPOLOGY-CORRECTION-CONSTRUCTION-REPORT.md) | How were future execution authority paths made uniquely add-only while failed authority remained immutable history? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-DOCKER-DIAGNOSTIC-RESCUE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact missing-container diagnostic corrected and a future cleanup-rescue membrane constructed without executing rescue? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a one-use body-free inspect diagnostic constructed without authorizing or calling Docker? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-BODY-FREE-DOCKER-INSPECT-DIAGNOSTIC-PREPARE-FAILURE-CORRECTION-CONSTRUCTION-REPORT.md) | How was the failed V1 prepare made stage-exact and body-free without granting a replacement diagnostic? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-CONSTRUCTION-REPORT.md) | How did one medium-grained repository campaign close diagnosis, exact-owned cleanup, absence gating and the frozen rehearsal contract without executing them? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-MISSING-CORRECTION-CONSTRUCTION-REPORT.md) | How were the inspect-missing parser and Gate-B concurrency validation corrected without authorizing a replacement campaign? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V2-TOPOLOGY-VERIFIER-CORRECTION-CONSTRUCTION-REPORT.md) | How was the full committed successor topology made executable for V2 Card/Review without authorizing physical execution? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-MANIFEST-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was the body-free image-manifest diagnostic constructed without authorizing its Docker call, pull, cleanup or PostgreSQL? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-DIAGNOSTIC-CONSTRUCTION-REPORT.md) | How was a separate one-use image-acquisition diagnostic constructed without calling Docker, pulling an image, cleaning resources or touching PostgreSQL? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-IMAGE-ACQUISITION-REPLACEMENT-CONSTRUCTION-REPORT.md) | How was the failed V1 acquisition authority preserved and a fresh add-only V2 replacement path constructed without calling Docker or touching PostgreSQL? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-INSPECT-FINGERPRINT-CORRECTION-CONSTRUCTION-REPORT.md) | How was the exact V3 body-free missing-object fingerprint admitted without exposing its body, widening effects or claiming PostgreSQL Green? |
+| [`R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md`](./R4-PUBLIC-CORE-LOCAL-POSTGRES-INTEGRATION-CAMPAIGN-V4-OUTCOME.md) | What did the final bounded V4 lifecycle prove, where did it stop, and why is a new Owner decision required before any retry? |
 | [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Owner-approved privacy-first P human-boundary model plus proposed cognitive/delegation application guidance. |
 | [`STEWARDSHIP.md`](./STEWARDSHIP.md) | Proposed: how different workspace types maintain low entropy and long-running coherence. |
 | [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Owner-approved product foundation: the edge-intelligent Forme Room, Projection/Guest/Response Capsules, Signal Box, and no-server-AI topology. |
