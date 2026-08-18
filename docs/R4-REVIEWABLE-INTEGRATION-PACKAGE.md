@@ -1,7 +1,7 @@
 # R4 reviewable integration package
 
 Status: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_BRANCH_REFRESH_APPROVED / MERGE_NOT_REQUESTED`,
+REVIEWABLE_INTEGRATION_DRAFT_PR_OPEN / MERGE_NOT_REQUESTED`,
 2026-08-18.
 
 ## User outcome
@@ -64,6 +64,10 @@ The approved refresh adds only the later proof-closing implementation/evidence
 and current operating truth. Historical authority documents and failed-run
 artifacts remain outside the review branch as archive evidence.
 
+The refreshed branch is published for review as
+[Draft PR #78](https://github.com/formehq/forme/pull/78), stacked directly on
+Draft PR #76. Opening the Draft PR grants no merge or activation authority.
+
 The two proof-closing commits already frozen on the refreshed branch are:
 
 4. final runner, SQL, test and package bytes
@@ -102,7 +106,7 @@ Runnable repository-only proof:
 node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-postgres-rehearsal.test.ts
 ```
 
-Remote CI is not inferred until the branch is pushed and checked.
+Remote CI is reported only from Draft PR #78's actual check state.
 
 ## Owner review focus
 
@@ -121,5 +125,5 @@ bounded Guest knock, not another PostgreSQL rehearsal.
 Current stop:
 
 `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-REVIEWABLE_INTEGRATION_DRAFT_PR_REQUIRED / MERGE_NOT_REQUESTED /
+REVIEWABLE_INTEGRATION_DRAFT_PR_OPEN / MERGE_NOT_REQUESTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

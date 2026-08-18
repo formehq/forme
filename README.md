@@ -15,6 +15,9 @@ commit `360ed6c` aligned rollback with schema/verify's pinned local
 `69ac02f4e8dfbf01` passed schema, both verify passes, same-container restart,
 persistence, rollback, schema-absence proof and exact cleanup. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+The current review shape is published as
+[Draft PR #78](https://github.com/formehq/forme/pull/78); merge remains
+separately controlled.
 
 The Public Room experience remains `Building / At Risk`: the database boundary
 is proven, but #67 still needs product integration, activation and one
