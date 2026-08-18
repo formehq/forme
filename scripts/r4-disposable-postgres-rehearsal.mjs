@@ -52,12 +52,24 @@ export const SQL_BINDINGS = Object.freeze({
 const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DOCKER_CLI = "/Applications/Docker.app/Contents/Resources/bin/docker";
 const MAX_OUTPUT_BYTES = 1024 * 1024;
-const MAX_READINESS_ATTEMPTS = 30;
-const READINESS_DELAY_MS = 500;
+const MAX_READINESS_ATTEMPTS = 60;
+const READINESS_DELAY_MS = 1_000;
+const READINESS_DEADLINE_MS = 60_000;
 const OWNER_LABEL = "forme.r4.owner";
 const OWNER_VALUE = "disposable-postgres-rehearsal";
 const RUN_LABEL = "forme.r4.run";
 const ENABLER_LABEL = "forme.r4.enabler";
+export const READINESS_OUTCOMES = Object.freeze([
+  "READY",
+  "CONNECT_RETRYABLE",
+  "CONNECT_FAILED",
+  "AUTH_OR_CONFIGURATION_FAILED",
+  "QUERY_FAILED",
+  "RESULT_INVALID",
+  "CLIENT_CLOSE_FAILED",
+]);
+const RETRYABLE_READINESS_CODES = new Set(["ECONNREFUSED", "ECONNRESET", "ETIMEDOUT", "EHOSTUNREACH", "57P03"]);
+const AUTH_OR_CONFIGURATION_CODES = new Set(["28000", "28P01", "3D000"]);
 
 class RehearsalError extends Error {
   constructor(code, phase, { ambiguous = false, diagnostic = null } = {}) {
@@ -72,6 +84,24 @@ class RehearsalError extends Error {
 
 function fail(code, phase, options) {
   throw new RehearsalError(code, phase, options);
+}
+
+function readinessDiagnostic(readinessOutcome, attempts) {
+  if (!READINESS_OUTCOMES.includes(readinessOutcome) || !Number.isSafeInteger(attempts) || attempts < 1) {
+    fail("disposable_postgres_readiness_diagnostic_invalid", "postgres.readiness", { ambiguous: true });
+  }
+  return Object.freeze({ readinessOutcome, attempts });
+}
+
+function errorCode(error) {
+  return error !== null && typeof error === "object" && typeof error.code === "string" ? error.code : null;
+}
+
+function classifyConnectFailure(error) {
+  const code = errorCode(error);
+  if (code !== null && RETRYABLE_READINESS_CODES.has(code)) return "CONNECT_RETRYABLE";
+  if (code !== null && AUTH_OR_CONFIGURATION_CODES.has(code)) return "AUTH_OR_CONFIGURATION_FAILED";
+  return "CONNECT_FAILED";
 }
 
 function sha256(bytes) {
@@ -250,6 +280,28 @@ export function buildContainerCreateArguments(spec, passwordPath) {
     "--env", `POSTGRES_DB=${spec.postgres.database}`,
     IMAGE_REFERENCE,
   ]);
+}
+
+export function validateRunningPublishedPort(object, containerPort, expectedPort = null, phase = "docker.container.inspect") {
+  if (object === null || typeof object !== "object" || Array.isArray(object)
+      || !Number.isSafeInteger(containerPort) || containerPort < 1 || containerPort > 65_535
+      || (expectedPort !== null && (!Number.isSafeInteger(expectedPort) || expectedPort < 1 || expectedPort > 65_535))) {
+    fail("disposable_postgres_port_binding_invalid", phase, { ambiguous: true });
+  }
+  if (object.State?.Running !== true) fail("disposable_postgres_container_not_running", phase);
+  const bindings = object.NetworkSettings?.Ports?.[`${containerPort}/tcp`];
+  if (!Array.isArray(bindings) || bindings.length !== 1 || bindings[0]?.HostIp !== "127.0.0.1"
+      || !/^[1-9][0-9]{1,4}$/u.test(bindings[0]?.HostPort ?? "")) {
+    fail("disposable_postgres_port_binding_invalid", phase, { ambiguous: true });
+  }
+  const port = Number(bindings[0].HostPort);
+  if (!Number.isSafeInteger(port) || port < 1 || port > 65_535) {
+    fail("disposable_postgres_port_binding_invalid", phase, { ambiguous: true });
+  }
+  if (expectedPort !== null && port !== expectedPort) {
+    fail("disposable_postgres_port_binding_changed", phase, { ambiguous: true });
+  }
+  return port;
 }
 
 function assertOwnedLabels(actual, spec, phase) {
@@ -459,14 +511,10 @@ function createPhysicalDocker(spec, runtime, socketPath) {
     if (object.State?.Running === true) await call("container.stop", ["container", "stop", "--time", "10", spec.names.container]);
   }
 
-  async function publishedPort() {
+  async function publishedPort(expectedPort = null, phase = "docker.container.inspect") {
     const object = await inspect("container", spec.names.container);
     assertOwned("container", object);
-    const bindings = object.NetworkSettings?.Ports?.[`${spec.postgres.containerPort}/tcp`];
-    if (!Array.isArray(bindings) || bindings.length !== 1 || bindings[0]?.HostIp !== "127.0.0.1" || !/^[0-9]{2,5}$/u.test(bindings[0]?.HostPort ?? "")) {
-      fail("disposable_postgres_port_binding_invalid", "docker.container.inspect", { ambiguous: true });
-    }
-    return Number(bindings[0].HostPort);
+    return validateRunningPublishedPort(object, spec.postgres.containerPort, expectedPort, phase);
   }
 
   async function cleanup() {
@@ -509,8 +557,133 @@ function createPhysicalDocker(spec, runtime, socketPath) {
   });
 }
 
+export async function waitForPostgresReadiness({
+  createClient,
+  phase,
+  onAttempt = () => {},
+  maxAttempts = MAX_READINESS_ATTEMPTS,
+  delayMs = READINESS_DELAY_MS,
+  deadlineMs = READINESS_DEADLINE_MS,
+  sleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
+  now = () => Date.now(),
+}) {
+  if (typeof createClient !== "function" || typeof phase !== "string" || !phase.startsWith("postgres.readiness.")
+      || typeof onAttempt !== "function" || typeof sleep !== "function" || typeof now !== "function"
+      || !Number.isSafeInteger(maxAttempts) || maxAttempts < 1 || maxAttempts > MAX_READINESS_ATTEMPTS
+      || !Number.isSafeInteger(delayMs) || delayMs < 0 || delayMs > READINESS_DELAY_MS
+      || !Number.isSafeInteger(deadlineMs) || deadlineMs < 1 || deadlineMs > READINESS_DEADLINE_MS) {
+    fail("disposable_postgres_readiness_input_invalid", "postgres.readiness", { ambiguous: true });
+  }
+  const startedAt = now();
+  if (!Number.isSafeInteger(startedAt) || startedAt < 0) {
+    fail("disposable_postgres_readiness_clock_invalid", phase, { ambiguous: true });
+  }
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    const observedAt = now();
+    if (!Number.isSafeInteger(observedAt) || observedAt < startedAt) {
+      fail("disposable_postgres_readiness_clock_invalid", phase, { ambiguous: true });
+    }
+    if (observedAt - startedAt >= deadlineMs) {
+      fail("disposable_postgres_readiness_exhausted", phase, {
+        diagnostic: readinessDiagnostic("CONNECT_RETRYABLE", attempt - 1 || 1),
+      });
+    }
+    onAttempt(attempt);
+    let client = null;
+    let connected = false;
+    let ready = false;
+    let failure = null;
+    let primaryError = null;
+    try {
+      try {
+        client = createClient();
+      } catch {
+        fail("disposable_postgres_readiness_connect_failed", phase, {
+          ambiguous: true,
+          diagnostic: readinessDiagnostic("CONNECT_FAILED", attempt),
+        });
+      }
+      if (client === null || typeof client !== "object" || typeof client.connect !== "function"
+          || typeof client.query !== "function" || typeof client.end !== "function") {
+        fail("disposable_postgres_readiness_connect_failed", phase, {
+          ambiguous: true,
+          diagnostic: readinessDiagnostic("CONNECT_FAILED", attempt),
+        });
+      }
+      try {
+        await client.connect();
+        connected = true;
+      } catch (error) {
+        const outcome = classifyConnectFailure(error);
+        if (outcome !== "CONNECT_RETRYABLE") {
+          fail(outcome === "AUTH_OR_CONFIGURATION_FAILED"
+            ? "disposable_postgres_readiness_auth_or_configuration_failed"
+            : "disposable_postgres_readiness_connect_failed", phase, {
+            ambiguous: outcome === "CONNECT_FAILED",
+            diagnostic: readinessDiagnostic(outcome, attempt),
+          });
+        }
+        failure = Object.freeze({ outcome, attempts: attempt });
+      }
+      if (connected) {
+        let result;
+        try {
+          result = await client.query("SELECT 1::integer AS ready");
+        } catch {
+          fail("disposable_postgres_readiness_query_failed", phase, {
+            ambiguous: true,
+            diagnostic: readinessDiagnostic("QUERY_FAILED", attempt),
+          });
+        }
+        if (result?.rows?.length !== 1 || result.rows[0]?.ready !== 1) {
+          fail("disposable_postgres_readiness_result_invalid", phase, {
+            ambiguous: true,
+            diagnostic: readinessDiagnostic("RESULT_INVALID", attempt),
+          });
+        }
+        ready = true;
+      }
+    } catch (error) {
+      primaryError = error;
+      throw error;
+    } finally {
+      if (client !== null && typeof client === "object" && typeof client.end === "function") {
+        try { await client.end(); }
+        catch {
+          if (primaryError === null) {
+            fail("disposable_postgres_readiness_client_close_failed", phase, {
+              ambiguous: true,
+              diagnostic: readinessDiagnostic("CLIENT_CLOSE_FAILED", attempt),
+            });
+          }
+        }
+      }
+    }
+    if (ready) return Object.freeze({ readinessOutcome: "READY", attempts: attempt });
+    if (failure === null || failure.outcome !== "CONNECT_RETRYABLE") {
+      fail("disposable_postgres_readiness_connect_failed", phase, {
+        ambiguous: true,
+        diagnostic: readinessDiagnostic("CONNECT_FAILED", attempt),
+      });
+    }
+    const afterAttempt = now();
+    if (!Number.isSafeInteger(afterAttempt) || afterAttempt < observedAt) {
+      fail("disposable_postgres_readiness_clock_invalid", phase, { ambiguous: true });
+    }
+    if (attempt === maxAttempts || afterAttempt - startedAt >= deadlineMs) {
+      fail("disposable_postgres_readiness_exhausted", phase, {
+        diagnostic: readinessDiagnostic("CONNECT_RETRYABLE", attempt),
+      });
+    }
+    await sleep(Math.min(delayMs, deadlineMs - (afterAttempt - startedAt)));
+  }
+  fail("disposable_postgres_readiness_exhausted", phase, {
+    diagnostic: readinessDiagnostic("CONNECT_RETRYABLE", maxAttempts),
+  });
+}
+
 function createPhysicalPostgres(spec, runtime) {
-  function config(port) {
+  function config(port, readiness = false) {
     return Object.freeze({
       host: "127.0.0.1",
       port,
@@ -520,8 +693,8 @@ function createPhysicalPostgres(spec, runtime) {
       application_name: `forme-r4-enabler-77-${spec.runId}`,
       ssl: false,
       connectionTimeoutMillis: 1_500,
-      query_timeout: 90_000,
-      statement_timeout: 90_000,
+      query_timeout: readiness ? 1_500 : 90_000,
+      statement_timeout: readiness ? 1_500 : 90_000,
     });
   }
 
@@ -543,23 +716,12 @@ function createPhysicalPostgres(spec, runtime) {
     }
   }
 
-  async function waitReady(port, phase) {
-    for (let attempt = 1; attempt <= MAX_READINESS_ATTEMPTS; attempt += 1) {
-      const client = new Client(config(port));
-      try {
-        await client.connect();
-        const result = await client.query("SELECT 1::integer AS ready");
-        await client.end();
-        if (result.rows.length === 1 && result.rows[0]?.ready === 1) return attempt;
-        fail("disposable_postgres_readiness_result_invalid", phase, { ambiguous: true });
-      } catch (error) {
-        try { await client.end(); } catch { /* no durable SQL has run */ }
-        if (error instanceof RehearsalError) throw error;
-        if (attempt === MAX_READINESS_ATTEMPTS) fail("disposable_postgres_readiness_exhausted", phase);
-        await new Promise((resolve) => setTimeout(resolve, READINESS_DELAY_MS));
-      }
-    }
-    fail("disposable_postgres_readiness_exhausted", phase);
+  async function waitReady(port, phase, onAttempt) {
+    return waitForPostgresReadiness({
+      createClient: () => new Client(config(port, true)),
+      phase,
+      onAttempt,
+    });
   }
 
   async function serverVersion(port) {
@@ -653,6 +815,7 @@ export async function runRehearsal({
     image: null,
     port: null,
     readiness: { initial: 0, restart: 0 },
+    readinessOutcomes: { initial: "NOT_STARTED", restart: "NOT_STARTED" },
     schemaApplied: false,
     verifyCount: 0,
     restartCount: 0,
@@ -685,9 +848,15 @@ export async function runRehearsal({
     state.resourceIds.volume = await docker.createVolume();
     state.resourceIds.container = await docker.createContainer();
     await docker.startContainer();
-    state.port = await docker.publishedPort();
+    state.port = await docker.publishedPort(null, "docker.container.initial");
 
-    state.readiness.initial = await postgres.waitReady(state.port, "postgres.readiness.initial");
+    const initialReadiness = await postgres.waitReady(
+      state.port,
+      "postgres.readiness.initial",
+      (attempt) => { state.readiness.initial = attempt; },
+    );
+    state.readiness.initial = initialReadiness.attempts;
+    state.readinessOutcomes.initial = initialReadiness.readinessOutcome;
     const version = await postgres.serverVersion(state.port);
     if (version !== POSTGRES_SERVER_VERSION_NUM) fail("disposable_postgres_version_mismatch", "postgres.version");
     await postgres.execute(state.port, sql.schema, "postgres.schema");
@@ -700,7 +869,14 @@ export async function runRehearsal({
     await docker.stopContainer();
     await docker.startContainer();
     state.restartCount = 1;
-    state.readiness.restart = await postgres.waitReady(state.port, "postgres.readiness.restart");
+    await docker.publishedPort(state.port, "docker.container.restart");
+    const restartReadiness = await postgres.waitReady(
+      state.port,
+      "postgres.readiness.restart",
+      (attempt) => { state.readiness.restart = attempt; },
+    );
+    state.readiness.restart = restartReadiness.attempts;
+    state.readinessOutcomes.restart = restartReadiness.readinessOutcome;
     await postgres.execute(state.port, sql.verify, "postgres.verify.restart");
     state.verifyCount += 1;
     state.seedAfterRestart = await postgres.installationSeed(state.port);
@@ -712,6 +888,12 @@ export async function runRehearsal({
     if (!state.rollbackProven) fail("disposable_postgres_rollback_proof_failed", "postgres.rollback-proof", { ambiguous: true });
   } catch (error) {
     primaryFailure = sanitizeError(error);
+    if (primaryFailure.phase === "postgres.readiness.initial" && primaryFailure.diagnostic?.readinessOutcome !== undefined) {
+      state.readinessOutcomes.initial = primaryFailure.diagnostic.readinessOutcome;
+    }
+    if (primaryFailure.phase === "postgres.readiness.restart" && primaryFailure.diagnostic?.readinessOutcome !== undefined) {
+      state.readinessOutcomes.restart = primaryFailure.diagnostic.readinessOutcome;
+    }
   } finally {
     try { cleanup = await docker.cleanup(); }
     catch (error) { cleanupFailure = sanitizeError(error); }
@@ -721,7 +903,7 @@ export async function runRehearsal({
   const green = primaryFailure === null && cleanupGreen && state.schemaApplied && state.verifyCount === 2
     && state.restartCount === 1 && state.rollbackApplied && state.rollbackProven;
   return Object.freeze({
-    schemaVersion: "r4.disposable-postgres-rehearsal-result.v1",
+    schemaVersion: "r4.disposable-postgres-rehearsal-result.v2",
     status: green ? "GREEN" : cleanupGreen ? "FAILED_CLEAN" : "FAILED_CLEANUP_AMBIGUOUS",
     runId: spec.runId,
     startedAt,
@@ -747,6 +929,7 @@ export async function runRehearsal({
       publishedHost: state.port === null ? null : "127.0.0.1",
       publishedPort: state.port,
       readinessAttempts: Object.freeze({ ...state.readiness }),
+      readinessOutcomes: Object.freeze({ ...state.readinessOutcomes }),
     }),
     resources: Object.freeze({
       names: spec.names,
@@ -778,6 +961,7 @@ export async function runVerifyDiagnosticRehearsal({
     image: null,
     port: null,
     readinessAttempts: 0,
+    readinessOutcome: "NOT_STARTED",
     schemaApplied: false,
     assertionIds: null,
     resourceIds: { container: null, network: null, volume: null },
@@ -804,8 +988,14 @@ export async function runVerifyDiagnosticRehearsal({
     state.resourceIds.volume = await docker.createVolume();
     state.resourceIds.container = await docker.createContainer();
     await docker.startContainer();
-    state.port = await docker.publishedPort();
-    state.readinessAttempts = await postgres.waitReady(state.port, "postgres.readiness.diagnostic");
+    state.port = await docker.publishedPort(null, "docker.container.diagnostic");
+    const readiness = await postgres.waitReady(
+      state.port,
+      "postgres.readiness.diagnostic",
+      (attempt) => { state.readinessAttempts = attempt; },
+    );
+    state.readinessAttempts = readiness.attempts;
+    state.readinessOutcome = readiness.readinessOutcome;
     const version = await postgres.serverVersion(state.port);
     if (version !== POSTGRES_SERVER_VERSION_NUM) fail("disposable_postgres_version_mismatch", "postgres.version");
     await postgres.execute(state.port, sql.schema, "postgres.schema");
@@ -815,6 +1005,9 @@ export async function runVerifyDiagnosticRehearsal({
     );
   } catch (error) {
     primaryFailure = sanitizeError(error);
+    if (primaryFailure.phase === "postgres.readiness.diagnostic" && primaryFailure.diagnostic?.readinessOutcome !== undefined) {
+      state.readinessOutcome = primaryFailure.diagnostic.readinessOutcome;
+    }
   } finally {
     try { cleanup = await docker.cleanup(); }
     catch (error) { cleanupFailure = sanitizeError(error); }
@@ -850,6 +1043,7 @@ export async function runVerifyDiagnosticRehearsal({
       publishedHost: state.port === null ? null : "127.0.0.1",
       publishedPort: state.port,
       readinessAttempts: state.readinessAttempts,
+      readinessOutcome: state.readinessOutcome,
     }),
     resources: Object.freeze({
       names: spec.names,
@@ -891,7 +1085,7 @@ async function main() {
       : await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
   } catch (error) {
     result = Object.freeze({
-      schemaVersion: "r4.disposable-postgres-rehearsal-result.v1",
+      schemaVersion: "r4.disposable-postgres-rehearsal-result.v2",
       status: "FAILED_CLEAN",
       runId,
       startedAt: new Date().toISOString(),

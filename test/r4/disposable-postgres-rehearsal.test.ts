@@ -7,6 +7,7 @@ import {
   IMAGE_PLATFORM,
   IMAGE_REFERENCE,
   POSTGRES_SERVER_VERSION_NUM,
+  READINESS_OUTCOMES,
   SQL_BINDINGS,
   VERIFY_ASSERTION_IDS,
   buildVerifyAssertionDiagnosticSql,
@@ -18,6 +19,8 @@ import {
   readPinnedSql,
   runRehearsal,
   runVerifyDiagnosticRehearsal,
+  validateRunningPublishedPort,
+  waitForPostgresReadiness,
 // The development harness is an executable .mjs artifact; its exports are
 // tested directly without adding a declaration-only maintenance surface.
 // @ts-expect-error -- intentional executable artifact import.
@@ -30,11 +33,13 @@ type FakeOptions = Readonly<{
   failSqlPhase?: string | null;
   cleanupOwnershipMismatch?: boolean;
   diagnosticFailedAssertions?: readonly string[];
+  restartReadinessExhausted?: boolean;
 }>;
 
 class FakeDocker {
   readonly callCounts: Record<string, number> = {};
   readonly calls: string[] = [];
+  readonly portProofs: Array<Readonly<{ expectedPort: number | null; phase: string }>> = [];
   readonly options: FakeOptions;
   imagePresent: boolean;
   containerPresent = false;
@@ -96,8 +101,9 @@ class FakeDocker {
     this.record("container.stop");
   }
 
-  async publishedPort(): Promise<number> {
+  async publishedPort(_expectedPort: number | null = null, _phase = "docker.container.inspect"): Promise<number> {
     this.record("container.port");
+    this.portProofs.push(Object.freeze({ expectedPort: _expectedPort, phase: _phase }));
     return 55432;
   }
 
@@ -120,9 +126,22 @@ class FakePostgres {
     this.options = options;
   }
 
-  async waitReady(_port: number, phase: string): Promise<number> {
+  async waitReady(_port: number, phase: string, onAttempt: (attempt: number) => void = () => {}): Promise<Readonly<{ readinessOutcome: string; attempts: number }>> {
     this.calls.push(phase);
-    return phase.endsWith("restart") ? 2 : 1;
+    if (phase.endsWith("restart") && this.options.restartReadinessExhausted === true) {
+      return waitForPostgresReadiness({
+        createClient: () => scriptedReadinessClient("ECONNREFUSED", { ended: 0 }),
+        phase,
+        onAttempt,
+        maxAttempts: 3,
+        delayMs: 0,
+        deadlineMs: 100,
+        now: () => 0,
+      });
+    }
+    const attempts = phase.endsWith("restart") ? 2 : 1;
+    onAttempt(attempts);
+    return Object.freeze({ readinessOutcome: "READY", attempts });
   }
 
   async serverVersion(): Promise<number> {
@@ -170,6 +189,37 @@ function fixture(options: FakeOptions = {}) {
   return { spec, sql, docker, postgres };
 }
 
+type ReadinessStep = "ready" | "result_invalid" | "query_failed" | "close_failed" | string;
+
+function scriptedReadinessClient(step: ReadinessStep, counters: { ended: number }) {
+  return {
+    async connect(): Promise<void> {
+      if (!["ready", "result_invalid", "query_failed", "close_failed"].includes(step)) {
+        throw Object.assign(new Error("body must not cross"), { code: step });
+      }
+    },
+    async query(): Promise<Readonly<{ rows: readonly Readonly<{ ready: number }>[] }>> {
+      if (step === "query_failed") throw new Error("query body must not cross");
+      return Object.freeze({ rows: step === "result_invalid" ? [] : [Object.freeze({ ready: 1 })] });
+    },
+    async end(): Promise<void> {
+      counters.ended += 1;
+      if (step === "close_failed") throw new Error("close body must not cross");
+    },
+  };
+}
+
+function assertRehearsalError(error: unknown, code: string, outcome: string, attempts: number): boolean {
+  const bounded = error as Error & {
+    code?: string;
+    diagnostic?: Readonly<{ readinessOutcome?: string; attempts?: number }>;
+  };
+  assert.equal(bounded.code, code);
+  assert.deepEqual(bounded.diagnostic, { readinessOutcome: outcome, attempts });
+  assert.doesNotMatch(JSON.stringify(bounded.diagnostic), /body must not cross/u);
+  return true;
+}
+
 test("#77 binds one unique, loopback-only, secret-file Docker plan", () => {
   const spec = createRunSpec("0123456789abcdef", "/private/tmp/forme-r4-pg-test");
   assert.deepEqual(spec.names, {
@@ -193,6 +243,121 @@ test("#77 binds one unique, loopback-only, secret-file Docker plan", () => {
   assert.equal(args.filter((value: string) => value.includes(secretPath)).length, 1);
   assert.match(args.find((value: string) => value.includes(secretPath)) ?? "", /,readonly$/u);
   assert.equal(args.some((value: string) => value.includes("POSTGRES_PASSWORD=")), false);
+});
+
+test("post-start inspection proves a running container and stable loopback port", () => {
+  const observation = {
+    State: { Running: true },
+    NetworkSettings: { Ports: { "5432/tcp": [{ HostIp: "127.0.0.1", HostPort: "55432" }] } },
+  };
+  assert.equal(validateRunningPublishedPort(observation, 5432), 55432);
+  assert.equal(validateRunningPublishedPort(observation, 5432, 55432, "docker.container.restart"), 55432);
+  assert.throws(
+    () => validateRunningPublishedPort({ ...observation, State: { Running: false } }, 5432, null, "docker.container.restart"),
+    (error: unknown) => (error as Error & { code?: string; phase?: string }).code === "disposable_postgres_container_not_running"
+      && (error as Error & { phase?: string }).phase === "docker.container.restart",
+  );
+  assert.throws(
+    () => validateRunningPublishedPort(observation, 5432, 55431, "docker.container.restart"),
+    (error: unknown) => (error as Error & { code?: string }).code === "disposable_postgres_port_binding_changed",
+  );
+});
+
+test("production readiness retries only closed transient connects and preserves exact attempts", async () => {
+  assert.deepEqual(READINESS_OUTCOMES, [
+    "READY", "CONNECT_RETRYABLE", "CONNECT_FAILED", "AUTH_OR_CONFIGURATION_FAILED",
+    "QUERY_FAILED", "RESULT_INVALID", "CLIENT_CLOSE_FAILED",
+  ]);
+  const steps: ReadinessStep[] = ["ECONNREFUSED", "57P03", "ready"];
+  const counters = { ended: 0 };
+  let clock = 0;
+  const attempts: number[] = [];
+  const result = await waitForPostgresReadiness({
+    createClient: () => scriptedReadinessClient(steps.shift() ?? "CONNECT_FAILED", counters),
+    phase: "postgres.readiness.restart",
+    onAttempt: (attempt: number) => attempts.push(attempt),
+    maxAttempts: 3,
+    delayMs: 10,
+    deadlineMs: 100,
+    sleep: async (milliseconds: number) => { clock += milliseconds; },
+    now: () => clock,
+  });
+  assert.deepEqual(result, { readinessOutcome: "READY", attempts: 3 });
+  assert.deepEqual(attempts, [1, 2, 3]);
+  assert.equal(counters.ended, 3);
+});
+
+test("production readiness fails body-free on auth, query, result, close, and exhaustion boundaries", async () => {
+  const cases = [
+    { step: "28P01", code: "disposable_postgres_readiness_auth_or_configuration_failed", outcome: "AUTH_OR_CONFIGURATION_FAILED" },
+    { step: "query_failed", code: "disposable_postgres_readiness_query_failed", outcome: "QUERY_FAILED" },
+    { step: "result_invalid", code: "disposable_postgres_readiness_result_invalid", outcome: "RESULT_INVALID" },
+    { step: "close_failed", code: "disposable_postgres_readiness_client_close_failed", outcome: "CLIENT_CLOSE_FAILED" },
+  ] as const;
+  for (const item of cases) {
+    const counters = { ended: 0 };
+    await assert.rejects(
+      waitForPostgresReadiness({
+        createClient: () => scriptedReadinessClient(item.step, counters),
+        phase: "postgres.readiness.restart",
+        maxAttempts: 3,
+        delayMs: 0,
+        deadlineMs: 100,
+        now: () => 0,
+      }),
+      (error: unknown) => assertRehearsalError(error, item.code, item.outcome, 1),
+    );
+  }
+
+  const counters = { ended: 0 };
+  const attempts: number[] = [];
+  await assert.rejects(
+    waitForPostgresReadiness({
+      createClient: () => scriptedReadinessClient("ECONNREFUSED", counters),
+      phase: "postgres.readiness.restart",
+      onAttempt: (attempt: number) => attempts.push(attempt),
+      maxAttempts: 3,
+      delayMs: 0,
+      deadlineMs: 100,
+      now: () => 0,
+    }),
+    (error: unknown) => assertRehearsalError(
+      error, "disposable_postgres_readiness_exhausted", "CONNECT_RETRYABLE", 3,
+    ),
+  );
+  assert.deepEqual(attempts, [1, 2, 3]);
+  assert.equal(counters.ended, 3);
+});
+
+test("production readiness deadline and clock rollback fail before an unbounded retry", async () => {
+  let clock = 0;
+  const attempts: number[] = [];
+  await assert.rejects(
+    waitForPostgresReadiness({
+      createClient: () => scriptedReadinessClient("ECONNREFUSED", { ended: 0 }),
+      phase: "postgres.readiness.restart",
+      onAttempt: (attempt: number) => attempts.push(attempt),
+      maxAttempts: 3,
+      delayMs: 50,
+      deadlineMs: 50,
+      sleep: async (milliseconds: number) => { clock += milliseconds; },
+      now: () => clock,
+    }),
+    (error: unknown) => assertRehearsalError(
+      error, "disposable_postgres_readiness_exhausted", "CONNECT_RETRYABLE", 1,
+    ),
+  );
+  assert.deepEqual(attempts, [1]);
+
+  const times = [10, 9];
+  await assert.rejects(
+    waitForPostgresReadiness({
+      createClient: () => scriptedReadinessClient("ready", { ended: 0 }),
+      phase: "postgres.readiness.restart",
+      now: () => times.shift() ?? 9,
+    }),
+    (error: unknown) => (error as Error & { code?: string }).code === "disposable_postgres_readiness_clock_invalid",
+  );
 });
 
 test("#77 pins the PostgreSQL 16-compatible Core schema, verify and rollback bytes", () => {
@@ -369,6 +534,11 @@ test("cached-image rehearsal proves schema, restart, rollback and exact cleanup"
   assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
   assert.equal(result.observation.imagePulled, false);
   assert.deepEqual(result.observation.readinessAttempts, { initial: 1, restart: 2 });
+  assert.deepEqual(result.observation.readinessOutcomes, { initial: "READY", restart: "READY" });
+  assert.deepEqual(input.docker.portProofs, [
+    { expectedPort: null, phase: "docker.container.initial" },
+    { expectedPort: 55432, phase: "docker.container.restart" },
+  ]);
   assert.equal(input.docker.calls.filter((kind) => kind === "container.start").length, 2);
   assert.equal(input.docker.calls.at(-1), "cleanup");
   assert.deepEqual(result.effects, {
@@ -381,6 +551,21 @@ test("cached-image rehearsal proves schema, restart, rollback and exact cleanup"
     gateCEffects: 0,
     dockerCallCounts: result.effects.dockerCallCounts,
   });
+});
+
+test("restart exhaustion preserves all failed attempts and its closed causal class", async () => {
+  const input = fixture({ restartReadinessExhausted: true });
+  const result = await runRehearsal({ ...input, startedAt: "2026-08-17T00:00:00.000Z" });
+  assert.equal(result.status, "FAILED_CLEAN");
+  assert.equal(result.schemaVersion, "r4.disposable-postgres-rehearsal-result.v2");
+  assert.equal(result.failure.code, "disposable_postgres_readiness_exhausted");
+  assert.equal(result.failure.phase, "postgres.readiness.restart");
+  assert.deepEqual(result.failure.diagnostic, { readinessOutcome: "CONNECT_RETRYABLE", attempts: 3 });
+  assert.deepEqual(result.observation.readinessAttempts, { initial: 1, restart: 3 });
+  assert.deepEqual(result.observation.readinessOutcomes, { initial: "READY", restart: "CONNECT_RETRYABLE" });
+  assert.deepEqual(result.resources.finalAbsent, { container: true, network: true, volume: true });
+  assert.equal(result.outcome.verifyCount, 1);
+  assert.equal(result.outcome.rollbackApplied, false);
 });
 
 test("an absent exact image permits one pull and no second pull", async () => {
