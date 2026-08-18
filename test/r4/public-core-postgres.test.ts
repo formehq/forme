@@ -32,11 +32,19 @@ const VERIFY = readFileSync(new URL("../../schemas/r4/public-core/verify.sql", i
 const ROLLBACK = readFileSync(new URL("../../schemas/r4/public-core/rollback.sql", import.meta.url), "utf8");
 const ADAPTER = readFileSync(new URL("../../apps/room/src/public-core-postgres.ts", import.meta.url), "utf8");
 
+function catalogManifestRows(sql: string): string {
+  const start = sql.indexOf("SELECT 'relation|'");
+  const endMarker = ") catalog_rows;";
+  const end = sql.indexOf(endMarker, start);
+  assert.ok(start >= 0 && end >= 0, "catalog manifest row query must exist");
+  return sql.slice(start, end + endMarker.length).replace(/\s+/gu, " ").trim();
+}
+
 const NOW = "2026-08-10T12:00:00.000Z";
 const HOUR = "2026-08-10T12:00:00.000Z";
 const DAY = "2026-08-10T00:00:00.000Z";
 const RATE_EXPIRES = "2026-08-11T12:59:00.000Z";
-const ENCOUNTER_EXPIRES = "2026-08-11T11:59:00.000Z";
+const ENCOUNTER_EXPIRES = "2026-08-11T12:00:00.000Z";
 const BODY_EXPIRES = "2026-09-09T11:59:00.000Z";
 const PAIR_EXPIRES = "2026-08-10T12:10:00.000Z";
 const BINDING_EXPIRES = "2026-09-09T12:00:00.000Z";
@@ -172,8 +180,9 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
       ...event,
     };
     case "interaction.create": return {
-      encounterId: IDS.encounter,
       interactionId: IDS.interaction,
+      interactionType: "ask" as const,
+      projectionId: IDS.projection,
       acceptRateEventId: IDS.rateAccept,
       dayWindowStart: DAY,
       rateExpiresAt: RATE_EXPIRES,
@@ -227,13 +236,13 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
     };
     case "curation.admit":
     case "curation.unlist": return { projectionId: IDS.projection, ...event };
-    case "room_operator.sync": return { bindingId: IDS.binding, afterSequence: 2 };
-    case "room_operator.pull": return { bindingId: IDS.binding, interactionId: IDS.interaction, ...event };
+    case "room_operator.sync": return { bindingCredentialDigest: hmac("8"), afterSequence: 2 };
+    case "room_operator.pull": return { bindingCredentialDigest: hmac("8"), interactionId: IDS.interaction, ...event };
     case "room_operator.ack": return {
-      ackId: IDS.ack, bindingId: IDS.binding, eventId: IDS.event, sequence: 3, eventHash: sha("3"),
+      ackId: IDS.ack, bindingCredentialDigest: hmac("8"), eventId: IDS.event, sequence: 3, eventHash: sha("3"),
     };
     case "room_operator.projection.deliver": return {
-      bindingId: IDS.binding,
+      bindingCredentialDigest: hmac("8"),
       projectionId: IDS.projection,
       capsuleCiphertext: encrypted("projections", "capsule_ciphertext", IDS.projection),
       payloadHash: sha("7"),
@@ -249,7 +258,7 @@ function inputFor(action: PublicCoreSqlMutationActionV1): object {
       ...event,
     };
     case "room_operator.local_purge.receipt": return {
-      bindingId: IDS.binding, interactionId: IDS.interaction, ...event,
+      bindingCredentialDigest: hmac("8"), interactionId: IDS.interaction, ...event,
     };
   }
 }
@@ -294,6 +303,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
   pullGuestHash: `sha256:${string}` | null = sha("d");
   pullExpiresAt = BODY_EXPIRES;
   pullTombstoneExpiresAt = TOMBSTONE_EXPIRES;
+  pullProjectionId = IDS.projection;
+  pullOriginProjectionHash = sha("7");
+  pullInteractionType: "ask" | "seed" | "resonance" = "ask";
+  pullConsentHash = sha("5");
+  pullAcceptedAt = NOW;
   localPurgeReceivedAt: string | null = null;
   syncFloor = 1;
   syncHighWater = 5;
@@ -341,6 +355,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: this.pullGuestHash,
       pullExpiresAt: this.pullExpiresAt,
       pullTombstoneExpiresAt: this.pullTombstoneExpiresAt,
+      pullProjectionId: this.pullProjectionId,
+      pullOriginProjectionHash: this.pullOriginProjectionHash,
+      pullInteractionType: this.pullInteractionType,
+      pullConsentHash: this.pullConsentHash,
+      pullAcceptedAt: this.pullAcceptedAt,
       localPurgeReceivedAt: this.localPurgeReceivedAt,
     };
     const transaction: PublicCoreSqlTransactionV1 = Object.freeze({
@@ -392,6 +411,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: string | null;
       pullExpiresAt: string;
       pullTombstoneExpiresAt: string;
+      pullProjectionId: string;
+      pullOriginProjectionHash: string;
+      pullInteractionType: ExecutingFakeSqlExecutor["pullInteractionType"];
+      pullConsentHash: string;
+      pullAcceptedAt: string;
       localPurgeReceivedAt: string | null;
     },
   ): PublicCoreSqlQueryResultV1 {
@@ -533,6 +557,12 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
         request_field_version: domain.pullRequestFieldVersion,
         guest_capsule_field_version: domain.pullGuestFieldVersion,
         body_expires_at: domain.pullExpiresAt,
+        origin_projection_id: domain.pullProjectionId,
+        origin_projection_payload_hash: domain.pullOriginProjectionHash,
+        interaction_type: domain.pullInteractionType,
+        consent_hash: domain.pullConsentHash,
+        created_at: domain.pullAcceptedAt,
+        local_purge_received_at: domain.localPurgeReceivedAt,
       }] };
     }
     if (statement.statementId === "room_operator.pull.terminal.recovery.read") {
@@ -608,6 +638,11 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullGuestHash: string | null;
       pullExpiresAt: string;
       pullTombstoneExpiresAt: string;
+      pullProjectionId: string;
+      pullOriginProjectionHash: string;
+      pullInteractionType: "ask" | "seed" | "resonance";
+      pullConsentHash: string;
+      pullAcceptedAt: string;
       localPurgeReceivedAt: string | null;
     },
     receipts: Map<string, ReceiptState>,
@@ -704,6 +739,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: "seen_locally",
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullExpiresAt,
         };
       }
@@ -722,6 +764,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: domain.pullState,
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullTombstoneExpiresAt,
         };
       }
@@ -745,6 +794,13 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
           request_field_version: domain.pullRequestFieldVersion,
           guest_capsule_field_version: domain.pullGuestFieldVersion,
           body_expires_at: domain.pullExpiresAt,
+          origin_projection_id: domain.pullProjectionId,
+          origin_projection_payload_hash: domain.pullOriginProjectionHash,
+          interaction_type: domain.pullInteractionType,
+          consent_hash: domain.pullConsentHash,
+          interaction_state: "interaction_expired",
+          created_at: domain.pullAcceptedAt,
+          local_purge_received_at: domain.localPurgeReceivedAt,
           source_expires_at: domain.pullTombstoneExpiresAt,
         };
       }
@@ -786,6 +842,9 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       third_place_id: "thirdplace_forme_public_core_v1",
       room_id: IDS.room,
       projection_id: IDS.projection,
+      capsule_ciphertext: encrypted("projections", "capsule_ciphertext", IDS.projection).envelope,
+      capsule_plaintext_bytes: 12,
+      capsule_field_version: 1,
       payload_hash: sha("7"),
       lifecycle_version: 1,
       fresh_until: FRESH_UNTIL,
@@ -838,6 +897,9 @@ function thirdPlacePortRow(): Record<string, unknown> {
     third_place_id: "thirdplace_forme_public_core_v1",
     room_id: IDS.room,
     projection_id: IDS.projection,
+    capsule_ciphertext: encrypted("projections", "capsule_ciphertext", IDS.projection).envelope,
+    capsule_plaintext_bytes: 12,
+    capsule_field_version: 1,
     payload_hash: sha("7"),
     lifecycle_version: 1,
     fresh_until: FRESH_UNTIL,
@@ -1071,7 +1133,11 @@ test("executor rows are owned snapshots and ciphertext envelopes are exact seven
     payload_hash: sha("7"),
     owner_state: "published_fresh",
     curation_state: "admitted",
+    interaction_mode: "public_single",
+    current: true,
+    body_readable: true,
     lifecycle_version: 1,
+    published_at: NOW,
     fresh_until: FRESH_UNTIL,
     expires_at: PROJECTION_EXPIRES,
   };
@@ -1872,6 +1938,7 @@ test("pull receipt recovery binds request and guest field versions, hashes and e
   await executeAction(store, "room_operator.pull");
 
   executor.pullVersion += 1;
+  executor.localPurgeReceivedAt = NOW;
   const lifecycleReplay = await executeAction(
     store,
     "room_operator.pull",
@@ -2243,6 +2310,110 @@ test("every purge obligation keeps a strict sub-24-hour margin and verify reject
   assert.match(VERIFY, /public_core_check_constraint_definition_drift/u);
 });
 
+test("constraint inventory compares the exact schema set in full-signature C order", () => {
+  const expectedBlock = VERIFY.match(
+    /expected_constraint_csv constant text :=([\s\S]*?);\n  expected_key_constraint_csv/u,
+  )?.[1];
+  assert.ok(expectedBlock, "expected constraint inventory must remain explicit");
+  const expected = [...expectedBlock.matchAll(/'([^']*)'/gu)]
+    .map((match) => match[1] ?? "")
+    .join("")
+    .split(",");
+
+  const constraintType = (constraintName: string): string => constraintName.startsWith("pk_")
+    ? "p"
+    : constraintName.startsWith("uq_")
+      ? "u"
+      : constraintName.startsWith("fk_")
+        ? "f"
+        : "c";
+  const actual = [...SCHEMA.matchAll(
+    /CREATE TABLE forme_r4_public_core\.([a-z_]+) \(([\s\S]*?)\n\);/gu,
+  )].flatMap((tableMatch) => {
+    const tableName = tableMatch[1] ?? "";
+    return [...(tableMatch[2] ?? "").matchAll(/\bCONSTRAINT ([a-z0-9_]+)/gu)].map((constraintMatch) => {
+      const constraintName = constraintMatch[1] ?? "";
+      const type = constraintType(constraintName);
+      return { tableName, constraintName, signature: `${tableName}|${constraintName}|${type}` };
+    });
+  });
+  actual.push(...[...SCHEMA.matchAll(
+    /ALTER TABLE forme_r4_public_core\.([a-z_]+)\n  ADD CONSTRAINT ([a-z0-9_]+)/gu,
+  )].map((match) => {
+    const tableName = match[1] ?? "";
+    const constraintName = match[2] ?? "";
+    const type = constraintType(constraintName);
+    return { tableName, constraintName, signature: `${tableName}|${constraintName}|${type}` };
+  }));
+  const byBytes = (left: string, right: string): number => Buffer.compare(Buffer.from(left), Buffer.from(right));
+  const signatureOrder = actual.map(({ signature }) => signature).sort(byBytes);
+  const legacyNameOrder = actual.toSorted((left, right) => {
+    const tableOrder = byBytes(left.tableName, right.tableName);
+    return tableOrder === 0 ? byBytes(left.constraintName, right.constraintName) : tableOrder;
+  }).map(({ signature }) => signature);
+
+  assert.equal(actual.length, 172);
+  assert.deepEqual(signatureOrder, expected);
+  assert.deepEqual(
+    legacyNameOrder.flatMap((signature, index) => signature === expected[index]
+      ? []
+      : [{ index, expected: expected[index], actual: signature }]),
+    [
+      {
+        index: 41,
+        expected: "mutation_receipts|ck_mutation_receipts__actor_action|c",
+        actual: "mutation_receipts|ck_mutation_receipts__actor|c",
+      },
+      {
+        index: 42,
+        expected: "mutation_receipts|ck_mutation_receipts__actor|c",
+        actual: "mutation_receipts|ck_mutation_receipts__actor_action|c",
+      },
+      {
+        index: 49,
+        expected: "mutation_receipts|ck_mutation_receipts__recovery_action|c",
+        actual: "mutation_receipts|ck_mutation_receipts__recovery|c",
+      },
+      {
+        index: 50,
+        expected: "mutation_receipts|ck_mutation_receipts__recovery|c",
+        actual: "mutation_receipts|ck_mutation_receipts__recovery_action|c",
+      },
+    ],
+  );
+  assert.match(
+    VERIFY,
+    /array_agg\(signature ORDER BY signature COLLATE "C"\)[\s\S]*?constraint_inventory/u,
+  );
+});
+
+test("fixed verify inventories use one explicit text C-ordering contract", () => {
+  assert.match(
+    VERIFY,
+    /array_agg\(table_name::text ORDER BY table_name::text COLLATE "C"\)/u,
+  );
+  assert.match(
+    VERIFY,
+    /array_agg\(indexname::text ORDER BY indexname::text COLLATE "C"\)/u,
+  );
+  assert.equal(
+    (VERIFY.match(/array_agg\(signature ORDER BY signature COLLATE "C"\)/gu) ?? []).length,
+    5,
+  );
+  assert.match(
+    VERIFY,
+    /ORDER BY \(t\.typname::text \|\| '\|' \|\| t\.typtype::text\) COLLATE "C"/u,
+  );
+  assert.match(
+    VERIFY,
+    /ORDER BY \(table_name \|\| '\.' \|\| column_name\)::text COLLATE "C"/u,
+  );
+  assert.match(
+    VERIFY,
+    /pg_catalog\.md5\(string_agg\(signature, E'\\n' ORDER BY signature\)\)/u,
+  );
+});
+
 test("janitor failure records a closed failure code in a separate transaction", async () => {
   const executor = new ExecutingFakeSqlExecutor();
   executor.failAtStatementId = "retention.janitor.purge.claim";
@@ -2274,8 +2445,8 @@ test("verify is read-only and rollback refuses durable rows, seed drift, and une
   assert.match(VERIFY, /pg_catalog\.pg_get_constraintdef/u);
   assert.match(VERIFY, /WHEN '_text' THEN 'text\[\]'/u);
   assert.match(VERIFY, /WHEN '_int8' THEN 'bigint\[\]'/u);
-  assert.match(ROLLBACK, /\) <> 206 OR \(/u);
-  assert.match(ROLLBACK, /\) <> 171 OR EXISTS \(/u);
+  assert.match(ROLLBACK, /\) <> 207 OR \(/u);
+  assert.match(ROLLBACK, /\) <> 172 OR EXISTS \(/u);
   assert.match(SCHEMA, /r4\.public-core\.catalog-manifest\.v2:contract-sha256:/u);
   assert.match(VERIFY, /uq_interactions__consumed_lineage/u);
   assert.match(VERIFY, /\) <> 15 THEN/u);
@@ -2298,6 +2469,40 @@ test("verify is read-only and rollback refuses durable rows, seed drift, and une
   assert.match(ROLLBACK, /DROP SCHEMA forme_r4_public_core RESTRICT/u);
   assert.doesNotMatch(ROLLBACK, /\bCASCADE\b/u);
   assert.doesNotMatch(`${SCHEMA}\n${VERIFY}\n${ROLLBACK}`, /\\connect|\bpsql\b|docker|postgres:\/\//iu);
+});
+
+test("catalog signatures cast PostgreSQL catalog identifiers and internal char fields without changing their frame", () => {
+  const manifestRows = [SCHEMA, VERIFY, ROLLBACK].map(catalogManifestRows);
+  assert.equal(manifestRows[1], manifestRows[0]);
+  assert.equal(manifestRows[2], manifestRows[0]);
+  for (const signatureRows of manifestRows) {
+    for (const expression of [
+      "c.relname::text", "c.relkind::text", "c.relpersistence::text",
+      "a.attname::text", "t.typname::text", "a.attidentity::text", "a.attgenerated::text",
+      "owner.relname::text", "constraint_row.conname::text", "constraint_row.contype::text",
+      "idx.relname::text", "access_method.amname::text",
+      "item.typname::text", "item.typtype::text", "item.typcategory::text",
+    ]) assert.match(signatureRows, new RegExp(expression.replaceAll(".", "\\."), "u"));
+    assert.doesNotMatch(
+      signatureRows,
+      /(?:relkind|relpersistence|attidentity|attgenerated|contype|typtype|typcategory)(?!::text)\s*\|\|/u,
+    );
+  }
+  const preCorrectionFrame = manifestRows[0]?.replace(
+    /(?<identifier>(?:c\.(?:relname|relkind|relpersistence)|a\.(?:attname|attidentity|attgenerated)|t\.typname|owner\.relname|constraint_row\.(?:conname|contype)|idx\.relname|access_method\.amname|item\.(?:typname|typtype|typcategory)))::text/gu,
+    "$<identifier>",
+  );
+  assert.equal(
+    createHash("sha256").update(preCorrectionFrame ?? "").digest("hex"),
+    "7b911e0b0b89a759b73052baeb08fa037c0539b3606b827f35bcb87eb2d7ece8",
+    "the shared catalog signature frame changes only by explicit text casts",
+  );
+  assert.match(VERIFY, /owner\.relname::text \|\| '\|' \|\| c\.conname::text \|\| '\|' \|\| c\.contype::text/u);
+  assert.match(VERIFY, /a\.attnum::text \|\| ':' \|\| a\.attname::text/u);
+  assert.match(
+    VERIFY,
+    /array_agg\(\s*t\.typname::text \|\| '\|' \|\| t\.typtype::text/u,
+  );
 });
 
 test("construction has no driver, runtime, network, migration or body diagnostics", () => {

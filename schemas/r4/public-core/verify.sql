@@ -1,5 +1,6 @@
 -- R4 #67 Durable Public Core proposed verification.
--- Read-only by contract; Gate C must hash-pin these bytes before any use.
+-- Read-only by contract; Physical Rebind must hash-pin these bytes before any
+-- use. Gate C is not requested.
 
 BEGIN TRANSACTION READ ONLY;
 SET LOCAL search_path = pg_catalog, forme_r4_public_core;
@@ -13,7 +14,7 @@ DECLARE
   actual_catalog_manifest text;
   stored_catalog_manifest text;
   expected_catalog_contract_sha256 constant text :=
-    'sha256:2eebb5f582d67b35d11f49b69edeff5fcecf39ee24cfa15b4575b794b5f14559';
+    'sha256:a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4';
   expected_tables constant text[] := ARRAY[
     'encryption_nonces',
     'event_acks',
@@ -55,7 +56,7 @@ DECLARE
     'encryption_nonces|ck_encryption_nonces__closed_field|c,encryption_nonces|ck_encryption_nonces__field_version|c,encryption_nonces|ck_encryption_nonces__key_version|c,encryption_nonces|ck_encryption_nonces__nonce|c,encryption_nonces|pk_encryption_nonces|p,encryption_nonces|uq_encryption_nonces__field|u' || ',' ||
     'event_acks|ck_event_acks__ids|c,event_acks|ck_event_acks__version|c,event_acks|fk_event_acks__binding|f,event_acks|fk_event_acks__event|f,event_acks|fk_event_acks__room|f,event_acks|pk_event_acks|p,event_acks|uq_event_acks__semantic|u' || ',' ||
     'installation|ck_installation__ids|c,installation|ck_installation__lineage|c,installation|ck_installation__singleton|c,installation|ck_installation__version|c,installation|pk_installation|p,installation|uq_installation__singleton|u' || ',' ||
-    'interactions|ck_interactions__deleted|c,interactions|ck_interactions__field_versions|c,interactions|ck_interactions__guest_cipher|c,interactions|ck_interactions__hashes|c,interactions|ck_interactions__ids|c,interactions|ck_interactions__local_purge|c,interactions|ck_interactions__plaintext_sizes|c,interactions|ck_interactions__purged|c,interactions|ck_interactions__request_cipher|c,interactions|ck_interactions__retention|c,interactions|ck_interactions__secret_digests|c,interactions|ck_interactions__state|c,interactions|ck_interactions__terminal_body|c,interactions|ck_interactions__version|c,interactions|fk_interactions__origin_projection|f,interactions|fk_interactions__room|f,interactions|pk_interactions|p,interactions|uq_interactions__consumed_lineage|u,interactions|uq_interactions__encounter|u,interactions|uq_interactions__room_scope|u' || ',' ||
+    'interactions|ck_interactions__deleted|c,interactions|ck_interactions__field_versions|c,interactions|ck_interactions__guest_cipher|c,interactions|ck_interactions__hashes|c,interactions|ck_interactions__ids|c,interactions|ck_interactions__local_purge|c,interactions|ck_interactions__plaintext_sizes|c,interactions|ck_interactions__purged|c,interactions|ck_interactions__request_cipher|c,interactions|ck_interactions__retention|c,interactions|ck_interactions__secret_digests|c,interactions|ck_interactions__state|c,interactions|ck_interactions__terminal_body|c,interactions|ck_interactions__type|c,interactions|ck_interactions__version|c,interactions|fk_interactions__origin_projection|f,interactions|fk_interactions__room|f,interactions|pk_interactions|p,interactions|uq_interactions__consumed_lineage|u,interactions|uq_interactions__encounter|u,interactions|uq_interactions__room_scope|u' || ',' ||
     'mutation_receipts|ck_mutation_receipts__action|c,mutation_receipts|ck_mutation_receipts__actor_action|c,mutation_receipts|ck_mutation_receipts__actor|c,mutation_receipts|ck_mutation_receipts__closed_shape|c,mutation_receipts|ck_mutation_receipts__idempotency_key|c,mutation_receipts|ck_mutation_receipts__ids|c,mutation_receipts|ck_mutation_receipts__pairing_recovery|c,mutation_receipts|ck_mutation_receipts__pull_recovery|c,mutation_receipts|ck_mutation_receipts__pull_terminal|c,mutation_receipts|ck_mutation_receipts__recovery_action|c,mutation_receipts|ck_mutation_receipts__recovery|c,mutation_receipts|ck_mutation_receipts__request_hash|c,mutation_receipts|ck_mutation_receipts__result_contract|c,mutation_receipts|ck_mutation_receipts__retention|c,mutation_receipts|ck_mutation_receipts__scope_digest|c,mutation_receipts|ck_mutation_receipts__status|c,mutation_receipts|ck_mutation_receipts__sync_window|c,mutation_receipts|ck_mutation_receipts__target_kind|c,mutation_receipts|ck_mutation_receipts__target_version|c,mutation_receipts|ck_mutation_receipts__terminal|c,mutation_receipts|fk_mutation_receipts__room|f,mutation_receipts|pk_mutation_receipts|p,mutation_receipts|uq_mutation_receipts__idempotency|u' || ',' ||
     'pairing_challenges|ck_pairing_challenges__chronology|c,pairing_challenges|ck_pairing_challenges__client_key|c,pairing_challenges|ck_pairing_challenges__digest|c,pairing_challenges|ck_pairing_challenges__exchange_cipher|c,pairing_challenges|ck_pairing_challenges__field_versions|c,pairing_challenges|ck_pairing_challenges__id|c,pairing_challenges|ck_pairing_challenges__pairing_cipher|c,pairing_challenges|ck_pairing_challenges__plaintext_sizes|c,pairing_challenges|ck_pairing_challenges__state|c,pairing_challenges|ck_pairing_challenges__terminal_clear|c,pairing_challenges|ck_pairing_challenges__version|c,pairing_challenges|fk_pairing_challenges__room|f,pairing_challenges|pk_pairing_challenges|p,pairing_challenges|uq_pairing_challenges__room_scope|u' || ',' ||
     'projections|ck_projections__capsule_cipher|c,projections|ck_projections__capsule_size|c,projections|ck_projections__chronology|c,projections|ck_projections__curation_state|c,projections|ck_projections__current|c,projections|ck_projections__field_version|c,projections|ck_projections__hashes|c,projections|ck_projections__ids|c,projections|ck_projections__owner_state|c,projections|ck_projections__purged|c,projections|ck_projections__terminal_body|c,projections|ck_projections__terminal_time|c,projections|fk_projections__room|f,projections|pk_projections|p,projections|uq_projections__full_scope|u,projections|uq_projections__publication_approval|u,projections|uq_projections__room_scope|u' || ',' ||
@@ -73,7 +74,7 @@ DECLARE
   expected_explicit_index_csv constant text :=
     'interactions|ix_interactions__unresolved_pool|N|room_id+created_at+interaction_id,mutation_receipts|ix_mutation_receipts__expiry|N|expires_at,pairing_challenges|ix_pairing_challenges__expiry|N|room_id+expires_at,projections|ix_projections__public_discovery|N|room_id+curation_state+fresh_until+expires_at,projections|uq_projections__one_current|U|room_id,public_encounters|ix_public_encounters__active|N|room_id+projection_id+expires_at,purge_jobs|ix_purge_jobs__bounded_batch|N|state+due_at+purge_job_id,room_bindings|ix_room_bindings__current|N|room_id+expires_at,room_events|ix_room_events__replay|N|room_id+sequence';
 BEGIN
-  SELECT array_agg(table_name::text ORDER BY table_name)
+  SELECT array_agg(table_name::text ORDER BY table_name::text COLLATE "C")
     INTO actual_tables
     FROM information_schema.tables
     WHERE table_schema = 'forme_r4_public_core'
@@ -83,22 +84,22 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_table_inventory_drift';
   END IF;
 
-  SELECT array_agg(indexname::text ORDER BY indexname)
+  SELECT array_agg(indexname::text ORDER BY indexname::text COLLATE "C")
     INTO actual_indexes FROM pg_catalog.pg_indexes
    WHERE schemaname = 'forme_r4_public_core';
   IF actual_indexes IS DISTINCT FROM expected_indexes THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_index_inventory_drift';
   END IF;
 
-  SELECT array_agg(
-           (owner.relname || '|' || c.conname || '|' || c.contype)::text
-           ORDER BY owner.relname, c.conname
-         )
+  SELECT array_agg(signature ORDER BY signature COLLATE "C")
     INTO actual_constraints
-    FROM pg_catalog.pg_constraint c
-    JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid
-    JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
-   WHERE n.nspname = 'forme_r4_public_core';
+    FROM (
+      SELECT owner.relname::text || '|' || c.conname::text || '|' || c.contype::text AS signature
+        FROM pg_catalog.pg_constraint c
+        JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid
+        JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
+       WHERE n.nspname = 'forme_r4_public_core'
+    ) constraint_inventory;
 
   IF actual_constraints IS DISTINCT FROM string_to_array(expected_constraint_csv, ',') THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_constraint_inventory_drift';
@@ -117,9 +118,9 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
-        SELECT owner.relname || '|' || c.conname || '|' || c.contype || '|' ||
+        SELECT owner.relname::text || '|' || c.conname::text || '|' || c.contype::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.conkey) WITH ORDINALITY key(attnum, ordinal)
@@ -138,16 +139,16 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
-        SELECT owner.relname || '|' || c.conname || '|' ||
+        SELECT owner.relname::text || '|' || c.conname::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.conkey) WITH ORDINALITY key(attnum, ordinal)
                    JOIN pg_catalog.pg_attribute a
                      ON a.attrelid = c.conrelid AND a.attnum = key.attnum
                   ORDER BY key.ordinal
-               ), '+') || '|' || referenced.relname || '|' ||
+               ), '+') || '|' || referenced.relname::text || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
                    FROM unnest(c.confkey) WITH ORDINALITY key(attnum, ordinal)
@@ -177,9 +178,9 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
-        SELECT owner.relname || '|' || idx.relname || '|' ||
+        SELECT owner.relname::text || '|' || idx.relname::text || '|' ||
                CASE WHEN i.indisunique THEN 'U' ELSE 'N' END || '|' ||
                array_to_string(ARRAY(
                  SELECT a.attname
@@ -258,7 +259,7 @@ BEGIN
       ('room_bindings', '1:binding_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:credential_digest:text:-1:N:-|5:capability_bundle:text:-1:N:''room_operator.v1''::text|6:state:text:-1:N:''current''::text|7:version:bigint:-1:N:1|8:paired_at:timestamptz:3:N:-|9:expires_at:timestamptz:3:N:-|10:revoked_at:timestamptz:3:Y:-'),
       ('rate_events', '1:rate_event_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:bucket_kind:text:-1:N:-|5:bucket_digest:text:-1:N:-|6:window_start:timestamptz:3:N:-|7:window_end:timestamptz:3:N:-|8:event_ordinal:integer:-1:N:-|9:recorded_at:timestamptz:3:N:transaction_timestamp()|10:expires_at:timestamptz:3:N:-'),
       ('public_encounters', '1:encounter_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:projection_id:text:-1:N:-|5:encounter_secret_digest:text:-1:N:-|6:issuance_bucket_digest:text:-1:N:-|7:hourly_rate_event_id:text:-1:N:-|8:daily_rate_event_id:text:-1:N:-|9:state:text:-1:N:''issued''::text|10:consumed_interaction_id:text:-1:Y:-|11:version:bigint:-1:N:1|12:issued_at:timestamptz:3:N:-|13:expires_at:timestamptz:3:N:-|14:consumed_at:timestamptz:3:Y:-|15:invalidated_at:timestamptz:3:Y:-'),
-      ('interactions', '1:interaction_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:encounter_id:text:-1:N:-|5:origin_projection_id:text:-1:N:-|6:request_ciphertext:jsonb:-1:Y:-|7:guest_capsule_ciphertext:jsonb:-1:Y:-|8:request_plaintext_bytes:integer:-1:N:-|9:guest_capsule_plaintext_bytes:integer:-1:Y:-|10:request_field_version:integer:-1:N:1|11:guest_capsule_field_version:integer:-1:N:1|12:request_hash:text:-1:N:-|13:guest_capsule_hash:text:-1:Y:-|14:consent_hash:text:-1:N:-|15:origin_projection_payload_hash:text:-1:N:-|16:reply_secret_digest:text:-1:Y:-|17:delete_secret_digest:text:-1:Y:-|18:state:text:-1:N:''accepted''::text|19:body_readable:boolean:-1:N:true|20:version:bigint:-1:N:1|21:created_at:timestamptz:3:N:-|22:body_expires_at:timestamptz:3:N:-|23:tombstone_expires_at:timestamptz:3:N:-|24:pulled_at:timestamptz:3:Y:-|25:local_purge_received_at:timestamptz:3:Y:-|26:deleted_at:timestamptz:3:Y:-|27:purged_at:timestamptz:3:Y:-'),
+      ('interactions', '1:interaction_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:encounter_id:text:-1:N:-|5:origin_projection_id:text:-1:N:-|6:interaction_type:text:-1:N:-|7:request_ciphertext:jsonb:-1:Y:-|8:guest_capsule_ciphertext:jsonb:-1:Y:-|9:request_plaintext_bytes:integer:-1:N:-|10:guest_capsule_plaintext_bytes:integer:-1:Y:-|11:request_field_version:integer:-1:N:1|12:guest_capsule_field_version:integer:-1:N:1|13:request_hash:text:-1:N:-|14:guest_capsule_hash:text:-1:Y:-|15:consent_hash:text:-1:N:-|16:origin_projection_payload_hash:text:-1:N:-|17:reply_secret_digest:text:-1:Y:-|18:delete_secret_digest:text:-1:Y:-|19:state:text:-1:N:''accepted''::text|20:body_readable:boolean:-1:N:true|21:version:bigint:-1:N:1|22:created_at:timestamptz:3:N:-|23:body_expires_at:timestamptz:3:N:-|24:tombstone_expires_at:timestamptz:3:N:-|25:pulled_at:timestamptz:3:Y:-|26:local_purge_received_at:timestamptz:3:Y:-|27:deleted_at:timestamptz:3:Y:-|28:purged_at:timestamptz:3:Y:-'),
       ('room_events', '1:event_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:sequence:bigint:-1:N:-|5:event_kind:text:-1:N:-|6:object_id:text:-1:N:-|7:object_version:bigint:-1:N:-|8:event_hash:text:-1:N:-|9:committed_at:timestamptz:3:N:transaction_timestamp()|10:expires_at:timestamptz:3:N:-'),
       ('mutation_receipts', '1:receipt_id:text:-1:N:-|2:room_id:text:-1:N:-|3:actor_class:text:-1:N:-|4:actor_scope_digest:text:-1:N:-|5:action_name:text:-1:N:-|6:idempotency_key:text:-1:N:-|7:request_hash:text:-1:N:-|8:recovery_kind:text:-1:N:-|9:target_id:text:-1:Y:-|10:related_target_id:text:-1:Y:-|11:target_version:bigint:-1:Y:-|12:status:text:-1:N:''reserved''::text|13:http_status:smallint:-1:Y:-|14:result_code:text:-1:Y:-|15:sync_after_sequence:bigint:-1:Y:-|16:sync_high_water:bigint:-1:Y:-|17:sync_replay_floor:bigint:-1:Y:-|18:sync_result_kind:text:-1:Y:-|19:sync_event_ids:text[]:-1:Y:-|20:sync_event_sequences:bigint[]:-1:Y:-|21:sync_event_kinds:text[]:-1:Y:-|22:sync_object_ids:text[]:-1:Y:-|23:sync_object_versions:bigint[]:-1:Y:-|24:sync_event_hashes:text[]:-1:Y:-|25:sync_event_committed_ats:text[]:-1:Y:-|26:sync_tombstone_ids:text[]:-1:Y:-|27:sync_tombstone_expires_ats:text[]:-1:Y:-|28:pull_interaction_id:text:-1:Y:-|29:pull_request_field_version:integer:-1:Y:-|30:pull_body_hash:text:-1:Y:-|31:pull_guest_field_version:integer:-1:Y:-|32:pull_guest_hash:text:-1:Y:-|33:pull_body_expires_at:timestamptz:3:Y:-|34:pull_terminal_state:text:-1:Y:-|35:source_expires_at:timestamptz:3:Y:-|36:created_at:timestamptz:3:N:transaction_timestamp()|37:committed_at:timestamptz:3:Y:-|38:expires_at:timestamptz:3:N:-'),
       ('event_acks', '1:ack_id:text:-1:N:-|2:room_id:text:-1:N:-|3:installation_id:text:-1:N:-|4:binding_id:text:-1:N:-|5:event_id:text:-1:N:-|6:sequence:bigint:-1:N:-|7:event_hash:text:-1:N:-|8:version:bigint:-1:N:1|9:acked_at:timestamptz:3:N:transaction_timestamp()'),
@@ -268,7 +269,7 @@ BEGIN
     ), actual AS (
       SELECT c.relname::text AS table_name,
              string_agg(
-               a.attnum::text || ':' || a.attname || ':' ||
+               a.attnum::text || ':' || a.attname::text || ':' ||
                CASE t.typname
                  WHEN 'bool' THEN 'boolean'
                  WHEN 'int2' THEN 'smallint'
@@ -276,7 +277,7 @@ BEGIN
                  WHEN 'int8' THEN 'bigint'
                  WHEN '_text' THEN 'text[]'
                  WHEN '_int8' THEN 'bigint[]'
-                 ELSE t.typname
+                 ELSE t.typname::text
                END || ':' || a.atttypmod::text || ':' ||
                CASE WHEN a.attnotnull THEN 'N' ELSE 'Y' END || ':' ||
                COALESCE(pg_catalog.pg_get_expr(d.adbin, d.adrelid, true), '-'),
@@ -311,16 +312,16 @@ BEGIN
          pg_catalog.md5(string_agg(signature, E'\n' ORDER BY signature))
     INTO actual_catalog_manifest
     FROM (
-      SELECT 'relation|' || c.relname || '|' || c.relkind || '|' || c.relpersistence || '|' ||
+      SELECT 'relation|' || c.relname::text || '|' || c.relkind::text || '|' || c.relpersistence::text || '|' ||
              c.relispartition::text || '|' || c.relrowsecurity::text || '|' ||
              c.relforcerowsecurity::text AS signature
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'column|' || c.relname || '|' || a.attnum::text || '|' || a.attname || '|' ||
-             t.typname || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
-             a.attidentity || '|' || a.attgenerated || '|' ||
+      SELECT 'column|' || c.relname::text || '|' || a.attnum::text || '|' || a.attname::text || '|' ||
+             t.typname::text || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
+             a.attidentity::text || '|' || a.attgenerated::text || '|' ||
              COALESCE(pg_catalog.pg_get_expr(d.adbin, d.adrelid, false), '-')
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
@@ -330,8 +331,8 @@ BEGIN
        WHERE n.nspname = 'forme_r4_public_core'
          AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
       UNION ALL
-      SELECT 'constraint|' || owner.relname || '|' || constraint_row.conname || '|' ||
-             constraint_row.contype || '|' || constraint_row.condeferrable::text || '|' ||
+      SELECT 'constraint|' || owner.relname::text || '|' || constraint_row.conname::text || '|' ||
+             constraint_row.contype::text || '|' || constraint_row.condeferrable::text || '|' ||
              constraint_row.condeferred::text || '|' || constraint_row.convalidated::text || '|' ||
              constraint_row.connoinherit::text || '|' ||
              pg_catalog.pg_get_constraintdef(constraint_row.oid, false)
@@ -340,7 +341,7 @@ BEGIN
         JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'index|' || owner.relname || '|' || idx.relname || '|' || access_method.amname || '|' ||
+      SELECT 'index|' || owner.relname::text || '|' || idx.relname::text || '|' || access_method.amname::text || '|' ||
              index_row.indisunique::text || '|' || index_row.indisprimary::text || '|' ||
              index_row.indisvalid::text || '|' || index_row.indisready::text || '|' ||
              index_row.indislive::text || '|' || index_row.indisclustered::text || '|' ||
@@ -353,7 +354,7 @@ BEGIN
         JOIN pg_catalog.pg_am access_method ON access_method.oid = idx.relam
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'type|' || item.typname || '|' || item.typtype || '|' || item.typcategory
+      SELECT 'type|' || item.typname::text || '|' || item.typtype::text || '|' || item.typcategory::text
         FROM pg_catalog.pg_type item
         JOIN pg_catalog.pg_namespace n ON n.oid = item.typnamespace
        WHERE n.nspname = 'forme_r4_public_core'
@@ -411,12 +412,15 @@ BEGIN
          OR c.relforcerowsecurity
        )
   ) OR (
-    SELECT array_agg((t.typname || '|' || t.typtype)::text ORDER BY t.typname)
+    SELECT array_agg(
+      t.typname::text || '|' || t.typtype::text
+      ORDER BY (t.typname::text || '|' || t.typtype::text) COLLATE "C"
+    )
       FROM pg_catalog.pg_type t
       JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
      WHERE n.nspname = 'forme_r4_public_core'
   ) IS DISTINCT FROM (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
         SELECT table_name || '|c' AS signature
           FROM unnest(expected_tables) AS item(table_name)
@@ -565,7 +569,10 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_body_free_table_drift';
   END IF;
 
-  SELECT array_agg((table_name || '.' || column_name)::text ORDER BY table_name, column_name)
+  SELECT array_agg(
+    (table_name || '.' || column_name)::text
+    ORDER BY (table_name || '.' || column_name)::text COLLATE "C"
+  )
     INTO actual_encrypted_fields
     FROM information_schema.columns
     WHERE table_schema = 'forme_r4_public_core'

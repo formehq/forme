@@ -1,7 +1,8 @@
 -- R4 #67 Durable Public Core proposed schema.
 --
 -- CONSTRUCTION ONLY: these bytes are intentionally not wired to a driver and
--- must not be applied before the separately hash-pinned Gate C grant.
+-- must not be applied before the separately hash-pinned Physical Rebind grant.
+-- Gate C is not requested.
 
 BEGIN;
 
@@ -432,6 +433,7 @@ CREATE TABLE forme_r4_public_core.interactions (
   installation_id text NOT NULL,
   encounter_id text NOT NULL,
   origin_projection_id text NOT NULL,
+  interaction_type text NOT NULL,
   request_ciphertext jsonb NULL,
   guest_capsule_ciphertext jsonb NULL,
   request_plaintext_bytes integer NOT NULL,
@@ -481,6 +483,9 @@ CREATE TABLE forme_r4_public_core.interactions (
   ),
   CONSTRAINT ck_interactions__state CHECK (
     state IN ('accepted', 'seen_locally', 'interaction_deleted', 'origin_revoked', 'interaction_expired')
+  ),
+  CONSTRAINT ck_interactions__type CHECK (
+    interaction_type IN ('ask', 'seed', 'resonance')
   ),
   CONSTRAINT ck_interactions__retention CHECK (
     created_at < body_expires_at
@@ -1085,16 +1090,16 @@ BEGIN
   SELECT pg_catalog.md5(string_agg(signature, E'\n' ORDER BY signature))
     INTO manifest_digest
     FROM (
-      SELECT 'relation|' || c.relname || '|' || c.relkind || '|' || c.relpersistence || '|' ||
+      SELECT 'relation|' || c.relname::text || '|' || c.relkind::text || '|' || c.relpersistence::text || '|' ||
              c.relispartition::text || '|' || c.relrowsecurity::text || '|' ||
              c.relforcerowsecurity::text AS signature
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'column|' || c.relname || '|' || a.attnum::text || '|' || a.attname || '|' ||
-             t.typname || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
-             a.attidentity || '|' || a.attgenerated || '|' ||
+      SELECT 'column|' || c.relname::text || '|' || a.attnum::text || '|' || a.attname::text || '|' ||
+             t.typname::text || '|' || a.atttypmod::text || '|' || a.attnotnull::text || '|' ||
+             a.attidentity::text || '|' || a.attgenerated::text || '|' ||
              COALESCE(pg_catalog.pg_get_expr(d.adbin, d.adrelid, false), '-')
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
@@ -1104,8 +1109,8 @@ BEGIN
        WHERE n.nspname = 'forme_r4_public_core'
          AND c.relkind = 'r' AND a.attnum > 0 AND NOT a.attisdropped
       UNION ALL
-      SELECT 'constraint|' || owner.relname || '|' || constraint_row.conname || '|' ||
-             constraint_row.contype || '|' || constraint_row.condeferrable::text || '|' ||
+      SELECT 'constraint|' || owner.relname::text || '|' || constraint_row.conname::text || '|' ||
+             constraint_row.contype::text || '|' || constraint_row.condeferrable::text || '|' ||
              constraint_row.condeferred::text || '|' || constraint_row.convalidated::text || '|' ||
              constraint_row.connoinherit::text || '|' ||
              pg_catalog.pg_get_constraintdef(constraint_row.oid, false)
@@ -1114,7 +1119,7 @@ BEGIN
         JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'index|' || owner.relname || '|' || idx.relname || '|' || access_method.amname || '|' ||
+      SELECT 'index|' || owner.relname::text || '|' || idx.relname::text || '|' || access_method.amname::text || '|' ||
              index_row.indisunique::text || '|' || index_row.indisprimary::text || '|' ||
              index_row.indisvalid::text || '|' || index_row.indisready::text || '|' ||
              index_row.indislive::text || '|' || index_row.indisclustered::text || '|' ||
@@ -1127,7 +1132,7 @@ BEGIN
         JOIN pg_catalog.pg_am access_method ON access_method.oid = idx.relam
        WHERE n.nspname = 'forme_r4_public_core'
       UNION ALL
-      SELECT 'type|' || item.typname || '|' || item.typtype || '|' || item.typcategory
+      SELECT 'type|' || item.typname::text || '|' || item.typtype::text || '|' || item.typcategory::text
         FROM pg_catalog.pg_type item
         JOIN pg_catalog.pg_namespace n ON n.oid = item.typnamespace
        WHERE n.nspname = 'forme_r4_public_core'
@@ -1136,7 +1141,7 @@ BEGIN
   EXECUTE pg_catalog.format(
     'COMMENT ON SCHEMA forme_r4_public_core IS %L',
     'r4.public-core.catalog-manifest.v2:contract-sha256:' ||
-      '2eebb5f582d67b35d11f49b69edeff5fcecf39ee24cfa15b4575b794b5f14559' ||
+      'a6d6738de85edf58c12fa4dc3561c8aaf320daaaecb949cc075ee4946e1c63e4' ||
       ':catalog-md5:' || manifest_digest
   );
 END

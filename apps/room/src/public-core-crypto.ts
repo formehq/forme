@@ -136,6 +136,22 @@ export interface PublicCoreKeyedDigestV1 {
   readonly digest: `sha256:${string}`;
 }
 
+export interface PublicCoreCanonicalFieldParseResultV1<T> {
+  readonly value: T;
+  /** The exact typed value whose canonical SHA-256 is stored beside the field. */
+  readonly canonicalValue: unknown;
+}
+
+export interface PublicCoreCanonicalFieldDecryptInputV1<T> {
+  readonly key: PublicCoreCryptoKeyHandleV1;
+  readonly envelope: unknown;
+  readonly aad: PublicCoreFieldAadV1;
+  readonly bodyReadable: boolean;
+  readonly expectedCanonicalHash: `sha256:${string}`;
+  readonly maximumPlaintextBytes: number;
+  readonly parseCanonical: (plaintext: string) => PublicCoreCanonicalFieldParseResultV1<T>;
+}
+
 export class PublicCoreCryptoError extends Error {
   readonly code: string;
 
@@ -172,6 +188,15 @@ function constantTimeTextEqual(left: string, right: string): boolean {
 
 function sha256(bytes: Uint8Array): `sha256:${string}` {
   return `sha256:${createHash("sha256").update(bytes).digest("hex")}`;
+}
+
+function zeroizingCanonicalSha256(value: unknown): `sha256:${string}` {
+  const bytes = canonicalJsonBytes(value);
+  try {
+    return sha256(bytes);
+  } finally {
+    bytes.fill(0);
+  }
 }
 
 function canonicalBase64Url(bytes: Uint8Array): string {
@@ -337,12 +362,18 @@ export function validatePublicCoreEncryptedField(value: unknown): PublicCoreEncr
   ) {
     fail("R4_PUBLIC_CORE_CRYPTO_ENVELOPE_INVALID");
   }
-  const nonce = decodeCanonicalBase64Url(envelope.nonce, PUBLIC_CORE_AES_GCM_NONCE_BYTES);
-  const ciphertext = decodeCanonicalBase64Url(envelope.ciphertext, null);
-  const tag = decodeCanonicalBase64Url(envelope.tag, PUBLIC_CORE_AES_GCM_TAG_BYTES);
-  nonce.fill(0);
-  ciphertext.fill(0);
-  tag.fill(0);
+  let nonce: Buffer | null = null;
+  let ciphertext: Buffer | null = null;
+  let tag: Buffer | null = null;
+  try {
+    nonce = decodeCanonicalBase64Url(envelope.nonce, PUBLIC_CORE_AES_GCM_NONCE_BYTES);
+    ciphertext = decodeCanonicalBase64Url(envelope.ciphertext, null);
+    tag = decodeCanonicalBase64Url(envelope.tag, PUBLIC_CORE_AES_GCM_TAG_BYTES);
+  } finally {
+    nonce?.fill(0);
+    ciphertext?.fill(0);
+    tag?.fill(0);
+  }
   return Object.freeze({ ...envelope }) as PublicCoreEncryptedFieldV1;
 }
 
@@ -481,16 +512,24 @@ export async function encryptPublicCoreField(input: Readonly<{
   }
 }
 
-export function decryptPublicCoreField(input: Readonly<{
+interface PublicCoreAuthenticatedFieldDecryptInputV1 {
   key: PublicCoreCryptoKeyHandleV1;
   envelope: unknown;
   aad: PublicCoreFieldAadV1;
   bodyReadable: boolean;
-  expectedPlaintextHash: `sha256:${string}`;
-}>): Uint8Array {
+  maximumPlaintextBytes: number;
+}
+
+function decryptAuthenticatedPublicCoreField(
+  input: Readonly<PublicCoreAuthenticatedFieldDecryptInputV1>,
+): Uint8Array {
   if (input.bodyReadable !== true) fail("R4_PUBLIC_CORE_CRYPTO_BODY_UNREADABLE");
   assertAad(input.aad);
-  if (typeof input.expectedPlaintextHash !== "string" || !SHA256.test(input.expectedPlaintextHash)) {
+  if (
+    !Number.isSafeInteger(input.maximumPlaintextBytes)
+    || input.maximumPlaintextBytes < 1
+    || input.maximumPlaintextBytes > MAX_PLAINTEXT_BYTES
+  ) {
     fail("R4_PUBLIC_CORE_CRYPTO_INPUT_INVALID");
   }
   const envelope = validatePublicCoreEncryptedField(input.envelope);
@@ -498,37 +537,70 @@ export function decryptPublicCoreField(input: Readonly<{
   if (!constantTimeTextEqual(envelope.aadHash, sha256(aadBytes))) {
     fail("R4_PUBLIC_CORE_CRYPTO_AUTHENTICATION_FAILED");
   }
-  const nonce = decodeCanonicalBase64Url(envelope.nonce, PUBLIC_CORE_AES_GCM_NONCE_BYTES);
-  const ciphertext = decodeCanonicalBase64Url(envelope.ciphertext, null);
-  const tag = decodeCanonicalBase64Url(envelope.tag, PUBLIC_CORE_AES_GCM_TAG_BYTES);
+  let nonce: Buffer | null = null;
+  let ciphertext: Buffer | null = null;
+  let tag: Buffer | null = null;
   let plaintext: Buffer | null = null;
   try {
+    const decodedNonce = decodeCanonicalBase64Url(envelope.nonce, PUBLIC_CORE_AES_GCM_NONCE_BYTES);
+    nonce = decodedNonce;
+    const decodedCiphertext = decodeCanonicalBase64Url(envelope.ciphertext, null);
+    ciphertext = decodedCiphertext;
+    const decodedTag = decodeCanonicalBase64Url(envelope.tag, PUBLIC_CORE_AES_GCM_TAG_BYTES);
+    tag = decodedTag;
+    if (decodedCiphertext.byteLength > input.maximumPlaintextBytes) {
+      fail("R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_TOO_LARGE");
+    }
     plaintext = useKey(input.key, "body_encryption", (key, keyVersion) => {
       if (!constantTimeTextEqual(envelope.keyVersion, keyVersion)) {
         fail("R4_PUBLIC_CORE_CRYPTO_AUTHENTICATION_FAILED");
       }
       try {
-        const decipher = createDecipheriv("aes-256-gcm", key, nonce, {
+        const decipher = createDecipheriv("aes-256-gcm", key, decodedNonce, {
           authTagLength: PUBLIC_CORE_AES_GCM_TAG_BYTES,
         });
         decipher.setAAD(aadBytes);
-        decipher.setAuthTag(tag);
-        return Buffer.concat([decipher.update(ciphertext), decipher.final()]);
+        decipher.setAuthTag(decodedTag);
+        return Buffer.concat([decipher.update(decodedCiphertext), decipher.final()]);
       } catch {
         fail("R4_PUBLIC_CORE_CRYPTO_AUTHENTICATION_FAILED");
       }
     });
-    if (!constantTimeTextEqual(sha256(plaintext), input.expectedPlaintextHash)) {
-      plaintext.fill(0);
-      fail("R4_PUBLIC_CORE_CRYPTO_INTEGRITY_FAILED");
-    }
     return Uint8Array.from(plaintext);
   } finally {
     plaintext?.fill(0);
-    nonce.fill(0);
-    ciphertext.fill(0);
-    tag.fill(0);
+    nonce?.fill(0);
+    ciphertext?.fill(0);
+    tag?.fill(0);
   }
+}
+
+export function decryptPublicCoreField(input: Readonly<{
+  key: PublicCoreCryptoKeyHandleV1;
+  envelope: unknown;
+  aad: PublicCoreFieldAadV1;
+  bodyReadable: boolean;
+  expectedPlaintextHash: `sha256:${string}`;
+}>): Uint8Array {
+  // Preserve the established lifecycle/AAD denial order before inspecting an
+  // integrity claim supplied beside the protected value.
+  if (input.bodyReadable !== true) fail("R4_PUBLIC_CORE_CRYPTO_BODY_UNREADABLE");
+  assertAad(input.aad);
+  if (typeof input.expectedPlaintextHash !== "string" || !SHA256.test(input.expectedPlaintextHash)) {
+    fail("R4_PUBLIC_CORE_CRYPTO_INPUT_INVALID");
+  }
+  const plaintext = decryptAuthenticatedPublicCoreField({
+    key: input.key,
+    envelope: input.envelope,
+    aad: input.aad,
+    bodyReadable: input.bodyReadable,
+    maximumPlaintextBytes: MAX_PLAINTEXT_BYTES,
+  });
+  if (!constantTimeTextEqual(sha256(plaintext), input.expectedPlaintextHash)) {
+    plaintext.fill(0);
+    fail("R4_PUBLIC_CORE_CRYPTO_INTEGRITY_FAILED");
+  }
+  return plaintext;
 }
 
 export async function withDecryptedPublicCoreField<T>(
@@ -548,6 +620,114 @@ export async function withDecryptedPublicCoreField<T>(
     }
     return result;
   } finally {
+    plaintext.fill(0);
+  }
+}
+
+function exactCanonicalParseResult<T>(value: unknown): PublicCoreCanonicalFieldParseResultV1<T> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    fail("R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID");
+  }
+  try {
+    const prototype = Object.getPrototypeOf(value);
+    const descriptors = Object.getOwnPropertyDescriptors(value);
+    const keys = Object.keys(descriptors).sort();
+    if (
+      (prototype !== Object.prototype && prototype !== null)
+      || Object.getOwnPropertySymbols(value).length !== 0
+      || keys.length !== 2
+      || keys[0] !== "canonicalValue"
+      || keys[1] !== "value"
+    ) {
+      fail("R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID");
+    }
+    const canonicalValue = descriptors.canonicalValue;
+    const parsedValue = descriptors.value;
+    if (
+      !canonicalValue
+      || !("value" in canonicalValue)
+      || canonicalValue.enumerable !== true
+      || !parsedValue
+      || !("value" in parsedValue)
+      || parsedValue.enumerable !== true
+    ) {
+      fail("R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID");
+    }
+    return Object.freeze({
+      value: parsedValue.value as T,
+      canonicalValue: canonicalValue.value,
+    });
+  } catch {
+    fail("R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID");
+  }
+}
+
+export function withDecryptedCanonicalPublicCoreField<T>(
+  input: Readonly<PublicCoreCanonicalFieldDecryptInputV1<T>>,
+): Promise<T>;
+export function withDecryptedCanonicalPublicCoreField<T, R>(
+  input: Readonly<PublicCoreCanonicalFieldDecryptInputV1<T>>,
+  operation: (value: T) => R | Promise<R>,
+): Promise<R>;
+export async function withDecryptedCanonicalPublicCoreField<T, R>(
+  input: Readonly<PublicCoreCanonicalFieldDecryptInputV1<T>>,
+  operation?: (value: T) => R | Promise<R>,
+): Promise<T | R> {
+  if (input.bodyReadable !== true) fail("R4_PUBLIC_CORE_CRYPTO_BODY_UNREADABLE");
+  assertAad(input.aad);
+  if (
+    typeof input.expectedCanonicalHash !== "string"
+    || !SHA256.test(input.expectedCanonicalHash)
+    || typeof input.parseCanonical !== "function"
+    || (operation !== undefined && typeof operation !== "function")
+  ) {
+    fail("R4_PUBLIC_CORE_CRYPTO_INPUT_INVALID");
+  }
+  const plaintext = decryptAuthenticatedPublicCoreField({
+    key: input.key,
+    envelope: input.envelope,
+    aad: input.aad,
+    bodyReadable: input.bodyReadable,
+    maximumPlaintextBytes: input.maximumPlaintextBytes,
+  });
+  let plaintextText: string | null = null;
+  try {
+    let parsed: PublicCoreCanonicalFieldParseResultV1<T>;
+    let actualCanonicalHash: `sha256:${string}`;
+    try {
+      plaintextText = new TextDecoder("utf-8", { fatal: true }).decode(plaintext);
+      parsed = exactCanonicalParseResult<T>(input.parseCanonical(plaintextText));
+      // Both values must remain canonical-JSON data. The second hash is the
+      // field's stored integrity subject; Projection intentionally supplies
+      // the omit-payloadHash preimage here.
+      zeroizingCanonicalSha256(parsed.value);
+      actualCanonicalHash = zeroizingCanonicalSha256(parsed.canonicalValue);
+    } catch {
+      fail("R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID");
+    }
+    if (!constantTimeTextEqual(actualCanonicalHash, input.expectedCanonicalHash)) {
+      fail("R4_PUBLIC_CORE_CRYPTO_INTEGRITY_FAILED");
+    }
+    if (operation === undefined) return parsed.value;
+    try {
+      const result = await operation(parsed.value);
+      if (result instanceof Uint8Array || Buffer.isBuffer(result)) {
+        fail("R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_ESCAPE_DENIED");
+      }
+      return result;
+    } catch (error) {
+      let escapeDenied = false;
+      try {
+        escapeDenied = error instanceof PublicCoreCryptoError
+          && error.code === "R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_ESCAPE_DENIED";
+      } catch {
+        escapeDenied = false;
+      }
+      if (escapeDenied) fail("R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_ESCAPE_DENIED");
+      fail("R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_CALLBACK_FAILED");
+    }
+  } finally {
+    plaintextText = null;
     plaintext.fill(0);
   }
 }

@@ -13,10 +13,12 @@ import {
   keyedPublicCoreDigest,
   matchesPublicCoreKeyedDigest,
   validatePublicCoreEncryptedField,
+  withDecryptedCanonicalPublicCoreField,
   withDecryptedPublicCoreField,
   type PublicCoreFieldAadV1,
   type PublicCoreSecretDigestDomain,
 } from "../../apps/room/src/public-core-crypto.ts";
+import { canonicalSha256 } from "../../packages/r4-protocol/src/index.ts";
 import type { PublicCoreConfigReference } from "../../apps/room/src/production-config.ts";
 
 const encoder = new TextEncoder();
@@ -124,6 +126,21 @@ test("#67 production-specific a256gcm envelope binds exact AAD, key version, non
     bodyReadable: true,
     expectedPlaintextHash: encrypted.plaintextHash,
   }, (bytes) => decoder.decode(bytes)), canary);
+
+  let zeroizedView: Uint8Array | null = null;
+  await withDecryptedPublicCoreField({
+    key,
+    envelope: encrypted.envelope,
+    aad: aad(),
+    bodyReadable: true,
+    expectedPlaintextHash: encrypted.plaintextHash,
+  }, (bytes) => {
+    zeroizedView = bytes;
+    return null;
+  });
+  assert.ok(zeroizedView);
+  const observedZeroizedView = zeroizedView as unknown as Uint8Array;
+  assert.equal(observedZeroizedView.every((byte: number) => byte === 0), true);
 
   await assert.rejects(
     withDecryptedPublicCoreField({
@@ -279,6 +296,98 @@ test("nonce and exact field-version authority reject global nonce reuse and fiel
       "R4_PUBLIC_CORE_CRYPTO_NONCE_SOURCE_FAILED",
       nonceSourceCanary,
     ),
+  );
+  key.close();
+});
+
+test("canonical-body decrypt authenticates first, validates the typed hash subject, and contains hostile plaintext callbacks", async () => {
+  const canary = "CANONICAL_BODY_PRIVATE_CANARY";
+  const preimage = Object.freeze({ schemaVersion: "canonical_test.v1", message: canary });
+  const value = Object.freeze({ ...preimage, payloadHash: canonicalSha256(preimage) });
+  const key = bodyKey();
+  const encrypted = await encryptPublicCoreField({
+    key,
+    plaintext: encoder.encode(JSON.stringify(value)),
+    aad: aad(),
+    nonceAuthority: new InMemoryPublicCoreNonceAuthorityV1(),
+    nonceSource: () => NONCE_A,
+  });
+  let parseCalls = 0;
+  const parseCanonical = (plaintext: string) => {
+    parseCalls += 1;
+    const parsed = JSON.parse(plaintext) as typeof value;
+    assert.deepEqual(Object.keys(parsed).sort(), ["message", "payloadHash", "schemaVersion"]);
+    assert.equal(parsed.schemaVersion, "canonical_test.v1");
+    assert.equal(typeof parsed.message, "string");
+    assert.equal(typeof parsed.payloadHash, "string");
+    const { payloadHash, ...canonicalValue } = parsed;
+    assert.equal(payloadHash, canonicalSha256(canonicalValue));
+    return Object.freeze({ value: Object.freeze(parsed), canonicalValue: Object.freeze(canonicalValue) });
+  };
+  const input = {
+    key,
+    envelope: encrypted.envelope,
+    aad: aad(),
+    bodyReadable: true,
+    expectedCanonicalHash: value.payloadHash,
+    maximumPlaintextBytes: 1_024,
+    parseCanonical,
+  } as const;
+
+  assert.deepEqual(await withDecryptedCanonicalPublicCoreField(input), value);
+  assert.equal(await withDecryptedCanonicalPublicCoreField(input, (typed) => typed.schemaVersion), "canonical_test.v1");
+
+  parseCalls = 0;
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField({
+      ...input,
+      envelope: { ...encrypted.envelope, tag: flipCanonical(encrypted.envelope.tag) },
+    }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_AUTHENTICATION_FAILED", canary),
+  );
+  assert.equal(parseCalls, 0, "typed parsing must not run before AEAD authentication");
+
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField({
+      ...input,
+      expectedCanonicalHash: canonicalSha256({ ...preimage, message: "different" }),
+    }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_INTEGRITY_FAILED", canary),
+  );
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField({ ...input, maximumPlaintextBytes: 8 }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_TOO_LARGE", canary),
+  );
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField({
+      ...input,
+      parseCanonical(): never { throw new Error(canary); },
+    }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID", canary),
+  );
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField(input, (): never => { throw new Error(canary); }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_CALLBACK_FAILED", canary),
+  );
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField(input, () => encoder.encode(canary)),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_PLAINTEXT_ESCAPE_DENIED", canary),
+  );
+
+  const invalidUtf8 = await encryptPublicCoreField({
+    key,
+    plaintext: Uint8Array.of(0xff),
+    aad: aad({ objectVersion: 2 }),
+    nonceAuthority: new InMemoryPublicCoreNonceAuthorityV1(),
+    nonceSource: () => NONCE_B,
+  });
+  await assert.rejects(
+    withDecryptedCanonicalPublicCoreField({
+      ...input,
+      envelope: invalidUtf8.envelope,
+      aad: aad({ objectVersion: 2 }),
+    }),
+    (error: unknown) => expectSanitized(error, "R4_PUBLIC_CORE_CRYPTO_CANONICAL_BODY_INVALID", canary),
   );
   key.close();
 });
