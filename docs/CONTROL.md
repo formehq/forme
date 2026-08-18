@@ -1,6 +1,38 @@
 # Owner technical cockpit
 
-## Superseding current status — #77 final failed-clean lifecycle, 2026-08-17
+## Superseding current status — #77 local campaign resumed, 2026-08-17
+
+**Product progress remains `0`.** The Owner confirmed one larger local,
+synthetic, loopback-only disposable integration campaign after the
+restart-readiness repository correction. The campaign covers exact image
+acquisition, diagnostics, contract-preserving repair, bounded reruns, evidence
+and cleanup without per-command approval.
+
+No-pull run `5bfaf0bfacaede47` stopped at
+`disposable_postgres_image_not_cached` before creating a container, network,
+volume, PostgreSQL connection or SQL effect. Exact resource absence and local
+runtime cleanup are Green. This consumes one acquisition observation, not a
+full lifecycle.
+
+The active ceilings are three working days, three repository-only repair
+rounds, four full disposable lifecycles and two acquisition attempts for the
+same exact approved PostgreSQL digest. The next action is one continuous exact
+image acquisition plus schema → initial verify → restart → post-restart
+persistence → rollback → exact-cleanup lifecycle. Two same-boundary physical
+failures pause runs for architecture review; ordinary in-envelope repair does
+not reopen an Owner gate.
+
+The current local branch is `codex/r4-public-core-local-postgres-wiring` at
+`acda73e`. It has no upstream and is not represented by Draft PR #76 or remote
+CI. GitHub #77, #67, Project #1 and PR #76 now disclose that local-only truth.
+Push, merge, Production, real/private data, provider/public effects and Gate C
+remain closed.
+
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_ACTIVE /
+EXACT_IMAGE_ACQUISITION_AND_LIFECYCLE_IN_PROGRESS / PRODUCT_PROGRESS_0 /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Historical checkpoint — #77 final failed-clean lifecycle, 2026-08-17
 
 #77's replacement diagnostic consumed one exact pull and evaluated all 18
 assertions. Its sole failure was the reviewed catalog-ordering class. The

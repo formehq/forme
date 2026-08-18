@@ -1,6 +1,8 @@
 # R4 reviewable integration package
 
-Status: repository-only construction Green; physical execution not requested.
+Status: repository-only construction Green. A later Owner-confirmed local
+disposable campaign separately authorizes bounded physical execution; see
+[`CONTROL.md`](./CONTROL.md) for current operational truth.
 
 ## User outcome
 
@@ -97,10 +99,12 @@ node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-post
   without rewriting immutable history?
 
 Passing these tests is Technical Review only. Restart persistence, post-restart
-verify and rollback remain physically unproved. A later cached-image lifecycle
-requires a separate runtime decision.
+verify and rollback remain physically unproved. The later runtime decision is
+now confirmed as one larger local campaign covering exact acquisition,
+diagnostic, bounded repair, rerun and cleanup. That continuation does not alter
+the repository construction proof in this package.
 
-Current stop:
+Historical construction stop:
 
 `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
 REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
