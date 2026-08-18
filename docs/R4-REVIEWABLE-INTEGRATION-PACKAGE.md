@@ -60,6 +60,20 @@ reports, artifact indexes and frozen machine-evidence schemas remain immutable
 archive evidence. They are not required reading for the current implementation
 review and must not be presented as separate active product decisions.
 
+## Constructed local review branch
+
+Local branch `codex/r4-reviewable-integration` is constructed directly above
+Draft PR #76 head `c831b4d5253049c4581d3c576aea59648d699d97` as exactly three commits:
+
+1. product persistence `30822612145e46dee6c9210e484abf2715907f3b`;
+2. disposable PostgreSQL proof `773ac10b2cd47fb5584a93412cb8bf588e6b3510`;
+3. current operating truth `1aa5c18a06a60bd3b3fc1fbac750ee8f75edcc52`.
+
+The branch has no upstream and has not been pushed or merged. An isolated
+worktree validation of its own bytes passed the focused disposable proof
+`22/22`, product persistence tests `88/88`, spine/Room typecheck and document
+audit. The temporary validation worktree was removed afterward.
+
 ## Validation
 
 - focused disposable PostgreSQL tests: `22 passed / 0 failed`;

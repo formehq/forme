@@ -67,8 +67,10 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
   governance correction.
 - Before another runtime effect or merge review, create a reviewable
   integration shape that separates current product implementation from the
-  historical governance/evidence chain. Push and merge remain
-  `NOT_REQUESTED` in this correction.
+  historical governance/evidence chain. That local shape now exists as
+  `codex/r4-reviewable-integration`, exactly three commits above Draft PR #76,
+  and its focused proof, product tests, typecheck and docs audit are Green. It
+  has no upstream. Push and merge remain `NOT_REQUESTED` in this correction.
 
 ### Current-truth routing
 
