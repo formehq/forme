@@ -2310,6 +2310,83 @@ test("every purge obligation keeps a strict sub-24-hour margin and verify reject
   assert.match(VERIFY, /public_core_check_constraint_definition_drift/u);
 });
 
+test("constraint inventory compares the exact schema set in full-signature C order", () => {
+  const expectedBlock = VERIFY.match(
+    /expected_constraint_csv constant text :=([\s\S]*?);\n  expected_key_constraint_csv/u,
+  )?.[1];
+  assert.ok(expectedBlock, "expected constraint inventory must remain explicit");
+  const expected = [...expectedBlock.matchAll(/'([^']*)'/gu)]
+    .map((match) => match[1] ?? "")
+    .join("")
+    .split(",");
+
+  const constraintType = (constraintName: string): string => constraintName.startsWith("pk_")
+    ? "p"
+    : constraintName.startsWith("uq_")
+      ? "u"
+      : constraintName.startsWith("fk_")
+        ? "f"
+        : "c";
+  const actual = [...SCHEMA.matchAll(
+    /CREATE TABLE forme_r4_public_core\.([a-z_]+) \(([\s\S]*?)\n\);/gu,
+  )].flatMap((tableMatch) => {
+    const tableName = tableMatch[1] ?? "";
+    return [...(tableMatch[2] ?? "").matchAll(/\bCONSTRAINT ([a-z0-9_]+)/gu)].map((constraintMatch) => {
+      const constraintName = constraintMatch[1] ?? "";
+      const type = constraintType(constraintName);
+      return { tableName, constraintName, signature: `${tableName}|${constraintName}|${type}` };
+    });
+  });
+  actual.push(...[...SCHEMA.matchAll(
+    /ALTER TABLE forme_r4_public_core\.([a-z_]+)\n  ADD CONSTRAINT ([a-z0-9_]+)/gu,
+  )].map((match) => {
+    const tableName = match[1] ?? "";
+    const constraintName = match[2] ?? "";
+    const type = constraintType(constraintName);
+    return { tableName, constraintName, signature: `${tableName}|${constraintName}|${type}` };
+  }));
+  const byBytes = (left: string, right: string): number => Buffer.compare(Buffer.from(left), Buffer.from(right));
+  const signatureOrder = actual.map(({ signature }) => signature).sort(byBytes);
+  const legacyNameOrder = actual.toSorted((left, right) => {
+    const tableOrder = byBytes(left.tableName, right.tableName);
+    return tableOrder === 0 ? byBytes(left.constraintName, right.constraintName) : tableOrder;
+  }).map(({ signature }) => signature);
+
+  assert.equal(actual.length, 172);
+  assert.deepEqual(signatureOrder, expected);
+  assert.deepEqual(
+    legacyNameOrder.flatMap((signature, index) => signature === expected[index]
+      ? []
+      : [{ index, expected: expected[index], actual: signature }]),
+    [
+      {
+        index: 41,
+        expected: "mutation_receipts|ck_mutation_receipts__actor_action|c",
+        actual: "mutation_receipts|ck_mutation_receipts__actor|c",
+      },
+      {
+        index: 42,
+        expected: "mutation_receipts|ck_mutation_receipts__actor|c",
+        actual: "mutation_receipts|ck_mutation_receipts__actor_action|c",
+      },
+      {
+        index: 49,
+        expected: "mutation_receipts|ck_mutation_receipts__recovery_action|c",
+        actual: "mutation_receipts|ck_mutation_receipts__recovery|c",
+      },
+      {
+        index: 50,
+        expected: "mutation_receipts|ck_mutation_receipts__recovery|c",
+        actual: "mutation_receipts|ck_mutation_receipts__recovery_action|c",
+      },
+    ],
+  );
+  assert.match(
+    VERIFY,
+    /array_agg\(signature ORDER BY signature COLLATE "C"\)[\s\S]*?constraint_inventory/u,
+  );
+});
+
 test("janitor failure records a closed failure code in a separate transaction", async () => {
   const executor = new ExecutingFakeSqlExecutor();
   executor.failAtStatementId = "retention.janitor.purge.claim";

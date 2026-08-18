@@ -91,15 +91,15 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_index_inventory_drift';
   END IF;
 
-  SELECT array_agg(
-           owner.relname::text || '|' || c.conname::text || '|' || c.contype::text
-           ORDER BY owner.relname, c.conname
-         )
+  SELECT array_agg(signature ORDER BY signature COLLATE "C")
     INTO actual_constraints
-    FROM pg_catalog.pg_constraint c
-    JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid
-    JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
-   WHERE n.nspname = 'forme_r4_public_core';
+    FROM (
+      SELECT owner.relname::text || '|' || c.conname::text || '|' || c.contype::text AS signature
+        FROM pg_catalog.pg_constraint c
+        JOIN pg_catalog.pg_class owner ON owner.oid = c.conrelid
+        JOIN pg_catalog.pg_namespace n ON n.oid = owner.relnamespace
+       WHERE n.nspname = 'forme_r4_public_core'
+    ) constraint_inventory;
 
   IF actual_constraints IS DISTINCT FROM string_to_array(expected_constraint_csv, ',') THEN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_constraint_inventory_drift';
