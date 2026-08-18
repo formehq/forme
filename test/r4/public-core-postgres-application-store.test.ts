@@ -221,6 +221,76 @@ test("bridge exposes exactly the approved 20-method application store and captur
   assert.equal(Object.hasOwn(sqlInput, "labelCiphertext"), true);
 });
 
+test("bridge constructor and prepared-store result membrane reject accessors, extras, and non-index array keys", async () => {
+  const store = new FakePreparedStore();
+  const stableConfig = config(store);
+  const hostileConfig = Object.create(null) as Record<string, unknown>;
+  for (const [key, value] of Object.entries(stableConfig)) {
+    Object.defineProperty(hostileConfig, key, {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value,
+    });
+  }
+  let getterCalls = 0;
+  Object.defineProperty(hostileConfig, "roomId", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      getterCalls += 1;
+      throw new Error("PRIVATE_CONFIG_GETTER_CANARY");
+    },
+  });
+  assert.throws(
+    () => createPublicCorePostgresApplicationStoreV1(hostileConfig as unknown as PublicCorePostgresApplicationStoreConfigV1),
+    (error: unknown) => {
+      assert.deepEqual(authenticPublicCorePostgresApplicationStoreErrorDetails(error), {
+        status: 500,
+        code: "public_core_postgres_application_config_invalid",
+      });
+      return true;
+    },
+  );
+  assert.equal(getterCalls, 0);
+
+  assert.throws(
+    () => createPublicCorePostgresApplicationStoreV1(Object.freeze({ ...stableConfig, extraAuthority: true })),
+    (error: unknown) => {
+      assert.deepEqual(authenticPublicCorePostgresApplicationStoreErrorDetails(error), {
+        status: 500,
+        code: "public_core_postgres_application_config_invalid",
+      });
+      return true;
+    },
+  );
+
+  const rows: unknown[] = [];
+  Object.defineProperty(rows, "4294967295", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: "PRIVATE_ARRAY_KEY_CANARY",
+  });
+  store.results.set("listThirdPlace", Object.freeze({
+    kind: "read",
+    action: "third_place.list",
+    rows: Object.freeze(rows),
+  }));
+  const bridge = createPublicCorePostgresApplicationStoreV1(stableConfig);
+  await assert.rejects(
+    bridge.listThirdPlace(),
+    (error: unknown) => {
+      assert.deepEqual(authenticPublicCorePostgresApplicationStoreErrorDetails(error), {
+        status: 503,
+        code: "public_core_store_contract_invalid",
+      });
+      assert.equal(`${String(error)}${JSON.stringify(error)}`.includes("PRIVATE_ARRAY_KEY_CANARY"), false);
+      return true;
+    },
+  );
+});
+
 test("read bridge authenticates projection canonical preimage, body-free interaction consent, and operator credential digest", async () => {
   const store = new FakePreparedStore();
   const key = bodyKey();

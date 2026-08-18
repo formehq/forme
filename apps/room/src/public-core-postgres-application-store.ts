@@ -62,6 +62,7 @@ const HOUR_MS = 60 * 60 * 1_000;
 const DAY_MS = 24 * HOUR_MS;
 const TEN_MINUTES_MS = 10 * 60 * 1_000;
 const THIRTY_DAYS_MS = 30 * DAY_MS;
+const MAX_SNAPSHOT_ARRAY_ITEMS = 4_096;
 const ID_SUFFIX = "[A-Za-z0-9_-]{16,128}";
 const SHA256 = /^sha256:[a-f0-9]{64}$/u;
 const SECRET = /^[A-Za-z0-9_-]{16,4096}$/u;
@@ -178,7 +179,23 @@ function snapshot(value: unknown, seen = new WeakSet<object>(), depth = 0): unkn
     if (Array.isArray(value)) {
       if (Object.getPrototypeOf(value) !== Array.prototype) fail(503, "public_core_store_contract_invalid");
       const length = descriptors.length;
-      if (!length || !("value" in length) || !Number.isSafeInteger(length.value) || length.value < 0) {
+      if (
+        !length
+        || !("value" in length)
+        || !Number.isSafeInteger(length.value)
+        || length.value < 0
+        || length.value > MAX_SNAPSHOT_ARRAY_ITEMS
+      ) {
+        fail(503, "public_core_store_contract_invalid");
+      }
+      const expectedKeys = new Set([
+        "length",
+        ...Array.from({ length: length.value }, (_, index) => String(index)),
+      ]);
+      if (
+        Object.keys(descriptors).length !== expectedKeys.size
+        || Object.keys(descriptors).some((key) => !expectedKeys.has(key))
+      ) {
         fail(503, "public_core_store_contract_invalid");
       }
       const result: unknown[] = [];
@@ -188,9 +205,6 @@ function snapshot(value: unknown, seen = new WeakSet<object>(), depth = 0): unkn
           fail(503, "public_core_store_contract_invalid");
         }
         result.push(snapshot(descriptor.value, seen, depth + 1));
-      }
-      if (Object.keys(descriptors).some((key) => key !== "length" && !/^(?:0|[1-9][0-9]*)$/u.test(key))) {
-        fail(503, "public_core_store_contract_invalid");
       }
       return Object.freeze(result);
     }
@@ -350,32 +364,54 @@ export class PublicCorePostgresApplicationStoreV1 implements PublicCoreApplicati
 
   constructor(config: PublicCorePostgresApplicationStoreConfigV1) {
     try {
-      if (!isRecord(config) || typeof config.roomId !== "string" || !new RegExp(`^room_${ID_SUFFIX}$`, "u").test(config.roomId)) {
+      if (!isRecord(config) || Object.getOwnPropertySymbols(config).length !== 0) {
         fail(500, "public_core_postgres_application_config_invalid");
       }
-      if (!config.postgresStore || (typeof config.postgresStore !== "object" && typeof config.postgresStore !== "function")) {
+      const descriptors = Object.getOwnPropertyDescriptors(config);
+      const expectedKeys = [
+        "bodyEncryptionKey", "capabilityPepperKey", "identity", "now",
+        "postgresStore", "publicationVerifier", "roomId",
+      ];
+      if (
+        Object.keys(descriptors).sort().join("|") !== expectedKeys.sort().join("|")
+        || expectedKeys.some((key) => {
+          const descriptor = descriptors[key];
+          return !descriptor || !("value" in descriptor) || descriptor.enumerable !== true;
+        })
+      ) {
         fail(500, "public_core_postgres_application_config_invalid");
       }
-      if (!config.identity || typeof config.identity !== "object") fail(500, "public_core_postgres_application_config_invalid");
-      const now = Object.getOwnPropertyDescriptor(config, "now")?.value;
-      const verifier = Object.getOwnPropertyDescriptor(config, "publicationVerifier")?.value;
-      const deriveId = Object.getOwnPropertyDescriptor(config.identity, "deriveId")?.value
-        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(config.identity), "deriveId")?.value;
-      const deriveSecret = Object.getOwnPropertyDescriptor(config.identity, "deriveSecret")?.value
-        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(config.identity), "deriveSecret")?.value;
-      const deriveNonce = Object.getOwnPropertyDescriptor(config.identity, "deriveNonce")?.value
-        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(config.identity), "deriveNonce")?.value;
+      const roomId = descriptors.roomId?.value;
+      const postgresStore = descriptors.postgresStore?.value;
+      const identity = descriptors.identity?.value;
+      const bodyEncryptionKey = descriptors.bodyEncryptionKey?.value;
+      const capabilityPepperKey = descriptors.capabilityPepperKey?.value;
+      const now = descriptors.now?.value;
+      const verifier = descriptors.publicationVerifier?.value;
+      if (typeof roomId !== "string" || !new RegExp(`^room_${ID_SUFFIX}$`, "u").test(roomId)) {
+        fail(500, "public_core_postgres_application_config_invalid");
+      }
+      if (!postgresStore || (typeof postgresStore !== "object" && typeof postgresStore !== "function")) {
+        fail(500, "public_core_postgres_application_config_invalid");
+      }
+      if (!identity || typeof identity !== "object") fail(500, "public_core_postgres_application_config_invalid");
+      const deriveId = Object.getOwnPropertyDescriptor(identity, "deriveId")?.value
+        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(identity), "deriveId")?.value;
+      const deriveSecret = Object.getOwnPropertyDescriptor(identity, "deriveSecret")?.value
+        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(identity), "deriveSecret")?.value;
+      const deriveNonce = Object.getOwnPropertyDescriptor(identity, "deriveNonce")?.value
+        ?? Object.getOwnPropertyDescriptor(Object.getPrototypeOf(identity), "deriveNonce")?.value;
       if ([now, verifier, deriveId, deriveSecret, deriveNonce].some((value) => typeof value !== "function")) {
         fail(500, "public_core_postgres_application_config_invalid");
       }
-      this.#postgresStore = config.postgresStore;
-      this.#methods = new Map(METHOD_NAMES.map((name) => [name, captureMethod(config.postgresStore, name)]));
-      this.#roomId = config.roomId;
-      this.#bodyEncryptionKey = config.bodyEncryptionKey;
-      this.#capabilityPepperKey = config.capabilityPepperKey;
+      this.#postgresStore = postgresStore as PublicCorePreparedSqlStoreV1;
+      this.#methods = new Map(METHOD_NAMES.map((name) => [name, captureMethod(this.#postgresStore, name)]));
+      this.#roomId = roomId;
+      this.#bodyEncryptionKey = bodyEncryptionKey as PublicCoreCryptoKeyHandleV1;
+      this.#capabilityPepperKey = capabilityPepperKey as PublicCoreCryptoKeyHandleV1;
       this.#nowReceiver = config;
       this.#now = now as () => string;
-      this.#identityReceiver = config.identity;
+      this.#identityReceiver = identity as PublicCorePostgresApplicationIdentityPortV1;
       this.#deriveId = deriveId as PublicCorePostgresApplicationIdentityPortV1["deriveId"];
       this.#deriveSecret = deriveSecret as PublicCorePostgresApplicationIdentityPortV1["deriveSecret"];
       this.#deriveNonce = deriveNonce as PublicCorePostgresApplicationIdentityPortV1["deriveNonce"];
