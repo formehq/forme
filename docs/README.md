@@ -2,24 +2,23 @@
 
 The repository keeps a deliberately small decision surface.
 
-## Current execution truth — management reset, 2026-08-17
+## Current execution truth — disposable PostgreSQL Green, 2026-08-18
 
-#77's replacement diagnostic consumed one exact pull, evaluated all 18
-predicates and found only the reviewed catalog-ordering assertion. The
-consolidated verify-only correction passed repository validation. The final
-lifecycle passed initial verify, then failed cleanly at restart readiness;
-cleanup passed and all execution allowances are exhausted.
+#77 now physically proves schema apply, both verify passes around a
+same-container restart, seed persistence, rollback, schema absence and exact
+cleanup. The closed rollback vector isolated the sole mismatch to catalog
+deparse context; commit `360ed6c` added the pinned local `search_path` already
+used by schema and verify. No schema shape or business meaning changed.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json), plus
-the
-[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+the current
+[`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

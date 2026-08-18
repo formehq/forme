@@ -1,17 +1,20 @@
 # Native Harness architecture contract v0.4
 
-## Superseding R4 execution status — 2026-08-17
+## Superseding R4 execution status — 2026-08-18
 
-NH1/NH2 are unchanged. The complete 18-predicate replacement diagnostic used
-one exact pull and returned only the reviewed catalog-ordering failure. The
-consolidated verify-only correction passed repository validation. The final
-lifecycle passed initial verify but failed cleanly at restart readiness; exact
-cleanup passed and no execution authority remains.
+NH1/NH2 are unchanged. #77's disposable PostgreSQL boundary is now physically
+Green through schema, both verify passes, same-container restart, persistence,
+rollback, schema absence and exact cleanup. The only correction was a pinned
+transaction-local `search_path` for rollback catalog deparse; it grants no new
+runtime, file, provider, Guest, publication or Production authority.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The architecture question now returns to #67 integration: admit this proven
+local persistence mechanism through the existing typed Forme contracts, then
+validate the Owner-visible encounter. Gate C remains separate.
+
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

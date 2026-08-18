@@ -2,6 +2,31 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-18 — Close the disposable PostgreSQL Enabler and return to #67
+
+**Decision:** accept the Owner-confirmed successor campaign as the final #77
+local rehearsal envelope. It may construct one closed 10-guard rollback
+diagnostic, execute one diagnostic lifecycle, make at most one rollback-only
+contract-preserving correction and execute one final lifecycle. Production,
+real/private data, provider/public effects, push, merge and Gate C stay closed.
+
+**Outcome:** run `4aff3665a92bc4d8` evaluated all 10 guards after schema,
+two verify passes, restart and persistence, isolating only
+`public_core_rollback_catalog_manifest_drift`. Schema and verify used a pinned
+local `search_path` for catalog deparse; rollback did not. Commit `360ed6c`
+added that setting without changing schema shape, business meaning or catalog
+signature. Final run `69ac02f4e8dfbf01` passed the complete lifecycle through
+rollback and schema-absence proof, with exact residue `0`.
+
+**Roadmap effect:** #77 is Technical Review Green and leaves the active Enabler
+slot. #67 remains Building until product integration, activation and one
+Owner-experienced Guest encounter. Infrastructure proof still earns no direct
+Product Progress credit.
+
+**Stop:** `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## 2026-08-17 — Replace blind restart retry with one reviewable integration outcome
 
 **Decision:** the Owner approved one medium-grained repository-only envelope to

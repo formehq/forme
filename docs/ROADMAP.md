@@ -1,28 +1,21 @@
 # MVP rebuild roadmap
 
-## Superseding current gate — R4 execution management reset, 2026-08-17
+## Superseding current gate — R4 #77 PostgreSQL Enabler Green, 2026-08-18
 
-#77 consumed its one-pull replacement vector, consolidated verify correction
-and final lifecycle. The correction is physically Green through initial verify,
-but restart readiness failed before persistence proof and rollback. Cleanup is
-Green. This Enabler still earns `0 Product Progress`; #67 remains
-`Building / At Risk`, and a new Owner decision is required before more local
-execution.
+#77 now physically proves the whole disposable local persistence chain:
+PostgreSQL 16 schema apply, both verify passes around one same-container
+restart, seed persistence, rollback apply, schema absence and exact cleanup.
+The sole rollback guard mismatch was a missing pinned `search_path` during
+catalog deparse; commit `360ed6c` corrected only that observation context.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The Enabler no longer blocks the roadmap. #67 remains `Building / At Risk`
+because the next milestone is user-facing: integrate the proven persistence
+boundary into Public Room, activate the bounded path and complete one
+Owner-experienced Guest encounter. No more database rehearsal is proposed.
 
-Repository follow-up: the restart-readiness controller correction and
-three-slice integration package are Technical Review Green. The next gate is a
-review of current product persistence, disposable proof and operating truth;
-historical authority artifacts remain archive evidence. No new lifecycle,
-Docker/PostgreSQL effect, push or merge is authorized by this correction.
-
-Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
-REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

@@ -1,6 +1,34 @@
 # Owner technical cockpit
 
-## Superseding current status — #77 final failed-clean lifecycle, 2026-08-17
+## Superseding current status — #77 disposable PostgreSQL Green, 2026-08-18
+
+**The local persistence Enabler is Technical Review Green; the Public Room
+experience is still Building.** A strict 10-item body-free diagnostic isolated
+the rollback failure to `public_core_rollback_catalog_manifest_drift`. The
+catalog was unchanged: rollback alone lacked the pinned transaction-local
+`search_path` used by schema and verify, so PostgreSQL 16 deparsed equivalent
+catalog text differently.
+
+Commit `360ed6c` adds only that setting and updates the exact rollback binding.
+Final run `69ac02f4e8dfbf01` physically passed schema apply, initial verify,
+same-container restart, restart readiness, post-restart verify, seed
+persistence, rollback apply and schema-absence proof. Exact container, network,
+volume, credential and runtime residue is `0`; no pull was used in the final
+run. Focused `26/26`, offline R4 `602/602` with `111` frozen historical skips,
+typecheck, docs audit and diff check are Green.
+
+#77 is ready to leave the active Enabler slot. #67 remains `Building / At Risk`
+because the proven persistence boundary is not yet integrated into the Public
+Room walking slice and no Owner-experienced Guest encounter has run. The next
+work is product integration and activation, not another database rehearsal.
+Push, merge, Production, real/private data, provider/public effects and Gate C
+remain closed.
+
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## Historical checkpoint — #77 final failed-clean lifecycle, 2026-08-17
 
 #77's replacement diagnostic consumed one exact pull and evaluated all 18
 assertions. Its sole failure was the reviewed catalog-ordering class. The
@@ -37,8 +65,9 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - One shared controller now drives production and focused readiness tests.
 - Failure preserves the exact attempt count and one of seven closed body-free
   outcome classes instead of reporting restart attempts as zero.
-- Restart re-inspects the exact-owned container, running state and unchanged
-  loopback port before PostgreSQL probing.
+- Restart re-inspects the exact-owned container and running state, then uses
+  its freshly proven single loopback port before PostgreSQL probing; Docker may
+  legitimately assign a new random host port on the second start.
 - Focused tests are `22/22`; offline R4 is `598/598` with `111` historical
   physical skips; typecheck, docs and diff checks are Green.
 - Review routing is frozen in
@@ -51,24 +80,22 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Current local and remote integration truth
 
-- The current R4 implementation/evidence baseline on local branch
-  `codex/r4-public-core-local-postgres-wiring` is
-  `a2ce37947c2858eab5e6f5803af51a832fadc62d` / tree
-  `14245e17818d41850a204364a8193b0853dcae8a`. This repository-only
-  working-model reconciliation is layered locally above that baseline; neither
-  line has an upstream.
-- The implementation baseline is 123 commits and 163 changed paths beyond
-  Draft PR #76's remote head
-  `c831b4d5253049c4581d3c576aea59648d699d97`.
+- The physically Green implementation/evidence is frozen through local commit
+  `3b53154` on `codex/r4-public-core-local-postgres-wiring`. That source branch
+  has no upstream and its physical proof is not remote CI evidence.
+- The chronological source line is more than 120 commits and 160 paths beyond
+  Draft PR #76's remote head `c831b4d5253049c4581d3c576aea59648d699d97`;
+  it is historical construction truth, not the proposed review shape.
 - Draft PR #76 remains accurate historical evidence for Durable Public Core
   Construction, but it does not contain or validate the current local line.
 - The broader integration Draft PR #65 and the open Draft PR stack likewise do
   not provide remote or CI coverage for the implementation baseline or this
   governance correction.
-- Before another runtime effect or merge review, create a reviewable
-  integration shape that separates current product implementation from the
-  historical governance/evidence chain. Push and merge remain
-  `NOT_REQUESTED` in this correction.
+- The Owner approved refreshing `codex/r4-reviewable-integration` with the
+  final PostgreSQL Green proof, validating its own bytes, pushing it and
+  creating a Draft PR. This grants remote review and status reconciliation,
+  not merge. Until push completes, Draft PR #76 remains historical evidence
+  only and no remote CI claim covers the Green local bytes.
 
 ### Current-truth routing
 

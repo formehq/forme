@@ -1,30 +1,24 @@
 # Product
 
-## Superseding R4 execution status — 2026-08-17
+## Superseding R4 execution status — 2026-08-18
 
-Enabler #77's replacement vector used one exact pull and evaluated all 18
-predicates. One reviewed catalog-ordering failure unlocked one consolidated
-verify-only correction. The final lifecycle passed schema apply and initial
-verify, then failed cleanly at restart readiness before persistence or
-rollback. Exact cleanup passed and the execution budget is exhausted.
+Enabler #77 is Technical Review Green. The disposable PostgreSQL path now
+physically passes schema apply, both verify passes, same-container restart,
+seed persistence, rollback, schema absence and exact cleanup. The last failure
+was not a data-model defect: rollback omitted the pinned local `search_path`
+used when schema and verify deparse PostgreSQL 16 catalog text. Commit
+`360ed6c` corrected only that observation context. See the
+[`rehearsal result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`; restart, persistence and rollback are still unproved. See the
-[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+This removes the local database blocker but is not itself a user-visible MVP
+milestone. #67 remains `Building / At Risk`: the Owner still needs the real
+Public Room → bounded knock → durable local pull → fresh candidate → exact
+response experience. Work now returns to integration, activation and one
+Owner-experienced Guest encounter rather than more database rehearsal.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-The subsequent repository-only architecture correction is Green. It makes the
-restart gate observable through exact attempt counts and seven closed body-free
-outcomes, rechecks the running container and stable loopback port, and makes
-tests execute the production readiness controller. It does not change the
-physical truth above or earn Product Progress. The next integration review is
-organized by the
-[`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md), and
-physical execution remains unrequested.
+Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
+PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 
