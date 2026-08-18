@@ -29,8 +29,10 @@ persist the 30 attempted restart probes and did not record a post-start running
 state or stable-port proof. The Owner-approved repository correction replaces
 that blind spot with result v2: exact failed attempt counts, seven closed
 body-free readiness outcomes, a shared production/test controller, and a
-post-restart running-container plus unchanged-loopback-port check. The gate is
-bounded to at most 60 attempts and 60 seconds.
+post-restart running-container plus freshly observed loopback-port check.
+Docker may assign a new random host port when the same exact container starts
+again; the controller binds the restart probe to that newly proven single
+loopback port. The gate is bounded to at most 60 attempts and 60 seconds.
 
 This correction used no Docker, socket, PostgreSQL or SQL effect and does not
 reinterpret the old run. It is organized for review in

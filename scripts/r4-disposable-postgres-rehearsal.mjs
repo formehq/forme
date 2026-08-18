@@ -873,7 +873,10 @@ export async function runRehearsal({
     await docker.stopContainer();
     await docker.startContainer();
     state.restartCount = 1;
-    await docker.publishedPort(state.port, "docker.container.restart");
+    // Docker may assign a new random loopback host port when the same exact
+    // container is started again. Re-inspect the owned running container and
+    // use that newly proven loopback binding for the restart probe.
+    state.port = await docker.publishedPort(null, "docker.container.restart");
     const restartReadiness = await postgres.waitReady(
       state.port,
       "postgres.readiness.restart",

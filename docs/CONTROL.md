@@ -69,8 +69,9 @@ PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 - One shared controller now drives production and focused readiness tests.
 - Failure preserves the exact attempt count and one of seven closed body-free
   outcome classes instead of reporting restart attempts as zero.
-- Restart re-inspects the exact-owned container, running state and unchanged
-  loopback port before PostgreSQL probing.
+- Restart re-inspects the exact-owned container and running state, then uses
+  its freshly proven single loopback port before PostgreSQL probing; Docker may
+  legitimately assign a new random host port on the second start.
 - Focused tests are `22/22`; offline R4 is `598/598` with `111` historical
   physical skips; typecheck, docs and diff checks are Green.
 - Review routing is frozen in

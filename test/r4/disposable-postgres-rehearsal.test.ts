@@ -34,6 +34,7 @@ type FakeOptions = Readonly<{
   cleanupOwnershipMismatch?: boolean;
   diagnosticFailedAssertions?: readonly string[];
   restartReadinessExhausted?: boolean;
+  restartPublishedPort?: number;
 }>;
 
 class FakeDocker {
@@ -104,7 +105,7 @@ class FakeDocker {
   async publishedPort(_expectedPort: number | null = null, _phase = "docker.container.inspect"): Promise<number> {
     this.record("container.port");
     this.portProofs.push(Object.freeze({ expectedPort: _expectedPort, phase: _phase }));
-    return 55432;
+    return _phase === "docker.container.restart" ? this.options.restartPublishedPort ?? 55432 : 55432;
   }
 
   async cleanup(): Promise<Readonly<{ container: boolean; network: boolean; volume: boolean }>> {
@@ -246,7 +247,7 @@ test("#77 binds one unique, loopback-only, secret-file Docker plan", () => {
   assert.equal(args.some((value: string) => value.includes("POSTGRES_PASSWORD=")), false);
 });
 
-test("post-start inspection proves a running container and stable loopback port", () => {
+test("post-start inspection proves a running container and one loopback port", () => {
   const observation = {
     State: { Running: true },
     NetworkSettings: { Ports: { "5432/tcp": [{ HostIp: "127.0.0.1", HostPort: "55432" }] } },
@@ -537,7 +538,7 @@ test("replacement diagnostic permits exactly one explicit pull before its comple
 });
 
 test("cached-image rehearsal proves schema, restart, rollback and exact cleanup", async () => {
-  const input = fixture();
+  const input = fixture({ restartPublishedPort: 55433 });
   const result = await runRehearsal({ ...input, startedAt: "2026-08-17T00:00:00.000Z" });
   assert.equal(result.status, "GREEN");
   assert.deepEqual(result.outcome, {
@@ -552,9 +553,10 @@ test("cached-image rehearsal proves schema, restart, rollback and exact cleanup"
   assert.equal(result.observation.imagePulled, false);
   assert.deepEqual(result.observation.readinessAttempts, { initial: 1, restart: 2 });
   assert.deepEqual(result.observation.readinessOutcomes, { initial: "READY", restart: "READY" });
+  assert.equal(result.observation.publishedPort, 55433);
   assert.deepEqual(input.docker.portProofs, [
     { expectedPort: null, phase: "docker.container.initial" },
-    { expectedPort: 55432, phase: "docker.container.restart" },
+    { expectedPort: null, phase: "docker.container.restart" },
   ]);
   assert.equal(input.docker.calls.filter((kind) => kind === "container.start").length, 2);
   assert.equal(input.docker.calls.at(-1), "cleanup");

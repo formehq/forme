@@ -32,8 +32,9 @@ The repository correction now:
   result, client-close, clock, container-state, or port-binding failure;
 - uses a fresh client with readiness-specific 1.5-second query/statement limits;
 - bounds the gate to at most 60 attempts and 60 seconds;
-- re-inspects the restarted exact-owned container and proves that it is running
-  with the unchanged loopback published port before another PostgreSQL probe;
+- re-inspects the restarted exact-owned container, proves that it is running
+  with one loopback-only published port, and uses that freshly observed port
+  before another PostgreSQL probe;
 - emits result schema `r4.disposable-postgres-rehearsal-result.v2` with exact
   readiness attempt counts and closed outcome classes.
 
