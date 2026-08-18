@@ -1,26 +1,56 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED`,
-2026-08-17.
+Status: `FAILED_CLEAN / RESTART_PERSISTENCE_GREEN / ROLLBACK_GUARD_UNIDENTIFIED`,
+2026-08-17 through 2026-08-18.
 
 ## Plain-language result
 
-Replacement diagnostic run `0dddf25aee37504c` pulled the exact image once,
-evaluated all 18 assertions and returned one closed failure identifier:
-`public_core_unexpected_object_present`. This exactly matched the reviewed
-PostgreSQL catalog-ordering class. The run cleaned every exact-owned resource.
+The larger local campaign materially narrowed #77. The exact PostgreSQL 16
+image was acquired once. Run `eec5b2c54651d075` exposed a startup-handshake
+disconnect, and run `ac4b54f5c5fe0be8` proved schema plus initial verify before
+Docker assigned the restarted container a new random loopback port. Two
+bounded repository corrections closed those two controller defects.
 
-The consolidated verify-only correction at `e8db0e47` gave every fixed
-inventory comparison the same explicit text `C` ordering. It changed no
-schema, rollback, expected set, catalog-manifest query/result or business
-meaning. Full repository validation passed.
+Runs `2be1317fe91bd165` and `7dca9ef5bf763039` then both applied the exact
+schema, passed initial verify, restarted the same owned container, reached
+restart readiness on its freshly observed loopback port, passed post-restart
+verify and proved seed persistence. This is the first direct physical proof of
+that complete chain in the simplified harness.
 
-Final run `71ac0e393653db72` applied the schema and passed the corrected initial
-verify, then performed one container stop/start. PostgreSQL did not become
-ready within the bounded restart window. Post-restart verify, persistence
-proof and rollback were not reached. Image pull was `0`; container, network,
-volume, credential and runtime root were all removed. The final run budget is
-consumed and no retry is authorized.
+Both runs stopped at the rollback guard with the same body-free PostgreSQL
+diagnostic: `P0001 / ERROR / exec_stmt_raise`. The third and final repository
+repair aligned rollback's table/index inventory ordering with verify's explicit
+text `C` ordering, but the final lifecycle returned the same closed diagnostic.
+The result membrane does not identify which allowlisted rollback guard raised
+it, so another blind SQL change or fifth lifecycle would be guesswork.
+
+Every run removed its exact-owned container, network, volume, credential and
+runtime directory. The final run used the cached image and performed no pull.
+Production, real/private data, provider/public effects and Gate C remained
+zero. The campaign budget is exhausted at repository repairs `3 / 3`, full
+lifecycles `4 / 4`, acquisition attempts `1 / 2` and pulls `1`.
+
+Repository validation after the final repair is Green: focused rehearsal
+`22 / 22`, offline R4 `598 / 598` with `111` frozen historical skips,
+TypeScript, documentation audit and `git diff --check`.
+
+## Next bounded decision
+
+Do not rerun the current harness. The next useful change is a strict body-free
+rollback-assertion vector that reports only the predefined rollback guard ID.
+A future medium-sized campaign can then use one diagnostic lifecycle, make at
+most one contract-preserving rollback-only correction if the result warrants
+it, and use at most one final lifecycle. That is a new campaign boundary, not
+an ordinary retry.
+
+Current stop:
+
+`LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Historical pre-campaign result
 
 ## Repository-only restart-readiness correction
 
@@ -108,7 +138,7 @@ wiring is not Green and this remains `0 Product Progress`.
 - provider calls, real Guest records, production effects, public traffic and
   Gate C effects: `0`.
 
-## What needs review
+## Historical review stop (superseded by the local campaign above)
 
 Do not rerun. The catalog-expression correction is physically proved through
 the initial verify, but restart readiness, post-restart verification,

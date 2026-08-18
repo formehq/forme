@@ -1,11 +1,11 @@
 {
-  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v6",
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v7",
   "issue": 77,
-  "status": "FINAL_LIFECYCLE_RESTART_READINESS_FAILED_CLEAN",
+  "status": "LOCAL_CAMPAIGN_ROLLBACK_GUARD_FAILED_CLEAN",
   "productProgress": 0,
   "repositoryCorrection": {
-    "status": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN",
-    "physicalExecutionPerformed": false,
+    "status": "LOCAL_CAMPAIGN_THREE_REPOSITORY_REPAIRS_GREEN",
+    "physicalExecutionPerformed": true,
     "resultSchemaVersion": "r4.disposable-postgres-rehearsal-result.v2",
     "maximumReadinessAttempts": 60,
     "maximumReadinessDurationMs": 60000,
@@ -22,6 +22,9 @@
     "productionControllerUsedByTests": true,
     "restartContainerRunningRechecked": true,
     "restartLoopbackPortRechecked": true,
+    "startupHandshakeDisconnectRetryBounded": true,
+    "restartUsesFreshlyObservedLoopbackPort": true,
+    "rollbackInventoryUsesExplicitTextCOrdering": true,
     "reviewableIntegrationPackage": "docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md"
   },
   "attemptBudget": {
@@ -62,6 +65,128 @@
       "finalFullLifecyclesConsumed": 1,
       "anonymousImagePullsAllowed": 1,
       "anonymousImagePullsConsumed": 1
+    },
+    "localDisposableCampaign": {
+      "workingDaysAllowed": 3,
+      "repositoryRepairsAllowed": 3,
+      "repositoryRepairsConsumed": 3,
+      "fullLifecyclesAllowed": 4,
+      "fullLifecyclesConsumed": 4,
+      "imageAcquisitionAttemptsAllowed": 2,
+      "imageAcquisitionAttemptsConsumed": 1,
+      "imagePullsConsumed": 1
+    }
+  },
+  "localDisposableCampaign": {
+    "preCampaignAcquisitionObservation": {
+      "runId": "5bfaf0bfacaede47",
+      "status": "FAILED_CLEAN",
+      "failureCode": "disposable_postgres_image_not_cached",
+      "beforeResourceCreation": true,
+      "countedAsFullLifecycle": false,
+      "imagePulled": false,
+      "ownedResidue": 0
+    },
+    "repositoryRepairs": [
+      {
+        "commit": "bfac7cf8ee642807231867296ce84d47518ff93e",
+        "tree": "3a5948ae57290a5ce6d9da393711b4f0c0fa2906",
+        "outcome": "BOUNDED_STARTUP_HANDSHAKE_DISCONNECT_RETRY"
+      },
+      {
+        "commit": "b9765e673819662f9e26c25402f5b88f6423f663",
+        "tree": "156b2fe4a2174f33c5b25a2ab511610fce0e7ecd",
+        "outcome": "RESTART_BINDS_FRESHLY_OBSERVED_LOOPBACK_PORT"
+      },
+      {
+        "commit": "236ac1b9a78c4f28686b006faa390ac7c9902326",
+        "tree": "8121ee2b8638efe9396b54d5afd21599d0db6c00",
+        "outcome": "ROLLBACK_INVENTORY_EXPLICIT_TEXT_C_ORDERING",
+        "rollbackSqlSha256": "sha256:d20b9da9fbb2287390d16ba230c25b840d9daeee207662d59d79bf5b3448334a"
+      }
+    ],
+    "lifecycles": [
+      {
+        "runId": "eec5b2c54651d075",
+        "status": "FAILED_CLEAN",
+        "imagePulled": true,
+        "failureCode": "disposable_postgres_readiness_connect_failed",
+        "failurePhase": "postgres.readiness.initial",
+        "schemaApplied": false,
+        "ownedResidue": 0
+      },
+      {
+        "runId": "ac4b54f5c5fe0be8",
+        "status": "FAILED_CLEAN",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_port_binding_changed",
+        "failurePhase": "docker.container.restart",
+        "schemaApplied": true,
+        "verifyCount": 1,
+        "restartCount": 1,
+        "ownedResidue": 0
+      },
+      {
+        "runId": "2be1317fe91bd165",
+        "status": "FAILED_CLEAN",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_sql_failed",
+        "failurePhase": "postgres.rollback",
+        "schemaApplied": true,
+        "verifyCount": 2,
+        "restartCount": 1,
+        "restartPersistenceProven": true,
+        "rollbackApplied": false,
+        "postgresDiagnostic": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise"
+        },
+        "ownedResidue": 0
+      },
+      {
+        "runId": "7dca9ef5bf763039",
+        "status": "FAILED_CLEAN",
+        "startedAt": "2026-08-18T04:06:16.927Z",
+        "finishedAt": "2026-08-18T04:06:20.346Z",
+        "imagePulled": false,
+        "failureCode": "disposable_postgres_sql_failed",
+        "failurePhase": "postgres.rollback",
+        "schemaApplied": true,
+        "verifyCount": 2,
+        "restartCount": 1,
+        "restartPersistenceProven": true,
+        "rollbackApplied": false,
+        "postgresDiagnostic": {
+          "pgCode": "P0001",
+          "severity": "ERROR",
+          "position": null,
+          "routine": "exec_stmt_raise"
+        },
+        "publishedHost": "127.0.0.1",
+        "publishedPort": 56232,
+        "initialReadinessAttempts": 2,
+        "restartReadinessAttempts": 2,
+        "ownedResidue": 0
+      }
+    ],
+    "physicallyProven": {
+      "postgresServerVersionNum": 160010,
+      "schemaApplied": true,
+      "initialVerify": true,
+      "sameContainerRestart": true,
+      "restartReadiness": true,
+      "postRestartVerify": true,
+      "restartPersistence": true,
+      "exactCleanup": true
+    },
+    "notProven": {
+      "rollbackGuardIdentity": true,
+      "rollbackApplied": true,
+      "rollbackSchemaAbsence": true,
+      "production": true,
+      "gateC": true
     }
   },
   "bindings": {
@@ -518,14 +643,19 @@
     "imagePullsInCompleteVectorReplacement": 1,
     "diagnosticInvocationsInCompleteVectorReplacement": 1,
     "verifyCorrectionsInCompleteVectorReplacement": 1,
-    "fullPostgresLifecyclesInCompleteVectorReplacement": 1
+    "fullPostgresLifecyclesInCompleteVectorReplacement": 1,
+    "repositoryRepairsInLocalDisposableCampaign": 3,
+    "fullPostgresLifecyclesInLocalDisposableCampaign": 4,
+    "imageAcquisitionAttemptsInLocalDisposableCampaign": 1,
+    "imagePullsInLocalDisposableCampaign": 1,
+    "latestLifecycleOwnedResidue": 0
   },
   "inference": {
-    "classification": "INITIAL_VERIFY_GREEN_RESTART_READINESS_FAILED_CLEAN",
+    "classification": "RESTART_PERSISTENCE_GREEN_ROLLBACK_GUARD_FAILED_CLEAN",
     "confidence": "HIGH",
-    "basis": "Replacement diagnostic run 0dddf25aee37504c consumed the one authorized exact image pull, evaluated all 18 predicates and returned only public_core_unexpected_object_present. That vector exactly matched the reviewed PostgreSQL catalog-ordering class. Commit e8db0e47 applied one consolidated verify-only C-ordering correction and repository validation passed. Final run 71ac0e393653db72 then applied the schema and passed initial verify, stopped after one container restart when readiness exhausted, and removed every exact-owned resource and runtime byte.",
-    "suspectedArea": "The catalog-expression correction is physically proved through the initial verify. Restart persistence and rollback remain unproved because the single final lifecycle exhausted readiness after restart. The retained v1 result cannot distinguish container exit, port drift, transient connect refusal, authentication/configuration failure, query failure or malformed readiness result. The repository-only v2 controller can distinguish those closed classes on a future separately authorized lifecycle, but it does not retroactively identify the old run's cause."
+    "basis": "Local campaign runs 2be1317fe91bd165 and 7dca9ef5bf763039 each applied the exact schema, passed initial verify, restarted the same exact-owned container, reached bounded restart readiness, passed post-restart verify and proved seed persistence. Both then failed cleanly at the rollback guard with the same body-free P0001/exec_stmt_raise diagnostic and removed every exact-owned resource and runtime byte. Three repository repair rounds and four lifecycle attempts are consumed.",
+    "suspectedArea": "The remaining blocker is confined to the rollback guard rather than schema construction, catalog verification, restart readiness or persistence. The current body-free result does not identify which allowlisted rollback guard raised P0001, so another lifecycle without a closed rollback-assertion diagnostic would be guesswork."
   },
-  "physicalStop": "POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED / EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED",
-  "stop": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN / REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "physicalStop": "LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN / SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN / ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED",
+  "stop": "ROLLBACK_GUARD_DIAGNOSTIC_REVIEW_REQUIRED / NO_FURTHER_LIFECYCLE_AUTHORIZED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

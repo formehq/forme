@@ -1,27 +1,27 @@
 # MVP rebuild roadmap
 
-## Superseding current gate — R4 execution management reset, 2026-08-17
+## Superseding current gate — R4 #77 rollback guard, 2026-08-18
 
-#77 consumed its one-pull replacement vector, consolidated verify correction
-and final lifecycle. The correction is physically Green through initial verify,
-but restart readiness failed before persistence proof and rollback. Cleanup is
-Green. This Enabler still earns `0 Product Progress`; #67 remains
-`Building / At Risk`, and a new Owner decision is required before more local
-execution.
+#77's larger local campaign physically proved the path through schema, initial
+verify, same-container restart, restart readiness, post-restart verify and seed
+persistence. Exact cleanup passed on every run. This removes the old Docker
+startup, port and restart-persistence uncertainty.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The remaining Enabler gate is one unidentified rollback guard. The body-free
+result is `P0001 / ERROR / exec_stmt_raise`; it does not name the predefined
+guard. Repository repairs are `3/3` and full lifecycles are `4/4`, so another
+blind correction or run is prohibited. #67 remains `Building / At Risk` until
+rollback is physically Green and the product integration/activation path can
+resume.
 
-Repository follow-up: the restart-readiness controller correction and
-three-slice integration package are Technical Review Green. The next gate is a
-review of current product persistence, disposable proof and operating truth;
-historical authority artifacts remain archive evidence. No new lifecycle,
-Docker/PostgreSQL effect, push or merge is authorized by this correction.
+Next proposed gate: a medium-sized strict rollback-assertion diagnostic
+campaign with one diagnostic lifecycle, at most one rollback-only correction
+and at most one final lifecycle. No campaign, Docker/PostgreSQL effect, push or
+merge is currently authorized.
 
-Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
-REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

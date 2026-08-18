@@ -2,23 +2,24 @@
 
 The repository keeps a deliberately small decision surface.
 
-## Current execution truth — management reset, 2026-08-17
+## Current execution truth — rollback guard boundary, 2026-08-18
 
-#77's replacement diagnostic consumed one exact pull, evaluated all 18
-predicates and found only the reviewed catalog-ordering assertion. The
-consolidated verify-only correction passed repository validation. The final
-lifecycle passed initial verify, then failed cleanly at restart readiness;
-cleanup passed and all execution allowances are exhausted.
+#77's bounded local campaign physically proved schema apply, initial verify,
+same-container restart, restart readiness, post-restart verify, seed persistence
+and exact cleanup. Two runs reached that boundary. Both stopped in rollback
+with the same body-free `P0001 / ERROR / exec_stmt_raise` diagnostic, which does
+not identify the predefined guard. All three repair rounds and all four full
+lifecycles are consumed.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
 [`machine evidence`](./evidence/r4-disposable-postgres-rehearsal.json), plus
-the
-[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+the current
+[`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

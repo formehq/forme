@@ -1,16 +1,20 @@
 # Native Harness architecture contract v0.4
 
-## Superseding R4 execution status — 2026-08-17
+## Superseding R4 execution status — 2026-08-18
 
-NH1/NH2 are unchanged. The complete 18-predicate replacement diagnostic used
-one exact pull and returned only the reviewed catalog-ordering failure. The
-consolidated verify-only correction passed repository validation. The final
-lifecycle passed initial verify but failed cleanly at restart readiness; exact
-cleanup passed and no execution authority remains.
+NH1/NH2 are unchanged. The bounded local #77 campaign physically proved the
+disposable PostgreSQL path through schema, both verify passes, same-container
+restart readiness and seed persistence. Both latest runs then failed cleanly
+inside the rollback guard with a body-free `P0001` identifier class, and exact
+cleanup passed. No production, provider, Guest or Gate C boundary changed.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+The next architectural question is deliberately narrow: add a strict closed
+rollback-guard identifier before any further lifecycle. The present campaign
+has exhausted repairs `3/3` and lifecycles `4/4`.
+
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

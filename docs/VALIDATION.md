@@ -1,38 +1,33 @@
 # Product validation and learning log
 
-## Current verdict — restart-readiness repository correction
+## Current verdict — local campaign reaches the rollback guard
 
-Enabler #77 still has no product progress. Its replacement diagnostic used one
-exact pull and evaluated all 18 predicates. The sole failure matched the
-reviewed catalog-ordering class; the consolidated verify-only correction passed
-repository validation. Final run `71ac0e393653db72` passed schema apply and
-initial verify, then failed cleanly at restart readiness. Exact cleanup passed
-and all execution allowances are consumed.
+Enabler #77 has physically proved schema apply, initial verify, same-container
+restart, restart readiness, post-restart verify, seed persistence and exact
+cleanup. Runs `2be1317fe91bd165` and `7dca9ef5bf763039` independently reached
+that boundary. Both stopped in the rollback guard with the same closed
+`P0001 / ERROR / exec_stmt_raise` diagnostic.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
 and
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
-Repository validation: focused assertion-vector harness `17/17`; constraint
-set `172/172`; corrected rehearsal harness `22/22`; offline R4
+Repository validation after the third repair: focused assertion-vector harness
+`17/17`; constraint set `172/172`; corrected rehearsal harness `22/22`; offline R4
 `598 passed / 0 failed / 111 frozen historical-runner tests skipped`; spine
 `45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
 diff-check Green.
 
-The repository-only correction preserves failed readiness attempts, shares one
-production controller with the tests, distinguishes seven closed body-free
-outcomes, and rechecks the restarted container plus stable loopback port. No
-Docker/PostgreSQL effect occurred. The old failed-clean physical result remains
-unchanged and restart persistence/rollback are still unproved.
+The campaign used repository repairs `3/3`, full lifecycles `4/4`, one exact
+pull and one of two acquisition attempts. Every exact-owned resource and local
+runtime byte is absent. Provider, Guest, production, public-traffic and Gate C
+effects are `0`. The next validation need is not another blind run; it is a
+closed rollback-assertion identifier followed by a separately bounded campaign.
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
-REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)

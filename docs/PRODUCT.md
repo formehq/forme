@@ -1,30 +1,34 @@
 # Product
 
-## Superseding R4 execution status — 2026-08-17
+## Superseding R4 execution status — 2026-08-18
 
-Enabler #77's replacement vector used one exact pull and evaluated all 18
-predicates. One reviewed catalog-ordering failure unlocked one consolidated
-verify-only correction. The final lifecycle passed schema apply and initial
-verify, then failed cleanly at restart readiness before persistence or
-rollback. Exact cleanup passed and the execution budget is exhausted.
+Enabler #77 has now physically proved almost the entire disposable PostgreSQL
+chain: exact schema apply, initial verify, same-container restart, bounded
+restart readiness, post-restart verify, seed persistence and exact cleanup.
+Two independent runs reached the same boundary. The old restart-readiness and
+random-port uncertainties are closed.
 
-This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`; restart, persistence and rollback are still unproved. See the
-[`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
+The only remaining #77 failure is the rollback guard. It returns the closed
+diagnostic `P0001 / ERROR / exec_stmt_raise`, but the current body-free result
+does not name which predefined guard fired. Three repository repairs and four
+full lifecycles are consumed, so another blind correction or retry is not
+authorized. See the
+[`rehearsal result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+This is substantial technical risk reduction, but not yet a user-visible MVP
+milestone: #67 remains `Building / At Risk`, and the Owner still cannot complete
+the real Public Room → bounded knock → durable local pull → fresh candidate →
+exact response experience. After rollback proof, #67 still needs integration,
+activation and one Owner-experienced Guest encounter.
+
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
-The subsequent repository-only architecture correction is Green. It makes the
-restart gate observable through exact attempt counts and seven closed body-free
-outcomes, rechecks the running container and stable loopback port, and makes
-tests execute the production readiness controller. It does not change the
-physical truth above or earn Product Progress. The next integration review is
-organized by the
-[`reviewable integration package`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md), and
-physical execution remains unrequested.
+The next useful proposal is one medium-sized strict body-free rollback-assertion
+diagnostic campaign, not another authority micro-chain and not another blind
+lifecycle. Production, real/private data, push, merge and Gate C remain closed.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

@@ -1,7 +1,8 @@
 # R4 reviewable integration package
 
-Status: repository-only construction Green. A later Owner-confirmed local
-disposable campaign separately authorizes bounded physical execution; see
+Status: repository-only construction Green; the later bounded local campaign
+physically proved schema, both verify passes, restart readiness and persistence,
+then exhausted its budget at an unidentified rollback guard. See
 [`CONTROL.md`](./CONTROL.md) for current operational truth.
 
 ## User outcome
@@ -40,6 +41,17 @@ The repository correction now:
 
 No Docker, socket, PostgreSQL, SQL, provider, Guest, production, public traffic
 or Gate C effect was used to construct or validate this correction.
+
+## What the later local campaign proved
+
+The Owner-confirmed campaign subsequently exercised the corrected controller.
+Runs `2be1317fe91bd165` and `7dca9ef5bf763039` each applied the exact schema,
+passed initial verify, restarted the same container, became ready on the newly
+observed loopback port, passed post-restart verify and proved seed persistence.
+Every exact-owned resource was then removed. The remaining failure is confined
+to a body-free rollback guard `P0001`; its exact predefined guard identifier is
+not present in result v2. Three repairs and four lifecycles are consumed, so no
+further run is authorized by this package.
 
 ## Three review slices
 
@@ -99,11 +111,11 @@ node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-post
 - Does the final integration PR make the product-persistence slice obvious
   without rewriting immutable history?
 
-Passing these tests is Technical Review only. Restart persistence, post-restart
-verify and rollback remain physically unproved. The later runtime decision is
-now confirmed as one larger local campaign covering exact acquisition,
-diagnostic, bounded repair, rerun and cleanup. That continuation does not alter
-the repository construction proof in this package.
+Passing these tests is Technical Review only. Restart persistence and
+post-restart verify are now physically proved; rollback remains unproved. The
+next review target is a strict predefined rollback-assertion diagnostic and a
+bounded successor campaign. That continuation does not alter the repository
+construction proof in this package.
 
 Historical construction stop:
 

@@ -1,35 +1,47 @@
 # Owner technical cockpit
 
-## Superseding current status — #77 local campaign resumed, 2026-08-17
+## Superseding current status — #77 local campaign exhausted at rollback, 2026-08-18
 
-**Product progress remains `0`.** The Owner confirmed one larger local,
-synthetic, loopback-only disposable integration campaign after the
-restart-readiness repository correction. The campaign covers exact image
-acquisition, diagnostics, contract-preserving repair, bounded reruns, evidence
-and cleanup without per-command approval.
+**The Public Room experience is still not Done, but the infrastructure gap is
+now much smaller.** The Owner-confirmed local campaign used all three repository
+repair rounds and all four full disposable lifecycles. It used one exact image
+acquisition/pull and never crossed into Production, real/private data,
+provider/public effects or Gate C.
 
-No-pull run `5bfaf0bfacaede47` stopped at
-`disposable_postgres_image_not_cached` before creating a container, network,
-volume, PostgreSQL connection or SQL effect. Exact resource absence and local
-runtime cleanup are Green. This consumes one acquisition observation, not a
-full lifecycle.
+The campaign physically proved PostgreSQL `160010`, exact schema apply, initial
+verify, one same-container restart, readiness on the freshly observed loopback
+port, post-restart verify, seed persistence and exact cleanup. Runs
+`2be1317fe91bd165` and `7dca9ef5bf763039` independently reached that same
+boundary. This closes the old restart-readiness and port-binding uncertainty.
 
-The active ceilings are three working days, three repository-only repair
-rounds, four full disposable lifecycles and two acquisition attempts for the
-same exact approved PostgreSQL digest. The next action is one continuous exact
-image acquisition plus schema → initial verify → restart → post-restart
-persistence → rollback → exact-cleanup lifecycle. Two same-boundary physical
-failures pause runs for architecture review; ordinary in-envelope repair does
-not reopen an Owner gate.
+The remaining failure is narrower: rollback stops inside its guard with the
+closed diagnostic `P0001 / ERROR / exec_stmt_raise`. The final repair aligned
+rollback's table/index inventory with verify's explicit text `C` ordering, but
+the final lifecycle returned the same diagnostic. The current result membrane
+does not reveal which predefined rollback guard fired, so another blind fix or
+fifth lifecycle is prohibited.
 
-The current local branch is `codex/r4-public-core-local-postgres-wiring` at
-`acda73e`. It has no upstream and is not represented by Draft PR #76 or remote
-CI. GitHub #77, #67, Project #1 and PR #76 now disclose that local-only truth.
-Push, merge, Production, real/private data, provider/public effects and Gate C
-remain closed.
+The implementation repairs are `bfac7cf` (bounded startup-handshake retry),
+`b9765e6` (fresh restart loopback-port binding) and `236ac1b` (rollback
+inventory C-ordering). Repository validation is Green: focused `22/22`, offline
+R4 `598/598` with `111` frozen historical skips, typecheck, docs audit and diff
+check. Every physical run ended with exact container/network/volume/runtime
+residue `0`.
 
-Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_ACTIVE /
-EXACT_IMAGE_ACQUISITION_AND_LIFECYCLE_IN_PROGRESS / PRODUCT_PROGRESS_0 /
+The current local branch has no upstream and remains ahead of Draft PR #76;
+remote CI does not cover these bytes. GitHub #77/#67, Project #1 and PR #76
+must describe this as `Building / At Risk`, not Technical Review Green. Push,
+merge, Production, real/private data, provider/public effects and Gate C remain
+closed.
+
+Next useful step: review a medium-sized, strict body-free rollback-assertion
+diagnostic campaign. It should allow one diagnostic lifecycle, at most one
+rollback-only contract-preserving repair and at most one final lifecycle. No
+new campaign or Docker call is currently authorized.
+
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Historical checkpoint — #77 final failed-clean lifecycle, 2026-08-17

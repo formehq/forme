@@ -6,36 +6,27 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding execution update — 2026-08-17
+### Superseding execution update — 2026-08-18
 
-The replacement diagnostic pulled the exact image once, evaluated all 18
-predicates and found only the reviewed catalog-ordering assertion. The
-consolidated verify-only correction then passed repository validation and the
-final lifecycle passed schema apply plus initial verify. It failed cleanly at
-restart readiness before persistence proof or rollback. Every resource was
-removed, every execution allowance is consumed, and this remains
-`0 Product Progress`. See the
+The larger local #77 campaign physically proved exact schema apply, initial
+verify, same-container restart, bounded restart readiness, post-restart verify,
+seed persistence and exact cleanup. Two independent runs reached that boundary.
+This closes the previous restart-readiness and random-port defects.
+
+Rollback still stops in one predefined guard with the body-free diagnostic
+`P0001 / ERROR / exec_stmt_raise`. The result does not name which guard fired.
+All three repository repairs and all four lifecycle slots are consumed, so
+there will be no blind fifth run. See the
 [#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
-[assertion-vector result](docs/R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
-
-Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
-INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
-EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-### Repository-only restart-readiness correction
-
-The Owner approved one medium-grained repository envelope after the failed
-restart. The corrected rehearsal now preserves failed attempt counts, uses one
-shared production readiness state machine in code and tests, distinguishes
-seven closed body-free outcomes, and re-proves container running state plus the
-unchanged loopback port after restart. Focused tests are `22/22` and the offline
-R4 regression is `598 passed / 0 failed / 111 historical skips`. No Docker or
-PostgreSQL call was made. See the
 [reviewable integration package](docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
 
-Repository stop: `POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
-REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
+The Public Room experience is still `Building / At Risk`: this is substantial
+infrastructure proof, not yet Owner-visible MVP completion. The next proposed
+step is one medium-sized strict rollback-assertion diagnostic campaign.
+
+Current stop: `LOCAL_DISPOSABLE_POSTGRES_CAMPAIGN_FAILED_CLEAN /
+SCHEMA_INITIAL_VERIFY_RESTART_POST_RESTART_VERIFY_PERSISTENCE_GREEN /
+ROLLBACK_GUARD_UNIDENTIFIED / EXECUTION_BUDGET_EXHAUSTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
