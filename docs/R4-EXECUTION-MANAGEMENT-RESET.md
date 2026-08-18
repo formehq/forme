@@ -35,17 +35,17 @@ Outcome after exercising this model and the later compatibility and diagnostic d
   positions; verify-only commit `f005cbe` corrected that comparison;
 - the final lifecycle passed the corrected assertion and stopped at
   `public_core_unexpected_object_present`;
-- all current-run residue is zero, both full lifecycle slots are consumed, and
-  the next action is repository-only architecture review rather than another
-  child correction or runtime attempt.
+- all current-run residue is zero and both full lifecycle slots are consumed;
+- the repository-only architecture review is complete and requires one
+  complete body-free assertion vector before any consolidated correction,
+  rather than another child correction or immediate runtime attempt.
 
 Current stop:
 
-`DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+`POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 The reset-start truth below is retained as the checkpoint that preceded #77.
 

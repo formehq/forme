@@ -9,15 +9,16 @@ final lifecycle stopped at `public_core_unexpected_object_present`. Both runs
 were synthetic and cleaned exactly; restart and rollback proof remain absent.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
-Risk`. The next action is a repository-only architecture review of the whole
-remaining verify contract, not another one-assertion patch/run loop. See
-[`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+Risk`. The [architecture review](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md)
+is complete and replaces another one-assertion patch/run loop with one complete
+body-free assertion vector followed, only if it matches, by one consolidated
+verify correction. See the
+[`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

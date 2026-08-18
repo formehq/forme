@@ -9,14 +9,15 @@ the final lifecycle passed it and stopped at the independent body-free
 assertion `public_core_unexpected_object_present`. Both runs cleaned exactly.
 
 Do not run again, pull again, or start another narrow correction chain. The
-next task is one repository-only architecture review of the remaining verify
-contract. #67 stays `Building / At Risk` and earns no product progress here.
+[architecture review](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md) is complete:
+the next decision surface is one complete body-free assertion-vector
+diagnostic plus a consolidated correction boundary. #67 stays
+`Building / At Risk` and earns no product progress here.
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

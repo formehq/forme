@@ -1,6 +1,6 @@
 # R4 disposable PostgreSQL rehearsal result
 
-Status: `FAILED_CLEAN / ARCHITECTURE_REVIEW_REQUIRED`, 2026-08-17.
+Status: `FAILED_CLEAN / ARCHITECTURE_REVIEW_COMPLETE`, 2026-08-17.
 
 ## Plain-language result
 
@@ -56,18 +56,18 @@ wiring is not Green and this remains `0 Product Progress`.
 Do not run again or apply another narrow catalog patch. The latest assertion
 combines several catalog predicates and does not identify which one disagreed.
 Static review points to another mixed ordering domain in the `pg_type`
-inventory, but that is only a hypothesis. The next action is one repository-
-only architecture review of the remaining verify contract, followed by a new
-Owner decision if another lifecycle is warranted. Production, real data,
-push, merge and Gate C remain closed.
+inventory, but that is only a hypothesis. The completed
+[architecture review](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md) therefore
+requires one complete body-free assertion vector before a consolidated
+correction and any later final rehearsal. Production, real data, push, merge
+and Gate C remain closed.
 
 Machine-readable evidence:
 [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json).
 
 Current stop:
 
-`DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+`POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

@@ -8,16 +8,15 @@ corrected it, and the final run advanced to the independent
 `public_core_unexpected_object_present` assertion. Both cleaned exactly. This
 Enabler still earns `0 Product Progress`; #67 remains `Building / At Risk`.
 
-The next roadmap action is one repository-only architecture review of all
-remaining verify predicates. Do not run or pull again, and do not create a
-child correction chain. The Public Room → knock → candidate → response path
-is unchanged.
+The architecture review is complete. The next roadmap decision is one
+repository-only complete-assertion diagnostic and consolidated-correction
+envelope; no pull or physical run is currently authorized. The Public Room →
+knock → candidate → response path is unchanged.
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

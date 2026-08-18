@@ -12,7 +12,9 @@ comparison. The final lifecycle advanced to
 Each run removed its container, network, volume, credential and runtime root.
 Provider, real Guest, production, public traffic and Gate C effects are zero.
 The complete verify/restart/rollback proof is absent and the budget is
-exhausted; the next action is architecture review, not another retry.
+exhausted. The completed architecture review requires one body-free vector of
+all assertions before any consolidated correction, not another immediate
+retry.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
@@ -23,11 +25,10 @@ Repository validation: focused `12/12`; constraint set `172/172`; offline R4
 `587 passed / 0 failed / 111 frozen historical-runner tests skipped`;
 spine/Room typecheck, docs audit and diff-check Green.
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)
 

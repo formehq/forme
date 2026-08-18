@@ -14,14 +14,16 @@ verify-only commit `f005cbe` proved the same 172 constraints and corrected only
 their comparison order. The final lifecycle passed that check, then stopped at
 `public_core_unexpected_object_present`. Both runs cleaned exactly, but
 restart/rollback proof is still absent. This remains `0 Product Progress` and
-#77 is `Needs Decision`; no further pull or lifecycle is authorized. See the
-[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
+#77 is `Needs Decision`; no further pull or lifecycle is authorized. The
+completed architecture review requires one complete body-free assertion vector
+before any consolidated correction. See the
+[#77 result](docs/R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and
+[verify review](docs/R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md).
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ### Execution-management reset that preceded #77
 

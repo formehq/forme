@@ -10,14 +10,14 @@ occurred.
 
 NH1/NH2 are unchanged. The result reinforces the boundary: local computation
 may diagnose under an outcome envelope, but exhausted evidence budgets stop
-before repeated meaning changes. The next action is repository-only
-architecture review; no further runtime is implicit.
+before repeated meaning changes. The repository-only architecture review is
+complete; it proposes a complete body-free assertion vector before any later
+consolidated correction. No runtime is implicit.
 
-Current stop: `DISPOSABLE_POSTGRES_VERIFY_FAILED_CLEAN /
-CONSTRAINT_INVENTORY_CORRECTION_PROVEN /
-UNEXPECTED_OBJECT_ASSERTION_OBSERVED / LIFECYCLE_BUDGET_EXHAUSTED /
-ARCHITECTURE_REVIEW_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Current stop: `POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
+COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
+CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
 
