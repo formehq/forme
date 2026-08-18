@@ -1,6 +1,6 @@
 # Owner technical cockpit
 
-## Superseding current status — execution management reset, 2026-08-17
+## Superseding current status — #77 final failed-clean lifecycle, 2026-08-17
 
 #77's replacement diagnostic consumed one exact pull and evaluated all 18
 assertions. Its sole failure was the reviewed catalog-ordering class. The
@@ -13,6 +13,52 @@ Current stop: `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CL
 INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
 EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+### Plain-language product status
+
+- **Product progress in #77: 0.** The Owner still cannot complete the real
+  Public Room → private knock → durable local pull → fresh candidate → exact
+  response experience.
+- **What moved:** PostgreSQL 16 schema apply and the complete initial verify
+  are now proven in one isolated run, and exact cleanup remains proven.
+- **What remains before #67 can advance:** restart readiness, persistence after
+  restart and rollback rehearsal; after that, #67 still needs integration,
+  activation and one real Owner-experienced Guest encounter.
+- **Current blocker:** the restarted container never became ready within the
+  bounded check. The execution budget is exhausted, so another local run is
+  not an ordinary retry.
+- **Next action:** architecture review of restart readiness and the integration
+  shape. No Docker or PostgreSQL attempt is currently authorized.
+
+### Current local and remote integration truth
+
+- The current R4 implementation/evidence baseline on local branch
+  `codex/r4-public-core-local-postgres-wiring` is
+  `a2ce37947c2858eab5e6f5803af51a832fadc62d` / tree
+  `14245e17818d41850a204364a8193b0853dcae8a`. This repository-only
+  working-model reconciliation is layered locally above that baseline; neither
+  line has an upstream.
+- The implementation baseline is 123 commits and 163 changed paths beyond
+  Draft PR #76's remote head
+  `c831b4d5253049c4581d3c576aea59648d699d97`.
+- Draft PR #76 remains accurate historical evidence for Durable Public Core
+  Construction, but it does not contain or validate the current local line.
+- The broader integration Draft PR #65 and the open Draft PR stack likewise do
+  not provide remote or CI coverage for the implementation baseline or this
+  governance correction.
+- Before another runtime effect or merge review, create a reviewable
+  integration shape that separates current product implementation from the
+  historical governance/evidence chain. Push and merge remain
+  `NOT_REQUESTED` in this correction.
+
+### Current-truth routing
+
+Use this file and active issues #67/#77 for current execution truth. Use
+`PRODUCT.md` and `ROADMAP.md` for stable product meaning, an active integration
+PR for remote bytes and CI, and reports/evidence/Cards/Addenda/Reviews only as
+dated or immutable proof. `R4-EXECUTION-MANAGEMENT-RESET.md` now records the
+stable policy and historical checkpoints; it is no longer a competing live
+status surface.
 
 ## Execution-management reset before #77 (historical checkpoint)
 

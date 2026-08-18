@@ -1,120 +1,138 @@
 # Agent working agreement
 
-This repository is being rebuilt to keep implementation speed and owner understanding synchronized.
+This repository is being rebuilt to keep implementation speed, product
+progress, and Owner understanding synchronized. Global Codex preferences come
+from `~/.codex/AGENTS.md`; this file adds the stricter Forme contract.
 
 ## Before changing anything
 
 1. Read `docs/PRODUCT.md`, `docs/CONTROL.md`, and the active GitHub issue.
    Before runtime, context, file/tool authority, or R4 T3 work, also read
    `docs/NATIVE-HARNESS-ARCHITECTURE.md`.
-2. Name the user-visible outcome and current roadmap gate.
-3. Identify whether the change touches an owner stop gate.
-4. Keep one pull request to one demonstrable outcome.
+2. Name the user-visible outcome, current roadmap gate, and distance to the
+   next Owner-experience acceptance point.
+3. State whether the work creates product progress or is only an Enabler. An
+   Enabler reports `0 Product Progress` until a user capability changes.
+4. Identify any Owner stop gate and confirm that the current outcome envelope
+   covers it.
+5. Check that `docs/CONTROL.md`, the active issue, the GitHub Project item, the
+   integration PR, and the actual branch describe the same blocker and next
+   action before any runtime or external effect.
 
 ## Owner stop gates
 
-Do not implement past the proposal stage without explicit owner confirmation when a change:
+Do not implement past the proposal stage without explicit Owner confirmation
+when a change:
 
-- creates or changes durable state;
-- changes a schema or trust boundary;
-- grants an agent new file, shell, network, publish, or messaging authority;
+- changes a persisted product schema, migration, retention rule, canonical
+  meaning, or trust boundary;
+- grants a new class of file, shell, network, provider, publish, messaging,
+  credential, spend, production, or public authority;
 - changes what Codex or OpenCode may observe or execute;
-- changes projection privacy or audience rules;
-- adds a foundational dependency;
-- changes P0 scope, dates, or public behavior.
+- changes projection privacy, audience, representation, or authorship rules;
+- adds a foundational dependency or deployment topology;
+- changes P0 scope, dates, public behavior, or an Owner-accepted product
+  contract; or
+- expands a one-use or bounded physical-effect ceiling, retries after an
+  exhausted ceiling, or acts while effects are ambiguous.
+
+Ordinary repository files, tests, docs, evidence, and Git commits inside an
+already confirmed outcome envelope are not separate durable-state decisions.
 
 ## Outcome-envelope workflow
 
 Prefer one medium-grained Owner decision over a sequence of ceremonial
-per-file, per-commit, or per-hash approvals.
+per-file, per-commit, per-run, or per-hash approvals.
 
-Before implementation, state an outcome envelope containing:
+Before implementation, state one outcome envelope containing:
 
-- the user-visible outcome and current roadmap gate;
-- the allowed paths or bounded workset;
-- the data, permission, runtime, network, production, publication, spend, and
+- the user-visible result and current roadmap gate;
+- the bounded workset;
+- data, permission, runtime, network, production, publication, spend, and
   other external-effect ceilings;
-- the validation and evidence expected at Technical Review; and
-- the exact stop or review condition.
+- validation and Technical Review evidence; and
+- the exact exception or acceptance condition that returns control to the
+  Owner.
 
-Once the Owner confirms that envelope, proceed autonomously inside it through
-implementation, local/fake tests, bounded repairs, evidence freezing,
-documentation reconciliation, and commits. Recomputed hashes and ordinary
-implementation choices inside the confirmed envelope do not reopen an Owner
-gate.
+Once the Owner confirms the envelope, proceed autonomously through ordinary
+implementation, local/fake tests, body-free diagnostics, contract-preserving
+compatibility repairs, evidence freezing, current-status reconciliation, and
+local commits. Recomputed hashes, added regression cases, report wording, and
+other implementation choices inside the confirmed envelope do not reopen an
+Owner gate.
 
-Stop and return to the Owner when the work would cross an Owner stop gate,
-expand the outcome/workset/effect ceiling, make an external or irreversible
-effect not already explicit in the envelope, encounter ambiguous evidence or
-an exhausted safety ceiling, or materially change the promised result. A
-failed test that can be repaired inside the envelope is not by itself a new
-approval gate. Passing tests remains Technical Review, not Owner Experience
-Acceptance.
+Default Owner touchpoints are:
 
-## Drift control and escalation
+1. confirm the outcome envelope;
+2. review a real exception only if the envelope must change; and
+3. perform Owner Experience Acceptance when the result is demonstrable.
 
+A failed test that can be repaired inside the envelope is not a new approval
+gate. Passing tests remains Technical Review, not Owner Experience Acceptance.
+
+## Anti-ceremony and escalation
+
+- Do not create a new Card, Addendum, Owner Review, issue, or authority tree
+  for an ordinary implementation bug, platform wording difference, hash
+  refresh, body-free diagnostic variant, or bounded repair.
+- Plan runtime envelopes around the complete foreseeable outcome: diagnostic,
+  ordinary repair, verification, and exact cleanup. A physical-attempt ceiling
+  counts physical attempts, not Owner approvals.
 - Keep at most one active Walking Slice and one linked Enabler.
-- An Enabler earns no product-progress credit by itself. Every status update
-  starts by naming the new user capability, or says `0 Product Progress`.
-- Unless an approved outcome envelope says otherwise, an Enabler has a
-  two-working-day and two-full-attempt budget. Reaching either limit without
-  the promised result moves it to `Needs Decision`; do not create a child
-  Enabler, Card, Addendum, or approval chain to continue the same approach.
-- Two consecutive failures at the same abstraction boundary require an
-  architecture review before another attempt. Fixing an ordinary bug inside
-  an existing envelope remains ordinary implementation work.
-- Exact hashes are evidence, not the unit of Owner decision. Recomputed hashes,
-  platform wording, and low-level diagnostic variants do not reopen a gate
-  unless they expose ambiguous effects, a trust-boundary change, or an
-  exhausted ceiling.
-- GitHub Project, the active issue, the integration PR, and the current-status
-  repository documents must describe the same blocker and next action. If they
-  diverge, reconcile them before more implementation.
+- Unless an approved envelope says otherwise, an Enabler has a two-working-day
+  and two-full-attempt budget. Reaching either limit without the promised
+  result moves it to `Needs Decision`; do not create a child Enabler to extend
+  the same approach.
+- Two failures at the same abstraction boundary require architecture review
+  before another attempt.
+- Exact hashes are evidence, not units of Owner decision.
+- When implementation details are uncertain but the boundary is not, choose
+  the most reversible in-envelope path and continue.
+
+## Current-truth hierarchy
+
+Use these surfaces for distinct jobs:
+
+1. `docs/PRODUCT.md` and `docs/ROADMAP.md` — stable product meaning, scope, and
+   acceptance sequence;
+2. `docs/CONTROL.md` plus the active GitHub issue — current blocker, current
+   authority, and next action;
+3. the active integration PR — remote bytes and CI truth;
+4. evidence, result reports, Cards, Addenda, and Reviews — immutable or dated
+   historical proof.
+
+Historical evidence never overrides the current control surfaces. A policy or
+reset document must label dated execution snapshots as historical and point
+readers to `docs/CONTROL.md` for current truth.
+
+Update only the smallest current-status set during active work. `PRODUCT.md`,
+`ROADMAP.md`, and architecture documents change only when product or
+architecture truth changes; ordinary attempts update the active issue,
+`CONTROL.md`, one result report, and the integration PR when applicable.
+
+Do not claim remote integration, review, or CI for a local-only head. Before a
+new runtime effect, the current branch must either be represented by the
+active integration PR or be explicitly recorded as local-only in both
+`CONTROL.md` and the active issue.
 
 ## Non-negotiable boundaries
 
-- The owner retains final authority over meaning and authorship.
+- The Owner retains final authority over meaning and authorship.
 - Runtime sessions are disposable computation, never canonical truth.
-- Agent inference remains evidence-backed, uncertain, revisable, and invalidatable.
-- Under the Owner-approved NH2 two-class boundary, implemented
-  Forme-authoritative writes remain deterministic, authorized, inspectable,
-  and reversible where feasible.
-- Ordinary Native Workbench activity may use harness-native capabilities only
-  inside a separately approved runtime envelope. Its results may be offered
-  and admitted as evidence only through a separate typed Forme contract; they
-  are never auto-ingested as canonical meaning or a Forme-authoritative effect.
-- The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
-  tool, network, provider, credential, Guest, or Room authority.
-- The 2026-08-03 R4 T3 approval fixes the exact Fresh Native Response Session
-  contract. The 2026-08-03 T4 approval fixes the recommended public/admission,
-  unlist, stale, revoke, retirement, and successor lifecycle contract without
-  expanding `room_operator.v1`. The 2026-08-03 full T5 approval fixes explicit
-  sync/manual recovery, optional notification-only email, four exact
-  continuation presets (24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted
-  7d/10), body-retention ceilings, deletion/purge honesty, and the P0 cut.
-  These approvals authorized only authority-document and reconciled Control
-  Packet preparation. Packet v0.2 is independently audited at
-  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  The Owner approved those exact bytes on 2026-08-03. Gate A authorizes only
-  repository code/docs, synthetic fixtures, local/ephemeral tests, read-only
-  probes that expose no real content, and preparation of the next exact
-  manifest. A Fresh Native Response provider call, real Guest-data handling,
-  schema migration, deployment, spend, production Room mutation, external
-  message, secret, or public response capability remains unauthorized.
-  Schema/runtime/migration validation and any first provider call require the
-  separately approved Gate B Manifest and named test grant; production/public
-  action requires Gate C.
-- The Owner approved the five recommendations in the 2026-08-07 R4 Gate B
-  Correction Scope Decision Brief at
-  `sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`:
-  Demo-critical PostgreSQL Core, a separate Codex zero-call diagnostic
-  profile, the transient-candidate MVP exception, a disclosed procedural
-  controlling-Agent boundary, and retained pinned public PostgreSQL image
-  cache. That approval authorizes preparation of an exact Correction Packet
-  only. Until that Packet is separately approved, Correction Construction,
-  Retry Execution and First Provider Call remain unauthorized. The original
-  Full target remains immutable and Core Green must never be called Full
-  Green.
+- Agent inference remains evidence-backed, uncertain, revisable, and
+  invalidatable.
+- Under the Owner-approved NH2 two-class boundary, ordinary Native Workbench
+  activity may proceed only inside its admitted Harness envelope. Results are
+  not automatically Forme meaning or a Forme-authoritative effect.
+- Implemented Forme-authoritative writes remain deterministic, authorized,
+  inspectable, and reversible where feasible.
+- The approved R4 T3/T4/T5 and Demo-critical Core contracts remain product and
+  trust constraints. They do not by themselves grant a concrete runtime,
+  provider call, Guest-data access, production action, public effect, push,
+  merge, or Gate C authority.
+- Current operational authority comes from the active confirmed envelope and
+  current control surfaces, never from an old Card, Review, Packet, hash, or
+  successful historical run.
 - Private source existence never implies projection permission.
 - Unknown capabilities and invalid outputs fail closed.
 
@@ -122,14 +140,14 @@ Acceptance.
 
 Every implementation pull request must include:
 
-- the user outcome;
-- whether the change creates product progress or only enables later progress;
+- the user outcome and MVP-distance change;
+- whether it creates product progress or only enables later progress;
 - before/after behavior;
 - data and permission impact;
-- validation evidence;
-- a runnable demo path;
-- the Enabler time/attempt budget and stop condition when applicable;
-- what the owner should challenge;
-- documentation updates when the system understanding changes.
+- validation evidence and a runnable demo path;
+- Enabler time/attempt budget and stop condition when applicable;
+- what the Owner should challenge; and
+- documentation updates when shared system understanding changed.
 
-Passing tests is Technical Review. Only owner experience acceptance moves a core slice to Done.
+Passing tests is Technical Review. Only Owner Experience Acceptance moves a
+core slice to Done.

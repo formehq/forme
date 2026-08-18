@@ -1,7 +1,23 @@
-# R4 execution management reset
+# R4 execution-management policy and reset checkpoint
 
-Status: Owner-approved repository and GitHub execution-management correction,
-2026-08-17.
+Status: Owner-approved execution-management policy, with dated historical
+checkpoints from 2026-08-17.
+
+## How to read this document
+
+This file defines the stable operating model introduced by the R4 reset. It is
+not the live execution cockpit and should not be rewritten after every local
+attempt.
+
+Current truth lives in:
+
+1. [`CONTROL.md`](./CONTROL.md) and active Walking Slice
+   [#67](https://github.com/formehq/forme/issues/67);
+2. the linked Enabler [#77][issue-77]; and
+3. the active integration PR for remote bytes and CI.
+
+Execution details below are dated evidence. They never override those current
+control surfaces.
 
 ## Product result
 
@@ -13,82 +29,81 @@ R4 exists to complete one connected experience:
 
 Infrastructure is useful only when it removes a blocker from that story.
 
-## Current truth
+## #77 outcome checkpoint — 2026-08-17 (historical)
 
-Outcome after exercising this model and the later compatibility and diagnostic decisions on #77:
+The reset model was exercised through the complete approved #77 budget:
 
-- the Owner approved one medium-grained two-lifecycle envelope;
-- ordinary implementation and repairs proceeded without per-hash approvals;
-- both isolated runs reached PostgreSQL and cleaned exactly;
-- both failed at the same first-schema boundary, with the second reporting
-  PostgreSQL `42725 / op_error`;
-- the budget rule moved #77 to `Needs Decision` without creating another
-  Enabler or authority tree;
-- the Owner then approved one catalog-cast correction plus one cached-image
-  lifecycle with no pull and no retry;
-- that correction applied the complete schema, then failed cleanly at the
-  first read-only verify with project-defined `P0001 / exec_stmt_raise`;
-- the later strict body-free diagnostic became repository Green; one approved
-  pull then acquired the exact image and the first full lifecycle named
-  `public_core_constraint_inventory_drift`;
-- static proof found the same 172 constraints with four ordering-only
-  positions; verify-only commit `f005cbe` corrected that comparison;
-- the final lifecycle passed the corrected assertion and stopped at
-  `public_core_unexpected_object_present`;
-- all current-run residue is zero and both full lifecycle slots are consumed;
-- the repository-only architecture review is complete and requires one
-  complete body-free assertion vector before any consolidated correction,
-  rather than another child correction or immediate runtime attempt.
-- the Owner approved that consolidated path; commit `934e760` constructed the
-  complete 18-predicate body-free vector and passed repository review;
-- its one cached-image invocation found the exact digest absent, made no pull,
-  created no resources, reached no PostgreSQL/SQL and cleaned exactly;
-- no vector was observed, so the conditional correction and final lifecycle
-  remain locked pending a new Owner decision.
+- one medium-grained envelope covered ordinary implementation and repair
+  without per-file, per-commit, or per-hash approval;
+- isolated PostgreSQL attempts and body-free diagnostics cleaned exactly;
+- compatibility work preserved schema shape and business meaning while
+  correcting PostgreSQL 16 catalog expression assumptions;
+- replacement diagnostic run `0dddf25aee37504c` used the one approved exact
+  image pull and evaluated all 18 predicates;
+- its only failure, `public_core_unexpected_object_present`, matched the
+  reviewed catalog-ordering class;
+- one consolidated verify-only correction made fixed inventory comparisons
+  use explicit text `C` ordering without changing schema, rollback, expected
+  inventory, business meaning, or catalog-manifest results;
+- final run `71ac0e393653db72` used the cached image, applied the schema and
+  passed initial verify, then failed cleanly at restart readiness;
+- post-restart verification, persistence proof and rollback were not reached;
+- current-run container, network, volume, credential and runtime-root residue
+  is zero; and
+- all pull, diagnostic, correction and final-lifecycle allowances are
+  consumed. There is no retry under that envelope.
 
-Current stop:
+Historical checkpoint stop:
 
-`POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
-EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
-COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
+`POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
+INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
+EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
-The reset-start truth below is retained as the checkpoint that preceded #77.
+## Reset-start checkpoint — 2026-08-17 (historical)
 
-- #67 remains `Building / At Risk`; the complete experience is not in
-  Technical Review or Owner Acceptance.
-- Integration Campaign V4 is immutable failed-clean history. It reached no
-  PostgreSQL or SQL and left exact-owned residue at zero.
-- The existing local physical runner and its Correction/Card/Review chain are
-  frozen as historical evidence. They receive no routine fingerprint or
-  platform-wording extension.
-- R4 is not on `main`. At reset start, local HEAD `679176a` was 108 commits and
-  151 changed paths beyond the remote Draft PR #76 head; 99 of those paths were
-  documents and 33 were schemas. No open PR represents that local line. Draft
-  PR #65 is `Needs Decision / Blocked` until the history has a reviewable
-  integration shape.
-- This reset authorizes repository rules, status reconciliation and GitHub
-  metadata only. It authorizes no Docker, PostgreSQL, provider, Guest,
+- #67 remained `Building / At Risk`; the complete experience was not in Owner
+  Acceptance.
+- Integration Campaign V4 became immutable failed-clean history. It reached
+  no PostgreSQL or SQL and left exact-owned residue at zero.
+- The prior physical runner and Correction/Card/Review chain were frozen as
+  historical evidence rather than extended for routine fingerprints.
+- At reset start, local HEAD `679176a` was 108 commits and 151 changed paths
+  beyond remote Draft PR #76. No open PR represented that local line, and
+  Draft PR #65 required a reviewable integration shape.
+- The reset itself authorized repository rules, status reconciliation and
+  GitHub metadata only. It authorized no Docker, PostgreSQL, provider, Guest,
   publication, production, merge, push, spend or Gate C effect.
 
-## Operating model
+Reset-start stop:
+
+`R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
+DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
+DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## Stable operating model
 
 1. Keep one active Walking Slice: #67.
-2. Keep at most one linked Enabler:
-   [#77 — simplified disposable local PostgreSQL rehearsal][issue-77].
-3. The Enabler receives zero product-progress credit. Progress is the user
-   capability added to #67.
-4. Ordinary repairs inside an approved envelope do not create new Cards,
-   Addenda, Owner Reviews or per-hash approval requests.
-5. Two same-boundary failures, two full attempts, two working days without the
+2. Keep at most one linked Enabler.
+3. An Enabler receives zero product-progress credit. Progress is the user
+   capability added to the Walking Slice.
+4. Prefer one medium-grained result/effect envelope. Once approved, ordinary
+   code, tests, body-free diagnostics, bounded repairs, evidence, docs and
+   local commits proceed review-by-exception.
+5. Exact hashes and regenerated evidence are proof, not separate Owner
+   decisions.
+6. Ordinary repairs do not create new Cards, Addenda, Owner Reviews, Enablers
+   or per-hash approval requests.
+7. Two same-boundary failures, two full attempts, two working days without the
    promised result, ambiguous effects, or an Enabler needing another Enabler
-   forces `Needs Decision` and an architecture review.
-6. Technical Review is automated evidence. Done still requires Owner
+   forces `Needs Decision` and architecture review.
+8. Technical Review is automated evidence. Done still requires Owner
    Experience Acceptance.
 
-## Next Enabler contract
+## Original #77 Enabler contract (historical)
 
-The next proposal must produce one repeatable disposable PostgreSQL rehearsal:
+#77 was created to produce one repeatable disposable PostgreSQL rehearsal
+with:
 
 - unique run-scoped names and labels;
 - synthetic data only;
@@ -96,36 +111,43 @@ The next proposal must produce one repeatable disposable PostgreSQL rehearsal:
 - semantic/structured Docker result handling rather than complete stderr-body
   SHA allowlisting;
 - bounded readiness retries only when no ambiguous durable or external effect
-  can be replayed;
+  could replay;
 - schema apply and verification, restart recovery, rollback rehearsal, and
-  final exact-owned residue zero;
-- one implementation PR and one result report.
+  final exact-owned residue zero; and
+- one implementation PR and one concise result report.
 
-Default budget after a separate medium-grained runtime envelope is approved:
-two working days and at most two full lifecycles. Failure at that boundary
-replaces the approach; it does not start another authority-document tree.
+Its default budget was two working days and at most two full lifecycles after
+runtime-envelope approval. The historical outcome above exhausted its later
+approved extensions and returned to `Needs Decision`; it does not authorize a
+successor authority tree or another runtime attempt.
 
 ## Owner decision levels
 
-Normal repository implementation, tests, refactors, docs and already bounded
-local/synthetic repair are review-by-exception. Stop for the Owner only when:
+Normal repository implementation, tests, refactors, documentation and already
+bounded local/synthetic repair are review-by-exception. Return to the Owner
+when:
 
-1. schema, durable meaning or a trust boundary changes;
-2. real Guest data, a provider or an external message is used for the first
-   time; or
-3. production, public traffic or Gate C is requested.
+1. product meaning, a persisted schema, durable meaning or a trust boundary
+   changes;
+2. a new source/provider/effect class, real Guest data or an external message
+   is introduced;
+3. an approved physical budget or one-use authority must expand;
+4. effects are ambiguous; or
+5. production, public traffic, push, merge or Gate C is requested.
 
-## GitHub control
+## Current-truth and GitHub control
 
-GitHub Project is the current execution control surface. The active issue,
-linked Enabler, integration PR and current-status documents must agree on the
-same blocker and next action. Correction details remain evidence or subtasks;
-they do not become independent product milestones.
+GitHub Project is the execution board, while repository documents preserve the
+product and architecture contracts:
 
-Reset-start stop:
+- `PRODUCT.md` and `ROADMAP.md`: stable product meaning and acceptance order;
+- `CONTROL.md` plus the active issue: current blocker and next action;
+- active integration PR: remote bytes and CI truth;
+- reports, evidence, Cards, Addenda and Reviews: dated or immutable history.
 
-`R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
-DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
-DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+The active issue, linked Enabler, Project fields, integration PR and
+`CONTROL.md` must agree before another runtime or external effect. Correction
+details remain evidence or subtasks; they do not become independent product
+milestones.
 
 [issue-77]: https://github.com/formehq/forme/issues/77

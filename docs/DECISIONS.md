@@ -1990,3 +1990,41 @@ push, merge, spend or Gate C effect.
 **Stop:** `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
 DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
 DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## 2026-08-17 — Make medium-grained autonomy the persistent Codex working model
+
+**Decision:** persist the Owner's preferred collaboration model at both Codex
+global scope and Forme repository scope. One confirmed outcome envelope covers
+ordinary implementation, tests, body-free diagnostics, bounded repairs,
+evidence, current-status reconciliation and local commits. Exact hashes and
+implementation details are evidence, not separate decisions. The default
+Owner touchpoints are envelope confirmation, a real boundary exception if one
+appears, and Owner Experience Acceptance.
+
+**Stop gates:** return to the Owner for product meaning, persisted schema or
+durable meaning, trust/privacy/representation changes, foundational
+dependencies, new source/provider/effect classes, real data or external
+representation, expanded or ambiguous physical effects, production/public
+behavior, push, merge or Gate C. An ordinary in-envelope defect does not open
+a new Card/Addendum/Review chain. Two failures at the same abstraction boundary
+force architecture review instead of another narrow approval.
+
+**Current-truth hierarchy:** `PRODUCT.md` and `ROADMAP.md` hold stable product
+meaning; `CONTROL.md` and the active issue hold the current blocker and next
+action; the active integration PR holds remote-byte and CI truth; reports,
+evidence, Cards, Addenda and Reviews are dated or immutable proof. The reset
+document is policy plus historical checkpoints, not a competing live cockpit.
+
+**Current reconciliation:** #77 remains `Needs Decision / Blocked` with
+`0 Product Progress`. The final isolated lifecycle applied the schema and
+passed initial verify, then failed cleanly at restart readiness before
+persistence and rollback; exact cleanup passed and the execution budget is
+exhausted. The local implementation/evidence baseline `a2ce379` and the
+working-model correction layered above it have no upstream representation in
+Draft PR #76 or the wider Draft PR stack. No remote CI claim applies to those
+local bytes.
+
+**Effect:** this decision changes instructions, repository/GitHub control
+surfaces and local commits only. Docker, PostgreSQL, provider, Guest,
+publication, production, push, merge, spend and Gate C remain
+`NOT_REQUESTED`.
