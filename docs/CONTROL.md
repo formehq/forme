@@ -2,18 +2,15 @@
 
 ## Superseding current status — execution management reset, 2026-08-17
 
-#77 has one active consolidated continuation. The
-[complete assertion-vector result](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md)
-is repository Technical Review Green: all 18 original predicates are derived
-from the pinned verify source and the output membrane accepts only their closed
-identifiers. Construction made zero Docker/PostgreSQL effects. The next effect
-is exactly one cached-image, no-pull diagnostic lifecycle. A verify-only change
-is allowed only if its full vector matches reviewed catalog-expression
-assumptions. #67 stays `Building / At Risk` and earns no product progress here.
+#77's complete assertion-vector command is repository Technical Review Green,
+but its single cached-image invocation failed cleanly because the exact digest
+was no longer cached. It made no pull, created no resources and reached no
+PostgreSQL/SQL. The vector is unobserved; correction and final rehearsal remain
+locked. #67 stays `Building / At Risk` and earns no product progress here.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

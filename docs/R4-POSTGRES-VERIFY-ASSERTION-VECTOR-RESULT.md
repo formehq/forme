@@ -1,7 +1,17 @@
 # R4 PostgreSQL complete assertion-vector result
 
-Status: `REPOSITORY_TECHNICAL_REVIEW_GREEN / DIAGNOSTIC_LIFECYCLE_AUTHORIZED`,
+Status: `REPOSITORY_TECHNICAL_REVIEW_GREEN / DIAGNOSTIC_FAILED_CLEAN`,
 2026-08-17.
+
+## Physical diagnostic outcome
+
+The single authorized invocation, run `58fde18b4ff6cde3`, observed Docker
+client/server `29.3.1` on `linux/arm64`, then proved that the exact image digest
+was not cached. It stopped before resource creation, PostgreSQL and SQL. Image
+pulls were `0`; the exact container, network and volume names were absent and
+the private runtime root was removed. The complete assertion vector was not
+observed, so neither the conditional correction nor the final lifecycle is
+unlocked.
 
 ## User-visible outcome
 
@@ -62,7 +72,8 @@ rehearsal proves restart persistence and rollback.
 
 ## Runnable path and challenge points
 
-Authorized diagnostic command: `npm run r4:postgres:diagnose`.
+The consumed diagnostic command was `npm run r4:postgres:diagnose`; do not
+repeat it without a new Owner decision.
 
 The Owner should challenge any result that is not
 `DIAGNOSTIC_COMPLETE_CLEAN`, does not report `evaluatedAssertionCount: 18`,
@@ -72,7 +83,7 @@ envelope and cannot authorize a verify correction.
 
 ## Current stop
 
-`POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+`POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.

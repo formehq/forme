@@ -4,10 +4,11 @@ The repository keeps a deliberately small decision surface.
 
 ## Current execution truth — management reset, 2026-08-17
 
-#77 now has one approved consolidated continuation. Its complete body-free
-18-predicate diagnostic is repository Technical Review Green with zero
-physical effects. Exactly one cached-image, no-pull diagnostic lifecycle is
-authorized; a correction remains conditional on the resulting complete vector.
+#77's complete body-free 18-predicate diagnostic is repository Technical
+Review Green. Its one cached-image invocation found the exact digest absent
+and stopped with zero pull, zero resource creation, zero PostgreSQL/SQL and
+exact cleanup. The vector is unobserved; correction and final rehearsal remain
+locked pending a new Owner decision.
 
 See the
 [`#77 result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md) and its
@@ -15,9 +16,9 @@ See the
 the
 [`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

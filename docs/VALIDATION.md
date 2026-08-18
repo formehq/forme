@@ -2,12 +2,11 @@
 
 ## Current verdict — R4 execution management reset
 
-Enabler #77 still has no product progress, but its complete body-free
-assertion-vector command is repository Technical Review Green. It derives and
-evaluates all 18 original predicates without first-failure short-circuiting,
-accepts only their closed identifiers and refuses image pull. Construction
-made zero Docker/PostgreSQL effects. One cached-image diagnostic lifecycle is
-authorized; restart/rollback proof remains absent.
+Enabler #77 still has no product progress. Its complete body-free assertion
+vector is repository Technical Review Green, but the single cached-image
+invocation found the exact digest absent. It made no pull, created no resource,
+reached no PostgreSQL/SQL and cleaned exactly. Zero of 18 predicates were
+physically evaluated; restart/rollback proof remains absent.
 
 Evidence:
 [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
@@ -20,9 +19,9 @@ set `172/172`; offline R4
 `45/45`; Gate-B Core final rerun `146/146`; spine/Room typecheck, docs audit and
 diff-check Green.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset verdict before #77 (historical checkpoint)

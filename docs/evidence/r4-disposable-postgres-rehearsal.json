@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v3",
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v4",
   "issue": 77,
-  "status": "VERIFY_FAILED_CLEAN_LIFECYCLE_BUDGET_EXHAUSTED",
+  "status": "COMPLETE_ASSERTION_VECTOR_DIAGNOSTIC_IMAGE_NOT_CACHED_FAILED_CLEAN",
   "productProgress": 0,
   "attemptBudget": {
     "originalEnvelope": {
@@ -23,6 +23,14 @@
       "fullPostgresLifecyclesConsumed": 2,
       "anonymousImagePullsAllowed": 1,
       "anonymousImagePullsConsumed": 1
+    },
+    "completeAssertionVectorContinuation": {
+      "diagnosticInvocationsAllowed": 1,
+      "diagnosticInvocationsConsumed": 1,
+      "finalFullLifecyclesAllowed": 1,
+      "finalFullLifecyclesConsumed": 0,
+      "anonymousImagePullsAllowed": 0,
+      "anonymousImagePullsConsumed": 0
     }
   },
   "bindings": {
@@ -60,6 +68,16 @@
       "runnerSha256": "sha256:4d3f93638882a5718b9208b1613f16f84cac56315bab23f68e536bed52a2b432",
       "rehearsalTestSha256": "sha256:4ff46b22b648bbd308d2ca757780b4dee5e82531a8d3ef592a414879f61ca022",
       "postgresContractTestSha256": "sha256:a817cf9fb73468591bb540cd65679ce3f17d4f2799d8a1b8d1db150f19a32b72"
+    },
+    "completeAssertionVectorConstruction": {
+      "commit": "934e76009c4628c557f533e5e5bc0657d6071b04",
+      "tree": "0823d0ca15bf1dff391ccb4b985fa634352cef67",
+      "runnerSha256": "sha256:edee318bae6cf070631afb21aa9eca305150d8434ebd81f15bc7a2c6a5057aab",
+      "testSha256": "sha256:84973553ad3ea9bfe870683a251dd6a9df1a8c878b2eaabfe9aa71e51187b914",
+      "constructionReportSha256": "sha256:8d184d801e28b8a1ff183b7c2764e214c2ad3fc0102a7cab853130203989eeff",
+      "verifySourceSha256": "sha256:f964e22b4a2b0a7989e6286e018d1436c3cec889216a9eb87a06a62e5c27df97",
+      "derivedDiagnosticSqlSha256": "sha256:395403c01b38f259f76a986af84a9cc7082cfbd01b90ec79522bb2a65c9fb8fc",
+      "verifyAssertionEnumCount": 18
     }
   },
   "attempts": [
@@ -275,15 +293,51 @@
         "volume": true,
         "credentialAndRuntimeRoot": true
       }
+    },
+    {
+      "runId": "58fde18b4ff6cde3",
+      "bindingSet": "completeAssertionVectorConstruction",
+      "startedAt": "2026-08-18T00:25:49.284Z",
+      "finishedAt": "2026-08-18T00:25:50.486Z",
+      "status": "FAILED_CLEAN",
+      "imagePulled": false,
+      "exactImageCached": false,
+      "dockerHost": {
+        "clientVersion": "29.3.1",
+        "serverVersion": "29.3.1",
+        "platform": "linux/arm64"
+      },
+      "postgresReady": false,
+      "schemaApplied": false,
+      "assertionCount": 18,
+      "evaluatedAssertionCount": 0,
+      "failedAssertionIds": null,
+      "failure": {
+        "code": "disposable_postgres_image_not_cached",
+        "phase": "docker.image.inspect"
+      },
+      "dockerCallCounts": {
+        "version": 1,
+        "image.inspect": 1,
+        "container.list": 2,
+        "network.list": 2,
+        "volume.list": 2
+      },
+      "finalAbsent": {
+        "container": true,
+        "network": true,
+        "volume": true,
+        "credentialAndRuntimeRoot": true
+      }
     }
   ],
   "validation": {
     "focusedHarnessTests": {
-      "passed": 12,
+      "passed": 16,
       "failed": 0
     },
     "offlineR4Regression": {
-      "passed": 587,
+      "passed": 591,
       "failed": 0,
       "skippedHistoricalPhysicalRunnerTests": 111
     },
@@ -309,16 +363,18 @@
     "productionEffects": 0,
     "publicTrafficEffects": 0,
     "gateCEffects": 0,
-    "exactImageCachedAtLatestDiagnostic": true,
+    "exactImageCachedAtLatestDiagnostic": false,
     "imagePullsInApprovedContinuation": 1,
     "imagePullsInLatestLifecycle": 0,
-    "fullPostgresLifecyclesInApprovedContinuation": 2
+    "fullPostgresLifecyclesInApprovedContinuation": 2,
+    "diagnosticInvocationsInCompleteVectorContinuation": 1,
+    "fullPostgresLifecyclesInCompleteVectorContinuation": 0
   },
   "inference": {
-    "classification": "VERIFY_SUCCESSOR_ASSERTION_OBSERVED_BUDGET_EXHAUSTED",
+    "classification": "COMPLETE_VECTOR_NOT_OBSERVED_IMAGE_NOT_CACHED",
     "confidence": "HIGH",
-    "basis": "The only authorized anonymous pull acquired the exact linux/arm64 digest. The first full lifecycle applied the schema and named public_core_constraint_inventory_drift. Repository comparison proved that the same 172 signatures differed only at four positions because the query ordered table/name while the fixed inventory used full signatures. Commit f005cbef corrected only that ordering. The final lifecycle passed that assertion and stopped at the next allowlisted assertion, public_core_unexpected_object_present. Both lifecycles cleaned their exact-owned resources and runtime roots.",
-    "suspectedArea": "The broad unexpected-object assertion combines several catalog predicates, so the physical evidence does not identify which predicate disagreed. Static review finds another mixed ordering domain in the pg_type inventory (catalog name order versus text-signature order), but that is a hypothesis, not a proven correction. No lifecycle, pull, or further verify change remains authorized."
+    "basis": "Repository commit 934e760 constructs a deterministic body-free diagnostic over all 18 original predicates and is fully regression Green. Its single authorized cached-image invocation observed Docker 29.3.1 linux/arm64 but the exact digest was not cached. The command made no pull, created no resource, reached no PostgreSQL or SQL, and proved every exact-owned name and runtime root absent.",
+    "suspectedArea": "The broad unexpected-object assertion still has a high-confidence static pg_type ordering candidate, but the complete physical assertion vector was not observed. The conditional verify-only correction and final lifecycle therefore remain locked."
   },
-  "stop": "POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE / COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED / CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "stop": "POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN / EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED / COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

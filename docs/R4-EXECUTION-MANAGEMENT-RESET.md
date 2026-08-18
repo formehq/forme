@@ -39,12 +39,18 @@ Outcome after exercising this model and the later compatibility and diagnostic d
 - the repository-only architecture review is complete and requires one
   complete body-free assertion vector before any consolidated correction,
   rather than another child correction or immediate runtime attempt.
+- the Owner approved that consolidated path; commit `934e760` constructed the
+  complete 18-predicate body-free vector and passed repository review;
+- its one cached-image invocation found the exact digest absent, made no pull,
+  created no resources, reached no PostgreSQL/SQL and cleaned exactly;
+- no vector was observed, so the conditional correction and final lifecycle
+  remain locked pending a new Owner decision.
 
 Current stop:
 
-`POSTGRES_VERIFY_ARCHITECTURE_REVIEW_COMPLETE /
-COMPLETE_BODY_FREE_ASSERTION_VECTOR_REQUIRED /
-CONSOLIDATED_CORRECTION_ENVELOPE_REQUIRED / PHYSICAL_EXECUTION_NOT_REQUESTED /
+`POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 The reset-start truth below is retained as the checkpoint that preceded #77.

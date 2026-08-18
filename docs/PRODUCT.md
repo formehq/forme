@@ -2,20 +2,19 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-Enabler #77 now has one approved consolidated continuation. Its complete
-body-free assertion vector is repository Technical Review Green and evaluates
-all 18 verify predicates in one read-only pass. Construction made no physical
-effect. One cached-image, no-pull diagnostic lifecycle is authorized; only a
-matching catalog-expression vector may unlock one consolidated verify-only
-correction and one final lifecycle.
+Enabler #77's complete body-free assertion vector is repository Technical
+Review Green. Its single authorized cached-image invocation found the exact
+digest absent and stopped before resource creation, PostgreSQL or SQL, with no
+pull and exact cleanup. The vector is unobserved; correction and final
+lifecycle remain locked pending a new Owner decision.
 
 This is still `0 Product Progress`. The #67 experience remains `Building / At
 Risk`; restart, persistence and rollback are still unproved. See the
 [`assertion-vector result`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md).
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)

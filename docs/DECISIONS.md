@@ -21,6 +21,12 @@ closed. No third lifecycle or assertion-by-assertion continuation exists.
 assertions per physical run. A complete closed vector keeps diagnostic content
 body-free while preventing another serial patch/run chain.
 
+**Outcome:** repository construction reached Technical Review Green at
+`934e760`. The one cached-image invocation then found the exact digest absent
+and stopped before resource creation, PostgreSQL or SQL. Pull remained zero and
+cleanup was exact. The vector is unobserved, so correction and final rehearsal
+remain locked pending a new Owner decision.
+
 ## 2026-08-17 — Prove one verify correction, then stop at the successor assertion
 
 **Decision:** the Owner authorized one anonymous pull of the exact PostgreSQL

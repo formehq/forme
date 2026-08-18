@@ -2,16 +2,15 @@
 
 ## Superseding R4 execution status — 2026-08-17
 
-NH1/NH2 are unchanged. Under the newly approved consolidated #77 envelope, the
-complete 18-predicate body-free diagnostic is repository Technical Review
-Green. It derives from the pinned verify source instead of copying catalog
-logic and accepts no arbitrary database message. Construction made zero
-physical effects. Exactly one cached-image, no-pull diagnostic lifecycle is
-authorized; later correction remains conditional on its complete vector.
+NH1/NH2 are unchanged. The complete 18-predicate body-free diagnostic is
+repository Technical Review Green. Its one cached-image invocation found the
+exact digest absent and stopped before resource creation or SQL, with zero pull
+and exact cleanup. The vector remains unobserved, so later correction and final
+lifecycle remain locked.
 
-Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_REPOSITORY_TECHNICAL_REVIEW_GREEN /
-ONE_BODY_FREE_DIAGNOSTIC_LIFECYCLE_AUTHORIZED /
-CONDITIONAL_CONSOLIDATED_VERIFY_ONLY_CORRECTION /
+Current stop: `POSTGRES_VERIFY_ASSERTION_VECTOR_DIAGNOSTIC_FAILED_CLEAN /
+EXACT_IMAGE_NOT_CACHED / DIAGNOSTIC_INVOCATION_CONSUMED /
+COMPLETE_VECTOR_NOT_OBSERVED / NEW_OWNER_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Execution-management reset before #77 (historical checkpoint)
