@@ -2412,6 +2412,14 @@ test("fixed verify inventories use one explicit text C-ordering contract", () =>
     VERIFY,
     /pg_catalog\.md5\(string_agg\(signature, E'\\n' ORDER BY signature\)\)/u,
   );
+  assert.match(
+    ROLLBACK,
+    /array_agg\(table_name::text ORDER BY table_name::text COLLATE "C"\)/u,
+  );
+  assert.match(
+    ROLLBACK,
+    /array_agg\(indexname::text ORDER BY indexname::text COLLATE "C"\)/u,
+  );
 });
 
 test("janitor failure records a closed failure code in a separate transaction", async () => {

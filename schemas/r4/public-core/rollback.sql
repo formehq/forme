@@ -5,6 +5,7 @@
 -- seeds created by schema.sql are eligible for removal.
 
 BEGIN;
+SET LOCAL search_path = pg_catalog, forme_r4_public_core;
 
 DO $rollback_guard$
 DECLARE
@@ -57,7 +58,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_schema_absent';
   END IF;
 
-  SELECT array_agg(table_name::text ORDER BY table_name)
+  SELECT array_agg(table_name::text ORDER BY table_name::text COLLATE "C")
     INTO actual_tables
     FROM information_schema.tables
     WHERE table_schema = 'forme_r4_public_core'
@@ -67,7 +68,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_rollback_inventory_drift';
   END IF;
 
-  SELECT array_agg(indexname::text ORDER BY indexname)
+  SELECT array_agg(indexname::text ORDER BY indexname::text COLLATE "C")
     INTO actual_indexes FROM pg_catalog.pg_indexes
    WHERE schemaname = 'forme_r4_public_core';
   IF actual_indexes IS DISTINCT FROM expected_indexes THEN

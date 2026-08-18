@@ -34,6 +34,20 @@ export const VERIFY_ASSERTION_IDS = Object.freeze([
 ]);
 const VERIFY_ASSERTION_ID_SET = new Set(VERIFY_ASSERTION_IDS);
 const VERIFY_DIAGNOSTIC_STATUS = "PUBLIC_CORE_ASSERTION_VECTOR_COMPLETE";
+export const ROLLBACK_ASSERTION_IDS = Object.freeze([
+  "public_core_schema_absent",
+  "public_core_rollback_inventory_drift",
+  "public_core_rollback_index_inventory_drift",
+  "public_core_rollback_definition_drift",
+  "public_core_rollback_catalog_manifest_drift",
+  "public_core_rollback_unexpected_object",
+  "public_core_rollback_external_dependency",
+  "public_core_rollback_installation_seed_drift",
+  "public_core_rollback_retention_seed_drift",
+  "public_core_rollback_durable_rows_present",
+]);
+const ROLLBACK_ASSERTION_ID_SET = new Set(ROLLBACK_ASSERTION_IDS);
+const ROLLBACK_DIAGNOSTIC_STATUS = "PUBLIC_CORE_ROLLBACK_ASSERTION_VECTOR_COMPLETE";
 export const SQL_BINDINGS = Object.freeze({
   schema: Object.freeze({
     path: "schemas/r4/public-core/schema.sql",
@@ -45,7 +59,7 @@ export const SQL_BINDINGS = Object.freeze({
   }),
   rollback: Object.freeze({
     path: "schemas/r4/public-core/rollback.sql",
-    sha256: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
+    sha256: "sha256:618f5de12e7d5b0aeae56229c055aacf1ea9936adfad8c14bed87b80d5650c61",
   }),
 });
 
@@ -99,6 +113,10 @@ function errorCode(error) {
 
 function classifyConnectFailure(error) {
   const code = errorCode(error);
+  // During PostgreSQL startup, pg can report a terminated startup handshake
+  // without a stable error code. No readiness query has been sent at this
+  // point, so a bounded retry cannot replay a database effect.
+  if (code === null) return "CONNECT_RETRYABLE";
   if (code !== null && RETRYABLE_READINESS_CODES.has(code)) return "CONNECT_RETRYABLE";
   if (code !== null && AUTH_OR_CONFIGURATION_CODES.has(code)) return "AUTH_OR_CONFIGURATION_FAILED";
   return "CONNECT_FAILED";
@@ -183,6 +201,55 @@ export function buildVerifyAssertionDiagnosticSql(verifySql) {
   return diagnosticSql;
 }
 
+export function projectRollbackAssertionNotice(notice) {
+  if (notice === null || typeof notice !== "object" || Array.isArray(notice)) return null;
+  return notice.code === "00000"
+    && notice.severity === "NOTICE"
+    && notice.routine === "exec_stmt_raise"
+    && typeof notice.message === "string"
+    && ROLLBACK_ASSERTION_ID_SET.has(notice.message)
+    ? notice.message
+    : null;
+}
+
+export function normalizeRollbackAssertionVector(assertionIds) {
+  if (!Array.isArray(assertionIds) || assertionIds.some((value) => typeof value !== "string")) {
+    fail("disposable_postgres_rollback_diagnostic_invalid", "postgres.rollback-diagnostic", { ambiguous: true });
+  }
+  const positions = assertionIds.map((value) => ROLLBACK_ASSERTION_IDS.indexOf(value));
+  if (positions.some((position) => position < 0)
+      || new Set(assertionIds).size !== assertionIds.length
+      || positions.some((position, index) => index > 0 && position <= positions[index - 1])) {
+    fail("disposable_postgres_rollback_diagnostic_invalid", "postgres.rollback-diagnostic", { ambiguous: true });
+  }
+  return Object.freeze([...assertionIds]);
+}
+
+export function buildRollbackAssertionDiagnosticSql(rollbackSql) {
+  if (typeof rollbackSql !== "string" || !rollbackSql.startsWith("-- R4 #67 Durable Public Core proposed rollback.")) {
+    fail("disposable_postgres_rollback_diagnostic_source_invalid", "sql.rollback-diagnostic");
+  }
+  const raisePattern = /RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = '([a-z0-9_]+)';/gu;
+  const identifiers = [...rollbackSql.matchAll(raisePattern)].map((match) => match[1]);
+  if (canonicalJson(identifiers) !== canonicalJson(ROLLBACK_ASSERTION_IDS)) {
+    fail("disposable_postgres_rollback_diagnostic_source_invalid", "sql.rollback-diagnostic");
+  }
+  const guardPattern = /DO \$rollback_guard\$[\s\S]*?\$rollback_guard\$;/gu;
+  const guards = rollbackSql.match(guardPattern) ?? [];
+  if (guards.length !== 1) fail("disposable_postgres_rollback_diagnostic_source_invalid", "sql.rollback-diagnostic");
+  const diagnosticGuard = guards[0].replace(
+    raisePattern,
+    (_statement, identifier) => `RAISE NOTICE USING ERRCODE = '00000', MESSAGE = '${identifier}';`,
+  );
+  const diagnosticSql = `BEGIN TRANSACTION READ ONLY;\n\n${diagnosticGuard}\n\nSELECT '${ROLLBACK_DIAGNOSTIC_STATUS}'::text AS status, ${ROLLBACK_ASSERTION_IDS.length}::integer AS assertion_count;\n\nROLLBACK;\n`;
+  if (diagnosticSql.includes("RAISE EXCEPTION USING ERRCODE = 'P0001'")
+      || (diagnosticSql.match(/RAISE NOTICE USING ERRCODE = '00000'/gu) ?? []).length !== ROLLBACK_ASSERTION_IDS.length
+      || /\b(?:ALTER|DROP|COMMIT)\b/u.test(diagnosticSql)) {
+    fail("disposable_postgres_rollback_diagnostic_source_invalid", "sql.rollback-diagnostic");
+  }
+  return diagnosticSql;
+}
+
 function exactObject(value, phase) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) fail("disposable_postgres_docker_result_invalid", phase, { ambiguous: true });
   return value;
@@ -210,6 +277,12 @@ export function parseCliArguments(argv) {
   }
   if (argv.length === 2 && argv[0] === "diagnose" && argv[1] === "--allow-image-pull") {
     return Object.freeze({ mode: "diagnose", allowImagePull: true });
+  }
+  if (argv.length === 1 && argv[0] === "diagnose-rollback") {
+    return Object.freeze({ mode: "diagnose-rollback", allowImagePull: false });
+  }
+  if (argv.length === 2 && argv[0] === "diagnose-rollback" && argv[1] === "--allow-image-pull") {
+    return Object.freeze({ mode: "diagnose-rollback", allowImagePull: true });
   }
   if (argv.length === 1 && argv[0] === "--allow-image-pull") {
     return Object.freeze({ mode: "rehearse", allowImagePull: true });
@@ -251,10 +324,13 @@ export function readPinnedSql(repositoryRoot = REPOSITORY_ROOT) {
     result[kind] = bytes.toString("utf8");
   }
   const verifyDiagnostic = buildVerifyAssertionDiagnosticSql(result.verify);
+  const rollbackDiagnostic = buildRollbackAssertionDiagnosticSql(result.rollback);
   return Object.freeze({
     ...result,
     verifyDiagnostic,
     verifyDiagnosticSha256: sha256(Buffer.from(verifyDiagnostic, "utf8")),
+    rollbackDiagnostic,
+    rollbackDiagnosticSha256: sha256(Buffer.from(rollbackDiagnostic, "utf8")),
   });
 }
 
@@ -777,6 +853,43 @@ function createPhysicalPostgres(spec, runtime) {
     }
   }
 
+  async function diagnoseRollback(port, sql, phase) {
+    const client = new Client(config(port));
+    const assertionIds = [];
+    let unexpectedNotice = false;
+    let connected = false;
+    const onNotice = (notice) => {
+      const identifier = projectRollbackAssertionNotice(notice);
+      if (identifier === null) unexpectedNotice = true;
+      else assertionIds.push(identifier);
+    };
+    client.on("notice", onNotice);
+    try {
+      await client.connect();
+      connected = true;
+      const rawResult = await client.query(sql);
+      if (unexpectedNotice) fail("disposable_postgres_rollback_diagnostic_invalid", phase, { ambiguous: true });
+      const results = Array.isArray(rawResult) ? rawResult : [rawResult];
+      const markers = results.flatMap((result) => Array.isArray(result?.rows) ? result.rows : [])
+        .filter((row) => row?.status === ROLLBACK_DIAGNOSTIC_STATUS);
+      if (markers.length !== 1
+          || canonicalJson(Object.keys(markers[0]).sort()) !== canonicalJson(["assertion_count", "status"])
+          || markers[0].assertion_count !== ROLLBACK_ASSERTION_IDS.length) {
+        fail("disposable_postgres_rollback_diagnostic_invalid", phase, { ambiguous: true });
+      }
+      return normalizeRollbackAssertionVector(assertionIds);
+    } catch (error) {
+      if (error instanceof RehearsalError) throw error;
+      fail("disposable_postgres_sql_failed", phase, { ambiguous: true });
+    } finally {
+      client.off("notice", onNotice);
+      if (connected) {
+        try { await client.end(); }
+        catch { /* the disposable container/volume cleanup is the final closure */ }
+      }
+    }
+  }
+
   async function installationSeed(port) {
     return withClient(port, "postgres.seed", async (client) => {
       const result = await client.query(
@@ -794,7 +907,7 @@ function createPhysicalPostgres(spec, runtime) {
     });
   }
 
-  return Object.freeze({ waitReady, serverVersion, execute, diagnose, installationSeed, schemaAbsent });
+  return Object.freeze({ waitReady, serverVersion, execute, diagnose, diagnoseRollback, installationSeed, schemaAbsent });
 }
 
 function expectedSeed() {
@@ -806,9 +919,11 @@ function expectedSeed() {
   });
 }
 
-export async function runRehearsal({
+async function runPostRestartCampaign({
   spec, docker, postgres, sql, startedAt = new Date().toISOString(), allowImagePull = false,
+  diagnosticMode = false,
 }) {
+  if (typeof diagnosticMode !== "boolean") fail("disposable_postgres_rollback_diagnostic_input_invalid", "input");
   const state = {
     host: null,
     imagePulled: false,
@@ -821,6 +936,7 @@ export async function runRehearsal({
     restartCount: 0,
     rollbackApplied: false,
     rollbackProven: false,
+    rollbackAssertionIds: null,
     seedBeforeRestart: null,
     seedAfterRestart: null,
     resourceIds: { container: null, network: null, volume: null },
@@ -869,7 +985,10 @@ export async function runRehearsal({
     await docker.stopContainer();
     await docker.startContainer();
     state.restartCount = 1;
-    await docker.publishedPort(state.port, "docker.container.restart");
+    // Docker may assign a new random loopback host port when the same exact
+    // container is started again. Re-inspect the owned running container and
+    // use that newly proven loopback binding for the restart probe.
+    state.port = await docker.publishedPort(null, "docker.container.restart");
     const restartReadiness = await postgres.waitReady(
       state.port,
       "postgres.readiness.restart",
@@ -882,10 +1001,16 @@ export async function runRehearsal({
     state.seedAfterRestart = await postgres.installationSeed(state.port);
     if (canonicalJson(state.seedAfterRestart) !== canonicalJson(state.seedBeforeRestart)) fail("disposable_postgres_restart_persistence_failed", "postgres.seed");
 
-    await postgres.execute(state.port, sql.rollback, "postgres.rollback");
-    state.rollbackApplied = true;
-    state.rollbackProven = await postgres.schemaAbsent(state.port);
-    if (!state.rollbackProven) fail("disposable_postgres_rollback_proof_failed", "postgres.rollback-proof", { ambiguous: true });
+    if (diagnosticMode) {
+      state.rollbackAssertionIds = normalizeRollbackAssertionVector(
+        await postgres.diagnoseRollback(state.port, sql.rollbackDiagnostic, "postgres.rollback-diagnostic"),
+      );
+    } else {
+      await postgres.execute(state.port, sql.rollback, "postgres.rollback");
+      state.rollbackApplied = true;
+      state.rollbackProven = await postgres.schemaAbsent(state.port);
+      if (!state.rollbackProven) fail("disposable_postgres_rollback_proof_failed", "postgres.rollback-proof", { ambiguous: true });
+    }
   } catch (error) {
     primaryFailure = sanitizeError(error);
     if (primaryFailure.phase === "postgres.readiness.initial" && primaryFailure.diagnostic?.readinessOutcome !== undefined) {
@@ -900,23 +1025,45 @@ export async function runRehearsal({
   }
 
   const cleanupGreen = cleanupFailure === null && cleanup.container && cleanup.network && cleanup.volume;
+  const restartPersistenceProven = canonicalJson(state.seedBeforeRestart) === canonicalJson(state.seedAfterRestart)
+    && state.seedBeforeRestart !== null;
   const green = primaryFailure === null && cleanupGreen && state.schemaApplied && state.verifyCount === 2
     && state.restartCount === 1 && state.rollbackApplied && state.rollbackProven;
+  const diagnosticComplete = diagnosticMode && primaryFailure === null && cleanupGreen
+    && state.schemaApplied && state.verifyCount === 2 && state.restartCount === 1
+    && restartPersistenceProven && state.rollbackAssertionIds !== null;
   return Object.freeze({
-    schemaVersion: "r4.disposable-postgres-rehearsal-result.v2",
-    status: green ? "GREEN" : cleanupGreen ? "FAILED_CLEAN" : "FAILED_CLEANUP_AMBIGUOUS",
+    schemaVersion: diagnosticMode
+      ? "r4.disposable-postgres-rollback-diagnostic-result.v1"
+      : "r4.disposable-postgres-rehearsal-result.v2",
+    status: diagnosticComplete ? "DIAGNOSTIC_COMPLETE_CLEAN"
+      : green ? "GREEN" : cleanupGreen ? "FAILED_CLEAN" : "FAILED_CLEANUP_AMBIGUOUS",
     runId: spec.runId,
     startedAt,
     finishedAt: new Date().toISOString(),
-    outcome: Object.freeze({
+    outcome: Object.freeze(diagnosticMode ? {
       schemaApplied: state.schemaApplied,
       verifyCount: state.verifyCount,
       restartCount: state.restartCount,
-      restartPersistenceProven: canonicalJson(state.seedBeforeRestart) === canonicalJson(state.seedAfterRestart) && state.seedBeforeRestart !== null,
+      restartPersistenceProven,
+      assertionCount: ROLLBACK_ASSERTION_IDS.length,
+      evaluatedAssertionCount: state.rollbackAssertionIds === null ? 0 : ROLLBACK_ASSERTION_IDS.length,
+      failedAssertionIds: state.rollbackAssertionIds,
+    } : {
+      schemaApplied: state.schemaApplied,
+      verifyCount: state.verifyCount,
+      restartCount: state.restartCount,
+      restartPersistenceProven,
       rollbackApplied: state.rollbackApplied,
       rollbackProven: state.rollbackProven,
     }),
-    bindings: Object.freeze({
+    bindings: Object.freeze(diagnosticMode ? {
+      imageReference: IMAGE_REFERENCE,
+      imagePlatform: IMAGE_PLATFORM,
+      postgresServerVersionNum: POSTGRES_SERVER_VERSION_NUM,
+      sql: Object.freeze(Object.fromEntries(Object.entries(SQL_BINDINGS).map(([kind, binding]) => [kind, binding.sha256]))),
+      rollbackDiagnosticSha256: sql.rollbackDiagnosticSha256,
+    } : {
       imageReference: IMAGE_REFERENCE,
       imagePlatform: IMAGE_PLATFORM,
       postgresServerVersionNum: POSTGRES_SERVER_VERSION_NUM,
@@ -950,6 +1097,14 @@ export async function runRehearsal({
     failure: primaryFailure,
     cleanupFailure,
   });
+}
+
+export async function runRehearsal(input) {
+  return runPostRestartCampaign({ ...input, diagnosticMode: false });
+}
+
+export async function runRollbackDiagnosticRehearsal(input) {
+  return runPostRestartCampaign({ ...input, diagnosticMode: true });
 }
 
 export async function runVerifyDiagnosticRehearsal({
@@ -1082,7 +1237,9 @@ async function main() {
     const postgres = createPhysicalPostgres(spec, runtime);
     result = cli.mode === "diagnose"
       ? await runVerifyDiagnosticRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull })
-      : await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
+      : cli.mode === "diagnose-rollback"
+        ? await runRollbackDiagnosticRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull })
+        : await runRehearsal({ spec, docker, postgres, sql, allowImagePull: cli.allowImagePull });
   } catch (error) {
     result = Object.freeze({
       schemaVersion: "r4.disposable-postgres-rehearsal-result.v2",
