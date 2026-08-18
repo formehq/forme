@@ -194,6 +194,7 @@ type ReadinessStep = "ready" | "result_invalid" | "query_failed" | "close_failed
 function scriptedReadinessClient(step: ReadinessStep, counters: { ended: number }) {
   return {
     async connect(): Promise<void> {
+      if (step === "connect_no_code") throw new Error("body must not cross");
       if (!["ready", "result_invalid", "query_failed", "close_failed"].includes(step)) {
         throw Object.assign(new Error("body must not cross"), { code: step });
       }
@@ -285,6 +286,22 @@ test("production readiness retries only closed transient connects and preserves 
   assert.deepEqual(result, { readinessOutcome: "READY", attempts: 3 });
   assert.deepEqual(attempts, [1, 2, 3]);
   assert.equal(counters.ended, 3);
+
+  const startupHandshakeSteps: ReadinessStep[] = ["connect_no_code", "ready"];
+  const startupHandshakeCounters = { ended: 0 };
+  const startupHandshakeAttempts: number[] = [];
+  const startupHandshakeResult = await waitForPostgresReadiness({
+    createClient: () => scriptedReadinessClient(startupHandshakeSteps.shift() ?? "CONNECT_FAILED", startupHandshakeCounters),
+    phase: "postgres.readiness.initial",
+    onAttempt: (attempt: number) => startupHandshakeAttempts.push(attempt),
+    maxAttempts: 2,
+    delayMs: 0,
+    deadlineMs: 100,
+    now: () => 0,
+  });
+  assert.deepEqual(startupHandshakeResult, { readinessOutcome: "READY", attempts: 2 });
+  assert.deepEqual(startupHandshakeAttempts, [1, 2]);
+  assert.equal(startupHandshakeCounters.ended, 2);
 });
 
 test("production readiness fails body-free on auth, query, result, close, and exhaustion boundaries", async () => {

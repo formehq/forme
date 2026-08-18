@@ -99,6 +99,10 @@ function errorCode(error) {
 
 function classifyConnectFailure(error) {
   const code = errorCode(error);
+  // During PostgreSQL startup, pg can report a terminated startup handshake
+  // without a stable error code. No readiness query has been sent at this
+  // point, so a bounded retry cannot replay a database effect.
+  if (code === null) return "CONNECT_RETRYABLE";
   if (code !== null && RETRYABLE_READINESS_CODES.has(code)) return "CONNECT_RETRYABLE";
   if (code !== null && AUTH_OR_CONFIGURATION_CODES.has(code)) return "AUTH_OR_CONFIGURATION_FAILED";
   return "CONNECT_FAILED";
