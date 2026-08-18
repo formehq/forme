@@ -1,5 +1,32 @@
 # Product
 
+## Superseding #67 activation status — 2026-08-18
+
+The Public Room is no longer disconnected from the durable implementation.
+Its guest-facing Next.js routes now select the existing PostgreSQL-backed
+Public Core through an exact loopback/private-root activation mode. The
+visible product path can list admitted Projections, serve direct reads, issue
+the bounded encounter and accept one private Interaction without adding a
+server model, email or automatic answer.
+
+Repository Technical Review is Green (`607/607` offline R4, full `check`,
+normal Room production build and post-build boundary audit). The first
+synthetic physical activation rehearsal stopped before PostgreSQL because its
+exact image was not present in the local Docker cache and pull/retry were not
+authorized. Cleanup is exact and every real-Guest, Provider, public-traffic,
+Production and Gate C effect is zero.
+
+This is real Product Progress—the durable core is on the guest-facing product
+path—but not Owner Experience Acceptance. #67 remains `Building / At Risk`
+until a replacement synthetic rehearsal is Green and one Owner-reviewed,
+publication-stable `24h / 1 Interaction` encounter is completed.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding R4 execution status — 2026-08-18
 
 Enabler #77 is Technical Review Green. The disposable PostgreSQL path now

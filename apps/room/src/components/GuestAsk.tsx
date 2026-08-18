@@ -20,6 +20,7 @@ interface ProjectionInput {
 interface GuestAskProps {
   projection: ProjectionInput;
   capabilitySecret?: string;
+  runtimeMode?: "synthetic" | "local_public_core";
 }
 
 interface GuestAskRecoveryV1 {
@@ -108,7 +109,7 @@ async function responseJson(response: Response): Promise<Record<string, unknown>
   return readClientApiJson(response, "The Room did not accept this signal. Check that the Projection is still current and retry.");
 }
 
-export function GuestAsk({ projection, capabilitySecret }: GuestAskProps) {
+export function GuestAsk({ projection, capabilitySecret, runtimeMode = "synthetic" }: GuestAskProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -147,11 +148,12 @@ export function GuestAsk({ projection, capabilitySecret }: GuestAskProps) {
           interactionType: form.get("interactionType"),
           consent: form.get("consent"),
           requestBody: form.get("requestBody"),
+          guestCapsule: null,
           replySecret: recovery.replySecret,
           deleteSecret: recovery.deleteSecret,
         }),
       }));
-      const interactionId = String(result.interactionId);
+      const interactionId = String(result.interactionId ?? result.targetId);
       localStorage.setItem(`forme:r4:delete:${interactionId}`, recovery.deleteSecret);
       sessionStorage.removeItem(recoveryKey(projection.projectionId));
       window.location.assign(`/g/${encodeURIComponent(interactionId)}#${recovery.replySecret}`);
@@ -181,24 +183,36 @@ export function GuestAsk({ projection, capabilitySecret }: GuestAskProps) {
         </label>
         <label className="card">
           Local response path
-          <select name="consent" defaultValue="allow_owner_local_ai">
-            <option value="allow_owner_local_ai">Allow one Owner-started local AI session</option>
+          <select name="consent" defaultValue={runtimeMode === "local_public_core" ? "manual_owner_only" : "allow_owner_local_ai"}>
+            {runtimeMode === "synthetic"
+              ? <option value="allow_owner_local_ai">Allow one Owner-started local AI session</option>
+              : null}
             <option value="manual_owner_only">Owner manual response only</option>
           </select>
         </label>
       </div>
       <div className="notice">
-        <p>{SYNTHETIC_CONSENT_COPY_V1}</p>
-        <details>
-          <summary>Exact synthetic policy and retention identifiers</summary>
-          <dl className="consentFacts">
-            <dt>Provider policy URL</dt><dd className="mono">{SYNTHETIC_PROVIDER_POLICY_URL}</dd>
-            <dt>Provider policy hash</dt><dd className="mono">{SYNTHETIC_PROVIDER_POLICY_HASH}</dd>
-            <dt>Consent-copy hash</dt><dd className="mono">{SYNTHETIC_CONSENT_COPY_HASH}</dd>
-            <dt>Provider retention</dt><dd>{SYNTHETIC_PROVIDER_RETENTION_DISCLOSURE}</dd>
-            <dt>Hosted backup</dt><dd>{SYNTHETIC_BACKUP_RETENTION_DISCLOSURE}</dd>
-          </dl>
-        </details>
+        {runtimeMode === "synthetic" ? (
+          <>
+            <p>{SYNTHETIC_CONSENT_COPY_V1}</p>
+            <details>
+              <summary>Exact synthetic policy and retention identifiers</summary>
+              <dl className="consentFacts">
+                <dt>Provider policy URL</dt><dd className="mono">{SYNTHETIC_PROVIDER_POLICY_URL}</dd>
+                <dt>Provider policy hash</dt><dd className="mono">{SYNTHETIC_PROVIDER_POLICY_HASH}</dd>
+                <dt>Consent-copy hash</dt><dd className="mono">{SYNTHETIC_CONSENT_COPY_HASH}</dd>
+                <dt>Provider retention</dt><dd>{SYNTHETIC_PROVIDER_RETENTION_DISCLOSURE}</dd>
+                <dt>Hosted backup</dt><dd>{SYNTHETIC_BACKUP_RETENTION_DISCLOSURE}</dd>
+              </dl>
+            </details>
+          </>
+        ) : (
+          <p>
+            This #67 activation carries one private request to the local Owner. It invokes no model,
+            sends no email, and creates no automatic answer. The request remains encrypted in the
+            bounded local PostgreSQL activation until the reviewed cleanup or deletion step.
+          </p>
+        )}
       </div>
       {error ? <p className="error" role="alert">{error}</p> : null}
       <button disabled={busy} type="submit">{busy ? "Sending privately…" : "Send private signal"}</button>

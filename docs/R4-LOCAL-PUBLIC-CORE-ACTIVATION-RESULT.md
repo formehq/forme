@@ -1,0 +1,73 @@
+# R4 local Public Core activation result
+
+## Outcome
+
+The product-facing Room runtime is now connected to the existing Durable
+Public Core through a bounded local activation mode. The Next.js public API,
+Third Place and Projection pages can select a loopback PostgreSQL-backed
+runtime by an exact private-root environment binding. Synthetic walkthrough
+mode remains separate, and an unconfigured build still fails closed.
+
+This is repository Technical Review, not Owner Experience Acceptance and not
+Production. The first synthetic local activation rehearsal stopped cleanly
+before PostgreSQL because the exact `linux/arm64` image was not present in the
+Docker cache and the envelope prohibited pull and retry.
+
+Machine-readable evidence:
+[`evidence/r4-local-public-core-activation.json`](./evidence/r4-local-public-core-activation.json).
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
+## What is now connected
+
+- The existing 32-action Public Core inventory remains the only application
+  surface.
+- Public, Controller, Curator, room-operator and Guest-capability requests are
+  mapped through a closed local transport membrane.
+- Controller, Curator and room-operator secrets, identity material, database
+  URL, body key, capability pepper and publication authority are read only
+  from an exact canonical private directory (`0700`) containing nine exact
+  regular files (`0600`, current uid, one link, no-follow reads).
+- PostgreSQL is restricted to an exact `127.0.0.1` URL and a one-connection
+  pool.
+- The public route ignores caller-supplied synthetic actor and rate-bucket
+  headers in local activation mode.
+- The Guest UI exposes only `manual_owner_only`: no model, email, automatic
+  answer, Provider call or Production identity is introduced.
+- The local Harness remains the Owner workbench. The hosted `/owner` surface
+  intentionally remains unavailable outside synthetic mode because no
+  Production Owner identity adapter has been authorized.
+
+## Repository evidence
+
+- `npm run typecheck`: Green.
+- `npm run check`: `45/45` spine, `607/607` R4 and `145/145` Gate-B Core.
+- `npm run test:r4:offline`: `607/607`, with external network denied.
+- `npm run room:build`: Green under the normal Turbopack path.
+- Post-build audit: 18 route chunks, 9 dependency traces, zero model/provider
+  packages, zero Owner paths and zero source-reader/process-execution markers.
+
+## Physical rehearsal evidence
+
+Run `541c92f7ea265465` used the exact image reference
+`postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74`
+and exact `linux/arm64` platform. Docker was reachable, but the local
+`docker.image.inspect` did not find an admissible cached image. Under the
+approved no-pull/no-retry rule the run stopped immediately.
+
+- status: `FAILED_CLEAN`
+- image pulls: `0`
+- schema/verify/runtime loads: `0 / 0 / 0`
+- real Guest records, Provider calls, messages, public traffic, Production and
+  Gate C effects: all `0`
+- container, network, volume and private-root residue: all proven absent
+
+No second invocation is implied by this result. The next effectful decision is
+either one exact image acquisition plus one replacement synthetic rehearsal,
+or an independently populated exact cache plus one fresh no-pull rehearsal.
+Only after that rehearsal is Green should the Owner review publication-stable
+copy and the single real `24h / 1 Interaction` encounter.

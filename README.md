@@ -6,6 +6,34 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
+### Superseding activation update — local runtime integrated, rehearsal stopped cleanly
+
+The guest-facing Room now has a bounded local activation mode wired to the
+existing Durable Public Core and PostgreSQL adapter. The public API, Third
+Place and Projection routes share the same closed operation inventory; local
+Controller/Curator/room-operator credentials and cryptographic material come
+only from one exact private root. Synthetic mode remains separate and the
+hosted Owner dashboard remains closed without a Production identity adapter.
+
+Repository validation is Green: offline R4 `607/607`, full `check` (`45/45`,
+`607/607`, `145/145`) and the normal Turbopack Room build plus post-build
+boundary audit. The first no-pull synthetic activation rehearsal reached
+Docker and stopped at exact cached-image inspection. It made no PostgreSQL,
+Guest, Provider, public-traffic or Production effect and proved all owned
+residue absent. See the
+[activation result](docs/R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
+
+#67 remains `Building / At Risk`: product runtime integration is Technical
+Review Green, while physical local activation and the Owner-experienced Guest
+encounter remain incomplete. The next effectful choice is exact image
+acquisition plus one replacement synthetic rehearsal, not a hidden retry.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ### Superseding integration update — 2026-08-18
 
 #77's disposable PostgreSQL Enabler is Technical Review Green. A closed

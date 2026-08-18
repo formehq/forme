@@ -6,7 +6,7 @@ import type {
   ProjectionLifecycleV1,
   ProjectionReadViewV1,
 } from "../../../packages/r4-protocol/src/index.ts";
-import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
+import { HostedRuntimeUnavailable, roomApplication, roomRuntimeMode } from "./runtime.ts";
 import { coreOperationDefinition } from "./core-policy.ts";
 
 interface ProjectionPageProps {
@@ -19,6 +19,7 @@ interface GuestAskProps {
     version: number;
     supportedInteractions: Array<"ask" | "seed" | "resonance">;
   };
+  runtimeMode?: "synthetic" | "local_public_core";
 }
 
 const CLAIM_SECTIONS = [
@@ -81,6 +82,7 @@ function renderBoundary(projection: ProjectionCapsuleV1): ReactNode {
 export function renderProjectionArticle(
   view: Pick<ProjectionReadViewV1, "projection" | "lifecycle" | "warning">,
   GuestAsk: ComponentType<GuestAskProps>,
+  runtimeMode: "synthetic" | "local_public_core" = "synthetic",
 ): ReactNode {
   const { projection, lifecycle, warning } = view;
   const children: ReactNode[] = [
@@ -101,6 +103,7 @@ export function renderProjectionArticle(
       createElement("p", { className: "eyebrow" }, "Go deeper by asking, not by exposing the Twin"),
       createElement("h2", null, "Send one private signal"),
       createElement(GuestAsk, {
+        runtimeMode,
         projection: {
           projectionId: projection.projectionId,
           version: lifecycle.version,
@@ -117,7 +120,7 @@ export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
     const { projectionId } = await params;
     let view: Pick<ProjectionReadViewV1, "projection" | "lifecycle" | "warning">;
     try {
-      const result = await hostedApplication().runCore({
+      const result = await (await roomApplication()).runCore({
         definition: coreOperationDefinition("projection.read"),
         params: { projectionId },
         body: {},
@@ -125,8 +128,19 @@ export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
         syntheticActor: null,
         idempotencyKey: null,
         expectedVersion: null,
+        syntheticClientBucket: null,
       });
-      view = result.body.view as unknown as ProjectionReadViewV1;
+      if (result.body.view !== undefined) {
+        view = result.body.view as unknown as ProjectionReadViewV1;
+      } else {
+        view = {
+          projection: result.body.projection as ProjectionCapsuleV1,
+          lifecycle: result.body.lifecycle as ProjectionLifecycleV1,
+          warning: result.body.staleWarning === true
+            ? "stale_projection"
+            : null,
+        };
+      }
     } catch (error) {
       if (error instanceof HostedRuntimeUnavailable) {
         return createElement("p", { className: "error" }, "Hosted Room is not provisioned; this build fails closed outside explicit synthetic mode.");
@@ -134,6 +148,7 @@ export function createProjectionPage(GuestAsk: ComponentType<GuestAskProps>) {
       notFound();
     }
 
-    return renderProjectionArticle(view, GuestAsk);
+    const mode = roomRuntimeMode();
+    return renderProjectionArticle(view, GuestAsk, mode === "local_public_core" ? mode : "synthetic");
   };
 }

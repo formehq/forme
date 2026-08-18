@@ -2,6 +2,32 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-18 — Admit the durable core into a bounded local Room activation path
+
+**Decision:** under one medium/large activation envelope, connect the existing
+Durable Public Core/PostgreSQL adapter to the guest-facing Room, validate it
+repository-wide, and attempt one cached-image-only synthetic local rehearsal.
+The envelope does not authorize image pull, retry, public deployment,
+Production identity, Provider use, additional Guests or Gate C.
+
+**Architecture:** one exact private root supplies loopback database and local
+actor/cryptographic bindings. The public Next.js routes retain the closed Core
+inventory and ignore synthetic authority in local mode. The Harness remains
+the Owner workbench; the hosted Owner dashboard stays closed without a real
+identity adapter. No server model, email or automatic response is added.
+
+**Outcome:** repository validation and production build are Green. Run
+`541c92f7ea265465` stopped before PostgreSQL at exact cached-image inspection,
+used zero pull and cleaned container, network, volume and private-root state.
+The next effectful step requires one fresh image-acquisition/rehearsal decision;
+the consumed run is not repeated.
+
+**Stop:** `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## 2026-08-18 — Close the disposable PostgreSQL Enabler and return to #67
 
 **Decision:** accept the Owner-confirmed successor campaign as the final #77

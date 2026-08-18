@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
 import { parseStrictJson } from "../../../packages/r4-protocol/src/index.ts";
-import { HostedRuntimeUnavailable, hostedApplication } from "./runtime.ts";
+import { HostedRuntimeUnavailable, roomApplication, roomRuntimeMode } from "./runtime.ts";
 import { matchCoreOperation } from "./core-policy.ts";
 import { isSemanticError, SemanticError } from "./application.ts";
+import { PublicCoreApplicationError } from "./public-core-application.ts";
 
 const RESPONSE_HEADERS = {
   "Cache-Control": "no-store",
@@ -60,20 +61,24 @@ export async function dispatchApi(request: Request, segments: string[]): Promise
     const match = matchCoreOperation(request.method, path);
     if (!match) return json(404, { error: { code: "not_found", correlationId } });
     const body = await requestBody(request);
-    const result = await hostedApplication().runCore({
+    const mode = roomRuntimeMode();
+    const result = await (await roomApplication()).runCore({
       definition: match.definition,
       params: match.params,
       body,
       authorization: request.headers.get("authorization"),
-      syntheticActor: request.headers.get("x-forme-synthetic-actor"),
+      syntheticActor: mode === "synthetic" ? request.headers.get("x-forme-synthetic-actor") : null,
       idempotencyKey: request.headers.get("idempotency-key"),
       expectedVersion: expectedVersion(request),
-      syntheticClientBucket: request.headers.get("x-forme-synthetic-client-bucket"),
+      syntheticClientBucket: mode === "synthetic" ? request.headers.get("x-forme-synthetic-client-bucket") : null,
     });
     return json(result.status, result.body);
   } catch (error) {
     if (isSemanticError(error)) {
       return json(error.status, { error: { code: error.code, message: error.message, correlationId } });
+    }
+    if (error instanceof PublicCoreApplicationError) {
+      return json(error.status, { error: { code: error.code, correlationId } });
     }
     if (error instanceof HostedRuntimeUnavailable) {
       return json(503, { error: { code: "hosted_runtime_unavailable", correlationId } });

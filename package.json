@@ -38,6 +38,7 @@
     "r4:postgres:diagnose:pull": "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose --allow-image-pull",
     "r4:postgres:diagnose-rollback": "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose-rollback",
     "r4:postgres:diagnose-rollback:pull": "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose-rollback --allow-image-pull",
+    "r4:room:runtime-rehearse": "node scripts/r4-local-public-core-runtime-rehearsal.mjs execute",
     "r4:audit": "node scripts/r4-gate-a-static-audit.mjs",
     "r4:room-build:audit": "node scripts/r4-room-build-audit.mjs",
     "r4:docs:audit": "node scripts/r4-doc-audit.mjs",

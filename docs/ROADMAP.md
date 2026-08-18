@@ -1,5 +1,26 @@
 # MVP rebuild roadmap
 
+## Superseding current gate — #67 local activation, 2026-08-18
+
+The first #67 product-integration step is complete: the proven Durable Public
+Core and PostgreSQL adapter are now reachable through the guest-facing Room's
+bounded local activation mode. This closes the repository wiring gap and moves
+R4 from infrastructure-only proof to an actual product path.
+
+The first no-pull synthetic activation rehearsal failed cleanly because the
+exact `linux/arm64` PostgreSQL image was not cached. No database or Guest data
+was created and cleanup is exact. The roadmap therefore stays on #67; no new
+Enabler is opened. The next milestone is one replacement synthetic rehearsal
+under a fresh image-acquisition decision, followed by one concentrated Owner
+review of publication-stable wording and the real `24h / 1 Interaction`
+encounter.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding current gate — R4 #77 PostgreSQL Enabler Green, 2026-08-18
 
 #77 now physically proves the whole disposable local persistence chain:

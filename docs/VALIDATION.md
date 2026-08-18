@@ -1,5 +1,30 @@
 # Product validation and learning log
 
+## Current verdict — product runtime integrated; first activation failed cleanly
+
+The Durable Public Core is now exercised through a product-facing local Room
+transport rather than only through store/application tests. The transport
+preserves the closed action inventory, authenticates every non-public actor,
+uses one exact private root and loopback PostgreSQL URL, and exposes no server
+model, email or automatic response path.
+
+Repository evidence is offline R4 `607/607`, full `check` (`45/45`, `607/607`,
+`145/145`), normal Turbopack Room build and post-build boundary audit. Run
+`541c92f7ea265465` then stopped at cached image inspection with
+`FAILED_CLEAN`: image pull `0`, PostgreSQL/schema/runtime/Guest effects `0`,
+and exact container/network/volume/private-root absence.
+
+This validates the integration mechanism but not persistence through the new
+product path and not the Owner/Guest experience. The consumed no-pull run is
+not repeated. See
+[`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Current verdict — disposable PostgreSQL Enabler is Green
 
 Enabler #77 now physically proves schema apply, initial verify, same-container

@@ -1,5 +1,25 @@
 # Native Harness architecture contract v0.4
 
+## Superseding #67 local activation status — 2026-08-18
+
+NH1/NH2 remain unchanged. The new local Room mode admits the already-reviewed
+Durable Public Core through typed Forme operations; it does not turn the
+Harness into the database or make runtime state canonical meaning. The local
+Harness remains the Owner workbench, while the guest-facing Next.js surface
+holds only the exact public/capability transport and loopback PostgreSQL
+binding. The hosted Owner dashboard remains unavailable without a separately
+approved identity adapter.
+
+Repository integration and production build are Green. The first no-pull
+synthetic rehearsal stopped before PostgreSQL because the exact image was not
+cached, then cleaned every owned local artifact. This grants no Provider,
+public deployment, Production or Gate C authority.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
 ## Superseding R4 execution status — 2026-08-18
 
 NH1/NH2 are unchanged. #77's disposable PostgreSQL boundary is now physically

@@ -4,6 +4,26 @@ This page is the short route into Forme's repository documentation. The repo
 contains current operating truth, stable product/architecture contracts and
 dated evidence. Those are intentionally different things.
 
+## Current state — local product runtime integrated, 2026-08-18
+
+The guest-facing Room now has a bounded local activation mode connected to the
+Durable Public Core and loopback PostgreSQL adapter. Repository validation and
+the normal Room production build are Green. The first no-pull synthetic
+activation rehearsal stopped before PostgreSQL because the exact image was not
+cached and cleaned all owned artifacts.
+
+#67 remains `Building / At Risk`: replacement synthetic activation and one
+Owner-experienced Guest encounter remain open. Production, Provider use,
+public deployment and Gate C remain closed. Start with the
+[`activation result`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md), then the top
+of [`CONTROL.md`](./CONTROL.md).
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
+REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Current state — consolidated integration, 2026-08-18
 
 The disposable PostgreSQL Enabler (#77) is Technical Review Green. The exact
@@ -57,6 +77,11 @@ These documents remain valid beyond one execution attempt:
 
 ## Current evidence
 
+- [`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md)
+  records the product runtime integration and the first failed-clean no-pull
+  activation rehearsal.
+- [`evidence/r4-local-public-core-activation.json`](./evidence/r4-local-public-core-activation.json)
+  is its machine-readable repository, effect and cleanup evidence.
 - [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
   records the physically Green disposable PostgreSQL 16 lifecycle.
 - [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json)

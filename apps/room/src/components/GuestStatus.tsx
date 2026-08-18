@@ -22,6 +22,33 @@ interface InteractionView {
   } | null;
 }
 
+function normalizeInteraction(value: unknown): InteractionView | null {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return null;
+  const input = value as Record<string, unknown>;
+  const stateVersion = input.stateVersion ?? input.version;
+  if (
+    typeof input.interactionId !== "string"
+    || typeof input.state !== "string"
+    || typeof stateVersion !== "number"
+    || !Number.isSafeInteger(stateVersion)
+    || typeof input.acceptedAt !== "string"
+    || typeof input.expiresAt !== "string"
+  ) return null;
+  return {
+    interactionId: input.interactionId,
+    state: input.state,
+    stateVersion,
+    acceptedAt: input.acceptedAt,
+    expiresAt: input.expiresAt,
+    response: input.response && typeof input.response === "object" && !Array.isArray(input.response)
+      ? input.response as InteractionView["response"]
+      : null,
+    grantOffer: input.grantOffer && typeof input.grantOffer === "object" && !Array.isArray(input.grantOffer)
+      ? input.grantOffer as InteractionView["grantOffer"]
+      : null,
+  };
+}
+
 interface GrantOfferRecoveryV1 {
   schemaVersion: "guest_grant_offer_recovery.v1";
   interactionId: string;
@@ -118,8 +145,9 @@ export function GuestStatus({ interactionId }: { interactionId: string }) {
         response,
         "This private reply is unavailable. Check that the complete link, including its # fragment, is open in this browser.",
       ) as { interaction?: InteractionView };
-      if (!value.interaction) throw new Error("invalid response shape");
-      setInteraction(value.interaction);
+      const interaction = normalizeInteraction(value.interaction);
+      if (!interaction) throw new Error("invalid response shape");
+      setInteraction(interaction);
       setError(null);
     } catch (cause) {
       setError(safeClientFailure(
