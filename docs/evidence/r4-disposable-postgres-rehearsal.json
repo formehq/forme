@@ -1,8 +1,29 @@
 {
-  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v5",
+  "schemaVersion": "r4.disposable-postgres-rehearsal-evidence.v6",
   "issue": 77,
   "status": "FINAL_LIFECYCLE_RESTART_READINESS_FAILED_CLEAN",
   "productProgress": 0,
+  "repositoryCorrection": {
+    "status": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN",
+    "physicalExecutionPerformed": false,
+    "resultSchemaVersion": "r4.disposable-postgres-rehearsal-result.v2",
+    "maximumReadinessAttempts": 60,
+    "maximumReadinessDurationMs": 60000,
+    "readinessOutcomeSet": [
+      "READY",
+      "CONNECT_RETRYABLE",
+      "CONNECT_FAILED",
+      "AUTH_OR_CONFIGURATION_FAILED",
+      "QUERY_FAILED",
+      "RESULT_INVALID",
+      "CLIENT_CLOSE_FAILED"
+    ],
+    "failedAttemptCountPreserved": true,
+    "productionControllerUsedByTests": true,
+    "restartContainerRunningRechecked": true,
+    "restartLoopbackPortRechecked": true,
+    "reviewableIntegrationPackage": "docs/R4-REVIEWABLE-INTEGRATION-PACKAGE.md"
+  },
   "attemptBudget": {
     "originalEnvelope": {
       "fullLifecyclesAllowed": 2,
@@ -458,11 +479,11 @@
   ],
   "validation": {
     "focusedHarnessTests": {
-      "passed": 17,
+      "passed": 22,
       "failed": 0
     },
     "offlineR4Regression": {
-      "passed": 593,
+      "passed": 598,
       "failed": 0,
       "skippedHistoricalPhysicalRunnerTests": 111
     },
@@ -503,7 +524,8 @@
     "classification": "INITIAL_VERIFY_GREEN_RESTART_READINESS_FAILED_CLEAN",
     "confidence": "HIGH",
     "basis": "Replacement diagnostic run 0dddf25aee37504c consumed the one authorized exact image pull, evaluated all 18 predicates and returned only public_core_unexpected_object_present. That vector exactly matched the reviewed PostgreSQL catalog-ordering class. Commit e8db0e47 applied one consolidated verify-only C-ordering correction and repository validation passed. Final run 71ac0e393653db72 then applied the schema and passed initial verify, stopped after one container restart when readiness exhausted, and removed every exact-owned resource and runtime byte.",
-    "suspectedArea": "The catalog-expression correction is physically proved through the initial verify. Restart persistence and rollback remain unproved because the single final lifecycle exhausted readiness after restart. No body-free diagnostic identifies why the restarted PostgreSQL target did not become ready within the bounded window, and no further run is authorized."
+    "suspectedArea": "The catalog-expression correction is physically proved through the initial verify. Restart persistence and rollback remain unproved because the single final lifecycle exhausted readiness after restart. The retained v1 result cannot distinguish container exit, port drift, transient connect refusal, authentication/configuration failure, query failure or malformed readiness result. The repository-only v2 controller can distinguish those closed classes on a future separately authorized lifecycle, but it does not retroactively identify the old run's cause."
   },
-  "stop": "POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED / EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "physicalStop": "POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN / INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED / EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED",
+  "stop": "POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN / REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

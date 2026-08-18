@@ -22,6 +22,20 @@ proof and rollback were not reached. Image pull was `0`; container, network,
 volume, credential and runtime root were all removed. The final run budget is
 consumed and no retry is authorized.
 
+## Repository-only restart-readiness correction
+
+The retained v1 result cannot identify which readiness layer failed: it did not
+persist the 30 attempted restart probes and did not record a post-start running
+state or stable-port proof. The Owner-approved repository correction replaces
+that blind spot with result v2: exact failed attempt counts, seven closed
+body-free readiness outcomes, a shared production/test controller, and a
+post-restart running-container plus unchanged-loopback-port check. The gate is
+bounded to at most 60 attempts and 60 seconds.
+
+This correction used no Docker, socket, PostgreSQL or SQL effect and does not
+reinterpret the old run. It is organized for review in
+[`R4-REVIEWABLE-INTEGRATION-PACKAGE.md`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md).
+
 Earlier in the same #77 history, the one approved anonymous pull acquired the
 exact PostgreSQL `linux/arm64` digest. The first full diagnostic lifecycle
 applied the complete schema and named `public_core_constraint_inventory_drift`.
@@ -67,8 +81,8 @@ wiring is not Green and this remains `0 Product Progress`.
   `e8db0e47bccdf51d47cc98f0ce17278bc5ea1115`, tree
   `5618016267368b52f47204fd06d6f187205584df`, corrected verify
   `sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e`;
-- current validation: focused `17/17`, offline R4
-  `593/593` with `111` historical physical skips, spine `45/45`, Gate-B Core
+- current validation: focused `22/22`, offline R4
+  `598/598` with `111` historical physical skips, spine `45/45`, Gate-B Core
   final rerun `146/146`, typecheck/docs/diff Green.
 
 ## Diagnostic invocation
@@ -108,4 +122,10 @@ Current stop:
 `POSTGRES_VERIFY_CONSOLIDATED_CORRECTION_FINAL_LIFECYCLE_FAILED_CLEAN /
 INITIAL_VERIFY_GREEN / RESTART_READINESS_FAILED / ROLLBACK_NOT_REACHED /
 EXECUTION_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+Repository stop:
+
+`POSTGRES_RESTART_READINESS_CONTROLLER_REPOSITORY_GREEN /
+REVIEWABLE_INTEGRATION_PACKAGE_READY / PHYSICAL_EXECUTION_NOT_REQUESTED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
