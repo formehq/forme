@@ -18,7 +18,7 @@ run. Focused `26/26`, offline R4 `602/602` with `111` frozen historical skips,
 typecheck, docs audit and diff check are Green.
 
 The review branch's smaller, archive-free byte set separately passes product
-persistence `88/88`, disposable proof `26/26`, offline R4 `601/601` with zero
+persistence `89/89`, disposable proof `26/26`, offline R4 `602/602` with zero
 skips, typecheck, docs audit and diff check.
 
 #77 is ready to leave the active Enabler slot. #67 remains `Building / At Risk`

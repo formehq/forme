@@ -84,6 +84,12 @@ The two proof-closing commits already frozen on the refreshed branch are:
 The following operating-truth commit intentionally does not self-bind its own
 hash. Git and the Draft PR provide that outer binding.
 
+Independent code review then closed one narrow bridge-membrane omission in
+commit `c698955b0a8c884de03fe7cea6a550b745192667`: constructor configuration is
+now exact data-only input, and prepared-store arrays can no longer hide
+non-index properties or exceed the bounded snapshot size. This changes no SQL,
+schema, durable data, runtime authority or physical result.
+
 ## Validation and demo
 
 Current source validation before the branch refresh:
@@ -97,10 +103,10 @@ Current source validation before the branch refresh:
 Validation of the refreshed review branch's own bytes:
 
 - focused disposable PostgreSQL tests: `26 / 26`;
-- focused product persistence tests: `88 / 88`;
-- complete `npm run check`: spine `45 / 45`, R4 `601 / 601`, and
+- focused product persistence tests: `89 / 89`;
+- complete `npm run check`: spine `45 / 45`, R4 `602 / 602`, and
   historical Gate-B `145 / 145`;
-- offline R4 regression: `601 passed / 0 failed / 0 skipped`;
+- offline R4 regression: `602 passed / 0 failed / 0 skipped`;
 - spine and Room TypeScript checks: Green;
 - document audit and `git diff --check`: Green.
 
