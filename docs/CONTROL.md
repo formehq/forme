@@ -17,6 +17,10 @@ volume, credential and runtime residue is `0`; no pull was used in the final
 run. Focused `26/26`, offline R4 `602/602` with `111` frozen historical skips,
 typecheck, docs audit and diff check are Green.
 
+The review branch's smaller, archive-free byte set separately passes product
+persistence `88/88`, disposable proof `26/26`, offline R4 `601/601` with zero
+skips, typecheck, docs audit and diff check.
+
 #77 is ready to leave the active Enabler slot. #67 remains `Building / At Risk`
 because the proven persistence boundary is not yet integrated into the Public
 Room walking slice and no Owner-experienced Guest encounter has run. The next

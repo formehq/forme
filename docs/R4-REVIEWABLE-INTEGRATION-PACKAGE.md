@@ -84,15 +84,25 @@ Current source validation before the branch refresh:
 - document audit and `git diff --check`: Green;
 - final physical proof: `GREEN`, exact-owned residue `0`.
 
+Validation of the refreshed review branch's own bytes:
+
+- focused disposable PostgreSQL tests: `26 / 26`;
+- focused product persistence tests: `88 / 88`;
+- offline R4 regression: `601 passed / 0 failed / 0 skipped`;
+- spine and Room TypeScript checks: Green;
+- document audit and `git diff --check`: Green.
+
+The review branch intentionally omits the historical physical-runner archive;
+that is why its offline suite has no historical skips and a different total
+from the chronological source line.
+
 Runnable repository-only proof:
 
 ```sh
 node --import ./scripts/deny-external-network.mjs --test test/r4/disposable-postgres-rehearsal.test.ts
 ```
 
-The Draft PR must also run the product persistence tests, full offline R4,
-typecheck and document audit against its own bytes. Remote CI is not inferred
-until that branch is pushed and checked.
+Remote CI is not inferred until the branch is pushed and checked.
 
 ## Owner review focus
 

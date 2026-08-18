@@ -21,6 +21,11 @@ or catalog signature. Repository validation is focused `26/26`, offline R4
 diff Green. Every exact-owned resource and local runtime byte is absent.
 Provider, Guest, production, public-traffic and Gate C effects are `0`.
 
+The refreshed review branch deliberately excludes the historical physical
+runner archive and independently passes product persistence `88/88`,
+disposable proof `26/26`, offline R4 `601/601` with zero skips, typecheck,
+docs audit and diff check.
+
 Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
 PRODUCT_INTEGRATION_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
