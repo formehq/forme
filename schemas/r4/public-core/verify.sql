@@ -74,7 +74,7 @@ DECLARE
   expected_explicit_index_csv constant text :=
     'interactions|ix_interactions__unresolved_pool|N|room_id+created_at+interaction_id,mutation_receipts|ix_mutation_receipts__expiry|N|expires_at,pairing_challenges|ix_pairing_challenges__expiry|N|room_id+expires_at,projections|ix_projections__public_discovery|N|room_id+curation_state+fresh_until+expires_at,projections|uq_projections__one_current|U|room_id,public_encounters|ix_public_encounters__active|N|room_id+projection_id+expires_at,purge_jobs|ix_purge_jobs__bounded_batch|N|state+due_at+purge_job_id,room_bindings|ix_room_bindings__current|N|room_id+expires_at,room_events|ix_room_events__replay|N|room_id+sequence';
 BEGIN
-  SELECT array_agg(table_name::text ORDER BY table_name)
+  SELECT array_agg(table_name::text ORDER BY table_name::text COLLATE "C")
     INTO actual_tables
     FROM information_schema.tables
     WHERE table_schema = 'forme_r4_public_core'
@@ -84,7 +84,7 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_table_inventory_drift';
   END IF;
 
-  SELECT array_agg(indexname::text ORDER BY indexname)
+  SELECT array_agg(indexname::text ORDER BY indexname::text COLLATE "C")
     INTO actual_indexes FROM pg_catalog.pg_indexes
    WHERE schemaname = 'forme_r4_public_core';
   IF actual_indexes IS DISTINCT FROM expected_indexes THEN
@@ -118,7 +118,7 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
         SELECT owner.relname::text || '|' || c.conname::text || '|' || c.contype::text || '|' ||
                array_to_string(ARRAY(
@@ -139,7 +139,7 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
         SELECT owner.relname::text || '|' || c.conname::text || '|' ||
                array_to_string(ARRAY(
@@ -178,7 +178,7 @@ BEGIN
   END IF;
 
   IF (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
         SELECT owner.relname::text || '|' || idx.relname::text || '|' ||
                CASE WHEN i.indisunique THEN 'U' ELSE 'N' END || '|' ||
@@ -412,12 +412,15 @@ BEGIN
          OR c.relforcerowsecurity
        )
   ) OR (
-    SELECT array_agg(t.typname::text || '|' || t.typtype::text ORDER BY t.typname)
+    SELECT array_agg(
+      t.typname::text || '|' || t.typtype::text
+      ORDER BY (t.typname::text || '|' || t.typtype::text) COLLATE "C"
+    )
       FROM pg_catalog.pg_type t
       JOIN pg_catalog.pg_namespace n ON n.oid = t.typnamespace
      WHERE n.nspname = 'forme_r4_public_core'
   ) IS DISTINCT FROM (
-    SELECT array_agg(signature ORDER BY signature)
+    SELECT array_agg(signature ORDER BY signature COLLATE "C")
       FROM (
         SELECT table_name || '|c' AS signature
           FROM unnest(expected_tables) AS item(table_name)
@@ -566,7 +569,10 @@ BEGIN
     RAISE EXCEPTION USING ERRCODE = 'P0001', MESSAGE = 'public_core_body_free_table_drift';
   END IF;
 
-  SELECT array_agg((table_name || '.' || column_name)::text ORDER BY table_name, column_name)
+  SELECT array_agg(
+    (table_name || '.' || column_name)::text
+    ORDER BY (table_name || '.' || column_name)::text COLLATE "C"
+  )
     INTO actual_encrypted_fields
     FROM information_schema.columns
     WHERE table_schema = 'forme_r4_public_core'

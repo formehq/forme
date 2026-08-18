@@ -94,7 +94,7 @@ nodeTest("the frozen physical runner rejects the #77 PostgreSQL compatibility by
   assert.equal(HISTORICAL_RUNNER_SQL_CURRENT, false);
   assert.deepEqual(CURRENT_SQL_HASHES, {
     schema: "sha256:752affd9c237edf0469ec1486269ad68f46b3b83f93d63d80666f0d20984cb00",
-    verify: "sha256:f964e22b4a2b0a7989e6286e018d1436c3cec889216a9eb87a06a62e5c27df97",
+    verify: "sha256:1b05175a925a2a8c614976c0e70700b6f9b7dab1fd59557d0eef6edb0f64c85e",
     rollback: "sha256:317c5cabc0af6d368fdb3d7d5e03ea97de2a58414bbd382883ee0fffd5c6878d",
   });
 });
