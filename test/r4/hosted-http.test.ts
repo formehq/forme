@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { isSemanticError } from "../../apps/room/src/application.ts";
-import { dispatchApi } from "../../apps/room/src/http.ts";
+import { dispatchApi, dispatchLocalPublicCoreApiV1 } from "../../apps/room/src/http.ts";
 
 const PUBLIC_PROJECTION_ID = "proj_formepublic00000000000000000000";
 
@@ -60,6 +60,34 @@ test("Agent JSON list/read share one semantic Projection decision and every resp
     if (previous === undefined) delete process.env.FORME_R4_SYNTHETIC;
     else process.env.FORME_R4_SYNTHETIC = previous;
   }
+});
+
+test("local Public Core rehearsal seam uses the real HTTP membrane without synthetic authority", async () => {
+  const calls: unknown[] = [];
+  const application: Parameters<typeof dispatchLocalPublicCoreApiV1>[2] = {
+    async runCore(request) {
+      calls.push(request);
+      return { status: 200, body: { residents: [] } };
+    },
+  };
+  const response = await dispatchLocalPublicCoreApiV1(
+    new Request("http://127.0.0.1/api/v1/third-place/projections", {
+      headers: { "x-forme-synthetic-client-bucket": "must-not-cross" },
+    }),
+    ["third-place", "projections"],
+    application,
+  );
+  assert.equal(response.status, 200);
+  expectNoStore(response);
+  assert.equal(calls.length, 1);
+  const request = calls[0] as {
+    definition: { name: string };
+    syntheticActor: string | null;
+    syntheticClientBucket: string | null;
+  };
+  assert.equal(request.definition.name, "third_place.list");
+  assert.equal(request.syntheticActor, null);
+  assert.equal(request.syntheticClientBucket, null);
 });
 
 test("HTTP parser rejects duplicate JSON keys and missing object versions before mutation", async () => {

@@ -469,7 +469,7 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
     }
     if (statement.phase === "domain_write") {
       const action = statement.action as PublicCoreSqlMutationActionV1;
-      const row = this.#domainRow(action, statement, domain, receipts);
+      const row = this.#domainRow(action, statement, domain);
       if (row === null) return { rowCount: 0, rows: [] };
       effects.set(action, (effects.get(action) ?? 0) + 1);
       return { rowCount: 1, rows: [row] };
@@ -517,6 +517,19 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
         source_expires_at: values[14],
         committed_at: values[6],
         expires_at: values[14],
+        sync_after_sequence: values[17],
+        sync_high_water: values[18],
+        sync_replay_floor: values[19],
+        sync_result_kind: values[20],
+        sync_event_ids: values[21],
+        sync_event_sequences: values[22],
+        sync_event_kinds: values[23],
+        sync_object_ids: values[24],
+        sync_object_versions: values[25],
+        sync_event_hashes: values[26],
+        sync_event_committed_ats: values[27],
+        sync_tombstone_ids: values[28],
+        sync_tombstone_expires_ats: values[29],
       });
       return { rowCount: 1, rows: [Object.freeze({ ...row })] };
     }
@@ -645,7 +658,6 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
       pullAcceptedAt: string;
       localPurgeReceivedAt: string | null;
     },
-    receipts: Map<string, ReceiptState>,
   ): ReceiptState | null {
     const target: Readonly<Record<PublicCoreSqlMutationActionV1, readonly [string, number]>> = {
       "public_encounter.issue": [IDS.encounter, 1],
@@ -669,7 +681,6 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
     const targetId = this.domainTargetOverride ?? canonicalTargetId;
     const targetVersion = this.domainVersionOverride ?? canonicalTargetVersion;
     if (action === "room_operator.sync") {
-      const receiptId = statement.values[1];
       const after = Number(statement.values[0]);
       const cursorGone = after < this.syncFloor - 1;
       const pageAfter = cursorGone ? this.syncFloor - 1 : after;
@@ -681,25 +692,6 @@ class ExecutingFakeSqlExecutor implements PublicCoreSqlExecutorV1 {
         ? TOMBSTONE_EXPIRES
         : SYNC_CEILING);
       const sourceExpiresAt = tombstoneExpiresAts[0] ?? SYNC_CEILING;
-      for (const row of receipts.values()) {
-        if (row.receipt_id === receiptId) {
-          row.sync_after_sequence = after;
-          row.sync_high_water = pageHigh;
-          row.sync_replay_floor = this.syncFloor;
-          row.sync_result_kind = cursorGone ? "cursor_gone" : "event_batch";
-          row.sync_event_ids = page.map((event) => event.event_id);
-          row.sync_event_sequences = page.map((event) => event.sequence);
-          row.sync_event_kinds = page.map((event) => event.event_kind);
-          row.sync_object_ids = page.map((event) => event.object_id);
-          row.sync_object_versions = page.map((event) => event.object_version);
-          row.sync_event_hashes = page.map((event) => event.event_hash);
-          row.sync_event_committed_ats = page.map((event) => event.committed_at);
-          row.sync_tombstone_ids = tombstones;
-          row.sync_tombstone_expires_ats = tombstoneExpiresAts;
-          row.source_expires_at = sourceExpiresAt;
-          row.expires_at = sourceExpiresAt;
-        }
-      }
       return {
         target_id: targetId,
         target_version: targetVersion,
@@ -2096,6 +2088,10 @@ test("sync freezes its high-water, locks event IDs in C order and returns cursor
   };
   assert.equal(first.kind, "sync_window");
   assert.equal(first.highWater, 5);
+  const domain = executor.trace.find((statement) => statement.statementId === "room_operator.sync.domain_write");
+  const finalize = executor.trace.find((statement) => statement.statementId === "room_operator.sync.receipt.finalize");
+  assert.doesNotMatch(domain?.text ?? "", /UPDATE forme_r4_public_core\.mutation_receipts/u);
+  assert.match(finalize?.text ?? "", /SET status='committed'[\s\S]*sync_after_sequence=/u);
   const lock = executor.trace.find((statement) => statement.statementId === "room_operator.sync.lock.event_or_ack");
   assert.match(lock?.text ?? "", /ORDER BY e\.event_id COLLATE "C" FOR UPDATE/u);
   executor.syncHighWater = 9;

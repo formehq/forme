@@ -2424,7 +2424,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                CASE WHEN $1<r.event_replay_floor-1 THEN r.event_replay_floor-1
                     ELSE $1::bigint END AS page_after
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.rooms r
-         WHERE r.room_id=$4 AND $1>=0 AND $1<=r.event_high_water
+         WHERE r.room_id=$2 AND $1>=0 AND $1<=r.event_high_water
       ), bounds AS (
         SELECT s.*,LEAST(s.event_high_water,s.page_after+256) AS page_high
           FROM room_state s
@@ -2433,7 +2433,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                e.event_hash,e.committed_at,e.expires_at
           FROM ${PUBLIC_CORE_SQL_SCHEMA}.room_events e
           JOIN bounds b ON b.room_id=e.room_id
-         WHERE e.sequence>b.page_after AND e.sequence<=b.page_high AND e.expires_at>$5
+         WHERE e.sequence>b.page_after AND e.sequence<=b.page_high AND e.expires_at>$3
          ORDER BY e.sequence,e.event_id COLLATE "C"
       ), event_snapshot AS (
         SELECT COALESCE(array_agg(e.event_id ORDER BY e.sequence),ARRAY[]::text[]) AS event_ids,
@@ -2449,7 +2449,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
       ), tombstone_page AS (
         SELECT tombstone.object_id,tombstone.source_expires_at
           FROM (
-            SELECT p.projection_id AS object_id,$5::timestamptz+interval '37 days' AS source_expires_at
+            SELECT p.projection_id AS object_id,$3::timestamptz+interval '37 days' AS source_expires_at
               FROM ${PUBLIC_CORE_SQL_SCHEMA}.projections p
               JOIN bounds b ON b.room_id=p.room_id
              WHERE b.result_kind='cursor_gone' AND NOT p.body_readable
@@ -2458,7 +2458,7 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
               FROM ${PUBLIC_CORE_SQL_SCHEMA}.interactions x
               JOIN bounds b ON b.room_id=x.room_id
              WHERE b.result_kind='cursor_gone' AND NOT x.body_readable
-               AND x.tombstone_expires_at>$5
+               AND x.tombstone_expires_at>$3
           ) tombstone
          ORDER BY tombstone.object_id COLLATE "C" LIMIT 256
       ), tombstone_snapshot AS (
@@ -2470,37 +2470,28 @@ function domainStatement(run: MutationRunV1): PublicCoreCanonicalSqlStatementV1 
                MIN(t.source_expires_at) AS tombstone_source_expires_at
           FROM tombstone_page t
       ), snapshot AS (
-        SELECT b.*,$5::timestamptz+interval '37 days' AS receipt_ceiling,
+        SELECT b.*,$3::timestamptz+interval '37 days' AS receipt_ceiling,
                es.event_ids,es.event_sequences,es.event_kinds,es.object_ids,es.object_versions,
                es.event_hashes,es.committed_ats,ts.tombstone_ids,ts.tombstone_expires_ats,
-               LEAST($5::timestamptz+interval '37 days',
-                 COALESCE(es.event_source_expires_at,$5::timestamptz+interval '37 days'),
-                 COALESCE(ts.tombstone_source_expires_at,$5::timestamptz+interval '37 days'))
+               LEAST($3::timestamptz+interval '37 days',
+                 COALESCE(es.event_source_expires_at,$3::timestamptz+interval '37 days'),
+                 COALESCE(ts.tombstone_source_expires_at,$3::timestamptz+interval '37 days'))
                  AS source_expires_at
           FROM bounds b CROSS JOIN event_snapshot es CROSS JOIN tombstone_snapshot ts
          WHERE es.event_count=GREATEST(b.page_high-b.page_after,0)
-      ) UPDATE ${PUBLIC_CORE_SQL_SCHEMA}.mutation_receipts mr
-                 SET sync_after_sequence=$1,sync_high_water=s.page_high,
-                     sync_replay_floor=s.event_replay_floor,sync_result_kind=s.result_kind,
-                     sync_event_ids=s.event_ids,sync_event_sequences=s.event_sequences,
-                     sync_event_kinds=s.event_kinds,sync_object_ids=s.object_ids,
-                     sync_object_versions=s.object_versions,sync_event_hashes=s.event_hashes,
-                     sync_event_committed_ats=s.committed_ats,sync_tombstone_ids=s.tombstone_ids,
-                     sync_tombstone_expires_ats=s.tombstone_expires_ats,
-                     source_expires_at=s.source_expires_at,expires_at=s.source_expires_at,
-                     recovery_kind='sync_window'
-                FROM snapshot s
-               WHERE mr.receipt_id=$2 AND mr.request_hash=$3 AND mr.status='reserved'
-              RETURNING s.room_id AS target_id,s.version AS target_version,
-                        mr.sync_after_sequence,mr.sync_high_water,mr.sync_replay_floor,
-                        mr.sync_result_kind,mr.sync_event_ids,mr.sync_event_sequences,
-                        mr.sync_event_kinds,mr.sync_object_ids,mr.sync_object_versions,
-                        mr.sync_event_hashes,mr.sync_event_committed_ats,mr.sync_tombstone_ids,
-                        mr.sync_tombstone_expires_ats,
-                        mr.source_expires_at`;
+      ) SELECT s.room_id AS target_id,s.version AS target_version,
+               $1::bigint AS sync_after_sequence,s.page_high AS sync_high_water,
+               s.event_replay_floor AS sync_replay_floor,s.result_kind AS sync_result_kind,
+               s.event_ids AS sync_event_ids,s.event_sequences AS sync_event_sequences,
+               s.event_kinds AS sync_event_kinds,s.object_ids AS sync_object_ids,
+               s.object_versions AS sync_object_versions,s.event_hashes AS sync_event_hashes,
+               s.committed_ats AS sync_event_committed_ats,
+               s.tombstone_ids AS sync_tombstone_ids,
+               s.tombstone_expires_ats AS sync_tombstone_expires_ats,
+               s.source_expires_at
+          FROM snapshot s`;
       values = [
-        input.afterSequence, context.receiptId, context.canonicalRequestHash, context.roomId,
-        context.requestedAt,
+        input.afterSequence, context.roomId, context.requestedAt,
       ];
       break;
     }
@@ -2873,12 +2864,43 @@ function receiptFinalizeStatement(
   let pullGuestHash: string | null = null;
   let pullExpires: string | null = null;
   let pullTerminalState: string | null = null;
+  let syncAfterSequence: number | null = null;
+  let syncHighWater: number | null = null;
+  let syncReplayFloor: number | null = null;
+  let syncResultKind: string | null = null;
+  let syncEventIds: readonly string[] | null = null;
+  let syncEventSequences: readonly number[] | null = null;
+  let syncEventKinds: readonly string[] | null = null;
+  let syncObjectIds: readonly string[] | null = null;
+  let syncObjectVersions: readonly number[] | null = null;
+  let syncEventHashes: readonly string[] | null = null;
+  let syncEventCommittedAts: readonly string[] | null = null;
+  let syncTombstoneIds: readonly string[] | null = null;
+  let syncTombstoneExpiresAts: readonly string[] | null = null;
   let sourceExpiresAt = addMilliseconds(run.context.requestedAt, 37 * DAY_MS);
   if (action === "room_operator.sync") {
-    const syncResultKind = rowText(outcome.row, "sync_result_kind");
+    syncAfterSequence = rowNumber(outcome.row, "sync_after_sequence");
+    syncHighWater = rowNumber(outcome.row, "sync_high_water");
+    syncReplayFloor = rowNumber(outcome.row, "sync_replay_floor");
+    syncResultKind = rowText(outcome.row, "sync_result_kind");
+    syncEventIds = rowNullableStringArray(outcome.row, "sync_event_ids");
+    syncEventSequences = rowNullableNumberArray(outcome.row, "sync_event_sequences");
+    syncEventKinds = rowNullableStringArray(outcome.row, "sync_event_kinds");
+    syncObjectIds = rowNullableStringArray(outcome.row, "sync_object_ids");
+    syncObjectVersions = rowNullableNumberArray(outcome.row, "sync_object_versions");
+    syncEventHashes = rowNullableStringArray(outcome.row, "sync_event_hashes");
+    syncEventCommittedAts = rowNullableStringArray(outcome.row, "sync_event_committed_ats");
+    syncTombstoneIds = rowNullableStringArray(outcome.row, "sync_tombstone_ids");
+    syncTombstoneExpiresAts = rowNullableStringArray(outcome.row, "sync_tombstone_expires_ats");
     if (syncResultKind !== "event_batch" && syncResultKind !== "cursor_gone") {
       fail(503, "sql_sync_result_kind_invalid");
     }
+    if (
+      syncEventIds === null || syncEventSequences === null || syncEventKinds === null
+      || syncObjectIds === null || syncObjectVersions === null || syncEventHashes === null
+      || syncEventCommittedAts === null || syncTombstoneIds === null
+      || syncTombstoneExpiresAts === null
+    ) fail(503, "sql_sync_result_invalid");
     metadata = syncResultKind === "event_batch"
       ? Object.freeze({ status: 200, code: "event_batch" })
       : Object.freeze({ status: 410, code: "cursor_gone" });
@@ -2938,7 +2960,12 @@ function receiptFinalizeStatement(
                   pull_interaction_id=$8,pull_request_field_version=$9,
                   pull_body_hash=$10,pull_guest_field_version=$11,pull_guest_hash=$12,
                   pull_body_expires_at=$13,pull_terminal_state=$14,
-                  source_expires_at=$15,expires_at=$15
+                  source_expires_at=$15,expires_at=$15,
+                  sync_after_sequence=$18,sync_high_water=$19,sync_replay_floor=$20,
+                  sync_result_kind=$21,sync_event_ids=$22,sync_event_sequences=$23,
+                  sync_event_kinds=$24,sync_object_ids=$25,sync_object_versions=$26,
+                  sync_event_hashes=$27,sync_event_committed_ats=$28,
+                  sync_tombstone_ids=$29,sync_tombstone_expires_ats=$30
             WHERE receipt_id=$16 AND request_hash=$17 AND status='reserved'
             RETURNING ${RECEIPT_COLUMNS}`,
     values: [
@@ -2947,6 +2974,10 @@ function receiptFinalizeStatement(
       pullId, pullRequestFieldVersion, pullHash, pullGuestFieldVersion, pullGuestHash,
       pullExpires, pullTerminalState, sourceExpiresAt,
       run.context.receiptId, run.context.canonicalRequestHash,
+      syncAfterSequence, syncHighWater, syncReplayFloor, syncResultKind,
+      syncEventIds, syncEventSequences, syncEventKinds, syncObjectIds,
+      syncObjectVersions, syncEventHashes, syncEventCommittedAts,
+      syncTombstoneIds, syncTombstoneExpiresAts,
     ],
     rowExpectation: "exactly_one",
     rowKeys: RECEIPT_ROW_KEYS,

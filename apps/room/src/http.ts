@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { parseStrictJson } from "../../../packages/r4-protocol/src/index.ts";
 import { HostedRuntimeUnavailable, roomApplication, roomRuntimeMode } from "./runtime.ts";
 import { matchCoreOperation } from "./core-policy.ts";
-import { isSemanticError, SemanticError } from "./application.ts";
+import { isSemanticError, SemanticError, type HostedRoomApplication } from "./application.ts";
 import { PublicCoreApplicationError } from "./public-core-application.ts";
 
 const RESPONSE_HEADERS = {
@@ -52,7 +52,16 @@ function expectedVersion(request: Request): number | null {
   return Number(normalized);
 }
 
-export async function dispatchApi(request: Request, segments: string[]): Promise<Response> {
+type RoomApiApplication = Pick<HostedRoomApplication, "runCore">;
+
+async function dispatchApiWithResolver(
+  request: Request,
+  segments: string[],
+  resolveRuntime: () => Promise<Readonly<{
+    mode: "synthetic" | "local_public_core";
+    application: RoomApiApplication;
+  }>>,
+): Promise<Response> {
   const correlationId = randomUUID();
   try {
     const path = `/${segments.map(encodeURIComponent).join("/")}`;
@@ -61,8 +70,8 @@ export async function dispatchApi(request: Request, segments: string[]): Promise
     const match = matchCoreOperation(request.method, path);
     if (!match) return json(404, { error: { code: "not_found", correlationId } });
     const body = await requestBody(request);
-    const mode = roomRuntimeMode();
-    const result = await (await roomApplication()).runCore({
+    const { mode, application } = await resolveRuntime();
+    const result = await application.runCore({
       definition: match.definition,
       params: match.params,
       body,
@@ -85,4 +94,28 @@ export async function dispatchApi(request: Request, segments: string[]): Promise
     }
     return json(503, { error: { code: "service_unavailable", correlationId } });
   }
+}
+
+export async function dispatchApi(request: Request, segments: string[]): Promise<Response> {
+  return dispatchApiWithResolver(request, segments, async () => {
+    const mode = roomRuntimeMode();
+    if (mode === "unavailable") throw new HostedRuntimeUnavailable();
+    return Object.freeze({ mode, application: await roomApplication() });
+  });
+}
+
+/**
+ * Loopback rehearsal seam for the exact loaded Public Core runtime. It runs
+ * the same route matcher, request parser, authorization membrane and response
+ * sanitizer as the Next route without installing a second global runtime.
+ */
+export async function dispatchLocalPublicCoreApiV1(
+  request: Request,
+  segments: string[],
+  application: RoomApiApplication,
+): Promise<Response> {
+  return dispatchApiWithResolver(request, segments, async () => Object.freeze({
+    mode: "local_public_core" as const,
+    application,
+  }));
 }

@@ -46,6 +46,8 @@ test("local runtime rehearsal is one exact-image, loopback-only, synthetic-data 
   assert.match(SOURCE, /DOCKER_CONFIG: dockerConfig/u);
   assert.match(SOURCE, /"--host", `unix:\/\/\$\{docker\.socketPath\}`/u);
   assert.match(SOURCE, /"docker\.image\.pull", false, 180_000/u);
+  assert.match(SOURCE, /local_runtime_operation_\$\{error\.code\}.*product\.\$\{action\}/su);
+  assert.match(SOURCE, /deriveSecret\(\{\s*purpose: "room_binding",\s*action: "room\.pair\.exchange"/u);
 });
 
 test("rehearsal walks the complete #67 arrival path and closes before returning", () => {
@@ -57,6 +59,7 @@ test("rehearsal walks the complete #67 arrival path and closes before returning"
     "curation.admit",
     "room.mode.set",
     "third_place.list",
+    "projection.read",
     "public_encounter.issue",
     "interaction.create",
     "room_operator.sync",
@@ -70,6 +73,9 @@ test("rehearsal walks the complete #67 arrival path and closes before returning"
     cursor = position + action.length;
   }
   assert.match(SOURCE, /await loaded\.close\(\);[\s\S]*loadPublicCoreLocalRuntimeV1\(runtimeRoot\)[\s\S]*runtimeReloaded = true/u);
+  assert.match(SOURCE, /dispatchLocalPublicCoreApiV1/u);
+  assert.match(SOURCE, /interactionMode: "public_single"[\s\S]*expectedVersion: 2/u);
+  assert.match(SOURCE, /interactionMode: "closed"[\s\S]*expectedVersion: 3/u);
   assert.match(SOURCE, /"container", "rm", "--force"/u);
   assert.match(SOURCE, /"network", "rm"/u);
   assert.match(SOURCE, /"volume", "rm", "--force"/u);

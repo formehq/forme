@@ -526,6 +526,13 @@ Production interaction remains blocked until the later Production Grant names
 the actual backup, Cloudflare/Caddy/app/PostgreSQL log, and outbound-email
 provider retention and disclosure values.
 
+Durable sync preserves one atomic receipt boundary: the domain step freezes
+and returns the exact event/tombstone page but does not mutate the reserved
+receipt. Finalization commits the frozen page, source expiry and committed
+status together. A reserved receipt therefore remains body-free and
+snapshot-free even inside the transaction, while replay reads only the frozen
+committed page rather than mutable events.
+
 The Owner-approved T4 lifecycle keeps those authorities distinct. Third Place
 discovers only a current, fresh, admitted Projection. A current public
 Projection that is never admitted or later unlisted remains direct-readable,
