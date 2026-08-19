@@ -1,6 +1,31 @@
 # R4 local Public Core activation result
 
-## Outcome
+## Superseding outcome — image acquisition attempt failed cleanly
+
+The approved replacement envelope made its one exact anonymous pull attempt
+in run `4f810557bf3ae7df`. Docker returned a body-free nonzero result at
+`docker.image.pull`; the pull did not complete and the lifecycle stopped before
+container construction or PostgreSQL.
+
+The run created no container, network, volume, private runtime, database,
+schema or Guest record and proved all run-owned resources absent. A failed
+pull may leave Docker-managed partial layer cache, however, so image-cache
+residue is honestly `UNKNOWN`, not claimed absent. The pull and lifecycle
+budget are consumed and the command was not repeated.
+
+Repository review found that this new runner used an empty process environment
+and implicit Docker socket, unlike the physically proven #77 transport. The
+runner is now corrected repository-only to use the exact current-user socket,
+an isolated `HOME`/`DOCKER_CONFIG`, closed locale/PATH and explicit call
+deadlines. That correction is validated but has made no Docker call.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
+## First no-pull outcome
 
 The product-facing Room runtime is now connected to the existing Durable
 Public Core through a bounded local activation mode. The Next.js public API,

@@ -1,6 +1,6 @@
 # Owner technical cockpit
 
-## Superseding current status — #67 local runtime integrated, 2026-08-18
+## Superseding current status — #67 runtime integrated; image pull failed, 2026-08-18
 
 **The durable Public Core is now on the guest-facing Room path; physical local
 activation is still blocked before PostgreSQL.** The Next.js API, Third Place
@@ -12,20 +12,28 @@ fails closed.
 
 Repository evidence is Green: offline R4 `607/607`; full `check` is `45/45`,
 `607/607`, `145/145`; Room Turbopack build and its post-build security audit
-are Green. The first approved no-pull rehearsal, run `541c92f7ea265465`,
-stopped at `docker.image.inspect` because the exact cached image was absent.
-It reached no schema, PostgreSQL runtime or Guest record and proved container,
-network, volume and private-root residue absent.
+are Green. The first no-pull rehearsal stopped on an absent cached image.
+Replacement run `4f810557bf3ae7df` then made exactly one approved pull attempt;
+Docker returned nonzero at `docker.image.pull` before pull completion,
+resource construction or PostgreSQL. Container, network, volume and private
+root are absent. Docker-managed partial image-cache residue is unknown.
 
-The next action is one medium decision, not a sequence of hash approvals:
-authorize one exact image acquisition and one replacement synthetic
-rehearsal, or populate the exact cache independently and authorize one fresh
-no-pull rehearsal. After Green, return once for publication wording and the
-single real Guest encounter. Do not pull or rerun under the consumed envelope.
+Repository review identified one transport drift from the physically proven
+#77 runner: the new rehearsal used an empty environment and implicit Docker
+socket. It now uses the exact current-user socket, isolated
+`HOME`/`DOCKER_CONFIG`, closed locale/PATH and deadlines. This correction is
+repository Green and has made zero Docker calls.
+
+Both execution envelopes are consumed. The next action remains one medium
+decision, not a hash chain: either authorize the corrected transport for one
+exact acquisition-plus-lifecycle, or populate the exact cache independently
+and authorize one no-pull lifecycle. After Green, return once for publication
+wording and the single real Guest encounter.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

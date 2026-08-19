@@ -11,13 +11,17 @@ binding. The hosted Owner dashboard remains unavailable without a separately
 approved identity adapter.
 
 Repository integration and production build are Green. The first no-pull
-synthetic rehearsal stopped before PostgreSQL because the exact image was not
-cached, then cleaned every owned local artifact. This grants no Provider,
-public deployment, Production or Gate C authority.
+rehearsal stopped on the absent image; one later exact pull attempt returned
+nonzero before completion or resource construction. Every run-owned artifact
+is absent, while partial Docker image-cache residue is unknown. The local
+runner now mirrors #77's explicit current-user socket and isolated Docker
+configuration, repository-only. This grants no Provider, public deployment,
+Production or Gate C authority.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Superseding R4 execution status — 2026-08-18

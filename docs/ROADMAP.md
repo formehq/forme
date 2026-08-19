@@ -7,17 +7,20 @@ Core and PostgreSQL adapter are now reachable through the guest-facing Room's
 bounded local activation mode. This closes the repository wiring gap and moves
 R4 from infrastructure-only proof to an actual product path.
 
-The first no-pull synthetic activation rehearsal failed cleanly because the
-exact `linux/arm64` PostgreSQL image was not cached. No database or Guest data
-was created and cleanup is exact. The roadmap therefore stays on #67; no new
-Enabler is opened. The next milestone is one replacement synthetic rehearsal
-under a fresh image-acquisition decision, followed by one concentrated Owner
-review of publication-stable wording and the real `24h / 1 Interaction`
-encounter.
+The first no-pull rehearsal stopped because the exact image was not cached.
+The replacement envelope made one pull attempt, which Docker rejected before
+completion or resource creation. No database or Guest data was created; all
+run-owned cleanup is exact and partial Docker image-cache residue is unknown.
+The runner's Docker transport is now aligned repository-only with the proven
+#77 explicit-socket/isolated-config path. The roadmap stays on #67; no new
+Enabler is opened. The next milestone is one successful synthetic activation
+under a fresh medium decision, followed by one concentrated Owner review of
+publication wording and the real `24h / 1 Interaction` encounter.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

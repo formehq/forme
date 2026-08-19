@@ -6,7 +6,7 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding activation update — local runtime integrated, rehearsal stopped cleanly
+### Superseding activation update — runtime integrated; image acquisition failed cleanly
 
 The guest-facing Room now has a bounded local activation mode wired to the
 existing Durable Public Core and PostgreSQL adapter. The public API, Third
@@ -17,20 +17,25 @@ hosted Owner dashboard remains closed without a Production identity adapter.
 
 Repository validation is Green: offline R4 `607/607`, full `check` (`45/45`,
 `607/607`, `145/145`) and the normal Turbopack Room build plus post-build
-boundary audit. The first no-pull synthetic activation rehearsal reached
-Docker and stopped at exact cached-image inspection. It made no PostgreSQL,
-Guest, Provider, public-traffic or Production effect and proved all owned
-residue absent. See the
+boundary audit. The first no-pull rehearsal stopped at cached-image inspection.
+A separately approved replacement made exactly one anonymous pull attempt;
+Docker returned nonzero before pull completion, resource creation or
+PostgreSQL. All run-owned residue is absent; Docker-managed partial image-cache
+residue is unknown rather than claimed clean. The runner has since been aligned
+repository-only with the proven #77 explicit-socket/isolated-config transport.
+See the
 [activation result](docs/R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
 #67 remains `Building / At Risk`: product runtime integration is Technical
 Review Green, while physical local activation and the Owner-experienced Guest
-encounter remain incomplete. The next effectful choice is exact image
-acquisition plus one replacement synthetic rehearsal, not a hidden retry.
+encounter remain incomplete. Both prior envelopes are consumed. Another
+Docker call requires one fresh medium activation decision; there is no hidden
+retry.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

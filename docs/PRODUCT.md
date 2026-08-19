@@ -13,17 +13,22 @@ Repository Technical Review is Green (`607/607` offline R4, full `check`,
 normal Room production build and post-build boundary audit). The first
 synthetic physical activation rehearsal stopped before PostgreSQL because its
 exact image was not present in the local Docker cache and pull/retry were not
-authorized. Cleanup is exact and every real-Guest, Provider, public-traffic,
-Production and Gate C effect is zero.
+authorized. A separately approved pull-once replacement then made one exact
+pull attempt; Docker returned nonzero before completion or resource creation.
+All run-owned cleanup is exact, while Docker-managed partial image-cache
+residue is unknown. Every real-Guest, Provider, public-traffic, Production and
+Gate C effect is zero. The runner is now aligned repository-only with #77's
+proven explicit-socket and isolated Docker-config transport.
 
 This is real Product Progress—the durable core is on the guest-facing product
 path—but not Owner Experience Acceptance. #67 remains `Building / At Risk`
-until a replacement synthetic rehearsal is Green and one Owner-reviewed,
+until a synthetic activation rehearsal is Green and one Owner-reviewed,
 publication-stable `24h / 1 Interaction` encounter is completed.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

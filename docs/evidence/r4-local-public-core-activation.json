@@ -1,13 +1,15 @@
 {
   "schemaVersion": "r4.local-public-core-activation-evidence.v1",
-  "generatedAt": "2026-08-18T23:53:59Z",
-  "status": "LOCAL_RUNTIME_REPOSITORY_GREEN_PHYSICAL_REHEARSAL_FAILED_CLEAN",
+  "generatedAt": "2026-08-19T00:05:21Z",
+  "status": "LOCAL_RUNTIME_REPOSITORY_GREEN_IMAGE_ACQUISITION_FAILED_CLEAN",
   "implementation": {
     "roomRuntimeSha256": "sha256:56ae6fd696adc3b6c81482764cd941a1eb47d6aab1d90c1be4e264279e16f5f0",
     "localLoaderSha256": "sha256:c587cc7151b6d4be0637221cb015bce81925110eac489a4c0887325ce3078dbf",
-    "rehearsalSha256": "sha256:634b45ddb8902e1e48265889d4df378124a1bd68a9d45a7abc706d15091389db",
+    "rehearsalSha256": "sha256:6afd2c1d583c50bf78c9f12f012c7828ac86b0bd0175c224b242f0d92ba5c135",
     "runtimeTestSha256": "sha256:4272d9b9f77e8e7526bb4ab6678ff3a60950ca36d2bb9fb4995be8001c3c52ae",
-    "rehearsalTestSha256": "sha256:b00b5d83f9be2f131b2b7f20da4553522bffbc35c652c77b0dc14280b2681167"
+    "rehearsalTestSha256": "sha256:65ae8bec3984398b538efcd45f7ea872914403122d811bc16ca32a9cda8f73a4",
+    "packageSha256": "sha256:c77c3b4fd3ffbb305ee1c99dd7fec509753ebcea92839dd296d30c00080fef82",
+    "correctedDockerTransportRepositoryGreen": true
   },
   "validation": {
     "spine": { "passed": 45, "failed": 0 },
@@ -25,37 +27,69 @@
       "sourceReaderOrProcessExecutionMarkerCount": 0
     }
   },
-  "rehearsal": {
-    "runId": "541c92f7ea265465",
-    "status": "FAILED_CLEAN",
-    "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
-    "platform": "linux/arm64",
-    "failureCode": "local_runtime_docker_call_failed",
-    "failurePhase": "docker.image.inspect",
-    "schemaApplied": false,
-    "verifyPassed": false,
-    "runtimeLoads": 0,
-    "imagePulls": 0,
-    "realGuestRecords": 0,
-    "providerCalls": 0,
-    "externalMessages": 0,
-    "productionEffects": 0,
-    "publicTrafficEffects": 0,
-    "gateCEffects": 0,
-    "cleanup": {
-      "containerAbsent": true,
-      "networkAbsent": true,
-      "volumeAbsent": true,
-      "privateRootAbsent": true
+  "rehearsals": [
+    {
+      "runId": "541c92f7ea265465",
+      "status": "FAILED_CLEAN",
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "platform": "linux/arm64",
+      "failureCode": "local_runtime_docker_call_failed",
+      "failurePhase": "docker.image.inspect",
+      "imagePullAttempts": 0,
+      "imagePulls": 0,
+      "schemaApplied": false,
+      "verifyPassed": false,
+      "runtimeLoads": 0,
+      "realGuestRecords": 0,
+      "providerCalls": 0,
+      "externalMessages": 0,
+      "productionEffects": 0,
+      "publicTrafficEffects": 0,
+      "gateCEffects": 0,
+      "cleanup": {
+        "containerAbsent": true,
+        "networkAbsent": true,
+        "volumeAbsent": true,
+        "privateRootAbsent": true,
+        "imageCacheResidue": "NOT_APPLICABLE_NO_PULL"
+      }
+    },
+    {
+      "runId": "4f810557bf3ae7df",
+      "status": "FAILED_CLEAN",
+      "executedRehearsalSha256": "sha256:dd753be5bf9d5e13a112309648a8e23d6b947c826cf150baf54885be6799805d",
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "platform": "linux/arm64",
+      "failureCode": "local_runtime_docker_call_failed",
+      "failurePhase": "docker.image.pull",
+      "imagePullAttempts": 1,
+      "imagePulls": 0,
+      "schemaApplied": false,
+      "verifyPassed": false,
+      "runtimeLoads": 0,
+      "realGuestRecords": 0,
+      "providerCalls": 0,
+      "externalMessages": 0,
+      "productionEffects": 0,
+      "publicTrafficEffects": 0,
+      "gateCEffects": 0,
+      "cleanup": {
+        "containerAbsent": true,
+        "networkAbsent": true,
+        "volumeAbsent": true,
+        "privateRootAbsent": true,
+        "imageCacheResidue": "UNKNOWN_AFTER_FAILED_PULL_ATTEMPT"
+      }
     }
-  },
+  ],
   "readiness": {
     "productRuntimeIntegrated": true,
+    "correctedDockerTransportRepositoryGreen": true,
     "localActivationPhysicallyGreen": false,
     "publicationReviewed": false,
     "realGuestEncounterCompleted": false,
     "productionRequested": false,
     "gateCRequested": false
   },
-  "stop": "LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN / LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED / REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "stop": "LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN / CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN / NEW_ACTIVATION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

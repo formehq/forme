@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { spawn } from "node:child_process";
-import { chmod, mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import { chmod, lstat, mkdir, readFile, realpath, rm, writeFile } from "node:fs/promises";
+import { homedir, tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
@@ -58,12 +58,48 @@ function safeFailure(error) {
   });
 }
 
-async function command(args, phase, allowNonzero = false) {
+async function createDockerContext(campaignRoot) {
+  const executable = await lstat(DOCKER);
+  if (!executable.isFile() || executable.isSymbolicLink() || (executable.mode & 0o111) === 0 || await realpath(DOCKER) !== DOCKER) {
+    fail("local_runtime_docker_cli_invalid", "docker.preflight");
+  }
+  const home = await realpath(homedir());
+  const socketPath = join(home, ".docker", "run", "docker.sock");
+  const socket = await lstat(socketPath);
+  if (!socket.isSocket() || socket.isSymbolicLink() || socket.uid !== process.getuid?.() || await realpath(socketPath) !== socketPath) {
+    fail("local_runtime_docker_socket_invalid", "docker.preflight");
+  }
+  const dockerConfig = join(campaignRoot, "docker-config");
+  await mkdir(dockerConfig, { mode: 0o700 });
+  await chmod(dockerConfig, 0o700);
+  await writeFile(join(dockerConfig, "config.json"), "{\"auths\":{}}\n", { encoding: "utf8", mode: 0o600, flag: "wx" });
+  return Object.freeze({
+    socketPath,
+    env: Object.freeze({
+      HOME: campaignRoot,
+      DOCKER_CONFIG: dockerConfig,
+      PATH: "/usr/bin:/bin",
+      LANG: "C",
+      LC_ALL: "C",
+    }),
+  });
+}
+
+async function command(docker, args, phase, allowNonzero = false, timeoutMs = 60_000) {
   return await new Promise((resolvePromise, rejectPromise) => {
-    const child = spawn(DOCKER, args, { cwd: ROOT, env: {}, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(DOCKER, ["--host", `unix://${docker.socketPath}`, ...args], {
+      cwd: "/",
+      env: docker.env,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
     const stdout = [];
     const stderr = [];
     let bytes = 0;
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill("SIGKILL");
+    }, timeoutMs);
     const capture = (target) => (chunk) => {
       bytes += chunk.byteLength;
       if (bytes > MAX_OUTPUT) child.kill("SIGKILL");
@@ -71,19 +107,23 @@ async function command(args, phase, allowNonzero = false) {
     };
     child.stdout.on("data", capture(stdout));
     child.stderr.on("data", capture(stderr));
-    child.once("error", () => rejectPromise(new RehearsalFailure("local_runtime_docker_spawn_failed", phase)));
+    child.once("error", () => {
+      clearTimeout(timer);
+      rejectPromise(new RehearsalFailure("local_runtime_docker_spawn_failed", phase));
+    });
     child.once("close", (code, signal) => {
+      clearTimeout(timer);
       const out = Buffer.concat(stdout).toString("utf8").trim();
       const err = Buffer.concat(stderr).toString("utf8").trim();
-      if (bytes > MAX_OUTPUT || signal !== null) rejectPromise(new RehearsalFailure("local_runtime_docker_call_ambiguous", phase));
+      if (bytes > MAX_OUTPUT || timedOut || signal !== null) rejectPromise(new RehearsalFailure("local_runtime_docker_call_ambiguous", phase));
       else if (code !== 0 && !allowNonzero) rejectPromise(new RehearsalFailure("local_runtime_docker_call_failed", phase));
       else resolvePromise(Object.freeze({ code, stdout: out, stderr: err }));
     });
   });
 }
 
-async function exactAbsent(kind, name) {
-  const result = await command([kind, "inspect", name], `docker.${kind}.absence`, true);
+async function exactAbsent(docker, kind, name) {
+  const result = await command(docker, [kind, "inspect", name], `docker.${kind}.absence`, true);
   if (result.code === 0) fail("local_runtime_owned_name_collision", `docker.${kind}.absence`);
 }
 
@@ -226,7 +266,22 @@ async function sql(config, text, phase) {
   }
 }
 
-export async function runLocalPublicCoreRuntimeRehearsal() {
+function allowImagePull(options) {
+  if (options === undefined) return false;
+  if (
+    options === null
+    || typeof options !== "object"
+    || Array.isArray(options)
+    || Object.getPrototypeOf(options) !== Object.prototype
+    || Object.keys(options).length !== 1
+    || Object.keys(options)[0] !== "allowImagePull"
+    || typeof options.allowImagePull !== "boolean"
+  ) fail("local_runtime_rehearsal_options_invalid", "input");
+  return options.allowImagePull;
+}
+
+export async function runLocalPublicCoreRuntimeRehearsal(options) {
+  const pullAllowed = allowImagePull(options);
   const runId = randomBytes(8).toString("hex");
   const names = Object.freeze({
     container: `forme-r4-runtime-${runId}`,
@@ -267,6 +322,7 @@ export async function runLocalPublicCoreRuntimeRehearsal() {
       realGuestRecords: 0,
       providerCalls: 0,
       externalMessages: 0,
+      imagePullAttempts: 0,
       imagePulls: 0,
       productionEffects: 0,
       publicTrafficEffects: 0,
@@ -276,21 +332,30 @@ export async function runLocalPublicCoreRuntimeRehearsal() {
     failure: null,
   };
   let loaded = null;
+  let docker = null;
   try {
     await chmod(campaignRoot, 0o700);
+    docker = await createDockerContext(campaignRoot);
     const password = capability();
     await writeFile(passwordPath, password, { mode: 0o600 });
     await chmod(passwordPath, 0o600);
-    await command(["version", "--format", "{{json .Server}}"], "docker.version");
-    await command(["image", "inspect", LOCAL_RUNTIME_REHEARSAL_IMAGE, "--format", "{{json .}}"], "docker.image.inspect");
-    await exactAbsent("container", names.container);
-    await exactAbsent("network", names.network);
-    await exactAbsent("volume", names.volume);
-    await command(["network", "create", "--label", OWNER_LABEL, names.network], "docker.network.create");
+    await command(docker, ["version", "--format", "{{json .Server}}"], "docker.version");
+    const cachedImage = await command(docker, ["image", "inspect", LOCAL_RUNTIME_REHEARSAL_IMAGE, "--format", "{{json .}}"], "docker.image.inspect", true);
+    if (cachedImage.code !== 0) {
+      if (!pullAllowed) fail("local_runtime_exact_image_not_cached", "docker.image.inspect");
+      result.effects.imagePullAttempts = 1;
+      await command(docker, ["image", "pull", "--platform", LOCAL_RUNTIME_REHEARSAL_PLATFORM, LOCAL_RUNTIME_REHEARSAL_IMAGE], "docker.image.pull", false, 180_000);
+      result.effects.imagePulls = 1;
+      await command(docker, ["image", "inspect", LOCAL_RUNTIME_REHEARSAL_IMAGE, "--format", "{{json .}}"], "docker.image.inspect.after_pull");
+    }
+    await exactAbsent(docker, "container", names.container);
+    await exactAbsent(docker, "network", names.network);
+    await exactAbsent(docker, "volume", names.volume);
+    await command(docker, ["network", "create", "--label", OWNER_LABEL, names.network], "docker.network.create");
     state.network = true;
-    await command(["volume", "create", "--label", OWNER_LABEL, names.volume], "docker.volume.create");
+    await command(docker, ["volume", "create", "--label", OWNER_LABEL, names.volume], "docker.volume.create");
     state.volume = true;
-    await command([
+    await command(docker, [
       "container", "create", "--name", names.container, "--platform", LOCAL_RUNTIME_REHEARSAL_PLATFORM,
       "--label", OWNER_LABEL, "--network", names.network,
       "--mount", `type=volume,src=${names.volume},dst=/var/lib/postgresql/data`,
@@ -301,8 +366,8 @@ export async function runLocalPublicCoreRuntimeRehearsal() {
       LOCAL_RUNTIME_REHEARSAL_IMAGE,
     ], "docker.container.create");
     state.container = true;
-    await command(["container", "start", names.container], "docker.container.start");
-    const portResult = await command(["container", "port", names.container, "5432/tcp"], "docker.container.port");
+    await command(docker, ["container", "start", names.container], "docker.container.start");
+    const portResult = await command(docker, ["container", "port", names.container, "5432/tcp"], "docker.container.port");
     const portMatch = /^127\.0\.0\.1:([1-9][0-9]{0,4})$/u.exec(portResult.stdout);
     if (!portMatch) fail("local_runtime_loopback_port_invalid", "docker.container.port");
     const port = Number(portMatch[1]);
@@ -486,15 +551,21 @@ export async function runLocalPublicCoreRuntimeRehearsal() {
     if (loaded) {
       try { await loaded.close(); } catch { result.failure ??= { code: "local_runtime_close_failed", phase: "runtime.close" }; }
     }
-    if (state.container) {
-      await command(["container", "stop", "--time", "10", names.container], "cleanup.container.stop", true);
-      await command(["container", "rm", "--force", names.container], "cleanup.container.rm", true);
+    if (docker !== null && state.container) {
+      await command(docker, ["container", "stop", "--time", "10", names.container], "cleanup.container.stop", true);
+      await command(docker, ["container", "rm", "--force", names.container], "cleanup.container.rm", true);
     }
-    if (state.network) await command(["network", "rm", names.network], "cleanup.network.rm", true);
-    if (state.volume) await command(["volume", "rm", "--force", names.volume], "cleanup.volume.rm", true);
-    result.cleanup.containerAbsent = (await command(["container", "inspect", names.container], "cleanup.container.absent", true)).code !== 0;
-    result.cleanup.networkAbsent = (await command(["network", "inspect", names.network], "cleanup.network.absent", true)).code !== 0;
-    result.cleanup.volumeAbsent = (await command(["volume", "inspect", names.volume], "cleanup.volume.absent", true)).code !== 0;
+    if (docker !== null && state.network) await command(docker, ["network", "rm", names.network], "cleanup.network.rm", true);
+    if (docker !== null && state.volume) await command(docker, ["volume", "rm", "--force", names.volume], "cleanup.volume.rm", true);
+    if (docker !== null) {
+      result.cleanup.containerAbsent = (await command(docker, ["container", "inspect", names.container], "cleanup.container.absent", true)).code !== 0;
+      result.cleanup.networkAbsent = (await command(docker, ["network", "inspect", names.network], "cleanup.network.absent", true)).code !== 0;
+      result.cleanup.volumeAbsent = (await command(docker, ["volume", "inspect", names.volume], "cleanup.volume.absent", true)).code !== 0;
+    } else {
+      result.cleanup.containerAbsent = state.container === false;
+      result.cleanup.networkAbsent = state.network === false;
+      result.cleanup.volumeAbsent = state.volume === false;
+    }
     await rm(campaignRoot, { recursive: true, force: true });
     try { await realpath(campaignRoot); } catch { result.cleanup.privateRootAbsent = true; }
   }
@@ -507,11 +578,12 @@ export async function runLocalPublicCoreRuntimeRehearsal() {
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  if (process.argv.length !== 3 || process.argv[2] !== "execute") {
-    process.stderr.write("usage: node scripts/r4-local-public-core-runtime-rehearsal.mjs execute\n");
+  const pullAllowed = process.argv.length === 4 && process.argv[3] === "--allow-image-pull";
+  if ((process.argv.length !== 3 && !pullAllowed) || process.argv[2] !== "execute") {
+    process.stderr.write("usage: node scripts/r4-local-public-core-runtime-rehearsal.mjs execute [--allow-image-pull]\n");
     process.exitCode = 2;
   } else {
-    const result = await runLocalPublicCoreRuntimeRehearsal();
+    const result = await runLocalPublicCoreRuntimeRehearsal({ allowImagePull: pullAllowed });
     process.stdout.write(`${JSON.stringify(result)}\n`);
     if (result.status !== "GREEN_CLEAN") process.exitCode = 1;
   }

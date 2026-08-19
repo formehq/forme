@@ -8,19 +8,22 @@ dated evidence. Those are intentionally different things.
 
 The guest-facing Room now has a bounded local activation mode connected to the
 Durable Public Core and loopback PostgreSQL adapter. Repository validation and
-the normal Room production build are Green. The first no-pull synthetic
-activation rehearsal stopped before PostgreSQL because the exact image was not
-cached and cleaned all owned artifacts.
+the normal Room production build are Green. A no-pull rehearsal stopped on the
+absent exact image; a later pull-once rehearsal made one attempt and Docker
+returned nonzero before completion or resource creation. All run-owned state
+is absent, while partial Docker image-cache residue is unknown. The corrected
+runner transport is repository Green but unexecuted.
 
-#67 remains `Building / At Risk`: replacement synthetic activation and one
+#67 remains `Building / At Risk`: successful synthetic activation and one
 Owner-experienced Guest encounter remain open. Production, Provider use,
 public deployment and Gate C remain closed. Start with the
 [`activation result`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md), then the top
 of [`CONTROL.md`](./CONTROL.md).
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

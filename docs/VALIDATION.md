@@ -1,6 +1,6 @@
 # Product validation and learning log
 
-## Current verdict — product runtime integrated; first activation failed cleanly
+## Current verdict — product runtime integrated; image acquisition failed cleanly
 
 The Durable Public Core is now exercised through a product-facing local Room
 transport rather than only through store/application tests. The transport
@@ -9,19 +9,23 @@ uses one exact private root and loopback PostgreSQL URL, and exposes no server
 model, email or automatic response path.
 
 Repository evidence is offline R4 `607/607`, full `check` (`45/45`, `607/607`,
-`145/145`), normal Turbopack Room build and post-build boundary audit. Run
-`541c92f7ea265465` then stopped at cached image inspection with
-`FAILED_CLEAN`: image pull `0`, PostgreSQL/schema/runtime/Guest effects `0`,
-and exact container/network/volume/private-root absence.
+`145/145`), normal Turbopack Room build and post-build boundary audit. No-pull
+run `541c92f7ea265465` stopped at absent cache. Pull-once run
+`4f810557bf3ae7df` made one exact attempt and stopped on Docker nonzero before
+completion. Both runs reached zero PostgreSQL/schema/runtime/Guest effects and
+prove exact container/network/volume/private-root absence. Partial Docker
+image-cache residue after the failed pull is `UNKNOWN`.
 
 This validates the integration mechanism but not persistence through the new
-product path and not the Owner/Guest experience. The consumed no-pull run is
-not repeated. See
+product path and not the Owner/Guest experience. Both effect envelopes are
+consumed. A repository-only correction now mirrors #77's explicit socket,
+isolated Docker config and deadlines; it has made no Docker call. See
 [`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-LOCAL_ACTIVATION_REHEARSAL_FAILED_CLEAN_IMAGE_NOT_CACHED /
-REPLACEMENT_IMAGE_ACQUISITION_DECISION_REQUIRED /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

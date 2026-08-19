@@ -2,6 +2,30 @@
 
 Keep this file short. Record only decisions that change product scope, constitutional boundaries, architecture, dates, or collaboration authority.
 
+## 2026-08-18 — Consume one image-acquisition attempt and correct Docker transport
+
+**Decision:** allow one anonymous exact `linux/arm64` image pull and, only if
+it completes, one synthetic activation lifecycle. No second pull or lifecycle
+is implied. Public/real Guest, Provider, Production and Gate C effects remain
+closed.
+
+**Outcome:** run `4f810557bf3ae7df` made the one pull attempt. Docker returned
+nonzero before successful acquisition, resource creation or PostgreSQL. All
+run-owned residue is absent; partial Docker-managed image-cache residue is
+unknown. The execution envelope is consumed.
+
+**Correction:** repository review found the activation runner used an empty
+environment and implicit Docker socket instead of #77's proven transport. It
+now binds the exact current-user socket, isolated `HOME`/`DOCKER_CONFIG`,
+closed locale/PATH and explicit deadlines. This construction made no Docker
+call and does not revive the consumed envelope.
+
+**Stop:** `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
+CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
+NEW_ACTIVATION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
 ## 2026-08-18 — Admit the durable core into a bounded local Room activation path
 
 **Decision:** under one medium/large activation envelope, connect the existing
