@@ -68,7 +68,8 @@
     "typecheck:spine": "tsc --noEmit",
     "typecheck:room": "tsc --project apps/room/tsconfig.json --noEmit",
     "typecheck": "npm run typecheck:spine && npm run typecheck:room",
-    "check": "npm run typecheck && npm test"
+    "check:room-boundary": "npm --workspace apps/room run check:no-ai",
+    "check": "npm run typecheck && npm run check:room-boundary && npm test"
   },
   "dependencies": {
     "ajv": "8.20.0",

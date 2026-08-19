@@ -8,8 +8,9 @@ const forbiddenImports = [
   /^ai(?:\/|$)/,
   /^@anthropic-ai(?:\/|$)/,
   /^node:child_process$/,
-  /^node:fs(?:\/promises)?$/,
 ];
+const fileSystemImport = /^node:fs(?:\/promises)?$/;
+const localPrivateRuntimeLoader = "src/public-core-local-runtime.ts";
 
 async function files(directory) {
   const result = [];
@@ -30,6 +31,9 @@ for (const root of roots) {
       if (specifier && forbiddenImports.some((pattern) => pattern.test(specifier))) {
         violations.push(`${path}: forbidden hosted import ${specifier}`);
       }
+      if (specifier && fileSystemImport.test(specifier) && path !== localPrivateRuntimeLoader) {
+        violations.push(`${path}: forbidden ambient filesystem import ${specifier}`);
+      }
     }
   }
 }
@@ -38,5 +42,5 @@ if (violations.length > 0) {
   console.error(violations.join("\n"));
   process.exitCode = 1;
 } else {
-  console.log("Hosted Room import boundary passed: no model/provider, child-process, or source-reader import path.");
+  console.log("Hosted Room import boundary passed: no model/provider, child-process, or ambient source-reader import path.");
 }
