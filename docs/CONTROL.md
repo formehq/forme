@@ -1,5 +1,33 @@
 # Owner technical cockpit
 
+## Superseding current status — server-readiness pivot, 2026-08-18
+
+**Docker cache is no longer a #67 readiness condition.** #77 already proves
+the disposable PostgreSQL schema/restart/persistence/rollback/cleanup chain,
+and the product runner has physically passed schema/verify. The later no-pull
+miss is honest evidence that cache retention is volatile; it does not reopen
+the persistence Enabler.
+
+The active Walking Slice remains #67 `Building / At Risk`. The next linked
+Enabler is the repository-only
+[`existing-server readiness inventory`](./R4-SERVER-READINESS-INVENTORY.md)
+for the approved Cloudflare → Caddy → Hetzner → PostgreSQL shape. This
+round only defines that inventory. No server connection, credential use,
+GitHub mutation, image pull, Docker lifecycle, deployment, PostgreSQL change,
+Production action or Gate C effect has been requested or performed.
+
+The next Owner stop is one medium-grained read-only server inventory envelope.
+If that inventory is Green, a later isolated synthetic-staging envelope may be
+proposed. A cache-only local retry is not the next action.
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding current status — #67 no-pull replacement failed cleanly, 2026-08-18
 
 **The durable Public Core is on the guest-facing Room path and its exact local

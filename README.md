@@ -6,6 +6,31 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
+### Superseding #67 direction — cache is not a product gate
+
+Local persistence is sufficiently proven for roadmap purposes: #77 passed the
+full disposable PostgreSQL schema/restart/persistence/rollback/cleanup cycle,
+and the product runner separately passed PostgreSQL schema/verify. Later
+cached-only attempts demonstrate volatile Docker retention, not a regression
+of those proofs. Cross-invocation cache presence is now treated only as an
+optimization and will not gate product readiness.
+
+The next Enabler is a repository-defined, read-only readiness inventory for
+the existing Cloudflare → Caddy → Hetzner → PostgreSQL deployment path.
+The [inventory plan](docs/R4-SERVER-READINESS-INVENTORY.md) records the exact
+unknowns and the boundaries for a later body-free server read. This change
+does not connect to the server, mutate GitHub, deploy, use Production data or
+request Gate C. #67 remains `Building / At Risk`; the complete synthetic
+product flow and Owner-experienced Guest encounter are still open.
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ### Superseding activation update — no-pull replacement failed cleanly
 
 The guest-facing Room now has a bounded local activation mode wired to the

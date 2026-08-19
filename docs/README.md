@@ -4,26 +4,28 @@ This page is the short route into Forme's repository documentation. The repo
 contains current operating truth, stable product/architecture contracts and
 dated evidence. Those are intentionally different things.
 
-## Current state — local product runtime integrated, 2026-08-18
+## Current state — server-readiness pivot, 2026-08-18
 
-The guest-facing Room now has a bounded local activation mode connected to the
-Durable Public Core and loopback PostgreSQL adapter. Repository validation and
-the normal Room production build are Green. A no-pull rehearsal stopped on the
-absent exact image; a later pull-once rehearsal made one attempt and Docker
-returned nonzero before completion or resource creation. All run-owned state
-is absent, while partial Docker image-cache residue is unknown. The corrected
-runner transport is repository Green but unexecuted.
+The guest-facing Room has a bounded local activation mode connected to the
+Durable Public Core and PostgreSQL adapter. #77 already proves the disposable
+schema/restart/persistence/rollback/cleanup chain, and the product runner has
+physically passed schema/verify. Later cached-only misses show volatile Docker
+retention; cache presence is now an optimization rather than a readiness gate.
 
-#67 remains `Building / At Risk`: successful synthetic activation and one
-Owner-experienced Guest encounter remain open. Production, Provider use,
-public deployment and Gate C remain closed. Start with the
-[`activation result`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md), then the top
-of [`CONTROL.md`](./CONTROL.md).
+#67 remains `Building / At Risk`: the complete synthetic product flow and one
+Owner-experienced Guest encounter remain open. The next Enabler is the
+repository-defined
+[`existing-server readiness inventory`](./R4-SERVER-READINESS-INVENTORY.md)
+for Cloudflare → Caddy → Hetzner → PostgreSQL. This change did not read
+the server or authorize staging, Production, Provider use, public deployment
+or Gate C. Start with the inventory plan, then the top of
+[`CONTROL.md`](./CONTROL.md).
 
-Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
-CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
-NEW_ACTIVATION_DECISION_REQUIRED /
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
@@ -62,6 +64,7 @@ GATE_C_NOT_REQUESTED`.
 | [Draft PR #78](https://github.com/formehq/forme/pull/78) | Current remote bytes, review discussion and CI. |
 | [`VALIDATION.md`](./VALIDATION.md) | Append-only product learning and evidence register. Read its top verdict unless auditing history. |
 | [`R4-REVIEWABLE-INTEGRATION-PACKAGE.md`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md) | What the consolidated integration proves and what it deliberately does not prove. |
+| [`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md) | Next deployment-shaped unknowns and the boundary for a later body-free server inventory. |
 
 ## Stable product and architecture contracts
 

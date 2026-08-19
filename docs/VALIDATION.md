@@ -1,5 +1,32 @@
 # Product validation and learning log
 
+## Current verdict — local proof retained; cache removed as readiness gate
+
+The evidence supports two separate conclusions:
+
+1. local PostgreSQL persistence is sufficiently proven by #77's Green
+   schema/restart/persistence/rollback/cleanup lifecycle; and
+2. the product runner physically passed schema/verify before reaching a later
+   synthetic product-protocol defect that is now repository-corrected.
+
+Repeated cached-only misses prove only that Docker image retention is volatile.
+They do not invalidate either conclusion. The team therefore stops treating
+cross-invocation cache presence as a #67 acceptance condition and moves the
+next Enabler to the real deployment-shaped uncertainty.
+
+Repository evidence now includes the
+[`existing-server readiness inventory plan`](./R4-SERVER-READINESS-INVENTORY.md).
+No live server metadata was read in this change. Product Progress: `0`; server,
+Docker, network, PostgreSQL, GitHub-remote, Production and Gate C effects: `0`.
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Current verdict — no-pull replacement stopped cleanly at cache inspection
 
 The Durable Public Core is now exercised through a product-facing local Room

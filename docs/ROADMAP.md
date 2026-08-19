@@ -1,5 +1,31 @@
 # MVP rebuild roadmap
 
+## Superseding current gate — existing-server readiness, 2026-08-18
+
+The roadmap no longer waits for Docker to retain a local image between runs.
+Local persistence is sufficiently proven by #77's Green lifecycle and the
+product runner's physical schema/verify pass. Cross-invocation cache presence
+is an optimization, not a milestone.
+
+The next dependency is a read-only inventory of the existing Cloudflare →
+Caddy → Hetzner → PostgreSQL path. It must establish whether an isolated,
+synthetic staging slice is feasible without touching Production traffic. The
+inventory plan is repository Green; live server reading still requires one
+medium Owner envelope. If the inventory is Green, the next step is one isolated
+staging rehearsal, then the concentrated Owner review and real bounded Guest
+encounter already required by #67. If it is not Green, the result must name one
+repairable gap or one architecture decision rather than return to cache loops.
+
+See [`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md).
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding current gate — #67 no-pull replacement clean stop, 2026-08-18
 
 The first #67 product-integration step is complete: the proven Durable Public

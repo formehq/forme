@@ -1,5 +1,34 @@
 # Product
 
+## Superseding #67 direction — deployment-shaped readiness, 2026-08-18
+
+The Durable Public Core is integrated into the guest-facing Room path, its
+repository contract is Green, and local PostgreSQL persistence has already
+been proven through schema, restart, persistence, rollback and exact cleanup.
+The product runner also physically reached and passed schema/verify. Docker
+cache retention between invocations is therefore an engineering convenience,
+not part of the MVP claim and not a readiness gate.
+
+#67 remains `Building / At Risk` because the complete synthetic Room flow and
+one Owner-experienced Guest encounter are not yet Green. The next Enabler is a
+read-only readiness inventory for the existing Cloudflare → Caddy → Hetzner
+→ PostgreSQL path, followed—only if suitable—by an isolated synthetic
+staging envelope. The current repository change adds `0 Product Progress`; it
+removes a misleading infrastructure prerequisite and aims the next work at
+the real deployment boundary.
+
+See [`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md).
+Live server access, staging mutation, real Guest data, Production and Gate C
+remain unrequested.
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+PRODUCT_RUNTIME_REPOSITORY_GREEN /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED /
+ISOLATED_STAGING_NOT_REQUESTED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding #67 activation status — 2026-08-18 no-pull replacement failed cleanly
 
 The Public Room is no longer disconnected from the durable implementation.

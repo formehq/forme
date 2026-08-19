@@ -12,24 +12,25 @@ Complete one connected R4 experience: Public Room → bounded private knock →
 durable local pull → fresh candidate → exact Owner response → bounded
 continuation and negative Private boundary.
 
-## Current focus — 2026-08-17
+## Current focus — 2026-08-18
 
 - R0–R3 and #66 are Done and Owner-accepted.
 - #67 is the one active Walking Slice: `Building / At Risk`.
-- The one linked Enabler #77 is now `Needs Decision / Blocked`. Its approved
-  diagnostic/correction budget reached PostgreSQL 16.10, applied the schema,
-  passed the complete initial verify and cleaned exactly. The final lifecycle
-  then failed at restart readiness before persistence or rollback. All
-  pull/diagnostic/correction/lifecycle allowances are consumed. The next
-  action is restart-readiness architecture review, not another local retry.
+- #77 is Technical Review Green: its disposable PostgreSQL lifecycle passed
+  schema, restart, persistence, rollback and exact cleanup. It is closed as a
+  local persistence Enabler and contributes `0 Product Progress` by itself.
+- The product runtime is repository Green and has physically passed its
+  PostgreSQL schema/verify boundary. The complete synthetic Room flow and one
+  Owner-experienced Guest encounter remain open.
+- Repeated cached-only misses establish cache volatility, not a persistence
+  regression. Docker cache is no longer a readiness prerequisite.
+- The next linked Enabler is the repository-defined, read-only existing-server
+  readiness inventory for Cloudflare → Caddy → Hetzner → PostgreSQL.
+  Live server access and isolated staging remain unapproved.
 - #71 Setup/Doctor remains Planned for #68 and is not the active #67 Enabler.
-- The current local R4 head is not represented by the open Draft PR stack;
-  implementation/evidence baseline `a2ce379` is 123 commits and 163 changed
-  paths beyond Draft PR #76's head, with this repository-only working-model
-  correction layered locally above it. Draft PR #65 is
-  `Needs Decision / Blocked` until product code and historical governance
-  material are separated into a reviewable integration shape. Do not claim
-  remote/CI coverage for either local layer.
+- The local branch is ahead of its remote tracking branch. The GitHub issue,
+  Project item and integration PR have not been refreshed by this
+  repository-only change, so no new remote synchronization or CI is claimed.
 
 ## Operating rules
 

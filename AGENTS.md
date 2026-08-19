@@ -90,6 +90,22 @@ compatibility repairs, bounded reruns, and exact cleanup. The exact image cache
 may remain as named local residue; disposable containers, networks, volumes,
 credentials, databases, runtime roots, and coordinator state may not.
 
+Docker and OCI caches are non-authoritative optimizations. Cache presence is
+never canonical evidence, a readiness condition, a future-run binding, or a
+prerequisite for product acceptance. If a lifecycle needs an acquired image,
+inspect, acquire when allowed, re-inspect and consume that exact digest in the
+same continuous campaign whenever feasible. Do not create a later cached-only
+product gate whose success depends on Docker retaining bytes between
+invocations.
+
+Once a local persistence boundary has a Green schema/restart/persistence/
+rollback/cleanup proof, repeated cache misses at that boundary do not justify
+another local Docker Enabler. Freeze the local proof and move to the next
+deployment-shaped uncertainty. For R4, that means a separately bounded,
+read-only inventory of the existing Cloudflare → Caddy → Hetzner →
+PostgreSQL path before any staging or Production mutation. Repository planning
+does not itself authorize server access.
+
 Inspect, acquire, re-inspect, and consume the exact dependency in one
 continuous campaign whenever feasible. A cache miss discovered before any
 runtime resource is created consumes an acquisition attempt, not a full

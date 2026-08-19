@@ -1,5 +1,30 @@
 # Native Harness architecture contract v0.4
 
+## Superseding #67 architecture direction — deployment-shaped inventory
+
+NH1/NH2 do not require a persistent local Docker cache. Runtime containers and
+image bytes remain disposable computation, never canonical Forme truth. The
+Green local PostgreSQL proof and repository-integrated product path may be
+carried forward without requiring Docker to retain the image between later
+invocations.
+
+The next architecture check is a read-only inventory of the existing
+Cloudflare → Caddy → Hetzner → PostgreSQL path. It asks whether the
+approved self-hosted Next.js/Caddy/PostgreSQL contract can support an isolated
+synthetic staging namespace. Inventory evidence may describe infrastructure
+metadata through a body-free typed contract; it does not become canonical
+Owner meaning and grants no Harness-native authority to mutate Forme,
+Production or public traffic.
+
+The plan is documented in
+[`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md).
+Live server access remains a separate Owner stop gate.
+
+Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
+SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
+LIVE_SERVER_READ_APPROVAL_REQUIRED / ISOLATED_STAGING_NOT_REQUESTED /
+PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
+
 ## Superseding #67 local activation status — 2026-08-18 no-pull replacement clean stop
 
 NH1/NH2 remain unchanged. The new local Room mode admits the already-reviewed
