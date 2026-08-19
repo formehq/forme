@@ -1,6 +1,6 @@
 # Product
 
-## Superseding #67 activation status — 2026-08-18
+## Superseding #67 activation status — 2026-08-18 persistence Green, bootstrap corrected
 
 The Public Room is no longer disconnected from the durable implementation.
 Its guest-facing Next.js routes now select the existing PostgreSQL-backed
@@ -9,16 +9,19 @@ visible product path can list admitted Projections, serve direct reads, issue
 the bounded encounter and accept one private Interaction without adding a
 server model, email or automatic answer.
 
-Repository Technical Review is Green (`607/607` offline R4, full `check`,
-normal Room production build and post-build boundary audit). The first
-synthetic physical activation rehearsal stopped before PostgreSQL because its
-exact image was not present in the local Docker cache and pull/retry were not
-authorized. A separately approved pull-once replacement then made one exact
-pull attempt; Docker returned nonzero before completion or resource creation.
-All run-owned cleanup is exact, while Docker-managed partial image-cache
-residue is unknown. Every real-Guest, Provider, public-traffic, Production and
-Gate C effect is zero. The runner is now aligned repository-only with #77's
-proven explicit-socket and isolated Docker-config transport.
+Corrected run `fd98766193fb82cb` made the sole approved anonymous pull,
+established the exact image, started PostgreSQL, applied the schema and passed
+verify. It then failed cleanly before the first product-runtime load because
+three synthetic Projection claims omitted uncertainty text required by their
+existing `inferred_allowed` classification. No Room, binding, Projection,
+admission, encounter or Interaction was created. Exact container, network,
+volume and private-root cleanup is Green; every real-Guest, Provider,
+public-traffic, Production and Gate C effect is zero.
+
+The mismatch is now corrected repository-only with an executable protocol
+regression test. This changes no product schema, trust boundary or Owner
+meaning. The exact image is cached, but the one-use physical envelope is
+consumed and has not been retried.
 
 This is real Product Progress—the durable core is on the guest-facing product
 path—but not Owner Experience Acceptance. #67 remains `Building / At Risk`
@@ -26,9 +29,10 @@ until a synthetic activation rehearsal is Green and one Owner-reviewed,
 publication-stable `24h / 1 Interaction` encounter is completed.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
-CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
-NEW_ACTIVATION_DECISION_REQUIRED /
+EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
+PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

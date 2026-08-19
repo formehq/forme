@@ -1,26 +1,27 @@
 # MVP rebuild roadmap
 
-## Superseding current gate — #67 local activation, 2026-08-18
+## Superseding current gate — #67 persistence Green, bootstrap correction, 2026-08-18
 
 The first #67 product-integration step is complete: the proven Durable Public
 Core and PostgreSQL adapter are now reachable through the guest-facing Room's
 bounded local activation mode. This closes the repository wiring gap and moves
 R4 from infrastructure-only proof to an actual product path.
 
-The first no-pull rehearsal stopped because the exact image was not cached.
-The replacement envelope made one pull attempt, which Docker rejected before
-completion or resource creation. No database or Guest data was created; all
-run-owned cleanup is exact and partial Docker image-cache residue is unknown.
-The runner's Docker transport is now aligned repository-only with the proven
-#77 explicit-socket/isolated-config path. The roadmap stays on #67; no new
-Enabler is opened. The next milestone is one successful synthetic activation
-under a fresh medium decision, followed by one concentrated Owner review of
+Corrected run `fd98766193fb82cb` completed its single pull and physically
+passed PostgreSQL schema and verify through the product activation runner. It
+then stopped before runtime load on a synthetic Projection fixture that did
+not satisfy the existing inferred-claim uncertainty contract. The defect is
+fixed repository-only with a direct test; no product object or Guest data was
+created and cleanup is exact. The roadmap stays on #67 and opens no new
+Enabler. The next milestone is one replacement synthetic activation under a
+fresh medium decision, followed by one concentrated Owner review of
 publication wording and the real `24h / 1 Interaction` encounter.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
-CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
-NEW_ACTIVATION_DECISION_REQUIRED /
+EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
+PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

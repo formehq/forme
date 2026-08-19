@@ -127,7 +127,7 @@ async function exactAbsent(docker, kind, name) {
   if (result.code === 0) fail("local_runtime_owned_name_collision", `docker.${kind}.absence`);
 }
 
-function projection(roomId, entityId, now) {
+export function createLocalRuntimeRehearsalProjectionV1(roomId, entityId, now) {
   const publishedAt = now.toISOString();
   const freshUntil = new Date(now.getTime() + 48 * 60 * 60 * 1_000).toISOString();
   const expiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1_000).toISOString();
@@ -141,10 +141,10 @@ function projection(roomId, entityId, now) {
     thirdPlaceSummary: "Synthetic loopback-only content proves the durable #67 product path without publishing Owner meaning.",
     claims: [
       { slot: "becoming", text: "The durable Public Core is connected to the actual Room runtime.", attribution: "inferred_allowed", uncertainty: "This is synthetic technical evidence, not publication authority." },
-      { slot: "now", text: "A loopback rehearsal is validating PostgreSQL-backed Room behavior.", attribution: "inferred_allowed", uncertainty: null },
-      { slot: "nextMove", text: "Review publication-stable Owner wording before the real bounded encounter.", attribution: "inferred_allowed", uncertainty: null },
+      { slot: "now", text: "A loopback rehearsal is validating PostgreSQL-backed Room behavior.", attribution: "inferred_allowed", uncertainty: "This is a synthetic rehearsal observation, not a Production or Owner-experience claim." },
+      { slot: "nextMove", text: "Review publication-stable Owner wording before the real bounded encounter.", attribution: "inferred_allowed", uncertainty: "The next move remains subject to Owner review after technical activation is Green." },
       { slot: "tensions", text: "Useful Presence must remain separate from private Twin truth and Owner authorship.", attribution: "unresolved_allowed", uncertainty: null },
-      { slot: "openTo", text: "One reviewed real Guest encounter after the technical path closes.", attribution: "inferred_allowed", uncertainty: null },
+      { slot: "openTo", text: "One reviewed real Guest encounter after the technical path closes.", attribution: "inferred_allowed", uncertainty: "No real Guest encounter or publication authority is implied by this synthetic run." },
     ],
     supportedInteractions: ["ask"],
     allowedTopics: ["Forme product direction"],
@@ -383,7 +383,7 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
     const now = new Date();
     const roomId = `room_${createHash("sha256").update(`room:${runId}`).digest("hex").slice(0, 32)}`;
     const entityId = "entity_forme_public_core_v1";
-    const projectionValue = projection(roomId, entityId, now);
+    const projectionValue = createLocalRuntimeRehearsalProjectionV1(roomId, entityId, now);
     const approvalHash = canonicalSha256({ runId, kind: "synthetic-runtime-rehearsal-approval" });
     const attestationHash = canonicalSha256({ runId, kind: "synthetic-runtime-rehearsal-attestation" });
     const publicationAuthority = Object.freeze({

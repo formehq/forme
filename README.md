@@ -6,7 +6,7 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding activation update — runtime integrated; image acquisition failed cleanly
+### Superseding activation update — persistence Green; product bootstrap corrected repository-only
 
 The guest-facing Room now has a bounded local activation mode wired to the
 existing Durable Public Core and PostgreSQL adapter. The public API, Third
@@ -15,27 +15,31 @@ Controller/Curator/room-operator credentials and cryptographic material come
 only from one exact private root. Synthetic mode remains separate and the
 hosted Owner dashboard remains closed without a Production identity adapter.
 
-Repository validation is Green: offline R4 `607/607`, full `check` (`45/45`,
-`607/607`, `145/145`) and the normal Turbopack Room build plus post-build
-boundary audit. The first no-pull rehearsal stopped at cached-image inspection.
-A separately approved replacement made exactly one anonymous pull attempt;
-Docker returned nonzero before pull completion, resource creation or
-PostgreSQL. All run-owned residue is absent; Docker-managed partial image-cache
-residue is unknown rather than claimed clean. The runner has since been aligned
-repository-only with the proven #77 explicit-socket/isolated-config transport.
+Repository validation was Green before execution. Corrected run
+`fd98766193fb82cb` then made the sole approved anonymous pull, established the
+exact `linux/arm64` image, started PostgreSQL, applied the schema and passed its
+full verify contract. It stopped cleanly before the first product-runtime load:
+three synthetic Projection claims used the existing `inferred_allowed`
+classification without its required uncertainty text. No Room, binding,
+Projection, admission, encounter or Interaction was created, and all run-owned
+container/network/volume/private-root residue is absent.
+
+That protocol mismatch is now corrected repository-only and has an executable
+regression test. The image remains cached as permitted evidence, but the
+one-use pull/lifecycle envelope is consumed and has not been retried.
 See the
 [activation result](docs/R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
-#67 remains `Building / At Risk`: product runtime integration is Technical
-Review Green, while physical local activation and the Owner-experienced Guest
-encounter remain incomplete. Both prior envelopes are consumed. Another
-Docker call requires one fresh medium activation decision; there is no hidden
-retry.
+#67 remains `Building / At Risk`: persistence through the product runner is
+physically Green, while the complete synthetic product flow and the
+Owner-experienced Guest encounter remain incomplete. Another Docker call
+requires one fresh medium activation decision; there is no hidden retry.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
-CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
-NEW_ACTIVATION_DECISION_REQUIRED /
+EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
+PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

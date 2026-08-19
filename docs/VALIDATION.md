@@ -1,6 +1,6 @@
 # Product validation and learning log
 
-## Current verdict — product runtime integrated; image acquisition failed cleanly
+## Current verdict — persistence Green; product bootstrap corrected repository-only
 
 The Durable Public Core is now exercised through a product-facing local Room
 transport rather than only through store/application tests. The transport
@@ -8,24 +8,25 @@ preserves the closed action inventory, authenticates every non-public actor,
 uses one exact private root and loopback PostgreSQL URL, and exposes no server
 model, email or automatic response path.
 
-Repository evidence is offline R4 `607/607`, full `check` (`45/45`, `607/607`,
-`145/145`), normal Turbopack Room build and post-build boundary audit. No-pull
-run `541c92f7ea265465` stopped at absent cache. Pull-once run
-`4f810557bf3ae7df` made one exact attempt and stopped on Docker nonzero before
-completion. Both runs reached zero PostgreSQL/schema/runtime/Guest effects and
-prove exact container/network/volume/private-root absence. Partial Docker
-image-cache residue after the failed pull is `UNKNOWN`.
+Corrected run `fd98766193fb82cb` completed its one exact pull, started
+PostgreSQL, applied schema and passed verify. It failed cleanly before the
+first runtime load because three synthetic `inferred_allowed` claims lacked
+the uncertainty text required by the existing Projection protocol. The result
+records `runtimeLoads=0`; no Room, binding, Projection, admission, encounter or
+Interaction was created. Container/network/volume/private-root cleanup is
+Green and all real-Guest/Provider/public/Production/Gate-C effects are zero.
 
-This validates the integration mechanism but not persistence through the new
-product path and not the Owner/Guest experience. Both effect envelopes are
-consumed. A repository-only correction now mirrors #77's explicit socket,
-isolated Docker config and deadlines; it has made no Docker call. See
+The fixture is corrected repository-only and now has a direct executable
+protocol regression test. This proves persistence readiness but not the full
+product flow or Owner/Guest experience. The physical envelope is consumed and
+was not retried. See
 [`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN /
-CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN /
-NEW_ACTIVATION_DECISION_REQUIRED /
+EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
+PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

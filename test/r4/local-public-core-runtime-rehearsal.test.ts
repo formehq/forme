@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
+  createLocalRuntimeRehearsalProjectionV1,
   LOCAL_RUNTIME_REHEARSAL_IMAGE,
   LOCAL_RUNTIME_REHEARSAL_PLATFORM,
   LOCAL_RUNTIME_REHEARSAL_SERVER_VERSION,
@@ -11,6 +12,22 @@ import {
 } from "../../scripts/r4-local-public-core-runtime-rehearsal.mjs";
 
 const SOURCE = readFileSync(new URL("../../scripts/r4-local-public-core-runtime-rehearsal.mjs", import.meta.url), "utf8");
+
+test("rehearsal Projection satisfies the exact existing protocol before physical work", () => {
+  const value = createLocalRuntimeRehearsalProjectionV1(
+    "room_00000000000000000000000000000001",
+    "entity_forme_public_core_v1",
+    new Date("2026-08-19T00:00:00.000Z"),
+  );
+  assert.equal(value.schemaVersion, "projection_capsule.v1");
+  assert.equal(value.claims.length, 5);
+  for (const claim of value.claims) {
+    if (claim.attribution === "inferred_allowed") {
+      assert.equal(typeof claim.uncertainty, "string");
+      assert.ok(claim.uncertainty.length > 0);
+    }
+  }
+});
 
 test("local runtime rehearsal is one exact-image, loopback-only, synthetic-data lifecycle", () => {
   assert.equal(LOCAL_RUNTIME_REHEARSAL_IMAGE, "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74");

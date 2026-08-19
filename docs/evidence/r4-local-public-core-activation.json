@@ -1,20 +1,21 @@
 {
   "schemaVersion": "r4.local-public-core-activation-evidence.v1",
-  "generatedAt": "2026-08-19T00:05:21Z",
-  "status": "LOCAL_RUNTIME_REPOSITORY_GREEN_IMAGE_ACQUISITION_FAILED_CLEAN",
+  "generatedAt": "2026-08-19T00:10:41Z",
+  "status": "LOCAL_RUNTIME_REPOSITORY_GREEN_POSTGRES_SCHEMA_VERIFY_GREEN_BOOTSTRAP_FAILED_CLEAN",
   "implementation": {
     "roomRuntimeSha256": "sha256:56ae6fd696adc3b6c81482764cd941a1eb47d6aab1d90c1be4e264279e16f5f0",
     "localLoaderSha256": "sha256:c587cc7151b6d4be0637221cb015bce81925110eac489a4c0887325ce3078dbf",
-    "rehearsalSha256": "sha256:6afd2c1d583c50bf78c9f12f012c7828ac86b0bd0175c224b242f0d92ba5c135",
+    "rehearsalSha256": "sha256:aaa6a10f4b38cbd5eeea614c163e654e56406096bf15d647b0266e1af3f1eb91",
     "runtimeTestSha256": "sha256:4272d9b9f77e8e7526bb4ab6678ff3a60950ca36d2bb9fb4995be8001c3c52ae",
-    "rehearsalTestSha256": "sha256:65ae8bec3984398b538efcd45f7ea872914403122d811bc16ca32a9cda8f73a4",
+    "rehearsalTestSha256": "sha256:7c2fb8983b132189bb5390695334d187261bb2ff615a7839ea47f1a83cbdb808",
     "packageSha256": "sha256:c77c3b4fd3ffbb305ee1c99dd7fec509753ebcea92839dd296d30c00080fef82",
-    "correctedDockerTransportRepositoryGreen": true
+    "correctedDockerTransportRepositoryGreen": true,
+    "projectionProtocolCorrectionRepositoryGreen": true
   },
   "validation": {
     "spine": { "passed": 45, "failed": 0 },
-    "r4": { "passed": 607, "failed": 0 },
-    "r4Offline": { "passed": 607, "failed": 0, "externalNetworkDenied": true },
+    "r4": { "passed": 608, "failed": 0 },
+    "r4Offline": { "passed": 608, "failed": 0, "externalNetworkDenied": true },
     "gateBCore": { "passed": 145, "failed": 0 },
     "typecheck": "GREEN",
     "roomBuild": "GREEN",
@@ -80,16 +81,54 @@
         "privateRootAbsent": true,
         "imageCacheResidue": "UNKNOWN_AFTER_FAILED_PULL_ATTEMPT"
       }
+    },
+    {
+      "runId": "fd98766193fb82cb",
+      "status": "FAILED_CLEAN",
+      "executedRehearsalSha256": "sha256:6afd2c1d583c50bf78c9f12f012c7828ac86b0bd0175c224b242f0d92ba5c135",
+      "bodyFreeResultSha256": "sha256:ab18e80b55a6653b84221215bf3ddcd9c851c2947aadcff2f85f150d6cc9bf4a",
+      "image": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74",
+      "platform": "linux/arm64",
+      "failureCode": "local_runtime_rehearsal_failed",
+      "failurePhase": "unknown",
+      "repositoryDiagnosis": "synthetic_inferred_claim_uncertainty_missing",
+      "imagePullAttempts": 1,
+      "imagePulls": 1,
+      "schemaApplied": true,
+      "verifyPassed": true,
+      "runtimeLoads": 0,
+      "roomCreated": false,
+      "bindingCreated": false,
+      "projectionDelivered": false,
+      "curatorAdmitted": false,
+      "publicModeOpened": false,
+      "interactionCreated": false,
+      "realGuestRecords": 0,
+      "providerCalls": 0,
+      "externalMessages": 0,
+      "productionEffects": 0,
+      "publicTrafficEffects": 0,
+      "gateCEffects": 0,
+      "cleanup": {
+        "containerAbsent": true,
+        "networkAbsent": true,
+        "volumeAbsent": true,
+        "privateRootAbsent": true,
+        "imageCacheResidue": "EXACT_PINNED_IMAGE_CACHED_AFTER_COMPLETED_PULL"
+      }
     }
   ],
   "readiness": {
     "productRuntimeIntegrated": true,
     "correctedDockerTransportRepositoryGreen": true,
+    "projectionProtocolCorrectionRepositoryGreen": true,
+    "exactImageAcquired": true,
+    "postgresSchemaVerifyGreen": true,
     "localActivationPhysicallyGreen": false,
     "publicationReviewed": false,
     "realGuestEncounterCompleted": false,
     "productionRequested": false,
     "gateCRequested": false
   },
-  "stop": "LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_ATTEMPT_FAILED_CLEAN / CORRECTED_DOCKER_TRANSPORT_REPOSITORY_GREEN / NEW_ACTIVATION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
+  "stop": "LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN / EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN / PRODUCT_BOOTSTRAP_FAILED_CLEAN / PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN / REPLACEMENT_ACTIVATION_DECISION_REQUIRED / OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED"
 }

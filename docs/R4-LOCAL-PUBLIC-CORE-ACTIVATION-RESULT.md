@@ -1,5 +1,33 @@
 # R4 local Public Core activation result
 
+## Superseding outcome — PostgreSQL Green; product bootstrap failed cleanly
+
+Corrected run `fd98766193fb82cb` used the exact current-user Docker socket and
+isolated client configuration. It completed the sole approved anonymous pull
+of the pinned `linux/arm64` image, created the disposable database resources,
+reached PostgreSQL 16.10, applied the exact schema and passed verify.
+
+The run then stopped before the first product-runtime load. The body-free
+result reported a generic bootstrap failure; repository diagnosis found an
+exact deterministic cause: three synthetic Projection claims were classified
+as `inferred_allowed` while omitting the uncertainty text required by the
+existing Projection protocol. No Room, binding, Projection delivery,
+admission, encounter or Interaction occurred. `runtimeLoads=0`, and exact
+container, network, volume and private-root cleanup is Green.
+
+The fixture correction is repository-only, changes no schema, trust boundary
+or Owner meaning, and is covered by a direct protocol test. The exact image is
+now cached as permitted. The pull/lifecycle authority is consumed and the run
+was not repeated.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
+PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding outcome — image acquisition attempt failed cleanly
 
 The approved replacement envelope made its one exact anonymous pull attempt
@@ -70,8 +98,8 @@ GATE_C_NOT_REQUESTED`.
 ## Repository evidence
 
 - `npm run typecheck`: Green.
-- `npm run check`: `45/45` spine, `607/607` R4 and `145/145` Gate-B Core.
-- `npm run test:r4:offline`: `607/607`, with external network denied.
+- `npm run check`: `45/45` spine, `608/608` R4 and `145/145` Gate-B Core.
+- `npm run test:r4:offline`: `608/608`, with external network denied.
 - `npm run room:build`: Green under the normal Turbopack path.
 - Post-build audit: 18 route chunks, 9 dependency traces, zero model/provider
   packages, zero Owner paths and zero source-reader/process-execution markers.
