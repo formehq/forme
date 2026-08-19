@@ -43,7 +43,6 @@ collection of infrastructure proofs.
 
 ## Re-entry
 
-Start with the active R4 issue, then its integration pull request. Use
-[docs/CONTEXT.md](../docs/CONTEXT.md) for the repository working set and
-[docs/CONTROL.md](../docs/CONTROL.md) for the current blocker and next
-acceptance point.
+Start with the active R4 issue, then its integration pull request. In the
+repository, use docs/CONTEXT.md for the working set and docs/CONTROL.md for the
+current blocker and next acceptance point.
