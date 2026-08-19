@@ -29,17 +29,17 @@ collection of infrastructure proofs.
 
 ## Board rules
 
-1. One item represents one user-visible outcome, required dependency or
-   explicit decision.
-2. Status and Stage show current position; do not encode history in titles or
-   descriptions.
-3. Enablers count as 0 Product Progress until they unlock a user capability.
-4. Stable issue bodies describe outcome, acceptance and non-goals. Progress
-   belongs in short comments or the linked pull request.
-5. Owner Acceptance is distinct from Technical Review.
-6. P1 remains optional until P0 is Green.
-7. Production, real/private data, providers, deployment, publication,
-   messaging, spend and merge require explicit authority.
+1. Keep one active user-visible outcome. Add an Enabler only for a concrete
+   blocker exposed by that outcome.
+2. The Owner approves outcomes and consequential boundaries; engineering
+   inside them proceeds without per-file, per-hash or per-attempt approval.
+3. Stable issue bodies describe outcome and acceptance. Progress belongs in a
+   short comment or the linked pull request, not in new authority documents.
+4. Technical Review, integration and Owner Experience Acceptance are distinct.
+   A merge does not make the product issue Done.
+5. P1 remains optional until P0 is Green. Production, real/private data,
+   providers, deployment, publication, messaging, spend and merge remain
+   explicit decisions.
 
 ## Re-entry
 

@@ -85,6 +85,22 @@ Owner-bound approval, bounded execution and outcome/rollback evidence.
 
 ## Working model
 
+### The clean restart separates outcome approval from engineering execution
+
+The Owner approves user-visible outcomes, product/trust changes and real
+external effects. Once an outcome boundary is clear, ordinary implementation,
+tests, local synthetic work, reversible repair, evidence, commits and pull
+request updates proceed autonomously. Files, hashes and attempts are not units
+of Owner approval.
+
+### Integration is not product acceptance
+
+A reviewed fail-closed implementation may enter `main` as a development
+baseline while its product issue remains open. Technical Review, integration
+and Owner Experience Acceptance are separate events. Historical detail remains
+recoverable through Git and tags rather than being carried in every active
+task.
+
 ### GitHub is the live execution surface
 
 The active issue and integration pull request carry mutable execution truth.

@@ -17,11 +17,14 @@ Guest flow, a deployment-shaped integration decision and one
 Owner-experienced Guest encounter remain open in
 [Issue #67](https://github.com/formehq/forme/issues/67).
 
-The project is currently at a context-distillation checkpoint. Historical
+The project is currently at a clean-restart integration checkpoint. Historical
 control packets and evidence remain available, but the default working set is
-now deliberately small. No production access, public traffic, provider call,
-real/private Guest data, deployment, merge or Gate C authority follows from
-the local proofs.
+deliberately small and ordinary engineering now proceeds inside one
+outcome-level boundary rather than through per-file or per-attempt approval.
+Draft PR #78 is the candidate R4 development baseline; integrating it would
+not complete #67 or imply Owner Experience Acceptance. No production access,
+public traffic, provider call, real/private Guest data, deployment, merge or
+Gate C authority follows from the local proofs.
 
 ## Start here
 

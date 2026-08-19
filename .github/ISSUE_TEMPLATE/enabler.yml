@@ -1,5 +1,5 @@
 name: Bounded enabler
-description: Propose one time-boxed prerequisite for an active Walking Slice.
+description: Record one concrete blocker that cannot be resolved inside the active product outcome.
 title: "[Enabler] "
 labels:
   - type:enabler
@@ -16,7 +16,7 @@ body:
     id: unblock
     attributes:
       label: Exact unblock result
-      description: Name the technical fact this must prove. Do not describe the Enabler as product progress.
+      description: Name the technical fact this must prove and the user outcome it unlocks.
     validations:
       required: true
   - type: textarea
@@ -34,14 +34,6 @@ body:
       placeholder: "2 working days"
     validations:
       required: true
-  - type: input
-    id: attempts
-    attributes:
-      label: Full-attempt budget
-      description: Default maximum is two full attempts.
-      placeholder: "2"
-    validations:
-      required: true
   - type: textarea
     id: exit
     attributes:
@@ -50,16 +42,9 @@ body:
     validations:
       required: true
   - type: textarea
-    id: stop
-    attributes:
-      label: Mandatory redesign condition
-      description: Two same-boundary failures, exhausted time/attempt budget, an Enabler needing its own Enabler, or ambiguous effects must stop the approach.
-    validations:
-      required: true
-  - type: textarea
     id: owner
     attributes:
-      label: Owner decision boundary
-      description: Name only the schema/trust, real-data/provider, or production/public boundary that still needs Owner approval.
+      label: Return condition
+      description: Name the real boundary change, ambiguous effect, failed cleanup or changed outcome that would return control to the Owner.
     validations:
       required: true

@@ -39,11 +39,25 @@ they do not authorize a new effect or redefine the product.
 If live surfaces disagree, stop the external/runtime effect and reconcile
 them. A stale historical statement never overrides a current contract.
 
+## Working mode
+
+The repository agreement is [AGENTS.md](../AGENTS.md). The Owner approves a
+user-visible outcome and consequential boundaries. Ordinary implementation,
+tests, local synthetic work, reversible repair and evidence proceed
+autonomously inside that envelope. Per-file, per-hash and per-attempt approval
+are not part of the default workflow.
+
+Technical Review, code integration and Owner Experience Acceptance are three
+different events. A Green pull request may establish a fail-closed development
+baseline without claiming that its product issue is Done.
+
 ## Current working boundary
 
 - R1–R3 are accepted.
 - R4 Controlled Presence is open.
 - Local synthetic and disposable persistence proofs are Green.
+- Draft PR #78 is the candidate clean integration baseline; `main` has not yet
+  admitted it.
 - End-to-end product integration and one Owner-experienced Guest encounter
   remain open.
 - Production, public traffic, real/private Guest data, provider calls,
