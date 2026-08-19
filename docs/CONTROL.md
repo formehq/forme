@@ -1,6 +1,6 @@
 # Owner technical cockpit
 
-## Superseding current status — #67 persistence Green; bootstrap corrected, 2026-08-18
+## Superseding current status — #67 no-pull replacement failed cleanly, 2026-08-18
 
 **The durable Public Core is on the guest-facing Room path and its exact local
 PostgreSQL schema/verify boundary has passed physically.** The Next.js API, Third Place
@@ -10,23 +10,24 @@ closed transport membrane. Synthetic mode remains separate, arbitrary
 synthetic headers are ignored in local mode, and the unconfigured server still
 fails closed.
 
-Corrected run `fd98766193fb82cb` used the proven explicit socket and isolated
-Docker config, completed its sole pull, reached PostgreSQL, applied schema and
-passed verify. It stopped before the first runtime load because synthetic
-Projection fixtures violated an existing protocol rule: three inferred claims
-lacked uncertainty text. No product object was created and exact cleanup is
-Green. The defect is corrected repository-only and directly tested.
+Run `fd98766193fb82cb` completed its pull and physically passed PostgreSQL
+schema/verify before exposing a deterministic synthetic Projection fixture
+error. That existing-protocol mismatch is corrected repository-only and
+directly tested. No-pull replacement `754fcd2f9bdb4d45` then found the exact
+image unavailable at cache inspection. It stopped before construction, used
+zero pull/PostgreSQL/product effects and cleaned exactly.
 
-The one-use lifecycle is consumed and was not retried. The next action is one
-medium replacement-activation decision after repository review, not another
-transport or database campaign. A Green replacement would return once for
-publication wording and the single real Guest encounter.
+The no-pull lifecycle is consumed and was not retried. Docker cache retention
+cannot be treated as a later-run prerequisite. The next action is one medium
+decision for a combined pull-if-needed plus same-invocation activation—not
+another transport or database correction chain. A Green run would return once
+for publication wording and the single real Guest encounter.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
-PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
 PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

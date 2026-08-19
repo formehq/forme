@@ -6,7 +6,7 @@ The MVP is a **Living Project Twin** for one real project. It must remember wher
 
 ## Current state
 
-### Superseding activation update — persistence Green; product bootstrap corrected repository-only
+### Superseding activation update — no-pull replacement failed cleanly
 
 The guest-facing Room now has a bounded local activation mode wired to the
 existing Durable Public Core and PostgreSQL adapter. The public API, Third
@@ -15,31 +15,30 @@ Controller/Curator/room-operator credentials and cryptographic material come
 only from one exact private root. Synthetic mode remains separate and the
 hosted Owner dashboard remains closed without a Production identity adapter.
 
-Repository validation was Green before execution. Corrected run
-`fd98766193fb82cb` then made the sole approved anonymous pull, established the
-exact `linux/arm64` image, started PostgreSQL, applied the schema and passed its
-full verify contract. It stopped cleanly before the first product-runtime load:
-three synthetic Projection claims used the existing `inferred_allowed`
-classification without its required uncertainty text. No Room, binding,
-Projection, admission, encounter or Interaction was created, and all run-owned
-container/network/volume/private-root residue is absent.
+Run `fd98766193fb82cb` previously acquired the exact `linux/arm64` image and
+physically passed PostgreSQL schema and verify before exposing one deterministic
+synthetic Projection fixture error. That protocol mismatch is corrected
+repository-only with an executable regression test.
 
-That protocol mismatch is now corrected repository-only and has an executable
-regression test. The image remains cached as permitted evidence, but the
-one-use pull/lifecycle envelope is consumed and has not been retried.
+The approved no-pull replacement run `754fcd2f9bdb4d45` then found that the
+exact image was no longer admissible through its cache inspection and stopped
+before resource construction. It made zero pulls and created no PostgreSQL or
+product state; container/network/volume/private-root cleanup is Green. The
+earlier run proves the image was available immediately after pull, not that
+Docker would retain it until a later invocation.
 See the
 [activation result](docs/R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
-#67 remains `Building / At Risk`: persistence through the product runner is
-physically Green, while the complete synthetic product flow and the
-Owner-experienced Guest encounter remain incomplete. Another Docker call
-requires one fresh medium activation decision; there is no hidden retry.
+#67 remains `Building / At Risk`: its PostgreSQL boundary is physically Green,
+while the complete synthetic product flow and Owner-experienced Guest encounter
+remain incomplete. Another Docker call requires one fresh medium activation
+decision; there is no hidden retry.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
-PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
 PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

@@ -1,6 +1,6 @@
 # Product validation and learning log
 
-## Current verdict — persistence Green; product bootstrap corrected repository-only
+## Current verdict — no-pull replacement stopped cleanly at cache inspection
 
 The Durable Public Core is now exercised through a product-facing local Room
 transport rather than only through store/application tests. The transport
@@ -8,25 +8,25 @@ preserves the closed action inventory, authenticates every non-public actor,
 uses one exact private root and loopback PostgreSQL URL, and exposes no server
 model, email or automatic response path.
 
-Corrected run `fd98766193fb82cb` completed its one exact pull, started
-PostgreSQL, applied schema and passed verify. It failed cleanly before the
-first runtime load because three synthetic `inferred_allowed` claims lacked
-the uncertainty text required by the existing Projection protocol. The result
-records `runtimeLoads=0`; no Room, binding, Projection, admission, encounter or
-Interaction was created. Container/network/volume/private-root cleanup is
-Green and all real-Guest/Provider/public/Production/Gate-C effects are zero.
+Run `fd98766193fb82cb` completed its pull and physically passed PostgreSQL
+schema/verify before exposing a synthetic Projection fixture mismatch. The
+fixture is corrected repository-only with a direct executable protocol test.
+No-pull replacement `754fcd2f9bdb4d45` then returned
+`local_runtime_exact_image_not_cached` at `docker.image.inspect`. It made zero
+pulls and stopped before resource construction, PostgreSQL or product runtime;
+all four cleanup predicates are true.
 
-The fixture is corrected repository-only and now has a direct executable
-protocol regression test. This proves persistence readiness but not the full
-product flow or Owner/Guest experience. The physical envelope is consumed and
-was not retried. See
+The result proves only that the prior image was available immediately after
+pull, not durably retained for a later invocation. The one-use no-pull envelope
+is consumed and was not retried. All real-Guest/Provider/public/Production/
+Gate-C effects remain zero. See
 [`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md).
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
-PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
 PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 

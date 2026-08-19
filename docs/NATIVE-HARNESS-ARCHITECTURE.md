@@ -1,6 +1,6 @@
 # Native Harness architecture contract v0.4
 
-## Superseding #67 local activation status — 2026-08-18 persistence Green
+## Superseding #67 local activation status — 2026-08-18 no-pull replacement clean stop
 
 NH1/NH2 remain unchanged. The new local Room mode admits the already-reviewed
 Durable Public Core through typed Forme operations; it does not turn the
@@ -10,20 +10,20 @@ holds only the exact public/capability transport and loopback PostgreSQL
 binding. The hosted Owner dashboard remains unavailable without a separately
 approved identity adapter.
 
-Corrected run `fd98766193fb82cb` used #77's explicit current-user socket and
-isolated Docker configuration, completed the exact pull, started PostgreSQL,
-applied schema and passed verify. It stopped before runtime load on an invalid
-synthetic Projection fixture, not on a Harness/runtime authority boundary.
-The existing protocol required uncertainty text for inferred claims; the
-fixture is corrected repository-only and directly tested. Exact run-owned
-cleanup is Green. This grants no Provider, real Guest, public deployment,
-Production or Gate C authority.
+Run `fd98766193fb82cb` used #77's explicit socket/config boundary, completed
+the pull and physically passed PostgreSQL schema/verify before exposing a
+synthetic Projection fixture error. The fixture is corrected repository-only.
+No-pull replacement `754fcd2f9bdb4d45` then found the image unavailable at
+cache inspection and stopped before construction, with exact cleanup and zero
+PostgreSQL/product effects. This is cache volatility, not a change to NH1/NH2,
+and grants no Provider, real Guest, public deployment, Production or Gate C
+authority.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
-PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
 PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
 PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
 
 ## Superseding R4 execution status — 2026-08-18

@@ -1,5 +1,33 @@
 # R4 local Public Core activation result
 
+## Superseding outcome — no-pull replacement stopped at cache inspection
+
+No-pull replacement run `754fcd2f9bdb4d45` used the corrected repository
+bytes and made its one authorized invocation. Docker transport preflight was
+reachable, but the exact pinned image was not admissible at
+`docker.image.inspect`. The runner stopped before creating a network, volume,
+container, PostgreSQL process or product runtime.
+
+The run made `0` pull attempts and `0` pulls. Schema, verify and runtime loads
+were all `0`; every real-Guest, Provider, public-traffic, Production and Gate C
+effect was `0`. Container, network, volume and private-root absence are all
+Green. The result does not erase the prior physical schema/verify proof; it
+corrects one claim about cache durability. The earlier completed pull proved
+the image was usable during that invocation, not that Docker would retain it
+for a later no-pull run.
+
+The no-pull lifecycle is consumed and was not repeated. Any further activation
+needs one fresh medium decision that treats pull-if-needed and product
+activation as one invocation.
+
+Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
+PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
+OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
+GATE_C_NOT_REQUESTED`.
+
 ## Superseding outcome — PostgreSQL Green; product bootstrap failed cleanly
 
 Corrected run `fd98766193fb82cb` used the exact current-user Docker socket and

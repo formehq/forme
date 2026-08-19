@@ -1,27 +1,26 @@
 # MVP rebuild roadmap
 
-## Superseding current gate — #67 persistence Green, bootstrap correction, 2026-08-18
+## Superseding current gate — #67 no-pull replacement clean stop, 2026-08-18
 
 The first #67 product-integration step is complete: the proven Durable Public
 Core and PostgreSQL adapter are now reachable through the guest-facing Room's
 bounded local activation mode. This closes the repository wiring gap and moves
 R4 from infrastructure-only proof to an actual product path.
 
-Corrected run `fd98766193fb82cb` completed its single pull and physically
-passed PostgreSQL schema and verify through the product activation runner. It
-then stopped before runtime load on a synthetic Projection fixture that did
-not satisfy the existing inferred-claim uncertainty contract. The defect is
-fixed repository-only with a direct test; no product object or Guest data was
-created and cleanup is exact. The roadmap stays on #67 and opens no new
-Enabler. The next milestone is one replacement synthetic activation under a
-fresh medium decision, followed by one concentrated Owner review of
-publication wording and the real `24h / 1 Interaction` encounter.
+Run `fd98766193fb82cb` physically passed PostgreSQL schema/verify through the
+product runner, then exposed a synthetic Projection fixture mismatch now fixed
+repository-only. No-pull replacement `754fcd2f9bdb4d45` could not admit the
+exact image from cache and stopped before construction, with zero pull and
+exact cleanup. The roadmap stays on #67 and opens no new Enabler. The next
+milestone is one combined pull-if-needed plus same-invocation synthetic
+activation under a fresh medium decision, followed by one concentrated Owner
+review of publication wording and the real `24h / 1 Interaction` encounter.
 
 Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-EXACT_IMAGE_ACQUIRED / POSTGRES_SCHEMA_VERIFY_GREEN /
-PRODUCT_BOOTSTRAP_FAILED_CLEAN /
+POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
 PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-REPLACEMENT_ACTIVATION_DECISION_REQUIRED /
+NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
+NEW_ACTIVATION_DECISION_REQUIRED /
 OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
 GATE_C_NOT_REQUESTED`.
 
