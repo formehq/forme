@@ -1,186 +1,5 @@
 # Product
 
-## Superseding #67 direction — deployment-shaped readiness, 2026-08-18
-
-The Durable Public Core is integrated into the guest-facing Room path, its
-repository contract is Green, and local PostgreSQL persistence has already
-been proven through schema, restart, persistence, rollback and exact cleanup.
-The product runner also physically reached and passed schema/verify. Docker
-cache retention between invocations is therefore an engineering convenience,
-not part of the MVP claim and not a readiness gate.
-
-#67 remains `Building / At Risk` because the complete synthetic Room flow and
-one Owner-experienced Guest encounter are not yet Green. The next Enabler is a
-read-only readiness inventory for the existing Cloudflare → Caddy → Hetzner
-→ PostgreSQL path, followed—only if suitable—by an isolated synthetic
-staging envelope. The current repository change adds `0 Product Progress`; it
-removes a misleading infrastructure prerequisite and aims the next work at
-the real deployment boundary.
-
-See [`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md).
-Live server access, staging mutation, real Guest data, Production and Gate C
-remain unrequested.
-
-Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
-PRODUCT_RUNTIME_REPOSITORY_GREEN /
-SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
-LIVE_SERVER_READ_APPROVAL_REQUIRED /
-ISOLATED_STAGING_NOT_REQUESTED /
-OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
-
-## Superseding #67 activation status — 2026-08-18 no-pull replacement failed cleanly
-
-The Public Room is no longer disconnected from the durable implementation.
-Its guest-facing Next.js routes now select the existing PostgreSQL-backed
-Public Core through an exact loopback/private-root activation mode. The
-visible product path can list admitted Projections, serve direct reads, issue
-the bounded encounter and accept one private Interaction without adding a
-server model, email or automatic answer.
-
-Run `fd98766193fb82cb` acquired the exact image and physically passed
-PostgreSQL schema and verify before exposing a deterministic synthetic
-Projection fixture error. That existing-protocol mismatch is corrected
-repository-only with an executable regression test and changes no schema,
-trust boundary or Owner meaning.
-
-No-pull replacement `754fcd2f9bdb4d45` found the exact image unavailable at
-cache inspection and stopped before resource construction. It used zero pull,
-PostgreSQL, Room, Projection, encounter or Interaction effects, and exact
-run-owned cleanup is Green. The prior completed pull proved immediate use, not
-durable Docker cache retention. Every real-Guest, Provider, public-traffic,
-Production and Gate C effect remains zero.
-
-This is real Product Progress—the durable core is on the guest-facing product
-path—but not Owner Experience Acceptance. #67 remains `Building / At Risk`
-until a synthetic activation rehearsal is Green and one Owner-reviewed,
-publication-stable `24h / 1 Interaction` encounter is completed.
-
-Current stop: `LOCAL_PUBLIC_CORE_RUNTIME_INTEGRATION_TECHNICAL_REVIEW_GREEN /
-POSTGRES_SCHEMA_VERIFY_PHYSICAL_GREEN /
-PROJECTION_PROTOCOL_CORRECTION_REPOSITORY_GREEN /
-NO_PULL_REPLACEMENT_FAILED_CLEAN_IMAGE_UNAVAILABLE /
-NEW_ACTIVATION_DECISION_REQUIRED /
-OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
-
-## Superseding R4 execution status — 2026-08-18
-
-Enabler #77 is Technical Review Green. The disposable PostgreSQL path now
-physically passes schema apply, both verify passes, same-container restart,
-seed persistence, rollback, schema absence and exact cleanup. The last failure
-was not a data-model defect: rollback omitted the pinned local `search_path`
-used when schema and verify deparse PostgreSQL 16 catalog text. Commit
-`360ed6c` corrected only that observation context. See the
-[`rehearsal result`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md).
-
-This removes the local database blocker but is not itself a user-visible MVP
-milestone. #67 remains `Building / At Risk`: the Owner still needs the real
-Public Room → bounded knock → durable local pull → fresh candidate → exact
-response experience. The reviewed repository tree is consolidated in Draft
-PR #78 targeting `main`; the former stacked Draft PRs are closed without
-merge. Work now returns to product runtime integration, activation and one
-Owner-experienced Guest encounter rather than more database rehearsal.
-
-Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
-OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
-
-## Execution-management reset before #77 (historical checkpoint)
-
-The Owner has reset R4 execution management around the product outcome rather
-than the historical local-infrastructure authority chain. #67 remains
-`Building / At Risk`: the Public Room, one bounded knock, durable local pull,
-fresh candidate and exact Owner response are still the outcome. Integration
-Campaign V4 and the existing physical runner are frozen as failed-clean
-historical evidence; another stderr-fingerprint Correction chain is not the
-next product step.
-
-The next proposed Enabler is
-[#77](https://github.com/formehq/forme/issues/77), one simplified disposable
-local PostgreSQL rehearsal with unique run ownership, semantic Docker results, synthetic data,
-schema/restart/rollback proof and exact cleanup. It defaults to two working
-days and two full lifecycles after a separate medium-grained runtime envelope.
-This management reset itself makes no Docker, PostgreSQL, provider, Guest,
-publication, production or Gate C effect.
-
-Reset stop: `R4_EXECUTION_MANAGEMENT_RESET_COMPLETE /
-DISPOSABLE_POSTGRES_ENABLER_ENVELOPE_REQUIRED /
-DOCKER_NOT_REQUESTED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-See [`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md).
-
-## Integration Campaign V4 status before the reset (historical)
-
-The MVP still needs one Green disposable local PostgreSQL rehearsal. V4
-consumed the final lifecycle in the confirmed autonomous envelope, proved the
-current Docker host and corrected historical container absence, then failed
-safely on a second body-free historical network-missing fingerprint before
-PostgreSQL. Fresh resources are proven absent and cleanup is exact. Target
-PostgreSQL, catalog `14/207/172/44`, product runtime, public traffic and Gate C
-remain unobserved/false. This is real infrastructure progress, but not the
-persistence proof and not the Public Room encounter. A new Owner decision is
-required before another correction-and-lifecycle campaign. R4 remains
-Building, not Owner-accepted and not Done.
-
-Current stop: `LOCAL_POSTGRES_INTEGRATION_CAMPAIGN_V4_FAILED_CLEAN /
-LOCAL_LIFECYCLE_BUDGET_EXHAUSTED / NEW_OWNER_DECISION_REQUIRED /
-PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-
-## Earlier product status snapshot (historical context)
-
-- Status: owner-approved product frame and R4 P/T1–T5/NH1/NH2 contracts;
-  reconciled Technical Control Packet v0.2 and Gate A repository mechanisms are
-  complete. #66 local Projection review is Owner-accepted; #67 is offline
-  Technical Review Green on Draft PR #73 at `5e93196`, with the public-only
-  production-boundary foundation on Draft PR #75 at `09401a0`. The Owner
-  approved the exact Durable Public Core Construction Packet/Review on
-  2026-08-10 and Addendum A on 2026-08-11. Repository-only Construction is
-  Technical Review Green at Stage-A `bcd4259`. Local PostgreSQL Wiring is
-  frozen at `bc0b520`. A precisely approved physical prepare stopped before
-  grant creation on an invalid fixed APFS directory-nlink precondition, with
-  zero Docker/PostgreSQL/SQL effects. Repository-only APFS correction is
-  Technical Review Green at Kc `18e3a32` / Lc `32448cb`. The later
-  execution-authority topology correction is Technical Review Green at Kt
-  `f7d3783` / Lt `c699f9d`. A later one-use v3 rehearsal and its separately
-  approved cleanup rescue each consumed one grant and failed closed on the
-  exact-name inspect result. No Docker resource, PostgreSQL process/database,
-  SQL or domain action was created; absence remains unknown. The repository-only
-  body-free inspect diagnostic reached Technical Review Green at Kf `bd3cdf7`
-  / Lf `7384ef8`; its approved V1 prepare then failed before grant creation
-  and before Docker/socket effects. Kp `eaca190` / Lp `7a31dba` froze the
-  19-stage body-free correction. The later Integration Campaign V2 was
-  prepared and consumed once, proved the historical resource names absent,
-  then failed closed before PostgreSQL at
-  `local_postgres_image_platform_manifest_invalid`. A later one-use
-  image-manifest diagnostic was consumed and stopped at `IMAGE_MISSING`.
-  The first image-acquisition diagnostic then consumed its one-use authority;
-  its Docker `version` call completed `NONZERO / exit 1`, and it stopped
-  before inspect or pull. The Owner reports Docker Desktop was not running for
-  that attempt and is running now; this remains unverified context until a new
-  authorized diagnostic observes it. Kiar `3db3060` / Liar `3e1b0cb`
-  freeze a V2 replacement authority path without reviving V1. Repository
-  construction is Technical Review Green; no replacement diagnostic has been
-  prepared or executed, no manifest pin is corrected, and cleanup, target
-  PostgreSQL, vault, transport, traffic and Gate C remain false. Draft PR #76 remains
-  unmerged; production activation
-  and one real Guest knock remain absent. PR #74 is merged. Both Host Binding
-  attempts are consumed Yellow
-  history, not the Controlled Presence milestone. R4 remains Building, is not
-  on `main`, and is not Owner-accepted or Done
-- Updated: 2026-08-16
-- Image-acquisition replacement construction bindings: index
-  `sha256:f37fd3adccb7b540aaa0ff180237d892b78c1e27f2c64d9686c3f0ff0577c8b3`,
-  schema `sha256:7712430fed5f4feb6e8f53daf53b9aa11ba5046e2f625b2f865fed35880a6130`,
-  evidence `sha256:202e96b8d30a5f4e9e4074415388ddf73c133ceb9101733d8d36db61dc353f88`,
-  report `sha256:2750f690996e2c9e706af312e12832bc833406f0433651e1078522c70d58d156`.
-- Current stop: `LOCAL_POSTGRES_IMAGE_ACQUISITION_REPLACEMENT_AUTHORITY_TECHNICAL_REVIEW_GREEN / IMAGE_ACQUISITION_V2_APPROVAL_REQUIRED / PRODUCTION_NOT_REQUESTED / GATE_C_NOT_REQUESTED`.
-- Completion: gate-driven through Technical Review and Owner Experience
-  Acceptance; no calendar date makes the MVP Done
-- Progress / Vision Sharing: 2026-08-25 (Tuesday), presenting the truthful
-  state reached by then rather than requiring a complete/repeatable MVP
-
 ## Highest vision
 
 Forme extends an entity across four dimensions:
@@ -237,47 +56,24 @@ tiny verb or one click at a time. Confidence, owner-history similarity, account
 login, filesystem access, or authority in another Room never creates
 permission by itself.
 
-[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
-perimeter, companion authorship/consequence guards, and no-self-expansion
-meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
-approved. The R4 P0 T3 direction is one Fresh Native Response Session per
-Interaction, not a Managed-vs-Native trust selector. The Owner approved its
-exact contract on 2026-08-03, followed by the recommended T4 lifecycle contract
-on the same date. The Owner then approved full T5 on 2026-08-03. The later
-reconciled, independently audited and hashed Technical Control Packet v0.2 was
-also Owner-approved; Gate A repository-only implementation is current.
-[`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
-Entropy Reduction as the metabolism that keeps all four dimensions coherent.
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the privacy-primary perimeter,
+companion authorship/consequence guards and no-self-expansion meta-rule.
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
+the approved Native Workbench and Fresh Native Response Session boundary.
+[`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for Entropy Reduction
+as the metabolism that keeps all four dimensions coherent.
 
-## Active Gate B Demo-critical Core amendment
+## Demo-critical proof boundary
 
-On 2026-08-07 the Owner approved all five recommendations in
-[`R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md`](./R4-GATE-B-CORRECTION-SCOPE-DECISION-BRIEF.md)
-at
-`sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f`.
-The active MVP physical proof is one truthful public Hero Encounter:
-real Demo-critical PostgreSQL semantics, a separate real-Codex zero-call
-diagnostic, and—only after later grants—a transient one-shot candidate review
-path. Unimplemented Full operations are absent from the active API/Web/CLI,
-not exposed as `503` placeholders.
+The current MVP proves one truthful public Hero Encounter, not the full
+long-term Room architecture. Unimplemented Full operations remain absent
+rather than appearing as placeholders.
 
-This is an explicit MVP proof/claim amendment. The original Full target remains
-a future architecture target outside the current R4/R5 scope, but Core success does not prove its full
-45-operation surface, Private Room, notification, Agent derivative, Direct
-Invite, persistent candidate or production identity/deployment path. In Core,
-an unpublished candidate intentionally persists zero bytes and cannot survive
-process exit, cancellation, authority expiry, crash or restart. The prior
-seven-day persistent-candidate ceiling, later/offline review, candidate edit/
-replacement and submitted-unknown body recovery are unavailable rather than
-silently approximated.
-
-The controlling Desktop Agent remains a disclosed procedural boundary; child
-processes must use their exact kernel profile. A future disposable PostgreSQL
-run must remove its container, volume, workers and run root, while the exact
-public pinned image cache may remain. The Scope approval authorized preparation
-of an exact Correction Packet only; it did not authorize Construction,
-physical Retry, First Provider Call, real Guest data, Gate C, deployment,
-public traffic, merge or spend.
+Core success does not prove the full Private Room, notification, Agent
+derivative, Direct Invite, persistent candidate, production identity or
+deployment path. An unpublished candidate is transient and must persist zero
+bytes. Provider calls, real Guest data, production, deployment, public traffic,
+merge, spend and Gate C remain separate authorities.
 
 ## MVP vision
 
@@ -358,7 +154,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — #67 Construction Technical Review Green; real encounter open
+## Owner-approved R4 product target
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -433,20 +229,12 @@ ingestion, Person Twin, open signup, multiple required residents, search/feed,
 server AI, rich attachments, and cross-Room reusable Agent identity outside
 P0.
 
-Full T5 approval authorized documentation and Packet reconciliation only.
-Implementation, OpenAI/provider calls, real Guest-data handling, schema,
-deployment, spend, external messaging, and Room mutation remain unauthorized.
-The resulting exact
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2
-passed independent audits at
-`sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-The Owner approved those exact bytes on 2026-08-03, authorizing Gate A
-repository-only work. Exact machine schemas/runtime/migrations remain a
-separately hashed Gate B manifest; production deployment, real external
-writes, and spend remain a separate Production Deployment & Provisioning
-Grant.
-The versioned static projection remains the honest sharing fallback floor if
-the real encounter has not yet crossed its later gates.
+The exact T3/T4/T5 implementation lineage remains in the frozen
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and
+archive history. Those contracts do not grant provider calls, real Guest-data
+handling, deployment, spend, external messaging or Room mutation. The
+versioned static projection remains the honest sharing fallback floor until
+the real encounter crosses its later gates.
 
 The agency-first recalibration and approved T2 contract are recorded
 in [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).

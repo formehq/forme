@@ -1,0 +1,62 @@
+# Active context contract
+
+This document is Forme's canonical re-entry point. It keeps the working memory
+small without deleting product meaning or audit history.
+
+## Default read set
+
+For ordinary planning, coding, review or status work, read only:
+
+1. the root [README](../README.md);
+2. [PRODUCT.md](./PRODUCT.md);
+3. [CONTROL.md](./CONTROL.md);
+4. the relevant section of [ROADMAP.md](./ROADMAP.md);
+5. the active GitHub issue and active integration pull request.
+
+Do not preload completed packets, reports, evidence or old issue comments.
+
+## Open conditionally
+
+| Work touches | Add this contract |
+|---|---|
+| durable service/data boundaries | [ARCHITECTURE.md](./ARCHITECTURE.md) |
+| approval, privacy, identity or human friction | [AGENCY-TRUST.md](./AGENCY-TRUST.md) |
+| Native Harness, local carrier or response sessions | [NATIVE-HARNESS-ARCHITECTURE.md](./NATIVE-HARNESS-ARCHITECTURE.md) |
+| Room, Projection, Guest or Response meaning | [R4-SOCIAL-PRESENCE.md](./R4-SOCIAL-PRESENCE.md) |
+| R4 encounter scope or Demo-critical cut | [R4-HERO-ENCOUNTER-DECISION-BRIEF.md](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md) |
+| durable rationale or product evidence | [DECISIONS.md](./DECISIONS.md) or [VALIDATION.md](./VALIDATION.md) |
+
+Open [HISTORY.md](./HISTORY.md) only for lineage, audit, regression diagnosis
+or a byte-bound test.
+
+## Truth hierarchy
+
+Stable product meaning is controlled by Product, Architecture and Agency &
+Trust. Live execution truth is controlled by the active issue and pull
+request, then the cockpit and Project. Tests and evidence say what was proved;
+they do not authorize a new effect or redefine the product.
+
+If live surfaces disagree, stop the external/runtime effect and reconcile
+them. A stale historical statement never overrides a current contract.
+
+## Current working boundary
+
+- R1–R3 are accepted.
+- R4 Controlled Presence is open.
+- Local synthetic and disposable persistence proofs are Green.
+- End-to-end product integration and one Owner-experienced Guest encounter
+  remain open.
+- Production, public traffic, real/private Guest data, provider calls,
+  credentials, spend, deployment, publication, messaging, merge and Gate C
+  remain outside the current authority.
+
+## Context budget
+
+The default set should remain a short re-entry surface, not an execution log.
+When status changes, replace the cockpit statement and update the live issue
+or PR. Do not prepend another “superseding” section.
+
+When a decision becomes stable, fold its meaning into the relevant contract
+and keep only a compact rationale in Decisions. When evidence becomes
+historical, leave the exact bytes in Git or its frozen fixture and summarize
+only the still-useful product truth in Validation.

@@ -1,154 +1,53 @@
 # Documentation map
 
-This page is the short route into Forme's repository documentation. The repo
-contains current operating truth, stable product/architecture contracts and
-dated evidence. Those are intentionally different things.
+Forme documentation has three layers. Keep them separate so that chronology
+does not become operating context.
 
-## Current state — server-readiness pivot, 2026-08-18
+## 1. Default working set
 
-The guest-facing Room has a bounded local activation mode connected to the
-Durable Public Core and PostgreSQL adapter. #77 already proves the disposable
-schema/restart/persistence/rollback/cleanup chain, and the product runner has
-physically passed schema/verify. Later cached-only misses show volatile Docker
-retention; cache presence is now an optimization rather than a readiness gate.
+Start with [CONTEXT.md](./CONTEXT.md). For ordinary re-entry it routes to:
 
-#67 remains `Building / At Risk`: the complete synthetic product flow and one
-Owner-experienced Guest encounter remain open. The next Enabler is the
-repository-defined
-[`existing-server readiness inventory`](./R4-SERVER-READINESS-INVENTORY.md)
-for Cloudflare → Caddy → Hetzner → PostgreSQL. This change did not read
-the server or authorize staging, Production, Provider use, public deployment
-or Gate C. Start with the inventory plan, then the top of
-[`CONTROL.md`](./CONTROL.md).
+- [PRODUCT.md](./PRODUCT.md) for durable product meaning;
+- [CONTROL.md](./CONTROL.md) for the current gate and next acceptance point;
+- [ROADMAP.md](./ROADMAP.md) for stable dependency order;
+- the active GitHub issue and pull request for live execution state.
 
-Current stop: `LOCAL_DOCKER_PERSISTENCE_PROOF_SUFFICIENT /
-PRODUCT_RUNTIME_REPOSITORY_GREEN /
-SERVER_READINESS_INVENTORY_PLAN_REPOSITORY_GREEN /
-LIVE_SERVER_READ_APPROVAL_REQUIRED /
-ISOLATED_STAGING_NOT_REQUESTED /
-OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+## 2. Conditional contracts
 
-## Current state — consolidated integration, 2026-08-18
+Open only the contract relevant to the work:
 
-The disposable PostgreSQL Enabler (#77) is Technical Review Green. The exact
-schema/restart/persistence/rollback rehearsal completed with owned residue
-zero. That removes the local persistence blocker but adds no direct Product
-Progress.
+- [ARCHITECTURE.md](./ARCHITECTURE.md) — durable system boundaries;
+- [AGENCY-TRUST.md](./AGENCY-TRUST.md) — privacy-first human boundary;
+- [NATIVE-HARNESS-ARCHITECTURE.md](./NATIVE-HARNESS-ARCHITECTURE.md) —
+  Harness/Forme carrier and native session boundaries;
+- [R4-SOCIAL-PRESENCE.md](./R4-SOCIAL-PRESENCE.md) — Room, Projection, Guest
+  and Response semantics;
+- [R4-HERO-ENCOUNTER-DECISION-BRIEF.md](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md)
+  — Owner-approved Hybrid encounter and Demo-critical cut;
+- [STEWARDSHIP.md](./STEWARDSHIP.md) — proposal, not current authority.
 
-The reviewed repository result is now one
-[Draft integration PR #78](https://github.com/formehq/forme/pull/78) targeting
-`main`. Its reviewed code baseline is `5338f04`; PR metadata is authoritative
-for the current tip and CI after later documentation-only commits. The former
-stacked Draft PRs #65, #73, #75 and #76 are closed, unmerged historical review
-surfaces.
+[DECISIONS.md](./DECISIONS.md) is the compact register of active durable
+decisions. [VALIDATION.md](./VALIDATION.md) is the compact product truth and
+falsification register.
 
-#67 remains `Building / At Risk`. Product runtime activation,
-publication/admission and one Owner-experienced Guest encounter remain open.
-Production, real/private Guest data, Provider calls, public traffic and Gate C
-are not authorized by repository integration.
+## 3. Historical and byte-frozen material
 
-Current stop: `LOCAL_POSTGRES_WIRING_TECHNICAL_REVIEW_GREEN /
-CONSOLIDATED_MAIN_INTEGRATION_CI_GREEN / PRODUCT_INTEGRATION_REQUIRED /
-OWNER_EXPERIENCE_ACCEPTANCE_REQUIRED / PRODUCTION_NOT_REQUESTED /
-GATE_C_NOT_REQUESTED`.
+Gate packets, reviews, reports, manifests and machine-readable evidence
+preserve lineage and may also be implementation fixtures. They are not entry
+points and should not be read or edited merely because they are present.
 
-## Read this first
+[HISTORY.md](./HISTORY.md) explains the archive tags, frozen-fixture boundary
+and how to investigate chronology without loading it into ordinary work.
 
-| Document | Use it for |
-|---|---|
-| [`CONTROL.md`](./CONTROL.md) | Current gate, next action and Owner stop conditions. Read the top current section first. |
-| [`PRODUCT.md`](./PRODUCT.md) | Highest Vision, MVP claim, P0/P1/P2 scope and the real #67 acceptance story. |
-| [`ROADMAP.md`](./ROADMAP.md) | Dependency order, scope protection and what follows R4. |
-| [Issue #67](https://github.com/formehq/forme/issues/67) | Live walking-slice status and Owner-facing acceptance checklist. |
-| [Draft PR #78](https://github.com/formehq/forme/pull/78) | Current remote bytes, review discussion and CI. |
-| [`VALIDATION.md`](./VALIDATION.md) | Append-only product learning and evidence register. Read its top verdict unless auditing history. |
-| [`R4-REVIEWABLE-INTEGRATION-PACKAGE.md`](./R4-REVIEWABLE-INTEGRATION-PACKAGE.md) | What the consolidated integration proves and what it deliberately does not prove. |
-| [`R4-SERVER-READINESS-INVENTORY.md`](./R4-SERVER-READINESS-INVENTORY.md) | Next deployment-shaped unknowns and the boundary for a later body-free server inventory. |
+## Maintenance rule
 
-## Stable product and architecture contracts
+One fact gets one canonical home:
 
-These documents remain valid beyond one execution attempt:
+- live status: active issue/PR and the short cockpit;
+- durable meaning: Product or a named architecture/trust contract;
+- durable decision: Decisions;
+- present product evidence and falsification: Validation;
+- chronology and exact historical bytes: Git history, archive tags, issue/PR
+  comments and frozen evidence.
 
-| Document | Contract |
-|---|---|
-| [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Durable system boundaries. |
-| [`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) | Owner-approved Harness/Forme carrier, NH1/NH2 and Fresh Native Response Session boundary. |
-| [`AGENCY-TRUST.md`](./AGENCY-TRUST.md) | Privacy-first, minimum-friction human boundary. |
-| [`R4-SOCIAL-PRESENCE.md`](./R4-SOCIAL-PRESENCE.md) | Room, Projection, Guest, Response and no-server-AI product foundation. |
-| [`R4-HERO-ENCOUNTER-DECISION-BRIEF.md`](./R4-HERO-ENCOUNTER-DECISION-BRIEF.md) | Owner-approved Hybrid encounter and Demo-critical cut. |
-| [`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) | Byte-frozen Gate A control boundary approved on 2026-08-03. |
-| [`R4-TECHNICAL-OWNER-REVIEW.md`](./R4-TECHNICAL-OWNER-REVIEW.md) | Closed P/T1–T5/NH1/NH2 review record. |
-| [`R4-EXECUTION-MANAGEMENT-RESET.md`](./R4-EXECUTION-MANAGEMENT-RESET.md) | Stable medium-envelope and review-by-exception operating policy. |
-
-## Current evidence
-
-- [`R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md`](./R4-LOCAL-PUBLIC-CORE-ACTIVATION-RESULT.md)
-  records the product runtime integration and the first failed-clean no-pull
-  activation rehearsal.
-- [`evidence/r4-local-public-core-activation.json`](./evidence/r4-local-public-core-activation.json)
-  is its machine-readable repository, effect and cleanup evidence.
-- [`R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md`](./R4-DISPOSABLE-POSTGRES-REHEARSAL-RESULT.md)
-  records the physically Green disposable PostgreSQL 16 lifecycle.
-- [`evidence/r4-disposable-postgres-rehearsal.json`](./evidence/r4-disposable-postgres-rehearsal.json)
-  is its machine-readable evidence.
-- [`R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md`](./R4-POSTGRES-VERIFY-ARCHITECTURE-REVIEW.md)
-  and [`R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md`](./R4-POSTGRES-VERIFY-ASSERTION-VECTOR-RESULT.md)
-  explain the PostgreSQL 16 catalog-expression diagnosis.
-- [`R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md`](./R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-PACKET.md),
-  its [`Owner Review`](./R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-OWNER-REVIEW.md)
-  and [`Construction Report`](./R4-PUBLIC-CORE-DURABLE-CONSTRUCTION-REPORT.md)
-  preserve the Durable Public Core repository boundary.
-
-## Logs are not entry points
-
-Three intentionally long files preserve chronology:
-
-- [`DECISIONS.md`](./DECISIONS.md) is the append-only Owner decision log;
-- [`VALIDATION.md`](./VALIDATION.md) is the append-only learning/evidence log;
-- [`CONTROL.md`](./CONTROL.md) contains the current cockpit followed by
-  completed R1–R4 control packets and historical checkpoints.
-
-Do not read them end-to-end for ordinary re-entry. Start at the top current
-section and follow a dated historical section only when investigating lineage.
-Their length is not a signal that every old checkpoint is still active.
-
-## Historical material intentionally omitted from current integration tree
-
-The reviewable integration deliberately excluded the large chronological
-Local PostgreSQL authority archive. Historical references in mutable status
-documents therefore route here instead of pretending the omitted file is
-present.
-
-The omitted family includes the former
-`R4-PUBLIC-CORE-LOCAL-POSTGRES-*` wiring, Physical Rebind, APFS correction,
-execution-topology correction, Docker diagnostic/rescue and Integration
-Campaign reports. Their exact names, hashes and outcomes remain recorded in
-[`DECISIONS.md`](./DECISIONS.md), [`VALIDATION.md`](./VALIDATION.md), the
-physically Green source chronology and Git history. They are evidence, not
-current authority, and should not be copied back merely to make the active PR
-larger.
-
-The R4 Gate A/Gate B documents that are present in this tree are likewise
-dated or byte-frozen evidence unless their own header explicitly says they are
-current.
-
-## Reference and research
-
-- [`reference/architecture-understanding-contract-v0.1.md`](./reference/architecture-understanding-contract-v0.1.md)
-  is an owner-authored rebuild reference.
-- [`reference/design-lineage.md`](./reference/design-lineage.md) explains how
-  the early model became the current Living Project Twin architecture.
-- [`research/`](./research/) contains dated research, not product authority.
-- [`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal.
-
-## Documentation maintenance rule
-
-1. Current status belongs at the top of `CONTROL.md`, the active issue and the
-   active integration PR.
-2. Stable meaning belongs in Product, Roadmap or Architecture only after an
-   Owner-confirmed change.
-3. Evidence and decisions are append-only; mark superseded sections as dated
-   history rather than rewriting their claims.
-4. Do not move or edit byte-frozen authority documents solely for tidiness.
-5. Every relative Markdown link in the active integration tree must resolve.
+All relative links in the default and conditional sets must resolve.
