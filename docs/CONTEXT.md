@@ -56,8 +56,9 @@ baseline without claiming that its product issue is Done.
 - R1–R3 are accepted.
 - R4 Controlled Presence is open.
 - Local synthetic and disposable persistence proofs are Green.
-- Draft PR #78 is the candidate clean integration baseline; `main` has not yet
-  admitted it.
+- PR #78 carries the clean integration baseline. When this revision is present
+  on `main`, integration is complete without closing #67 or implying Owner
+  Experience Acceptance.
 - End-to-end product integration and one Owner-experienced Guest encounter
   remain open.
 - Production, public traffic, real/private Guest data, provider calls,

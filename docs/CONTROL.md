@@ -28,15 +28,14 @@ acceptance point.
 ## Current blocker and next action
 
 The Durable Public Core and PostgreSQL path have repository and disposable
-local proof, but their 72-commit integration remains outside `main` in Draft
-PR #78. The immediate engineering action is a focused review of the
-authorization, no-server-AI, runtime-mode, PostgreSQL migration/rollback and
-cleanup boundaries on the exact Green tip. If that baseline is accepted, it
-may be integrated without closing #67 or claiming product acceptance.
+local proof. PR #78 carries the reviewed fail-closed integration baseline;
+when this revision is present on `main`, the integration blocker is removed
+without closing #67 or claiming product acceptance.
 
-After integration, resume #67 under one outcome envelope for the complete
-synthetic Room/knock flow. Do not return to cache-chasing, server inventory or
-standalone Enabler work unless that flow exposes a concrete blocker.
+The immediate engineering action after integration is to resume #67 under one
+outcome envelope for the complete synthetic Room/knock flow. Do not return to
+cache-chasing, server inventory or standalone Enabler work unless that flow
+exposes a concrete blocker.
 
 ## Current evidence
 
@@ -45,10 +44,9 @@ standalone Enabler work unless that flow exposes a concrete blocker.
   contract coverage;
 - one disposable PostgreSQL lifecycle proved schema, persistence across
   restart, rollback and owned-resource cleanup;
-- consolidated integration is represented by Draft PR
+- consolidated integration was reviewed in PR
   [#78](https://github.com/formehq/forme/pull/78);
-- the preceding PR tip passed remote CI; the clean-restart tip has full local
-  proof and requires a fresh exact-tip remote run before integration;
+- its exact tip passed full local proof and remote CI before integration;
 - no live server inventory, isolated staging run or Owner-experienced Guest
   encounter has been completed.
 

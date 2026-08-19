@@ -21,10 +21,11 @@ The project is currently at a clean-restart integration checkpoint. Historical
 control packets and evidence remain available, but the default working set is
 deliberately small and ordinary engineering now proceeds inside one
 outcome-level boundary rather than through per-file or per-attempt approval.
-Draft PR #78 is the candidate R4 development baseline; integrating it would
-not complete #67 or imply Owner Experience Acceptance. No production access,
-public traffic, provider call, real/private Guest data, deployment, merge or
-Gate C authority follows from the local proofs.
+PR #78 carries the reviewed R4 development baseline; its GitHub state records
+whether that baseline has entered `main`. Integration does not complete #67 or
+imply Owner Experience Acceptance. No production access, public traffic,
+provider call, real/private Guest data, deployment or Gate C authority follows
+from the local proofs.
 
 ## Start here
 
