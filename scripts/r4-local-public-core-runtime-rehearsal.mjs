@@ -323,6 +323,23 @@ async function sql(config, text, phase) {
   }
 }
 
+/**
+ * Narrow construction seam used by the isolated #67 Owner staging tool. The
+ * staging tool owns its state root and lifecycle; these functions preserve
+ * the exact runtime-root, SQL and pairing semantics already exercised by the
+ * physical rehearsal instead of creating a second bootstrap implementation.
+ */
+export const localPublicCoreRuntimeConstructionV1 = Object.freeze({
+  capability,
+  deriveBindingSecret,
+  operation,
+  postgresReady,
+  schemaPath: SCHEMA_PATH,
+  sql,
+  verifyPath: VERIFY_PATH,
+  writeRuntimeRoot,
+});
+
 function allowImagePull(options) {
   if (options === undefined) return false;
   if (

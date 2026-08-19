@@ -58,12 +58,16 @@ baseline without claiming that its product issue is Done.
 - Local synthetic and disposable persistence proofs are Green.
 - PR #78 established the clean integration baseline on `main` without closing
   #67 or implying Owner Experience Acceptance.
-- The synthetic #67 arrival path is Green through the real HTTP membrane,
+- PR #79 integrated the synthetic #67 arrival through the real HTTP membrane,
   runtime reload and durable operator sync/pull.
-- One Owner-experienced Guest encounter remains open.
-- Production, public traffic, real/private Guest data, provider calls,
-  credentials, spend, deployment, publication, messaging, merge and Gate C
-  remain outside the current authority.
+- One exact-owned loopback-only staging Room on `hetzner-main` completed an
+  Owner-experienced synthetic browser knock and durable Owner pull.
+- The explicit Owner judgment on whether that encounter feels like Forme
+  remains open; engineering evidence cannot claim it.
+- Production, private-server access beyond the exact current staging
+  resources, public traffic, real/private Guest data, provider calls, new
+  credentials, spend, Production deployment, publication, messaging, merge
+  and Gate C remain outside the current authority.
 
 ## Context budget
 
