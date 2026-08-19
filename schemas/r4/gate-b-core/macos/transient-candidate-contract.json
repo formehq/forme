@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "r4.gate-b-core.transient-candidate-contract.v1",
+  "frameSchemaVersion": "transient_candidate_frame.v1",
+  "candidateSchemaVersion": "response_candidate.v1",
+  "maximumFrameBytes": 32768,
+  "maximumResponseTextBytes": 16384,
+  "sourceDisclosureClass": "fresh_native_sanitized_snapshot_owner_reviewed",
+  "candidateHashSemantics": "canonical full ResponseCandidateV1 object excluding candidateHash",
+  "responseTextReviewSemantics": {
+    "decodedBeforeReview": true,
+    "requiredEncoding": "valid UTF-8 NFC",
+    "acceptedCanonicalEscapes": ["quote", "backslash", "newline", "carriage-return", "tab"],
+    "failClosedMVPSubsetExcludes": ["unicode escapes", "backspace", "form-feed"],
+    "swiftStringBodyMaterialization": false,
+    "frameworkManagedCopyErasureClaimed": false
+  },
+  "syntheticBinding": {
+    "candidateId": "candidate_cccccccccccccccccccccccccccccccc",
+    "interactionId": "interaction_iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+    "sessionEnvelopeId": "session_ssssssssssssssssssssssssssssssss",
+    "roomId": "room_rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+    "projectionId": "proj_pppppppppppppppppppppppppppppppp",
+    "originState": "published_fresh",
+    "twinBasisHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "snapshotManifestHash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "sessionReceiptHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "policyHash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "reservationId": "reservation_vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv",
+    "sessionEnvelopeHash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "startAuthorizationHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "sessionAuthorityExpiresAt": "2026-08-19T23:00:00.000Z",
+    "interactionExpiresAt": "2026-08-19T23:00:00.000Z"
+  },
+  "decisions": ["approve_exact", "discard", "authority_expired", "controlled_failure"],
+  "reviewTerminalSemantics": {
+    "windowClose": "discard",
+    "absoluteAuthorityDeadline": "authority_expired",
+    "outerHardTimeoutOrHelperDeath": "yellow_unknown_not_discard",
+    "deadlineMayExtend": false
+  },
+  "frozenSyntheticVector": {
+    "frameBytes": 1390,
+    "frameSha256": "sha256:0576ca281013f55670897488801dcfef98fb00db08a303fcbd8a028f97f2c001",
+    "candidateHash": "sha256:7fec81b95698754e4bd6fc2c8b126e61f3f1a9c62881d4f60820ca0bff1fe617",
+    "responseTextBytes": 79,
+    "candidateAdmittedAt": "2026-08-07T00:00:00.000Z",
+    "candidateExpiresAt": "2026-08-10T00:00:00.000Z",
+    "responseText": "Synthetic Forme Gate B response.\nApprove only this exact demonstration handoff."
+  },
+  "persistentRecoverySupported": false,
+  "candidateKeychainOperations": 0,
+  "candidateSecureEnclaveOperations": 0,
+  "bodyBearingHandoffOutsideHelper": 0
+}

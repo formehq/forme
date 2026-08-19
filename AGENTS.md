@@ -1,74 +1,44 @@
-# Agent working agreement
+# Forme working agreement
 
-This repository is being rebuilt to keep implementation speed and owner understanding synchronized.
+Forme is operated by outcomes, not by per-file or per-attempt approval.
 
-## Before changing anything
+## Start
 
-1. Read `docs/PRODUCT.md`, `docs/CONTROL.md`, and the active GitHub issue.
-   Before runtime, context, file/tool authority, or R4 T3 work, also read
-   `docs/NATIVE-HARNESS-ARCHITECTURE.md`.
-2. Name the user-visible outcome and current roadmap gate.
-3. Identify whether the change touches an owner stop gate.
-4. Keep one pull request to one demonstrable outcome.
+Read `docs/CONTEXT.md`, `docs/CONTROL.md`, the active issue and the active pull
+request. State one user-visible outcome and the boundary for the work.
 
-## Owner stop gates
+Inside that boundary, proceed autonomously through implementation, tests,
+refactors, local synthetic runs, reversible repairs, documentation, commits
+and updates to the active pull request. A failed test, changed hash or ordinary
+implementation choice is not a new Owner decision.
 
-Do not implement past the proposal stage without explicit owner confirmation when a change:
+## Return to the Owner only when
 
-- creates or changes durable state;
-- changes a schema or trust boundary;
-- grants an agent new file, shell, network, publish, or messaging authority;
-- changes what Codex or OpenCode may observe or execute;
-- changes projection privacy or audience rules;
-- adds a foundational dependency;
-- changes P0 scope, dates, or public behavior.
+- product meaning, authorship, privacy or another trust boundary would change;
+- real/private data, a provider call, production, public traffic, publication,
+  messaging, credentials, spend or a merge would be used;
+- a destructive or meaning-changing durable migration is required;
+- effects are ambiguous, owned cleanup cannot be proved, or the promised
+  outcome must materially change; or
+- the result is ready for Owner Experience Acceptance.
 
-## Non-negotiable boundaries
+Ordinary additive schema work, local disposable infrastructure and bounded
+diagnostics remain engineering work when they are already inside the stated
+outcome and use synthetic data with exact-owned cleanup.
 
-- The owner retains final authority over meaning and authorship.
-- Runtime sessions are disposable computation, never canonical truth.
-- Agent inference remains evidence-backed, uncertain, revisable, and invalidatable.
-- Under the Owner-approved NH2 two-class boundary, implemented
-  Forme-authoritative writes remain deterministic, authorized, inspectable,
-  and reversible where feasible.
-- Ordinary Native Workbench activity may use harness-native capabilities only
-  inside a separately approved runtime envelope. Its results may be offered
-  and admitted as evidence only through a separate typed Forme contract; they
-  are never auto-ingested as canonical meaning or a Forme-authoritative effect.
-- The NH1/NH2 architecture approval grants no concrete runtime, file, shell,
-  tool, network, provider, credential, Guest, or Room authority.
-- The 2026-08-03 R4 T3 approval fixes the exact Fresh Native Response Session
-  contract. The 2026-08-03 T4 approval fixes the recommended public/admission,
-  unlist, stale, revoke, retirement, and successor lifecycle contract without
-  expanding `room_operator.v1`. The 2026-08-03 full T5 approval fixes explicit
-  sync/manual recovery, optional notification-only email, four exact
-  continuation presets (24h/1, 3d/2, familiar 7d/3, and Owner-selected trusted
-  7d/10), body-retention ceilings, deletion/purge honesty, and the P0 cut.
-  These approvals authorized only authority-document and reconciled Control
-  Packet preparation. Packet v0.2 is independently audited at
-  `sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-  The Owner approved those exact bytes on 2026-08-03. Gate A authorizes only
-  repository code/docs, synthetic fixtures, local/ephemeral tests, read-only
-  probes that expose no real content, and preparation of the next exact
-  manifest. A Fresh Native Response provider call, real Guest-data handling,
-  schema migration, deployment, spend, production Room mutation, external
-  message, secret, or public response capability remains unauthorized.
-  Schema/runtime/migration validation and any first provider call require the
-  separately approved Gate B Manifest and named test grant; production/public
-  action requires Gate C.
-- Private source existence never implies projection permission.
-- Unknown capabilities and invalid outputs fail closed.
+## Keep the project legible
 
-## Completion protocol
+- Keep one active product outcome. Add an Enabler only for a concrete blocker.
+- Passing tests means Technical Review, not product Done.
+- A merge integrates reviewable code; it does not close the product issue or
+  imply Owner acceptance.
+- Replace current status in `docs/CONTROL.md`; do not append chronology.
+- Put live progress in the active issue and pull request. Keep historical
+  detail in Git, frozen evidence or `docs/HISTORY.md`.
+- Do not revive an old Packet, Card, Addendum, grant or hash as current
+  authority.
 
-Every implementation pull request must include:
+## Report
 
-- the user outcome;
-- before/after behavior;
-- data and permission impact;
-- validation evidence;
-- a runnable demo path;
-- what the owner should challenge;
-- documentation updates when the system understanding changes.
-
-Passing tests is Technical Review. Only owner experience acceptance moves a core slice to Done.
+Use three normal touchpoints: outcome/boundary at the start, a message only if
+a real return condition appears, and a final evidence-backed handoff.

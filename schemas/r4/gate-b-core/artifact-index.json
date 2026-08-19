@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "r4.gate-b-core.artifact-index.v1",
+  "status": "HOST_BINDING_REATTEMPT_PREPARATION_GRANTED_HOST_ACTIVATION_NOT_REQUESTED",
+  "constructionPacketSha256": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06",
+  "hostBindingReattemptPacketSha256": "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3",
+  "hostBindingReattemptOwnerReviewSha256": "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445",
+  "approvedReattemptProposalHead": "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d",
+  "approvedReattemptProposalTree": "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e",
+  "hostBindingReattemptPreparationGrant": "APPROVED",
+  "hostBindingAttemptGrant": "NOT_REQUESTED",
+  "retryExecutionGrant": "NOT_REQUESTED",
+  "firstProviderCallTestGrant": "NOT_REQUESTED",
+  "fileCount": 34,
+  "aggregateSha256": "sha256:b6204f1a6541fd9d94ab3907f0a6ead78be340fd3de05bb41c7cac76f70abc4e",
+  "files": [
+    {
+      "path": "schemas/r4/gate-b-core/README.md",
+      "sha256": "sha256:6eadf67e86c3c8d71ee5f61a707c27bff6da51de4e4b9f0df482a284f1df7ca6"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/api-v1-index.json",
+      "sha256": "sha256:ff029f3988b9fbd734bf797c1309548fd056304fba8c7dbc1605305a35e5cdf5"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/api-v1.schema.json",
+      "sha256": "sha256:b6877ca0d9ea309f558504f0499115e16c7c9276785ba4ff8ae25f5c81ec1251"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/codex-zero-call-contract.json",
+      "sha256": "sha256:d73b00021dfe268fb776c5da0d8457df12dde7633b9e9df25c52c56e237b6f7e"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/core-basis.json",
+      "sha256": "sha256:eabd968569b8245a7d6ed15493a3e79a59c913304e8d429169bf611b3d173d35"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/evidence.schema.json",
+      "sha256": "sha256:34bda9a95ea6aa13047aa12c25f656e051a95c107416d4a2c50c20ba2343a9e1"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-capsule.schema.json",
+      "sha256": "sha256:dea2fc5e17174b0c1ef7818abffeec14f776436846c6b5053a0b447fb192ea12"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-input.schema.json",
+      "sha256": "sha256:9a948dd4e152efe1869f3b16b2757e62293424fb4a0c8eeac959c1cd05fd7ad1"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-public-receipt.schema.json",
+      "sha256": "sha256:80a0e13c0f728cba84514e31db9704f1ac43ec50bb899f534cec4f153f574c01"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-capsule.schema.json",
+      "sha256": "sha256:a7764c5840be3ba7ed96067392674b52ec25c6a31128ab86d612c3ab3d883ccc"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-checkpoint.schema.json",
+      "sha256": "sha256:ccf699d840d9b0e372294176d620436d9daff04b5cdb18a5d6ea0f07a4cbd240"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json",
+      "sha256": "sha256:b45c76e73632a0b39afd99c0e48175887f1512d1712d500c45116ad048638464"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-input.schema.json",
+      "sha256": "sha256:debfe126076e6acff6ac16a563dcda49c09923ba0c443f4498043c58d3b6026c"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json",
+      "sha256": "sha256:f2d1e9dde1755cfe78958aa613c109eae62bcef4e45b5f7ed7536b395e728c61"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/build-recipe.json",
+      "sha256": "sha256:6685aa357222667b967d54bfa9dce7a54851ea13154121196b60b21b2cd1d17c"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/evidence.schema.json",
+      "sha256": "sha256:08eb1e8331ddcb1fd1c6c84762ad285550420a9ef685394db2415c033b53f81f"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/forme-codex-zero-call.sb",
+      "sha256": "sha256:0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/forme-core-transient-response.sb",
+      "sha256": "sha256:3a8c17648b02e0bcebedbcf1405de3fa4d4ca7ceb4c324e0b4969676d777732c"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/physical-adapter-contract.json",
+      "sha256": "sha256:484e6b1f4bb8822ac80f50ac9fc103f8201b4ffe81e5211ae53ac65715e4ac1f"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/macos/transient-candidate-contract.json",
+      "sha256": "sha256:693fd377df18a68033b7e464a6eeba1a2e8552ef7497c6ed92f636920ea27d01"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/operations.md",
+      "sha256": "sha256:d32a5a54b2f8dca432279b27553a461d05636b7ee9d5ca022796a9a427ea9108"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json",
+      "sha256": "sha256:0448b46079d02f1d222b049e4de3dcf1d75615b3acb35956ed0da6d2b12dad69"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/physical-construction-evidence.schema.json",
+      "sha256": "sha256:fd14ee175863728c433a87dda1a1c0875ba1c1aae75e746f7915b4529477d8a5"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/physical-retry-evidence.schema.json",
+      "sha256": "sha256:bb1df602ac4b3d5ba5a9c0b33aa0b8721b8ec27d5ec95ad20c37723f6bbf095f"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/physical-runner-contract.json",
+      "sha256": "sha256:d9ecaf94b97152ac912b79f826ef10284e422ceee64884facb3fa30cd85f1116"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/postgres-contract.md",
+      "sha256": "sha256:028d7c53675247027fbd5d8185e73fb478355929aa8adbe8a5bdd4edfab6bd95"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/postgres/physical-adapter-contract.json",
+      "sha256": "sha256:a13581791d2de6c134040385ca57def1689fa53a9b2af15a67c2612b0ecc0119"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/postgres/race-byte-index.json",
+      "sha256": "sha256:3844ece0645e7c686ab51ef253511a0f49abb5f32936b5553b6882a7b23f17a6"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/postgres/race-catalog.json",
+      "sha256": "sha256:b37d981917e78742d30610bfadb21a5c80ed1563fddbd1178220535ef48dbef4"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/runtime-boundary.json",
+      "sha256": "sha256:35d83681f7da2d4c6e8e0c3852ebc8b072dda647b22d1f450a3c337c2588edb9"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0000_r4_gate_b_core_bootstrap.sql",
+      "sha256": "sha256:1776d1e0b7deacadd59b5d59fa9807c3e565332f9fd716cf42810ba40efa20b8"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.rollback.sql",
+      "sha256": "sha256:f33497a36e810b8a6e8f393da3ef50b93a19126ecebd53cfc41847d3ce4e09c0"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.sql",
+      "sha256": "sha256:4090ada09f8f0080ba503e32c3a4be271d3e3d1169b5957ef5ed77778f565be0"
+    },
+    {
+      "path": "schemas/r4/gate-b-core/sql/0001_r4_gate_b_core_presence.verify.sql",
+      "sha256": "sha256:4bad90577693b363c86857018f29159f77c79419aa93b9ebb7afae0decd95133"
+    }
+  ]
+}

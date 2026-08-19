@@ -1,0 +1,7 @@
+(version 1)
+(deny default)
+(deny network*)
+(deny process-fork)
+(deny process-exec)
+; Future Provider-Test profile only. Construction and zero-provider Retry do not invoke it.
+; A later exact Execution Manifest must bind all literal roots and the one initial child transition.

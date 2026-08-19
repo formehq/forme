@@ -6,13 +6,12 @@ What becomes possible or clearer for the user?
 
 Describe the previous and new observable behavior.
 
-## Contract and control impact
+## Boundary
 
-- Durable state:
-- Agent-visible context:
-- Agent authority:
-- Privacy / projection:
-- Owner stop gate crossed: yes / no
+- Linked product outcome:
+- Product progress, or exact blocker removed:
+- Data, authority, privacy and external-effect impact:
+- What remains explicitly outside this pull request:
 
 ## Evidence
 
@@ -20,11 +19,8 @@ Describe the previous and new observable behavior.
 - Manual demo:
 - Failure / restart behavior:
 
-## Owner review
+## Handoff
 
-- What should the owner challenge?
-- What experience still requires acceptance?
-
-## Documentation
-
-List updated control, roadmap, architecture, or decision documents, or explain why none changed.
+- What should the reviewer challenge?
+- Is this ready to integrate independently of product Done?
+- What experience or consequential effect still requires Owner approval?

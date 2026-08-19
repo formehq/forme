@@ -1,0 +1,454 @@
+{
+  "schemaVersion": "r4.gate-b-core.api-v1-index.v1",
+  "constructionPacketSha256": "sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6",
+  "scopeDecisionBriefSha256": "sha256:c20e987cfb7ff7cc2b73c1d13584a8d7955bd5c3407369bed3a98ce37700f86f",
+  "operationMapSha256": "sha256:d32a5a54b2f8dca432279b27553a461d05636b7ee9d5ca022796a9a427ea9108",
+  "fullApiBundleSha256": "sha256:8541775a52ab541db08526b743621e817c920a7ac3b30ad416df65e073d3d0c1",
+  "fullApiIndexSha256": "sha256:021cff86b2fc0cabebc63d85ca14f1fad41f7978b205594f90328872c5e7d3bf",
+  "canonicalProtocolRegistrySha256": "sha256:8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea",
+  "operationInventorySha256": "sha256:cc8f6fe8c0c35917da118e2aa2f90d373b49ad3981f58a472d86ab218fedb041",
+  "corePolicySha256": "sha256:4f0d72416388ed7329fed957a202750549bc8cb569dcd4c58dade615d6892fd5",
+  "bundleSha256": "sha256:b6877ca0d9ea309f558504f0499115e16c7c9276785ba4ff8ae25f5c81ec1251",
+  "operationCount": 32,
+  "mutationCount": 26,
+  "readCount": 6,
+  "expectedVersionRequiredCount": 21,
+  "operations": [
+    {
+      "action": "third_place.list",
+      "method": "GET",
+      "path": "/third-place/projections",
+      "actor": "public",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/ThirdPlaceListRequestV1",
+      "resultRefs": [
+        "#/$defs/ThirdPlaceListResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "projection.read",
+      "method": "GET",
+      "path": "/projections/:projectionId",
+      "actor": "public",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/ProjectionReadRequestV1",
+      "resultRefs": [
+        "#/$defs/ProjectionReadResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "public_encounter.issue",
+      "method": "POST",
+      "path": "/projections/:projectionId/encounters",
+      "actor": "public",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/PublicEncounterIssueRequestV1",
+      "resultRefs": [
+        "#/$defs/PublicEncounterIssueResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "interaction.create",
+      "method": "POST",
+      "path": "/interactions",
+      "actor": "guest_capability",
+      "mutating": true,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/InteractionCreateRequestV1",
+      "resultRefs": [
+        "#/$defs/InteractionCreateResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "interaction.read",
+      "method": "GET",
+      "path": "/interactions/:interactionId",
+      "actor": "guest_capability",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/InteractionReadRequestV1",
+      "resultRefs": [
+        "#/$defs/InteractionReadResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "interaction.delete",
+      "method": "DELETE",
+      "path": "/interactions/:interactionId",
+      "actor": "guest_capability",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/InteractionDeleteRequestV1",
+      "resultRefs": [
+        "#/$defs/InteractionDeleteResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "grant_offer.accept",
+      "method": "POST",
+      "path": "/grant-offers/:offerId/accept",
+      "actor": "guest_capability",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/GrantOfferAcceptRequestV1",
+      "resultRefs": [
+        "#/$defs/GrantOfferAcceptResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room.pair.exchange",
+      "method": "POST",
+      "path": "/pairings/:pairingId/exchange",
+      "actor": "public",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomPairExchangeRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomPairExchangeResultV1",
+        "#/$defs/RoomPairExchangeRecoveryExpiredResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "control.status",
+      "method": "GET",
+      "path": "/control/status",
+      "actor": "controller",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/ControlStatusRequestV1",
+      "resultRefs": [
+        "#/$defs/ControlStatusResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "control.interaction.read",
+      "method": "GET",
+      "path": "/control/interactions/:interactionId",
+      "actor": "controller",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/ControlInteractionReadRequestV1",
+      "resultRefs": [
+        "#/$defs/ControlInteractionReadResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room.create",
+      "method": "POST",
+      "path": "/control/rooms",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/RoomCreateRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomCreateResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room.pair",
+      "method": "POST",
+      "path": "/control/rooms/:roomId/pairings",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomPairRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomPairResultV1",
+        "#/$defs/RoomPairRecoveryExpiredResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room.binding.revoke",
+      "method": "POST",
+      "path": "/control/room-bindings/:bindingId/revoke",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomBindingRevokeRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomBindingRevokeResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "projection.revoke",
+      "method": "POST",
+      "path": "/control/projections/:projectionId/revoke",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/ProjectionRevokeRequestV1",
+      "resultRefs": [
+        "#/$defs/ProjectionRevokeResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "response.revoke",
+      "method": "POST",
+      "path": "/control/responses/:responseId/revoke",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/ResponseRevokeRequestV1",
+      "resultRefs": [
+        "#/$defs/ResponseRevokeResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "grant.revoke",
+      "method": "POST",
+      "path": "/control/grants/:grantId/revoke",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/GrantRevokeRequestV1",
+      "resultRefs": [
+        "#/$defs/GrantRevokeResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "grant_offer.issue",
+      "method": "POST",
+      "path": "/control/grant-offers",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/GrantOfferIssueRequestV1",
+      "resultRefs": [
+        "#/$defs/GrantOfferIssueResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "grant_offer.revoke",
+      "method": "POST",
+      "path": "/control/grant-offers/:offerId/revoke",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/GrantOfferRevokeRequestV1",
+      "resultRefs": [
+        "#/$defs/GrantOfferRevokeResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "interaction.close",
+      "method": "POST",
+      "path": "/control/interactions/:interactionId/close",
+      "actor": "controller",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/InteractionCloseRequestV1",
+      "resultRefs": [
+        "#/$defs/InteractionCloseResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "curation.admit",
+      "method": "POST",
+      "path": "/curation/projections/:projectionId/admit",
+      "actor": "curator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/CurationAdmitRequestV1",
+      "resultRefs": [
+        "#/$defs/CurationAdmitResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "curation.unlist",
+      "method": "POST",
+      "path": "/curation/projections/:projectionId/unlist",
+      "actor": "curator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/CurationUnlistRequestV1",
+      "resultRefs": [
+        "#/$defs/CurationUnlistResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.status",
+      "method": "GET",
+      "path": "/room-operator/status",
+      "actor": "room_operator",
+      "mutating": false,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/RoomOperatorStatusRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorStatusResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.sync",
+      "method": "POST",
+      "path": "/room-operator/sync",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/RoomOperatorSyncRequestV1",
+      "resultRefs": [
+        "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomEventBatchV1",
+        "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/CursorGoneV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.pull",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/pull",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorPullRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorPullResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.cycle.reserve",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/cycle/reserve",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorCycleReserveRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorCycleReserveResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.cycle.recover",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/cycle/recover",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorCycleRecoverRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorCycleRecoverResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.cycle.abandon",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/cycle/abandon",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorCycleAbandonRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorCycleAbandonResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.dispatch.issue",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/dispatch-permits",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorDispatchIssueRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorDispatchIssueResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.ack",
+      "method": "POST",
+      "path": "/room-operator/events/ack",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": false,
+      "requestRef": "#/$defs/RoomOperatorAckRequestV1",
+      "resultRefs": [
+        "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomEventAckReceiptV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.projection.deliver",
+      "method": "POST",
+      "path": "/room-operator/projections/deliver",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorProjectionDeliverRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorProjectionDeliverResultV1",
+        "#/$defs/PublicationRecoveryUnavailableResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.response.deliver",
+      "method": "POST",
+      "path": "/room-operator/responses/deliver",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorResponseDeliverRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorResponseDeliverResultV1",
+        "#/$defs/PublicationRecoveryUnavailableResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    },
+    {
+      "action": "room_operator.local_purge.receipt",
+      "method": "POST",
+      "path": "/room-operator/interactions/:interactionId/local-purge",
+      "actor": "room_operator",
+      "mutating": true,
+      "expectedVersion": true,
+      "requestRef": "#/$defs/RoomOperatorLocalPurgeReceiptRequestV1",
+      "resultRefs": [
+        "#/$defs/RoomOperatorLocalPurgeReceiptResultV1",
+        "#/$defs/ApiErrorV1"
+      ]
+    }
+  ],
+  "excludedOperations": [
+    "notification.set",
+    "notification.remove",
+    "notification.verify",
+    "direct_invite.redeem",
+    "agent_derivative.mint",
+    "room.mode.set",
+    "room.retire",
+    "room.delete",
+    "grant.issue",
+    "grant.replace",
+    "direct_invite.issue",
+    "direct_invite.revoke",
+    "room_operator.stale.attest"
+  ]
+}

@@ -1,0 +1,565 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/local-projection-review.v1.schema.json",
+  "title": "Forme R4 local-only Projection review records",
+  "$comment": "#66 local content review only. These records authorize neither Room mutation nor publication.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/LocalProjectionProfileInputV1"
+    },
+    {
+      "$ref": "#/$defs/LocalProjectionProfileInputV2"
+    },
+    {
+      "$ref": "#/$defs/LocalProjectionCandidateManifestV1"
+    },
+    {
+      "$ref": "#/$defs/LocalProjectionCurrentPointerV1"
+    },
+    {
+      "$ref": "#/$defs/LocalProjectionContentApprovalV1"
+    },
+    {
+      "$ref": "#/$defs/LocalProjectionApprovalReceiptV1"
+    },
+    {
+      "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionCapsuleV1"
+    },
+    {
+      "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionBasisV1"
+    }
+  ],
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "CandidateId": {
+      "type": "string",
+      "pattern": "^candidate_[a-f0-9]{32}$"
+    },
+    "ProjectionId": {
+      "type": "string",
+      "pattern": "^proj_[A-Za-z0-9_-]{16,128}$"
+    },
+    "RoomId": {
+      "type": "string",
+      "pattern": "^room_[A-Za-z0-9_-]{16,128}$"
+    },
+    "LocalProjectionProfileInputV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "workspaceName",
+        "openTo",
+        "becomingReflectionId",
+        "effectProposalId",
+        "preparedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_profile_input.v1"
+        },
+        "workspaceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "openTo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "tension": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "becomingReflectionId": {
+          "type": "string",
+          "pattern": "^ref_[A-Za-z0-9_-]{16,128}$"
+        },
+        "effectProposalId": {
+          "type": "string",
+          "pattern": "^act_[A-Za-z0-9_-]{16,128}$"
+        },
+        "preparedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalProjectionProfileInputV2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "workspaceName",
+        "ownerWording",
+        "becomingReflectionId",
+        "effectProposalId",
+        "preparedAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_profile_input.v2"
+        },
+        "workspaceName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "ownerWording": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "becoming",
+            "now",
+            "nextMove",
+            "tensions",
+            "openTo",
+            "boundary"
+          ],
+          "properties": {
+            "becoming": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 8,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              }
+            },
+            "now": {
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              }
+            },
+            "nextMove": {
+              "type": "array",
+              "minItems": 0,
+              "maxItems": 3,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              }
+            },
+            "tensions": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              }
+            },
+            "openTo": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 8192
+              }
+            },
+            "boundary": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "supportedInteractions",
+                "allowedTopics",
+                "unavailableTopics",
+                "expectedResponseLatency",
+                "agencyStatement",
+                "nonCommitmentStatement"
+              ],
+              "properties": {
+                "supportedInteractions": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "ask",
+                      "seed",
+                      "resonance"
+                    ]
+                  }
+                },
+                "allowedTopics": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 8192
+                  }
+                },
+                "unavailableTopics": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 8,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 8192
+                  }
+                },
+                "expectedResponseLatency": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192
+                },
+                "agencyStatement": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192
+                },
+                "nonCommitmentStatement": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192
+                }
+              }
+            }
+          }
+        },
+        "becomingReflectionId": {
+          "type": "string",
+          "pattern": "^ref_[A-Za-z0-9_-]{16,128}$"
+        },
+        "effectProposalId": {
+          "type": "string",
+          "pattern": "^act_[A-Za-z0-9_-]{16,128}$"
+        },
+        "preparedAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "LocalProjectionCandidateManifestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "projectionId",
+        "roomId",
+        "preparedAt",
+        "expiresAt",
+        "twinRevision",
+        "twinRevisionHash",
+        "workspaceContractHash",
+        "profileInputHash",
+        "profileInputSha256",
+        "capsuleSha256",
+        "basisSha256",
+        "payloadHash",
+        "basisHash",
+        "reviewHash",
+        "localOnly",
+        "publicationAuthorized",
+        "roomMutationAuthorized"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_candidate_manifest.v1"
+        },
+        "candidateId": {
+          "$ref": "#/$defs/CandidateId"
+        },
+        "projectionId": {
+          "$ref": "#/$defs/ProjectionId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/RoomId"
+        },
+        "preparedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "twinRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "twinRevisionHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "workspaceContractHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "profileInputHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "profileInputSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "capsuleSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "basisSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "payloadHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "basisHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "reviewHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "localOnly": {
+          "const": true
+        },
+        "publicationAuthorized": {
+          "const": false
+        },
+        "roomMutationAuthorized": {
+          "const": false
+        }
+      }
+    },
+    "LocalProjectionCurrentPointerV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "candidateId",
+        "reviewHash",
+        "twinRevisionHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_current_pointer.v1"
+        },
+        "candidateId": {
+          "$ref": "#/$defs/CandidateId"
+        },
+        "reviewHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "twinRevisionHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      }
+    },
+    "LocalProjectionContentApprovalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "approvalId",
+        "candidateId",
+        "projectionId",
+        "reviewHash",
+        "payloadHash",
+        "basisHash",
+        "policyHash",
+        "twinRevision",
+        "twinRevisionHash",
+        "approvedAt",
+        "expiresAt",
+        "confirmationMethod",
+        "localOnly",
+        "publicationAuthorized",
+        "roomMutationAuthorized"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_content_approval.v1"
+        },
+        "approvalId": {
+          "type": "string",
+          "pattern": "^approval_[a-f0-9]{32}$"
+        },
+        "candidateId": {
+          "$ref": "#/$defs/CandidateId"
+        },
+        "projectionId": {
+          "$ref": "#/$defs/ProjectionId"
+        },
+        "reviewHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "payloadHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "basisHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "policyHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "twinRevision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "twinRevisionHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "approvedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "confirmationMethod": {
+          "const": "exact_hash_terminal_input"
+        },
+        "localOnly": {
+          "const": true
+        },
+        "publicationAuthorized": {
+          "const": false
+        },
+        "roomMutationAuthorized": {
+          "const": false
+        }
+      }
+    },
+    "LocalProjectionApprovalReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "receiptId",
+        "approvalId",
+        "candidateId",
+        "projectionId",
+        "reviewHash",
+        "candidateManifestSha256",
+        "profileInputSha256",
+        "capsuleSha256",
+        "basisSha256",
+        "approvalSha256",
+        "twinRevisionHash",
+        "approvedAt",
+        "expiresAt",
+        "roomCalls",
+        "networkCalls",
+        "providerCalls",
+        "hostBindingCalls",
+        "publicationCalls",
+        "localOnly",
+        "publicationAuthorized",
+        "roomMutationAuthorized"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_projection_approval_receipt.v1"
+        },
+        "receiptId": {
+          "type": "string",
+          "pattern": "^receipt_[a-f0-9]{32}$"
+        },
+        "approvalId": {
+          "type": "string",
+          "pattern": "^approval_[a-f0-9]{32}$"
+        },
+        "candidateId": {
+          "$ref": "#/$defs/CandidateId"
+        },
+        "projectionId": {
+          "$ref": "#/$defs/ProjectionId"
+        },
+        "reviewHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "candidateManifestSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "profileInputSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "capsuleSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "basisSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "approvalSha256": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "twinRevisionHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "approvedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "roomCalls": {
+          "const": 0
+        },
+        "networkCalls": {
+          "const": 0
+        },
+        "providerCalls": {
+          "const": 0
+        },
+        "hostBindingCalls": {
+          "const": 0
+        },
+        "publicationCalls": {
+          "const": 0
+        },
+        "localOnly": {
+          "const": true
+        },
+        "publicationAuthorized": {
+          "const": false
+        },
+        "roomMutationAuthorized": {
+          "const": false
+        }
+      }
+    }
+  }
+}

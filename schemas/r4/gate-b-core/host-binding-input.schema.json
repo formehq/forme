@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/host-binding-input.schema.json",
+  "title": "R4 Gate B Host Binding Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "dockerCli", "dockerUnixSocket", "codexPackageRoot"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_host_binding_input.v1" },
+    "dockerCli": { "$ref": "#/$defs/absolutePath" },
+    "dockerUnixSocket": { "$ref": "#/$defs/absolutePath" },
+    "codexPackageRoot": { "$ref": "#/$defs/absolutePath" }
+  },
+  "$defs": {
+    "absolutePath": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 4096,
+      "pattern": "^/(?!.*(?:^|/)\\.\\.(?:/|$))[^\\u0000]*$"
+    }
+  }
+}

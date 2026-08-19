@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/host-binding-reattempt-public-receipt.schema.json",
+  "title": "Public R4 Gate B Host Binding Reattempt Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "reattemptRunId", "attemptId", "attemptOrdinal", "cumulativeHostBindingAttemptCeiling", "hostBindingId", "hostBindingCapsuleSha256", "consumedAttemptTombstoneSha256", "createdAt", "expiresAt", "implementationHead", "implementationTree", "checkpointSha256", "activationCardSha256", "activationGrantSha256", "runtimeDependencyAggregateSha256", "platform", "tools", "docker", "closedBoundaries", "hostBindingAttemptGrant", "retryExecutionGrant", "firstProviderCallGrant", "status", "aggregateVerdict"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_host_binding_reattempt_public_receipt.v2" },
+    "reattemptRunId": { "const": "5cf5b31b5adfceac7fda4d5319db8957" },
+    "attemptId": { "$ref": "#/$defs/identifier" },
+    "attemptOrdinal": { "const": 2 },
+    "cumulativeHostBindingAttemptCeiling": { "const": 2 },
+    "hostBindingId": { "$ref": "#/$defs/identifier" },
+    "hostBindingCapsuleSha256": { "$ref": "#/$defs/sha" },
+    "consumedAttemptTombstoneSha256": { "$ref": "#/$defs/sha" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "expiresAt": { "type": "string", "format": "date-time" },
+    "implementationHead": { "$ref": "#/$defs/gitObject" },
+    "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "checkpointSha256": { "$ref": "#/$defs/sha" },
+    "activationCardSha256": { "$ref": "#/$defs/sha" },
+    "activationGrantSha256": { "$ref": "#/$defs/sha" },
+    "runtimeDependencyAggregateSha256": { "$ref": "#/$defs/sha" },
+    "platform": { "const": "darwin-arm64" },
+    "tools": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 24,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["logicalName", "version", "sha256"],
+        "properties": {
+          "logicalName": { "type": "string", "pattern": "^[a-z0-9._-]+$" },
+          "version": { "type": "string", "minLength": 1, "maxLength": 512 },
+          "sha256": { "$ref": "#/$defs/sha" }
+        }
+      }
+    },
+    "docker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clientVersion", "clientApiVersion", "serverVersion", "serverApiVersion", "serverOs", "serverArch", "repoDigest", "localImageId", "imageOs", "imageArch", "imageSizeBytes"],
+      "properties": {
+        "clientVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "clientApiVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$", "maxLength": 64 },
+        "serverVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "serverApiVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$", "maxLength": 64 },
+        "serverOs": { "const": "linux" },
+        "serverArch": { "const": "arm64" },
+        "repoDigest": { "const": "postgres@sha256:38471f330eb885e04de130b768d6db4e10469e2311879c7e5c699f6d2d8a1c74" },
+        "localImageId": { "$ref": "#/$defs/sha" },
+        "imageOs": { "const": "linux" },
+        "imageArch": { "const": "arm64" },
+        "imageSizeBytes": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "closedBoundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pathsWithheld", "accountIdentityWithheld", "dockerReadOnlyCliCalls", "localDockerUnixSocketRequests", "macosReadOnlyInspectionCalls", "dockerMutationCalls", "credentialsRead", "realPhysicalEffects", "realCodexCalls", "sandboxExecCalls", "signingCalls", "keychainCalls", "localAuthenticationCalls", "retryExecutions", "providerCalls", "externalRuntimeNetworkCalls"],
+      "properties": {
+        "pathsWithheld": { "const": true },
+        "accountIdentityWithheld": { "const": true },
+        "dockerReadOnlyCliCalls": { "const": 3 },
+        "localDockerUnixSocketRequests": { "const": 2 },
+        "macosReadOnlyInspectionCalls": { "const": 9 },
+        "dockerMutationCalls": { "const": 0 },
+        "credentialsRead": { "const": 0 },
+        "realPhysicalEffects": { "const": 0 },
+        "realCodexCalls": { "const": 0 },
+        "sandboxExecCalls": { "const": 0 },
+        "signingCalls": { "const": 0 },
+        "keychainCalls": { "const": 0 },
+        "localAuthenticationCalls": { "const": 0 },
+        "retryExecutions": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "externalRuntimeNetworkCalls": { "const": 0 }
+      }
+    },
+    "hostBindingAttemptGrant": { "const": "APPROVED_ONCE" },
+    "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+    "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+    "status": { "const": "HOST_BOUND_YELLOW" },
+    "aggregateVerdict": { "const": "YELLOW" }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "identifier": { "type": "string", "pattern": "^[0-9a-f]{32}$" }
+  }
+}

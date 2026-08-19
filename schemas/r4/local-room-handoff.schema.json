@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/local-room-handoff.v1.schema.json",
+  "title": "Forme R4 local Room-bound Projection handoff records",
+  "$comment": "#67 slice A only: exact local publication-content approval. No delivery, Room mutation, network, provider, host binding, or publication call is authorized or performed.",
+  "oneOf": [
+    { "$ref": "#/$defs/LocalRoomHandoffCandidateV1" },
+    { "$ref": "#/$defs/LocalRoomHandoffCurrentPointerV1" },
+    { "$ref": "#/$defs/LocalRoomHandoffPublicationApprovalV1" },
+    { "$ref": "#/$defs/LocalRoomHandoffApprovalReceiptV1" }
+  ],
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*_[A-Za-z0-9_-]{16,128}$",
+      "maxLength": 160
+    },
+    "HandoffId": {
+      "type": "string",
+      "pattern": "^handoff_[a-f0-9]{32}$"
+    },
+    "CandidateId": {
+      "type": "string",
+      "pattern": "^candidate_[a-f0-9]{32}$"
+    },
+    "LocalRoomHandoffReviewStatus": {
+      "enum": [
+        "READY_FOR_OWNER_REVIEW",
+        "APPROVED_CURRENT",
+        "STALE_SOURCE",
+        "APPROVED_STALE_SOURCE",
+        "STALE_TWIN",
+        "APPROVED_STALE_TWIN",
+        "NOT_YET_VALID",
+        "APPROVED_NOT_YET_VALID",
+        "PUBLICATION_WINDOW_CLOSED",
+        "STALE_TIME",
+        "APPROVED_STALE_TIME",
+        "EXPIRED",
+        "APPROVED_EXPIRED"
+      ]
+    },
+    "PublicText": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 8192
+    },
+    "ProjectionClaimSelection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slot", "source", "field"],
+          "properties": {
+            "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+            "source": { "const": "owner_frame" },
+            "field": { "enum": ["activeIntent", "nextMove"] }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slot", "source", "index"],
+          "properties": {
+            "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+            "source": { "const": "owner_unresolved" },
+            "index": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slot", "source", "reflectionId"],
+          "properties": {
+            "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+            "source": { "const": "reflection" },
+            "reflectionId": { "type": "string", "pattern": "^ref_[A-Za-z0-9_-]{16,128}$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slot", "source", "proposalId"],
+          "properties": {
+            "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+            "source": { "const": "r3_effect" },
+            "proposalId": { "type": "string", "pattern": "^act_[A-Za-z0-9_-]{16,128}$" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["slot", "source", "text"],
+          "properties": {
+            "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+            "source": { "const": "projection_owner_wording" },
+            "text": { "$ref": "#/$defs/PublicText" }
+          }
+        }
+      ]
+    },
+    "ProjectionDraftInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomId", "projectionId", "entityId", "basisId", "publicationAttestationId", "ownerDecisionId",
+        "title", "thirdPlaceSummary", "selections", "supportedInteractions", "allowedTopics", "unavailableTopics",
+        "expectedResponseLatency", "visualThemeToken", "agencyStatement", "nonCommitmentStatement",
+        "projectionPolicyGeneration", "projectionPolicyHash", "publishedAt", "freshUntil", "expiresAt"
+      ],
+      "properties": {
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "entityId": { "$ref": "#/$defs/OpaqueId" },
+        "basisId": { "$ref": "#/$defs/OpaqueId" },
+        "publicationAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "ownerDecisionId": { "$ref": "#/$defs/OpaqueId" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "thirdPlaceSummary": { "$ref": "#/$defs/PublicText" },
+        "selections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": { "$ref": "#/$defs/ProjectionClaimSelection" }
+        },
+        "supportedInteractions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": { "enum": ["ask", "seed", "resonance"] }
+        },
+        "allowedTopics": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/PublicText" }
+        },
+        "unavailableTopics": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/PublicText" }
+        },
+        "expectedResponseLatency": { "$ref": "#/$defs/PublicText" },
+        "visualThemeToken": { "$ref": "#/$defs/PublicText" },
+        "agencyStatement": { "$ref": "#/$defs/PublicText" },
+        "nonCommitmentStatement": { "$ref": "#/$defs/PublicText" },
+        "projectionPolicyGeneration": { "type": "integer", "minimum": 1 },
+        "projectionPolicyHash": { "$ref": "#/$defs/Sha256" },
+        "publishedAt": { "$ref": "#/$defs/Timestamp" },
+        "freshUntil": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "LocalRoomHandoffSourceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "candidateId", "reviewHash", "localOnlyRoomId", "projectionId", "payloadHash", "basisHash",
+        "profileInputSha256", "localContentApprovalId", "localContentApprovalSha256",
+        "localContentApprovalReceiptId", "localContentApprovalReceiptSha256", "twinRevisionHash",
+        "publicContentHash", "localContentApprovalReusable"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_source.v1" },
+        "candidateId": { "$ref": "#/$defs/CandidateId" },
+        "reviewHash": { "$ref": "#/$defs/Sha256" },
+        "localOnlyRoomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "basisHash": { "$ref": "#/$defs/Sha256" },
+        "profileInputSha256": { "$ref": "#/$defs/Sha256" },
+        "localContentApprovalId": { "$ref": "#/$defs/OpaqueId" },
+        "localContentApprovalSha256": { "$ref": "#/$defs/Sha256" },
+        "localContentApprovalReceiptId": { "$ref": "#/$defs/OpaqueId" },
+        "localContentApprovalReceiptSha256": { "$ref": "#/$defs/Sha256" },
+        "twinRevisionHash": { "$ref": "#/$defs/Sha256" },
+        "publicContentHash": { "$ref": "#/$defs/Sha256" },
+        "localContentApprovalReusable": { "const": false }
+      }
+    },
+    "LocalRoomHandoffCompiledDraftV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "input", "inputHash", "capsule", "basis"],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_compiled_draft.v1" },
+        "input": { "$ref": "#/$defs/ProjectionDraftInput" },
+        "inputHash": { "$ref": "#/$defs/Sha256" },
+        "capsule": { "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionCapsuleV1" },
+        "basis": { "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionBasisV1" }
+      }
+    },
+    "LocalRoomHandoffCandidateV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "handoffId", "source", "targetRoomId", "projectionId", "basisId",
+        "publicationAttestationId", "ownerDecisionId", "preparedAt", "scheduledPublishedAt", "freshUntil", "expiresAt",
+        "twinRevision", "twinRevisionHash", "workspaceContractHash", "draftSha256", "capsuleSha256",
+        "basisSha256", "payloadHash", "basisHash", "publicContentHash", "reviewHash", "draft",
+        "sourceLocalApprovalReused", "contentPublicationApproved", "deliveryAuthorized",
+        "roomMutationAuthorized", "localOnly"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_candidate.v1" },
+        "handoffId": { "$ref": "#/$defs/HandoffId" },
+        "source": { "$ref": "#/$defs/LocalRoomHandoffSourceV1" },
+        "targetRoomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "basisId": { "$ref": "#/$defs/OpaqueId" },
+        "publicationAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "ownerDecisionId": { "$ref": "#/$defs/OpaqueId" },
+        "preparedAt": { "$ref": "#/$defs/Timestamp" },
+        "scheduledPublishedAt": { "$ref": "#/$defs/Timestamp" },
+        "freshUntil": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "twinRevision": { "type": "integer", "minimum": 1 },
+        "twinRevisionHash": { "$ref": "#/$defs/Sha256" },
+        "workspaceContractHash": { "$ref": "#/$defs/Sha256" },
+        "draftSha256": { "$ref": "#/$defs/Sha256" },
+        "capsuleSha256": { "$ref": "#/$defs/Sha256" },
+        "basisSha256": { "$ref": "#/$defs/Sha256" },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "basisHash": { "$ref": "#/$defs/Sha256" },
+        "publicContentHash": { "$ref": "#/$defs/Sha256" },
+        "reviewHash": { "$ref": "#/$defs/Sha256" },
+        "draft": { "$ref": "#/$defs/LocalRoomHandoffCompiledDraftV1" },
+        "sourceLocalApprovalReused": { "const": false },
+        "contentPublicationApproved": { "const": false },
+        "deliveryAuthorized": { "const": false },
+        "roomMutationAuthorized": { "const": false },
+        "localOnly": { "const": true }
+      }
+    },
+    "LocalRoomHandoffCurrentPointerV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "handoffId", "targetRoomId", "reviewHash", "twinRevisionHash"],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_current_pointer.v1" },
+        "handoffId": { "$ref": "#/$defs/HandoffId" },
+        "targetRoomId": { "$ref": "#/$defs/OpaqueId" },
+        "reviewHash": { "$ref": "#/$defs/Sha256" },
+        "twinRevisionHash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "LocalRoomHandoffPublicationApprovalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "handoffId", "reviewHash", "sourceLocalApprovalId", "artifactApproval",
+        "confirmationMethod", "sourceLocalApprovalReused", "contentPublicationApproved",
+        "deliveryAuthorized", "roomMutationAuthorized", "localOnly"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_publication_approval.v1" },
+        "handoffId": { "$ref": "#/$defs/HandoffId" },
+        "reviewHash": { "$ref": "#/$defs/Sha256" },
+        "sourceLocalApprovalId": { "$ref": "#/$defs/OpaqueId" },
+        "artifactApproval": { "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ArtifactApprovalV1" },
+        "confirmationMethod": { "const": "exact_hash_terminal_input" },
+        "sourceLocalApprovalReused": { "const": false },
+        "contentPublicationApproved": { "const": true },
+        "deliveryAuthorized": { "const": false },
+        "roomMutationAuthorized": { "const": false },
+        "localOnly": { "const": true }
+      }
+    },
+    "LocalRoomHandoffApprovalReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "receiptId", "approvalId", "handoffId", "reviewHash", "candidateSha256",
+        "draftSha256", "artifactApprovalSha256", "approvalSha256", "twinRevisionHash", "approvedAt",
+        "expiresAt", "roomMutationCalls", "networkCalls", "providerCalls", "hostBindingCalls",
+        "publicationCalls", "sourceLocalApprovalReused", "contentPublicationApproved",
+        "deliveryAuthorized", "roomMutationAuthorized", "localOnly"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "local_room_handoff_approval_receipt.v1" },
+        "receiptId": { "$ref": "#/$defs/OpaqueId" },
+        "approvalId": { "$ref": "#/$defs/OpaqueId" },
+        "handoffId": { "$ref": "#/$defs/HandoffId" },
+        "reviewHash": { "$ref": "#/$defs/Sha256" },
+        "candidateSha256": { "$ref": "#/$defs/Sha256" },
+        "draftSha256": { "$ref": "#/$defs/Sha256" },
+        "artifactApprovalSha256": { "$ref": "#/$defs/Sha256" },
+        "approvalSha256": { "$ref": "#/$defs/Sha256" },
+        "twinRevisionHash": { "$ref": "#/$defs/Sha256" },
+        "approvedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "roomMutationCalls": { "const": 0 },
+        "networkCalls": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "hostBindingCalls": { "const": 0 },
+        "publicationCalls": { "const": 0 },
+        "sourceLocalApprovalReused": { "const": false },
+        "contentPublicationApproved": { "const": true },
+        "deliveryAuthorized": { "const": false },
+        "roomMutationAuthorized": { "const": false },
+        "localOnly": { "const": true }
+      }
+    }
+  }
+}

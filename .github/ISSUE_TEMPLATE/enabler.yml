@@ -1,0 +1,50 @@
+name: Bounded enabler
+description: Record one concrete blocker that cannot be resolved inside the active product outcome.
+title: "[Enabler] "
+labels:
+  - type:enabler
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent Walking Slice
+      description: Link the single user-visible issue this enables.
+      placeholder: "#67"
+    validations:
+      required: true
+  - type: textarea
+    id: unblock
+    attributes:
+      label: Exact unblock result
+      description: Name the technical fact this must prove and the user outcome it unlocks.
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Data, authority, and effect boundary
+      description: List what may be read, written, executed, called, retained, or spent, and what stays forbidden.
+    validations:
+      required: true
+  - type: input
+    id: timebox
+    attributes:
+      label: Time budget
+      description: Default maximum is two working days.
+      placeholder: "2 working days"
+    validations:
+      required: true
+  - type: textarea
+    id: exit
+    attributes:
+      label: Green exit condition
+      description: Give the runnable proof that unblocks the parent slice.
+    validations:
+      required: true
+  - type: textarea
+    id: owner
+    attributes:
+      label: Return condition
+      description: Name the real boundary change, ambiguous effect, failed cleanup or changed outcome that would return control to the Owner.
+    validations:
+      required: true

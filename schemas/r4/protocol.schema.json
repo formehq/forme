@@ -1,0 +1,988 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json",
+  "title": "Forme R4 Gate A proposed protocol objects",
+  "$comment": "Proposed Gate A contracts pinned to Packet sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5. Gate B fixes final hashes and SQL mapping.",
+  "oneOf": [
+    { "$ref": "#/$defs/RoomV1" },
+    { "$ref": "#/$defs/ProjectionCapsuleV1" },
+    { "$ref": "#/$defs/ProjectionLifecycleV1" },
+    { "$ref": "#/$defs/ProjectionBasisV1" },
+    { "$ref": "#/$defs/PublicEncounterV1" },
+    { "$ref": "#/$defs/GrantV1" },
+    { "$ref": "#/$defs/GrantOfferV1" },
+    { "$ref": "#/$defs/DirectGrantInviteV1" },
+    { "$ref": "#/$defs/AgentDerivativeV1" },
+    { "$ref": "#/$defs/GuestCapsuleV1" },
+    { "$ref": "#/$defs/ConsentEnvelopeV1" },
+    { "$ref": "#/$defs/InteractionV1" },
+    { "$ref": "#/$defs/ResponseV1" },
+    { "$ref": "#/$defs/ArtifactApprovalV1" },
+    { "$ref": "#/$defs/NotificationEndpointV1" },
+    { "$ref": "#/$defs/ReadyNoticeV1" },
+    { "$ref": "#/$defs/ResponseOrientationV1" },
+    { "$ref": "#/$defs/ResponseSourcePolicyV1" },
+    { "$ref": "#/$defs/ResponseSourceSnapshotV1" },
+    { "$ref": "#/$defs/SessionEnvelopeV1" },
+    { "$ref": "#/$defs/ResponseCandidateV1" },
+    { "$ref": "#/$defs/FreshCycleReservationV1" },
+    { "$ref": "#/$defs/DispatchPermitV1" },
+    { "$ref": "#/$defs/SessionReceiptV1" },
+    { "$ref": "#/$defs/OperationReceiptV1" },
+    { "$ref": "#/$defs/RoomEventV1" },
+    { "$ref": "#/$defs/RoomEventBatchV1" },
+    { "$ref": "#/$defs/CursorGoneV1" },
+    { "$ref": "#/$defs/RoomEventAckV1" },
+    { "$ref": "#/$defs/RoomEventAckReceiptV1" },
+    { "$ref": "#/$defs/ApiMutationEnvelopeV1" },
+    { "$ref": "#/$defs/ProjectionReadViewV1" },
+    { "$ref": "#/$defs/RoomOperatorRequestV1" },
+    { "$ref": "#/$defs/SnapshotLineReadV1" },
+    { "$ref": "#/$defs/SnapshotSearchV1" },
+    { "$ref": "#/$defs/SnapshotQueryResultV1" },
+    { "$ref": "#/$defs/TransportDispatchIntentV1" },
+    { "$ref": "#/$defs/TransportGateDecisionV1" },
+    { "$ref": "#/$defs/HostedPublicationDeliveryV1" }
+  ],
+  "$defs": {
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*_[A-Za-z0-9_-]{16,128}$",
+      "maxLength": 160
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
+    "NullableTimestamp": {
+      "oneOf": [
+        { "$ref": "#/$defs/Timestamp" },
+        { "type": "null" }
+      ]
+    },
+    "NullableId": {
+      "oneOf": [
+        { "$ref": "#/$defs/OpaqueId" },
+        { "type": "null" }
+      ]
+    },
+    "NullableString": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "CapabilityState": {
+      "enum": ["issued", "consumed", "revoked", "replaced", "expired", "invalidated"]
+    },
+    "ProjectionOwnerState": {
+      "enum": ["published_fresh", "stale", "superseded", "revoked", "expired"]
+    },
+    "SessionBudgetV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wallClockSeconds", "providerDispatches", "inputTokens", "outputTokens", "spend"],
+      "properties": {
+        "wallClockSeconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "providerDispatches": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "inputTokens": { "type": "integer", "minimum": 0, "maximum": 128000 },
+        "outputTokens": { "type": "integer", "minimum": 0, "maximum": 8000 },
+        "spend": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "maximumUsd"],
+              "properties": {
+                "mode": { "const": "incremental" },
+                "maximumUsd": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["mode", "maximumUsd"],
+              "properties": {
+                "mode": { "const": "not_applicable" },
+                "maximumUsd": { "type": "null" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "RoomV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "roomId", "entityId", "roomKind", "interactionMode", "status", "currentProjectionId", "version", "createdAt", "retiredAt"],
+      "properties": {
+        "schemaVersion": { "const": "room.v1" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "entityId": { "$ref": "#/$defs/OpaqueId" },
+        "roomKind": { "enum": ["third_place_public", "private_grant_only"] },
+        "interactionMode": { "enum": ["public_single", "invite_only", "closed"] },
+        "status": { "enum": ["active", "retired"] },
+        "currentProjectionId": { "$ref": "#/$defs/NullableId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "createdAt": { "$ref": "#/$defs/Timestamp" },
+        "retiredAt": { "$ref": "#/$defs/NullableTimestamp" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "roomKind": { "const": "private_grant_only" } }, "required": ["roomKind"] },
+          "then": { "properties": { "interactionMode": { "enum": ["invite_only", "closed"] } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "retired" } }, "required": ["status"] },
+          "then": { "properties": { "retiredAt": { "$ref": "#/$defs/Timestamp" } } }
+        }
+      ]
+    },
+    "ProjectionClaimV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "text", "attribution", "uncertainty"],
+      "properties": {
+        "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+        "text": { "type": "string", "minLength": 1, "maxLength": 8192 },
+        "attribution": { "enum": ["owner_confirmed", "inferred_allowed", "unresolved_allowed"] },
+        "uncertainty": { "$ref": "#/$defs/NullableString" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "attribution": { "const": "inferred_allowed" } }, "required": ["attribution"] },
+          "then": { "properties": { "uncertainty": { "type": "string", "minLength": 1 } } }
+        }
+      ]
+    },
+    "ProjectionCapsuleV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "projectionId", "roomId", "entityId", "title", "thirdPlaceSummary", "claims", "supportedInteractions", "allowedTopics", "unavailableTopics", "expectedResponseLatency", "visualThemeToken", "agencyStatement", "nonCommitmentStatement", "disclosureBasisId", "publicationAttestationId", "payloadHash", "publishedAt", "freshUntil", "expiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "projection_capsule.v1" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "entityId": { "$ref": "#/$defs/OpaqueId" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "thirdPlaceSummary": { "type": "string", "maxLength": 512 },
+        "claims": { "type": "array", "minItems": 1, "maxItems": 20, "items": { "$ref": "#/$defs/ProjectionClaimV1" } },
+        "supportedInteractions": { "type": "array", "minItems": 1, "maxItems": 3, "uniqueItems": true, "items": { "enum": ["ask", "seed", "resonance"] } },
+        "allowedTopics": { "type": "array", "maxItems": 32, "items": { "type": "string", "maxLength": 256 } },
+        "unavailableTopics": { "type": "array", "maxItems": 32, "items": { "type": "string", "maxLength": 256 } },
+        "expectedResponseLatency": { "type": "string", "maxLength": 256 },
+        "visualThemeToken": { "type": "string", "maxLength": 128 },
+        "agencyStatement": { "type": "string", "maxLength": 1024 },
+        "nonCommitmentStatement": { "type": "string", "maxLength": 1024 },
+        "disclosureBasisId": { "$ref": "#/$defs/OpaqueId" },
+        "publicationAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "publishedAt": { "$ref": "#/$defs/Timestamp" },
+        "freshUntil": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "ProjectionLifecycleV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "projectionId", "ownerState", "curationState", "current", "version", "changedAt"],
+      "properties": {
+        "schemaVersion": { "const": "projection_lifecycle.v1" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "ownerState": { "$ref": "#/$defs/ProjectionOwnerState" },
+        "curationState": { "enum": ["not_admitted", "admitted", "unlisted"] },
+        "current": { "type": "boolean" },
+        "version": { "type": "integer", "minimum": 1 },
+        "changedAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "ProjectionBasisClaimV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slot", "claimText", "attribution", "disclosureClass", "transformationClass", "sourceKind", "sourceReference", "sourceContentHash", "semanticStatus"],
+      "properties": {
+        "slot": { "enum": ["becoming", "now", "nextMove", "tensions", "openTo"] },
+        "claimText": { "type": "string", "minLength": 1, "maxLength": 8192 },
+        "attribution": { "enum": ["owner_confirmed", "inferred_allowed", "unresolved_allowed"] },
+        "disclosureClass": { "type": "string", "maxLength": 128 },
+        "transformationClass": { "enum": ["exact", "transformed", "owner_edited"] },
+        "sourceKind": { "enum": ["owner_frame", "owner_unresolved", "owner_corrected_reflection", "inferred_reflection", "r3_effect", "projection_owner_wording"] },
+        "sourceReference": { "$ref": "#/$defs/OpaqueId" },
+        "sourceContentHash": { "$ref": "#/$defs/Sha256" },
+        "semanticStatus": { "enum": ["active", "superseded", "invalidated", "proposed", "approved", "executed_current", "rolled_back", "indeterminate"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "sourceKind": { "const": "owner_frame" } }, "required": ["sourceKind"] },
+          "then": { "properties": { "attribution": { "const": "owner_confirmed" } } }
+        },
+        {
+          "if": { "properties": { "sourceKind": { "const": "owner_unresolved" } }, "required": ["sourceKind"] },
+          "then": { "properties": { "attribution": { "const": "unresolved_allowed" } } }
+        }
+      ]
+    },
+    "ProjectionBasisV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "basisId", "projectionId", "roomId", "twinRevision", "twinRevisionHash", "workspaceContractHash", "projectionPolicyGeneration", "projectionPolicyHash", "claims", "payloadHash", "ownerDecisionId", "ownerDecisionHash", "localReceiptId", "hostedReceiptId"],
+      "properties": {
+        "schemaVersion": { "const": "projection_basis.v1" },
+        "basisId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "twinRevision": { "type": "integer", "minimum": 1 },
+        "twinRevisionHash": { "$ref": "#/$defs/Sha256" },
+        "workspaceContractHash": { "$ref": "#/$defs/Sha256" },
+        "projectionPolicyGeneration": { "type": "integer", "minimum": 1 },
+        "projectionPolicyHash": { "$ref": "#/$defs/Sha256" },
+        "claims": { "type": "array", "minItems": 1, "maxItems": 20, "items": { "$ref": "#/$defs/ProjectionBasisClaimV1" } },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "ownerDecisionId": { "$ref": "#/$defs/OpaqueId" },
+        "ownerDecisionHash": { "$ref": "#/$defs/Sha256" },
+        "localReceiptId": { "$ref": "#/$defs/NullableId" },
+        "hostedReceiptId": { "$ref": "#/$defs/NullableId" }
+      }
+    },
+    "PublicEncounterV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "encounterId", "roomId", "projectionId", "secretDigest", "state", "issuedAt", "expiresAt", "acceptedCount", "unresolvedInteractionId"],
+      "properties": {
+        "schemaVersion": { "const": "public_encounter.v1" },
+        "encounterId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "secretDigest": { "$ref": "#/$defs/Sha256" },
+        "state": { "$ref": "#/$defs/CapabilityState" },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "acceptedCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "unresolvedInteractionId": { "$ref": "#/$defs/NullableId" }
+      }
+    },
+    "GrantV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "grantId", "roomId", "projectionId", "reentryChainId", "presetId", "secretDigest", "state", "issuedAt", "expiresAt", "acceptedCount", "acceptedQuota", "unresolvedInteractionId", "agentDerivationAllowed", "replacedGrantId"],
+      "properties": {
+        "schemaVersion": { "const": "grant.v1" },
+        "grantId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "reentryChainId": { "$ref": "#/$defs/OpaqueId" },
+        "presetId": { "enum": ["one_visit", "short_exchange", "familiar_collaborator", "trusted_collaborator"] },
+        "secretDigest": { "$ref": "#/$defs/Sha256" },
+        "state": { "$ref": "#/$defs/CapabilityState" },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "acceptedCount": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "acceptedQuota": { "enum": [1, 2, 3, 10] },
+        "unresolvedInteractionId": { "$ref": "#/$defs/NullableId" },
+        "agentDerivationAllowed": { "type": "boolean" },
+        "replacedGrantId": { "$ref": "#/$defs/NullableId" }
+      }
+    },
+    "GrantOfferV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "offerId", "sourceInteractionId", "targetRoomId", "targetProjectionId", "presetId", "state", "issuedAt", "acceptanceExpiresAt", "offeredGrantExpiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "grant_offer.v1" },
+        "offerId": { "$ref": "#/$defs/OpaqueId" },
+        "sourceInteractionId": { "$ref": "#/$defs/OpaqueId" },
+        "targetRoomId": { "$ref": "#/$defs/OpaqueId" },
+        "targetProjectionId": { "$ref": "#/$defs/OpaqueId" },
+        "presetId": { "enum": ["one_visit", "short_exchange", "familiar_collaborator", "trusted_collaborator"] },
+        "state": { "enum": ["issued", "accepted", "owner_revoked", "expired", "invalidated"] },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "acceptanceExpiresAt": { "$ref": "#/$defs/Timestamp" },
+        "offeredGrantExpiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "DirectGrantInviteV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "inviteId", "targetRoomId", "targetProjectionId", "presetId", "secretDigest", "state", "issuedAt", "redemptionExpiresAt", "offeredGrantExpiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "direct_grant_invite.v1" },
+        "inviteId": { "$ref": "#/$defs/OpaqueId" },
+        "targetRoomId": { "$ref": "#/$defs/OpaqueId" },
+        "targetProjectionId": { "$ref": "#/$defs/OpaqueId" },
+        "presetId": { "enum": ["one_visit", "short_exchange", "familiar_collaborator", "trusted_collaborator"] },
+        "secretDigest": { "$ref": "#/$defs/Sha256" },
+        "state": { "enum": ["issued", "redeemed", "owner_revoked", "expired", "invalidated"] },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "redemptionExpiresAt": { "$ref": "#/$defs/Timestamp" },
+        "offeredGrantExpiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "AgentDerivativeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "derivativeId", "parentCapabilityId", "parentCapabilityClass", "roomId", "projectionId", "secretDigest", "state", "issuedAt", "expiresAt", "acceptedCount"],
+      "properties": {
+        "schemaVersion": { "const": "agent_derivative.v1" },
+        "derivativeId": { "$ref": "#/$defs/OpaqueId" },
+        "parentCapabilityId": { "$ref": "#/$defs/OpaqueId" },
+        "parentCapabilityClass": { "enum": ["public_encounter.v1", "grant.v1"] },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "secretDigest": { "$ref": "#/$defs/Sha256" },
+        "state": { "$ref": "#/$defs/CapabilityState" },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "acceptedCount": { "type": "integer", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "GuestCapsuleV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "level", "pseudonym", "currentFocus", "offer", "seek", "openQuestion", "declaredSourceClass", "scopeLabel", "freshnessAt", "guestSchemaVersion", "consentStatement"],
+      "properties": {
+        "schemaVersion": { "const": "guest_capsule.v1" },
+        "level": { "enum": ["g0_manual", "g1_lightweight", "g2_agent_projection"] },
+        "pseudonym": { "$ref": "#/$defs/NullableString" },
+        "currentFocus": { "$ref": "#/$defs/NullableString" },
+        "offer": { "$ref": "#/$defs/NullableString" },
+        "seek": { "$ref": "#/$defs/NullableString" },
+        "openQuestion": { "$ref": "#/$defs/NullableString" },
+        "declaredSourceClass": { "$ref": "#/$defs/NullableString" },
+        "scopeLabel": { "$ref": "#/$defs/NullableString" },
+        "freshnessAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "guestSchemaVersion": { "$ref": "#/$defs/NullableString" },
+        "consentStatement": { "$ref": "#/$defs/NullableString" }
+      }
+    },
+    "ConsentEnvelopeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "consentEnvelopeId", "provider", "ownerAccountRegime", "sourceClass", "orientationClass", "guestCapsuleAllowed", "maximumBudget", "providerPolicyUrl", "providerPolicyHash", "providerRetentionDisclosureHash", "backupRetentionDisclosureHash", "consentCopyHash", "consentedAt", "replyCapabilityId", "replyCapabilityDigest"],
+      "properties": {
+        "schemaVersion": { "const": "consent_envelope.v1" },
+        "consentEnvelopeId": { "$ref": "#/$defs/OpaqueId" },
+        "provider": { "const": "OpenAI" },
+        "ownerAccountRegime": { "type": "string", "maxLength": 256 },
+        "sourceClass": { "const": "sanitized_current_forme_snapshot" },
+        "orientationClass": { "const": "body_path_free_twin_orientation" },
+        "guestCapsuleAllowed": { "type": "boolean" },
+        "maximumBudget": { "$ref": "#/$defs/SessionBudgetV1" },
+        "providerPolicyUrl": { "type": "string", "format": "uri", "pattern": "^https://" },
+        "providerPolicyHash": { "$ref": "#/$defs/Sha256" },
+        "providerRetentionDisclosureHash": { "$ref": "#/$defs/Sha256" },
+        "backupRetentionDisclosureHash": { "$ref": "#/$defs/Sha256" },
+        "consentCopyHash": { "$ref": "#/$defs/Sha256" },
+        "consentedAt": { "$ref": "#/$defs/Timestamp" },
+        "replyCapabilityId": { "$ref": "#/$defs/OpaqueId" },
+        "replyCapabilityDigest": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "InteractionV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "interactionId", "roomId", "projectionId", "originProjectionHash", "originStateAtAcceptance", "interactionType", "requestText", "guestCapsule", "consent", "consentEnvelope", "acceptedAt", "expiresAt", "replyCapabilityDigest", "deleteCapabilityDigest", "state", "stateVersion"],
+      "properties": {
+        "schemaVersion": { "const": "interaction.v1" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "originProjectionHash": { "$ref": "#/$defs/Sha256" },
+        "originStateAtAcceptance": { "$ref": "#/$defs/ProjectionOwnerState" },
+        "interactionType": { "enum": ["ask", "seed", "resonance"] },
+        "requestText": { "type": "string", "minLength": 1, "maxLength": 12288 },
+        "guestCapsule": { "oneOf": [{ "$ref": "#/$defs/GuestCapsuleV1" }, { "type": "null" }] },
+        "consent": { "enum": ["allow_owner_local_ai", "manual_owner_only"] },
+        "consentEnvelope": { "oneOf": [{ "$ref": "#/$defs/ConsentEnvelopeV1" }, { "type": "null" }] },
+        "acceptedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "replyCapabilityDigest": { "$ref": "#/$defs/Sha256" },
+        "deleteCapabilityDigest": { "$ref": "#/$defs/Sha256" },
+        "state": { "enum": ["accepted", "seen_locally", "preparing", "response_ready", "closed_without_response", "interaction_expired", "interaction_deleted", "origin_revoked", "room_retired"] },
+        "stateVersion": { "type": "integer", "minimum": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "consent": { "const": "allow_owner_local_ai" } }, "required": ["consent"] },
+          "then": { "properties": { "consentEnvelope": { "$ref": "#/$defs/ConsentEnvelopeV1" } } },
+          "else": { "properties": { "consentEnvelope": { "type": "null" } } }
+        }
+      ]
+    },
+    "ResponseV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "responseId", "interactionId", "roomId", "projectionId", "body", "candidateHash", "originStateAtPublication", "sourceDisclosureClass", "localBasisAttestationId", "approvalAttestationId", "publicationReceiptId", "publishedAt", "expiresAt", "state", "stateVersion"],
+      "properties": {
+        "schemaVersion": { "const": "response.v1" },
+        "responseId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "body": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "candidateHash": { "$ref": "#/$defs/Sha256" },
+        "originStateAtPublication": { "enum": ["published_fresh", "stale", "superseded", "expired"] },
+        "sourceDisclosureClass": { "enum": ["fresh_native_sanitized_snapshot_owner_reviewed", "manual_owner_authored"] },
+        "localBasisAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "approvalAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "publicationReceiptId": { "$ref": "#/$defs/OpaqueId" },
+        "publishedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "state": { "enum": ["available", "response_expired", "response_revoked", "origin_revoked", "interaction_deleted", "room_retired"] },
+        "stateVersion": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ArtifactApprovalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "approvalId", "artifactClass", "artifactHash", "roomId", "projectionId", "interactionId", "basisHash", "policyHash", "approvedAt", "expiresAt", "operationId"],
+      "properties": {
+        "schemaVersion": { "const": "artifact_approval.v1" },
+        "approvalId": { "$ref": "#/$defs/OpaqueId" },
+        "artifactClass": { "enum": ["projection", "response"] },
+        "artifactHash": { "$ref": "#/$defs/Sha256" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/NullableId" },
+        "basisHash": { "$ref": "#/$defs/Sha256" },
+        "policyHash": { "$ref": "#/$defs/Sha256" },
+        "approvedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "operationId": { "$ref": "#/$defs/OpaqueId" }
+      }
+    },
+    "PublicationAttestationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "attestationId", "bindingId", "roomId", "artifactClass", "artifactId", "artifactHash", "issuedAt", "expiresAt", "hmacSha256"],
+      "properties": {
+        "schemaVersion": { "const": "publication_attestation.v1" },
+        "attestationId": { "$ref": "#/$defs/OpaqueId" },
+        "bindingId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "artifactClass": { "enum": ["projection", "response"] },
+        "artifactId": { "$ref": "#/$defs/OpaqueId" },
+        "artifactHash": { "$ref": "#/$defs/Sha256" },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "hmacSha256": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "ResponsePublicationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "responseId", "interactionId", "roomId", "projectionId", "body", "candidateHash", "originStateAtPublication", "sourceDisclosureClass", "localBasisAttestationId", "payloadHash", "publishedAt", "expiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "response_publication.v1" },
+        "responseId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "body": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "candidateHash": { "$ref": "#/$defs/Sha256" },
+        "originStateAtPublication": { "enum": ["published_fresh", "stale", "superseded", "expired"] },
+        "sourceDisclosureClass": { "enum": ["fresh_native_sanitized_snapshot_owner_reviewed", "manual_owner_authored"] },
+        "localBasisAttestationId": { "$ref": "#/$defs/OpaqueId" },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "publishedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "HostedPublicationDeliveryV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schemaVersion", "artifactClass", "projection", "response", "attestation"],
+          "properties": {
+            "schemaVersion": { "const": "hosted_publication_delivery.v1" },
+            "artifactClass": { "const": "projection" },
+            "projection": { "$ref": "#/$defs/ProjectionCapsuleV1" },
+            "response": { "type": "null" },
+            "attestation": {
+              "allOf": [
+                { "$ref": "#/$defs/PublicationAttestationV1" },
+                { "type": "object", "properties": { "artifactClass": { "const": "projection" } } }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schemaVersion", "artifactClass", "projection", "response", "attestation"],
+          "properties": {
+            "schemaVersion": { "const": "hosted_publication_delivery.v1" },
+            "artifactClass": { "const": "response" },
+            "projection": { "type": "null" },
+            "response": { "$ref": "#/$defs/ResponsePublicationV1" },
+            "attestation": {
+              "allOf": [
+                { "$ref": "#/$defs/PublicationAttestationV1" },
+                { "type": "object", "properties": { "artifactClass": { "const": "response" } } }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "NotificationEndpointV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "interactionId", "state", "encryptedAddress", "redactedMarker", "verificationExpiresAt", "verificationAttempts", "verificationSendsThisHour", "confirmedAt", "version"],
+      "properties": {
+        "schemaVersion": { "const": "notification_endpoint.v1" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "state": { "enum": ["absent", "verification_pending", "confirmed", "cleared"] },
+        "encryptedAddress": { "$ref": "#/$defs/NullableString" },
+        "redactedMarker": { "$ref": "#/$defs/NullableString" },
+        "verificationExpiresAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "verificationAttempts": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "verificationSendsThisHour": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "confirmedAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ReadyNoticeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "noticeId", "interactionId", "responseId", "state", "encryptedDeliveryTarget", "stableAttemptId", "providerIdempotencyKey", "attemptNumber", "leaseExpiresAt", "reconciliationDeadline", "noFutureRetry", "version"],
+      "properties": {
+        "schemaVersion": { "const": "ready_notice.v1" },
+        "noticeId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "responseId": { "$ref": "#/$defs/OpaqueId" },
+        "state": { "enum": ["absent", "ready_pending", "submitting", "canceled", "provider_accepted", "delivery_unknown", "failed"] },
+        "encryptedDeliveryTarget": { "$ref": "#/$defs/NullableString" },
+        "stableAttemptId": { "$ref": "#/$defs/NullableId" },
+        "providerIdempotencyKey": { "$ref": "#/$defs/NullableString" },
+        "attemptNumber": { "type": "integer", "minimum": 0 },
+        "leaseExpiresAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "reconciliationDeadline": { "$ref": "#/$defs/NullableTimestamp" },
+        "noFutureRetry": { "type": "boolean" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "ResponseOrientationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "orientationId", "entityName", "ownerIntent", "currentState", "nextMove", "publicClaimSummary", "eligibleCorrectionSummaries", "eligibleUnresolvedItems", "localTwinRevision", "localTwinContentHash", "contentHash"],
+      "properties": {
+        "schemaVersion": { "const": "response_orientation.v1" },
+        "orientationId": { "$ref": "#/$defs/OpaqueId" },
+        "entityName": { "type": "string", "maxLength": 256 },
+        "ownerIntent": { "type": "string", "maxLength": 2048 },
+        "currentState": { "type": "string", "maxLength": 2048 },
+        "nextMove": { "type": "string", "maxLength": 2048 },
+        "publicClaimSummary": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 1024 } },
+        "eligibleCorrectionSummaries": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 1024 } },
+        "eligibleUnresolvedItems": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 1024 } },
+        "localTwinRevision": { "type": "integer", "minimum": 1 },
+        "localTwinContentHash": { "$ref": "#/$defs/Sha256" },
+        "contentHash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "ResponseSourcePolicyV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "policyId", "allowedRootFiles", "allowedDirectoryRoots", "allowedExtensions", "maximumFileBytes", "maximumTotalBytes", "secretPatternPolicyVersion", "secretPatternPolicyHash", "policyHash"],
+      "properties": {
+        "schemaVersion": { "const": "response_source_policy.v1" },
+        "policyId": { "$ref": "#/$defs/OpaqueId" },
+        "allowedRootFiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "allowedDirectoryRoots": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "allowedExtensions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "maximumFileBytes": { "const": 524288 },
+        "maximumTotalBytes": { "const": 8388608 },
+        "secretPatternPolicyVersion": { "type": "string", "maxLength": 128 },
+        "secretPatternPolicyHash": { "$ref": "#/$defs/Sha256" },
+        "policyHash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "SnapshotFileV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonicalPath", "contentHash", "byteCount"],
+      "properties": {
+        "canonicalPath": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "contentHash": { "$ref": "#/$defs/Sha256" },
+        "byteCount": { "type": "integer", "minimum": 0, "maximum": 524288 }
+      }
+    },
+    "ResponseSourceSnapshotV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "snapshotId", "repositoryHead", "repositoryTreeHash", "policyId", "policyHash", "files", "fileCount", "totalBytes", "manifestHash", "createdAt"],
+      "properties": {
+        "schemaVersion": { "const": "response_source_snapshot.v1" },
+        "snapshotId": { "$ref": "#/$defs/OpaqueId" },
+        "repositoryHead": { "type": "string", "pattern": "^[a-f0-9]{40,64}$" },
+        "repositoryTreeHash": { "$ref": "#/$defs/Sha256" },
+        "policyId": { "$ref": "#/$defs/OpaqueId" },
+        "policyHash": { "$ref": "#/$defs/Sha256" },
+        "files": { "type": "array", "items": { "$ref": "#/$defs/SnapshotFileV1" } },
+        "fileCount": { "type": "integer", "minimum": 0 },
+        "totalBytes": { "type": "integer", "minimum": 0, "maximum": 8388608 },
+        "manifestHash": { "$ref": "#/$defs/Sha256" },
+        "createdAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "SessionEnvelopeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "sessionEnvelopeId", "interactionId", "consentEnvelopeId", "consentEnvelopeHash", "provider", "modelId", "ownerAccountRegime", "sourceClass", "orientationClass", "guestCapsuleIncluded", "budget", "sourcePolicyHash", "snapshotManifestHash", "orientationHash", "providerRetentionDisclosureHash", "outputSchemaHash", "preparedAt", "authorityExpiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "session_envelope.v1" },
+        "sessionEnvelopeId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "consentEnvelopeId": { "$ref": "#/$defs/OpaqueId" },
+        "consentEnvelopeHash": { "$ref": "#/$defs/Sha256" },
+        "provider": { "const": "OpenAI" },
+        "modelId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "ownerAccountRegime": { "type": "string", "maxLength": 256 },
+        "sourceClass": { "const": "sanitized_current_forme_snapshot" },
+        "orientationClass": { "const": "body_path_free_twin_orientation" },
+        "guestCapsuleIncluded": { "type": "boolean" },
+        "budget": { "$ref": "#/$defs/SessionBudgetV1" },
+        "sourcePolicyHash": { "$ref": "#/$defs/Sha256" },
+        "snapshotManifestHash": { "$ref": "#/$defs/Sha256" },
+        "orientationHash": { "$ref": "#/$defs/Sha256" },
+        "providerRetentionDisclosureHash": { "$ref": "#/$defs/Sha256" },
+        "outputSchemaHash": { "$ref": "#/$defs/Sha256" },
+        "preparedAt": { "$ref": "#/$defs/Timestamp" },
+        "authorityExpiresAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "ResponseCandidateV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "candidateId", "interactionId", "sessionEnvelopeId", "roomId", "projectionId", "originState", "responseText", "sourceDisclosureClass", "twinBasisHash", "snapshotManifestHash", "sessionReceiptHash", "policyHash", "candidateHash", "admittedAt", "expiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "response_candidate.v1" },
+        "candidateId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "sessionEnvelopeId": { "oneOf": [{ "$ref": "#/$defs/OpaqueId" }, { "type": "null" }] },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "projectionId": { "$ref": "#/$defs/OpaqueId" },
+        "originState": { "enum": ["published_fresh", "stale", "superseded", "expired"] },
+        "responseText": { "type": "string", "minLength": 1, "maxLength": 16384 },
+        "sourceDisclosureClass": { "enum": ["fresh_native_sanitized_snapshot_owner_reviewed", "manual_owner_authored"] },
+        "twinBasisHash": { "$ref": "#/$defs/Sha256" },
+        "snapshotManifestHash": { "oneOf": [{ "$ref": "#/$defs/Sha256" }, { "type": "null" }] },
+        "sessionReceiptHash": { "$ref": "#/$defs/Sha256" },
+        "policyHash": { "$ref": "#/$defs/Sha256" },
+        "candidateHash": { "$ref": "#/$defs/Sha256" },
+        "admittedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" }
+      },
+      "allOf": [{
+        "if": { "properties": { "sourceDisclosureClass": { "const": "fresh_native_sanitized_snapshot_owner_reviewed" } }, "required": ["sourceDisclosureClass"] },
+        "then": {
+          "properties": {
+            "sessionEnvelopeId": { "$ref": "#/$defs/OpaqueId" },
+            "snapshotManifestHash": { "$ref": "#/$defs/Sha256" }
+          }
+        },
+        "else": {
+          "properties": {
+            "sessionEnvelopeId": { "type": "null" },
+            "snapshotManifestHash": { "type": "null" }
+          }
+        }
+      }]
+    },
+    "FreshCycleReservationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "reservationId", "interactionId", "startAuthorizationHash", "sessionEnvelopeHash", "state", "idempotencyKey", "reservedAt", "firstDispatchCommittedAt", "version"],
+      "properties": {
+        "schemaVersion": { "const": "fresh_cycle_reservation.v1" },
+        "reservationId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "startAuthorizationHash": { "$ref": "#/$defs/Sha256" },
+        "sessionEnvelopeHash": { "$ref": "#/$defs/Sha256" },
+        "state": { "enum": ["unreserved", "reserved", "dispatch_committed", "released_zero_dispatch"] },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "reservedAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "firstDispatchCommittedAt": { "$ref": "#/$defs/NullableTimestamp" },
+        "version": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "DispatchPermitV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "permitId", "interactionId", "reservationId", "sessionEnvelopeHash", "startAuthorizationHash", "provider", "modelId", "payloadHash", "dispatchOrdinal", "idempotencyKey", "issuedAt", "expiresAt", "consumedAt"],
+      "properties": {
+        "schemaVersion": { "const": "dispatch_permit.v1" },
+        "permitId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "reservationId": { "$ref": "#/$defs/OpaqueId" },
+        "sessionEnvelopeHash": { "$ref": "#/$defs/Sha256" },
+        "startAuthorizationHash": { "$ref": "#/$defs/Sha256" },
+        "provider": { "const": "OpenAI" },
+        "modelId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "dispatchOrdinal": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "issuedAt": { "$ref": "#/$defs/Timestamp" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" },
+        "consumedAt": { "$ref": "#/$defs/NullableTimestamp" }
+      }
+    },
+    "SessionReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "receiptId", "interactionId", "sessionEnvelopeId", "sessionEnvelopeHash", "startedAt", "finishedAt", "provider", "modelId", "terminalStatus", "dispatches", "inputTokens", "outputTokens", "applicableSpendUsd", "sourceQueryCount", "sourceResultBytes", "accessEvidenceDigest", "policyHash", "schemaHash", "runtimeVersion", "errorCode", "expiresAt"],
+      "properties": {
+        "schemaVersion": { "const": "session_receipt.v1" },
+        "receiptId": { "$ref": "#/$defs/OpaqueId" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "sessionEnvelopeId": { "oneOf": [{ "$ref": "#/$defs/OpaqueId" }, { "type": "null" }] },
+        "sessionEnvelopeHash": { "oneOf": [{ "$ref": "#/$defs/Sha256" }, { "type": "null" }] },
+        "startedAt": { "$ref": "#/$defs/Timestamp" },
+        "finishedAt": { "$ref": "#/$defs/Timestamp" },
+        "provider": { "oneOf": [{ "const": "OpenAI" }, { "type": "null" }] },
+        "modelId": { "$ref": "#/$defs/NullableString" },
+        "terminalStatus": { "enum": ["candidate_admitted", "manual_only", "failed", "budget_stopped", "terminal_aborted"] },
+        "dispatches": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "inputTokens": { "type": "integer", "minimum": 0, "maximum": 128000 },
+        "outputTokens": { "type": "integer", "minimum": 0, "maximum": 8000 },
+        "applicableSpendUsd": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "sourceQueryCount": { "type": "integer", "minimum": 0 },
+        "sourceResultBytes": { "type": "integer", "minimum": 0 },
+        "accessEvidenceDigest": { "oneOf": [{ "$ref": "#/$defs/Sha256" }, { "type": "null" }] },
+        "policyHash": { "$ref": "#/$defs/Sha256" },
+        "schemaHash": { "$ref": "#/$defs/Sha256" },
+        "runtimeVersion": { "type": "string", "maxLength": 256 },
+        "errorCode": { "$ref": "#/$defs/NullableString" },
+        "expiresAt": { "$ref": "#/$defs/Timestamp" }
+      },
+      "allOf": [{
+        "if": { "properties": { "terminalStatus": { "const": "manual_only" } }, "required": ["terminalStatus"] },
+        "then": {
+          "properties": {
+            "sessionEnvelopeId": { "type": "null" },
+            "sessionEnvelopeHash": { "type": "null" },
+            "provider": { "type": "null" },
+            "modelId": { "type": "null" },
+            "dispatches": { "const": 0 },
+            "inputTokens": { "const": 0 },
+            "outputTokens": { "const": 0 },
+            "applicableSpendUsd": { "type": "null" },
+            "sourceQueryCount": { "const": 0 },
+            "sourceResultBytes": { "const": 0 },
+            "accessEvidenceDigest": { "type": "null" }
+          }
+        },
+        "else": {
+          "properties": {
+            "sessionEnvelopeId": { "$ref": "#/$defs/OpaqueId" },
+            "sessionEnvelopeHash": { "$ref": "#/$defs/Sha256" }
+          }
+        }
+      }]
+    },
+    "OperationReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "receiptId", "actorClass", "action", "idempotencyKey", "canonicalRequestHash", "targetId", "targetVersion", "status", "committedAt", "bodyFreeCode"],
+      "properties": {
+        "schemaVersion": { "const": "operation_receipt.v1" },
+        "receiptId": { "$ref": "#/$defs/OpaqueId" },
+        "actorClass": { "type": "string", "maxLength": 128 },
+        "action": { "type": "string", "maxLength": 128 },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "canonicalRequestHash": { "$ref": "#/$defs/Sha256" },
+        "targetId": { "$ref": "#/$defs/OpaqueId" },
+        "targetVersion": { "type": "integer", "minimum": 1 },
+        "status": { "enum": ["committed", "no_op", "rejected", "terminal"] },
+        "committedAt": { "$ref": "#/$defs/Timestamp" },
+        "bodyFreeCode": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "RoomEventV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "eventId", "roomId", "sequence", "objectType", "objectId", "eventType", "objectVersion", "payloadHash", "committedAt", "bodyAvailable"],
+      "properties": {
+        "schemaVersion": { "const": "room_event.v1" },
+        "eventId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "objectType": { "enum": ["room", "projection", "interaction", "response", "grant", "notification", "purge"] },
+        "objectId": { "$ref": "#/$defs/OpaqueId" },
+        "eventType": { "type": "string", "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$", "maxLength": 128 },
+        "objectVersion": { "type": "integer", "minimum": 1 },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "committedAt": { "$ref": "#/$defs/Timestamp" },
+        "bodyAvailable": { "type": "boolean" }
+      }
+    },
+    "RoomEventBatchV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "roomId", "afterSequence", "highWater", "events"],
+      "properties": {
+        "schemaVersion": { "const": "room_event_batch.v1" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "afterSequence": { "type": "integer", "minimum": 0 },
+        "highWater": { "type": "integer", "minimum": 0 },
+        "events": { "type": "array", "maxItems": 1000, "items": { "$ref": "#/$defs/RoomEventV1" } }
+      }
+    },
+    "CursorGoneV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "roomId", "afterSequence", "highWater", "earliestReplayableSequence", "liveEvents", "tombstoneIds"],
+      "properties": {
+        "schemaVersion": { "const": "cursor_gone.v1" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "afterSequence": { "type": "integer", "minimum": 0 },
+        "highWater": { "type": "integer", "minimum": 0 },
+        "earliestReplayableSequence": { "type": "integer", "minimum": 1 },
+        "liveEvents": { "type": "array", "maxItems": 100000, "items": { "$ref": "#/$defs/RoomEventV1" } },
+        "tombstoneIds": { "type": "array", "maxItems": 100000, "uniqueItems": true, "items": { "$ref": "#/$defs/OpaqueId" } }
+      }
+    },
+    "RoomEventAckV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "roomId", "eventId", "sequence", "eventHash", "idempotencyKey"],
+      "properties": {
+        "schemaVersion": { "const": "room_event_ack.v1" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "eventId": { "$ref": "#/$defs/OpaqueId" },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "eventHash": { "$ref": "#/$defs/Sha256" },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 }
+      }
+    },
+    "RoomEventAckReceiptV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "receiptId", "roomId", "eventId", "sequence", "eventHash", "idempotencyKey", "committedAt"],
+      "properties": {
+        "schemaVersion": { "const": "room_event_ack_receipt.v1" },
+        "receiptId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "eventId": { "$ref": "#/$defs/OpaqueId" },
+        "sequence": { "type": "integer", "minimum": 1 },
+        "eventHash": { "$ref": "#/$defs/Sha256" },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "committedAt": { "$ref": "#/$defs/Timestamp" }
+      }
+    },
+    "ApiMutationEnvelopeV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "actorClass", "action", "idempotencyKey", "canonicalRequestHash", "expectedObjectVersion", "predecessorHash", "payloadHash"],
+      "properties": {
+        "schemaVersion": { "const": "api_mutation_envelope.v1" },
+        "actorClass": { "enum": ["public", "manual_guest", "guest_agent", "controller", "curator", "room_operator.v1", "janitor"] },
+        "action": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 },
+        "canonicalRequestHash": { "$ref": "#/$defs/Sha256" },
+        "expectedObjectVersion": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+        "predecessorHash": { "oneOf": [{ "$ref": "#/$defs/Sha256" }, { "type": "null" }] },
+        "payloadHash": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "ProjectionReadViewV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "room", "projection", "lifecycle", "warning", "cacheControl"],
+      "properties": {
+        "schemaVersion": { "const": "projection_read_view.v1" },
+        "room": { "$ref": "#/$defs/RoomV1" },
+        "projection": { "$ref": "#/$defs/ProjectionCapsuleV1" },
+        "lifecycle": { "$ref": "#/$defs/ProjectionLifecycleV1" },
+        "warning": { "oneOf": [{ "const": "stale_projection" }, { "type": "null" }] },
+        "cacheControl": { "const": "no-store" }
+      }
+    },
+    "RoomOperatorRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "bindingId", "roomId", "action", "mutation", "exactTargetId"],
+      "properties": {
+        "schemaVersion": { "const": "room_operator_request.v1" },
+        "bindingId": { "$ref": "#/$defs/OpaqueId" },
+        "roomId": { "$ref": "#/$defs/OpaqueId" },
+        "action": { "enum": ["inspect", "sync", "pull_exact_request", "reserve_fresh_cycle", "recover_fresh_cycle", "abandon_zero_dispatch", "issue_dispatch_permit", "recover_dispatch_permit", "ack_event", "recover_ack", "deliver_projection", "deliver_response", "attest_stale", "attest_local_purge"] },
+        "mutation": { "oneOf": [{ "$ref": "#/$defs/ApiMutationEnvelopeV1" }, { "type": "null" }] },
+        "exactTargetId": { "$ref": "#/$defs/NullableId" }
+      }
+    },
+    "SnapshotLineReadV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "canonicalPath", "lineStart", "lineEnd"],
+      "properties": {
+        "schemaVersion": { "const": "snapshot_line_read.v1" },
+        "canonicalPath": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "lineStart": { "type": "integer", "minimum": 1 },
+        "lineEnd": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "SnapshotSearchV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "pattern", "patternKind"],
+      "properties": {
+        "schemaVersion": { "const": "snapshot_search.v1" },
+        "pattern": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "patternKind": { "enum": ["literal", "re2"] }
+      }
+    },
+    "SnapshotQueryResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "queryHash", "status", "resultText", "matchCount", "resultBytes", "bodyFreeErrorCode"],
+      "properties": {
+        "schemaVersion": { "const": "snapshot_query_result.v1" },
+        "queryHash": { "$ref": "#/$defs/Sha256" },
+        "status": { "enum": ["ok", "not_found", "rejected", "timeout"] },
+        "resultText": { "oneOf": [{ "type": "string", "maxLength": 65536 }, { "type": "null" }] },
+        "matchCount": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "resultBytes": { "type": "integer", "minimum": 0, "maximum": 65536 },
+        "bodyFreeErrorCode": { "$ref": "#/$defs/NullableString" }
+      }
+    },
+    "TransportDispatchIntentV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "interactionId", "reservationId", "sessionEnvelopeHash", "startAuthorizationHash", "provider", "modelId", "payloadHash", "dispatchOrdinal", "countedInputTokens", "reservedOutputTokens", "reservedApplicableSpendUsd", "idempotencyKey"],
+      "properties": {
+        "schemaVersion": { "const": "transport_dispatch_intent.v1" },
+        "interactionId": { "$ref": "#/$defs/OpaqueId" },
+        "reservationId": { "$ref": "#/$defs/OpaqueId" },
+        "sessionEnvelopeHash": { "$ref": "#/$defs/Sha256" },
+        "startAuthorizationHash": { "$ref": "#/$defs/Sha256" },
+        "provider": { "const": "OpenAI" },
+        "modelId": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "payloadHash": { "$ref": "#/$defs/Sha256" },
+        "dispatchOrdinal": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "countedInputTokens": { "type": "integer", "minimum": 0, "maximum": 128000 },
+        "reservedOutputTokens": { "type": "integer", "minimum": 0, "maximum": 8000 },
+        "reservedApplicableSpendUsd": { "oneOf": [{ "type": "number", "minimum": 0, "maximum": 1 }, { "type": "null" }] },
+        "idempotencyKey": { "type": "string", "minLength": 16, "maxLength": 256 }
+      }
+    },
+    "TransportGateDecisionV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "allowed", "code", "permit", "bodyFreeReceipt"],
+      "properties": {
+        "schemaVersion": { "const": "transport_gate_decision.v1" },
+        "allowed": { "type": "boolean" },
+        "code": { "type": "string", "maxLength": 128 },
+        "permit": { "oneOf": [{ "$ref": "#/$defs/DispatchPermitV1" }, { "type": "null" }] },
+        "bodyFreeReceipt": { "$ref": "#/$defs/OperationReceiptV1" }
+      }
+    }
+  }
+}

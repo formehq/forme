@@ -1,0 +1,623 @@
+{
+  "schemaVersion": "r4_gate_a_source_inventory.v1",
+  "fileCount": 154,
+  "inventorySha256": "sha256:32893d5e820a7066603a0abf6befc842f9fadecc5d810f7a2ccf11ce80a56e1c",
+  "entries": [
+    {
+      "path": "README.md",
+      "sha256": "770ef931d95c02f0e7f2380abbd58c68fb3808b281e4fde0dbd46cd441c6b5df"
+    },
+    {
+      "path": "apps/room/README.md",
+      "sha256": "7ca578a9a633b7838a982b6a7f2afddd745b43749b9dae729f17a3f45806e305"
+    },
+    {
+      "path": "apps/room/app/api/v1/[...segments]/route.ts",
+      "sha256": "4cc64bed96b1430d9f2db2f1f76c74282a7e0eace1aab65cc831f0de946fd75e"
+    },
+    {
+      "path": "apps/room/app/g/[interactionId]/page.tsx",
+      "sha256": "428bd6c260ef0fe2881379c82a59a8e21175f72cf0cd7039c7800dc06b3e960c"
+    },
+    {
+      "path": "apps/room/app/globals.css",
+      "sha256": "3b0b3521343b66a591dfcddf039d8170df1907e0b03b87d21c695d44fb8360ec"
+    },
+    {
+      "path": "apps/room/app/layout.tsx",
+      "sha256": "407a7112b3cbee09ed6739169c7bef1c2f59697b47935999568767b845bb098d"
+    },
+    {
+      "path": "apps/room/app/owner/interactions/[interactionId]/page.tsx",
+      "sha256": "b5b513c222cbbeee8df9d7f8bb935b996493c597a6177c3c56d6465ba98cd7a0"
+    },
+    {
+      "path": "apps/room/app/owner/page.tsx",
+      "sha256": "568e240aee23349f772e9d19091b14ed55b143a751bfcef9e597549f761c4cdd"
+    },
+    {
+      "path": "apps/room/app/p/[projectionId]/page.tsx",
+      "sha256": "2b9f51740237428a8767b0fdd70086b5383b39410e2e9906e447bbf81e32ab7d"
+    },
+    {
+      "path": "apps/room/app/page.tsx",
+      "sha256": "a1f3abbe91af6782e9ad0cdad23c32d61c5ee309bc32c9ca9484a2446fb03358"
+    },
+    {
+      "path": "apps/room/app/private/[projectionId]/page.tsx",
+      "sha256": "0dcbeb575940de421e7cfce43ec0d350ef46679dc02c8c6a014f8303f544ebe6"
+    },
+    {
+      "path": "apps/room/next-env.d.ts",
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    },
+    {
+      "path": "apps/room/next.config.ts",
+      "sha256": "59660b264fc5923e4db388aab58240bbf1481bb620856f017b06fb46ce96f60d"
+    },
+    {
+      "path": "apps/room/package.json",
+      "sha256": "2921d981fd2668a9eacc97e6492c81d1cc12093279d963011bc439a65c5df575"
+    },
+    {
+      "path": "apps/room/scripts/assert-no-ai.mjs",
+      "sha256": "fd681cbdf1fc6c7e2c341a502aaad1b7240d0f748bbc3290a7ac1a288b6a151c"
+    },
+    {
+      "path": "apps/room/src/application.ts",
+      "sha256": "b5ee42622bbd3e635b967ca5e9c3744ac88f0d5a5a0a98457f71b2949e3b3cdf"
+    },
+    {
+      "path": "apps/room/src/components/GuestAsk.tsx",
+      "sha256": "b961b0aecfd98a389fbaf22ae34c1f3e9b819dd681369487b0a30cdcd09ba270"
+    },
+    {
+      "path": "apps/room/src/components/GuestStatus.tsx",
+      "sha256": "81ffa566e96c85db1da26600d9f218b2afaeeda0e18c384466af6b60326d420c"
+    },
+    {
+      "path": "apps/room/src/components/OwnerControls.tsx",
+      "sha256": "34056b344583af9241774588be28251ffdfc1de41f8b6a21170737122d197bd4"
+    },
+    {
+      "path": "apps/room/src/components/PrivateProjection.tsx",
+      "sha256": "2583fd2e34bbd038ec340a883974ca77f2dc39dba0da286f3b91a913c5e3ffd1"
+    },
+    {
+      "path": "apps/room/src/components/client-api.ts",
+      "sha256": "e837f7201e42c9b9eaf574e3975f9cf66c58edf425333e88eb12565d22f7e1a6"
+    },
+    {
+      "path": "apps/room/src/consent.ts",
+      "sha256": "b628146a5a73483cc506314cf5557bc57c3231a6a1d6636d81c2bcec4b03d785"
+    },
+    {
+      "path": "apps/room/src/domain.ts",
+      "sha256": "59a8ccb3d352299f176529482e1878a75bc4a6e5b9309de4d71d0d99ef89df39"
+    },
+    {
+      "path": "apps/room/src/http.ts",
+      "sha256": "266417a7dd60f637e65dc291833028898ebf5dc59cfbe4ec1c1ae182d74c781e"
+    },
+    {
+      "path": "apps/room/src/offline-control/notification.ts",
+      "sha256": "e635f4bf7f4568f70de1f72d20640204e54942b8725cc7cecd197b87a5daa571"
+    },
+    {
+      "path": "apps/room/src/offline-control/public-rate.ts",
+      "sha256": "64157ff93034eaa432a1cd9d9df5ac814a71a418845f124e9289a91cc29597d8"
+    },
+    {
+      "path": "apps/room/src/offline-control/retention.ts",
+      "sha256": "823388fdb120cefe521f5e598a423367ebc3fe6f2b9ba56a26937cf92e7e15b1"
+    },
+    {
+      "path": "apps/room/src/operation-inventory.ts",
+      "sha256": "d1808495ed8f171415918a91dcd1b4974cda2b3eb32de2aad0a5aecb3da899f9"
+    },
+    {
+      "path": "apps/room/src/projection-page.ts",
+      "sha256": "4ea54a1c16016af1add4e10df57670d747b832ea2aaeb9ebfb2fcc67dfc4700d"
+    },
+    {
+      "path": "apps/room/src/publication-verifier.ts",
+      "sha256": "417b1544b14201efbedb156aab8783bd3cb8ef671d988a2d1194019d1c16a7e5"
+    },
+    {
+      "path": "apps/room/src/redaction.ts",
+      "sha256": "218c18e29482237ec8acfc48bcad94928186c54588a49b124f13e3b9804608b8"
+    },
+    {
+      "path": "apps/room/src/runtime.ts",
+      "sha256": "91db00da5d215519e97a39678fcc58c15334f7d0d295268bd389eb3dcae80bab"
+    },
+    {
+      "path": "apps/room/src/store.ts",
+      "sha256": "55e6928194e6a98a9c5adb8d11102b7ed20737f6132858e0d44cc854428be36a"
+    },
+    {
+      "path": "apps/room/src/synthetic-fixtures.ts",
+      "sha256": "f8822943b349ca0a6a534ea5089897e9d96e334528d956e0d0385a7df2f45e81"
+    },
+    {
+      "path": "apps/room/tsconfig.json",
+      "sha256": "9934e924fa14a53615f52764e4291afcc98c73f178724e3c6d573e54edb81028"
+    },
+    {
+      "path": "bin/forme.js",
+      "sha256": "f20505d226172e2d2c45b9dbc518fb5fbb93ba900632e9e6e02599c4c7a35170"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812"
+    },
+    {
+      "path": "package.json",
+      "sha256": "d6d2912fe2ca48cb082ad95993795285f5b0ee39a040c43216434ff27586097f"
+    },
+    {
+      "path": "packages/r4-local/package.json",
+      "sha256": "30eaeffec7e27d91b482aa26dad8512c8cf60bcf4b925d6ad8c8c90221c83fbe"
+    },
+    {
+      "path": "packages/r4-local/src/body-free.ts",
+      "sha256": "a8fd4e9cf0ef034e30cc210a9a20657cb4e8476efa1a6d3471b79fe24a312f3d"
+    },
+    {
+      "path": "packages/r4-local/src/broker.ts",
+      "sha256": "da11c80e4f805055d0e410f5b1b6916ed9663d24b5909cba06d921a42f071234"
+    },
+    {
+      "path": "packages/r4-local/src/candidate-event-lifecycle.ts",
+      "sha256": "fdf1beb05e35b9cc35b7afdd0228cd3de30a068d6bbc8bf4fb7b50393f334b3e"
+    },
+    {
+      "path": "packages/r4-local/src/candidate-store.ts",
+      "sha256": "7539652642058ca2329edd295313bcb5c7d81a3943c8d4a0a204f7afdf1b6016"
+    },
+    {
+      "path": "packages/r4-local/src/capability-probe.ts",
+      "sha256": "76a0df8445df372daf9b3d43c64d92e05de29dd09ecbb1853e92da9e964b5c19"
+    },
+    {
+      "path": "packages/r4-local/src/cli.ts",
+      "sha256": "c16fb5ae3903946048f2b93c9b4898b0a6faf2ca19afc8d9aa64357b20c1e313"
+    },
+    {
+      "path": "packages/r4-local/src/coordinator.ts",
+      "sha256": "9571016637fe700304e878e7053be529018e3653c4d1d2852425c47a49720bad"
+    },
+    {
+      "path": "packages/r4-local/src/fault-injection.ts",
+      "sha256": "98e4d2ed21ef4ad82a711ccafbe0833efcc763748de7e5f8b6328709ed66beb7"
+    },
+    {
+      "path": "packages/r4-local/src/fresh-session.ts",
+      "sha256": "5e933deadb1bfc2d529c20fbd379e1f873e923136c225ccfcd4a8f2760e686ce"
+    },
+    {
+      "path": "packages/r4-local/src/index.ts",
+      "sha256": "e17136d819d48ae55dd208ac1999cb10eb64c797f012a0547628d5792d9c8a22"
+    },
+    {
+      "path": "packages/r4-local/src/ledger.ts",
+      "sha256": "22180b03bb8e728b2910491ef812efa2c1edb8f98efbff431a1be75a98824e4c"
+    },
+    {
+      "path": "packages/r4-local/src/lock.ts",
+      "sha256": "a1a8780c6840a5363ca0624a4e768327b503a57f5135d96a4e1465000d729724"
+    },
+    {
+      "path": "packages/r4-local/src/persisted-record.ts",
+      "sha256": "9f02bb2ddc4d79f6b4ada97c98e273d951e7674e2e367823a150b6f74827ce64"
+    },
+    {
+      "path": "packages/r4-local/src/projection.ts",
+      "sha256": "8198075455603cc74afd01fde0790a2f243fbf04e4bfcb354d10aaef29e073a5"
+    },
+    {
+      "path": "packages/r4-local/src/protected-root.ts",
+      "sha256": "631c155cb88062e2f29e241fbfb9817ba4280ab52a6acbe62b6696110f666d3a"
+    },
+    {
+      "path": "packages/r4-local/src/publication-operation.ts",
+      "sha256": "641e21dabd1b39ea9f6c9d210f06f32215c76581ed87269ff4f89ca116ef1c2f"
+    },
+    {
+      "path": "packages/r4-local/src/publication.ts",
+      "sha256": "7f19759c114e4e6d384847b55f6c3f4ddeb0eba0da2ab98774bed469b80ad34d"
+    },
+    {
+      "path": "packages/r4-local/src/real-basis-probe-cli.ts",
+      "sha256": "7c5981f61016b2bf2f9f3c721f9426d47aab8b7b6b0da421ed7f62c07b0c342e"
+    },
+    {
+      "path": "packages/r4-local/src/real-basis-probe.ts",
+      "sha256": "c72aa06beb238feace2b5e9f316c4ef1b08a70b2fd0ef41eecf400e3ab33541d"
+    },
+    {
+      "path": "packages/r4-local/src/response-session.ts",
+      "sha256": "543a7245e68d411db35a1470fd4f801eaf11f5ed59ee7ed638ec3ac4253f9b80"
+    },
+    {
+      "path": "packages/r4-local/src/restricted-runtime-adapter.ts",
+      "sha256": "4b1e86789e4a9282a47908359c20f6e9d5e0dd13c8a4347a1be1ac5b06215af1"
+    },
+    {
+      "path": "packages/r4-local/src/runtime-cleanup.ts",
+      "sha256": "ca5b3529fe9e771f9e202b1cfb85bbb75e9fc01cc23af9ca9c86a0cad3407795"
+    },
+    {
+      "path": "packages/r4-local/src/runtime-policy.ts",
+      "sha256": "0e4b088f754ae5ddd3ee980323085e8041fb59fbcee0dcfc0250752b10923228"
+    },
+    {
+      "path": "packages/r4-local/src/snapshot.ts",
+      "sha256": "fd94617f57e21bdb415f52666c656128f348feea9b43d93473376e52fbc5cc1f"
+    },
+    {
+      "path": "packages/r4-local/src/sync.ts",
+      "sha256": "7a187ef66d3dd7b4dd746b1b5890c0903dcdcfa1225a4199ccafbb40c8af440f"
+    },
+    {
+      "path": "packages/r4-local/src/types.ts",
+      "sha256": "a27a1567a5760540c3040be4c5fae49d555ff500fd5ffe89e00dc296991551a6"
+    },
+    {
+      "path": "packages/r4-local/src/walkthrough.ts",
+      "sha256": "5bad1615920c315f1b6a5bb9dabd8f4613a5d8dd60b56ba7f27ace4e239f2824"
+    },
+    {
+      "path": "packages/r4-protocol/README.md",
+      "sha256": "d0678a31638c3741d198d6f7a9b12bd057c9c08107f92378d76463510086463c"
+    },
+    {
+      "path": "packages/r4-protocol/src/canonical.ts",
+      "sha256": "e57c5735df2fdcff1121b8159b18aa76c979334072d5205d7e5ffa449e88d3e3"
+    },
+    {
+      "path": "packages/r4-protocol/src/constructors.ts",
+      "sha256": "121b6ca8984823300600100cf9fb0c5ae8cf5643112a5a9d4d3dc6b55a55910c"
+    },
+    {
+      "path": "packages/r4-protocol/src/golden.ts",
+      "sha256": "e8122aef463601d5081c068a37753e31cb1be02223c9afada1b3794a23c52ffd"
+    },
+    {
+      "path": "packages/r4-protocol/src/guards.ts",
+      "sha256": "49766b2817a441fca9b3f48544843d84698adfa507dc4be34719784ee66b5c5d"
+    },
+    {
+      "path": "packages/r4-protocol/src/index.ts",
+      "sha256": "e54c0d0129bfd311241dc4ec4b327430755c350a8c39d86657fc156e3d92a635"
+    },
+    {
+      "path": "packages/r4-protocol/src/object-validation.ts",
+      "sha256": "c71043c0c4dc1eb8ed0c82035b86c76f6b5f721ac4ee64bd72eab95c8466e950"
+    },
+    {
+      "path": "packages/r4-protocol/src/registry.ts",
+      "sha256": "26281eacc03544b45724617004f4bf92772bff392240c8d346dfbbcdcc22b924"
+    },
+    {
+      "path": "packages/r4-protocol/src/state.ts",
+      "sha256": "e077eda9b690a1eedc937dc982375629fb518008c546d3f06c99b6a312220b21"
+    },
+    {
+      "path": "packages/r4-protocol/src/types.ts",
+      "sha256": "d68d7a30c38c45025465fda0588f990206b1075a5784287a8e2d81cd8e89317b"
+    },
+    {
+      "path": "packages/r4-protocol/src/validation.ts",
+      "sha256": "7e48d46b59ac8d3c18f66fb11ca5953c11a828ba28a31e3c3a1691470deddb27"
+    },
+    {
+      "path": "schemas/r4/gate-b/README.md",
+      "sha256": "e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b"
+    },
+    {
+      "path": "schemas/r4/gate-b/artifact-index.json",
+      "sha256": "2fc4f5ec2554f43a8c9a0d93950a5ce1198b91555f361af53d80c7664c5b6a9f"
+    },
+    {
+      "path": "schemas/r4/gate-b/codex-zero-call-contract.json",
+      "sha256": "45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845"
+    },
+    {
+      "path": "schemas/r4/gate-b/local-formats.md",
+      "sha256": "f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995"
+    },
+    {
+      "path": "schemas/r4/gate-b/macos/build-recipe.json",
+      "sha256": "93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de"
+    },
+    {
+      "path": "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+      "sha256": "5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab"
+    },
+    {
+      "path": "schemas/r4/gate-b/operations.md",
+      "sha256": "b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4"
+    },
+    {
+      "path": "schemas/r4/gate-b/postgres-contract.md",
+      "sha256": "73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc"
+    },
+    {
+      "path": "schemas/r4/gate-b/runtime-boundary.json",
+      "sha256": "ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450"
+    },
+    {
+      "path": "schemas/r4/protocol.schema.json",
+      "sha256": "e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af"
+    },
+    {
+      "path": "schemas/r4/schema-index.json",
+      "sha256": "8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea"
+    },
+    {
+      "path": "scripts/deny-external-network.mjs",
+      "sha256": "3f7408486e62a307d32607e13020992e12b0b671afcedce347303113a12fdf7f"
+    },
+    {
+      "path": "scripts/r4-doc-audit.mjs",
+      "sha256": "6c3b665b2c9fde0a6ed12f16764be41fbfbe6aef5b8b975266039b1a4b955857"
+    },
+    {
+      "path": "scripts/r4-gate-a-static-audit.mjs",
+      "sha256": "ff519e46f69152298b2799f77b9d309aa66559f5f10517096319c0de4ec5cf15"
+    },
+    {
+      "path": "scripts/r4-room-build-audit.mjs",
+      "sha256": "686fbbf6ba9d1e704847c5cfb436111426897ce8028224c63d0e55d3a0c8e78e"
+    },
+    {
+      "path": "scripts/r4-room-standalone-prepare.mjs",
+      "sha256": "0f6b7d5b5642343f2fab42356f52e96e225a135d565f10da3c680d0680d5acdb"
+    },
+    {
+      "path": "scripts/r4-source-inventory.mjs",
+      "sha256": "685a651b1fbd8ad412bc2401999eee64ea498223970bd45249219db1016a640b"
+    },
+    {
+      "path": "src/action-context.ts",
+      "sha256": "3df2da75d90cd98a74b7c8aa64297c41412cd05226a3bd4c154335687f903c0d"
+    },
+    {
+      "path": "src/action.ts",
+      "sha256": "0b748c818abfc0dbafbd3245ff9d3ad09952b34b95cefc553513086942a914b7"
+    },
+    {
+      "path": "src/agency.ts",
+      "sha256": "e9a554538bb7dd57cd184fcb2b918ad067d542e2dbdbd4e9f188410047a5c160"
+    },
+    {
+      "path": "src/boundary.ts",
+      "sha256": "aedf1998ce9d6cc13618b9e40d6f582479e5bfc0c500b1cba9c39f77a3268bc3"
+    },
+    {
+      "path": "src/cli.ts",
+      "sha256": "65805d95a85f8f9643a1983c8fe21ec35b82d1651966b0dcf82b025cb76010c8"
+    },
+    {
+      "path": "src/cognition.ts",
+      "sha256": "be33f494222ab4bc6c53f69b3e05811301a1d979f08ff4b6bc163f782a077711"
+    },
+    {
+      "path": "src/context.ts",
+      "sha256": "bc06fa2321cccad26f6b9538bd8dc9a5344d6356ebe5ee557bfb23c5a5f09e42"
+    },
+    {
+      "path": "src/contracts.ts",
+      "sha256": "9db3fa4860e7d54bd3af1a7aa9013918b4d8568fc17d1b54a9f71902a455dea6"
+    },
+    {
+      "path": "src/reflection.ts",
+      "sha256": "165e54aa5a1bd51b98f1359ca56c416fce80c6a9bdfa1aac562ce6c43b6b99fb"
+    },
+    {
+      "path": "src/render.ts",
+      "sha256": "08b52ed6f06e8ee7be90d3d612f32311536a81e78ca48f46d54c741fc7ccee9a"
+    },
+    {
+      "path": "src/runtime.ts",
+      "sha256": "d58d022f609be35da7b55a50c766949804df9eb0d6911397eeb05307a1791fcf"
+    },
+    {
+      "path": "src/store.ts",
+      "sha256": "12458b82e754281e48b3c620986e611b7612fda4563737699f60fe1ca5f1a1f6"
+    },
+    {
+      "path": "src/types.ts",
+      "sha256": "8b5ddfe6477ddd46f8eedbdeb1bc7fccd2b59f0d383e3ec0de877b79f2757aab"
+    },
+    {
+      "path": "test/agency.test.ts",
+      "sha256": "a439cbaf744da063871761df1765b094ff69666228a7d8cc7a3c259bfc74f394"
+    },
+    {
+      "path": "test/boundary.test.ts",
+      "sha256": "3840870c9e8f9449e9ab1d7f478ba194135b89d7b4394c49b447a8a14582ba31"
+    },
+    {
+      "path": "test/cli.test.ts",
+      "sha256": "425703463e6d47d45b09513b2a6608c60d757f305aa391796ab53ec656dbaedb"
+    },
+    {
+      "path": "test/cognition.test.ts",
+      "sha256": "fe8e0c6818313dd64f6eaf6e39c3057e6d55de13e9c84552fa18625a700334e5"
+    },
+    {
+      "path": "test/continuity.test.ts",
+      "sha256": "9011e377c13fb7cfd22b6abeef87448effa4f7ee9a74f027caeca6fc7a36c29e"
+    },
+    {
+      "path": "test/helpers.ts",
+      "sha256": "b7857bb05936745f018de0bd3a04310926910e933faccf558d89470e915b4944"
+    },
+    {
+      "path": "test/r4/helpers.ts",
+      "sha256": "e28bc06e57f62783367e305e7ef3d98c7805a0a5674802fe2274be928633a5ce"
+    },
+    {
+      "path": "test/r4/hosted-application.test.ts",
+      "sha256": "448e347f805792f7929c61c274929c42aa919b75f44b2f044dcbb0d2a1401ed2"
+    },
+    {
+      "path": "test/r4/hosted-capabilities.test.ts",
+      "sha256": "daf3a119230995c7a8ab187e34f01126e48c01a7a116cb5b75569d0d7d270ee3"
+    },
+    {
+      "path": "test/r4/hosted-control-races.test.ts",
+      "sha256": "c2ef8f0b0e8e1d36bc88c242469d82381562e7ecb78abbc90c2238bca3a4d81b"
+    },
+    {
+      "path": "test/r4/hosted-event-compaction.test.ts",
+      "sha256": "de9e2c41adba99743d10b47f585ef9460256e26c74eb325d6c34b2f91f37d3d8"
+    },
+    {
+      "path": "test/r4/hosted-gate-a-hardening.test.ts",
+      "sha256": "d0918de5c5015730de775b55da0b52c6715ce18c7c1895d6cca30dd4bb292924"
+    },
+    {
+      "path": "test/r4/hosted-http.test.ts",
+      "sha256": "99cb151250bdf5caf6bdc70bd7acf34e289066959de81c8346e5956d26dcd234"
+    },
+    {
+      "path": "test/r4/hosted-lost-response-recovery.test.ts",
+      "sha256": "e46f394662b3157228e8fe9f4fd026703cf8ac9c72577779daa8d9cca718bac8"
+    },
+    {
+      "path": "test/r4/hosted-notification-control.test.ts",
+      "sha256": "7cb89e04624bdb1afa14b7881bca523b43744a06408c98163a9db6bd7904149c"
+    },
+    {
+      "path": "test/r4/hosted-publication-boundary.test.ts",
+      "sha256": "ba30e7297b0bcf8b13e4d170f6737c137203fdf061583164a89647e69fcb3626"
+    },
+    {
+      "path": "test/r4/hosted-publication-helpers.ts",
+      "sha256": "29f94ab163103e466bb9c0797b731f03dd2a8f1a6ed86bac7fa4c70018dd5bbb"
+    },
+    {
+      "path": "test/r4/hosted-redaction.test.ts",
+      "sha256": "accfc9cba065818ae5542dfbbccb175d45099137af0fa06a31d0e191e140d46f"
+    },
+    {
+      "path": "test/r4/hosted-response-terminal.test.ts",
+      "sha256": "c252af197e2bdda222bd4e288d8a31d63123a06cfca382c14bf6d6164cfe52ee"
+    },
+    {
+      "path": "test/r4/hosted-retention-janitor.test.ts",
+      "sha256": "fc7a8a8384f2f9e8510c43f170ade7a63d3e30c60b733453bc2a28dba9aeefb6"
+    },
+    {
+      "path": "test/r4/hosted-room-operator-binding.test.ts",
+      "sha256": "c5fe4b585d7f46aa36fd0e982648faf5c05ea99afad303c90321e802c035b994"
+    },
+    {
+      "path": "test/r4/hosted-web-agent-parity.test.ts",
+      "sha256": "b74f5d8adbe4fd678549a801f698d78b0adb5ebf6ba24a7182e9c84ccfa04cc6"
+    },
+    {
+      "path": "test/r4/local-canary-matrix.test.ts",
+      "sha256": "2574ef780542cb5d5c9c3debef21a558c98d1e9e1339e467dec85c8326c99766"
+    },
+    {
+      "path": "test/r4/local-cli.test.ts",
+      "sha256": "1d7d68093c82b403e1f723481c2fd49480d3a016896afb542b8b49af3ba12d98"
+    },
+    {
+      "path": "test/r4/local-fresh-session.test.ts",
+      "sha256": "886ef087891728b8e99b3498ab5c5a3a3afbf7fbe25676db6837469e8695a169"
+    },
+    {
+      "path": "test/r4/local-gate-a-hardening.test.ts",
+      "sha256": "acfe5e4b00db9ef30a25a0a87252508a3511c26e8ad70d617cf33502d384c3ef"
+    },
+    {
+      "path": "test/r4/local-ledger-sync.test.ts",
+      "sha256": "5e01f22741808b69dd8ceac094ded0d7891f73a07343ed4bbc0ae628a3a4b9c3"
+    },
+    {
+      "path": "test/r4/local-lock-candidate.test.ts",
+      "sha256": "78af4048f65755cc4d71b280301d999887fa99872a7319cc7c8b64c5e4068f73"
+    },
+    {
+      "path": "test/r4/local-projection.test.ts",
+      "sha256": "7748f7e8bb58fb9f4e8db5a6b807daae569be5cc23d6ba7bb96085a7831905f9"
+    },
+    {
+      "path": "test/r4/local-publication-operation.test.ts",
+      "sha256": "bdc521f08e3131ab49144f392d45d843e5f9db4b158b223c1b8a5b2e052f5193"
+    },
+    {
+      "path": "test/r4/local-response-session.test.ts",
+      "sha256": "7101054a78f3cf3540b58e79d21dd1c3d063d8b140dedbbf7a1fc8b4ac105af0"
+    },
+    {
+      "path": "test/r4/local-runtime-cleanup.test.ts",
+      "sha256": "6b81ddc73bcf3294ebc041cab66e711c8e0498340fd436d888cf2fd7102fdef2"
+    },
+    {
+      "path": "test/r4/local-snapshot-broker.test.ts",
+      "sha256": "daa671aa8f4b982250b628db26f0c4a726ad3aced315e70a4b51910e5b6b255c"
+    },
+    {
+      "path": "test/r4/local-terminal-event-sync.test.ts",
+      "sha256": "da3c3d764acf0b0c8fb088debc4e0df923c6d1ec7b0e615bb04c346c31a8eeb1"
+    },
+    {
+      "path": "test/r4/package-surface.test.ts",
+      "sha256": "4b5775a822437aca8119a9a3e9dc85f2d7ce5e5f252ba5cd6a484e2efd6c38d0"
+    },
+    {
+      "path": "test/r4/protocol-contract.test.ts",
+      "sha256": "b4664bdff8c142ae738d08356d9b31e42641e5f37b92831702ecdaf25b4be442"
+    },
+    {
+      "path": "test/r4/protocol-event-contract.test.ts",
+      "sha256": "5b178ffcb3917d86928eddba1220abb4407db4975c4786e0e33542343ad481d9"
+    },
+    {
+      "path": "test/r4/protocol-matrix.test.ts",
+      "sha256": "6ef23cd871b6ed3ef06a3da89d0458882391ed809176eb5343c18e7c36fc90a4"
+    },
+    {
+      "path": "test/r4/protocol-successor-scope.test.ts",
+      "sha256": "eb138962ba6476f553e515c4a35b5d8c25eb2e7d234bc8fdb4555022c96c1264"
+    },
+    {
+      "path": "test/r4/protocol-time-window.test.ts",
+      "sha256": "37189ccd3bf15a0af5f2766983fa47a6229204e154a900302c48f7d4811ca764"
+    },
+    {
+      "path": "test/r4/publication-boundary.test.ts",
+      "sha256": "c5472a303b6418eba4d99acad453a136c44700bd961eafcd258f025056ece6d3"
+    },
+    {
+      "path": "test/r4/ui-client-api.test.ts",
+      "sha256": "a1bd49a08bdca29bfdce9731af0aad2cc8357737de36a6ab83408a9759c558c8"
+    },
+    {
+      "path": "test/r4/ui-static-safety.test.ts",
+      "sha256": "d220ddd1adfb1e23201d6f026bfd03242ba7ba84865e5b8a3b9fd99e695798c1"
+    },
+    {
+      "path": "test/r4/walkthrough.test.ts",
+      "sha256": "eb664535f81ee0814bbec37f0b7194a22a9e36899a0f1bb600eaf50fddc603ac"
+    },
+    {
+      "path": "test/recovery.test.ts",
+      "sha256": "6d090371c0f8cf5b38e7ffeeea5f56177a398e1029a3106d734f48dacc4bdc83"
+    },
+    {
+      "path": "test/runtime.test.ts",
+      "sha256": "f4101c76ace7db26f641fbce560ddc60195fb5859bf19cf37a395a98b3f1c300"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "bff9e14538a2828bed482bf431f9db6683505abfe89d74c305541bff3b0e2d19"
+    }
+  ]
+}

@@ -1,17 +1,5 @@
 # Product
 
-- Status: owner-approved product frame, privacy-first P human-boundary
-  interpretation, R4 public/private Room correction, and T2 Room control
-  contract; NH1/NH2 and the exact Fresh Native Response Session T3 contract
-  approved; the recommended T4 public/admission/lifecycle contract approved;
-  the full recommended T5 async/deletion/retention/P0-cut contract
-  Owner-approved, with four Guest continuation presets; reconciled Technical
-  Control Packet v0.2 is independently audited, hashed, and Owner-approved;
-  Gate A repository-only implementation is current
-- Updated: 2026-08-03
-- MVP complete: 2026-08-18
-- Demo Day: 2026-08-19 (Wednesday)
-
 ## Highest vision
 
 Forme extends an entity across four dimensions:
@@ -24,7 +12,7 @@ Forme extends an entity across four dimensions:
 
 Its deepest claim is not an AI clone. It is that human agency need not exist only while a person remembers, focuses, and is online.
 
-Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the August MVP scope.
+Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the current MVP scope.
 
 ### Harness-native product shape
 
@@ -34,7 +22,7 @@ MCP, plugins, subagents, and runtime interaction. Forme contributes the durable
 semantic spine that survives the workbench: Twin identity and state, evidence,
 corrections, authority, receipts, projection, and continuity.
 
-The August MVP narrowed entity count, scope, and effect depth. R2/R3
+The current MVP narrows entity count, scope, and effect depth. R2/R3
 additionally used a packet-only, no-tools run to prove exact visibility of
 Forme-selected content and semantic/effect admission. That run remains a valid
 **Managed Privacy Run**, not the permanent definition of every Forme Agent.
@@ -68,17 +56,24 @@ tiny verb or one click at a time. Confidence, owner-history similarity, account
 login, filesystem access, or authority in another Room never creates
 permission by itself.
 
-[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the approved privacy-primary
-perimeter, companion authorship/consequence guards, and no-self-expansion
-meta-rule. The T2 Room control envelope and NH1/NH2 architecture choices are
-approved. The R4 P0 T3 direction is one Fresh Native Response Session per
-Interaction, not a Managed-vs-Native trust selector. The Owner approved its
-exact contract on 2026-08-03, followed by the recommended T4 lifecycle contract
-on the same date. The Owner then approved full T5 on 2026-08-03. The later
-reconciled, independently audited and hashed Technical Control Packet v0.2 was
-also Owner-approved; Gate A repository-only implementation is current.
-[`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for
-Entropy Reduction as the metabolism that keeps all four dimensions coherent.
+[`AGENCY-TRUST.md`](./AGENCY-TRUST.md) records the privacy-primary perimeter,
+companion authorship/consequence guards and no-self-expansion meta-rule.
+[`NATIVE-HARNESS-ARCHITECTURE.md`](./NATIVE-HARNESS-ARCHITECTURE.md) records
+the approved Native Workbench and Fresh Native Response Session boundary.
+[`STEWARDSHIP.md`](./STEWARDSHIP.md) remains a proposal for Entropy Reduction
+as the metabolism that keeps all four dimensions coherent.
+
+## Demo-critical proof boundary
+
+The current MVP proves one truthful public Hero Encounter, not the full
+long-term Room architecture. Unimplemented Full operations remain absent
+rather than appearing as placeholders.
+
+Core success does not prove the full Private Room, notification, Agent
+derivative, Direct Invite, persistent candidate, production identity or
+deployment path. An unpublished candidate is transient and must persist zero
+bytes. Provider calls, real Guest data, production, deployment, public traffic,
+merge, spend and Gate C remain separate authorities.
 
 ## MVP vision
 
@@ -149,7 +144,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - first additional curator-invited Third Place resident after the required
   public-resident P0 is green.
 
-### P2 — after Demo Day
+### P2 — outside the current R4/R5 scope
 
 - generalized mailbox and longer-lived Relationship Capsules;
 - Agent-to-Agent or Twin-to-Twin interaction beyond the bounded R4 exchange;
@@ -159,7 +154,7 @@ Without Continuity, Forme is a disposable chatbot. Without Cognition, it is a pr
 - public self-service Room creation, discovery, multiple workspaces, general
   automation, or a plugin marketplace.
 
-## Owner-approved R4 product target — Packet approved, Gate A next
+## Owner-approved R4 product target
 
 On 2026-07-25 the owner approved a more social R4 target. One curated,
 publicly viewable **Forme Third Place** contains the Forme Project Room as its
@@ -234,19 +229,12 @@ ingestion, Person Twin, open signup, multiple required residents, search/feed,
 server AI, rich attachments, and cross-Room reusable Agent identity outside
 P0.
 
-Full T5 approval authorized documentation and Packet reconciliation only.
-Implementation, OpenAI/provider calls, real Guest-data handling, schema,
-deployment, spend, external messaging, and Room mutation remain unauthorized.
-The resulting exact
-[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) v0.2
-passed independent audits at
-`sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5`.
-The Owner approved those exact bytes on 2026-08-03, authorizing Gate A
-repository-only work. Exact machine schemas/runtime/migrations remain a
-separately hashed Gate B manifest; production deployment, real external
-writes, and spend remain a separate Production Deployment & Provisioning
-Grant.
-The versioned static projection remains the schedule fallback floor.
+The exact T3/T4/T5 implementation lineage remains in the frozen
+[`R4-TECHNICAL-CONTROL-PACKET.md`](./R4-TECHNICAL-CONTROL-PACKET.md) and
+archive history. Those contracts do not grant provider calls, real Guest-data
+handling, deployment, spend, external messaging or Room mutation. The
+versioned static projection remains the honest sharing fallback floor until
+the real encounter crosses its later gates.
 
 The agency-first recalibration and approved T2 contract are recorded
 in [`R4-AGENCY-FIRST-RECALIBRATION.md`](./R4-AGENCY-FIRST-RECALIBRATION.md).

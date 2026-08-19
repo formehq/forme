@@ -1,0 +1,124 @@
+{
+  "schemaVersion": "r4.gate-b-core.macos-build-recipe.v1",
+  "status": "CONSTRUCTED_NOT_EXECUTED",
+  "minimumOS": "macOS 26.0",
+  "swiftToolsVersion": "6.2",
+  "swiftLanguageMode": "6",
+  "swiftPackage": "native/macos/Package.swift",
+  "product": "FormeCoreLocal",
+  "target": "FormeCoreLocal",
+  "bundleIdentifier": "org.chaostudio.forme.gate-b.core-local",
+  "bundleExecutable": "FormeCoreLocal",
+  "acceptedArguments": [
+    "--gate-b-core-transient-probe"
+  ],
+  "directStartGate": {
+    "schemaVersion": "r4.gate-b-core.macos-direct-start.v1",
+    "readyTransport": "inherited-pipe-only-no-durable-pid-slot",
+    "normalPathAuthority": "exact-ready-frame-plus-live-child-process-handle",
+    "crashBeforeStartedJournalVerdict": "RED_QUARANTINED",
+    "helper": {
+      "implementation": "self-blocked-direct-helper",
+      "descriptorMap": { "candidateInput": 0, "receiptOutput": 1, "diagnosticOutput": 2, "readyOutput": 3, "releaseInput": 4 },
+      "readyFramePattern": "R4_GATE_B_DIRECT_READY_V1 helper <positive-decimal-pid>\n",
+      "releaseFrame": "R4_GATE_B_DIRECT_RELEASE_V1 helper\n",
+      "releaseRequiresEOF": true
+    },
+    "feeder": {
+      "implementation": "self-blocked-direct-feeder",
+      "argvTail": ["3", "4", "5", "6", "complete"],
+      "descriptorMap": { "candidateOutput": 3, "completionOutput": 4, "readyOutput": 5, "releaseInput": 6 },
+      "readyFramePattern": "R4_GATE_B_DIRECT_READY_V1 feeder <positive-decimal-pid>\n",
+      "releaseFrame": "R4_GATE_B_DIRECT_RELEASE_V1 feeder\n",
+      "releaseRequiresEOF": true
+    },
+    "releaseOrdering": ["direct-child-ready", "pid-and-process-group-validated", "started-journal-fsync", "listeners-installed", "exact-release-frame-and-eof", "first-functional-effect"]
+  },
+  "preSignPayloadMembers": [
+    "Contents/Info.plist",
+    "Contents/MacOS/FormeCoreLocal",
+    "Contents/Resources/forme-core-transient-response.sb"
+  ],
+  "postSignBundleMembers": [
+    "Contents/Info.plist",
+    "Contents/MacOS/FormeCoreLocal",
+    "Contents/Resources/forme-core-transient-response.sb",
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "codesignGeneratedMembers": [
+    "Contents/_CodeSignature/CodeResources"
+  ],
+  "entitlements": "native/macos/Resources/FormeCoreLocal.entitlements",
+  "entitlementDictionaryEntryCount": 0,
+  "runtimeInputSource": "runner-owned-o-nofollow-hash-pinned-staging",
+  "worktreeReadsAfterRevalidation": 0,
+  "effectOrder": [
+    "compile",
+    "assembleBundle",
+    "snapshotKeychainMetadata",
+    "createTemporaryKeychain",
+    "createOneSigningIdentity",
+    "signAndVerifyBundle",
+    "launchExactHelper",
+    "collectBodyFreeEvidence",
+    "cleanupAndVerifyAbsence"
+  ],
+  "effectAuthority": {
+    "constructionExecutor": "fake_only",
+    "correctionConstructionGranted": true,
+    "retryExecutionGranted": false,
+    "firstProviderCallGranted": false,
+    "realProcessEffects": 0,
+    "securityFrameworkEffects": 0,
+    "localAuthenticationEffects": 0,
+    "networkEffects": 0,
+    "providerCalls": 0
+  },
+  "signingScope": {
+    "mechanism": "future_one_run_custom_file_keychain_probe",
+    "identityCount": 1,
+    "candidateBytesAllowed": false,
+    "fallbackToLoginKeychain": false,
+    "fallbackToDataProtectionKeychain": false,
+    "metadataReadCounts": {
+      "defaultKeychain": 2,
+      "keychainSearchList": 2
+    },
+    "customTemporaryKeychainOperations": 12,
+    "customOperationBreakdown": {
+      "securityLifecycleSubcommands": 10,
+      "identityInventoryReads": 1,
+      "signingPrivateKeyUses": 1
+    },
+    "certificateFingerprintBinding": "OBSERVE_AFTER_ONE_RUN_CREATION_THEN_VALIDATE_BEFORE_SIGNING",
+    "physicalAdapterStatus": "PHYSICAL_ADAPTER_CONSTRUCTED_OFFLINE_RETRY_NOT_REQUESTED"
+  },
+  "claims": {
+    "candidatePersistence": false,
+    "persistentRecovery": false,
+    "crashZeroization": false,
+    "bodyBearingHandoffOutsideHelper": false,
+    "productionSigning": false,
+    "notarization": false
+  },
+  "inputHashes": {
+    "native/macos/Sources/FormeCoreLocal/CoreLauncher.swift": "sha256:15e0fa234b709dfcd1b69ece7435ff245c5ea602a0f6a96ab59bf61ba6619772",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateSession.swift": "sha256:f372b7c5bb2b2a48641d381144c22ccc053832d341ff5c8eb2d15efb1582912e",
+    "native/macos/Sources/FormeCoreLocal/TransientCandidateReviewWindow.swift": "sha256:1b65611ada1300d9acf38facd981adceaa68ed05fe572a398c6b002b5f258869",
+    "native/macos/Sources/FormeCoreLocal/UserPresenceAuthorizer.swift": "sha256:ebb6ac265a6cceb457d832d1ea93f279d01bac86006bf830137fb9b89fbd9ff2",
+    "native/macos/Sources/FormeCoreLocal/CoreProcessSupervisor.swift": "sha256:4ebc7e8916a92aa2e7be35231284f1f4d44a90888b28241e6f587a21936ceb2c",
+    "native/macos/Sources/FormeCoreLocal/CorePhysicalEvidence.swift": "sha256:cf66c2abee0bc087f091549c01766e1589e7e30a712193f788b6e5a0ed41ec8c",
+    "native/macos/Sources/FormeCoreLocal/CoreSandboxProfile.swift": "sha256:b42a9f8fa25f91ff8c94ad4f6d0bb1e435e6984c99e05f3e12b282babb06716e",
+    "native/macos/Sources/FormeCoreLocal/CoreLockedMemory.swift": "sha256:08d948ec1be5c5fc953c595a58a9c1d2bded04644ec27adae37508c801773a41",
+    "native/macos/Sources/FormeCoreLocal/CountingHandoffPort.swift": "sha256:5002f68acfa8c4004240a415ff6cd5323e574ac5d4639dbea452db2b7abe8a4d",
+    "native/macos/Resources/FormeCoreLocal.Info.plist": "sha256:285990b2afa108cd1fcbd406bc79f1fc81be2894fb1767808cd4898940878192",
+    "native/macos/Resources/FormeCoreLocal.entitlements": "sha256:97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+    "schemas/r4/gate-b-core/macos/forme-core-transient-response.sb": "sha256:3a8c17648b02e0bcebedbcf1405de3fa4d4ca7ceb4c324e0b4969676d777732c",
+    "schemas/r4/gate-b-core/macos/transient-candidate-contract.json": "sha256:693fd377df18a68033b7e464a6eeba1a2e8552ef7497c6ed92f636920ea27d01",
+    "schemas/r4/gate-b-core/macos/evidence.schema.json": "sha256:08eb1e8331ddcb1fd1c6c84762ad285550420a9ef685394db2415c033b53f81f",
+    "fixtures/r4-gate-b-core/macos/synthetic-feeder.mjs": "sha256:4a55100593b239836022ec00ec3ed6b42841e1f89d1bd6462a3fb75962285cbb"
+  },
+  "compiledExecutableSha256": null,
+  "preSignPayloadInventorySha256": null,
+  "signedBundleInventorySha256": null
+}

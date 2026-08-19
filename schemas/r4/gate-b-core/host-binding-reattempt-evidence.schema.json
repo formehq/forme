@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/host-binding-reattempt-evidence.schema.json",
+  "title": "R4 Gate B Host Binding Reattempt Evidence",
+  "oneOf": [
+    { "$ref": "#/$defs/validationReceipt" },
+    { "$ref": "#/$defs/auditReceipt" },
+    { "$ref": "#/$defs/activationCard" },
+    { "$ref": "#/$defs/activationGrant" },
+    { "$ref": "#/$defs/consumedAttempt" },
+    { "$ref": "#/$defs/terminalResult" }
+  ],
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "identifier": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "shaOrNull": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+    "dateTimeOrNull": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+    "validationReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "implementationHead", "implementationTree", "status", "validationAggregateSha256", "hostBindingInputAccessed", "hostBindingInputPresenceObserved", "dockerReadOnlyCliCalls", "localDockerUnixSocketRequests", "macosReadOnlyInspectionCalls", "realPhysicalEffects", "retryExecutions", "providerCalls"],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_reattempt_validation_receipt.v2" },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "status": { "const": "PASS" },
+        "validationAggregateSha256": { "$ref": "#/$defs/sha" },
+        "hostBindingInputAccessed": { "const": false },
+        "hostBindingInputPresenceObserved": { "const": false },
+        "dockerReadOnlyCliCalls": { "const": 0 },
+        "localDockerUnixSocketRequests": { "const": 0 },
+        "macosReadOnlyInspectionCalls": { "const": 0 },
+        "realPhysicalEffects": { "const": 0 },
+        "retryExecutions": { "const": 0 },
+        "providerCalls": { "const": 0 }
+      }
+    },
+    "auditReceipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "auditClass", "implementationHead", "implementationTree", "status", "findingsCount", "blockerCount", "importantCount", "summarySha256"],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_reattempt_audit_receipt.v2" },
+        "auditClass": { "enum": ["authority-checkpoint-journal-cleanup", "host-admission-counters-zeroization-publication"] },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "status": { "const": "PASS" },
+        "findingsCount": { "const": 0 },
+        "blockerCount": { "const": 0 },
+        "importantCount": { "const": 0 },
+        "summarySha256": { "$ref": "#/$defs/sha" }
+      }
+    },
+    "activationCard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "reattemptPacketSha256", "reattemptOwnerReviewSha256", "approvedProposalHead", "approvedProposalTree", "implementationHead", "implementationTree",
+        "checkpointSha256", "worksetAggregateSha256", "validationReceiptSha256", "authorityAuditReceiptSha256", "hostAuditReceiptSha256", "attemptId",
+        "priorHostBindingAttempts", "additionalHostBindingAttemptCeiling", "attemptOrdinal", "hostBindingInputAccessed", "hostBindingInputPresenceObserved",
+        "dockerReadOnlyCliCalls", "localDockerUnixSocketRequests", "macosReadOnlyInspectionCalls", "dockerMutationCalls", "credentialsRead", "realPhysicalEffects", "realCodexCalls", "sandboxExecCalls", "signingCalls", "keychainCalls", "localAuthenticationCalls", "retryExecutions", "providerCalls", "externalRuntimeNetworkCalls",
+        "futureDockerReadOnlyCliCeiling", "futureLocalDockerUnixSocketRequestCeiling", "futureMacosReadOnlyInspectionCeiling",
+        "checkpointRetained", "reattemptJournalAbsent", "blockedSupervisorPidRecordsAbsent", "ownedTemporaryResourcesAbsent", "processGroupsAbsent", "hostBindingCapsulePresent", "hostBindingPublicReceiptPresent", "consumedAttemptTombstonePresent", "cleanupStatus",
+        "hostBindingReattemptPreparationGrant", "hostBindingAttemptGrant", "retryExecutionGrant", "firstProviderCallGrant", "status", "aggregateVerdict"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_activation_card.v2" },
+        "reattemptPacketSha256": { "const": "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3" },
+        "reattemptOwnerReviewSha256": { "const": "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445" },
+        "approvedProposalHead": { "const": "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d" },
+        "approvedProposalTree": { "const": "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e" },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "checkpointSha256": { "$ref": "#/$defs/sha" },
+        "worksetAggregateSha256": { "$ref": "#/$defs/sha" },
+        "validationReceiptSha256": { "$ref": "#/$defs/sha" },
+        "authorityAuditReceiptSha256": { "$ref": "#/$defs/sha" },
+        "hostAuditReceiptSha256": { "$ref": "#/$defs/sha" },
+        "attemptId": { "$ref": "#/$defs/identifier" },
+        "priorHostBindingAttempts": { "const": 1 },
+        "additionalHostBindingAttemptCeiling": { "const": 1 },
+        "attemptOrdinal": { "const": 2 },
+        "hostBindingInputAccessed": { "const": false },
+        "hostBindingInputPresenceObserved": { "const": false },
+        "dockerReadOnlyCliCalls": { "const": 0 },
+        "localDockerUnixSocketRequests": { "const": 0 },
+        "macosReadOnlyInspectionCalls": { "const": 0 },
+        "dockerMutationCalls": { "const": 0 },
+        "credentialsRead": { "const": 0 },
+        "realPhysicalEffects": { "const": 0 },
+        "realCodexCalls": { "const": 0 },
+        "sandboxExecCalls": { "const": 0 },
+        "signingCalls": { "const": 0 },
+        "keychainCalls": { "const": 0 },
+        "localAuthenticationCalls": { "const": 0 },
+        "retryExecutions": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "externalRuntimeNetworkCalls": { "const": 0 },
+        "futureDockerReadOnlyCliCeiling": { "const": 3 },
+        "futureLocalDockerUnixSocketRequestCeiling": { "const": 2 },
+        "futureMacosReadOnlyInspectionCeiling": { "const": 9 },
+        "checkpointRetained": { "const": true },
+        "reattemptJournalAbsent": { "const": true },
+        "blockedSupervisorPidRecordsAbsent": { "const": true },
+        "ownedTemporaryResourcesAbsent": { "const": true },
+        "processGroupsAbsent": { "const": true },
+        "hostBindingCapsulePresent": { "const": false },
+        "hostBindingPublicReceiptPresent": { "const": false },
+        "consumedAttemptTombstonePresent": { "const": false },
+        "cleanupStatus": { "const": "GREEN" },
+        "hostBindingReattemptPreparationGrant": { "const": "APPROVED" },
+        "hostBindingAttemptGrant": { "const": "NOT_REQUESTED" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+        "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+        "status": { "const": "WAITING_OWNER_ACTIVATION" },
+        "aggregateVerdict": { "const": "YELLOW" }
+      }
+    },
+    "activationGrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "activationCardSha256", "attemptOrdinal", "checkpointSha256", "firstProviderCallGrant", "hostBindingAttemptGrant", "hostBindingInputPreparedByOwner", "implementationHead", "implementationTree", "retryExecutionGrant"],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_activation_grant.v2" },
+        "activationCardSha256": { "$ref": "#/$defs/sha" },
+        "attemptOrdinal": { "const": 2 },
+        "checkpointSha256": { "$ref": "#/$defs/sha" },
+        "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+        "hostBindingAttemptGrant": { "const": "APPROVED_ONCE" },
+        "hostBindingInputPreparedByOwner": { "const": true },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "consumedAttempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "reattemptRunId", "reattemptPacketSha256", "reattemptOwnerReviewSha256", "approvedProposalHead", "approvedProposalTree", "implementationHead", "implementationTree", "checkpointSha256", "activationCardSha256", "activationGrantSha256", "attemptId", "attemptOrdinal", "priorHostBindingAttempts", "cumulativeHostBindingAttemptCeiling", "consumedAt", "hostBindingInputPreparedByOwner", "inputOpenIntent", "attemptConsumed", "bodyFree", "permanent", "purgeAuthorized", "retentionPolicy", "hostBindingAttemptGrant", "retryExecutionGrant", "firstProviderCallGrant"],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_consumed_attempt.v2" },
+        "reattemptRunId": { "const": "5cf5b31b5adfceac7fda4d5319db8957" },
+        "reattemptPacketSha256": { "const": "sha256:ee713295af27577edadeeca8c5188d492acec12816ab4e5cf4488f1f6146daf3" },
+        "reattemptOwnerReviewSha256": { "const": "sha256:670338ba6983c77daa70c67741828eedf7666dee5b88aad3fcb5a706af52e445" },
+        "approvedProposalHead": { "const": "af5396bb1ff69d6c2b74fbb5f9e4cea415fb826d" },
+        "approvedProposalTree": { "const": "b7aabaac66156f6d169be1547cc6caa2ea4e8a4e" },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "checkpointSha256": { "$ref": "#/$defs/sha" },
+        "activationCardSha256": { "$ref": "#/$defs/sha" },
+        "activationGrantSha256": { "$ref": "#/$defs/sha" },
+        "attemptId": { "$ref": "#/$defs/identifier" },
+        "attemptOrdinal": { "const": 2 },
+        "priorHostBindingAttempts": { "const": 1 },
+        "cumulativeHostBindingAttemptCeiling": { "const": 2 },
+        "consumedAt": { "type": "string", "format": "date-time" },
+        "hostBindingInputPreparedByOwner": { "const": true },
+        "inputOpenIntent": { "const": true },
+        "attemptConsumed": { "const": true },
+        "bodyFree": { "const": true },
+        "permanent": { "const": true },
+        "purgeAuthorized": { "const": false },
+        "retentionPolicy": { "const": "PERMANENT_NO_PURGE_NO_REVIVAL" },
+        "hostBindingAttemptGrant": { "const": "APPROVED_ONCE" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+        "firstProviderCallGrant": { "const": "NOT_REQUESTED" }
+      }
+    },
+    "terminalResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion", "status", "reasonCode", "reattemptRunId", "attemptId", "attemptOrdinal", "implementationHead", "implementationTree", "checkpointSha256", "activationCardSha256", "activationGrantSha256", "hostBindingInputPreparedByOwner", "attemptConsumed", "consumedAttemptTombstoneStatus", "consumedAttemptTombstoneSha256", "consumedAttemptTombstonePresent",
+        "hostBindingInputAccessed", "hostBindingInputOpenCalls", "hostBindingInputRemoved", "dockerReadOnlyCliCalls", "localDockerUnixSocketRequests", "macosReadOnlyInspectionCalls", "dockerMutationCalls", "credentialsRead", "realPhysicalEffects", "realCodexCalls", "sandboxExecCalls", "signingCalls", "keychainCalls", "localAuthenticationCalls", "retryExecutions", "providerCalls", "externalRuntimeNetworkCalls",
+        "publicationStatus", "hostBindingId", "hostBindingCapsuleSha256", "hostBindingPublicReceiptSha256", "hostBindingExpiresAt", "reattemptRunRootAbsent", "reattemptJournalAbsent", "processGroupsAbsent", "cleanupStatus", "hostBindingAttemptGrant", "retryExecutionGrant", "firstProviderCallGrant", "nextGate", "aggregateVerdict"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "r4_gate_b_host_binding_reattempt_terminal.v2" },
+        "status": { "enum": ["HOST_BOUND_YELLOW", "HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY", "RED", "RED_QUARANTINED"] },
+        "reasonCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{0,95}$" },
+        "reattemptRunId": { "const": "5cf5b31b5adfceac7fda4d5319db8957" },
+        "attemptId": { "$ref": "#/$defs/identifier" },
+        "attemptOrdinal": { "const": 2 },
+        "implementationHead": { "$ref": "#/$defs/gitObject" },
+        "implementationTree": { "$ref": "#/$defs/gitObject" },
+        "checkpointSha256": { "$ref": "#/$defs/sha" },
+        "activationCardSha256": { "$ref": "#/$defs/sha" },
+        "activationGrantSha256": { "$ref": "#/$defs/sha" },
+        "hostBindingInputPreparedByOwner": { "const": true },
+        "attemptConsumed": { "type": "boolean" },
+        "consumedAttemptTombstoneStatus": { "enum": ["ABSENT", "AUTHENTICATED", "PRESENT_UNAUTHENTICATED", "PRESENCE_UNKNOWN"] },
+        "consumedAttemptTombstoneSha256": { "$ref": "#/$defs/shaOrNull" },
+        "consumedAttemptTombstonePresent": { "type": ["boolean", "null"] },
+        "hostBindingInputAccessed": { "type": "boolean" },
+        "hostBindingInputOpenCalls": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "hostBindingInputRemoved": { "type": "boolean" },
+        "dockerReadOnlyCliCalls": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "localDockerUnixSocketRequests": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "macosReadOnlyInspectionCalls": { "type": "integer", "minimum": 0, "maximum": 9 },
+        "dockerMutationCalls": { "const": 0 },
+        "credentialsRead": { "const": 0 },
+        "realPhysicalEffects": { "const": 0 },
+        "realCodexCalls": { "const": 0 },
+        "sandboxExecCalls": { "const": 0 },
+        "signingCalls": { "const": 0 },
+        "keychainCalls": { "const": 0 },
+        "localAuthenticationCalls": { "const": 0 },
+        "retryExecutions": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "externalRuntimeNetworkCalls": { "const": 0 },
+        "publicationStatus": { "enum": ["ABSENT", "PUBLISHED", "QUARANTINED"] },
+        "hostBindingId": { "anyOf": [{ "$ref": "#/$defs/identifier" }, { "type": "null" }] },
+        "hostBindingCapsuleSha256": { "$ref": "#/$defs/shaOrNull" },
+        "hostBindingPublicReceiptSha256": { "$ref": "#/$defs/shaOrNull" },
+        "hostBindingExpiresAt": { "$ref": "#/$defs/dateTimeOrNull" },
+        "reattemptRunRootAbsent": { "type": "boolean" },
+        "reattemptJournalAbsent": { "type": "boolean" },
+        "processGroupsAbsent": { "type": "boolean" },
+        "cleanupStatus": { "enum": ["GREEN", "RED_QUARANTINED"] },
+        "hostBindingAttemptGrant": { "const": "APPROVED_ONCE" },
+        "retryExecutionGrant": { "const": "NOT_REQUESTED" },
+        "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+        "nextGate": { "enum": ["WAITING_RETRY_APPROVAL", "STOPPED"] },
+        "aggregateVerdict": { "enum": ["YELLOW", "RED"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "attemptConsumed": { "const": false } }, "required": ["attemptConsumed"] },
+          "then": { "properties": { "consumedAttemptTombstoneStatus": { "enum": ["ABSENT", "PRESENT_UNAUTHENTICATED", "PRESENCE_UNKNOWN"] }, "consumedAttemptTombstoneSha256": { "type": "null" }, "hostBindingInputAccessed": { "const": false }, "hostBindingInputOpenCalls": { "const": 0 }, "hostBindingInputRemoved": { "const": false }, "dockerReadOnlyCliCalls": { "const": 0 }, "localDockerUnixSocketRequests": { "const": 0 }, "macosReadOnlyInspectionCalls": { "const": 0 }, "publicationStatus": { "const": "ABSENT" }, "hostBindingId": { "type": "null" }, "hostBindingCapsuleSha256": { "type": "null" }, "hostBindingPublicReceiptSha256": { "type": "null" }, "hostBindingExpiresAt": { "type": "null" } } }
+        },
+        {
+          "if": { "properties": { "attemptConsumed": { "const": true } }, "required": ["attemptConsumed"] },
+          "then": { "properties": { "consumedAttemptTombstoneStatus": { "enum": ["AUTHENTICATED", "PRESENT_UNAUTHENTICATED", "PRESENCE_UNKNOWN"] } } }
+        },
+        {
+          "if": { "properties": { "consumedAttemptTombstoneStatus": { "const": "ABSENT" } }, "required": ["consumedAttemptTombstoneStatus"] },
+          "then": { "properties": { "attemptConsumed": { "const": false }, "consumedAttemptTombstoneSha256": { "type": "null" }, "consumedAttemptTombstonePresent": { "const": false } } }
+        },
+        {
+          "if": { "properties": { "consumedAttemptTombstoneStatus": { "const": "AUTHENTICATED" } }, "required": ["consumedAttemptTombstoneStatus"] },
+          "then": { "properties": { "attemptConsumed": { "const": true }, "consumedAttemptTombstoneSha256": { "$ref": "#/$defs/sha" }, "consumedAttemptTombstonePresent": { "const": true } } }
+        },
+        {
+          "if": { "properties": { "consumedAttemptTombstoneStatus": { "const": "PRESENT_UNAUTHENTICATED" } }, "required": ["consumedAttemptTombstoneStatus"] },
+          "then": { "properties": { "status": { "const": "RED_QUARANTINED" }, "consumedAttemptTombstoneSha256": { "type": "null" }, "consumedAttemptTombstonePresent": { "const": true }, "cleanupStatus": { "const": "RED_QUARANTINED" }, "nextGate": { "const": "STOPPED" }, "aggregateVerdict": { "const": "RED" } } }
+        },
+        {
+          "if": { "properties": { "consumedAttemptTombstoneStatus": { "const": "PRESENCE_UNKNOWN" } }, "required": ["consumedAttemptTombstoneStatus"] },
+          "then": { "properties": { "status": { "const": "RED_QUARANTINED" }, "consumedAttemptTombstoneSha256": { "type": "null" }, "consumedAttemptTombstonePresent": { "type": "null" }, "cleanupStatus": { "const": "RED_QUARANTINED" }, "nextGate": { "const": "STOPPED" }, "aggregateVerdict": { "const": "RED" } } }
+        },
+        {
+          "if": { "properties": { "cleanupStatus": { "const": "GREEN" } }, "required": ["cleanupStatus"] },
+          "then": { "properties": { "reattemptRunRootAbsent": { "const": true }, "reattemptJournalAbsent": { "const": true }, "processGroupsAbsent": { "const": true } } }
+        },
+        {
+          "if": { "properties": { "cleanupStatus": { "const": "GREEN" }, "attemptConsumed": { "const": true } }, "required": ["cleanupStatus", "attemptConsumed"] },
+          "then": { "properties": { "hostBindingInputRemoved": { "const": true } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "HOST_BOUND_YELLOW" } }, "required": ["status"] },
+          "then": { "properties": { "reasonCode": { "const": "HOST_BOUND" }, "attemptConsumed": { "const": true }, "consumedAttemptTombstoneStatus": { "const": "AUTHENTICATED" }, "hostBindingInputAccessed": { "const": true }, "hostBindingInputOpenCalls": { "const": 1 }, "hostBindingInputRemoved": { "const": true }, "dockerReadOnlyCliCalls": { "const": 3 }, "localDockerUnixSocketRequests": { "const": 2 }, "macosReadOnlyInspectionCalls": { "const": 9 }, "publicationStatus": { "const": "PUBLISHED" }, "hostBindingId": { "$ref": "#/$defs/identifier" }, "hostBindingCapsuleSha256": { "$ref": "#/$defs/sha" }, "hostBindingPublicReceiptSha256": { "$ref": "#/$defs/sha" }, "hostBindingExpiresAt": { "type": "string", "format": "date-time" }, "reattemptRunRootAbsent": { "const": true }, "reattemptJournalAbsent": { "const": true }, "processGroupsAbsent": { "const": true }, "cleanupStatus": { "const": "GREEN" }, "nextGate": { "const": "WAITING_RETRY_APPROVAL" }, "aggregateVerdict": { "const": "YELLOW" } } }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["HOST_BINDING_INCOMPLETE_YELLOW", "YELLOW_NO_RETRY"] } }, "required": ["status"] },
+          "then": { "properties": { "publicationStatus": { "const": "ABSENT" }, "hostBindingId": { "type": "null" }, "hostBindingCapsuleSha256": { "type": "null" }, "hostBindingPublicReceiptSha256": { "type": "null" }, "hostBindingExpiresAt": { "type": "null" }, "cleanupStatus": { "const": "GREEN" }, "nextGate": { "const": "STOPPED" }, "aggregateVerdict": { "const": "YELLOW" } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "RED" } }, "required": ["status"] },
+          "then": { "properties": { "publicationStatus": { "const": "ABSENT" }, "hostBindingId": { "type": "null" }, "hostBindingCapsuleSha256": { "type": "null" }, "hostBindingPublicReceiptSha256": { "type": "null" }, "hostBindingExpiresAt": { "type": "null" }, "cleanupStatus": { "const": "GREEN" }, "nextGate": { "const": "STOPPED" }, "aggregateVerdict": { "const": "RED" } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "RED_QUARANTINED" } }, "required": ["status"] },
+          "then": { "properties": { "publicationStatus": { "enum": ["ABSENT", "QUARANTINED"] }, "cleanupStatus": { "const": "RED_QUARANTINED" }, "nextGate": { "const": "STOPPED" }, "aggregateVerdict": { "const": "RED" } } }
+        }
+      ]
+    }
+  }
+}

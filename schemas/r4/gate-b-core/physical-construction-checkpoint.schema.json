@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/physical-construction-checkpoint.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "constructionRunId", "approvedDecisionBriefSha256", "constructionPacketSha256", "constructionOwnerReviewSha256", "approvedProposalHead", "approvedProposalTree", "implementationHead", "implementationTree", "physicalRunnerSha256", "hostBindingModuleSha256", "physicalPortSha256", "runnerContractSha256", "codexProfileSha256", "runtimeDependencyCount", "runtimeDependencyAggregateSha256", "runtimeDependencies", "validationAggregateSha256", "auditReceipts"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_physical_construction_checkpoint.v1" },
+    "constructionRunId": { "const": "79b7775defbdaf043697ef9b6d0ab45c" },
+    "approvedDecisionBriefSha256": { "const": "sha256:89a4f1b3d6e7507691b5719ad3edcbdf45b901bff25a3b71fdda1fce2dbca3f2" },
+    "constructionPacketSha256": { "const": "sha256:7ad7fd34d618b03b0cafffbe1b65c9516e0bd3bdcc0e329408f1d85e38669d06" },
+    "constructionOwnerReviewSha256": { "const": "sha256:27c64b28a19969f2d808870d64ad60fbd8b9bdf6b5343fa5d56aa719dd241ff9" },
+    "approvedProposalHead": { "const": "a45ea061e8e92f247597787e36ecfe52740b216a" },
+    "approvedProposalTree": { "const": "89b28903fc34e985a17e8f3fdc4bfd7d0972880e" },
+    "implementationHead": { "$ref": "#/$defs/gitObject" },
+    "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "physicalRunnerSha256": { "$ref": "#/$defs/sha" },
+    "hostBindingModuleSha256": { "$ref": "#/$defs/sha" },
+    "physicalPortSha256": { "$ref": "#/$defs/sha" },
+    "runnerContractSha256": { "$ref": "#/$defs/sha" },
+    "codexProfileSha256": { "const": "sha256:0c6dc1dda5c97f9d3773bc2ccbd49b28c8ba1b02f7f6b55180db7b2672a9d2ce" },
+    "runtimeDependencyCount": { "type": "integer", "minimum": 32, "maximum": 96 },
+    "runtimeDependencyAggregateSha256": { "$ref": "#/$defs/sha" },
+    "runtimeDependencies": {
+      "type": "array", "minItems": 32, "maxItems": 96,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+        "properties": { "path": { "type": "string", "pattern": "^[A-Za-z0-9._/-]+$" }, "sha256": { "$ref": "#/$defs/sha" } }
+      }
+    },
+    "validationAggregateSha256": { "$ref": "#/$defs/sha" },
+    "auditReceipts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["postgres", "codexUnified", "macosAuthority"],
+      "properties": { "postgres": { "$ref": "#/$defs/sha" }, "codexUnified": { "$ref": "#/$defs/sha" }, "macosAuthority": { "$ref": "#/$defs/sha" } }
+    }
+  },
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+  }
+}

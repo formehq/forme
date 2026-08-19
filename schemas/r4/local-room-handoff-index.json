@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "r4.local-room-handoff-index.v1",
+  "status": "LOCAL_PUBLICATION_CONTENT_APPROVAL_ONLY_NO_DELIVERY_AUTHORITY",
+  "schemaPath": "schemas/r4/local-room-handoff.schema.json",
+  "schemaSha256": "sha256:97069c5c25f7a5286254ba507a6fc5fc59b98e505df8b532e1acd2d3c7551d0c",
+  "protocolSchemaPath": "schemas/r4/protocol.schema.json",
+  "protocolSchemaSha256": "sha256:e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af",
+  "formatCount": 9,
+  "formats": [
+    {
+      "schemaVersion": "local_room_handoff_candidate.v1",
+      "definition": "#/$defs/LocalRoomHandoffCandidateV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/handoff_[a-f0-9]{32}\\.json$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "local_room_handoff_source.v1",
+      "definition": "#/$defs/LocalRoomHandoffSourceV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/handoff_[a-f0-9]{32}\\.json#/source$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "local_room_handoff_compiled_draft.v1",
+      "definition": "#/$defs/LocalRoomHandoffCompiledDraftV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/handoff_[a-f0-9]{32}\\.json#/draft$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "projection_capsule.v1",
+      "definition": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionCapsuleV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/handoff_[a-f0-9]{32}\\.json#/draft/capsule$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "projection_basis.v1",
+      "definition": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionBasisV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/handoff_[a-f0-9]{32}\\.json#/draft/basis$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "local_room_handoff_current_pointer.v1",
+      "definition": "#/$defs/LocalRoomHandoffCurrentPointerV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/current\\.json$",
+      "immutable": false
+    },
+    {
+      "schemaVersion": "local_room_handoff_publication_approval.v1",
+      "definition": "#/$defs/LocalRoomHandoffPublicationApprovalV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/approvals/handoff_[a-f0-9]{32}/approval\\.json$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "artifact_approval.v1",
+      "definition": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ArtifactApprovalV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/approvals/handoff_[a-f0-9]{32}/approval\\.json#/artifactApproval$",
+      "immutable": true
+    },
+    {
+      "schemaVersion": "local_room_handoff_approval_receipt.v1",
+      "definition": "#/$defs/LocalRoomHandoffApprovalReceiptV1",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/approvals/handoff_[a-f0-9]{32}/receipt\\.json$",
+      "immutable": true
+    }
+  ],
+  "transientCount": 5,
+  "transients": [
+    {
+      "kind": "exclusive_operation_lock",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/LOCK$",
+      "format": "decimal_pid_one_line",
+      "recovery": "fail_closed_explicit_recovery_no_automatic_stale_takeover"
+    },
+    {
+      "kind": "stale_lock_recovery_anchor",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/LOCK\\.recovery$",
+      "format": "hard_link_to_exact_dead_lock_inode",
+      "recovery": "recoverLocalRoomHandoff_with_exact_original_pid"
+    },
+    {
+      "kind": "candidate_stage",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/candidates/\\.handoff_[a-f0-9]{32}\\.json\\.stage$",
+      "format": "local_room_handoff_candidate.v1",
+      "recovery": "next_mutating_handoff_command_or_explicit_recovery"
+    },
+    {
+      "kind": "approval_bundle_stage",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/approvals/\\.handoff_[a-f0-9]{32}\\.stage$",
+      "format": "closed_subset_of_approval_and_receipt",
+      "recovery": "next_mutating_handoff_command_or_explicit_recovery"
+    },
+    {
+      "kind": "current_pointer_stage",
+      "locationPattern": "^workspace/\\.forme/r4/room-handoffs/\\.current\\.json\\.stage$",
+      "format": "local_room_handoff_current_pointer.v1",
+      "recovery": "next_mutating_handoff_command_or_explicit_recovery"
+    }
+  ],
+  "runtimeBindings": [
+    "source must equal the current #66 APPROVED_CURRENT candidate, approval, receipt, and exact Twin hash",
+    "the historical phase-only review sha256:45414f18e70b0c5e7f3a2f6980b1596835952663dfea2d25d87605b8283d1480 is a non-publishable historical source",
+    "public content hash and basis claims must remain exact across Room rebinding",
+    "scheduledPublishedAt must be strictly after preparation and no more than 24 hours later; an unapproved candidate closes after that instant",
+    "candidate, draft, capsule, basis, approval, and receipt hashes are recomputed on every read",
+    "the #66 local approval ID must differ from the new ArtifactApprovalV1 approval ID"
+  ],
+  "localOnly": true,
+  "contentPublicationApprovalOnly": true,
+  "deliveryAuthorized": false,
+  "roomMutationAuthorized": false,
+  "roomMutationCalls": 0,
+  "networkCalls": 0,
+  "providerCalls": 0,
+  "hostBindingCalls": 0,
+  "publicationCalls": 0
+}

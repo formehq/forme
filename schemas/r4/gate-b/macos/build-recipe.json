@@ -1,0 +1,458 @@
+{
+  "schemaVersion": "r4.gate-b.macos-build-recipe.v1",
+  "status": "PROPOSED_NOT_EXECUTED",
+  "authority": {
+    "document": "R4 Technical Control Packet v0.2",
+    "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "authorizedProviderSessions": 0,
+    "authorizedProviderBytes": 0,
+    "authorizedSpendUsd": 0,
+    "realGuestBytesAuthorized": false
+  },
+  "hostPin": {
+    "macosVersion": "26.5.2",
+    "macosBuild": "25F84",
+    "architecture": "arm64",
+    "darwinVersion": "25.5.0",
+    "xcodeVersion": "26.6",
+    "xcodeBuild": "17F113",
+    "swiftVersion": "6.3.3",
+    "swiftTarget": "arm64-apple-macosx26.0",
+    "toolHashes": {
+      "/usr/bin/sandbox-exec": "8290e4be7387a0df83cd1559e86afd880464f269450573d012795761fe298f16",
+      "/usr/bin/security": "2d2578ef40e1524f0572133e0e838479439027d51bb693a9ddfb57f20bb69e87",
+      "/usr/bin/codesign": "214d455584d19abc0d74d02b9cbc7d3da6bdcb0596c235e6156dd9ed2f4e1ba7",
+      "/usr/sbin/spctl": "4f1ec872401316140996c7ce6929db27729933318f48b0fc8042830a25c46466",
+      "/usr/bin/openssl": "517827f877751b6d7abebe404a296fa8e82425c63694a73ab06db35e6d9a8362"
+    },
+    "anyVersionOrHashDrift": "YELLOW_STOP_MACOS_LANE_NEW_MANIFEST_REQUIRED"
+  },
+  "runIdentity": {
+    "runIdPattern": "^gb_[a-f0-9]{32}$",
+    "runRootFormula": "realpath(TMPDIR)/forme-r4-gate-b/${RUN_ID}",
+    "existingRootAllowed": false
+  },
+  "roots": {
+    "build": "${RUN_ROOT}/build",
+    "app": "${RUN_ROOT}/install/FormeLocal.app",
+    "workspace": "${RUN_ROOT}/workspace",
+    "connectorProtection": "${RUN_ROOT}/connector-protection",
+    "candidateProtection": "${RUN_ROOT}/candidate-protection",
+    "runtime": "${RUN_ROOT}/runtime",
+    "home": "${RUN_ROOT}/auth/home",
+    "codexHome": "${RUN_ROOT}/auth/codex-home",
+    "tmp": "${RUN_ROOT}/tmp",
+    "keychains": "${RUN_ROOT}/keychains",
+    "signing": "${RUN_ROOT}/signing",
+    "stagingEvidence": "${RUN_ROOT}/staging-evidence"
+  },
+  "repositoryInputs": [
+    "native/macos/Package.swift",
+    "native/macos/Sources/FormeLocal/Launcher.swift",
+    "native/macos/Sources/FormeLocal/CodexAdapter.swift",
+    "native/macos/Sources/FormeLocal/KeychainProtector.swift",
+    "native/macos/Sources/FormeLocal/ReviewWindow.swift",
+    "native/macos/Sources/FormeLocal/SandboxProfile.swift",
+    "native/macos/Sources/FormeLocal/GateBProbe.swift",
+    "native/macos/Sources/FormeLocal/ResourceLimits.swift",
+    "native/macos/Sources/FormeLocal/MemoryPipe.swift",
+    "native/macos/Resources/Info.plist",
+    "native/macos/Resources/FormeLocal.entitlements",
+    "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+    "native/macos/Tests/FormeLocalTests/BoundaryTests.swift"
+  ],
+  "app": {
+    "bundleIdentifier": "org.chaostudio.forme.gate-b.local",
+    "bundleName": "FormeLocal",
+    "executableName": "FormeLocal",
+    "bundlePath": "${RUN_ROOT}/install/FormeLocal.app",
+    "executablePath": "${RUN_ROOT}/install/FormeLocal.app/Contents/MacOS/FormeLocal",
+    "codexExecutablePath": "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/Codex/codex",
+    "infoPlistPath": "${RUN_ROOT}/install/FormeLocal.app/Contents/Info.plist",
+    "sandboxProfilePath": "${RUN_ROOT}/install/FormeLocal.app/Contents/Resources/forme-fresh-response.sb",
+    "minimumSystemVersion": "26.0",
+    "networkEntitlements": [],
+    "forbiddenEntitlements": [
+      "com.apple.security.get-task-allow",
+      "com.apple.security.cs.disable-library-validation",
+      "com.apple.security.cs.allow-dyld-environment-variables",
+      "com.apple.security.cs.allow-unsigned-executable-memory",
+      "com.apple.security.network.client",
+      "com.apple.security.network.server"
+    ]
+  },
+  "build": {
+    "workingDirectory": "repository root",
+    "environmentConstruction": "env -i",
+    "environment": {
+      "HOME": "${RUN_ROOT}/auth/home",
+      "TMPDIR": "${RUN_ROOT}/tmp",
+      "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+      "SDKROOT": "macosx"
+    },
+    "steps": [
+      {
+        "name": "compile",
+        "argv": [
+          "/usr/bin/swift",
+          "build",
+          "--package-path",
+          "native/macos",
+          "--configuration",
+          "release",
+          "--scratch-path",
+          "${RUN_ROOT}/build/swift"
+        ]
+      },
+      {
+        "name": "resolve-bin-path",
+        "argv": [
+          "/usr/bin/swift",
+          "build",
+          "--package-path",
+          "native/macos",
+          "--configuration",
+          "release",
+          "--scratch-path",
+          "${RUN_ROOT}/build/swift",
+          "--show-bin-path"
+        ],
+        "requiredContainment": "returned canonical path is below ${RUN_ROOT}/build/swift"
+      },
+      {
+        "name": "install-bundle",
+        "operation": "create a new 0700 app directory, copy the compiled FormeLocal as mode 0500, copy the declared Resources, and copy the hash-pinned Codex 0.145.0 arm64 binary to Contents/Resources/Codex/codex as mode 0500; reject symlinks, require the pinned source/staged hash, and reject any other bundle member"
+      },
+      {
+        "name": "hash-before-sign",
+        "operation": "SHA-256 every regular bundle member in sorted relative-path order and store only the body-free hash index"
+      }
+    ],
+    "workspaceSourceExecutedAsTrustBoundary": false
+  },
+  "temporarySigning": {
+    "keychainFile": "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db",
+    "certificateCommonName": "Forme R4 Gate B Test ${RUN_ID}",
+    "certificateLifetimeDays": 1,
+    "privateKeyAlgorithm": "RSA-3072",
+    "certificateDigest": "SHA-256",
+    "keychainPasswordFormula": "lowercase-hex SHA-256 of UTF-8 'forme-gate-b-keychain|' concatenated with RUN_ID",
+    "pkcs12PasswordFormula": "lowercase-hex SHA-256 of UTF-8 'forme-gate-b-pkcs12|' concatenated with RUN_ID",
+    "changesDefaultKeychain": false,
+    "changesKeychainSearchList": false,
+    "commands": [
+      [
+        "/usr/bin/security",
+        "create-keychain",
+        "-p",
+        "${SYNTHETIC_KEYCHAIN_PASSWORD}",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db"
+      ],
+      [
+        "/usr/bin/security",
+        "set-keychain-settings",
+        "-lut",
+        "3600",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db"
+      ],
+      [
+        "/usr/bin/security",
+        "unlock-keychain",
+        "-p",
+        "${SYNTHETIC_KEYCHAIN_PASSWORD}",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db"
+      ],
+      [
+        "/usr/bin/openssl",
+        "req",
+        "-new",
+        "-newkey",
+        "rsa:3072",
+        "-nodes",
+        "-x509",
+        "-days",
+        "1",
+        "-sha256",
+        "-subj",
+        "/CN=Forme R4 Gate B Test ${RUN_ID}",
+        "-addext",
+        "basicConstraints=critical,CA:FALSE",
+        "-addext",
+        "keyUsage=critical,digitalSignature",
+        "-addext",
+        "extendedKeyUsage=codeSigning",
+        "-keyout",
+        "${RUN_ROOT}/signing/signing-key.pem",
+        "-out",
+        "${RUN_ROOT}/signing/signing-cert.pem"
+      ],
+      [
+        "/usr/bin/openssl",
+        "pkcs12",
+        "-export",
+        "-inkey",
+        "${RUN_ROOT}/signing/signing-key.pem",
+        "-in",
+        "${RUN_ROOT}/signing/signing-cert.pem",
+        "-name",
+        "Forme R4 Gate B Test ${RUN_ID}",
+        "-passout",
+        "pass:${SYNTHETIC_PKCS12_PASSWORD}",
+        "-out",
+        "${RUN_ROOT}/signing/signing-identity.p12"
+      ],
+      [
+        "/usr/bin/security",
+        "import",
+        "${RUN_ROOT}/signing/signing-identity.p12",
+        "-k",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db",
+        "-f",
+        "pkcs12",
+        "-x",
+        "-P",
+        "${SYNTHETIC_PKCS12_PASSWORD}",
+        "-T",
+        "/usr/bin/codesign"
+      ],
+      [
+        "/usr/bin/security",
+        "set-key-partition-list",
+        "-S",
+        "apple-tool:,apple:",
+        "-s",
+        "-k",
+        "${SYNTHETIC_KEYCHAIN_PASSWORD}",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db"
+      ],
+      [
+        "/usr/bin/codesign",
+        "--force",
+        "--sign",
+        "${RUNTIME_SIGNING_IDENTITY_SHA1}",
+        "--keychain",
+        "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db",
+        "--options",
+        "runtime",
+        "--timestamp=none",
+        "--entitlements",
+        "native/macos/Resources/FormeLocal.entitlements",
+        "${RUN_ROOT}/install/FormeLocal.app"
+      ]
+    ],
+    "syntheticPasswordsMayAppearInEphemeralProcessArgv": true,
+    "syntheticPasswordsOrRawArgvMayEnterEvidence": false,
+    "runtimeIdentityFingerprintPrePinnable": false,
+    "runtimeRequirement": "exactly one code-signing identity with the declared CN; record its SHA-256 certificate fingerprint and the SHA-256 of the derived designated requirement"
+  },
+  "signatureVerification": {
+    "commands": [
+      [
+        "/usr/bin/codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=4",
+        "${RUN_ROOT}/install/FormeLocal.app"
+      ],
+      [
+        "/usr/bin/codesign",
+        "--display",
+        "--requirements",
+        "-",
+        "${RUN_ROOT}/install/FormeLocal.app"
+      ],
+      [
+        "/usr/bin/codesign",
+        "--display",
+        "--entitlements",
+        ":-",
+        "${RUN_ROOT}/install/FormeLocal.app"
+      ]
+    ],
+    "hardenedRuntimeRequired": true,
+    "libraryValidationRequired": true,
+    "debuggerAttachInjectionReplacementAndDylibCanariesRequired": true,
+    "spctlAssessmentPassRequired": false,
+    "spctlReason": "a one-run self-signed identity is not a notarized production distribution identity"
+  },
+  "keyProtection": {
+    "temporaryKeychainFile": "${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db",
+    "candidateService": "org.chaostudio.forme.gate-b.candidate-wrap.${RUN_ID}",
+    "candidateAccount": "candidate-wrap",
+    "candidateApplicationTag": "org.chaostudio.forme.gate-b.candidate-wrap.${RUN_ID}",
+    "roomCredentialService": "org.chaostudio.forme.gate-b.room-binding.${RUN_ID}",
+    "roomCredentialAccount": "room-binding",
+    "realRoomCredentialAllowed": false,
+    "secureEnclavePrivateKey": {
+      "keyType": "ECSECPrimeRandom",
+      "keySizeBits": 256,
+      "permanent": true,
+      "exportable": false,
+      "accessControlFlags": [
+        "privateKeyUsage",
+        "userPresence"
+      ],
+      "wrapAlgorithm": "eciesEncryptionCofactorVariableIVX963SHA256AESGCM"
+    },
+    "candidateDataKey": {
+      "algorithm": "AES-256-GCM",
+      "randomBytes": 32,
+      "ivBytes": 12,
+      "authenticationTagBytes": 16,
+      "plaintextPersistenceAllowed": false
+    },
+    "silentApprovalPathAllowed": false,
+    "presenceCancellation": "YELLOW_NO_GUEST_BYTES_MANUAL_OWNER_ONLY",
+    "customTemporaryKeychainSecureEnclaveUnsupported": "YELLOW_NO_FALLBACK",
+    "fallbackToLoginOrDataProtectionKeychainAllowed": false
+  },
+  "ownerReviewWindows": {
+    "prepareAndStartWindow": "one-shot local native window",
+    "candidateReviewWindow": "one-shot local native window",
+    "maximumAuthorityMinutes": 15,
+    "pasteboard": false,
+    "dragAndDrop": false,
+    "printing": false,
+    "servicesMenu": false,
+    "externalAsset": false,
+    "historyPersistence": false,
+    "listener": false,
+    "captureExclusionRequest": "NSWindow.sharingType = .none where the pinned host supports it",
+    "captureExclusionUniversalPreventionClaimed": false
+  },
+  "freshChild": {
+    "profile": "schemas/r4/gate-b/macos/forme-fresh-response.sb",
+    "profileParameters": {
+      "FORME_APP_ROOT": "${RUN_ROOT}/install/FormeLocal.app",
+      "FORME_RUNTIME_ROOT": "${RUN_ROOT}/runtime",
+      "FORME_TMP_ROOT": "${RUN_ROOT}/tmp/fresh-child",
+      "FORME_HOME_ROOT": "${RUN_ROOT}/auth/home",
+      "FORME_CODEX_HOME_ROOT": "${RUN_ROOT}/auth/codex-home",
+      "FORME_WORKSPACE_ROOT": "${RUN_ROOT}/workspace",
+      "FORME_CONNECTOR_ROOT": "${RUN_ROOT}/connector-protection",
+      "FORME_CANDIDATE_ROOT": "${RUN_ROOT}/candidate-protection"
+    },
+    "cwd": "${RUN_ROOT}/tmp/fresh-child",
+    "environmentConstruction": "env -i",
+    "environment": {
+      "HOME": "${RUN_ROOT}/auth/home",
+      "CODEX_HOME": "${RUN_ROOT}/auth/codex-home",
+      "TMPDIR": "${RUN_ROOT}/tmp/fresh-child",
+      "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+      "NO_COLOR": "1",
+      "CODEX_DISABLE_ANALYTICS": "1"
+    },
+    "bodyTransport": "bounded anonymous pipes and explicitly locked memory only",
+    "bodyFilesystemArtifactsAllowed": false,
+    "modelCallableTools": [],
+    "network": "DENY",
+    "descendantExecOrFork": "DENY"
+  },
+  "supervisor": {
+    "processGroupRequired": true,
+    "wallMilliseconds": 3600000,
+    "cpuMilliseconds": 1800000,
+    "residentBytes": 2147483648,
+    "processCount": 32,
+    "fileDescriptors": 128,
+    "combinedEventAndStderrBytes": 33554432,
+    "softSignal": "SIGTERM",
+    "softSignalGraceMilliseconds": 2000,
+    "hardSignal": "SIGKILL",
+    "candidateAdmissionRequiresCleanExitCode": 0,
+    "unknownUsageOutcomeOrProcessTree": "DENY_CANDIDATE_AND_YELLOW_MANUAL_OWNER_ONLY"
+  },
+  "requiredCanaries": [
+    "normal cleanup",
+    "Owner cancellation",
+    "wall and CPU timeout",
+    "budget denial",
+    "output schema failure",
+    "child process kill",
+    "fork attempt",
+    "huge output",
+    "machine-crash reconciliation simulation",
+    "live Workspace and sibling-vault read denial",
+    "connector and candidate reverse-isolation denial",
+    "symlink and path-replacement denial",
+    "network DNS loopback Unix-socket and listener denial",
+    "shell helper browser MCP plugin hook and code-mode-host denial",
+    "debugger attach dynamic-library injection and signed-code replacement denial",
+    "pasteboard and export denial",
+    "user-presence cancellation",
+    "read-only startup causes zero writes",
+    "all request orientation event candidate and secret canaries absent after cleanup"
+  ],
+  "cleanup": {
+    "order": [
+      "Commit candidate denial or Fresh cleanup-required marker before deleting any protected bytes.",
+      "Close inherited pipes and send SIGTERM to the exact process group.",
+      "After 2000 ms, send SIGKILL to any surviving process-group member and require no surviving descendant.",
+      "Destroy the candidate Secure Enclave wrapping key item before removing candidate ciphertext.",
+      "Remove the synthetic room-binding Keychain item.",
+      "Commit and fsync the body-free candidate and Fresh cleanup receipts.",
+      "Delete signing-key.pem, signing-cert.pem, signing-identity.p12, and all derived build-only signing bytes.",
+      "Lock and delete ${RUN_ROOT}/keychains/forme-r4-gate-b-${RUN_ID}.keychain-db.",
+      "Verify the default Keychain and Keychain search-list hashes equal their preflight hashes.",
+      "Verify no process listener socket candidate key item room credential item runtime body or non-evidence file remains.",
+      "Copy only canonical body-free summaries to .forme/gate-b-evidence/${RUN_ID}, then remove RUN_ROOT."
+    ],
+    "loginKeychainMutationAllowed": false,
+    "defaultKeychainMutationAllowed": false,
+    "searchListMutationAllowed": false,
+    "cleanupUncertainty": "YELLOW_MANUAL_OWNER_ONLY",
+    "sensitiveLeakOrUnexpectedEffect": "RED_STOP"
+  },
+  "evidence": {
+    "file": "macos-boundary.json",
+    "bodyFree": true,
+    "allowed": [
+      "host and tool hashes",
+      "compiled and installed bundle hashes",
+      "runtime certificate fingerprint",
+      "designated-requirement hash",
+      "entitlement allow and deny booleans",
+      "profile hash",
+      "canary names and controlled outcomes",
+      "aggregate timing and resource observations",
+      "Keychain cleanup booleans",
+      "body-free cleanup receipt hashes"
+    ],
+    "forbidden": [
+      "absolute user path",
+      "environment value",
+      "raw command argument or output",
+      "certificate private key or password",
+      "Keychain secret",
+      "request prompt source orientation or candidate body",
+      "machine name installation id or real account identity"
+    ]
+  },
+  "classification": {
+    "allComposedCanariesAndCleanupPass": "GREEN_LOCAL_MECHANISM_ONLY",
+    "secureEnclaveTemporaryKeychainUnsupportedOrContainmentAmbiguous": "YELLOW_MANUAL_OWNER_ONLY",
+    "sensitiveLeakBoundaryBypassOrUnexpectedEffect": "RED_STOP",
+    "greenImpliesProductionIdentityNotarizationOrPortability": false,
+    "guestBytesMayEnterCodexUnderThisGateBRecipe": false
+  },
+  "knownUnpinnableOrHostSpecificFacts": [
+    "sandbox-exec and SBPL are undocumented and deprecated interfaces; this recipe proves only the pinned host behavior.",
+    "The generated one-run certificate fingerprint and designated requirement cannot be pre-pinned; they are execution evidence, not production identity.",
+    "A Secure Enclave key may not support storage constrained to a custom temporary file Keychain. The test must return Yellow rather than touch the login or Data Protection Keychain.",
+    "NSWindow capture exclusion is not a universal defense against root, accessibility, screen-recording permission, a camera, or physical observation.",
+    "setrlimit and a userspace supervisor may not provide a race-free hard 2 GiB RSS or 32-process ceiling on macOS; any ambiguity is Yellow.",
+    "Self-signed hardened-runtime verification does not prove Gatekeeper acceptance, notarization, or a future production signing identity."
+  ],
+  "postExecutionClaims": {
+    "compiled": false,
+    "signed": false,
+    "launched": false,
+    "keychainCreated": false,
+    "secureEnclaveKeyCreated": false,
+    "canariesPassed": false,
+    "cleanupPassed": false,
+    "providerCalled": false
+  }
+}

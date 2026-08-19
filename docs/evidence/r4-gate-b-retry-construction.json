@@ -1,0 +1,643 @@
+{
+  "schemaVersion": "r4_gate_b_retry_construction.v1",
+  "status": "COMPLETE",
+  "verdict": "YELLOW",
+  "authority": {
+    "retryConstructionPacketSha256": "sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7",
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "authorizedProviderSessions": 0,
+    "authorizedProviderBytes": 0,
+    "authorizedSpendUsd": 0
+  },
+  "commencement": {
+    "branch": "codex/r4-gate-a-build",
+    "commit": "6e8bf486cdc76deeb702f176a72bd8af981567e6",
+    "tree": "aded81af711db529305d261d98dc4e36139c95c2",
+    "implementationBaselineCommit": "3d3139798ae15e0f9ba267d157d6a84d2e8d0a98",
+    "implementationBaselineTree": "8fab1cab971b70939414b15f2836284d06860bbd",
+    "implementationBaselineIsAncestor": true,
+    "interveningPathsApprovalOrGovernanceOnly": true,
+    "worktreeClean": true,
+    "localRemoteTrackingRefMatched": true
+  },
+  "immutableBindings": {
+    "docs/R4-GATE-B-RETRY-CONSTRUCTION-PACKET.md": "sha256:4122e293fb476dc90e289566745459d9fe1b9603c3473c49de9d2e1429e025e7",
+    "docs/R4-GATE-B-RETRY-OWNER-REVIEW.md": "sha256:ecae36867e36b17c021dc87ae4e5c6106a3cd8729184dcf0d90a04890a9b891a",
+    "docs/R4-TECHNICAL-CONTROL-PACKET.md": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+    "docs/R4-GATE-B-SCHEMA-RUNTIME-MIGRATION-MANIFEST.md": "sha256:ba0f9ce389c6668aef5e41fb2e6228d8838d7bea481f942b2a025620d37ad5fa",
+    "docs/R4-GATE-B-OWNER-REVIEW.md": "sha256:a297970032436ee3c05eddafacb8fad9ad5ee13a11cac6ef366808c50135228c",
+    "docs/R4-GATE-B-EXECUTION-REPORT.md": "sha256:01469865af1cb851ec0167d7493ca16eab827f6be53f8a15659221fd64796e18",
+    "docs/evidence/r4-gate-b-execution.json": "sha256:647a87ee00597f8cf3fdf9e8a7ea7b4d3f803a1f562197ed757e61423e894f48",
+    "schemas/r4/gate-b/README.md": "sha256:e94d9dc6ca3412658ffaa51ddae1e424913b7607b7a76c8d2e40cfee62bd128b",
+    "schemas/r4/gate-b/artifact-index.json": "sha256:2fc4f5ec2554f43a8c9a0d93950a5ce1198b91555f361af53d80c7664c5b6a9f",
+    "schemas/r4/gate-b/operations.md": "sha256:b7de37eecc8809aeccea914e3005b3a3f2e60b2bddb9aefca42addf8c11802e4",
+    "schemas/r4/gate-b/local-formats.md": "sha256:f2a32c74c9b55cb15533b991ff8924f5f4e58619dae922c48f8fcddc42c10995",
+    "schemas/r4/gate-b/runtime-boundary.json": "sha256:ad65fc19721f87a3860079af229806d15c8ed2bb72296dc23ba37201a0569450",
+    "schemas/r4/gate-b/codex-zero-call-contract.json": "sha256:45219c9986bb585a2998f3d2c984213aac83f99f0be2070ab84981633570c845",
+    "schemas/r4/gate-b/macos/forme-fresh-response.sb": "sha256:5f801ddabe277fb29608dff91d4c3c2ded1639a2ee363fd9d7bc866757e263ab",
+    "schemas/r4/gate-b/macos/build-recipe.json": "sha256:93d82da1386adfdbf69521ee7c51fbf57cc8754552cb19ad1f4c6095ea1390de",
+    "schemas/r4/gate-b/postgres-contract.md": "sha256:73ad0d23400d0bb7adeabdc0aed5c960de3bc1a180e02cfaa12a68d1056424dc",
+    "package-lock.json": "sha256:d7a56f2e40ffc80f03413c8e697e1a9a9199dcb8873cedc43cd421a2b265c812"
+  },
+  "toolchain": {
+    "node": {
+      "version": "24.14.1",
+      "sha256": "sha256:35d4bc736bbe4161f0c074aa140ddb74586e46969bc2ad63d32c838bec4463ff"
+    },
+    "npm": {
+      "version": "11.11.0",
+      "launcherSha256": "sha256:8e5f6f3429f8cdbe693cdc29904e9d5a7b127a494bd15c804bd54c7403bfcbe7"
+    },
+    "typescript": {
+      "version": "7.0.2",
+      "launcherSha256": "sha256:2219f428a7e55aaf1f7ad85b9b0f0cf5078aeb76ccc9a7c6036c92d48f492ffd"
+    },
+    "git": {
+      "sha256": "sha256:179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818"
+    },
+    "swift": {
+      "version": "6.3.3",
+      "target": "arm64-apple-macosx26.0",
+      "launcherSha256": "sha256:179301dcb41ea78accc3fa0048a7e6f6710d891945a751a34addd622020c1818"
+    },
+    "xcode": {
+      "version": "26.6",
+      "build": "17F113",
+      "xcrunSha256": "sha256:a439970aea2b4e435eac6518ff62c97fd1c57d8c731974027ad211b515c7a7b8"
+    }
+  },
+  "preflightControls": {
+    "isolatedHome": true,
+    "isolatedTmpdir": true,
+    "globalGitConfigDisabled": true,
+    "systemGitConfigDisabled": true,
+    "repositoryDependenciesAlreadyPresent": true,
+    "dependencyResolutionOrDownloadAttempted": false,
+    "externalNetworkAttempted": false,
+    "realCodexReadOrInvocationAttempted": false,
+    "systemRealpathExecutablePresent": false,
+    "canonicalizer": "node:fs.realpathSync",
+    "canonicalPathsResolvedExactly": true
+  },
+  "checkpoints": [
+    {
+      "lane": "preflight",
+      "status": "GREEN",
+      "assertions": [
+        "BRANCH_MATCHED",
+        "WORKTREE_CLEAN",
+        "LOCAL_REMOTE_TRACKING_REF_MATCHED",
+        "COMMENCEMENT_COMMIT_MATCHED",
+        "COMMENCEMENT_TREE_MATCHED",
+        "IMPLEMENTATION_BASELINE_COMMIT_AND_TREE_MATCHED",
+        "IMPLEMENTATION_BASELINE_IS_ANCESTOR",
+        "INTERVENING_PATHS_ARE_APPROVAL_OR_GOVERNANCE_ONLY",
+        "IMMUTABLE_HASHES_MATCHED",
+        "PACKAGE_LOCK_HASH_MATCHED",
+        "OFFLINE_DEPENDENCIES_PRESENT",
+        "TOOLCHAIN_VERSIONS_AND_EXECUTABLE_HASHES_RECORDED"
+      ],
+      "controlledObservations": [
+        "SYSTEM_REALPATH_EXECUTABLE_ABSENT_NODE_CANONICALIZER_USED"
+      ]
+    },
+    {
+      "lane": "gate-a-regression-and-protocol-replay",
+      "status": "GREEN",
+      "assertions": [
+        "SPINE_AND_ROOM_TYPECHECK_PASSED",
+        "SPINE_TESTS_45_OF_45_PASSED",
+        "R4_OFFLINE_TESTS_293_OF_293_PASSED",
+        "FIVE_JOURNEY_PROTOCOL_REPLAY_PASSED",
+        "GATE_A_STATIC_REPOSITORY_AUDIT_PASSED",
+        "DOCUMENT_AUDIT_47_ROWS_PASSED"
+      ],
+      "protocolReplay": {
+        "journeyCount": 5,
+        "aggregateSha256": "sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56",
+        "networkCalls": 0,
+        "providerCalls": 0,
+        "externalEmailSends": 0,
+        "realGuestRecords": 0
+      },
+      "staticAudit": {
+        "protocolFileCount": 10,
+        "protocolAggregateSha256": "sha256:066d03e1cec744b3418c61c899d524430b4085478b4f130044eeb57ecc40e835",
+        "hostedFileCount": 28,
+        "hostedAggregateSha256": "sha256:1ee9fbc02716e1f0f9a408e077d2b14d4fc7148dacbd463dee66786ae55bb32a",
+        "migrationFileCount": 0
+      }
+    },
+    {
+      "lane": "path-fence",
+      "status": "GREEN",
+      "testCount": 5,
+      "developmentIterations": 4,
+      "fallbackUsed": false,
+      "assertions": [
+        "EXACT_ROOT_AND_LITERAL_ALLOWLIST_ALLOWED",
+        "PARENT_SIBLING_ABSOLUTE_AND_ALTERNATE_ROOT_DENIED",
+        "SYMLINK_COMPONENT_DENIED",
+        "HARD_LINKED_REGULAR_FILE_DENIED",
+        "EMPTY_ROOT_OVERLAP_AND_EMPTY_ALLOWLIST_DENIED",
+        "SYNTHETIC_CODEX_COMPONENT_DENIED",
+        "COMMAND_SUBSTITUTION_GLOB_AND_DYNAMIC_ROOT_DENIED",
+        "MISSING_PATH_HAS_NO_FALLBACK_SEARCH",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_FIXTURE_ALLOWLIST_CONFLICT_CORRECTED",
+        "INITIAL_TYPESCRIPT_UNKNOWN_NARROWING_CORRECTED"
+      ]
+    },
+    {
+      "lane": "api-and-local-format-schemas",
+      "status": "GREEN",
+      "testCount": 10,
+      "developmentIterations": 5,
+      "fallbackUsed": false,
+      "assertions": [
+        "API_OPERATION_MAP_BIJECTIVE",
+        "API_COUNTS_45_39_6_31_MATCHED",
+        "REQUEST_AND_RESULT_REFS_RESOLVED",
+        "REQUEST_OBJECTS_CLOSED",
+        "CONDITIONAL_REQUEST_CEILINGS_PRESERVED",
+        "RECOVERY_ARMS_EXACT",
+        "LOCAL_FORMAT_ROWS_25_BOUND",
+        "ONLY_ROOM_LEDGER_WORKSPACE_PERSISTENT",
+        "LOCAL_RECORD_OBJECTS_CLOSED",
+        "CANONICAL_WRITE_0700_0600_EXCLUSIVE_AND_FSYNCED",
+        "CANDIDATE_CLEANUP_DENY_FIRST_AND_RECONCILABLE",
+        "CONSTRUCTION_EVIDENCE_SCHEMA_VALIDATED",
+        "GENERATION_DETERMINISTIC",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_REGEX_LITERAL_CORRECTED",
+        "LOCAL_FORMAT_ROW_COUNT_CORRECTED_TO_FROZEN_25",
+        "BACKTICK_PIPE_TABLE_PARSER_CORRECTED",
+        "MULTILINE_MJS_IMPORT_TYPECHECK_CORRECTED"
+      ],
+      "metrics": {
+        "generatedSchemaFileCount": 5,
+        "generatedSchemaByteCount": 110451,
+        "operationCount": 45,
+        "mutationCount": 39,
+        "readCount": 6,
+        "expectedVersionRequiredCount": 31,
+        "canonicalProtocolObjectCount": 39,
+        "localFormatRowCount": 25,
+        "workspacePersistentFormatCount": 1
+      }
+    },
+    {
+      "lane": "static-sql-and-role-function-contracts",
+      "status": "GREEN",
+      "testCount": 6,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "STATIC_SQL_LEXER_AND_STATEMENT_BOUNDARIES_PASSED",
+        "EXACT_37_TABLE_INVENTORY_BOUND",
+        "EXACT_44_DOMAIN_AND_3_COMPOSITE_INVENTORY_BOUND",
+        "ZERO_ENUM_AND_ZERO_EXTENSION_CONSTRUCTION_BOUND",
+        "EXACT_5_ROLE_FLAGS_BOUND",
+        "53_SURFACE_FUNCTIONS_AND_11_AUDIT_VIEWS_BOUND",
+        "SECURITY_DEFINER_SEARCH_PATH_AND_PUBLIC_REVOKE_BOUND",
+        "NO_RUNTIME_RAW_TABLE_GRANT_BOUND",
+        "BOOTSTRAP_VERIFY_ROLLBACK_HASH_GUARDS_CONSTRUCTED",
+        "GLOBAL_LOCK_ORDER_AND_8_RACE_FIXTURES_REPLAYED",
+        "RUNTIME_EXECUTION_EXPLICITLY_DEFERRED",
+        "POSTGRES_DOCKER_AND_NETWORK_EFFECT_COUNTS_ZERO",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_INTERNAL_FUNCTION_SECURITY_DEFINER_ASSERTION_CORRECTED",
+        "PUBLIC_FUNCTION_ACL_ASSERTION_CORRECTED_TO_CATALOG_ACL_EXPANSION",
+        "CONTRACT_RECHECK_TEMP_ROOT_ENVIRONMENT_BINDING_CORRECTED"
+      ],
+      "metrics": {
+        "runtimeExecuted": false,
+        "sqlFileCount": 4,
+        "constructedByteCount": 124831,
+        "tableCount": 37,
+        "domainCount": 44,
+        "compositeCount": 3,
+        "functionCount": 60,
+        "surfaceFunctionCount": 53,
+        "auditViewCount": 11,
+        "triggerCount": 7,
+        "explicitIndexCount": 48,
+        "roleCount": 5,
+        "enumCount": 0,
+        "raceFixtureCount": 8,
+        "deferredExecutionAssertionCount": 5
+      }
+    },
+    {
+      "lane": "encrypted-field",
+      "status": "GREEN",
+      "testCount": 9,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "AES_256_GCM_ROUND_TRIP_PASSED",
+        "EXACT_CANONICAL_ENVELOPE_AND_AAD_BINDING_PASSED",
+        "WRONG_KEY_NONCE_TAG_CIPHERTEXT_KEY_ID_AND_AAD_DENIED",
+        "ROW_COLUMN_ROOM_AND_VERSION_SWAP_DENIED",
+        "TRUNCATED_NONCANONICAL_MISSING_AND_UNKNOWN_FIELDS_DENIED",
+        "KEY_PLAINTEXT_NONCE_AND_AAD_CEILINGS_DENIED",
+        "GLOBAL_SAME_AND_CROSS_TABLE_NONCE_REUSE_DENIED",
+        "TERMINAL_UNREADABILITY_DENIED_BEFORE_CRYPTO",
+        "SCOPED_DECRYPTED_BYTES_ZEROED_AND_ESCAPE_DENIED",
+        "DEDICATED_DESCRIPTOR_EXACT_32_BYTE_READ_AND_CLOSE_PASSED",
+        "SYNTHETIC_CANARIES_ABSENT_FROM_ENVELOPE_ERRORS_EVIDENCE_AND_DISK",
+        "NO_KEYCHAIN_NETWORK_OR_FILESYSTEM_WRITE_EFFECTS",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_TRUNCATION_CLASSIFICATION_EXPECTATION_CORRECTED",
+        "INHERITED_DESCRIPTOR_SHORT_READ_FIXTURE_AND_RETURN_PATH_CORRECTED",
+        "FAILED_NONCE_RESERVATION_CIPHERTEXT_BUFFER_ZEROING_HARDENED"
+      ],
+      "metrics": {
+        "algorithm": "AES-256-GCM",
+        "keyBytes": 32,
+        "nonceBytes": 12,
+        "tagBytes": 16,
+        "encryptedColumnCount": 9,
+        "constructedByteCount": 29509,
+        "filesystemWrites": 0,
+        "keychainOperations": 0,
+        "networkCalls": 0
+      }
+    },
+    {
+      "lane": "fake-budget-and-event-fence",
+      "status": "GREEN",
+      "testCount": 16,
+      "developmentIterations": 3,
+      "fallbackUsed": false,
+      "assertions": [
+        "JOURNAL_COMMITTED_BEFORE_EACH_FAKE_CALL",
+        "ONLY_SEQUENTIAL_DISPATCH_ORDINALS_1_2_3_ALLOWED",
+        "AGGREGATE_INPUT_OUTPUT_SPEND_WALL_AND_PERMIT_BOUNDARIES_EXACT",
+        "UNKNOWN_OR_INVALID_ACCOUNTING_DENIED_BEFORE_CALL",
+        "ALL_PERMIT_BINDING_FIELDS_MATCHED_BEFORE_CALL",
+        "RETRY_FALLBACK_PRIOR_FAILURE_AND_TERMINAL_AUTHORITY_DENIED",
+        "SAME_KEY_REPLAY_CALL_FREE_AND_DIFFERENT_BYTES_CONFLICT",
+        "UNKNOWN_OUTCOME_BURNS_CYCLE_WITHOUT_REPLACEMENT",
+        "ATOMIC_0700_0600_BODY_FREE_JOURNAL_AND_CLEANUP_PASSED",
+        "EXACT_COMPLETED_FIXTURE_THREAD_AND_TURN_SELECTED",
+        "OTHER_PARTIAL_TOOL_LATE_DUPLICATE_SCHEMA_DRIFT_AND_NONZERO_EXIT_DENIED",
+        "EVENT_ACCOUNTING_AND_32768_BYTE_CANDIDATE_BOUNDARIES_EXACT",
+        "BODY_FREE_EVENT_EVIDENCE_EXCLUDES_CANDIDATE_TEXT",
+        "FAKE_CALLS_3_PROVIDER_CALLS_BYTES_AND_SPEND_ZERO",
+        "SOCKET_AND_NETWORK_EFFECT_COUNTS_ZERO",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "EXACT_PERMIT_OBJECT_BINDING_ADDED_BEFORE_FAKE_DISPATCH",
+        "ATOMIC_FILE_JOURNAL_AND_OWNER_MODE_CHECKS_ADDED",
+        "OPTIONAL_POSIX_UID_FUNCTION_TYPE_NARROWING_CORRECTED"
+      ],
+      "metrics": {
+        "fakeCalls": 3,
+        "providerCalls": 0,
+        "providerBytes": 0,
+        "actualSpendUsd": 0,
+        "socketCalls": 0,
+        "journalCommitCount": 7,
+        "journalFullyConsumed": true,
+        "eventCount": 5,
+        "candidateMaximumBytes": 32768,
+        "constructedByteCount": 53710
+      }
+    },
+    {
+      "lane": "fake-only-codex-adapter",
+      "status": "GREEN",
+      "testCount": 6,
+      "developmentIterations": 4,
+      "fallbackUsed": false,
+      "assertions": [
+        "PINNED_CODEX_0_145_0_SCHEMA_AND_METHOD_FIXTURES_MATCHED",
+        "FIXTURE_EXECUTABLE_EXACT_ROOT_HASH_0500_MODE_AND_LINK_FENCE_PASSED",
+        "EXACT_CLEAN_ENVIRONMENT_AND_FOUR_INVOCATION_SEQUENCE_PASSED",
+        "ONLY_INITIALIZE_AND_INITIALIZED_CLIENT_WRITES_ALLOWED",
+        "SYNTHETIC_SCHEMA_INVENTORY_MATCHED_BEFORE_HANDSHAKE",
+        "SERVER_REQUESTS_UNKNOWN_AND_DUPLICATE_NOTIFICATIONS_DENIED",
+        "MALFORMED_STDOUT_STDERR_NONZERO_EXIT_AND_SCHEMA_DRIFT_DENIED",
+        "MACHINE_AND_INSTALLATION_FIELDS_SANITIZED_FROM_EVIDENCE",
+        "FIXTURE_EXECUTABLE_CALLS_4_REAL_CODEX_CALLS_ZERO",
+        "THREAD_TURN_PROVIDER_CALLS_AND_PROVIDER_BYTES_ZERO",
+        "FIXTURE_ROOT_CLEANUP_PASSED",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "PINNED_FIXTURE_PATH_LITERAL_UNION_NARROWING_CORRECTED",
+        "NODE_PROCESS_ENV_TYPE_AUGMENTATION_CORRECTED_WITHOUT_ADDING_AN_ENVIRONMENT_KEY",
+        "UNEXPECTED_SERVER_SHAPE_CALLBACK_REJECTION_HARDENED"
+      ],
+      "metrics": {
+        "fixtureExecutableCalls": 4,
+        "realCodexReads": 0,
+        "realCodexCalls": 0,
+        "clientWrites": 2,
+        "serverRequests": 0,
+        "schemaFileCount": 3,
+        "threadStarts": 0,
+        "turnStarts": 0,
+        "providerCalls": 0,
+        "providerBytes": 0,
+        "stderrBytes": 0,
+        "constructedByteCount": 39722
+      }
+    },
+    {
+      "lane": "native-source-compile-and-unit-tests",
+      "status": "GREEN",
+      "testCount": 12,
+      "developmentIterations": 5,
+      "fallbackUsed": false,
+      "assertions": [
+        "SWIFT_PACKAGE_DECLARED_ZERO_EXTERNAL_DEPENDENCIES",
+        "PINNED_SWIFT_6_RELEASE_COMPILE_PASSED",
+        "SWIFT_BOUNDARY_UNIT_TESTS_8_OF_8_PASSED",
+        "TYPESCRIPT_STATIC_NATIVE_TESTS_4_OF_4_PASSED",
+        "EXACT_BUNDLE_IDENTIFIER_MINIMUM_OS_AND_EMPTY_ENTITLEMENTS_BOUND",
+        "OWNER_ONE_SHOT_REVIEW_AND_15_MINUTE_AUTHORITY_BOUND",
+        "SECURE_ENCLAVE_USER_PRESENCE_AND_CUSTOM_KEYCHAIN_SOURCE_CONSTRUCTED",
+        "LOGIN_AND_DATA_PROTECTION_KEYCHAIN_FALLBACKS_DENIED",
+        "USER_PRESENCE_CANCELLATION_CLASSIFIES_YELLOW_WITHOUT_FALLBACK",
+        "SIGNATURE_VERIFICATION_REMAINS_AGGREGATE_RUNNER_AUTHORITY",
+        "MEMORY_PIPE_BODY_AND_EVENT_CEILINGS_BOUND",
+        "CPU_FD_RSS_PROCESS_AND_WALL_RESOURCE_CEILINGS_BOUND",
+        "PINNED_SEATBELT_PARAMETERS_NETWORK_AND_DESCENDANT_DENIAL_BOUND",
+        "CODEX_NATIVE_PLAN_REMAINS_INITIALIZE_ONLY_WITH_ZERO_THREAD_TURN_PROVIDER_AUTHORITY",
+        "CLEANUP_REQUIRED_BEFORE_TERMINAL_STATE",
+        "NO_SIGNED_APP_CERTIFICATE_KEYCHAIN_SECURE_ENCLAVE_PROMPT_OR_SEATBELT_CHILD_CREATED",
+        "CONSTRUCTION_SCRATCH_REMOVED_AFTER_EVERY_BUILD_ATTEMPT",
+        "PACKAGE_LOCK_UNCHANGED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "INITIAL_EXPLICIT_BZERO_IMPORT_FAILURE_CORRECTED",
+        "RESERVED_MEMSET_S_BRIDGE_WARNING_REMOVED_WITH_EXTERNAL_PATTERN_OVERWRITE",
+        "CUSTOM_FILE_KEYCHAIN_API_DEPRECATION_RECORDED_AS_FROZEN_HOST_SPECIFIC_EXECUTION_RISK",
+        "CONSTRUCTION_TEST_EXECUTABLE_PATH_CORRECTED_FROM_USR_BIN_TO_BIN",
+        "NATIVE_SIGNATURE_OVERCLAIM_REMOVED_AND_USER_CANCELLATION_CLASSIFICATION_CORRECTED"
+      ],
+      "metrics": {
+        "swiftSourceFileCount": 8,
+        "swiftUnitTestCount": 8,
+        "typescriptStaticTestCount": 4,
+        "constructedFileCount": 14,
+        "constructedByteCount": 43677,
+        "signedAppCreated": false,
+        "certificateCreated": false,
+        "keychainOperations": 0,
+        "secureEnclaveOperations": 0,
+        "userPresencePrompts": 0,
+        "seatbeltChildren": 0,
+        "providerCalls": 0,
+        "expectedDeprecatedCustomKeychainApiWarning": true,
+        "cleanupPassed": true
+      }
+    },
+    {
+      "lane": "aggregate-runner-synthetic-dry-run",
+      "status": "GREEN",
+      "testCount": 10,
+      "developmentIterations": 2,
+      "fallbackUsed": false,
+      "assertions": [
+        "EXACT_9_LANE_SERIAL_ORDER_PASSED",
+        "YELLOW_CONTINUES_ONLY_INDEPENDENT_LOCAL_LANES",
+        "CODEX_OR_MACOS_YELLOW_DISABLES_AI_LANE",
+        "RED_STOPS_ALL_REMAINING_NON_CLEANUP_LANES_AS_NOT_RUN",
+        "CLEANUP_RUNS_AFTER_GREEN_YELLOW_AND_RED",
+        "CLEANUP_RED_FORCES_AGGREGATE_RED",
+        "PROVIDER_MODEL_CREDENTIAL_REAL_DATA_CWD_AND_INCOMPLETE_ARGUMENTS_DENIED",
+        "EXACT_RUN_ROOT_MARKER_0700_0600_AND_AUTHORITY_BINDING_PASSED",
+        "PARTIAL_RUN_ROOT_CREATION_CLEANUP_FAILS_CLOSED",
+        "BODY_FREE_CODES_COUNTS_BOOLEANS_AND_HASHES_ONLY",
+        "FUTURE_EXECUTION_ARGUMENT_SURFACE_BINDS_PACKET_MANIFEST_GRANT_AND_ONE_INSTALL_ROOT",
+        "CODEX_INSTALL_ROOT_USES_TWO_EXACT_RELATIVE_PATHS_AND_PINNED_HASHES_WITHOUT_SEARCH",
+        "PHYSICAL_POSTGRES_CODEX_AND_MACOS_GAPS_RETURN_YELLOW_WITHOUT_FALLBACK",
+        "DRY_RUN_EXTERNAL_NETWORK_DOCKER_POSTGRES_CODEX_KEYCHAIN_USER_PRESENCE_AND_PROVIDER_COUNTS_ZERO",
+        "DRY_RUN_TEMP_ROOT_CLEANUP_PASSED",
+        "PACKAGE_LOCK_UNCHANGED"
+      ],
+      "controlledObservations": [
+        "INITIAL_OPTIONAL_FILE_INSPECTION_MASKED_EXPECTED_ABSENCE_BEFORE_CONSTRUCTION",
+        "PHYSICAL_EXECUTION_GAPS_CLASSIFIED_YELLOW_INSTEAD_OF_BEING_HIDDEN_BY_SYNTHETIC_SUCCESS"
+      ],
+      "metrics": {
+        "scenarioCount": 4,
+        "deniedArgumentCaseCount": 6,
+        "laneCount": 9,
+        "constructedFileCount": 3,
+        "constructedByteCount": 28217,
+        "externalNetworkCalls": 0,
+        "dockerCommands": 0,
+        "postgresProcesses": 0,
+        "realCodexCalls": 0,
+        "keychainOperations": 0,
+        "userPresencePrompts": 0,
+        "providerCalls": 0,
+        "cleanupPassed": true
+      }
+    },
+    {
+      "lane": "static-package-workset-audit",
+      "status": "GREEN",
+      "testCount": 56,
+      "developmentIterations": 2,
+      "fallbackUsed": false,
+      "assertions": [
+        "CHANGED_PATHS_54_ALL_WITHIN_EXACT_CONSTRUCTION_WORKSET",
+        "CONSTRUCTED_HASHES_53_MATCH_CURRENT_BYTES",
+        "IMMUTABLE_HASHES_17_MATCHED",
+        "PACKAGE_LOCK_BYTE_HASH_UNCHANGED",
+        "CHECKPOINT_COMMITS_11_BODY_FREE_AND_EXACTLY_ORDERED",
+        "UNLISTED_PATH_COUNT_ZERO",
+        "GENERATED_BUILD_OUTPUT_REMAINING_COUNT_ZERO",
+        "GATE_B_OFFLINE_TESTS_56_OF_56_PASSED_SERIAL",
+        "GATE_A_STATIC_REPOSITORY_AUDIT_REPLAY_PASSED",
+        "DOCUMENT_CROSSWALK_47_ROWS_PASSED",
+        "FIRST_PROVIDER_CALL_GRANT_REMAINS_NOT_REQUESTED",
+        "SPINE_TYPECHECK_PASSED"
+      ],
+      "controlledObservations": [
+        "AUDIT_REQUIRES_EVERY_CHANGED_PATH_EXCEPT_SELF_EVIDENCE_TO_HAVE_AN_EXACT_HASH",
+        "STATIC_RACE_FIXTURES_REMAIN_EXPLICITLY_DISTINCT_FROM_POSTGRES_RUNTIME_RACES"
+      ],
+      "metrics": {
+        "changedPathCount": 54,
+        "constructedHashCount": 53,
+        "immutableHashCount": 17,
+        "checkpointCommitCount": 11,
+        "gateBOfflineTestCount": 56,
+        "documentCrosswalkRowCount": 47,
+        "unlistedPathCount": 0,
+        "generatedOutputRemainingCount": 0,
+        "constructedByteCount": 19688,
+        "packageLockUnchanged": true
+      }
+    },
+    {
+      "lane": "construction-report-and-execution-manifest",
+      "status": "YELLOW",
+      "assertions": [
+        "CONSTRUCTION_REPORT_COMPLETED",
+        "MACHINE_EVIDENCE_COMPLETED",
+        "EXECUTION_MANIFEST_HASH_INDEX_COMPLETE",
+        "OWNER_REVIEW_COMPLETED",
+        "THREE_PHYSICAL_ADAPTER_GAPS_EXPLICIT",
+        "RETRY_EXECUTION_NOT_RECOMMENDED",
+        "RETRY_EXECUTION_GRANT_NOT_REQUESTED",
+        "FIRST_PROVIDER_CALL_GRANT_NOT_REQUESTED"
+      ],
+      "controlledObservations": [
+        "INITIAL_HASH_INDEX_RENDER_COMMAND_QUOTING_CORRECTED_WITHOUT_FILE_NETWORK_OR_EXTERNAL_EFFECT"
+      ],
+      "metrics": {
+        "reportBytes": 6815,
+        "executionManifestBytes": 12155,
+        "ownerReviewBytes": 3021,
+        "executionBearingFileCount": 50,
+        "executionBearingAggregateSha256": "sha256:50e043df23f338e9798baa600d1cb78e245b925f5efd5958750e437a53f2f5c4",
+        "physicalAdapterGapCount": 3,
+        "recommendRetryExecution": false
+      }
+    },
+    {
+      "lane": "cleanup",
+      "status": "GREEN",
+      "assertions": [
+        "CONSTRUCTION_TEMP_ROOT_REMOVED",
+        "SWIFT_SCRATCH_ABSENT",
+        "AGGREGATE_DRY_RUN_ROOT_ABSENT",
+        "FAKE_FIXTURE_ROOTS_ABSENT",
+        "GENERATED_REPOSITORY_BUILD_OUTPUTS_ABSENT"
+      ],
+      "metrics": {
+        "constructionTempRootRemoved": true,
+        "generatedOutputRemainingCount": 0
+      }
+    }
+  ],
+  "lanes": {
+    "preflight": "GREEN",
+    "gate-a-regression-and-protocol-replay": "GREEN",
+    "path-fence": "GREEN",
+    "api-and-local-format-schemas": "GREEN",
+    "static-sql-and-role-function-contracts": "GREEN",
+    "encrypted-field": "GREEN",
+    "fake-budget-and-event-fence": "GREEN",
+    "fake-only-codex-adapter": "GREEN",
+    "native-source-compile-and-unit-tests": "GREEN",
+    "aggregate-runner-synthetic-dry-run": "GREEN",
+    "static-package-workset-audit": "GREEN",
+    "construction-report-and-execution-manifest": "YELLOW",
+    "cleanup": "GREEN"
+  },
+  "effectCounts": {
+    "providerSessions": 0,
+    "providerBytes": 0,
+    "spendUsd": 0,
+    "codexThreadStarts": 0,
+    "codexTurnStarts": 0,
+    "realGuestBytes": 0,
+    "externalMessages": 0,
+    "productionWrites": 0,
+    "deploys": 0,
+    "merges": 0,
+    "dockerCommands": 0,
+    "postgresProcesses": 0,
+    "keychainOperations": 0,
+    "userPresencePrompts": 0
+  },
+  "constructedFiles": {
+    "scripts/r4-gate-b-path-fence.mjs": "sha256:c4e31663cdee762705f35ff47541a09ebf9c7a9aaade36d61751c17e190bbc99",
+    "test/r4-gate-b/path-fence.test.ts": "sha256:5cd60eb3ea35728954e5b69b292b10c723d433c87700deb1afc3af61fb7ea558",
+    "scripts/r4-gate-b-api-contract.mjs": "sha256:d95d52e95cb26250a2c36dbfacbfee9b20cd449b5f8cd42a668308485c7b0447",
+    "schemas/r4/api-v1.schema.json": "sha256:8541775a52ab541db08526b743621e817c920a7ac3b30ad416df65e073d3d0c1",
+    "schemas/r4/api-v1-index.json": "sha256:021cff86b2fc0cabebc63d85ca14f1fad41f7978b205594f90328872c5e7d3bf",
+    "schemas/r4/local-formats.schema.json": "sha256:e1d35cec21e321273214ca232d5975cade1133f27b96098815185d091f16b088",
+    "schemas/r4/local-formats-index.json": "sha256:ae8821c359de868ae9e8b51414db334c73fbdb7b8b59aa25b89c912f9681dbcd",
+    "schemas/r4/gate-b-evidence.schema.json": "sha256:3513c9d6e597868e6eb499b2cfdae90c22fc786457f024ef36a34c580cf2e81b",
+    "test/r4-gate-b/api-contract.test.ts": "sha256:289276290fc59f663a4bb103bbaba3fc37917ea8ee362ed679ce372fd686dcbe",
+    "test/r4-gate-b/local-formats.test.ts": "sha256:441014892b5c89492b9109d462327ff1888259a412372c7b7458eda6fc2d4314",
+    "schemas/r4/sql/0000_r4_gate_b_bootstrap.sql": "sha256:bdf76cf9d5e5dfb4f357d8d2fe230071cbbe344fbb599abca093005c915c0a71",
+    "schemas/r4/sql/0001_r4_presence.sql": "sha256:294fabfaabf7ed04d2c711ea8d1185f475ccd288d8db078ecc3fb0813e3ee4b3",
+    "schemas/r4/sql/0001_r4_presence.verify.sql": "sha256:beacf7fbd65745a9d2591482c602307e81c5c778cb0d896c1dc2501f0e19211d",
+    "schemas/r4/sql/0001_r4_presence.rollback.sql": "sha256:94104673383c07365f352d68cc36f55a8eaf9b9c756f02c90ffeb7c8eae2f6dc",
+    "scripts/r4-gate-b-postgres.mjs": "sha256:4fde21a2a63d57af1011cd885002260c338bf6970794fe47a287ccc688891422",
+    "test/r4-gate-b/postgres-schema.test.ts": "sha256:355026d53fb9435438aa41cd4d768464a4a41af86d6f5a785269ceb5d40a4735",
+    "packages/r4-persistence/src/encrypted-field.ts": "sha256:b33abb82a06f933f1bd30dec855f14969e4b9efc326a65233b04aac87b3a0e7d",
+    "packages/r4-persistence/src/index.ts": "sha256:f9b3a31fca1ffbdc7dff3f37924a321d90ac7aafc5a2b1188ec6a0671a3a62d6",
+    "scripts/r4-gate-b-encrypted-field.mjs": "sha256:8ff56dfc73f17b49373cf908e50b4c6d40baa553a660fd6ca66f1a5901058111",
+    "test/r4-gate-b/encrypted-field.test.ts": "sha256:9982af051908e118c698a46b0466345960ad42919eca084422d7723edf4e311e",
+    "package.json": "sha256:24b9c2c79107e64d23b953ad44a23a42dcf4ba92a04bc6d3e8917b841582c90d",
+    "packages/r4-codex-adapter/src/fake-transport.ts": "sha256:d7061b90fe3dcd565314e96a560a753d9c2e8cf0392de9bb66d822ab64057b7e",
+    "packages/r4-codex-adapter/src/event-fence.ts": "sha256:282a19a078b52bf8506b6cf6b7dca35fcb1a1d0b25aceffde78c930d66673ac6",
+    "scripts/r4-gate-b-fake-budget.mjs": "sha256:39b576000c6d38b8741bbdd6a12ab73c787b9c8dd2d880757b738342d31fa902",
+    "test/r4-gate-b/fake-transport-budget.test.ts": "sha256:c82153bde9364eccd91485e94ac78890b5c6c902da5e9d46e5b63e856f1a74e2",
+    "test/r4-gate-b/event-fence.test.ts": "sha256:36a59d19853048a88d4370c62f8b233d73fccf8b9db5cda1cc3c2af43e6c89fe",
+    "fixtures/r4-gate-b/codex-app-server-0.145.0-schema.sha256": "sha256:0cf2d60b9fac52b9339b1529404c8afdb01c892929c258fa20c5d1b1b04e96bf",
+    "fixtures/r4-gate-b/codex-app-server-0.145.0-methods.json": "sha256:d7722c090d5ec8d7d28a8f269610a42d7ad1d9eb09b2f090dfd739bfac8d4e36",
+    "packages/r4-codex-adapter/src/app-server-probe.ts": "sha256:8fd286f7398a63d3e073d4b165fdaa6086045ecdb3939028a6169c2ea2afbdf4",
+    "packages/r4-codex-adapter/src/index.ts": "sha256:d35a3179198bb90c8ea1c5cab3500e109fbfff09c657f60f3fed506056cdcb1c",
+    "scripts/r4-gate-b-codex-probe.mjs": "sha256:4870a3d4adcf944e6df8d786ea852ef5afbd9f991ec0db044d1148467b3ec657",
+    "test/r4-gate-b/codex-adapter.test.ts": "sha256:02be41f09727a883f734f7cf1278ee90e9e43a5b84ceeaf758cf2bf3ba63e6a7",
+    "native/macos/Package.swift": "sha256:57169aedae8d67190d4e087b8ebe65033490acab41adfb1bea28fe652b335503",
+    "native/macos/Sources/FormeLocal/Launcher.swift": "sha256:e0219082ffe309c591d3ab9c2b0365acfcf10c45da8d07e4101202ea6ad4046c",
+    "native/macos/Sources/FormeLocal/CodexAdapter.swift": "sha256:3f0102f7def8d4a6859e6217c09997ae7ddbe0315cc55930309c75f5256f5f35",
+    "native/macos/Sources/FormeLocal/KeychainProtector.swift": "sha256:3d2e12a008c91217a200a42517a1096277e8c31db44497854e56046d58b68e73",
+    "native/macos/Sources/FormeLocal/ReviewWindow.swift": "sha256:a2354b30435357bef8a4e2944bacd2a2941b6c39194127e936d58d73c720a379",
+    "native/macos/Sources/FormeLocal/SandboxProfile.swift": "sha256:a353b30eea419e5f90385c62c79716032504f79fddf2ce5a5a8ad1d11fcb22af",
+    "native/macos/Sources/FormeLocal/GateBProbe.swift": "sha256:52fdbb8a5111c898b693d158436e0254a8fbfb4aea086eac786f86bf1fe2e950",
+    "native/macos/Sources/FormeLocal/ResourceLimits.swift": "sha256:cd8b9fac6b79896fac1c150f9ec06de7d13a6578194c1661c438751cbd611fab",
+    "native/macos/Sources/FormeLocal/MemoryPipe.swift": "sha256:b19350e8513e8a5b1a27e59526158d49315c08ec679a4f60e993e45d7a908af3",
+    "native/macos/Resources/Info.plist": "sha256:4d943fe6e1cb55abbe547de1f1654bcef829705e6dd5ed3448f473cf19994b92",
+    "native/macos/Resources/FormeLocal.entitlements": "sha256:97704a8960b4facceef54397a08fb5d0a456247c3627359215aa2a27df22656c",
+    "native/macos/Tests/FormeLocalTests/BoundaryTests.swift": "sha256:f5678f7790c6ab303ff55fadad1727b3e03165d7cc7b109c204bab5793052fad",
+    "scripts/r4-gate-b-macos-probe.sh": "sha256:0c5b2fd1d950c1ea6cb8bf40a6d94fd425953987fb4fb0efb1eaa1824b6f7f5e",
+    "test/r4-gate-b/macos-boundary.test.ts": "sha256:d99a89e531258a28a811af3ac1f89517f48589586bc6df01f608ffda04d76c87",
+    "scripts/r4-gate-b-runner.mjs": "sha256:fbdc73c7d59adb4eb10e8a939060ce9066b4ede16f7382351afe65a401201cd1",
+    "scripts/r4-gate-b-preflight.mjs": "sha256:afa1c4546750bfbe23d83cc280df65f2f6135cb30f056f242abffed590229a0d",
+    "scripts/r4-gate-b-cleanup.mjs": "sha256:bd08acfa059fa95ce98007cd000fe85ab102f621970756c4fcb837a299404581",
+    "scripts/r4-doc-audit.mjs": "sha256:358b17e0ee024300b0540806f9a6a4a44ef9d47271c98d81641a8274bf1afcaa",
+    "docs/R4-GATE-B-RETRY-CONSTRUCTION-REPORT.md": "sha256:457e1d2257623fd1332d448a1381cde5b658dd89cad620096a66f44f05416b96",
+    "docs/R4-GATE-B-RETRY-EXECUTION-MANIFEST.md": "sha256:f2276d7dfd5716bc5f14e7853925cbc991349b525eb28e0453c9cf9b4602b976",
+    "docs/R4-GATE-B-RETRY-EXECUTION-OWNER-REVIEW.md": "sha256:126bac9434572ab22354f2d0951e5b1dac941fad0b860ff2c72eea39d9335abe"
+  },
+  "cleanup": {
+    "constructionTempRootRemoved": true,
+    "swiftScratchAbsent": true,
+    "aggregateDryRunRootAbsent": true,
+    "fakeFixtureRootsAbsent": true,
+    "generatedRepositoryBuildOutputsAbsent": true
+  },
+  "executionProposal": {
+    "manifestPath": "docs/R4-GATE-B-RETRY-EXECUTION-MANIFEST.md",
+    "manifestSha256": "sha256:f2276d7dfd5716bc5f14e7853925cbc991349b525eb28e0453c9cf9b4602b976",
+    "ownerReviewPath": "docs/R4-GATE-B-RETRY-EXECUTION-OWNER-REVIEW.md",
+    "ownerReviewSha256": "sha256:126bac9434572ab22354f2d0951e5b1dac941fad0b860ff2c72eea39d9335abe",
+    "recommendRetryExecution": false,
+    "retryExecutionGrant": "NOT_REQUESTED",
+    "firstProviderCallTestGrant": "NOT_REQUESTED",
+    "reasonCodes": [
+      "POSTGRES_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_ADAPTER",
+      "CODEX_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_SEATBELT_ADAPTER",
+      "MACOS_PHYSICAL_EXECUTION_REQUIRES_REVIEWED_SIGNING_ADAPTER"
+    ]
+  },
+  "physicalBoundary": "CONTROLLING_AGENT_NOT_KERNEL_SANDBOXED"
+}

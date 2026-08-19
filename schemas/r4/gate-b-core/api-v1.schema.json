@@ -1,0 +1,1225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.example/schemas/r4/gate-b-core/api-v1.v1.schema.json",
+  "title": "Forme R4 Demo-critical Core closed API v1 operation schemas",
+  "$comment": "Core-32 overlay constructed offline under Packet sha256:5c8ec32ca40ca9e6f67f96e8b2cec8f378c04fef8bc59387e98f5d79cbe0b3e6; Full remains unchanged.",
+  "$defs": {
+    "ApiErrorDetailV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "correlationId"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "correlationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "ApiErrorV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "$ref": "#/$defs/ApiErrorDetailV1"
+        }
+      }
+    },
+    "Capability32": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{43}$"
+    },
+    "ControlInteractionReadRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ControlInteractionReadResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "interaction",
+        "response"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "owner_interaction_view.v1"
+        },
+        "interaction": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/InteractionV1"
+        },
+        "response": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ResponseV1"
+        }
+      }
+    },
+    "ControlStatusRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ControlStatusResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "CurationAdmitRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "CurationAdmitResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycle",
+        "receipt"
+      ],
+      "properties": {
+        "lifecycle": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionLifecycleV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "CurationUnlistRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "CurationUnlistResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycle",
+        "receipt"
+      ],
+      "properties": {
+        "lifecycle": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionLifecycleV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "GrantOfferAcceptRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grantSecret"
+      ],
+      "properties": {
+        "grantSecret": {
+          "$ref": "#/$defs/Capability32"
+        }
+      }
+    },
+    "GrantOfferAcceptResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant",
+        "receipt"
+      ],
+      "properties": {
+        "grant": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/GrantV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "GrantOfferIssueRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceInteractionId",
+        "roomId",
+        "projectionId",
+        "presetId",
+        "acceptanceExpiresAt",
+        "offeredGrantExpiresAt"
+      ],
+      "properties": {
+        "sourceInteractionId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "projectionId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "presetId": {
+          "enum": [
+            "one_visit",
+            "short_exchange",
+            "familiar_collaborator",
+            "trusted_collaborator"
+          ]
+        },
+        "acceptanceExpiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "offeredGrantExpiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      }
+    },
+    "GrantOfferIssueResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offer",
+        "receipt"
+      ],
+      "properties": {
+        "offer": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/GrantOfferV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "GrantOfferRevokeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "GrantOfferRevokeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "offer",
+        "receipt"
+      ],
+      "properties": {
+        "offer": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/GrantOfferV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "GrantRevokeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "GrantRevokeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "grant",
+        "receipt"
+      ],
+      "properties": {
+        "grant": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/GrantV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "InteractionCloseRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "InteractionCloseResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "state",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "interaction_close_result.v1"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "InteractionCreateRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projectionId",
+        "interactionType",
+        "consent",
+        "requestBody"
+      ],
+      "properties": {
+        "projectionId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "interactionType": {
+          "enum": [
+            "ask",
+            "seed",
+            "resonance"
+          ]
+        },
+        "consent": {
+          "enum": [
+            "allow_owner_local_ai",
+            "manual_owner_only"
+          ]
+        },
+        "requestBody": {
+          "type": "string",
+          "maxLength": 12288
+        },
+        "replySecret": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "deleteSecret": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "guestCapsule": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/GuestCapsuleV1"
+            }
+          ]
+        }
+      }
+    },
+    "InteractionCreateResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "interactionId",
+        "state",
+        "expiresAt",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "interaction_create_result.v1"
+        },
+        "interactionId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "InteractionDeleteRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "InteractionDeleteResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "state",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "interaction_delete_result.v1"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "InteractionReadRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "InteractionReadResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "interaction"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "guest_interaction_status.v1"
+        },
+        "interaction": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/InteractionV1"
+        }
+      }
+    },
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*_[A-Za-z0-9_-]{16,128}$",
+      "maxLength": 160
+    },
+    "ProjectionReadRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ProjectionReadResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "view"
+      ],
+      "properties": {
+        "view": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionReadViewV1"
+        }
+      }
+    },
+    "ProjectionRevokeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ProjectionRevokeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lifecycle",
+        "receipt"
+      ],
+      "properties": {
+        "lifecycle": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionLifecycleV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "PublicEncounterIssueRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "encounterSecret"
+      ],
+      "properties": {
+        "encounterSecret": {
+          "$ref": "#/$defs/Capability32"
+        }
+      }
+    },
+    "PublicEncounterIssueResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "encounter",
+        "receipt"
+      ],
+      "properties": {
+        "encounter": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/PublicEncounterV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "PublicationRecoveryUnavailableResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "artifactClass",
+        "artifactId",
+        "state",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "publication_recovery_unavailable.v1"
+        },
+        "artifactClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "artifactId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "ResponseRevokeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ResponseRevokeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "responseState",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "response_revoke_result.v1"
+        },
+        "responseState": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomBindingRevokeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "RoomBindingRevokeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "bindingId",
+        "roomId",
+        "state",
+        "revokedAt",
+        "version",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_room_binding_revoke_result.v1"
+        },
+        "bindingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revokedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomCreateRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entityId",
+        "roomKind",
+        "label"
+      ],
+      "properties": {
+        "entityId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomKind": {
+          "enum": [
+            "third_place_public",
+            "private_grant_only"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      }
+    },
+    "RoomCreateResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "room",
+        "receipt"
+      ],
+      "properties": {
+        "room": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorAckRequestV1": {
+      "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomEventAckV1"
+    },
+    "RoomOperatorCycleAbandonRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservationId",
+        "startAuthorizationHash",
+        "sessionEnvelopeHash",
+        "transportJournalDispatches"
+      ],
+      "properties": {
+        "reservationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "transportJournalDispatches": {
+          "const": 0
+        }
+      }
+    },
+    "RoomOperatorCycleAbandonResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation",
+        "receipt"
+      ],
+      "properties": {
+        "reservation": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/FreshCycleReservationV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorCycleRecoverRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservationId",
+        "startAuthorizationHash",
+        "sessionEnvelopeHash"
+      ],
+      "properties": {
+        "reservationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      }
+    },
+    "RoomOperatorCycleRecoverResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation",
+        "receipt"
+      ],
+      "properties": {
+        "reservation": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/FreshCycleReservationV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorCycleReserveRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "startAuthorizationHash",
+        "sessionEnvelopeHash"
+      ],
+      "properties": {
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      }
+    },
+    "RoomOperatorCycleReserveResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservation",
+        "receipt"
+      ],
+      "properties": {
+        "reservation": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/FreshCycleReservationV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorDispatchIssueRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reservationId",
+        "sessionEnvelopeHash",
+        "startAuthorizationHash",
+        "provider",
+        "model",
+        "payloadHash",
+        "ordinal"
+      ],
+      "properties": {
+        "reservationId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "sessionEnvelopeHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "startAuthorizationHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "provider": {
+          "const": "OpenAI"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "payloadHash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      }
+    },
+    "RoomOperatorDispatchIssueResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "permit",
+        "syntheticTransport",
+        "receipt"
+      ],
+      "properties": {
+        "permit": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/DispatchPermitV1"
+        },
+        "syntheticTransport": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "upstreamEnabled"
+          ],
+          "properties": {
+            "upstreamEnabled": {
+              "const": false
+            }
+          }
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorLocalPurgeReceiptRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "localBytesAbsent"
+      ],
+      "properties": {
+        "localBytesAbsent": {
+          "const": true
+        }
+      }
+    },
+    "RoomOperatorLocalPurgeReceiptResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "localBytesAbsent",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "local_purge_result.v1"
+        },
+        "localBytesAbsent": {
+          "const": true
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorProjectionDeliverRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delivery"
+      ],
+      "properties": {
+        "delivery": {
+          "allOf": [
+            {
+              "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/HostedPublicationDeliveryV1"
+            },
+            {
+              "type": "object",
+              "required": [
+                "artifactClass"
+              ],
+              "properties": {
+                "artifactClass": {
+                  "const": "projection"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "RoomOperatorProjectionDeliverResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "projection",
+        "lifecycle",
+        "receipt"
+      ],
+      "properties": {
+        "projection": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionCapsuleV1"
+        },
+        "lifecycle": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionLifecycleV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorPullRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "RoomOperatorPullResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "interaction",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "room_operator_pull_result.v1"
+        },
+        "interaction": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/InteractionV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorResponseDeliverRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delivery"
+      ],
+      "properties": {
+        "delivery": {
+          "allOf": [
+            {
+              "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/HostedPublicationDeliveryV1"
+            },
+            {
+              "type": "object",
+              "required": [
+                "artifactClass"
+              ],
+              "properties": {
+                "artifactClass": {
+                  "const": "response"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "RoomOperatorResponseDeliverResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "responseId",
+        "interactionVersion",
+        "syntheticNotice",
+        "receipt"
+      ],
+      "properties": {
+        "responseId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "interactionVersion": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "syntheticNotice": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ReadyNoticeV1"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomOperatorStatusRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomId"
+      ],
+      "properties": {
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        }
+      }
+    },
+    "RoomOperatorStatusResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "room",
+        "interactions",
+        "synthetic",
+        "roomOperatorRequestHash"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "room_operator_status.v1"
+        },
+        "room": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/RoomV1"
+        },
+        "interactions": {
+          "type": "array",
+          "items": {
+            "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/InteractionV1"
+          }
+        },
+        "synthetic": {
+          "type": "boolean"
+        },
+        "roomOperatorRequestHash": {
+          "$ref": "#/$defs/Sha256"
+        }
+      }
+    },
+    "RoomOperatorSyncRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomId",
+        "afterSequence"
+      ],
+      "properties": {
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "afterSequence": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "RoomPairExchangeRecoveryExpiredResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "pairingId",
+        "roomId",
+        "expiresAt",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_pairing_exchange_recovery_expired.v1"
+        },
+        "pairingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomPairExchangeRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pairingCode",
+        "clientPublicKey"
+      ],
+      "properties": {
+        "pairingCode": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "clientPublicKey": {
+          "type": "string",
+          "minLength": 32,
+          "maxLength": 4096
+        }
+      }
+    },
+    "RoomPairExchangeResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "pairingId",
+        "bindingId",
+        "roomId",
+        "expiresAt",
+        "sealedCredential",
+        "version",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_pairing_exchange_result.v1"
+        },
+        "pairingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "bindingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "sealedCredential": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomPairRecoveryExpiredResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "pairingId",
+        "roomId",
+        "expiresAt",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_pairing_recovery_expired.v1"
+        },
+        "pairingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "RoomPairRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "RoomPairResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "pairingId",
+        "roomId",
+        "pairingCode",
+        "expiresAt",
+        "version",
+        "receipt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "synthetic_pairing_challenge_result.v1"
+        },
+        "pairingId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "roomId": {
+          "$ref": "#/$defs/OpaqueId"
+        },
+        "pairingCode": {
+          "$ref": "#/$defs/Capability32"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "receipt": {
+          "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/OperationReceiptV1"
+        }
+      }
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ThirdPlaceListRequestV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "ThirdPlaceListResultV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "residents"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "const": "third_place_list.v1"
+        },
+        "residents": {
+          "type": "array",
+          "items": {
+            "$ref": "https://forme.example/schemas/r4/protocol.proposed.v0.schema.json#/$defs/ProjectionCapsuleV1"
+          }
+        }
+      }
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    }
+  }
+}

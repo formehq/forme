@@ -1,0 +1,382 @@
+{
+  "schemaVersion": "r4_gate_a_evidence_bundle.v1",
+  "generatedAt": "2026-08-04T10:29:12.000Z",
+  "verdict": "GREEN_FOR_GATE_B_REVIEW",
+  "approvedPacketSha256": "sha256:e417836bd67bdef73f401919e83de3d58f68960499bd5c356951b48408adfff5",
+  "implementation": {
+    "branch": "codex/r4-gate-a-build",
+    "commit": "c23988e2c626a92d6d1a2dfacdce5ad089cdb4f7",
+    "tree": "fe1071da80310956c11fa0930ec63e710ee1d6e0",
+    "baseImplementationCommit": "e8fc2232609741733c1b7aca4729d99112e0a779"
+  },
+  "commands": [
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck",
+      "outcome": "pass"
+    },
+    {
+      "id": "spine",
+      "command": "npm run test:spine",
+      "outcome": "pass",
+      "passed": 45,
+      "failed": 0
+    },
+    {
+      "id": "r4_offline",
+      "command": "npm run test:r4:offline",
+      "outcome": "pass",
+      "passed": 293,
+      "failed": 0,
+      "externalNetworkDeniedBy": "scripts/deny-external-network.mjs"
+    },
+    {
+      "id": "static_audit",
+      "command": "npm run r4:audit",
+      "outcome": "pass",
+      "protocolFiles": 10,
+      "protocolAggregateSha256": "sha256:066d03e1cec744b3418c61c899d524430b4085478b4f130044eeb57ecc40e835",
+      "hostedFiles": 28,
+      "hostedAggregateSha256": "sha256:1ee9fbc02716e1f0f9a408e077d2b14d4fc7148dacbd463dee66786ae55bb32a",
+      "forbiddenCounts": 0
+    },
+    {
+      "id": "no_ai",
+      "command": "npm --workspace @forme/room run check:no-ai",
+      "outcome": "pass"
+    },
+    {
+      "id": "build",
+      "command": "NEXT_TELEMETRY_DISABLED=1 npm run room:build",
+      "outcome": "pass",
+      "routes": 8,
+      "routeChunksAudited": 18,
+      "dependencyTracesAudited": 9,
+      "forbiddenMarkers": 0,
+      "standaloneAssetsPrepared": true
+    },
+    {
+      "id": "walkthrough",
+      "command": "npm run --silent r4:walkthrough (twice; byte comparison)",
+      "outcome": "pass_byte_identical",
+      "aggregateSha256": "sha256:a09a4ff6208278e43a7d27a49f86c57d0ae302a933c1e6b2e193298cbf16fa56",
+      "rawJsonSha256WithoutFinalNewline": "sha256:684c2fa3644329c57b270ebfd6cc0de1d94e5418f426009d3fbaef79a86b7e75"
+    },
+    {
+      "id": "real_twin_probe",
+      "command": "npm run r4:probe-basis",
+      "outcome": "pass_body_and_path_free",
+      "reportedSourceBodyBytes": 0
+    },
+    {
+      "id": "browser",
+      "command": "FORME_R4_SYNTHETIC=1 HOSTNAME=127.0.0.1 PORT=32149 npm run room:start; npm exec --offline --yes agent-browser",
+      "outcome": "pass",
+      "server": "standalone",
+      "consoleErrors": 0,
+      "browserErrors": 0,
+      "screenshotSha256": "sha256:2f756f400579cb98bda02a43e3cf48b85a444ed690f3b91e816a36a81a9b8b14"
+    }
+  ],
+  "protocol": {
+    "objectCount": 39,
+    "supportingDefinitionCount": 14,
+    "totalDefinitionCount": 53,
+    "operationCount": 45,
+    "mutationCount": 39,
+    "readCount": 6,
+    "expectedVersionCount": 31,
+    "familyCounts": {
+      "public_guest": 13,
+      "controller": 18,
+      "curator": 2,
+      "room_operator": 12
+    },
+    "schemaBundleSha256": "sha256:e0c4795d5105c8a099d0e725c99834b526444d52468e8a2f064eb350a89178af",
+    "schemaIndexSha256": "sha256:8d772f383267291253af03f0a6ae1f5630296dc52367478b6deed76d3c4577ea",
+    "registryOrderSha256": "sha256:560b404cbae4105d4a59d63c3d68c32ad3493e964d4233d9da68d55bb85484b0",
+    "goldenFixtureBundleSha256": "sha256:2b852e34066066af2119760bee7d5749b4f89dbb634a7851fa4ce2831c754d5e"
+  },
+  "zeroExternalEffects": {
+    "realProviderCalls": 0,
+    "incrementalProviderSpendUsd": 0,
+    "realGuestBodyBytes": 0,
+    "externalEmailOrMessages": 0,
+    "hostedOrProductionMutations": 0,
+    "schemaMigrationsExecuted": 0,
+    "deploymentsOrPublicTrafficActions": 0,
+    "productionSecretsIssuedOrUsed": 0,
+    "realSourceBodyBytesInReports": 0,
+    "evidence": [
+      "r4_gate_a_static_audit.v1",
+      "r4.synthetic_walkthrough.v1",
+      "r4.real-twin-basis-probe.v1",
+      "offline network-denied test harness"
+    ]
+  },
+  "walkthrough": {
+    "deterministicClock": "2026-08-03T12:00:00.000Z",
+    "effects": {
+      "networkCalls": 0,
+      "providerCalls": 0,
+      "syntheticTransportDispatches": 1,
+      "externalEmailSends": 0,
+      "realGuestRecords": 0
+    },
+    "journeys": [
+      {
+        "id": "J1",
+        "steps": 5,
+        "transcriptSha256": "sha256:686065a03214c4b184697fc659789d71d6f5367c7bab5a6afdfeab1d2cc401d6"
+      },
+      {
+        "id": "J2",
+        "steps": 16,
+        "transcriptSha256": "sha256:42e00a0bd706d3c09a2e4798b380df14548850746bec78df81c9bddc87a21696"
+      },
+      {
+        "id": "J3",
+        "steps": 3,
+        "transcriptSha256": "sha256:494a5741b9f248acbdeb8bcdb94abb18503c105d14cf37ec1cb0fdf9aed1a2f7"
+      },
+      {
+        "id": "J4",
+        "steps": 5,
+        "transcriptSha256": "sha256:32ff4d6a01f25e3126ba7c73b100b6986ab5637e3f8ae642e715b02a787f536c"
+      },
+      {
+        "id": "J5",
+        "steps": 2,
+        "transcriptSha256": "sha256:57a1c5569ce3e23be6b668491a637133fc7d98792f14c2d53dc9f6df5231d76f"
+      }
+    ]
+  },
+  "realTwinProbe": {
+    "readOnly": true,
+    "bodyFree": true,
+    "twinRevision": 27,
+    "twinRevisionSha256": "sha256:05852a820a60a207296330b4981c0d4ad3f593d26574fef5b335adfc8f5505d3",
+    "workspaceContractSha256": "sha256:9cf2db074871219f22a5724ccff657c6cd0c0c2aa3cafb4fd92ee9f237ccc159",
+    "ownerFrameFactSha256": "sha256:e7e89c669c7e13c201f6ee3f264ab6345e48703b22c82aa1943e7556523c02f2",
+    "correctedReflectionId": "ref_705992a7ae63e403b601af34d16c5a54",
+    "correctedReflectionSha256": "sha256:49718c105f40f9c8e1c2b721183dd5f1a2597cc6874cc612212cee3327490261",
+    "r3ProposalId": "act_107c8748243c6ef3981e245ca7b0da3a",
+    "r3ReceiptIds": [
+      "eff_7a5ff5588d87b626eb0f8435c601c4c9",
+      "eff_4e73ebd064cf44233685ca34a087b107"
+    ],
+    "r3HistorySha256": "sha256:098d3d846e0944845a2986ba86a87cc334b2aa1a48abe14ed77fed104dd53a08",
+    "projectionBasisSha256": "sha256:f14317fc4f9ed08a2d5bbb0cb80d12eb32e330539468ad7b674dfb1e3e5ebbae",
+    "projectionPayloadSha256": "sha256:61ad4a44502d1b1ea69e5245a7af6b34ac34ab013a0e4e0fb555193cc96e5332",
+    "eligibilityClasses": [
+      "owner_frame",
+      "owner_corrected_reflection",
+      "rolled_back_history"
+    ],
+    "reportedSourceBodyBytes": 0
+  },
+  "requirements": {
+    "S01": [
+      "green_a",
+      "npm run test:spine:45/45"
+    ],
+    "S02": [
+      "green_a",
+      "test/{continuity,cognition,agency,recovery}.test.ts"
+    ],
+    "S03": [
+      "green_a_probe",
+      "r4.real-twin-basis-probe.v1:revision27/body0"
+    ],
+    "S04": [
+      "green_a",
+      "protocol-contract + local-projection eligibility vectors"
+    ],
+    "S05": [
+      "green_a",
+      "local-projection + publication-boundary revision/no-op vectors"
+    ],
+    "S06": [
+      "green_a",
+      "local-response-session:S06 + J2 before/after Twin hash"
+    ],
+    "S07": [
+      "green_a_b_physical_pending",
+      "local-cli + package-surface; official Workbench repeat remains Gate B"
+    ],
+    "D01": [
+      "green_a",
+      "publication-boundary + hosted-publication-boundary + P03 scans"
+    ],
+    "D02": [
+      "green_a_b_repeat_pending",
+      "protocol-matrix exhaustive generated matrix"
+    ],
+    "D03": [
+      "green_a_b_repeat_pending",
+      "hosted-web-agent-parity + production browser"
+    ],
+    "D04": [
+      "green_a_b_repeat_pending",
+      "protocol-contract + hosted-application J4"
+    ],
+    "D05": [
+      "green_a_b_repeat_pending",
+      "hosted-capabilities + hosted-lost-response-recovery"
+    ],
+    "D06": [
+      "green_a_b_repeat_pending",
+      "hosted-application J4 trusted use10/use11"
+    ],
+    "D07": [
+      "green_a_b_repeat_pending",
+      "hosted-gate-a-hardening concurrent replacement"
+    ],
+    "D08": [
+      "green_a_b_repeat_pending",
+      "hosted-capabilities two-order offer races"
+    ],
+    "D09": [
+      "green_a_b_repeat_pending",
+      "hosted-capabilities live-offer/invite/deadline vectors"
+    ],
+    "D10": [
+      "green_a_b_repeat_pending",
+      "hosted-control-races publish/terminal orders"
+    ],
+    "D11": [
+      "green_a_b_repeat_pending",
+      "hosted-control-races close/publish orders"
+    ],
+    "D12": [
+      "green_a_b_repeat_pending",
+      "hosted-gate-a-hardening D12"
+    ],
+    "D13": [
+      "green_a_b_repeat_pending",
+      "hosted-response-terminal + origin matrix"
+    ],
+    "F01": [
+      "green_a_b_physical_pending",
+      "local-fresh-session + local-gate-a-hardening denial inventory"
+    ],
+    "F02": [
+      "green_a_b_physical_pending",
+      "local-gate-a-hardening broker-only adapter"
+    ],
+    "F03": [
+      "green_a_b_repeat_pending",
+      "local-snapshot-broker adversarial vectors"
+    ],
+    "F04": [
+      "green_a_b_repeat_pending",
+      "protocol-contract SessionEnvelope subset + orientation tests"
+    ],
+    "F05": [
+      "green_a_b_physical_pending",
+      "local-gate-a-hardening runtime-policy negatives"
+    ],
+    "F06": [
+      "green_a_b_repeat_pending",
+      "local-fresh-session cycle recovery/races"
+    ],
+    "F07": [
+      "green_a_b_repeat_pending",
+      "local-fresh-session permit/destructive orders"
+    ],
+    "F08": [
+      "green_a_b_repeat_pending",
+      "local-fresh-session 17 event-fence subcases"
+    ],
+    "F09": [
+      "green_a_b_repeat_pending",
+      "manual-only zero-dispatch spy"
+    ],
+    "F10": [
+      "green_a_b_physical_pending",
+      "local-gate-a-hardening hard-budget fake transport"
+    ],
+    "F11": [
+      "green_a_b_physical_pending",
+      "local-runtime-cleanup + supervisor terminal matrix"
+    ],
+    "F12": [
+      "green_a_b_physical_pending",
+      "local-lock-candidate + reverse-isolation analogue"
+    ],
+    "F13": [
+      "green_a_b_repeat_pending",
+      "session receipt schema/body-path-free canary"
+    ],
+    "E01": [
+      "green_a_b_repeat_pending",
+      "20 named fault points converge"
+    ],
+    "E02": [
+      "green_a_b_repeat_pending",
+      "four operation pairings + lock/lease/replay tests"
+    ],
+    "E03": [
+      "green_a_b_repeat_pending",
+      "hosted-lost-response-recovery all capability classes"
+    ],
+    "E04": [
+      "green_a_b_repeat_pending",
+      "ledger sync + hosted event compaction"
+    ],
+    "E05": [
+      "green_a_b_repeat_pending",
+      "local-ledger-sync read-only status spies"
+    ],
+    "E06": [
+      "green_a_b_repeat_c_production_pending",
+      "hosted-retention-janitor + actual-store batch100"
+    ],
+    "E07": [
+      "green_a_b_repeat_pending",
+      "runtime cleanup expiry + terminal event sync"
+    ],
+    "E08": [
+      "green_a_b_repeat_pending",
+      "hosted-notification-control verification cross-product"
+    ],
+    "E09": [
+      "green_a_b_repeat_pending",
+      "hosted-notification-control + response-terminal"
+    ],
+    "E10": [
+      "green_a_b_repeat_c_production_pending",
+      "fake provider crash/reconcile suite"
+    ],
+    "E11": [
+      "green_a_b_repeat_c_production_pending",
+      "post-handoff race + late body-free refinement"
+    ],
+    "P01": [
+      "deferred_by_design_b_repeat",
+      "exact PostgreSQL execution forbidden in Gate A; proposed contract only"
+    ],
+    "P02": [
+      "green_a",
+      "AST source audit + built chunk/trace audit"
+    ],
+    "P03": [
+      "green_a_b_repeat_c_production_pending",
+      "hosted/local surface×canary matrices"
+    ]
+  },
+  "laterGateConditions": {
+    "gateB": [
+      "execute exact disposable PostgreSQL schema/role/encryption validation",
+      "repeat fake analogues against exact persistence",
+      "official Codex zero-thread/zero-turn capability probe",
+      "installed macOS boundary composition probe"
+    ],
+    "gateC": [
+      "real identity/edge/origin/log/backup/email/deploy facts",
+      "real Guest or hosted production encounter",
+      "production migration or public traffic"
+    ]
+  },
+  "firstProviderCallTestGrant": "NOT_REQUESTED"
+}

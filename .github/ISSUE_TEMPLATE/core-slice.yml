@@ -47,8 +47,7 @@ body:
     attributes:
       label: Owner stop gates
       options:
-        - label: Durable state or schema changes
-        - label: Agent context or authority changes
-        - label: Privacy or projection changes
-        - label: Foundational dependency or deployment changes
+        - label: Product meaning, authorship, privacy, or trust changes
+        - label: Real/private data, provider, production, publication, messaging, credentials, spend, or merge
+        - label: Destructive or meaning-changing durable migration
         - label: None

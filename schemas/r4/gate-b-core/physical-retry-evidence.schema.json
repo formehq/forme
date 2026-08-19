@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forme.local/schemas/r4/gate-b-core/physical-retry-evidence.schema.json",
+  "title": "R4 Gate B Successor Physical Retry Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "terminalStatus", "reasonCode", "manifestSha256", "executionGrantSha256", "hostBindingId", "hostBindingCapsuleSha256", "implementationHead", "implementationTree", "publicationHead", "publicationTree", "laneOrder", "postgres", "codex", "macos", "journalAggregateSha256", "cleanupStatus", "firstProviderCallGrant", "aggregateVerdict"],
+  "properties": {
+    "schemaVersion": { "const": "r4_gate_b_physical_retry_evidence.v1" },
+    "terminalStatus": { "enum": ["COMPLETED_YELLOW", "TERMINAL_YELLOW", "TERMINAL_RED", "RED_QUARANTINED"] },
+    "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+    "manifestSha256": { "$ref": "#/$defs/sha" },
+    "executionGrantSha256": { "$ref": "#/$defs/sha" },
+    "hostBindingId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+    "hostBindingCapsuleSha256": { "$ref": "#/$defs/sha" },
+    "implementationHead": { "$ref": "#/$defs/gitObject" },
+    "implementationTree": { "$ref": "#/$defs/gitObject" },
+    "publicationHead": { "$ref": "#/$defs/gitObject" },
+    "publicationTree": { "$ref": "#/$defs/gitObject" },
+    "laneOrder": { "const": ["postgres", "codex", "macos", "cleanup", "evidence", "stop"] },
+    "postgres": { "anyOf": [{ "$ref": "#/$defs/postgres" }, { "type": "null" }] },
+    "codex": { "anyOf": [{ "$ref": "#/$defs/codex" }, { "type": "null" }] },
+    "macos": { "anyOf": [{ "$ref": "#/$defs/macos" }, { "type": "null" }] },
+    "journalAggregateSha256": { "$ref": "#/$defs/sha" },
+    "cleanupStatus": { "enum": ["GREEN", "RED_QUARANTINED"] },
+    "firstProviderCallGrant": { "const": "NOT_REQUESTED" },
+    "aggregateVerdict": { "enum": ["YELLOW", "RED"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "terminalStatus": { "const": "COMPLETED_YELLOW" } }, "required": ["terminalStatus"] },
+      "then": { "properties": { "reasonCode": { "const": "CLEAN_ZERO_PROVIDER_RETRY" }, "postgres": { "$ref": "#/$defs/postgres" }, "codex": { "$ref": "#/$defs/codex" }, "macos": { "allOf": [{ "$ref": "#/$defs/macos" }, { "type": "object", "properties": { "status": { "const": "GREEN_TRANSIENT_MACOS_MECHANISM_ONLY" } } }] }, "cleanupStatus": { "const": "GREEN" }, "aggregateVerdict": { "const": "YELLOW" } } }
+    },
+    {
+      "if": { "properties": { "terminalStatus": { "enum": ["TERMINAL_RED", "RED_QUARANTINED"] } }, "required": ["terminalStatus"] },
+      "then": { "properties": { "aggregateVerdict": { "const": "RED" } } }
+    },
+    {
+      "if": { "properties": { "terminalStatus": { "const": "TERMINAL_YELLOW" } }, "required": ["terminalStatus"] },
+      "then": { "properties": { "cleanupStatus": { "const": "GREEN" }, "aggregateVerdict": { "const": "YELLOW" } } }
+    },
+    {
+      "if": { "properties": { "terminalStatus": { "const": "TERMINAL_RED" } }, "required": ["terminalStatus"] },
+      "then": { "properties": { "cleanupStatus": { "const": "GREEN" } } }
+    },
+    {
+      "if": { "properties": { "terminalStatus": { "const": "RED_QUARANTINED" } }, "required": ["terminalStatus"] },
+      "then": { "properties": { "cleanupStatus": { "const": "RED_QUARANTINED" } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "macos": {
+            "type": "object",
+            "properties": { "status": { "enum": ["RED", "RED_QUARANTINED"] } },
+            "required": ["status"]
+          }
+        },
+        "required": ["macos"]
+      },
+      "then": {
+        "properties": {
+          "terminalStatus": { "enum": ["TERMINAL_RED", "RED_QUARANTINED"] },
+          "aggregateVerdict": { "const": "RED" }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "macos": {
+            "type": "object",
+            "properties": { "helperReasonCode": { "const": "candidate_binding_drift" } },
+            "required": ["helperReasonCode"]
+          }
+        },
+        "required": ["macos"]
+      },
+      "then": {
+        "properties": {
+          "terminalStatus": { "enum": ["TERMINAL_RED", "RED_QUARANTINED"] },
+          "aggregateVerdict": { "const": "RED" }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "gitObject": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "postgres": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "namedFamilies", "executableCases", "orderedExecutions", "coreCalls", "recoveryCallsValidated", "successful2xx", "controlledNon2xx", "newReceipts", "persistedVerifiers", "readinessAttempts", "rollbackPassed", "reapplyPassed", "cleanupStatus"],
+      "properties": {
+        "status": { "const": "POSTGRES_CORE_LANE_GREEN" },
+        "namedFamilies": { "const": 13 },
+        "executableCases": { "const": 16 },
+        "orderedExecutions": { "const": 32 },
+        "coreCalls": { "const": 68 },
+        "recoveryCallsValidated": { "const": 4 },
+        "successful2xx": { "const": 39 },
+        "controlledNon2xx": { "const": 29 },
+        "newReceipts": { "const": 37 },
+        "persistedVerifiers": { "const": 32 },
+        "readinessAttempts": { "type": "integer", "minimum": 1, "maximum": 30 },
+        "rollbackPassed": { "const": true },
+        "reapplyPassed": { "const": true },
+        "cleanupStatus": { "const": "GREEN" }
+      }
+    },
+    "codex": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reportedVersion", "schemaFileCount", "schemaAggregateSha256", "processStartSlotsConsumed", "processGroupsStarted", "clientWrites", "serverResponses", "serverRequests", "serverNotifications", "receiveBufferEmptyBeforeSecondWrite", "preSecondWriteViolationObserved", "postSecondWriteViolationObserved", "allStartedGroupsReaped", "allStartedGroupsAbsent", "exitCodes", "stderrBytes", "schemaStdoutBytes", "threadStarts", "turnStarts", "providerCalls", "providerBytes", "networkAuthority", "networkTransmittedBytes", "networkSyscallAttemptAbsenceClaimed", "causalFinality", "postResponseFinalityProven", "aiLaneEnabled", "cleanupStatus"],
+      "properties": {
+        "status": { "const": "CODEX_ZERO_CALL_PHYSICAL_OBSERVED_GREEN" },
+        "reportedVersion": { "const": "codex-cli 0.145.0" },
+        "schemaFileCount": { "const": 273 },
+        "schemaAggregateSha256": { "const": "sha256:313baf8277ad3b5a3efdbfe1388762f0f41305ef0ea60c3e170c6bc28ec00a62" },
+        "processStartSlotsConsumed": { "const": 4 },
+        "processGroupsStarted": { "const": 4 },
+        "clientWrites": { "const": 2 },
+        "serverResponses": { "const": 1 },
+        "serverRequests": { "const": 0 },
+        "serverNotifications": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "receiveBufferEmptyBeforeSecondWrite": { "const": true },
+        "preSecondWriteViolationObserved": { "const": false },
+        "postSecondWriteViolationObserved": { "const": false },
+        "allStartedGroupsReaped": { "const": true },
+        "allStartedGroupsAbsent": { "const": true },
+        "exitCodes": { "const": [0, 0, 0, 0] },
+        "stderrBytes": { "const": 0 },
+        "schemaStdoutBytes": { "const": 0 },
+        "threadStarts": { "const": 0 },
+        "turnStarts": { "const": 0 },
+        "providerCalls": { "const": 0 },
+        "providerBytes": { "const": 0 },
+        "networkAuthority": { "const": 0 },
+        "networkTransmittedBytes": { "const": 0 },
+        "networkSyscallAttemptAbsenceClaimed": { "const": false },
+        "causalFinality": { "const": "UNPROVEN_ACCEPTED" },
+        "postResponseFinalityProven": { "const": false },
+        "aiLaneEnabled": { "const": false },
+        "cleanupStatus": { "const": "GREEN" }
+      }
+    },
+    "macos": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reasonCode", "helperReceiptSha256", "helperReceiptValidated", "helperReasonCode", "terminal", "presenceCeremonies", "presenceCeremoniesObserved", "handoffCount", "handoffCountObserved", "helperControlledZeroizationPassed", "helperCleanupPassed", "outerCleanupPassed", "helperSeatbeltApplied", "transientProviderProfileExecutionCount", "realProviderChildStarts", "candidateBodyFilesCreated", "candidateBodyStdoutBytes", "candidateBodyStderrBytes", "certificateSha256", "preSignExecutableSha256", "preSignPayloadInventorySha256", "signedBundleInventorySha256", "postSignExecutableSha256", "entitlementsSha256", "designatedRequirementSha256", "signatureStrictValidated", "runtimeIdentityValidated", "networkSampleZero", "defaultKeychainMetadataEqual", "searchListMetadataEqual", "customTemporaryKeychainOperations", "securityLifecycleSubcommands", "identityInventoryReads", "signingPrivateKeyUses", "defaultKeychainMetadataReads", "searchListMetadataReads", "securityCliInvocations", "codesignCliInvocations", "opensslCliInvocations"],
+      "properties": {
+        "status": { "enum": ["GREEN_TRANSIENT_MACOS_MECHANISM_ONLY", "YELLOW", "RED", "RED_QUARANTINED"] },
+        "reasonCode": { "type": "string", "pattern": "^[A-Z0-9_]+$" },
+        "helperReceiptSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "helperReceiptValidated": { "type": "boolean" },
+        "helperReasonCode": { "enum": ["approve_exact", "discard", "authority_expired", "controlled_failure", "candidate_binding_drift", null] },
+        "terminal": { "enum": ["approve_exact", "discard", "authority_expired", "controlled_failure", null] },
+        "presenceCeremonies": { "type": ["integer", "null"], "minimum": 0, "maximum": 1 },
+        "presenceCeremoniesObserved": { "type": "boolean" },
+        "handoffCount": { "type": ["integer", "null"], "minimum": 0, "maximum": 1 },
+        "handoffCountObserved": { "type": "boolean" },
+        "helperControlledZeroizationPassed": { "type": ["boolean", "null"] },
+        "helperCleanupPassed": { "type": ["boolean", "null"] },
+        "outerCleanupPassed": { "type": "boolean" },
+        "helperSeatbeltApplied": { "const": false },
+        "transientProviderProfileExecutionCount": { "const": 0 },
+        "realProviderChildStarts": { "const": 0 },
+        "candidateBodyFilesCreated": { "const": 0 },
+        "candidateBodyStdoutBytes": { "const": 0 },
+        "candidateBodyStderrBytes": { "const": 0 },
+        "certificateSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "preSignExecutableSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "preSignPayloadInventorySha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "signedBundleInventorySha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "postSignExecutableSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "entitlementsSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "designatedRequirementSha256": { "anyOf": [{ "$ref": "#/$defs/sha" }, { "type": "null" }] },
+        "signatureStrictValidated": { "type": "boolean" },
+        "runtimeIdentityValidated": { "type": "boolean" },
+        "networkSampleZero": { "type": "boolean" },
+        "defaultKeychainMetadataEqual": { "type": ["boolean", "null"] },
+        "searchListMetadataEqual": { "type": ["boolean", "null"] },
+        "customTemporaryKeychainOperations": { "type": "integer", "minimum": 0, "maximum": 16 },
+        "securityLifecycleSubcommands": { "type": "integer", "minimum": 0, "maximum": 14 },
+        "identityInventoryReads": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "signingPrivateKeyUses": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "defaultKeychainMetadataReads": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "searchListMetadataReads": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "securityCliInvocations": { "type": "integer", "minimum": 0, "maximum": 21 },
+        "codesignCliInvocations": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "opensslCliInvocations": { "type": "integer", "minimum": 0, "maximum": 2 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "GREEN_TRANSIENT_MACOS_MECHANISM_ONLY" } }, "required": ["status"] },
+          "then": {
+            "properties": {
+              "helperReceiptSha256": { "$ref": "#/$defs/sha" },
+              "helperReceiptValidated": { "const": true },
+              "helperReasonCode": { "const": "approve_exact" },
+              "terminal": { "const": "approve_exact" },
+              "presenceCeremonies": { "const": 1 },
+              "presenceCeremoniesObserved": { "const": true },
+              "handoffCount": { "const": 1 },
+              "handoffCountObserved": { "const": true },
+              "helperControlledZeroizationPassed": { "const": true },
+              "helperCleanupPassed": { "const": true },
+              "outerCleanupPassed": { "const": true },
+              "certificateSha256": { "$ref": "#/$defs/sha" },
+              "preSignExecutableSha256": { "$ref": "#/$defs/sha" },
+              "preSignPayloadInventorySha256": { "$ref": "#/$defs/sha" },
+              "signedBundleInventorySha256": { "$ref": "#/$defs/sha" },
+              "postSignExecutableSha256": { "$ref": "#/$defs/sha" },
+              "entitlementsSha256": { "$ref": "#/$defs/sha" },
+              "designatedRequirementSha256": { "$ref": "#/$defs/sha" },
+              "signatureStrictValidated": { "const": true },
+              "runtimeIdentityValidated": { "const": true },
+              "networkSampleZero": { "const": true },
+              "defaultKeychainMetadataEqual": { "const": true },
+              "searchListMetadataEqual": { "const": true },
+              "customTemporaryKeychainOperations": { "const": 12 },
+              "securityLifecycleSubcommands": { "const": 10 },
+              "identityInventoryReads": { "const": 1 },
+              "signingPrivateKeyUses": { "const": 1 },
+              "defaultKeychainMetadataReads": { "const": 2 },
+              "searchListMetadataReads": { "const": 2 },
+              "securityCliInvocations": { "const": 15 },
+              "codesignCliInvocations": { "const": 5 },
+              "opensslCliInvocations": { "const": 2 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "helperReceiptValidated": { "const": false } }, "required": ["helperReceiptValidated"] },
+          "then": {
+            "properties": {
+              "helperReceiptSha256": { "type": "null" },
+              "helperReasonCode": { "type": "null" },
+              "terminal": { "type": "null" },
+              "presenceCeremonies": { "type": "null" },
+              "presenceCeremoniesObserved": { "const": false },
+              "handoffCount": { "type": "null" },
+              "handoffCountObserved": { "const": false },
+              "helperControlledZeroizationPassed": { "type": "null" },
+              "helperCleanupPassed": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "helperReceiptValidated": { "const": true } }, "required": ["helperReceiptValidated"] },
+          "then": {
+            "properties": {
+              "helperReceiptSha256": { "$ref": "#/$defs/sha" },
+              "helperReasonCode": { "enum": ["approve_exact", "discard", "authority_expired", "controlled_failure", "candidate_binding_drift"] },
+              "terminal": { "enum": ["approve_exact", "discard", "authority_expired", "controlled_failure"] },
+              "presenceCeremonies": { "type": "integer", "minimum": 0, "maximum": 1 },
+              "presenceCeremoniesObserved": { "const": true },
+              "handoffCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+              "handoffCountObserved": { "const": true },
+              "helperControlledZeroizationPassed": { "const": true },
+              "helperCleanupPassed": { "const": true }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "terminal": { "const": "approve_exact" } }, "required": ["terminal"] },
+          "then": { "properties": { "helperReasonCode": { "const": "approve_exact" }, "presenceCeremonies": { "const": 1 }, "handoffCount": { "const": 1 } } }
+        },
+        {
+          "if": { "properties": { "terminal": { "const": "discard" } }, "required": ["terminal"] },
+          "then": { "properties": { "helperReasonCode": { "const": "discard" }, "presenceCeremonies": { "const": 1 }, "handoffCount": { "const": 0 } } }
+        },
+        {
+          "if": { "properties": { "terminal": { "const": "authority_expired" } }, "required": ["terminal"] },
+          "then": { "properties": { "helperReasonCode": { "const": "authority_expired" }, "handoffCount": { "const": 0 } } }
+        },
+        {
+          "if": { "properties": { "terminal": { "const": "controlled_failure" } }, "required": ["terminal"] },
+          "then": { "properties": { "helperReasonCode": { "enum": ["controlled_failure", "candidate_binding_drift"] }, "handoffCount": { "const": 0 } } }
+        },
+        {
+          "if": { "properties": { "helperReasonCode": { "const": "candidate_binding_drift" } }, "required": ["helperReasonCode"] },
+          "then": { "properties": { "status": { "const": "RED" } } }
+        },
+        {
+          "if": { "properties": { "status": { "enum": ["GREEN_TRANSIENT_MACOS_MECHANISM_ONLY", "YELLOW", "RED"] } }, "required": ["status"] },
+          "then": { "properties": { "outerCleanupPassed": { "const": true } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "RED_QUARANTINED" } }, "required": ["status"] },
+          "then": { "properties": { "outerCleanupPassed": { "const": false } } }
+        }
+      ]
+    }
+  }
+}
