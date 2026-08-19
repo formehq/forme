@@ -11,6 +11,8 @@ import {
   validateProjectionCapsuleV1,
 } from "../packages/r4-protocol/src/index.ts";
 import { loadPublicCoreLocalRuntimeV1 } from "../apps/room/src/public-core-local-runtime.ts";
+import { PublicCoreApplicationError } from "../apps/room/src/public-core-application.ts";
+import { dispatchLocalPublicCoreApiV1 } from "../apps/room/src/http.ts";
 import {
   createPublicCoreIdentityPortV1,
   derivePublicCoreLocalActorScopeDigestV1,
@@ -196,18 +198,73 @@ async function writeRuntimeRoot(input) {
   }));
 }
 
-function operation(runtime, action, options = {}) {
+async function operation(runtime, action, options = {}) {
   const definition = operationDefinition(action);
-  return runtime.runCore({
-    definition,
-    params: options.params ?? {},
-    body: options.body ?? {},
-    authorization: options.secret ? `Bearer ${options.secret}` : null,
-    syntheticActor: null,
-    syntheticClientBucket: null,
-    idempotencyKey: definition.mutating ? options.idempotencyKey : null,
-    expectedVersion: options.expectedVersion ?? null,
-  });
+  try {
+    return await runtime.runCore({
+      definition,
+      params: options.params ?? {},
+      body: options.body ?? {},
+      authorization: options.secret ? `Bearer ${options.secret}` : null,
+      syntheticActor: null,
+      syntheticClientBucket: null,
+      idempotencyKey: definition.mutating ? options.idempotencyKey : null,
+      expectedVersion: options.expectedVersion ?? null,
+    });
+  } catch (error) {
+    if (error instanceof PublicCoreApplicationError && /^[a-z0-9_]{1,80}$/u.test(error.code)) {
+      fail(`local_runtime_operation_${error.code}`, `product.${action}`);
+    }
+    fail("local_runtime_operation_failed", `product.${action}`);
+  }
+}
+
+function apiPath(definition, params) {
+  return definition.path.split("/").map((part) => {
+    if (!part.startsWith(":")) return part;
+    const value = params?.[part.slice(1)];
+    if (typeof value !== "string") fail("local_runtime_http_path_invalid", `product.http.${definition.name}`);
+    return encodeURIComponent(value);
+  }).join("/");
+}
+
+async function apiOperation(runtime, action, options = {}) {
+  const definition = operationDefinition(action);
+  const path = apiPath(definition, options.params ?? {});
+  const headers = new Headers({ "Content-Type": "application/json" });
+  if (options.secret) headers.set("Authorization", `Bearer ${options.secret}`);
+  if (definition.mutating) {
+    if (typeof options.idempotencyKey !== "string") {
+      fail("local_runtime_http_idempotency_invalid", `product.http.${action}`);
+    }
+    headers.set("Idempotency-Key", options.idempotencyKey);
+  }
+  if (definition.expectedVersion && !Number.isSafeInteger(options.expectedVersion)) {
+    fail("local_runtime_http_version_invalid", `product.http.${action}`);
+  }
+  if (options.expectedVersion !== undefined) headers.set("If-Match", String(options.expectedVersion));
+  const response = await dispatchLocalPublicCoreApiV1(new Request(`http://127.0.0.1/api/v1${path}`, {
+    method: definition.method,
+    headers,
+    body: definition.method === "GET" ? undefined : JSON.stringify(options.body ?? {}),
+  }), path.slice(1).split("/"), runtime);
+  let body;
+  try {
+    body = await response.json();
+  } catch {
+    fail("local_runtime_http_response_invalid", `product.http.${action}`);
+  }
+  if (body === null || typeof body !== "object" || Array.isArray(body)) {
+    fail("local_runtime_http_response_invalid", `product.http.${action}`);
+  }
+  if (!response.ok) {
+    const code = body.error && typeof body.error === "object" && typeof body.error.code === "string"
+      && /^[a-z0-9_]{1,80}$/u.test(body.error.code)
+      ? body.error.code
+      : "request_failed";
+    fail(`local_runtime_http_${code}`, `product.http.${action}`);
+  }
+  return Object.freeze({ status: response.status, body });
 }
 
 function deriveBindingSecret(input) {
@@ -225,7 +282,7 @@ function deriveBindingSecret(input) {
   const identity = createPublicCoreIdentityPortV1(input.identityKeyBytes);
   try {
     return identity.deriveSecret({
-      purpose: "operation",
+      purpose: "room_binding",
       action: "room.pair.exchange",
       actorScopeDigest,
       idempotencyKey: input.idempotencyKey,
@@ -310,6 +367,7 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
       projectionDelivered: false,
       curatorAdmitted: false,
       publicModeOpened: false,
+      projectionRead: false,
       encounterHours: 0,
       interactionCreated: false,
       runtimeReloaded: false,
@@ -439,7 +497,7 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
     if (typeof pairingId !== "string" || typeof pairingCode !== "string") fail("local_runtime_pairing_invalid", "product.room.pair");
     const exchangeKey = `exchange_${runId.padEnd(32, "0")}`;
     const clientPublicKey = `local-loopback-client-${runId}`;
-    const exchanged = await operation(loaded.runtime, "room.pair.exchange", {
+    const exchanged = await apiOperation(loaded.runtime, "room.pair.exchange", {
       params: { pairingId },
       body: { pairingCode, clientPublicKey },
       idempotencyKey: exchangeKey,
@@ -475,14 +533,22 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
       params: { roomId },
       body: { interactionMode: "public_single" },
       idempotencyKey: `open_${runId.padEnd(32, "0")}`,
-      expectedVersion: 1,
+      expectedVersion: 2,
     });
     if (opened.status !== 200) fail("local_runtime_mode_open_invalid", "product.room.mode.open");
     result.outcome.publicModeOpened = true;
-    const listed = await operation(loaded.runtime, "third_place.list");
+    const listed = await apiOperation(loaded.runtime, "third_place.list");
     if (!Array.isArray(listed.body.residents) || listed.body.residents.length !== 1) fail("local_runtime_discovery_invalid", "product.third_place.list");
+    const read = await apiOperation(loaded.runtime, "projection.read", {
+      params: { projectionId: projectionValue.projectionId },
+    });
+    const readProjection = read.body.projection ?? read.body.view?.projection;
+    if (read.status !== 200 || readProjection?.projectionId !== projectionValue.projectionId) {
+      fail("local_runtime_projection_read_invalid", "product.projection.read");
+    }
+    result.outcome.projectionRead = true;
     const encounterSecret = capability();
-    const encounter = await operation(loaded.runtime, "public_encounter.issue", {
+    const encounter = await apiOperation(loaded.runtime, "public_encounter.issue", {
       params: { projectionId: projectionValue.projectionId },
       body: { encounterSecret },
       idempotencyKey: `encounter_${runId.padEnd(32, "0")}`,
@@ -492,7 +558,7 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
     if (result.outcome.encounterHours <= 23.9 || result.outcome.encounterHours > 24.1) fail("local_runtime_encounter_window_invalid", "product.public_encounter.issue");
     const replySecret = capability();
     const deleteSecret = capability();
-    const interaction = await operation(loaded.runtime, "interaction.create", {
+    const interaction = await apiOperation(loaded.runtime, "interaction.create", {
       secret: encounterSecret,
       body: {
         projectionId: projectionValue.projectionId,
@@ -533,10 +599,10 @@ export async function runLocalPublicCoreRuntimeRehearsal(options) {
       params: { roomId },
       body: { interactionMode: "closed" },
       idempotencyKey: `close_${runId.padEnd(32, "0")}`,
-      expectedVersion: 2,
+      expectedVersion: 3,
     });
     if (closed.status !== 200) fail("local_runtime_mode_close_invalid", "product.room.mode.close");
-    const deleted = await operation(loaded.runtime, "interaction.delete", {
+    const deleted = await apiOperation(loaded.runtime, "interaction.delete", {
       secret: deleteSecret,
       params: { interactionId },
       idempotencyKey: `delete_${runId.padEnd(32, "0")}`,
