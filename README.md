@@ -11,21 +11,20 @@ R1 Continuity, R2 Cognition and R3 Bounded Agency are Owner-accepted. R4
 Controlled Presence is the active product gate.
 
 The repository contains a reviewable local Room, Durable Public Core and
-PostgreSQL adapter. Synthetic repository tests and disposable persistence
-proofs are Green. The product outcome is not yet complete: the full synthetic
-Guest flow, a deployment-shaped integration decision and one
-Owner-experienced Guest encounter remain open in
+PostgreSQL adapter. The complete local synthetic Guest arrival now crosses the
+real HTTP membrane, survives a runtime reload and reaches durable operator
+sync/pull with exact cleanup. The product outcome is not yet complete: one
+Owner-experienced Guest encounter remains open in
 [Issue #67](https://github.com/formehq/forme/issues/67).
 
-The project is currently at a clean-restart integration checkpoint. Historical
+The project is currently at a clean-restart #67 technical checkpoint. Historical
 control packets and evidence remain available, but the default working set is
 deliberately small and ordinary engineering now proceeds inside one
 outcome-level boundary rather than through per-file or per-attempt approval.
-PR #78 carries the reviewed R4 development baseline; its GitHub state records
-whether that baseline has entered `main`. Integration does not complete #67 or
-imply Owner Experience Acceptance. No production access, public traffic,
-provider call, real/private Guest data, deployment or Gate C authority follows
-from the local proofs.
+PR #78 established the R4 development baseline on `main`. The current
+synthetic product proof does not complete #67 or imply Owner Experience
+Acceptance. No production access, public traffic, provider call, real/private
+Guest data, deployment or Gate C authority follows from the local proofs.
 
 ## Start here
 
@@ -59,8 +58,9 @@ Useful bounded entry points:
     npm run r4:walkthrough
     npm run r4:docs:audit
 
-Runtime rehearsals can create local resources and are not implied by a normal
-test run. Use only the explicitly approved campaign for those effects.
+Runtime rehearsals create disposable local resources and are not implied by a
+normal test run. Keep them loopback-only, synthetic-data-only and exact-owned;
+the explicit `:pull` variant may acquire only its digest-pinned public image.
 
 ## Repository map
 

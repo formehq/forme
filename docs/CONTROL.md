@@ -2,9 +2,10 @@
 
 ## Product delta
 
-0 Product Progress from the context-distillation and clean-restart work. They
-change how the project is understood, integrated and managed; they do not add
-a Guest or Owner capability.
+The clean restart itself contributed 0 Product Progress. The first resumed #67
+product-path increment is now Green: one complete synthetic Guest arrival
+crosses the real HTTP membrane, persists through runtime reload and reaches the
+Owner-local operator sync/pull boundary.
 
 R1 Continuity, R2 Cognition and R3 Bounded Agency are accepted. R4 Controlled
 Presence remains open in
@@ -12,8 +13,9 @@ Presence remains open in
 
 ## Next user-visible acceptance point
 
-One bounded synthetic Guest journey must work through the real local product
-path, followed by one Owner-experienced encounter:
+The bounded synthetic Guest journey now works through the real local product
+path. The next user-visible acceptance point is one Owner-experienced
+encounter following the same sequence:
 
 1. the Owner publishes a bounded Projection;
 2. a Guest can discover it and knock;
@@ -22,19 +24,17 @@ path, followed by one Owner-experienced encounter:
 5. the Owner sees the result through the Native Harness boundary;
 6. the Owner judges whether the encounter feels like Forme.
 
-Repository integration and infrastructure proof are prerequisites, not this
-acceptance point.
+The synthetic run is Technical Review evidence, not this acceptance point.
 
 ## Current blocker and next action
 
-The Durable Public Core and PostgreSQL path have repository and disposable
-local proof. PR #78 carries the reviewed fail-closed integration baseline;
-when this revision is present on `main`, the integration blocker is removed
-without closing #67 or claiming product acceptance.
+PR #78 established the fail-closed integration baseline. The resumed #67 run
+found and corrected the real pairing-secret purpose, Room version chain and
+sync-receipt finalization defects. The current change must pass exact-tip
+Technical Review and integration before a real activation decision.
 
-The immediate engineering action after integration is to resume #67 under one
-outcome envelope for the complete synthetic Room/knock flow. Do not return to
-cache-chasing, server inventory or standalone Enabler work unless that flow
+After integration, return to the Owner for one bounded activation/experience
+envelope. Do not start #68 or create an Enabler unless the #67 encounter
 exposes a concrete blocker.
 
 ## Current evidence
@@ -47,6 +47,13 @@ exposes a concrete blocker.
 - consolidated integration was reviewed in PR
   [#78](https://github.com/formehq/forme/pull/78);
 - its exact tip passed full local proof and remote CI before integration;
+- the complete local synthetic arrival is `GREEN_CLEAN` through pairing,
+  Projection delivery, Curator admission, HTTP discovery/read/knock, a 24-hour
+  encounter, encrypted Interaction persistence, runtime reload, operator
+  sync/pull and Guest deletion;
+- the rehearsal proved zero Provider, external-message, Production, public
+  traffic and Gate C effects, plus exact container/network/volume/private-root
+  cleanup;
 - no live server inventory, isolated staging run or Owner-experienced Guest
   encounter has been completed.
 

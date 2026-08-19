@@ -56,11 +56,11 @@ baseline without claiming that its product issue is Done.
 - R1–R3 are accepted.
 - R4 Controlled Presence is open.
 - Local synthetic and disposable persistence proofs are Green.
-- PR #78 carries the clean integration baseline. When this revision is present
-  on `main`, integration is complete without closing #67 or implying Owner
-  Experience Acceptance.
-- End-to-end product integration and one Owner-experienced Guest encounter
-  remain open.
+- PR #78 established the clean integration baseline on `main` without closing
+  #67 or implying Owner Experience Acceptance.
+- The synthetic #67 arrival path is Green through the real HTTP membrane,
+  runtime reload and durable operator sync/pull.
+- One Owner-experienced Guest encounter remains open.
 - Production, public traffic, real/private Guest data, provider calls,
   credentials, spend, deployment, publication, messaging, merge and Gate C
   remain outside the current authority.
