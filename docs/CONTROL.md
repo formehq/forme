@@ -28,10 +28,13 @@ Green. #67 is accepted and closed. The current #68 Core Gate A walking slice
 is `GREEN_CLEAN`: it composes the real snapshot, orientation, session,
 capability-denial, budget, candidate-admission and cleanup contracts around one
 fresh non-resumed fake dispatch, then reviews and discards the untrusted
-candidate without persisting or publishing it. The next action is Technical
-Review of this increment, followed by the separately approved first physical
-Native/provider envelope. Use #71 only if that physical path demonstrates a
-concrete Host Setup/Doctor blocker.
+candidate without persisting or publishing it. The pinned physical no-provider
+preflight is also `GREEN_NO_PROVIDER`: one real Codex app-server thread/turn can
+reach only a single loopback broker, and the broker rebuilds the observed
+client request into a deterministic tool-free, hard-capped upstream envelope
+while forwarding remains disabled. The next action is Technical Review of PR
+#81, followed by the separately approved first provider envelope and Owner
+candidate judgment. No #71 Host Setup/Doctor blocker is currently present.
 
 ## Current evidence
 
@@ -66,7 +69,19 @@ concrete Host Setup/Doctor blocker.
   admits one typed untrusted candidate, takes a local synthetic discard and
   returns `GREEN_CLEAN` with zero Provider, network, connector, publication,
   real-Guest, candidate-persistence or temporary-root residue;
-- full repository verification remains Green at Spine 45, R4 615 and Gate-B
+- the #68 physical preflight stages the pinned `codex-cli 0.145.0` native image
+  by exact SHA-256, starts one fresh app-server thread/turn under a staged
+  Seatbelt profile, disables remote control and every optional tool surface,
+  permits only one exact localhost broker destination, sends no credential
+  header, and leaves no child process group, captured body or temporary root;
+- the loopback broker pins the one residual client-side `update_plan`
+  declaration and absence of a native output cap as client drift evidence, then
+  reconstructs—not mutates—an OpenAI Responses envelope for `gpt-5.6-sol` at
+  medium reasoning with zero tools, a conservative 32,000-token input ceiling,
+  `max_output_tokens: 1024`, one dispatch, 600 seconds and US$0.20 maximum. At
+  the currently documented US$5/M input and US$30/M output prices, the sealed
+  worst case is US$0.19072. Forwarding is still physically disabled;
+- full repository verification remains Green at Spine 45, R4 620 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
