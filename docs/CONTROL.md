@@ -10,7 +10,7 @@ verified with zero run residue.
 
 R1 Continuity, R2 Cognition and R3 Bounded Agency are accepted. R4 Controlled
 Presence remains open in
-[Issue #67](https://github.com/formehq/forme/issues/67).
+[Issue #52](https://github.com/formehq/forme/issues/52).
 
 ## Next user-visible acceptance point
 
@@ -24,10 +24,14 @@ before the first real call and judges the candidate.
 ## Current blocker and next action
 
 PRs #78 and #79 are integrated on `main`; exact-tip and post-merge CI were
-Green. #67 is accepted and closed. The next action is to reconcile the current
-#68 implementation and tests against its exact acceptance contract, then
-prepare the smallest reviewable increment. Use #71 only if the Fresh local
-Codex path demonstrates a concrete Host Setup/Doctor blocker.
+Green. #67 is accepted and closed. The current #68 Core Gate A walking slice
+is `GREEN_CLEAN`: it composes the real snapshot, orientation, session,
+capability-denial, budget, candidate-admission and cleanup contracts around one
+fresh non-resumed fake dispatch, then reviews and discards the untrusted
+candidate without persisting or publishing it. The next action is Technical
+Review of this increment, followed by the separately approved first physical
+Native/provider envelope. Use #71 only if that physical path demonstrates a
+concrete Host Setup/Doctor blocker.
 
 ## Current evidence
 
@@ -57,6 +61,13 @@ Codex path demonstrates a concrete Host Setup/Doctor blocker.
 - after Owner acceptance, all exact-owned staging containers, network, volume,
   private roots, tunnel listeners and the campaign-acquired Node image were
   removed and independently confirmed absent.
+- the current #68 rehearsal starts one new session with zero resume, proves all
+  21 named capability denials, uses one upstream-disabled synthetic dispatch,
+  admits one typed untrusted candidate, takes a local synthetic discard and
+  returns `GREEN_CLEAN` with zero Provider, network, connector, publication,
+  real-Guest, candidate-persistence or temporary-root residue;
+- full repository verification remains Green at Spine 45, R4 615 and Gate-B
+  Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
 acceptance.

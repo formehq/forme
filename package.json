@@ -32,6 +32,7 @@
     "room:build": "npm run room:compile && node scripts/r4-room-standalone-prepare.mjs && npm run r4:room-build:audit",
     "room:start": "node apps/room/.next/standalone/apps/room/server.js",
     "r4:walkthrough": "node packages/r4-local/src/walkthrough.ts",
+    "r4:fresh-candidate:rehearse": "node scripts/r4-fresh-candidate-rehearsal.mjs execute",
     "r4:probe-basis": "node packages/r4-local/src/real-basis-probe-cli.ts",
     "r4:postgres:rehearse": "node scripts/r4-disposable-postgres-rehearsal.mjs",
     "r4:postgres:diagnose": "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose",
