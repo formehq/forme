@@ -2,10 +2,11 @@
 
 ## Product delta
 
-The clean restart itself contributed 0 Product Progress. The first resumed #67
-product-path increment is now Green: one complete synthetic Guest arrival
-crosses the real HTTP membrane, persists through runtime reload and reaches the
-Owner-local operator sync/pull boundary.
+The resumed #67 product path is Done. The Owner used the loopback-only browser
+surface to submit one synthetic Guest knock, the durable local operator path
+synced, decrypted and pulled that exact request, and the Owner accepted the
+encounter on 2026-08-20. Exact-owned staging cleanup was then independently
+verified with zero run residue.
 
 R1 Continuity, R2 Cognition and R3 Bounded Agency are accepted. R4 Controlled
 Presence remains open in
@@ -13,29 +14,20 @@ Presence remains open in
 
 ## Next user-visible acceptance point
 
-The bounded synthetic Guest journey now works through the real local product
-path. The next user-visible acceptance point is one Owner-experienced
-encounter following the same sequence:
-
-1. the Owner publishes a bounded Projection;
-2. a Guest can discover it and knock;
-3. Forme admits or declines under the approved policy;
-4. the Guest submits a response without server-side AI;
-5. the Owner sees the result through the Native Harness boundary;
-6. the Owner judges whether the encounter feels like Forme.
-
-The synthetic run is Technical Review evidence, not this acceptance point.
+The active slice is [Issue #68](https://github.com/formehq/forme/issues/68):
+one exact Interaction enters a fresh, non-resumed Native Response Session with
+only a deterministic sanitized source snapshot and typed body/path-free
+orientation. It returns an untrusted local candidate with no publication
+authority. The Owner approves the exact source/provider/capability envelope
+before the first real call and judges the candidate.
 
 ## Current blocker and next action
 
-PR #78 established the fail-closed integration baseline. The resumed #67 run
-found and corrected the real pairing-secret purpose, Room version chain and
-sync-receipt finalization defects. The current change must pass exact-tip
-Technical Review and integration before a real activation decision.
-
-After integration, return to the Owner for one bounded activation/experience
-envelope. Do not start #68 or create an Enabler unless the #67 encounter
-exposes a concrete blocker.
+PRs #78 and #79 are integrated on `main`; exact-tip and post-merge CI were
+Green. #67 is accepted and closed. The next action is to reconcile the current
+#68 implementation and tests against its exact acceptance contract, then
+prepare the smallest reviewable increment. Use #71 only if the Fresh local
+Codex path demonstrates a concrete Host Setup/Doctor blocker.
 
 ## Current evidence
 
@@ -54,8 +46,17 @@ exposes a concrete blocker.
 - the rehearsal proved zero Provider, external-message, Production, public
   traffic and Gate C effects, plus exact container/network/volume/private-root
   cleanup;
-- no live server inventory, isolated staging run or Owner-experienced Guest
-  encounter has been completed.
+- the live server inventory resolved to repairable gaps without reading
+  secrets or changing public traffic;
+- one exact-owned isolated staging Room ran on `hetzner-main` behind loopback
+  ports and Owner-only SSH tunnels using synthetic data;
+- the Owner submitted one synthetic browser knock and the durable record moved
+  from `accepted` to `seen_locally` at version 2 after Owner pull;
+- the isolated operation ledger contains no response, Provider, external
+  message, Production, DNS, Caddy, Cloudflare or public-traffic action.
+- after Owner acceptance, all exact-owned staging containers, network, volume,
+  private roots, tunnel listeners and the campaign-acquired Node image were
+  removed and independently confirmed absent.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
 acceptance.
@@ -63,14 +64,15 @@ acceptance.
 ## Current engineering envelope
 
 The clean restart may include repository edits, tests, refactors, local
-synthetic development, loopback-only disposable infrastructure with exact
-owned cleanup, local commits and updates to the existing integration pull
-request. These actions proceed without per-file, per-hash or per-attempt
+synthetic development, local commits, review branches and pull-request
+preparation. These actions proceed without per-file, per-hash or per-attempt
 approval.
 
-It does not authorize production or private server access, public traffic,
-real/private Guest data, provider/model calls, credentials, spend, deployment,
-publication, external messaging, merge or Gate C.
+It does not authorize Production or private-server effects, public traffic,
+real/private Guest data, provider/model calls, new credentials, spend,
+Production deployment, publication, external messaging, merge or Gate C. The
+first real #68 call separately requires the exact source/provider/capability
+envelope named by that issue.
 
 The fixed-marker R3 action block in the root README remains separately
 controlled.
