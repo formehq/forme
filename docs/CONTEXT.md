@@ -60,14 +60,14 @@ baseline without claiming that its product issue is Done.
   #67 or implying Owner Experience Acceptance.
 - PR #79 integrated the synthetic #67 arrival through the real HTTP membrane,
   runtime reload and durable operator sync/pull.
-- One exact-owned loopback-only staging Room on `hetzner-main` completed an
-  Owner-experienced synthetic browser knock and durable Owner pull.
-- The explicit Owner judgment on whether that encounter feels like Forme
-  remains open; engineering evidence cannot claim it.
-- Production, private-server access beyond the exact current staging
-  resources, public traffic, real/private Guest data, provider calls, new
-  credentials, spend, Production deployment, publication, messaging, merge
-  and Gate C remain outside the current authority.
+- #67 is Owner-accepted and closed after one exact-owned loopback-only staging
+  browser knock, durable Owner pull and independently verified zero-residue
+  cleanup.
+- #68 is the active R4 slice: one isolated Fresh Native Response candidate.
+- Production, private-server effects, public traffic, real/private Guest data,
+  provider calls, new credentials, spend, Production deployment, publication,
+  messaging, merge and Gate C remain outside the current authority. The first
+  real #68 call requires its own exact source/provider/capability envelope.
 
 ## Context budget
 

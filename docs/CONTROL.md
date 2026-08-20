@@ -2,12 +2,11 @@
 
 ## Product delta
 
-The resumed #67 product path is now Green through an isolated Owner encounter.
-An Owner used the loopback-only browser surface to submit one synthetic Guest
-knock, and the durable local operator path synced, decrypted and pulled that
-exact request. This is the first Owner-experienced traversal of the integrated
-Room path; final Owner Experience Acceptance remains an explicit Owner
-judgment, not an engineering inference.
+The resumed #67 product path is Done. The Owner used the loopback-only browser
+surface to submit one synthetic Guest knock, the durable local operator path
+synced, decrypted and pulled that exact request, and the Owner accepted the
+encounter on 2026-08-20. Exact-owned staging cleanup was then independently
+verified with zero run residue.
 
 R1 Continuity, R2 Cognition and R3 Bounded Agency are accepted. R4 Controlled
 Presence remains open in
@@ -15,22 +14,20 @@ Presence remains open in
 
 ## Next user-visible acceptance point
 
-The isolated encounter has completed steps 1–5: bounded Projection,
-independent admission, browser discovery, one private request and durable
-Owner-local pull. The next acceptance point is only step 6: the Owner judges
-whether this encounter feels like Forme. Until that judgment is explicit, #67
-remains open.
+The active slice is [Issue #68](https://github.com/formehq/forme/issues/68):
+one exact Interaction enters a fresh, non-resumed Native Response Session with
+only a deterministic sanitized source snapshot and typed body/path-free
+orientation. It returns an untrusted local candidate with no publication
+authority. The Owner approves the exact source/provider/capability envelope
+before the first real call and judges the candidate.
 
 ## Current blocker and next action
 
 PRs #78 and #79 are integrated on `main`; exact-tip and post-merge CI were
-Green. The isolated staging encounter exposed and corrected two staging
-adapter defects: the standalone bundle boundary and the public event-field
-mapping used by the Owner pull helper. The product record itself was correct
-throughout.
-
-Return to the Owner now for the #67 experience judgment. Do not start #68 or
-create an Enabler unless that judgment exposes a concrete blocker.
+Green. #67 is accepted and closed. The next action is to reconcile the current
+#68 implementation and tests against its exact acceptance contract, then
+prepare the smallest reviewable increment. Use #71 only if the Fresh local
+Codex path demonstrates a concrete Host Setup/Doctor blocker.
 
 ## Current evidence
 
@@ -57,6 +54,9 @@ create an Enabler unless that judgment exposes a concrete blocker.
   from `accepted` to `seen_locally` at version 2 after Owner pull;
 - the isolated operation ledger contains no response, Provider, external
   message, Production, DNS, Caddy, Cloudflare or public-traffic action.
+- after Owner acceptance, all exact-owned staging containers, network, volume,
+  private roots, tunnel listeners and the campaign-acquired Node image were
+  removed and independently confirmed absent.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
 acceptance.
@@ -64,15 +64,15 @@ acceptance.
 ## Current engineering envelope
 
 The clean restart may include repository edits, tests, refactors, local
-synthetic development, and the currently authorized exact-owned isolated
-staging resources on `hetzner-main`. Staging remains synthetic and reachable
-only through Owner-local SSH tunnels. These actions proceed without per-file,
-per-hash or per-attempt approval.
+synthetic development, local commits, review branches and pull-request
+preparation. These actions proceed without per-file, per-hash or per-attempt
+approval.
 
-It does not authorize Production or private-server access beyond the exact
-current staging resources, public traffic, real/private Guest data,
-provider/model calls, new credentials, spend, Production deployment,
-publication, external messaging, merge or Gate C.
+It does not authorize Production or private-server effects, public traffic,
+real/private Guest data, provider/model calls, new credentials, spend,
+Production deployment, publication, external messaging, merge or Gate C. The
+first real #68 call separately requires the exact source/provider/capability
+envelope named by that issue.
 
 The fixed-marker R3 action block in the root README remains separately
 controlled.
