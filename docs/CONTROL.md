@@ -32,9 +32,13 @@ candidate without persisting or publishing it. The pinned physical no-provider
 preflight is also `GREEN_NO_PROVIDER`: one real Codex app-server thread/turn can
 reach only a single loopback broker, and the broker rebuilds the observed
 client request into a deterministic tool-free, hard-capped upstream envelope
-while forwarding remains disabled. The next action is Technical Review of PR
-#81, followed by the separately approved first provider envelope and Owner
-candidate judgment. No #71 Host Setup/Doctor blocker is currently present.
+while forwarding remains disabled. The pinned synthetic-Provider round trip is
+now `GREEN_SYNTHETIC_PROVIDER`: that same Native Session consumes one locally
+generated Responses SSE, completes one Turn and returns a candidate through
+the Codex app-server event membrane without retaining the candidate body. The
+remaining action after final review of the updated PR #81 tip is the separately
+approved first real provider envelope and Owner candidate judgment. No #71
+Host Setup/Doctor blocker is currently present.
 
 ## Current evidence
 
@@ -80,8 +84,18 @@ candidate judgment. No #71 Host Setup/Doctor blocker is currently present.
   medium reasoning with zero tools, a conservative 32,000-token input ceiling,
   `max_output_tokens: 1024`, one dispatch, 600 seconds and US$0.20 maximum. At
   the currently documented US$5/M input and US$30/M output prices, the sealed
-  worst case is US$0.19072. Forwarding is still physically disabled;
-- full repository verification remains Green at Spine 45, R4 620 and Gate-B
+  worst case is US$0.19072;
+- the synthetic-Provider physical round trip is byte-for-byte repeatable: one
+  locally generated Responses SSE passes the strict completion/output/usage
+  gate, the pinned Codex Turn completes with exactly one agent message, and
+  request bytes, Provider body, process group and temporary root all clean to
+  zero. Its aggregate is
+  `sha256:593c1f46207c3217b16515b173a9fc97a781ba83a32ba8671b6ed9c0c954c7cc`;
+- the dormant one-shot OpenAI transport is fixed to HTTPS
+  `api.openai.com/v1/responses`, follows no redirects, retries zero times,
+  accepts only `text/event-stream`, enforces the sealed request hash, 600-second
+  wall clock and declared token/spend ceilings, and has not been invoked;
+- full repository verification remains Green at Spine 45, R4 626 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner

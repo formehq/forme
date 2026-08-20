@@ -115,13 +115,22 @@ declared ceiling has a US$0.19072 theoretical worst case. Pricing must be
 reverified at the real-call gate against the official
 [model documentation](https://developers.openai.com/api/docs/models/gpt-5.6-sol).
 
-Forwarding, provider credentials and response admission remain absent. The
-preflight returns body/path-free hashes and counters after zeroing the captured
-body, terminating the child process group and removing its exact temporary
-root. This construction narrows the first bounded candidate test; it does not
-replace the Full Native Harness target or authorize a provider call. The Owner
-must still approve the exact source/provider/capability envelope before that
-single call and judge the resulting candidate.
+The next local-only seam relays one synthetic Responses SSE through the same
+loopback broker. The provider-side gate accepts only one completed response,
+one structured `responseText`, no tool output, usage inside the declared token
+and spend ceilings, and the exact pinned model. The Codex app-server then
+completes the original Turn and emits exactly one candidate message. Two
+physical executions returned the same body-free result and cleaned the captured
+request, synthetic Provider body, child process group and temporary root.
+
+A dormant one-shot HTTPS transport is fixed to
+`api.openai.com/v1/responses`, follows no redirect, performs no automatic
+retry, requires the sealed request hash and accepts only a successful
+`text/event-stream`. It has not been invoked or given a credential. The
+preflight and synthetic round trip therefore remain zero-Provider Technical
+Review evidence; neither authorizes the first real call. The Owner must still
+approve the exact source/provider/capability envelope and judge the transient
+candidate.
 
 ## Confirmed role separation
 

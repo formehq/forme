@@ -366,7 +366,7 @@ export function buildSyntheticFreshCandidatePreflightPrompt(): FreshCandidatePre
   return Object.freeze({ orientationText, userPayloadText, sourceManifestHash, orientationHash });
 }
 
-function pinnedModelCatalog(): JsonValue {
+export function buildPinnedFreshCandidateModelCatalog(): JsonValue {
   return {
     models: [{
       slug: FRESH_CANDIDATE_MODEL,
@@ -573,7 +573,7 @@ export async function runPinnedFreshCandidatePhysicalPreflight(
       const isolatedTmpdir = path.join(temporaryRoot, "tmp");
       for (const directory of [sessionRoot, isolatedHome, isolatedCodexHome, isolatedTmpdir]) mkdirSync(directory, { mode: 0o700 });
       const modelCatalogPath = path.join(temporaryRoot, "model-catalog.json");
-      writeFileSync(modelCatalogPath, canonicalJson(pinnedModelCatalog()), { encoding: "utf8", mode: 0o600 });
+      writeFileSync(modelCatalogPath, canonicalJson(buildPinnedFreshCandidateModelCatalog()), { encoding: "utf8", mode: 0o600 });
       const stagedProfilePath = path.join(temporaryRoot, "seatbelt.sb");
       const profileBytes = readFileSync(profilePath);
       const seatbeltProfileSha256 = sha(profileBytes);
