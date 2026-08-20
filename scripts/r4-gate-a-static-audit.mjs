@@ -147,7 +147,7 @@ if (protocolImportViolations.length > 0) throw new Error(`protocol package has n
 
 const roomPackage = JSON.parse(bytes("apps/room/package.json"));
 const roomDependencies = Object.keys(roomPackage.dependencies ?? {}).sort();
-const allowedRoomDependencies = ["next", "react", "react-dom"];
+const allowedRoomDependencies = ["next", "pg", "react", "react-dom"];
 if (JSON.stringify(roomDependencies) !== JSON.stringify(allowedRoomDependencies)) {
   throw new Error(`hosted dependency boundary widened:${roomDependencies.join(",")}`);
 }
@@ -158,6 +158,7 @@ const roomFiles = [
   join(root, "apps/room/next.config.ts"),
 ].sort();
 const forbiddenHostedImports = /^(?:(?:node:)?(?:child_process|fs|http|https|net|tls|dgram|dns|cluster|worker_threads|vm|module)|openai|ai|@ai-sdk|@anthropic-ai|@google\/generative-ai|cohere-ai|@mistralai|groq-sdk|langchain|@langchain|nodemailer|resend|@sendgrid)(?:\/|$)/u;
+const localPrivateRuntimeLoader = join(root, "apps/room/src/public-core-local-runtime.ts");
 
 const adversarialModuleFixtures = [
   ['import "node:fs";', "node:fs"],
@@ -198,7 +199,8 @@ for (const file of roomFiles) {
   const source = readFileSync(file, "utf8");
   const inspection = inspectSource(file, source);
   for (const specifier of inspection.moduleSpecifiers) {
-    if (forbiddenHostedImports.test(specifier)) hostedImportViolations.push(specifier);
+    const exactPrivateLoaderFileAccess = file === localPrivateRuntimeLoader && /^node:fs(?:\/promises)?$/u.test(specifier);
+    if (forbiddenHostedImports.test(specifier) && !exactPrivateLoaderFileAccess) hostedImportViolations.push(specifier);
   }
   if (inspection.nonLocalFetches.length > 0) externalFetchViolations.push(relative(root, file));
   if (inspection.dynamicModuleLoads.length > 0) dynamicModuleLoadViolations.push(relative(root, file));

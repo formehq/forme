@@ -10,7 +10,7 @@ verified with zero run residue.
 
 R1 Continuity, R2 Cognition and R3 Bounded Agency are accepted. R4 Controlled
 Presence remains open in
-[Issue #67](https://github.com/formehq/forme/issues/67).
+[Issue #52](https://github.com/formehq/forme/issues/52).
 
 ## Next user-visible acceptance point
 
@@ -24,10 +24,21 @@ before the first real call and judges the candidate.
 ## Current blocker and next action
 
 PRs #78 and #79 are integrated on `main`; exact-tip and post-merge CI were
-Green. #67 is accepted and closed. The next action is to reconcile the current
-#68 implementation and tests against its exact acceptance contract, then
-prepare the smallest reviewable increment. Use #71 only if the Fresh local
-Codex path demonstrates a concrete Host Setup/Doctor blocker.
+Green. #67 is accepted and closed. The current #68 Core Gate A walking slice
+is `GREEN_CLEAN`: it composes the real snapshot, orientation, session,
+capability-denial, budget, candidate-admission and cleanup contracts around one
+fresh non-resumed fake dispatch, then reviews and discards the untrusted
+candidate without persisting or publishing it. The pinned physical no-provider
+preflight is also `GREEN_NO_PROVIDER`: one real Codex app-server thread/turn can
+reach only a single loopback broker, and the broker rebuilds the observed
+client request into a deterministic tool-free, hard-capped upstream envelope
+while forwarding remains disabled. The pinned synthetic-Provider round trip is
+now `GREEN_SYNTHETIC_PROVIDER`: that same Native Session consumes one locally
+generated Responses SSE, completes one Turn and returns a candidate through
+the Codex app-server event membrane without retaining the candidate body. The
+remaining action after final review of the updated PR #81 tip is the separately
+approved first real provider envelope and Owner candidate judgment. No #71
+Host Setup/Doctor blocker is currently present.
 
 ## Current evidence
 
@@ -57,6 +68,35 @@ Codex path demonstrates a concrete Host Setup/Doctor blocker.
 - after Owner acceptance, all exact-owned staging containers, network, volume,
   private roots, tunnel listeners and the campaign-acquired Node image were
   removed and independently confirmed absent.
+- the current #68 rehearsal starts one new session with zero resume, proves all
+  21 named capability denials, uses one upstream-disabled synthetic dispatch,
+  admits one typed untrusted candidate, takes a local synthetic discard and
+  returns `GREEN_CLEAN` with zero Provider, network, connector, publication,
+  real-Guest, candidate-persistence or temporary-root residue;
+- the #68 physical preflight stages the pinned `codex-cli 0.145.0` native image
+  by exact SHA-256, starts one fresh app-server thread/turn under a staged
+  Seatbelt profile, disables remote control and every optional tool surface,
+  permits only one exact localhost broker destination, sends no credential
+  header, and leaves no child process group, captured body or temporary root;
+- the loopback broker pins the one residual client-side `update_plan`
+  declaration and absence of a native output cap as client drift evidence, then
+  reconstructs—not mutates—an OpenAI Responses envelope for `gpt-5.6-sol` at
+  medium reasoning with zero tools, a conservative 32,000-token input ceiling,
+  `max_output_tokens: 1024`, one dispatch, 600 seconds and US$0.20 maximum. At
+  the currently documented US$5/M input and US$30/M output prices, the sealed
+  worst case is US$0.19072;
+- the synthetic-Provider physical round trip is byte-for-byte repeatable: one
+  locally generated Responses SSE passes the strict completion/output/usage
+  gate, the pinned Codex Turn completes with exactly one agent message, and
+  request bytes, Provider body, process group and temporary root all clean to
+  zero. Its aggregate is
+  `sha256:593c1f46207c3217b16515b173a9fc97a781ba83a32ba8671b6ed9c0c954c7cc`;
+- the dormant one-shot OpenAI transport is fixed to HTTPS
+  `api.openai.com/v1/responses`, follows no redirects, retries zero times,
+  accepts only `text/event-stream`, enforces the sealed request hash, 600-second
+  wall clock and declared token/spend ceilings, and has not been invoked;
+- full repository verification remains Green at Spine 45, R4 626 and Gate-B
+  Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
 acceptance.

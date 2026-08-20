@@ -7,6 +7,7 @@ export * from "./cli.ts";
 export * from "./coordinator.ts";
 export * from "./credential-vault.ts";
 export * from "./fresh-session.ts";
+export * from "./fresh-candidate-rehearsal.ts";
 export * from "./hosted-room-api.ts";
 export * from "./fault-injection.ts";
 export * from "./ledger.ts";

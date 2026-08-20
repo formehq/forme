@@ -1,4 +1,7 @@
 export * from "./app-server-probe.ts";
 export * from "./event-fence.ts";
 export * from "./fake-transport.ts";
+export * from "./fresh-candidate-brokered-session.ts";
+export * from "./fresh-candidate-preflight.ts";
+export * from "./fresh-candidate-provider-gate.ts";
 export * from "./zero-call-physical.ts";

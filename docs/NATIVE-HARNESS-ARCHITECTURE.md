@@ -91,6 +91,47 @@ publication gate, no-retry/no-fallback rule, provider budget or Room connector
 boundary. Scope approval authorized the exact Correction Packet preparation
 only, not Construction, Retry Execution or a First Provider Call.
 
+### Current #68 physical no-provider preflight
+
+The current Technical Review slice now proves the first candidate lane up to,
+but not through, provider dispatch. A staged, exact-hash `codex-cli 0.145.0`
+native app-server starts one new thread and one turn inside a staged macOS
+Seatbelt profile. The child has no workspace, sibling-root, connector, shell,
+plugin, MCP, browser, subagent or external-network path; its only network
+destination is one exact localhost capture broker. The synthetic sanitized
+snapshot and typed orientation travel over the controller pipe, not through a
+readable workspace root.
+
+The observed pinned client currently declares one unavoidable `update_plan`
+tool and does not emit an upstream `max_output_tokens` ceiling. The broker
+therefore validates that exact client shape and rebuilds a new provider-visible
+request rather than forwarding or mutating it. The sealed future envelope is
+OpenAI Responses / `gpt-5.6-sol` / medium reasoning / zero tools / at most
+32,000 input tokens / 1,024 output tokens / one dispatch / 600 seconds /
+US$0.20 maximum. The complete provider-visible JSON is only 2,600 UTF-8 bytes
+in this synthetic preflight; the byte ceiling conservatively bounds tokenized
+input. At the current documented price of US$5/M input and US$30/M output, the
+declared ceiling has a US$0.19072 theoretical worst case. Pricing must be
+reverified at the real-call gate against the official
+[model documentation](https://developers.openai.com/api/docs/models/gpt-5.6-sol).
+
+The next local-only seam relays one synthetic Responses SSE through the same
+loopback broker. The provider-side gate accepts only one completed response,
+one structured `responseText`, no tool output, usage inside the declared token
+and spend ceilings, and the exact pinned model. The Codex app-server then
+completes the original Turn and emits exactly one candidate message. Two
+physical executions returned the same body-free result and cleaned the captured
+request, synthetic Provider body, child process group and temporary root.
+
+A dormant one-shot HTTPS transport is fixed to
+`api.openai.com/v1/responses`, follows no redirect, performs no automatic
+retry, requires the sealed request hash and accepts only a successful
+`text/event-stream`. It has not been invoked or given a credential. The
+preflight and synthetic round trip therefore remain zero-Provider Technical
+Review evidence; neither authorizes the first real call. The Owner must still
+approve the exact source/provider/capability envelope and judge the transient
+candidate.
+
 ## Confirmed role separation
 
 ```mermaid

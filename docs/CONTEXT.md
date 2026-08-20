@@ -64,6 +64,21 @@ baseline without claiming that its product issue is Done.
   browser knock, durable Owner pull and independently verified zero-residue
   cleanup.
 - #68 is the active R4 slice: one isolated Fresh Native Response candidate.
+- #68 now has one `GREEN_CLEAN` Gate A walking slice with a fresh non-resumed
+  synthetic session, an in-memory untrusted candidate, local synthetic discard
+  and zero candidate persistence.
+- #68 also has a deterministic `GREEN_NO_PROVIDER` physical preflight: pinned
+  Codex starts one fresh app-server thread/turn under Seatbelt, can contact only
+  an exact loopback broker, and the broker compiles the observed request into a
+  zero-tool, hard-capped OpenAI Responses envelope with forwarding disabled.
+- The next physical seam is `GREEN_SYNTHETIC_PROVIDER`: the same pinned Native
+  Session consumes one locally generated, officially shaped Responses SSE,
+  completes one Turn and yields only a transient candidate hash after exact
+  request/body/process/root cleanup. The one-shot Provider gate separately
+  rejects tool output, response or usage drift and remains uninvoked against
+  the real endpoint.
+  These are Technical Review proofs, not a provider call or Owner candidate
+  acceptance. No concrete #71 Host Setup/Doctor blocker remains.
 - Production, private-server effects, public traffic, real/private Guest data,
   provider calls, new credentials, spend, Production deployment, publication,
   messaging, merge and Gate C remain outside the current authority. The first
