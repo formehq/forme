@@ -84,23 +84,24 @@ baseline without claiming that its product issue is Done.
   One `codex exec --ephemeral` run completed with saved ChatGPT authentication,
   no tool events, a body-free receipt and exact Owner candidate approval. No
   concrete #71 Host Setup/Doctor blocker remains.
-- PR #83 integrated #69's transient manual-Owner delivery seam. The active #69
-  branch accepts Owner-authored text only at runtime, requires exact candidate
-  and complete public-payload review, and carries the HMAC-bound delivery
-  through the shared Room route matcher and strict HTTP parser. One reviewed run
-  survived an injected lost response with two attempts and one semantic commit;
-  the originating synthetic Guest observed all 217 approved bytes. Byte drift,
-  rejection, cancellation, Interaction deletion and Projection revocation fail
-  closed. The body-free proof used zero Provider/model/tool calls, external
-  network, hosted server or public traffic. It does not yet prove a live Next
-  socket, durable Public Core/PostgreSQL delivery, real Guest effect or
-  persistent candidate recovery.
+- PR #83 integrated #69's transient manual-Owner delivery seam and PR #84
+  integrated the in-process HTTP checkpoint. The active #69 branch accepts
+  Owner-authored text only at runtime, requires exact candidate and complete
+  public-payload review, and carries the HMAC-bound delivery through a real
+  temporary Next process bound to `127.0.0.1`. One reviewed run crossed 11 TCP
+  HTTP requests and survived an injected lost response with two attempts and
+  one `response.published` event; the originating synthetic Guest observed all
+  217 approved bytes. Non-loopback child network fails closed, and process,
+  port, build and private-root cleanup reached exact absence. The body-free
+  proof used zero Provider/model/tool calls, external network, hosted server or
+  public traffic. It does not yet prove Durable Public Core/PostgreSQL Response
+  delivery, real Guest effect or persistent candidate recovery.
 - Production, private-server effects, public traffic, real/private Guest data,
   additional provider calls, new credentials, spend, Production deployment,
   publication, messaging, merge and Gate C remain outside the current
-  authority. The consumed #68 envelope and one-shot local and synthetic-loopback
-  #69 envelopes grant no additional run, live/durable/real Guest delivery or
-  #70 authority.
+  authority. The consumed #68 envelope and one-shot local, in-process-loopback
+  and live-socket #69 envelopes grant no additional run, durable/real Guest
+  delivery or #70 authority.
 
 ## Context budget
 

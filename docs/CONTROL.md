@@ -20,13 +20,14 @@ is active. Its current branch proves that the Owner can supply, inspect and
 approve one exact Response, inspect the complete public payload, cross the
 actual Room route matcher and strict HTTP parser, recover one deliberately lost
 delivery response idempotently, and verify the exact bytes read by the
-originating synthetic Guest. The next acceptance seam is to preserve those
-properties across a live loopback Room process and durable Public Core before
-claiming the complete #69 product outcome.
+originating synthetic Guest. The current branch also preserves those properties
+across a real loopback-only Next process and TCP HTTP. The next acceptance seam
+is the Durable Public Core/PostgreSQL Response model before claiming the
+complete #69 product outcome.
 
 ## Current blocker and next action
 
-PRs #78–#83 are integrated on `main`; exact-tip and post-merge CI were Green.
+PRs #78–#84 are integrated on `main`; exact-tip and post-merge CI were Green.
 #67 and #68 are accepted and closed. The #68 fake dispatch, physical
 no-provider preflight and synthetic-Provider round trip remain Green technical
 baselines.
@@ -38,16 +39,18 @@ one fresh/non-resumed session, 9,186 input tokens, 50 output tokens, zero tool
 events and exact Owner candidate approval. No candidate body was printed or
 persisted, and publication, Room mutation and connector effects stayed zero.
 PR #82 integrated that result at `0dfdbd6`; PR #83 integrated the transient
-manual-Owner delivery seam at `c73cbda`. The active #69 branch reuses that seam
-through the Room HTTP membrane. The Owner again supplied and twice reviewed one
-exact Response. Delivery returned `GREEN_LOOPBACK_EXACT_RESPONSE_DELIVERED`:
-the synthetic Guest observed all 217 bytes, a deliberately lost first response
-caused two HTTP delivery attempts but exactly one Hosted semantic commit, and
-Provider, model, tool, external-network, hosted-server and public-traffic calls
-remained zero. The next action is Technical Review and integration of this
-in-process synthetic checkpoint. A live loopback Room process plus durable
-Public Core remains separately bounded work. No #71 Host Setup/Doctor blocker
-is present.
+manual-Owner delivery seam at `c73cbda`; PR #84 integrated the in-process HTTP
+checkpoint at `a13cdca`. The active #69 branch starts one temporary Next process
+bound only to `127.0.0.1`, with child telemetry disabled and non-loopback
+network fail-closed. The Owner again supplied and twice reviewed the exact
+Response. `GREEN_LIVE_SOCKET_EXACT_RESPONSE_DELIVERED` crossed 11 real TCP HTTP
+requests: the synthetic Guest observed all 217 bytes and a deliberately lost
+first response caused two delivery attempts but exactly one `response.published`
+event. Process group, port, `.next` and private root all cleaned to absence;
+Provider, model, tool, external-network and public-traffic calls remained zero.
+The next action is Technical Review and integration of this live-socket
+checkpoint, then the Response data model and mutation/read path must be added to
+Durable Public Core/PostgreSQL. No #71 Host Setup/Doctor blocker is present.
 
 ## Current evidence
 
@@ -126,7 +129,14 @@ is present.
   lost-response retry made two delivery attempts and one response commit.
   Byte drift, candidate rejection, final cancellation, Interaction deletion and
   Projection revocation all fail closed with no Guest Response;
-- full repository verification remains Green at Spine 45, R4 639 and Gate-B
+- the live-socket #69 envelope permits one Next child and one semantic commit.
+  Its Owner-reviewed run used 11 TCP HTTP requests on `127.0.0.1`; the same 217
+  bytes and Guest hash crossed the process boundary, and event sync observed
+  exactly one `response.published` after a two-attempt lost-response recovery.
+  A child preload permits only loopback TCP/local IPC and rejects non-loopback
+  network, DNS and UDP. Exact cleanup proved the process group, port, `.next`
+  output and private root absent;
+- full repository verification remains Green at Spine 45, R4 642 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
@@ -145,9 +155,9 @@ spend, Production deployment, hosted/public publication, external messaging,
 merge or Gate C.
 
 The fixed-marker R3 action block in the root README remains separately
-controlled. The completed #68 CLI envelope, one-shot local #69 envelope and
-one-shot synthetic-loopback #69 envelope are consumed. They grant no additional
-run, live socket, durable/hosted delivery, real Guest effect or #70 authority.
+controlled. The completed #68 CLI envelope and one-shot local, in-process
+loopback and live-socket #69 envelopes are consumed. They grant no additional
+run, durable/hosted delivery, real Guest effect or #70 authority.
 
 ## Live truth and return conditions
 

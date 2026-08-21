@@ -38,6 +38,7 @@
     "r4:fresh-candidate:codex-exec": "node scripts/r4-fresh-candidate-codex-exec.mjs",
     "r4:exact-response:local-delivery": "node scripts/r4-exact-response-local-delivery.mjs",
     "r4:exact-response:loopback": "node scripts/r4-exact-response-loopback-rehearsal.mjs",
+    "r4:exact-response:live-socket": "node scripts/r4-exact-response-live-socket-rehearsal.mjs",
     "r4:probe-basis": "node packages/r4-local/src/real-basis-probe-cli.ts",
     "r4:postgres:rehearse": "node scripts/r4-disposable-postgres-rehearsal.mjs",
     "r4:postgres:diagnose": "node scripts/r4-disposable-postgres-rehearsal.mjs diagnose",
