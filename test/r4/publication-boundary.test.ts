@@ -203,6 +203,30 @@ test("Response builder exposes exact public bytes and opaque IDs but none of the
   assert.equal(serialized.includes(GOLDEN_APPROVAL.approvalId), false);
 });
 
+test("transient-current MVP candidate is delivery-eligible without claiming persistent recovery", () => {
+  const delivery = buildResponsePublicationDeliveryV1({
+    responseId: "response_synthetictransient0000001",
+    publicationAttestationId: "att_synthetictransient0000000001",
+    candidate: GOLDEN_CANDIDATE,
+    approval: GOLDEN_APPROVAL,
+    preflight: { ...responsePreflight, candidateStoreState: "transient_current" },
+    binding,
+    responseExpiresAt: T7D,
+    attestationExpiresAt: T15M,
+  });
+  assert.equal(delivery.response?.candidateHash, GOLDEN_CANDIDATE.candidateHash);
+  assert.throws(() => buildResponsePublicationDeliveryV1({
+    responseId: "response_syntheticmissing00000001",
+    publicationAttestationId: "att_syntheticmissing00000000001",
+    candidate: GOLDEN_CANDIDATE,
+    approval: GOLDEN_APPROVAL,
+    preflight: { ...responsePreflight, candidateStoreState: "missing" },
+    binding,
+    responseExpiresAt: T7D,
+    attestationExpiresAt: T15M,
+  }), /candidate_not_current/u);
+});
+
 test("any current-state, exact approval, target, time, or HMAC mismatch is rejected", () => {
   const projectionInput = {
     projection: GOLDEN_PROJECTION,

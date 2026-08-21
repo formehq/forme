@@ -63,8 +63,9 @@ baseline without claiming that its product issue is Done.
 - #67 is Owner-accepted and closed after one exact-owned loopback-only staging
   browser knock, durable Owner pull and independently verified zero-residue
   cleanup.
-- #68 is the active R4 integration slice: one isolated Fresh Native Response
-  candidate has completed exact Owner review on the current branch.
+- #68 is Owner-accepted, integrated through PR #82 and closed. One isolated
+  Fresh Native Response candidate completed exact Owner review without
+  publication.
 - #68 now has one `GREEN_CLEAN` Gate A walking slice with a fresh non-resumed
   synthetic session, an in-memory untrusted candidate, local synthetic discard
   and zero candidate persistence.
@@ -83,10 +84,18 @@ baseline without claiming that its product issue is Done.
   One `codex exec --ephemeral` run completed with saved ChatGPT authentication,
   no tool events, a body-free receipt and exact Owner candidate approval. No
   concrete #71 Host Setup/Doctor blocker remains.
+- #69 is the active R4 slice. Its current branch accepts manual Owner-authored
+  text only at runtime, requires exact candidate review and complete public
+  payload review, and has verified one exact HMAC-bound in-memory delivery with
+  body-free receipts. The proof used zero Provider/model/tool calls, network,
+  server or public traffic. It does not yet prove delivery to the originating
+  loopback Room Guest, retry after process loss or persistent candidate
+  recovery.
 - Production, private-server effects, public traffic, real/private Guest data,
   additional provider calls, new credentials, spend, Production deployment,
   publication, messaging, merge and Gate C remain outside the current
-  authority. The consumed #68 envelope grants no retry or #69 authority.
+  authority. The consumed #68 envelope and one-shot local #69 envelope grant
+  no retry, hosted/real Guest delivery or #70 authority.
 
 ## Context budget
 
