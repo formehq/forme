@@ -7,6 +7,8 @@ import {
   validateSessionReceiptV1,
   type ArtifactApprovalV1,
   type HostedPublicationDeliveryV1,
+  type InteractionV1,
+  type ResponseCandidateV1,
   type SessionReceiptV1,
 } from "../../r4-protocol/src/index.ts";
 import { buildManualOwnerCandidate } from "./fresh-session.ts";
@@ -31,22 +33,28 @@ function opaqueId(prefix: string, value: unknown): string {
   return `${prefix}_${canonicalSha256(value).slice(7, 39)}`;
 }
 
-function manualReceipt(): SessionReceiptV1 {
+export function buildManualOwnerSessionReceiptV1(input: Readonly<{
+  interaction: Pick<InteractionV1, "interactionId">;
+  policyHash: `sha256:${string}`;
+  startedAt: string;
+  finishedAt: string;
+  expiresAt: string;
+}>): SessionReceiptV1 {
   const core = {
-    interactionId: GOLDEN_INTERACTION.interactionId,
-    policyHash: GOLDEN_SOURCE_POLICY.policyHash,
-    startedAt: T0,
-    finishedAt: T1S,
-    expiresAt: T7D,
+    interactionId: input.interaction.interactionId,
+    policyHash: input.policyHash,
+    startedAt: input.startedAt,
+    finishedAt: input.finishedAt,
+    expiresAt: input.expiresAt,
   };
   return validateSessionReceiptV1({
     schemaVersion: "session_receipt.v1",
     receiptId: opaqueId("receipt", core),
-    interactionId: GOLDEN_INTERACTION.interactionId,
+    interactionId: input.interaction.interactionId,
     sessionEnvelopeId: null,
     sessionEnvelopeHash: null,
-    startedAt: T0,
-    finishedAt: T1S,
+    startedAt: input.startedAt,
+    finishedAt: input.finishedAt,
     provider: null,
     modelId: null,
     terminalStatus: "manual_only",
@@ -57,28 +65,45 @@ function manualReceipt(): SessionReceiptV1 {
     sourceQueryCount: 0,
     sourceResultBytes: 0,
     accessEvidenceDigest: null,
-    policyHash: GOLDEN_SOURCE_POLICY.policyHash,
+    policyHash: input.policyHash,
     schemaHash: canonicalSha256("manual-owner-response-text.v1"),
     runtimeVersion: "r4-exact-response-transient.v1",
     errorCode: null,
-    expiresAt: T7D,
+    expiresAt: input.expiresAt,
   });
 }
 
-function approval(candidateHash: `sha256:${string}`): ArtifactApprovalV1 {
+export function buildExactResponseArtifactApprovalV1(input: Readonly<{
+  candidate: ResponseCandidateV1;
+  approvedAt: string;
+  expiresAt: string;
+  operationClass?: "exact_response_delivery" | "local_exact_response_delivery" | "loopback_exact_response_delivery";
+}>): ArtifactApprovalV1 {
+  const { candidate } = input;
+  const operationClass = input.operationClass ?? "exact_response_delivery";
   return validateArtifactApprovalV1({
     schemaVersion: "artifact_approval.v1",
-    approvalId: opaqueId("approval", { candidateHash, approvedAt: T3S }),
+    approvalId: opaqueId("approval", { candidateHash: candidate.candidateHash, approvedAt: input.approvedAt }),
     artifactClass: "response",
-    artifactHash: candidateHash,
-    roomId: GOLDEN_INTERACTION.roomId,
-    projectionId: GOLDEN_INTERACTION.projectionId,
-    interactionId: GOLDEN_INTERACTION.interactionId,
-    basisHash: GOLDEN_ORIENTATION.contentHash,
+    artifactHash: candidate.candidateHash,
+    roomId: candidate.roomId,
+    projectionId: candidate.projectionId,
+    interactionId: candidate.interactionId,
+    basisHash: candidate.twinBasisHash,
+    policyHash: candidate.policyHash,
+    operationId: opaqueId("op", { candidateHash: candidate.candidateHash, operation: operationClass }),
+    approvedAt: input.approvedAt,
+    expiresAt: input.expiresAt,
+  });
+}
+
+function manualReceipt(): SessionReceiptV1 {
+  return buildManualOwnerSessionReceiptV1({
+    interaction: GOLDEN_INTERACTION,
     policyHash: GOLDEN_SOURCE_POLICY.policyHash,
-    operationId: opaqueId("op", { candidateHash, operation: "local_exact_response_delivery" }),
-    approvedAt: T3S,
-    expiresAt: T15M,
+    startedAt: T0,
+    finishedAt: T1S,
+    expiresAt: T7D,
   });
 }
 
@@ -211,7 +236,12 @@ export function runTransientExactResponseLocalDelivery(
       runtime: { ...baseRuntime, localDeliveryCalls: 0 },
     });
   }
-  const exactApproval = approval(candidate.candidateHash);
+  const exactApproval = buildExactResponseArtifactApprovalV1({
+    candidate,
+    approvedAt: T3S,
+    expiresAt: T15M,
+    operationClass: "local_exact_response_delivery",
+  });
   const preflight: ResponsePublicationPreflightV1 = {
     artifactClass: "response",
     observedAt: T4S,

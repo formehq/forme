@@ -84,18 +84,23 @@ baseline without claiming that its product issue is Done.
   One `codex exec --ephemeral` run completed with saved ChatGPT authentication,
   no tool events, a body-free receipt and exact Owner candidate approval. No
   concrete #71 Host Setup/Doctor blocker remains.
-- #69 is the active R4 slice. Its current branch accepts manual Owner-authored
-  text only at runtime, requires exact candidate review and complete public
-  payload review, and has verified one exact HMAC-bound in-memory delivery with
-  body-free receipts. The proof used zero Provider/model/tool calls, network,
-  server or public traffic. It does not yet prove delivery to the originating
-  loopback Room Guest, retry after process loss or persistent candidate
-  recovery.
+- PR #83 integrated #69's transient manual-Owner delivery seam. The active #69
+  branch accepts Owner-authored text only at runtime, requires exact candidate
+  and complete public-payload review, and carries the HMAC-bound delivery
+  through the shared Room route matcher and strict HTTP parser. One reviewed run
+  survived an injected lost response with two attempts and one semantic commit;
+  the originating synthetic Guest observed all 217 approved bytes. Byte drift,
+  rejection, cancellation, Interaction deletion and Projection revocation fail
+  closed. The body-free proof used zero Provider/model/tool calls, external
+  network, hosted server or public traffic. It does not yet prove a live Next
+  socket, durable Public Core/PostgreSQL delivery, real Guest effect or
+  persistent candidate recovery.
 - Production, private-server effects, public traffic, real/private Guest data,
   additional provider calls, new credentials, spend, Production deployment,
   publication, messaging, merge and Gate C remain outside the current
-  authority. The consumed #68 envelope and one-shot local #69 envelope grant
-  no retry, hosted/real Guest delivery or #70 authority.
+  authority. The consumed #68 envelope and one-shot local and synthetic-loopback
+  #69 envelopes grant no additional run, live/durable/real Guest delivery or
+  #70 authority.
 
 ## Context budget
 

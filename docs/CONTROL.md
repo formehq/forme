@@ -17,14 +17,16 @@ Presence remains open in
 [Issue #68](https://github.com/formehq/forme/issues/68) is Owner-accepted,
 integrated and closed. [Issue #69](https://github.com/formehq/forme/issues/69)
 is active. Its current branch proves that the Owner can supply, inspect and
-approve one exact Response, inspect the complete public payload, and deliver
-the same bytes through the local publication contract. The next user-visible
-acceptance point remains delivery to the originating loopback Room Interaction
-and verification of the exact Response the Guest receives.
+approve one exact Response, inspect the complete public payload, cross the
+actual Room route matcher and strict HTTP parser, recover one deliberately lost
+delivery response idempotently, and verify the exact bytes read by the
+originating synthetic Guest. The next acceptance seam is to preserve those
+properties across a live loopback Room process and durable Public Core before
+claiming the complete #69 product outcome.
 
 ## Current blocker and next action
 
-PRs #78–#82 are integrated on `main`; exact-tip and post-merge CI were Green.
+PRs #78–#83 are integrated on `main`; exact-tip and post-merge CI were Green.
 #67 and #68 are accepted and closed. The #68 fake dispatch, physical
 no-provider preflight and synthetic-Provider round trip remain Green technical
 baselines.
@@ -35,14 +37,17 @@ invocation using saved ChatGPT authentication. That invocation is
 one fresh/non-resumed session, 9,186 input tokens, 50 output tokens, zero tool
 events and exact Owner candidate approval. No candidate body was printed or
 persisted, and publication, Room mutation and connector effects stayed zero.
-PR #82 integrated that result at `0dfdbd6`. The active #69 branch adds a
-transient manual-Owner lane and body-free one-shot ledger. The Owner supplied
-and twice reviewed one exact Response; local delivery returned
-`GREEN_LOCAL_EXACT_RESPONSE_DELIVERED`, with 217 Guest-observed bytes and zero
-Provider, model, tool, network, server or public-traffic calls. The next action
-is review and integration of this seam, followed by a separately authorized
-loopback Room delivery that proves current-state, idempotency and Guest-visible
-bytes. No #71 Host Setup/Doctor blocker is present.
+PR #82 integrated that result at `0dfdbd6`; PR #83 integrated the transient
+manual-Owner delivery seam at `c73cbda`. The active #69 branch reuses that seam
+through the Room HTTP membrane. The Owner again supplied and twice reviewed one
+exact Response. Delivery returned `GREEN_LOOPBACK_EXACT_RESPONSE_DELIVERED`:
+the synthetic Guest observed all 217 bytes, a deliberately lost first response
+caused two HTTP delivery attempts but exactly one Hosted semantic commit, and
+Provider, model, tool, external-network, hosted-server and public-traffic calls
+remained zero. The next action is Technical Review and integration of this
+in-process synthetic checkpoint. A live loopback Room process plus durable
+Public Core remains separately bounded work. No #71 Host Setup/Doctor blocker
+is present.
 
 ## Current evidence
 
@@ -113,7 +118,15 @@ bytes. No #71 Host Setup/Doctor blocker is present.
   approval, public Response, delivery and observed-body hashes; candidate
   persistence, Provider/model/tool calls, network and public traffic remained
   zero. This is a contract proof, not hosted or loopback Guest delivery;
-- full repository verification remains Green at Spine 45, R4 632 and Gate-B
+- the current #69 loopback envelope is body-free and deterministic. One
+  Owner-reviewed run crossed the shared Room route matcher, strict parser,
+  synthetic-actor membrane and response sanitizer. It recorded candidate,
+  approval, public Response, delivery, local receipt and Guest-observed hashes
+  but no response body. The exact Guest observation was 217 bytes; the injected
+  lost-response retry made two delivery attempts and one response commit.
+  Byte drift, candidate rejection, final cancellation, Interaction deletion and
+  Projection revocation all fail closed with no Guest Response;
+- full repository verification remains Green at Spine 45, R4 639 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
@@ -132,9 +145,9 @@ spend, Production deployment, hosted/public publication, external messaging,
 merge or Gate C.
 
 The fixed-marker R3 action block in the root README remains separately
-controlled. The completed #68 CLI envelope and the one-shot local #69 delivery
-envelope are consumed. They grant no retry, server/hosted delivery, real Guest
-effect or #70 authority.
+controlled. The completed #68 CLI envelope, one-shot local #69 envelope and
+one-shot synthetic-loopback #69 envelope are consumed. They grant no additional
+run, live socket, durable/hosted delivery, real Guest effect or #70 authority.
 
 ## Live truth and return conditions
 

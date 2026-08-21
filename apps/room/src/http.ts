@@ -119,3 +119,19 @@ export async function dispatchLocalPublicCoreApiV1(
     application,
   }));
 }
+
+/**
+ * Synthetic loopback rehearsal seam for an injected Hosted application. It
+ * exercises the same route matcher, strict parser, synthetic-actor membrane
+ * and response sanitizer as the Next route without installing global state.
+ */
+export async function dispatchLocalSyntheticRoomApiV1(
+  request: Request,
+  segments: string[],
+  application: RoomApiApplication,
+): Promise<Response> {
+  return dispatchApiWithResolver(request, segments, async () => Object.freeze({
+    mode: "synthetic" as const,
+    application,
+  }));
+}
