@@ -126,11 +126,28 @@ request, synthetic Provider body, child process group and temporary root.
 A dormant one-shot HTTPS transport is fixed to
 `api.openai.com/v1/responses`, follows no redirect, performs no automatic
 retry, requires the sealed request hash and accepts only a successful
-`text/event-stream`. It has not been invoked or given a credential. The
-preflight and synthetic round trip therefore remain zero-Provider Technical
-Review evidence; neither authorizes the first real call. The Owner must still
-approve the exact source/provider/capability envelope and judge the transient
-candidate.
+`text/event-stream`. It was never invoked or given a credential. Its earlier
+raw API grant was explicitly revoked unconsumed and is not current authority.
+The preflight and synthetic round trip remain zero-Provider Technical Review
+evidence.
+
+For the #68 Owner touchpoint, the Owner instead selected the native Codex CLI
+path. One `codex exec --ephemeral` invocation used saved ChatGPT authentication
+under CLI-native envelope
+`sha256:21843e8a00cd780497194a88d13cf7c004626a0220539c1cabb7f3c6bc60fef5`.
+The envelope preserved `gpt-5.6-sol`, medium reasoning, a fresh non-resumed
+transcript, the synthetic sanitized packet, managed read-only packet-root
+access, 600-second wall time, local 32,000/1,024 token audits and denial of
+tool, retry, connector, Room-mutation and publication effects. It also records
+the honest weaker proof boundary: Forme cannot independently fix the complete
+Provider-visible request bytes, Codex-internal dispatch count or a per-call API
+dollar cap through saved ChatGPT authentication.
+
+The completed run audited 9,186 input tokens, 50 output tokens and zero tool
+events. The candidate remained transient and body-free outside the local
+review dialog; the Owner selected `approve_exact`. Publication, Room mutation
+and connector calls remained zero. That envelope is consumed and grants no
+retry or #69 authority.
 
 ## Confirmed role separation
 

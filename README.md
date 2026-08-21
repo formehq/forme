@@ -11,20 +11,21 @@ R1 Continuity, R2 Cognition and R3 Bounded Agency are Owner-accepted. R4
 Controlled Presence is the active product gate.
 
 The repository contains a reviewable local Room, Durable Public Core and
-PostgreSQL adapter. The complete local synthetic Guest arrival now crosses the
+PostgreSQL adapter. The complete local synthetic Guest arrival crosses the
 real HTTP membrane, survives a runtime reload and reaches durable operator
-sync/pull with exact cleanup. The product outcome is not yet complete: one
-Owner-experienced Guest encounter remains open in
-[Issue #67](https://github.com/formehq/forme/issues/67).
+sync/pull with exact cleanup. That encounter is Owner-accepted. The active
+product slice is the Fresh Native Response candidate in
+[Issue #68](https://github.com/formehq/forme/issues/68).
 
-The project is currently at a clean-restart #67 technical checkpoint. Historical
+The project is currently at a clean-restart #68 integration checkpoint. Historical
 control packets and evidence remain available, but the default working set is
 deliberately small and ordinary engineering now proceeds inside one
 outcome-level boundary rather than through per-file or per-attempt approval.
-PR #78 established the R4 development baseline on `main`. The current
-synthetic product proof does not complete #67 or imply Owner Experience
-Acceptance. No production access, public traffic, provider call, real/private
-Guest data, deployment or Gate C authority follows from the local proofs.
+PRs #78–#81 established the R4 development and Fresh-session technical
+baseline on `main`. One separately authorized Codex CLI candidate run has now
+completed with exact local Owner approval and no publication authority. No
+production access, public traffic, additional provider call, real/private
+Guest data, deployment or Gate C authority follows from that result.
 
 ## Start here
 

@@ -238,7 +238,7 @@ export function auditCodexJsonl(output: string): AuditedOutput {
   };
 }
 
-interface StructuredRuntimeResult {
+export interface StructuredRuntimeResult {
   proposal: unknown;
   cliVersion: string;
   model: string;
@@ -300,6 +300,20 @@ export class CodexExecRuntime implements ReflectionRuntime, ActionRuntime {
     assertActionIntentProposal(result.proposal);
     validateActionProposalForPacket(result.proposal, packet);
     return { ...result, proposal: result.proposal as ActionIntentProposal };
+  }
+
+  generateStructuredPacket(options: {
+    packet: unknown;
+    forbiddenPaths?: string[];
+    schema: object;
+    schemaFilename: string;
+    packetFilename: string;
+    prompt: string;
+  }): StructuredRuntimeResult {
+    return this.#generateStructured({
+      ...options,
+      forbiddenPaths: options.forbiddenPaths ?? [],
+    });
   }
 
   #generateStructured(options: {

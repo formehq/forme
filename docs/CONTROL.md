@@ -14,31 +14,28 @@ Presence remains open in
 
 ## Next user-visible acceptance point
 
-The active slice is [Issue #68](https://github.com/formehq/forme/issues/68):
-one exact Interaction enters a fresh, non-resumed Native Response Session with
-only a deterministic sanitized source snapshot and typed body/path-free
-orientation. It returns an untrusted local candidate with no publication
-authority. The Owner approves the exact source/provider/capability envelope
-before the first real call and judges the candidate.
+[Issue #68](https://github.com/formehq/forme/issues/68) has reached its Owner
+touchpoint on the current review branch: one exact Interaction entered a fresh,
+non-resumed Codex CLI session, returned an untrusted local candidate and the
+Owner approved that exact candidate without publishing it. After this branch
+is reviewed and integrated, the next user-visible acceptance point is
+[Issue #69](https://github.com/formehq/forme/issues/69): approve and deliver
+that exact Response through the separately controlled publication path.
 
 ## Current blocker and next action
 
-PRs #78 and #79 are integrated on `main`; exact-tip and post-merge CI were
-Green. #67 is accepted and closed. The current #68 Core Gate A walking slice
-is `GREEN_CLEAN`: it composes the real snapshot, orientation, session,
-capability-denial, budget, candidate-admission and cleanup contracts around one
-fresh non-resumed fake dispatch, then reviews and discards the untrusted
-candidate without persisting or publishing it. The pinned physical no-provider
-preflight is also `GREEN_NO_PROVIDER`: one real Codex app-server thread/turn can
-reach only a single loopback broker, and the broker rebuilds the observed
-client request into a deterministic tool-free, hard-capped upstream envelope
-while forwarding remains disabled. The pinned synthetic-Provider round trip is
-now `GREEN_SYNTHETIC_PROVIDER`: that same Native Session consumes one locally
-generated Responses SSE, completes one Turn and returns a candidate through
-the Codex app-server event membrane without retaining the candidate body. The
-remaining action after final review of the updated PR #81 tip is the separately
-approved first real provider envelope and Owner candidate judgment. No #71
-Host Setup/Doctor blocker is currently present.
+PRs #78–#81 are integrated on `main`; exact-tip and post-merge CI were Green.
+#67 is accepted and closed. The #68 fake dispatch, physical no-provider
+preflight and synthetic-Provider round trip remain Green technical baselines.
+The Owner then replaced the unconsumed raw Responses API grant with one
+CLI-native envelope and authorized exactly one `codex exec --ephemeral`
+invocation using saved ChatGPT authentication. That invocation is
+`GREEN_CODEX_EXEC_OWNER_REVIEWED`: `codex-cli 0.145.0`, `gpt-5.6-sol`, medium,
+one fresh/non-resumed session, 9,186 input tokens, 50 output tokens, zero tool
+events and exact Owner candidate approval. No candidate body was printed or
+persisted, and publication, Room mutation and connector effects stayed zero.
+The remaining action is review and integration of this branch; #69 has not
+started. No #71 Host Setup/Doctor blocker is present.
 
 ## Current evidence
 
@@ -91,11 +88,19 @@ Host Setup/Doctor blocker is currently present.
   request bytes, Provider body, process group and temporary root all clean to
   zero. Its aggregate is
   `sha256:593c1f46207c3217b16515b173a9fc97a781ba83a32ba8671b6ed9c0c954c7cc`;
-- the dormant one-shot OpenAI transport is fixed to HTTPS
-  `api.openai.com/v1/responses`, follows no redirects, retries zero times,
-  accepts only `text/event-stream`, enforces the sealed request hash, 600-second
-  wall clock and declared token/spend ceilings, and has not been invoked;
-- full repository verification remains Green at Spine 45, R4 626 and Gate-B
+- the dormant raw OpenAI transport remains uninvoked; its earlier sealed API
+  grant was explicitly revoked unconsumed and is not current authority;
+- the replacement CLI-native envelope is
+  `sha256:21843e8a00cd780497194a88d13cf7c004626a0220539c1cabb7f3c6bc60fef5`;
+  it honestly records that exact Provider-visible bytes, Codex-internal
+  dispatch count and a per-call API dollar cap are not independently provable
+  through saved ChatGPT authentication;
+- one replacement `codex exec` invocation completed under that envelope with
+  zero tool events and body-free candidate hash
+  `sha256:2f5050f730c129306bfce09b3bcfbc02e197f286e1ab26eb91b9adf4e554a13f`;
+  the Owner selected `approve_exact`, while publication, Room mutation and
+  connector calls remained zero;
+- full repository verification remains Green at Spine 45, R4 627 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
@@ -109,10 +114,10 @@ preparation. These actions proceed without per-file, per-hash or per-attempt
 approval.
 
 It does not authorize Production or private-server effects, public traffic,
-real/private Guest data, provider/model calls, new credentials, spend,
-Production deployment, publication, external messaging, merge or Gate C. The
-first real #68 call separately requires the exact source/provider/capability
-envelope named by that issue.
+real/private Guest data, additional provider/model calls, new credentials,
+spend, Production deployment, publication, external messaging, merge or Gate
+C. The completed #68 CLI envelope is consumed and grants no retry or #69
+authority.
 
 The fixed-marker R3 action block in the root README remains separately
 controlled.
