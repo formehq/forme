@@ -58,7 +58,7 @@ export interface ResponsePublicationPreflightV1 {
   readonly interactionId: string;
   readonly interactionState: "accepted" | "seen_locally" | "preparing" | "terminal";
   readonly originState: ProjectionOwnerState;
-  readonly candidateStoreState: "protected_current" | "missing" | "submitted_unknown";
+  readonly candidateStoreState: "protected_current" | "transient_current" | "missing" | "submitted_unknown";
   readonly candidateHash: Sha256;
   readonly twinBasisHash: Sha256;
   readonly snapshotManifestHash: Sha256 | null;
@@ -301,7 +301,9 @@ export function buildResponsePublicationDeliveryV1(input: {
   if (!(["accepted", "seen_locally", "preparing"] as const).includes(preflight.interactionState as never)) {
     fail("interaction_not_response_eligible");
   }
-  if (preflight.candidateStoreState !== "protected_current") fail("candidate_not_protected_current");
+  if (preflight.candidateStoreState !== "protected_current" && preflight.candidateStoreState !== "transient_current") {
+    fail("candidate_not_current");
+  }
   if (preflight.existingResponseId !== null) fail("response_already_exists");
   same(preflight.roomId, candidate.roomId, "preflight_room_mismatch");
   same(preflight.projectionId, candidate.projectionId, "preflight_projection_mismatch");

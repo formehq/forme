@@ -14,19 +14,20 @@ Presence remains open in
 
 ## Next user-visible acceptance point
 
-[Issue #68](https://github.com/formehq/forme/issues/68) has reached its Owner
-touchpoint on the current review branch: one exact Interaction entered a fresh,
-non-resumed Codex CLI session, returned an untrusted local candidate and the
-Owner approved that exact candidate without publishing it. After this branch
-is reviewed and integrated, the next user-visible acceptance point is
-[Issue #69](https://github.com/formehq/forme/issues/69): approve and deliver
-that exact Response through the separately controlled publication path.
+[Issue #68](https://github.com/formehq/forme/issues/68) is Owner-accepted,
+integrated and closed. [Issue #69](https://github.com/formehq/forme/issues/69)
+is active. Its current branch proves that the Owner can supply, inspect and
+approve one exact Response, inspect the complete public payload, and deliver
+the same bytes through the local publication contract. The next user-visible
+acceptance point remains delivery to the originating loopback Room Interaction
+and verification of the exact Response the Guest receives.
 
 ## Current blocker and next action
 
-PRs #78–#81 are integrated on `main`; exact-tip and post-merge CI were Green.
-#67 is accepted and closed. The #68 fake dispatch, physical no-provider
-preflight and synthetic-Provider round trip remain Green technical baselines.
+PRs #78–#82 are integrated on `main`; exact-tip and post-merge CI were Green.
+#67 and #68 are accepted and closed. The #68 fake dispatch, physical
+no-provider preflight and synthetic-Provider round trip remain Green technical
+baselines.
 The Owner then replaced the unconsumed raw Responses API grant with one
 CLI-native envelope and authorized exactly one `codex exec --ephemeral`
 invocation using saved ChatGPT authentication. That invocation is
@@ -34,8 +35,14 @@ invocation using saved ChatGPT authentication. That invocation is
 one fresh/non-resumed session, 9,186 input tokens, 50 output tokens, zero tool
 events and exact Owner candidate approval. No candidate body was printed or
 persisted, and publication, Room mutation and connector effects stayed zero.
-The remaining action is review and integration of this branch; #69 has not
-started. No #71 Host Setup/Doctor blocker is present.
+PR #82 integrated that result at `0dfdbd6`. The active #69 branch adds a
+transient manual-Owner lane and body-free one-shot ledger. The Owner supplied
+and twice reviewed one exact Response; local delivery returned
+`GREEN_LOCAL_EXACT_RESPONSE_DELIVERED`, with 217 Guest-observed bytes and zero
+Provider, model, tool, network, server or public-traffic calls. The next action
+is review and integration of this seam, followed by a separately authorized
+loopback Room delivery that proves current-state, idempotency and Guest-visible
+bytes. No #71 Host Setup/Doctor blocker is present.
 
 ## Current evidence
 
@@ -65,7 +72,7 @@ started. No #71 Host Setup/Doctor blocker is present.
 - after Owner acceptance, all exact-owned staging containers, network, volume,
   private roots, tunnel listeners and the campaign-acquired Node image were
   removed and independently confirmed absent.
-- the current #68 rehearsal starts one new session with zero resume, proves all
+- the completed #68 rehearsal starts one new session with zero resume, proves all
   21 named capability denials, uses one upstream-disabled synthetic dispatch,
   admits one typed untrusted candidate, takes a local synthetic discard and
   returns `GREEN_CLEAN` with zero Provider, network, connector, publication,
@@ -100,7 +107,13 @@ started. No #71 Host Setup/Doctor blocker is present.
   `sha256:2f5050f730c129306bfce09b3bcfbc02e197f286e1ab26eb91b9adf4e554a13f`;
   the Owner selected `approve_exact`, while publication, Room mutation and
   connector calls remained zero;
-- full repository verification remains Green at Spine 45, R4 627 and Gate-B
+- one separate #69 local envelope accepted Owner-authored text only at runtime,
+  required exact candidate and complete public-payload review, then verified
+  one HMAC-bound in-memory delivery. Its body-free receipt records candidate,
+  approval, public Response, delivery and observed-body hashes; candidate
+  persistence, Provider/model/tool calls, network and public traffic remained
+  zero. This is a contract proof, not hosted or loopback Guest delivery;
+- full repository verification remains Green at Spine 45, R4 632 and Gate-B
   Core 145 tests, including the separate native transient-candidate suite.
 
 Local Green does not imply remote CI, merge, production readiness or Owner
@@ -115,12 +128,13 @@ approval.
 
 It does not authorize Production or private-server effects, public traffic,
 real/private Guest data, additional provider/model calls, new credentials,
-spend, Production deployment, publication, external messaging, merge or Gate
-C. The completed #68 CLI envelope is consumed and grants no retry or #69
-authority.
+spend, Production deployment, hosted/public publication, external messaging,
+merge or Gate C.
 
 The fixed-marker R3 action block in the root README remains separately
-controlled.
+controlled. The completed #68 CLI envelope and the one-shot local #69 delivery
+envelope are consumed. They grant no retry, server/hosted delivery, real Guest
+effect or #70 authority.
 
 ## Live truth and return conditions
 

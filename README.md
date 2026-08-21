@@ -14,18 +14,21 @@ The repository contains a reviewable local Room, Durable Public Core and
 PostgreSQL adapter. The complete local synthetic Guest arrival crosses the
 real HTTP membrane, survives a runtime reload and reaches durable operator
 sync/pull with exact cleanup. That encounter is Owner-accepted. The active
-product slice is the Fresh Native Response candidate in
-[Issue #68](https://github.com/formehq/forme/issues/68).
+product slice is exact Owner-approved Response delivery in
+[Issue #69](https://github.com/formehq/forme/issues/69).
 
-The project is currently at a clean-restart #68 integration checkpoint. Historical
-control packets and evidence remain available, but the default working set is
-deliberately small and ordinary engineering now proceeds inside one
-outcome-level boundary rather than through per-file or per-attempt approval.
-PRs #78–#81 established the R4 development and Fresh-session technical
-baseline on `main`. One separately authorized Codex CLI candidate run has now
-completed with exact local Owner approval and no publication authority. No
-production access, public traffic, additional provider call, real/private
-Guest data, deployment or Gate C authority follows from that result.
+The project is currently at a clean-restart #69 technical-review checkpoint.
+Historical control packets and evidence remain available, but the default
+working set is deliberately small and ordinary engineering now proceeds inside
+one outcome-level boundary rather than through per-file or per-attempt
+approval.
+PRs #78–#82 established the R4 development and Fresh-session technical
+baseline on `main`; #68 is Owner-accepted and closed. One Owner-authored exact
+Response has now passed two local reviews and an in-memory contract delivery
+with exact Guest-side byte observation. That proof used no Provider, model,
+tool, network, server or public traffic. It is not yet a Response delivered to
+a real or loopback Room Guest, and grants no production, deployment or Gate C
+authority.
 
 ## Start here
 
