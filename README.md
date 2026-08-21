@@ -22,13 +22,16 @@ Historical control packets and evidence remain available, but the default
 working set is deliberately small and ordinary engineering now proceeds inside
 one outcome-level boundary rather than through per-file or per-attempt
 approval.
-PRs #78–#82 established the R4 development and Fresh-session technical
-baseline on `main`; #68 is Owner-accepted and closed. One Owner-authored exact
-Response has now passed two local reviews and an in-memory contract delivery
-with exact Guest-side byte observation. That proof used no Provider, model,
-tool, network, server or public traffic. It is not yet a Response delivered to
-a real or loopback Room Guest, and grants no production, deployment or Gate C
-authority.
+PRs #78–#83 established the R4 development, Fresh-session and exact local
+Response baseline on `main`; #68 is Owner-accepted and closed. The active #69
+branch now carries one Owner-authored exact Response across the same route
+matcher, strict HTTP parser and synthetic Hosted Room application used by the
+Next route. After an injected lost response, the exact retry produced one
+semantic commit and the originating synthetic Guest observed all 217 approved
+bytes. The proof used no Provider, model, tool, external network, hosted server
+or public traffic. It remains an in-process synthetic loopback proof—not a
+durable PostgreSQL, live Next socket, real Guest or hosted deployment—and
+grants no production, deployment or Gate C authority.
 
 ## Start here
 
