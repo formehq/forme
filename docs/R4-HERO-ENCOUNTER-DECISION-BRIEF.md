@@ -1,5 +1,10 @@
 # R4 Hero Encounter, Forme Third Place, and identity — Owner Decision Brief v0.5
 
+> **Paused-contract notice — 2026-09-17:** This is a historical Owner decision
+> brief from the first build phase. It grants no current implementation or
+> external-effect authority. See
+> [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 - Status: **owner-approved product target, public/private Room correction, P
   human-boundary interpretation, T2 Room control contract, and NH1/NH2 Native
   Harness architecture; Fresh Native Response Session (Option 2B) exact T3

@@ -5,12 +5,14 @@ does not become operating context.
 
 ## 1. Default working set
 
-Start with [CONTEXT.md](./CONTEXT.md). For ordinary re-entry it routes to:
+Start with [CHECKPOINT-2026-09-17.md](./CHECKPOINT-2026-09-17.md), then
+[CONTEXT.md](./CONTEXT.md). During the project pause, these route to:
 
-- [PRODUCT.md](./PRODUCT.md) for durable product meaning;
-- [CONTROL.md](./CONTROL.md) for the current gate and next acceptance point;
-- [ROADMAP.md](./ROADMAP.md) for stable dependency order;
-- the active GitHub issue and pull request for live execution state.
+- [PRODUCT.md](./PRODUCT.md) for the product hypothesis under review;
+- [CONTROL.md](./CONTROL.md) for the paused operating state;
+- [ROADMAP.md](./ROADMAP.md) for the frozen prior gate sequence;
+- [VALIDATION.md](./VALIDATION.md) for evidence that remains valid and claims
+  that are no longer settled.
 
 ## 2. Conditional contracts
 
@@ -26,9 +28,9 @@ Open only the contract relevant to the work:
   — Owner-approved Hybrid encounter and Demo-critical cut;
 - [STEWARDSHIP.md](./STEWARDSHIP.md) — proposal, not current authority.
 
-[DECISIONS.md](./DECISIONS.md) is the compact register of active durable
-decisions. [VALIDATION.md](./VALIDATION.md) is the compact product truth and
-falsification register.
+[DECISIONS.md](./DECISIONS.md) records the pause decision and the durable
+decisions from the first build phase. [VALIDATION.md](./VALIDATION.md) separates
+historical evidence from the product claims now under review.
 
 ## 3. Historical and byte-frozen material
 
@@ -43,7 +45,7 @@ and how to investigate chronology without loading it into ordinary work.
 
 One fact gets one canonical home:
 
-- live status: active issue/PR and the short cockpit;
+- live status: the checkpoint and short cockpit while paused;
 - durable meaning: Product or a named architecture/trust contract;
 - durable decision: Decisions;
 - present product evidence and falsification: Validation;

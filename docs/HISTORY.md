@@ -4,7 +4,14 @@ Forme preserves chronology without making it the default working memory.
 
 ## Recovery points
 
-Two annotated remote tags capture the state before this distillation:
+The 2026-09-17 pause cleanup added annotated tags under
+`checkpoint/2026-09-17/*` for canonical `main`, each removed worktree and the
+three previously uncommitted local states. The exact pre-cleanup repository,
+including all refs, was also exported as a verified complete Git bundle to the
+Owner's local checkpoint archive.
+
+Two earlier annotated remote tags capture the state before the R4 context
+distillation:
 
 - r4-context-pre-distillation-2026-08-18 — consolidated reviewable integration
   at 034f59b;

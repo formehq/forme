@@ -1,58 +1,54 @@
 # Forme
 
-Forme is an Owner-controlled Living Project Twin: a local-first semantic spine
-that preserves project continuity, helps the Owner think, supports bounded
-action and can create a controlled social presence without surrendering
-authorship or trust.
+The first Forme build phase explored an Owner-controlled Living Project Twin:
+a local-first semantic spine intended to preserve project continuity, help the
+Owner think, support bounded action and create a controlled social presence
+without surrendering authorship or trust. That product hypothesis is now under
+review.
 
 ## Current position
 
-R1 Continuity, R2 Cognition and R3 Bounded Agency are Owner-accepted. R4
-Controlled Presence is the active product gate.
+**Paused for assumption review as of 2026-09-17.** The project is at an
+intentional checkpoint while the Owner re-examines the original product and
+memory assumptions behind the Living Project Twin.
 
-The repository contains a reviewable local Room, Durable Public Core and
-PostgreSQL adapter. The complete local synthetic Guest arrival crosses the
-real HTTP membrane, survives a runtime reload and reaches durable operator
-sync/pull with exact cleanup. That encounter is Owner-accepted. The active
-product slice is exact Owner-approved Response delivery in
-[Issue #69](https://github.com/formehq/forme/issues/69).
+R1–R3 produced accepted historical experiments. R4 stopped before complete
+Owner Experience Acceptance: `main` contains the integrated work through PR
+#84, while the later live-loopback checkpoint from PR #85 was preserved but
+not merged. No R4 or R5 implementation is active.
 
-The project is currently at a clean-restart #69 technical-review checkpoint.
-Historical control packets and evidence remain available, but the default
-working set is deliberately small and ordinary engineering now proceeds inside
-one outcome-level boundary rather than through per-file or per-attempt
-approval.
-PRs #78–#83 established the R4 development, Fresh-session and exact local
-Response baseline on `main`; #68 is Owner-accepted and closed. The active #69
-branch now carries one Owner-authored exact Response across the same route
-matcher, strict HTTP parser and synthetic Hosted Room application used by the
-Next route. After an injected lost response, the exact retry produced one
-semantic commit and the originating synthetic Guest observed all 217 approved
-bytes. The proof used no Provider, model, tool, external network, hosted server
-or public traffic. It remains an in-process synthetic loopback proof—not a
-durable PostgreSQL, live Next socket, real Guest or hosted deployment—and
-grants no production, deployment or Gate C authority.
+The central open question is whether repeated LLM synthesis and context
+compaction can safely maintain durable project judgment. Current evidence
+suggests that source, observation, candidate interpretation, Owner judgment
+and task context need stronger separation, and that the Twin architecture may
+require fundamental revision.
+
+Read [the 2026-09-17 checkpoint](docs/CHECKPOINT-2026-09-17.md) before treating
+the product hypothesis, roadmap or historical approvals as current direction.
 
 ## Start here
 
-Read [docs/CONTEXT.md](docs/CONTEXT.md). It defines the default context set,
-truth hierarchy and the boundary between active contracts and historical
-evidence.
+Read [the checkpoint](docs/CHECKPOINT-2026-09-17.md), then
+[docs/CONTEXT.md](docs/CONTEXT.md). They define the paused state, the default
+context set and the boundary between historical evidence and current belief.
 
 The shortest ordinary route is:
 
-1. [docs/PRODUCT.md](docs/PRODUCT.md) — what Forme is and what the MVP must
-   prove;
-2. [docs/CONTROL.md](docs/CONTROL.md) — current gate, blocker and next
-   acceptance point;
-3. [docs/ROADMAP.md](docs/ROADMAP.md) — stable gate and dependency order;
-4. the active GitHub issue and integration pull request — live execution
-   state.
+1. [docs/CHECKPOINT-2026-09-17.md](docs/CHECKPOINT-2026-09-17.md) — why work
+   paused, what remains evidence and what must be reconsidered;
+2. [docs/PRODUCT.md](docs/PRODUCT.md) — the product hypothesis under review;
+3. [docs/CONTROL.md](docs/CONTROL.md) — the current paused operating state;
+4. [docs/VALIDATION.md](docs/VALIDATION.md) — validated experiments and open
+   falsification questions.
 
 Architecture, trust and R4 encounter contracts are opened conditionally from
 [docs/CONTEXT.md](docs/CONTEXT.md), not read by default for every task.
 
 ## Local development
+
+The commands below remain as reproducibility surfaces. The project pause does
+not authorize a runtime rehearsal, provider call, server action or continuation
+of R4; run them only inside a newly stated review or experiment boundary.
 
 Requirements: Node.js 24+ and npm.
 

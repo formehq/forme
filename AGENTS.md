@@ -1,44 +1,34 @@
-# Forme working agreement
+# Forme paused-project working agreement
 
-Forme is operated by outcomes, not by per-file or per-attempt approval.
+Forme is paused for assumption review as of 2026-09-17. Read
+`docs/CHECKPOINT-2026-09-17.md` and `docs/CONTROL.md` before acting.
 
-## Start
+## Default mode
 
-Read `docs/CONTEXT.md`, `docs/CONTROL.md`, the active issue and the active pull
-request. State one user-visible outcome and the boundary for the work.
+- Do not continue R4, R5 or the old issue sequence by default.
+- Treat the existing Product, Roadmap, packets and approvals as historical
+  working contracts, not current authority to execute.
+- Preserve the distinction between experimental evidence and product belief.
+- Read historical packets only for a specific lineage or audit question.
 
-Inside that boundary, proceed autonomously through implementation, tests,
-refactors, local synthetic runs, reversible repairs, documentation, commits
-and updates to the active pull request. A failed test, changed hash or ordinary
-implementation choice is not a new Owner decision.
+Read-only analysis, assumption review, documentation and reversible local
+repository maintenance requested by the Owner may proceed normally. Do not
+turn a review conversation into implementation momentum.
 
-## Return to the Owner only when
+## Return to the Owner
 
-- product meaning, authorship, privacy or another trust boundary would change;
-- real/private data, a provider call, production, public traffic, publication,
-  messaging, credentials, spend or a merge would be used;
-- a destructive or meaning-changing durable migration is required;
-- effects are ambiguous, owned cleanup cannot be proved, or the promised
-  outcome must materially change; or
-- the result is ready for Owner Experience Acceptance.
+Return before work would:
 
-Ordinary additive schema work, local disposable infrastructure and bounded
-diagnostics remain engineering work when they are already inside the stated
-outcome and use synthetic data with exact-owned cleanup.
+- resume product implementation or establish a new roadmap;
+- promote an observation or AI interpretation into durable Owner judgment;
+- change product meaning, authorship, privacy or another trust boundary;
+- use real/private data, a provider, production, public traffic, publication,
+  messaging, credentials, spend, deployment or an external runtime; or
+- delete historical evidence that has not been independently archived.
 
-## Keep the project legible
+## Resumption
 
-- Keep one active product outcome. Add an Enabler only for a concrete blocker.
-- Passing tests means Technical Review, not product Done.
-- A merge integrates reviewable code; it does not close the product issue or
-  imply Owner acceptance.
-- Replace current status in `docs/CONTROL.md`; do not append chronology.
-- Put live progress in the active issue and pull request. Keep historical
-  detail in Git, frozen evidence or `docs/HISTORY.md`.
-- Do not revive an old Packet, Card, Addendum, grant or hash as current
-  authority.
-
-## Report
-
-Use three normal touchpoints: outcome/boundary at the start, a message only if
-a real return condition appears, and a final evidence-backed handoff.
+Product development resumes only after an explicit Owner decision states the
+revised assumptions and next learning objective. A historical approval, open
+issue, branch, successful test or prior roadmap position cannot resume work by
+itself.
