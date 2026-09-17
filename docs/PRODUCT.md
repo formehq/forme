@@ -1,5 +1,11 @@
 # Product
 
+> **Status — 2026-09-17:** The project is paused for assumption review. This
+> document records the product hypothesis that guided R0–R4; it is not an
+> active implementation commitment. In particular, the durable Memory and
+> judgment model behind the Living Project Twin may require fundamental
+> revision. See [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 ## Highest vision
 
 Forme extends an entity across four dimensions:
@@ -12,7 +18,7 @@ Forme extends an entity across four dimensions:
 
 Its deepest claim is not an AI clone. It is that human agency need not exist only while a person remembers, focuses, and is online.
 
-Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the current MVP scope.
+Long-term forms may include person, project, and team Twins; specialized cognitive agents; taste and incubation; role-scoped projections; and Twin-to-Twin interaction. These are a horizon, not the first-phase MVP scope.
 
 ### Harness-native product shape
 
@@ -22,7 +28,7 @@ MCP, plugins, subagents, and runtime interaction. Forme contributes the durable
 semantic spine that survives the workbench: Twin identity and state, evidence,
 corrections, authority, receipts, projection, and continuity.
 
-The current MVP narrows entity count, scope, and effect depth. R2/R3
+The first-phase MVP narrowed entity count, scope, and effect depth. R2/R3
 additionally used a packet-only, no-tools run to prove exact visibility of
 Forme-selected content and semantic/effect admission. That run remains a valid
 **Managed Privacy Run**, not the permanent definition of every Forme Agent.
@@ -65,8 +71,8 @@ as the metabolism that keeps all four dimensions coherent.
 
 ## Demo-critical proof boundary
 
-The current MVP proves one truthful public Hero Encounter, not the full
-long-term Room architecture. Unimplemented Full operations remain absent
+The first-phase MVP sought to prove one truthful public Hero Encounter, not the
+full long-term Room architecture. Unimplemented Full operations remain absent
 rather than appearing as placeholders.
 
 Core success does not prove the full Private Room, notification, Agent

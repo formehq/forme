@@ -1,5 +1,10 @@
 # Architecture boundaries
 
+> **Paused-contract notice — 2026-09-17:** This document records the
+> architecture used by the first build phase. It is not current authority to
+> continue implementation; the durable Twin and judgment architecture is under
+> review. See [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 - Status: R1, R2, and R3 owner-accepted; privacy-first P human-boundary model,
   R4 product topology, T1 public/private Room correction, and T2 Room control
   contract owner-approved; NH1 option 1 and NH2 option 1 owner-approved;

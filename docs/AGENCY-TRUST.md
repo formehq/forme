@@ -1,5 +1,10 @@
 # Agency and human-boundary model v0.4
 
+> **Paused-contract notice — 2026-09-17:** This document records the Agency
+> model used by the first build phase. Its boundary-not-steps principle remains
+> a useful hypothesis, but it grants no current execution authority. See
+> [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 - Status: **privacy-first P human-boundary interpretation and T2 Room control
   envelope Owner-approved for R4 on 2026-07-28; NH1/NH2 Owner-approved on
   2026-07-29; Fresh Native Response Session (Option 2B) selected as the R4 P0

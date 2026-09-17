@@ -1,5 +1,10 @@
 # R4 Forme Room experience and protocol brief v0.9
 
+> **Paused-contract notice — 2026-09-17:** R4 stopped incomplete and is no
+> longer the active product gate. This brief records the Social Presence
+> hypothesis tested by the first build phase. See
+> [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 - Status: **owner-approved product foundation, public/private Room correction,
   P human-boundary interpretation, T2 Room control contract, and NH1/NH2
   Native Harness architecture; Fresh Native Response Session (Option 2B) exact

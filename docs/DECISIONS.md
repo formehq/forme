@@ -4,6 +4,28 @@ This register contains only decisions that still shape the product or its
 working model. Execution chronology remains in Git history, archive tags and
 issue/PR records described in [HISTORY.md](./HISTORY.md).
 
+## Current decision status
+
+### Product development is paused for assumption review
+
+On 2026-09-17 the Owner paused Forme before completing R4. The implementation
+history remains evidence, but the Living Project Twin, its durable judgment
+model and the R1–R4 causal story are no longer treated as settled premises for
+new work. Resumption requires a new explicit product decision. See
+[CHECKPOINT-2026-09-17.md](./CHECKPOINT-2026-09-17.md).
+
+### AI-generated judgment is not self-authorizing memory
+
+Repeated model synthesis and context compaction can turn a provisional
+interpretation into an apparently canonical premise while drifting from the
+Owner's original meaning. Until a revised architecture is accepted, evidence,
+observation, candidate interpretation, Owner judgment and working context must
+not be collapsed into one automatically maintained durable judgment list.
+
+The decisions below record the working contracts used by the first build
+phase. They remain useful lineage and design evidence, not automatic authority
+to continue the prior roadmap.
+
 ## Product identity
 
 ### Forme is an Owner-controlled Living Project Twin
@@ -103,9 +125,11 @@ task.
 
 ### GitHub is the live execution surface
 
-The active issue and integration pull request carry mutable execution truth.
-Repository contracts carry stable meaning. The Project is a concise portfolio
-view, not a second narrative log.
+During an active build phase, the active issue and integration pull request
+carry mutable execution truth. Repository contracts carry stable meaning. The
+Project is a concise portfolio view, not a second narrative log. During the
+2026-09-17 pause, the checkpoint and cockpit replace an active issue/PR as the
+live execution surface.
 
 ### Use medium-grained outcome envelopes
 

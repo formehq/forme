@@ -1,71 +1,80 @@
 # Product validation
 
-This file records present product truth and the signals that could falsify it.
-Exact historical runs and review chronology remain available through
+This file separates experimental evidence from the product conclusions now
+under review. Exact run history remains available through
 [HISTORY.md](./HISTORY.md).
 
 ## Current verdict
 
-R1 Continuity, R2 Cognition and R3 Bounded Agency are Owner-accepted. R4
-Controlled Presence is not accepted.
+Forme is paused for assumption review. R1–R3 remain historically accepted
+experiments, but their interpretation as successive capabilities of one
+Living Project Twin is no longer treated as settled. R4 was not completed or
+accepted, and R5 did not begin.
 
-The repository proves enough local architecture to resume the product flow:
-the Room, Durable Public Core and PostgreSQL boundary are reviewable; synthetic
-contracts are Green; and a disposable PostgreSQL lifecycle proved schema,
-restart persistence, rollback and exact-owned cleanup.
+The repository proves that several mechanisms worked under bounded test
+conditions. It does not prove that the durable judgment architecture is sound,
+that recursive model synthesis preserves Owner meaning, or that Social
+Presence should remain the next product direction.
 
-It does not yet prove an end-to-end Guest journey through the real product
-path, deployment-shaped operation, real/private data handling, public traffic
-or the Owner's experience of the completed encounter.
+## Experimental evidence that remains valid
 
-## Product evidence that still matters
+- R1 demonstrated persistence and restart-oriented project continuity.
+- R2 demonstrated source-aware reflection, correction and invalidation under
+  its tested context boundary.
+- R3 demonstrated a bounded action with visible plan, Owner approval,
+  deterministic execution, receipt and rollback evidence.
+- R4 experiments demonstrated separable public Projection and Private Room
+  authorities, deterministic no-server-AI contracts and a durable synthetic
+  Guest arrival.
+- The PostgreSQL rehearsal demonstrated schema lifecycle, restart persistence,
+  rollback and exact-owned cleanup in its disposable environment.
+- Fresh-session experiments demonstrated that candidate generation can remain
+  distinct from Owner-attributed publication.
+- Exact Response experiments demonstrated local, HTTP and live-loopback
+  delivery, retry and idempotency properties.
 
-- R1 demonstrated a persistent project identity and continuity across work.
-- R2 demonstrated source-aware cognition with explicit capability resolution
-  before source transmission.
-- R3 demonstrated bounded agency with a visible plan, Owner-bound approval,
-  constrained execution and outcome/rollback evidence.
-- The local Projection/Room work established that a public encounter can stay
-  distinct from the Owner's Private Room.
-- The Durable Public Core construction established deterministic, no-server-AI
-  contracts for publication, admission, response and continuation state.
-- The disposable PostgreSQL rehearsal established that the persistence
-  boundary can survive restart and clean up owned resources.
+These claims are bounded evidence. They do not authorize production, provider
+calls, real Guest data, deployment or continued implementation.
 
-These claims are evidence, not authority for production, providers, real
-Guest data or deployment.
+## Product claims under review
 
-## Open R4 learning
+- that a durable Living Project Twin should maintain a canonical project self;
+- that LLM-generated summaries can safely become long-term project judgment;
+- that evidence, observation, inference, Owner judgment and working context
+  can share one durable semantic state without unacceptable drift;
+- that Continuity, Cognition, Agency and Presence form the correct single MVP
+  causal story;
+- that Social Presence is the right next expression of the project rather than
+  a premature layer over an unsettled cognitive architecture.
 
-The next validation is qualitative as well as technical:
+## New falsification signal
 
-- Does the Projection feel like a living expression of the project rather
-  than a static profile?
-- Does the knock/admission boundary feel trustworthy without becoming
-  ceremonial?
-- Does the Guest understand what is public, what is private and what happens
-  to a response?
-- Does the Fresh Native Response Session preserve provenance while giving the
-  Owner enough context to respond naturally?
-- Does the whole encounter strengthen the Owner's authorship rather than make
-  Forme appear to impersonate them?
+The project must revisit its memory architecture when repeated synthesis or
+context compaction:
 
-## Falsification signals
+- changes the practical meaning of an Owner judgment;
+- blurs whether a claim came from source evidence, the Owner or an Agent;
+- lets an AI-generated interpretation become its own future evidence;
+- produces a coherent current view that cannot be reconstructed from original
+  provenance; or
+- makes exclusion from context less deliberate than inclusion.
 
-Stop and revisit the product or architecture if:
+This signal has been observed strongly enough to pause further product work.
 
-- a Guest must access private Owner context to complete the P0 flow;
-- server-side semantic inference becomes necessary for ordinary admission or
-  response intake;
-- approval prompts appear for low-risk routine work or disappear at a
-  consequential boundary;
-- the Owner cannot distinguish Forme's proposal from their own commitment;
-- a local cleanup claim cannot prove exact ownership and residue absence;
-- the product can pass tests while the complete Owner/Guest experience is not
-  runnable or understandable.
+## Questions for the next research phase
+
+- Which information may become durable, and through what promotion mechanism?
+- Must Owner judgment be stored separately from model observations and
+  candidate interpretations?
+- Should working context be freshly compiled from sources instead of inherited
+  from a persistent Twin summary?
+- How should compaction drift be measured across many iterations?
+- Which parts of Agency and Controlled Presence remain valuable if the
+  canonical Twin model changes?
 
 ## Maintenance rule
 
-Replace the current verdict when product truth changes. Fold durable learning
-into Product, Architecture, Agency & Trust or Decisions. Keep exact run
-receipts in evidence/Git and do not append another chronological round here.
+Do not convert a historical success into a current product claim. Add new
+evidence only with its source, tested boundary and failure conditions. A future
+resumption decision must replace this verdict rather than append another
+superseding status section.

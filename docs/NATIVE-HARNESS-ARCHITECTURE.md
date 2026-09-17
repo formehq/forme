@@ -1,5 +1,10 @@
 # Native Harness architecture contract v0.4
 
+> **Paused-contract notice — 2026-09-17:** This document records the prior
+> Harness/Forme design. It is historical architecture, not authority to resume
+> a Fresh Response Session or other implementation. See
+> [the project checkpoint](./CHECKPOINT-2026-09-17.md).
+
 ## 60 秒 Owner 摘要
 
 这两个问题已经按推荐关闭：
